@@ -1,7 +1,8 @@
 <?php
 
 $di->setShared('db', function() use ($config) {
-    $pdo = new \PDO("mysql:host={$config['db']['host']};dbname={$config['db']['dbname']}", $config['db']['username'], $config['db']['password'], $config['db']['options']);
+    $dbConfig = $config['db'][APPLICATION_ENV];
+    $pdo = new \PDO("mysql:host={$dbConfig['host']};dbname={$dbConfig['dbname']}", $dbConfig['username'], $dbConfig['password'], $dbConfig['options']);
     //$this->exec("set profiling_history_size = {$config['db']['profiling']}; set profiling = 1;");
     return $pdo;
 });
