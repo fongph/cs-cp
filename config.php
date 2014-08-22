@@ -1,6 +1,6 @@
 <?php
 
-return array(
+$default = array(
     'build' => 24,
     'domain' => 'http://new-cp.topspyapp.local',
     'staticDomain' => 'http://new-cp.topspyapp.local/static',
@@ -16,46 +16,17 @@ return array(
             'subject' => 'TS CP Logger'
         )
     ),
-    'namespaces' => array(
-        'Controllers' => ROOT_PATH . 'controllers/',
-        'Models' => ROOT_PATH . 'models/',
-        'System' => ROOT_PATH . 'system/'
-    ),
     'db' => array(
-        'production' => array(
-            'host' => '66.232.96.3',
-            'username' => 'user_data',
-            'password' => 'pai1Geo9',
-            'dbname' => 'user_data',
-            'options' => array(
-                //PDO::MYSQL_ATTR_INIT_COMMAND => 'set names utf8;',
-                PDO::MYSQL_ATTR_INIT_COMMAND => 'set names latin1;',
-                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
-            )
-        ),
-        'development' => array(
-            'host' => '66.232.96.3',
-            'username' => 'user_data',
-            'password' => 'pai1Geo9',
-            'dbname' => 'user_data',
-            'options' => array(
-                PDO::MYSQL_ATTR_INIT_COMMAND => 'set names latin1;',
-                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
-            )
-        ),
-        'testing' => array(
-            'host' => 'localhost',
-            'username' => 'root',
-            'password' => '',
-            'dbname' => 'user_data_test',
-            'options' => array(
-                PDO::MYSQL_ATTR_INIT_COMMAND => 'set names latin1;',
-                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
-            )
-        ),
+        'host' => '66.232.96.3',
+        'username' => 'user_data',
+        'password' => 'pai1Geo9',
+        'dbname' => 'user_data',
+        'options' => array(
+            //PDO::MYSQL_ATTR_INIT_COMMAND => 'set names utf8;',
+            PDO::MYSQL_ATTR_INIT_COMMAND => 'set names latin1;',
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
+        )
     ),
     'mail' => array(
         'host' => 'mail.topspyapp.com',
@@ -174,3 +145,38 @@ return array(
         'privateKeyFile' => ROOT_PATH . 'cloudFrontPrivateKey'
     )
 );
+
+if (APPLICATION_ENV == 'production') {
+    return $default;
+} else if (APPLICATION_ENV == 'development') {
+    return array_merge($default, array(
+        'domain' => 'http://cp.topspyapp.local',
+        'staticDomain' => 'http://cp.topspyapp.local/static',
+        'cookieDomain' => 'topspyapp.local',
+        'db' => array(
+            'host' => '66.232.96.3',
+            'username' => 'user_data',
+            'password' => 'pai1Geo9',
+            'dbname' => 'user_data',
+            'options' => array(
+                PDO::MYSQL_ATTR_INIT_COMMAND => 'set names latin1;',
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
+            )
+        )
+    ));
+} else if (APPLICATION_ENV == 'testing') {
+    return array_merge($default, array(
+        'db' => array(
+            'host' => 'localhost',
+            'username' => 'root',
+            'password' => '',
+            'dbname' => 'user_data_test',
+            'options' => array(
+                PDO::MYSQL_ATTR_INIT_COMMAND => 'set names latin1;',
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
+            )
+        )
+    ));
+}
