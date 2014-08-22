@@ -22,38 +22,40 @@ return array(
         'System' => ROOT_PATH . 'system/'
     ),
     'db' => array(
-        'host' => '66.232.96.3',
-        'username' => 'user_data',
-        'password' => 'pai1Geo9',
-        'dbname' => 'user_data',
-        'options' => array(
-            //PDO::MYSQL_ATTR_INIT_COMMAND => 'set names utf8;',
-            PDO::MYSQL_ATTR_INIT_COMMAND => 'set names latin1;',
-            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
-        )
-    ),
-    'db-test' => array(
-        'host' => 'localhost',
-        'username' => 'root',
-        'password' => '',
-        'dbname' => 'user_data_test',
-        'options' => array(
-            PDO::MYSQL_ATTR_INIT_COMMAND => 'set names utf8;',
-            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
-        )
-    ),
-    'db-local' => array(
-        'host' => 'localhost',
-        'username' => 'root',
-        'password' => '',
-        'dbname' => 'user_data',
-        'options' => array(
-            PDO::MYSQL_ATTR_INIT_COMMAND => 'set names utf8;',
-            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
-        )
+        'production' => array(
+            'host' => '66.232.96.3',
+            'username' => 'user_data',
+            'password' => 'pai1Geo9',
+            'dbname' => 'user_data',
+            'options' => array(
+                //PDO::MYSQL_ATTR_INIT_COMMAND => 'set names utf8;',
+                PDO::MYSQL_ATTR_INIT_COMMAND => 'set names latin1;',
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
+            )
+        ),
+        'development' => array(
+            'host' => '66.232.96.3',
+            'username' => 'user_data',
+            'password' => 'pai1Geo9',
+            'dbname' => 'user_data',
+            'options' => array(
+                PDO::MYSQL_ATTR_INIT_COMMAND => 'set names latin1;',
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
+            )
+        ),
+        'testing' => array(
+            'host' => 'localhost',
+            'username' => 'root',
+            'password' => '',
+            'dbname' => 'user_data_test',
+            'options' => array(
+                PDO::MYSQL_ATTR_INIT_COMMAND => 'set names latin1;',
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
+            )
+        ),
     ),
     'mail' => array(
         'host' => 'mail.topspyapp.com',
