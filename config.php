@@ -16,11 +16,6 @@ return array(
             'subject' => 'TS CP Logger'
         )
     ),
-    'namespaces' => array(
-        'Controllers' => ROOT_PATH . 'controllers/',
-        'Models' => ROOT_PATH . 'models/',
-        'System' => ROOT_PATH . 'system/'
-    ),
     'db' => array(
         'host' => '66.232.96.3',
         'username' => 'user_data',
