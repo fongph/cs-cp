@@ -1,0 +1,148 @@
+<style type="text/css">
+    @media (min-width: 768px) {
+        .inputWrapper {
+            display: inline-block;
+            margin-bottom: 0;
+            vertical-align: middle;
+            width: 210px;
+        }
+    }
+
+    .networkForm {
+        margin: 15px 0 10px 0;
+    }
+
+    .photo {
+        width: 150px;
+        height: 150px;
+        margin-bottom: 5px;
+    }
+
+    .photo-info {
+        text-align: left;
+        font-size: 10px;
+    }
+
+    .photo-info dl {
+        margin: 10px 0 0 0;
+    }
+
+    .album {
+        display: block;
+        position: relative;
+        float: left;
+        width: 150px;
+        height: 150px;
+        margin: 0 5px 5px 0;
+    }
+
+    .album img {
+        width: 150px;
+        height: 150px;
+    }
+
+    .album .name {
+        position: absolute;
+        bottom: 0px;
+        width: 100%;
+        padding: 10px;
+        color: #000;
+        background: rgba(255, 255, 255, 0.7);
+    }
+
+    .album:hover .name {
+        bottom: 5px;
+        left: 5px;
+        width: 140px;
+    }
+</style>
+<div>
+    <h1 class="text-center">{$title}</h1>
+
+    {$di.flashMessages}
+
+    {if !$paid}
+        {include file="cp/updatePackage.html"}
+    {elseif count($recentPhotos)}
+    <div class="row networkForm">
+        <div class="col-lg-push-3 col-lg-6">
+            <form method="post" action="" class="form-inline">
+                <div class="form-group">
+                    <label for="network">Upload recorded files via</label>
+                    {html_options name="network" id="network" class="form-control" options=$networksList selected=$network}
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <p class="text-primary text-center">Additional charges may apply for data transfer using mobile operator network.</p>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">Recent Photos</div>
+        <div class="panel-body text-center">
+            {foreach from=$recentPhotos item=item}
+            <a href="{$item.fullUrl}" class="recent-photos"><img data-name="{$item.filepath|pathinfo:$smarty.const.PATHINFO_BASENAME}" data-time="{$item.timestamp}" data-album="{$item.album}" data-deleted="{$item.deleted}" src="{$item.thumbUrl}" alt="" class="photo img-rounded" /></a>
+            {/foreach}
+        </div>
+    </div>
+
+    {if count($albums)}
+    <div class="panel panel-default">
+        <div class="panel-heading">Albums</div>
+        <div class="panel-body text-center">
+            {foreach from=$albums item=item}
+            <a href="{$di.router->getRouteUrl('photos')}/album/{$item.album}" class="album">
+                <img src="{$item.thumbUrl}" alt="" class="img-rounded" />
+                <div class="name">{$item.album}</div>
+            </a>
+            {/foreach}
+        </div>
+    </div>
+    {/if}
+    <script type="text/javascript">
+        $(document).ready(function() {
+            var photoTmpl = _.template('<div class="photo-info"><strong class="text-info"><%= name %></strong><dl><dt>Date</dt><dd><%= time %></dd><dt>Album</dt><dd><%= album %></dd><dt>Deleted</dt><dd><% if (deleted > 0) { %>Yes<% } else { %>No<% } %></dd></dl></div>');
+
+            $('.photo').each(function() {
+                $(this).popover({
+                    html: true,
+                    content: photoTmpl({
+                        name: $(this).attr('data-name'),
+                        time: moment($(this).attr('data-time') * 1000).zone(0).format('llll'),
+                        album: $(this).attr('data-album'),
+                        deleted: $(this).attr('data-deleted')
+                    }),
+                    placement: 'top',
+                    trigger: 'hover',
+                    container: 'body'
+                });
+            });
+
+            $(".recent-photos").colorbox({
+                rel: 'recent',
+                maxWidth: '90%',
+                maxHeight: '90%'
+            });
+
+            $('#network').change(function() {
+                $(this).closest('form').submit();
+            });
+
+            $('.photo').hover(function() {
+                $(this).toggleClass('img-rounded img-thumbnail');
+            }, function() {
+                $(this).toggleClass('img-rounded img-thumbnail');
+            });
+
+            $('.album').hover(function() {
+                $(this).find('img').toggleClass('img-rounded img-thumbnail');
+            }, function() {
+                $(this).find('img').toggleClass('img-rounded img-thumbnail');
+            });
+        });
+    </script>
+    {else}
+        <h3>{$di.t->_('Waiting for photos… Why data may be unavailable?')}</h3>
+        {include file="content/{$di.locale}/noData.html"}
+    {/if}
+</div>

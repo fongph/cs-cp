@@ -1,0 +1,707 @@
+<style>
+    .pricing-table {
+        margin-bottom: 20px;
+        overflow: hidden;
+    } 
+
+    .pricing-table > div {
+        position: relative;
+    }
+
+    .pricing-table > div .price {
+        position: relative;
+        color: #fb9502;
+        font-size: 20px;
+        height: 60px;
+        line-height: 60px;
+        background: #f2f2f2;
+        padding-right: 15px;
+        border-left: 1px solid #dcdcdc;
+        border-right: 1px solid #dcdcdc;
+    }
+
+    .pricing-table > div .priceLabel {
+        height: 60px;
+        line-height: 60px;
+        border: 1px solid #dcdcdc;
+        border-bottom: none;
+        background: #f2f2f2;
+        font-size: 24px;
+        text-transform: uppercase;
+        font-weight: bold;
+        color: #656565;
+        padding-left: 20px;
+    }
+
+    .pricing-table > div .price span {
+        font-size: 38px;
+        font-weight: bold;
+    }
+
+    .pricing-table > div .price sup {
+        position: absolute;
+        top: 20px;
+    }
+
+    .pricing-table > div .price sub {
+        position: absolute;
+        top: 41px;
+    }
+
+    .pricing-table ul {
+        margin: 0 0 20px 0;
+        padding: 0;
+        width: 100%;
+        border: 1px solid #dcdcdc;
+        font-family: 'Yanone Kaffeesatz', sans-serif;
+    }
+
+    .pricing-table ul li {
+        list-style: none;
+        font-size: 17px;
+        line-height: 16px;
+        color: #656565;
+        padding: 7px 0 7px 15px;
+        border-bottom: 1px solid #dcdcdc;
+        line-height: 21px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    @media (min-width: 767px) {
+        .pricing-table ul li {
+            height: 36px;
+        }
+        
+        .pricing-table ul li.buttonHolder {
+            height: 80px !important;
+        }
+        
+        .pricing-table ul li.support {
+            height: 55px;
+        }
+
+        .pricing-table > div {
+            width: 25%;
+            float: left;
+            padding-right: 3px;
+        }
+    }
+
+    @media (max-width: 767px) {
+        .pricing-table > div {
+            margin: 0 auto 30px auto;
+            max-width: 230px;
+        }
+    }
+
+    .pricing-table ul li span {
+        font-weight: normal;
+    }
+
+    .pricing-table .highlited ul {
+        border: 0;
+    }
+
+    .pricing-table .highlited ul li .text-success {
+        color: #fff;
+    }
+
+    .pricing-table .highlited ul li {
+        background: #44aee1;
+        border: 0;
+        color: #fff;
+    }
+
+    .pricing-table .highlited ul li:nth-child(even) {
+        background: #0b94d5;
+    }
+
+    .pricing-table .highlited .price {
+        background: #0b94d5;
+        border: 0;
+        color: #fff;
+    }
+
+    .pricing-table ul li:nth-child(even) {
+        background: #f2f2f2;
+    }
+
+
+    .pricing-table ul li:nth-child(even) {
+        background: #f2f2f2;
+    }
+
+    .pricing-table ul li:last-child {
+        border: 0;
+    }
+
+    .pricing-table ul li label {
+        font-weight: normal;
+        margin: 0;
+        cursor: pointer;
+    }
+
+    .pricing-table .title {
+        border-radius: 5px 5px 0 0;
+        height: 90px;
+        width: 100%;
+    }
+
+    .pricing-table .title.business {
+        height: 49px;
+        margin-top: 41px;
+        background: url("{$di.config.staticDomain}/img/pricing-table/business.png") bottom center no-repeat;
+    }
+
+    .pricing-table .title.pro {
+        height: 49px;
+        margin-top: 41px;
+        background: url("{$di.config.staticDomain}/img/pricing-table/pro.png") bottom center no-repeat;
+    }
+
+    .pricing-table .title.pro-plus {
+        height: 72px;
+        margin-top: 18px;
+        background: url("{$di.config.staticDomain}/img/pricing-table/pro-plus.png") bottom center no-repeat;
+    }
+
+    .pricing-table .buyButton {
+        width: 100px;
+        padding: 8px 15px 10px;
+        margin: 10px 0 0 0 !important;
+        font-family: 'Yanone Kaffeesatz', sans-serif;
+        color: #353535 !important;
+        background-color: #f5a700;
+        border: medium none;
+        border-radius: 15px;
+        display: inline-block;
+        text-decoration: none;
+        text-align: center;
+        font-size: 25px;
+        font-weight: normal;
+        letter-spacing: normal;
+        line-height: normal;
+    }
+
+    .pricing-table .buyButton:hover {
+        text-decoration: underline;
+    }
+
+    .pricing-table .buyAnnually {
+        color: #656565;
+        font-size: 15px;
+        margin-top: 10px;
+    }
+</style>
+<h3 class="text-center">{$di.t->_('Unfortunately your package does not include this feature.')}</h3>
+<h3 class="text-center">{$di.t->_('Update Now to Extend!')}</h3>
+
+<div class="pricing-table">
+    <div class="text-left hidden-xs">
+        <div class="title"></div>
+        <div class="priceLabel">{$di.t->_('price')}</div>
+        <ul>
+            <li>{$di.t->_('12 months')}</li>
+            <li>{$di.t->_('6 months')}</li>
+            <li>{$di.t->_('3 months')}</li>
+            <li>{$di.t->_('1 month')}</li>
+            <li class="buttonHolder">&nbsp;</li>
+            <li>{$di.t->_('View Call History')}</li>
+            <li>{$di.t->_('View SMS')}</li>
+            <li>{$di.t->_('Stealth mode')}</li>
+            <li>{$di.t->_('Location Tracking')}</li>
+            <li>{$di.t->_('Record surroundings')}</li>
+            <li>{$di.t->_('Call Recording')}</li>
+            <li>{$di.t->_('Call/SMS blocking')}</li>
+            <li>{$di.t->_('View Contacts')}</li>
+            <li>{$di.t->_('View Calendar')}</li>
+            <li>{$di.t->_('Check browsing history')}</li>
+            <li>{$di.t->_('View bookmarks')}</li>
+            <li>{$di.t->_('View user Photos')}</li>
+            <li>{$di.t->_('Read Emails')} *</li>
+            <li>{$di.t->_('Remote Control')}</li>
+            
+            <li>{$di.t->_('Block applications')}</li>
+            <li>{$di.t->_('Software updates')}</li>
+            <li>{$di.t->_('SIM card change alert')}</li>
+            <li>{$di.t->_('Remote Device Lock')}</li>
+            
+            <li>{$di.t->_('Viber/WhatsApp/Skype')} *</li>
+            <li>{$di.t->_('View user Videos')}</li>
+            <li>{$di.t->_('Facebook Messages')} *</li>
+            <li>{$di.t->_('SMS Commands')}</li>
+            <li>{$di.t->_('Keylogger')}</li>
+            <li class="support">{$di.t->_('Customer Care')}</li>
+        </ul>
+    </div>
+    <div class="text-center">
+        <div class="title pro"></div>
+        <div class="price">
+            $
+            <span id="plan_PRO_price"></span>
+            <sup id="plan_PRO_cents"></sup>
+            <sub>/{$di.t->_('month')}</sub>
+        </div>
+        <ul>
+            <li>
+                <span class="visible-xs">{$di.t->_('12 months')}</span>
+                -
+            </li>
+            <li>
+                <span class="visible-xs">{$di.t->_('6 months')}</span>
+                -
+            </li>
+            <li>
+                <span class="visible-xs">{$di.t->_('3 months')}</span>
+                <label>
+                    <input type="radio" name="plan_PRO" id="plan_PRO-3" checked="checked" data-price="64.99" data-package="4604418"> $64.99
+                </label>
+            </li>
+            <li>
+                <span class="visible-xs">{$di.t->_('1 month')}</span>
+                <label>
+                    <input type="radio" name="plan_PRO" id="plan_PRO-1" data-price="34.99" data-package="4604417"> $34.99
+                </label>
+            </li>
+            <li class="buttonHolder">
+                <a href="" class="buyButton" id="plan_PRO_buy_now-2" onclick="return _gaLink(this);">Buy Now</a>
+            </li>
+            <li>
+                <span class="visible-xs">View Call History </span>
+                700 calls
+            </li>
+            <li>
+                <span class="visible-xs">View SMS </span>
+                300 sms
+            </li>
+            <li>
+                <span class="visible-xs">Stealth mode </span>
+                <i class="fa fa-check text-success"></i>
+            </li>
+            <li>
+                <span class="visible-xs">Location Tracking </span>
+                <i class="fa fa-check text-success"></i>
+            </li>
+            <li>
+                <span class="visible-xs">Record surroundings </span>
+                20
+            </li>
+            <li>
+                <span class="visible-xs">Call Recording </span>
+                20
+            </li>
+            <li>
+                <span class="visible-xs">Call/SMS blocking </span>
+                <i class="fa fa-check text-success"></i>
+            </li>
+            <li>
+                <span class="visible-xs">View Contacts </span>
+                <i class="fa fa-check text-success"></i>
+            </li>
+            <li>
+                <span class="visible-xs">View Calendar </span>
+                <i class="fa fa-check text-success"></i>
+            </li>
+            <li>
+                <span class="visible-xs">Check browsing history </span>
+                <i class="fa fa-check text-success"></i>
+            </li>
+            <li>
+                <span class="visible-xs">View bookmarks </span>
+                <i class="fa fa-check text-success"></i>
+            </li>
+            <li>
+                <span class="visible-xs">View user Photos </span>
+                <i class="fa fa-check text-success"></i>
+            </li>
+            <li>
+                <span class="visible-xs">Read Emails * </span>
+                <i class="fa fa-check text-success"></i>
+            </li>
+            <li>
+                <span class="visible-xs">Remote Control </span>
+                <i class="fa fa-check text-success"></i>
+            </li>
+            <li>
+                <span class="visible-xs">Block applications</span>
+                <i class="fa fa-check text-success"></i>
+            </li>
+            <li>
+                <span class="visible-xs">Software updates</span>
+                <i class="fa fa-check text-success"></i>
+            </li>
+            <li>
+                <span class="visible-xs">SIM card change alert</span>
+                <i class="fa fa-check text-success"></i>
+            </li>
+            <li>
+                <span class="visible-xs">Remote Device Lock</span>
+                <i class="fa fa-check text-success"></i>
+            </li>
+            <li>
+                <span class="visible-xs">Viber/WhatsApp/Skype * </span>
+                <i class="fa fa-times text-danger"></i>
+            </li>
+            <li>
+                <span class="visible-xs">View user Videos </span>
+                <i class="fa fa-times text-danger"></i>
+            </li>
+            <li>
+                <span class="visible-xs">Facebook Messages * </span>
+                <i class="fa fa-times text-danger"></i>
+            </li>
+            <li>
+                <span class="visible-xs">SMS Commands </span>
+                <i class="fa fa-times text-danger"></i>
+            </li>
+            <li>
+                <span class="visible-xs">Keylogger </span>
+                <i class="fa fa-times text-danger"></i>
+            </li>
+            <li class="support">
+                <span class="visible-xs">Customer Care</span>
+                Chat and E-mail Support
+            </li>
+        </ul>
+        <div>
+            <a href="" class="buyButton" id="plan_PRO_buy_now-2" onclick="return _gaLink(this);">Buy Now</a>
+        </div>
+    </div>
+    <div class="text-center highlited">
+        <div class="title pro-plus"></div>
+        <div class="price">
+            $
+            <span id="plan_PRO_Plus_price">18</span>
+            <sup id="plan_PRO_Plus_cents">33</sup>
+            <sub>/month</sub>
+        </div>
+        <ul>
+            <li>
+                <span class="visible-xs">12 months</span>
+                <label>
+                    <input type="radio" name="plan_PRO_Plus" id="plan_PRO_Plus-12" data-price="189.99" data-package="4604423"> $189.99
+                </label>
+            </li>
+            <li>
+                <span class="visible-xs">6 months </span>
+                <label>
+                    <input type="radio" name="plan_PRO_Plus" id="plan_PRO_Plus-6" data-price="129.99" data-package="4604422"> $129.99
+                </label>
+            </li>
+            <li>
+                <span class="visible-xs">3 months </span>
+                <label>
+                    <input type="radio" name="plan_PRO_Plus" id="plan_PRO_Plus-3" checked="checked" data-price="99.99" data-package="4604421"> $99.99
+                </label>
+            </li>
+            <li>
+                <span class="visible-xs">1 month </span>
+                <label>
+                    <input type="radio" name="plan_PRO_Plus" id="plan_PRO_Plus-1" data-price="64.99" data-package="4604420"> $64.99
+                </label>
+            </li>
+            <li class="buttonHolder">
+                <a href="" class="buyButton" id="plan_PRO_Plus_buy_now-2" onclick="return _gaLink(this);">Buy Now</a>
+            </li>
+            <li>
+                <span class="visible-xs">View Call History </span>
+                Unlimited
+            </li>
+            <li>
+                <span class="visible-xs">View SMS </span>
+                Unlimited
+            </li>
+            <li>
+                <span class="visible-xs">Stealth mode </span>
+                <i class="fa fa-check text-success"></i>
+            </li>
+            <li>
+                <span class="visible-xs">Location Tracking </span>
+                <i class="fa fa-check text-success"></i>
+            </li>
+            <li>
+                <span class="visible-xs">Record surroundings </span>
+                Unlimited
+            </li>
+            <li>
+                <span class="visible-xs">Call Recording </span>
+                Unlimited
+            </li>
+            <li>
+                <span class="visible-xs">Call/SMS blocking </span>
+                <i class="fa fa-check"></i>
+            </li>
+            <li>
+                <span class="visible-xs">View Contacts </span>
+                <i class="fa fa-check"></i>
+            </li>
+            <li>
+                <span class="visible-xs">View Calendar </span>
+                <i class="fa fa-check"></i>
+            </li>
+            <li>
+                <span class="visible-xs">Check browsing history </span>
+                <i class="fa fa-check"></i>
+            </li>
+            <li>
+                <span class="visible-xs">View bookmarks </span>
+                <i class="fa fa-check"></i>
+            </li>
+            <li>
+                <span class="visible-xs">View user Photos </span>
+                <i class="fa fa-check"></i>
+            </li>
+            <li>
+                <span class="visible-xs">Read Emails *</span>
+                <i class="fa fa-check"></i>
+            </li>
+            <li>
+                <span class="visible-xs">Remote Control</span>
+                <i class="fa fa-check"></i>
+            </li>
+            <li>
+                <span class="visible-xs">Block applications</span>
+                <i class="fa fa-check"></i>
+            </li>
+            <li>
+                <span class="visible-xs">Software updates</span>
+                <i class="fa fa-check"></i>
+            </li>
+            <li>
+                <span class="visible-xs">SIM card change alert</span>
+                <i class="fa fa-check"></i>
+            </li>
+            <li>
+                <span class="visible-xs">Remote Device Lock</span>
+                <i class="fa fa-check"></i>
+            </li>
+            <li>
+                <span class="visible-xs">Viber/WhatsApp/Skype * </span>
+                <i class="fa fa-check"></i>
+            </li>
+            <li>
+                <span class="visible-xs">View user Videos </span>
+                <i class="fa fa-check"></i>
+            </li>
+            <li>
+                <span class="visible-xs">Facebook Messages *</span>
+                <i class="fa fa-check"></i>
+            </li>
+            <li>
+                <span class="visible-xs">SMS Commands</span>
+                <i class="fa fa-check"></i>
+            </li>
+            <li>
+                <span class="visible-xs">Keylogger</span>
+                <i class="fa fa-check"></i>
+            </li>
+            <li class="support">
+                <span class="visible-xs">Customer Care</span>
+                Phone, Chat and E-mail Support
+            </li>
+        </ul>
+        <div>
+            <a href="" class="buyButton" id="plan_PRO_Plus_buy_now" onclick="return _gaLink(this);">Buy Now</a>
+        </div>
+    </div>
+    <div class="text-center">
+        <div class="title business"></div>
+        <div class="price">
+            $
+            <span id="plan_Business_price"></span>
+            <sup id="plan_Business_cents"></sup>
+            <sub>/month</sub>
+        </div>
+        <ul>
+            <li>
+                <span class="visible-xs">12 months</span>
+                <label>
+                    <input type="radio" name="plan_Business" id="plan_Business-12" checked="checked" data-price="389.99" data-package="4625796"> $389.99
+                </label>
+            </li>
+            <li>
+                <span class="visible-xs">6 months</span>
+                <label>
+                    <input type="radio" name="plan_Business" id="plan_Business-6" data-price="239.99" data-package="4625791"> $239.99
+                </label>
+            </li>
+            <li>
+                <span class="visible-xs">3 months </span>
+                -
+            </li>
+            <li>
+                <span class="visible-xs">1 month </span>
+                -
+            </li>
+            <li class="buttonHolder">
+                <a href="" class="buyButton" id="plan_Business_buy_now-2" onclick="return _gaLink(this);">Buy Now</a>
+            </li>
+            <li>
+                <span class="visible-xs">View Call History </span>
+                Unlimited
+            </li>
+            <li>
+                <span class="visible-xs">View SMS </span>
+                Unlimited
+            </li>
+            <li>
+                <span class="visible-xs">Stealth mode </span>
+                <i class="fa fa-check text-success"></i>
+            </li>
+            <li>
+                <span class="visible-xs">Location Tracking </span>
+                <i class="fa fa-check text-success"></i>
+            </li>
+            <li>
+                <span class="visible-xs">Record surroundings </span>
+                Unlimited
+            </li>
+            <li>
+                <span class="visible-xs">Call Recording </span>
+                Unlimited
+            </li>
+            <li>
+                <span class="visible-xs">Call/SMS blocking </span>
+                <i class="fa fa-check text-success"></i>
+            </li>
+            <li>
+                <span class="visible-xs">View Contacts </span>
+                <i class="fa fa-check text-success"></i>
+            </li>
+            <li>
+                <span class="visible-xs">View Calendar </span>
+                <i class="fa fa-check text-success"></i>
+            </li>
+            <li>
+                <span class="visible-xs">Check browsing history </span>
+                <i class="fa fa-check text-success"></i>
+            </li>
+            <li>
+                <span class="visible-xs">View bookmarks </span>
+                <i class="fa fa-check text-success"></i>
+            </li>
+            <li>
+                <span class="visible-xs">View user Photos </span>
+                <i class="fa fa-times text-danger"></i>
+            </li>
+            <li>
+                <span class="visible-xs">Read Emails * </span>
+                <i class="fa fa-times text-danger"></i>
+            </li>
+            <li>
+                <span class="visible-xs">Remote Control </span>
+                <i class="fa fa-check text-success"></i>
+            </li>
+            <li>
+                <span class="visible-xs">Block applications</span>
+                <i class="fa fa-check text-success"></i>
+            </li>
+            <li>
+                <span class="visible-xs">Software updates</span>
+                <i class="fa fa-check text-success"></i>
+            </li>
+            <li>
+                <span class="visible-xs">SIM card change alert</span>
+                <i class="fa fa-check text-success"></i>
+            </li>
+            <li>
+                <span class="visible-xs">Remote Device Lock</span>
+                <i class="fa fa-check text-success"></i>
+            </li>
+            <li>
+                <span class="visible-xs">Viber/WhatsApp/Skype * </span>
+                <i class="fa fa-check text-success"></i>
+            </li>
+            <li>
+                <span class="visible-xs">View user Videos </span>
+                <i class="fa fa-check text-success"></i>
+            </li>
+            <li>
+                <span class="visible-xs">Facebook Messages *</span>
+                <i class="fa fa-check text-success"></i>
+            </li>
+            <li>
+                <span class="visible-xs">SMS Commands </span>
+                <i class="fa fa-check text-success"></i>
+            </li>
+            <li>
+                <span class="visible-xs">Keylogger</span>
+                <i class="fa fa-check text-success"></i>
+            </li>
+            <li class="support">
+                <span class="visible-xs">Customer Care</span>
+                Phone, Chat and Email<br /> Premium Support
+            </li>
+        </ul>
+        <div class="text-center">
+            <a href="" class="buyButton" id="plan_Business_buy_now-1" onclick="return _gaLink(this);">Buy Now</a>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-42165193-1']);
+    _gaq.push(['_setDomainName', 'topspyapp.com']);
+    _gaq.push(['_setAllowLinker', true]);
+    _gaq.push(['_setAllowHash', false]);
+    _gaq.push(['_trackPageview']);
+    (function() {
+        var ga = document.createElement('script');
+        ga.type = 'text/javascript';
+        ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'stats.g.doubleclick.net/dc.js';
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(ga, s);
+    })();
+
+    function _gaLink(a) {
+        _gaq.push(['_set', 'hitCallback', function() {
+                _gaq.push(['_set', 'hitCallback', function() {
+                        _gaq.push(['_link', a.href]);
+                    }]);
+                _gaq.push(['_trackEvent', 'cpBuyClick', a.rel]);
+            }]);
+
+        _gaq.push(['_trackEvent', 'buyClick', 'cp']);
+        return false;
+    }
+
+    $(document).ready(function() {
+        var buyLink = '{$packageLink}';
+        
+        function planHandler(element) {
+            var strReplace = function(search, replace, subject) {
+                return subject.split(search).join(replace);
+            };
+
+            var price = parseFloat($(element).attr('data-price'));
+            var id = $(element).attr('id');
+            var valid_period = parseFloat(id.split('-')[1]);
+            var buy_now = '#' + id.split('-')[0] + '_buy_now-1, #' + id.split('-')[0] + '_buy_now-2';
+
+            $(buy_now).attr('href', buyLink.replace('PACKAGE_ID', $(element).attr('data-package')))
+                    .attr('rel', id.split('-')[0].split('plan_')[1].split('_').join('') + valid_period + 'M');
+
+            price = (price / valid_period).toString();
+
+            var dollars = price.split('.')[0];
+            var cents = price.split('.')[1];
+
+            id_d = strReplace('-' + id.split('-')[1], '', id) + '_price';
+            id_c = strReplace('-' + id.split('-')[1], '', id) + '_cents';
+            $('#' + id_d).html(dollars);
+            $('#' + id_c).html(cents.substr(0, 2));
+        }
+
+        $('input[id^="plan_"]:checked').each(function() {
+            planHandler($(this));
+        });
+
+        $('input[id^="plan_"]').click(function() {
+            planHandler($(this));
+        });
+    });
+</script>
+
+<p class="text-info">* In case of Android OS: device should be ROOTED and our application should have Super User privileges</p>

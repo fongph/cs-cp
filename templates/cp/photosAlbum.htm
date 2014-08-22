@@ -1,0 +1,72 @@
+<style type="text/css">
+    .networkForm {
+        margin: 15px 0 10px 0;
+    }
+
+    .photo {
+        width: 150px;
+        height: 150px;
+        margin-bottom: 5px;
+    }
+
+    .photo-info {
+        text-align: left;
+        font-size: 10px;
+    }
+
+    .photo-info dl {
+        margin: 10px 0 0 0;
+    }
+</style>
+<div>
+    <h1 class="text-center">{$title}</h1>
+
+    {$di.flashMessages}
+
+    <div style="margin-bottom: 10px">
+        <a class="btn btn-default" href="{$di.config.domain}/cp/photos">Back to albums list</a>
+    </div>
+
+    {if count($photos)}
+    <div class="panel panel-default">
+        <div class="panel-heading">{$albumName}</div>
+        <div class="panel-body text-center">
+            {foreach from=$photos item=item}
+            <a href="{$item.fullUrl}" class="album-item"><img data-name="{$item.filepath|pathinfo:$smarty.const.PATHINFO_BASENAME}" data-time="{$item.timestamp}" data-album="{$item.album}" data-deleted="{$item.deleted}" src="{$item.thumbUrl}" alt="" class="photo img-rounded" /></a>
+            {/foreach}
+        </div>
+    </div>
+    {/if}
+</div>
+<script type="text/javascript">
+    $(document).ready(function(e) {
+        var photoTmpl = _.template('<div class="photo-info"><strong class="text-info"><%= name %></strong><dl><dt>Date</dt><dd><%= time %></dd><dt>Album</dt><dd><%= album %></dd><dt>Deleted</dt><dd><% if (deleted > 0) { %>Yes<% } else { %>No<% } %></dd></dl></div>');
+
+        $('.photo').each(function() {
+            $(this).popover({
+                html: true,
+                content: photoTmpl({
+                    name: $(this).attr('data-name'),
+                    time: moment($(this).attr('data-time') * 1000).zone(0).format('llll'),
+                    album: $(this).attr('data-album'),
+                    deleted: $(this).attr('data-deleted')
+                }),
+                placement: 'top',
+                trigger: 'hover',
+                container: 'body'
+            });
+        });
+
+        $(".album-item").colorbox({
+            rel: 'recent',
+            maxWidth: '90%',
+            maxHeight: '90%'
+        });
+
+        $('.photo').hover(function() {
+            $(this).toggleClass('img-rounded img-thumbnail');
+        }, function() {
+            $(this).toggleClass('img-rounded img-thumbnail');
+        });
+    });
+</script>

@@ -1,0 +1,69 @@
+<div>
+    <h1 class="text-center">{$title}</h1>
+
+    {if $hasRecords}
+    <div class="form-inline calendar-form text-center">
+        <div class="btn-group">
+            <button class="btn btn-primary" data-calendar-nav="prev"><< {$di.t->_('Prev')}</button>
+            <button class="btn btn-default" data-calendar-nav="today">{$di.t->_('Today')}</button>
+            <button class="btn btn-primary" data-calendar-nav="next">{$di.t->_('Next')} >></button>
+        </div>
+        <div id="calendarView" class="btn-group">
+            <button class="btn btn-warning active" data-calendar-view="month">Month</button>
+            <button class="btn btn-warning" data-calendar-view="week">Week</button>
+            <button class="btn btn-warning" data-calendar-view="day">Day</button>
+        </div>
+    </div>
+
+    <h3 class="calendar-header text-center"></h3>
+
+    <div id="calendar"></div>
+    <script>
+        $(document).ready(function() {
+            var calendar = $('#calendar').calendar({
+                language: '{$di.locale}',
+                events_source: '{$di.config.domain}/cp/calendar',
+                view: 'month',
+                tmpl_path: '{$di.config.staticDomain}/tpl/',
+                tmpl_cache: false,
+                onAfterViewLoad: function(view) {
+                    $('h3.calendar-header').text(this.getTitle());
+                    $('#calendarView button').removeClass('active');
+                    $('button[data-calendar-view="' + view + '"]').addClass('active');
+
+                    $('.cal-week-box a[data-table-custom-navigate]').click(function(e) {
+                        e.preventDefault();
+                        calendar.options.view = 'day';
+                        calendar.navigate('custom', $(this).attr('data-table-custom-navigate'));
+                    });
+                },
+                time_start: '00:00',
+                time_end: '24:00',
+                classes: {
+                    months: {
+                        general: 'label'
+                    }
+                }
+            });
+
+            $('.btn-group button[data-calendar-nav]').each(function() {
+                var $this = $(this);
+                $this.click(function() {
+                    calendar.navigate($this.data('calendar-nav'));
+                });
+            });
+
+            $('.btn-group button[data-calendar-view]').each(function() {
+                var $this = $(this);
+                $this.click(function() {
+                    calendar.view($this.data('calendar-view'));
+                });
+            });
+        });
+    </script>
+    {else}
+    <h3>{$di.t->_('There are no calendar events on the device')}</h3>
+    <h3>{$di.t->_('Waiting for data… Why data may be unavailable?')}</h3>
+    {include file="content/{$di.locale}/noData.html"}
+    {/if}
+</div>

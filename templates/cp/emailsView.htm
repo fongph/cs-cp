@@ -1,0 +1,103 @@
+<style>
+    .email-panel {
+        border: 1px solid #e1e1e8;
+        background-color: #f7f7f9;
+        padding: 10px 2px;
+        overflow: hidden;
+    }
+
+    .panel-top {
+        margin-bottom: 10px;
+        vertical-align: bottom;
+    }
+
+    dl {
+        padding-bottom: 5px;
+        border-bottom: 1px solid #aaa;
+    }
+
+    .form-info {
+        padding: 15px;
+        margin: 0 10px;
+        border: 1px solid #ddd;
+        display: none;
+    }
+
+    #email-view {
+        display: none;
+    }
+    
+    #email-view iframe{
+        border: none;
+        width: 100%;
+    }
+
+    #loading {
+        text-align: center;
+        margin: 15px 0;
+    }
+</style>
+<div>
+    <h1 class="text-center">{$title}</h1>
+
+    {$di.flashMessages}
+
+    <div class="panel-top">
+        <a class="btn btn-default" href="{$di.router->getRouteUrl('emailsSelected', ['account'=>$account])}">Back to Emails log</a>
+    </div>
+
+    <div class="email-panel">
+        <dl class="dl-horizontal">
+            <dt>Date:</dt>
+            <dd id="timestamp" data-time="{$email.timestamp}"></dd>
+            <dt>From:</dt>
+            <dd>{$email.from|escape}</dd>
+            <dt>Subject:</dt>
+            <dd>{$email.subject|escape}</dd>
+            <dt>To:</dt>
+            <dd>{$email.to|escape}</dd>
+        </dl>
+
+        <p class="form-info image-form bg-warning">{$di.t->_('External images are not shown.')} <a href="" id="showImages">{$di.t->_('Show images')}</a></p>
+
+        <div id="email-view">
+        <iframe>No-data</iframe>
+        </div>
+        <div id="loading">
+            <img src="{$di.config.staticDomain}/img/loader.gif" alt="" />
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function() {
+        moment.lang('{$di.locale}');
+
+        $('#timestamp').html(moment.unix($('#timestamp').attr('data-time')).zone(0).format("LLL"));
+
+        $("#email-view iframe")
+                .load(function() {
+                    $('#loading').hide();
+                    $('#email-view').show();
+                    if ($(this).contents().find('img[tmp-src]').size()) {
+                        $('.image-form').show();
+                    }
+                    
+                    if ($(this).contents().height()) {
+                        $(this).css("height", $(this).contents().height() + "px");
+                    }
+                })
+                .attr({
+                    scrolling: "no",
+                    src: window.location + '?content'
+                });
+
+        $('#showImages').click(function(e) {
+            e.preventDefault();
+            $("#email-view iframe").contents().find('img[tmp-src]').each(function() {
+                $(this).attr('src', $(this).attr('tmp-src'));
+                $(this).removeAttr('tmp-src');
+            });
+            $(this).parent().hide();
+        });
+    });
+</script>

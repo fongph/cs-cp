@@ -1,0 +1,19 @@
+{
+    "type": "project",
+    "require": {
+        "php": ">=5.3.0",
+        "rastor/system": "dev-master",
+        "smarty/smarty": "3.*",
+        "phpmailer/phpmailer": "5.*",
+        "tpyo/amazon-s3-php-class": "0.5.0",
+        "hautelook/phpass": "0.3.0",
+        "monolog/monolog": "1.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Controllers\\": "controllers",
+            "Models\\": "models"
+        },
+        "files": ["includes/functions.php"]
+    }
+}

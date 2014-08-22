@@ -1,0 +1,96 @@
+<div>
+    <h1 class="text-center">{$title}</h1>
+
+    {$di.flashMessages}
+
+    {if $hasRecords}
+    <div class="table-container">
+        <table class="dataTable" id="datatables" aria-describedby="datatables_info">
+            <thead>
+                <tr role="row">
+                    <th>{$di['t']->_('Name')}</th>
+                    <th>{$di['t']->_('Version')}</th>
+                    <th>{$di['t']->_('Status')}</th>
+                    <th>{$di['t']->_('Count')}</th>
+                    <th>{$di['t']->_('Last date')}</th>
+                    <th>*{$di['t']->_('Actions')}</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+
+    <p class="text-info">*{$di.t->_('Command activation will take up to 20 minutes.')}</p>
+    <script>
+        $(document).ready(function() {
+            var actionsTemplate = _.template('<% if (blocked > 0) { %><a class="btn btn-info btn-xs" href="{$di.config.domain}/cp/applications?unblock=<%= id %>"><i class="fa fa-unlock"></i> {$di.t->_(Unblock)}</a><% } else { %><a class="btn btn-danger btn-xs" href="{$di.config.domain}/cp/applications?block=<%= id %>"><i class="fa fa-lock"></i> {$di.t->_(Block)}</a><% } %>');
+            var lnkTemplate = _.template('<% if (url.length) { %><a href="<%= url %>"><%= name %></a><% } else { %><%= name %><% } %>');
+
+            $('.dataTable').dataTable({
+                bProcessing: true,
+                bServerSide: true,
+                sAjaxSource: '{$di.config.domain}/cp/applications',
+                bPaginate: true,
+                bFilter: true,
+                bSort: true,
+                bInfo: true,
+                bAutoWidth: false,
+                bSortMulti: false,
+                iDisplayLength: '{$authData.records_per_page}',
+                oLanguage: {
+                    sUrl: '{$di.config.staticDomain}/js/datatables/language/{$di.locale}.txt'
+                },
+                aoColumns: [
+                    {
+                        mData: null,
+                        fnRender: function(obj) {
+                            return lnkTemplate({
+                                url: obj.aData.url,
+                                name: obj.aData.name
+                            });
+                        }
+                    },
+                    {
+                        mData: "version"
+                    },
+                    {
+                        mData: "deleted",
+                        fnRender: function(obj) {
+                            return  ((obj.aData.deleted > 0) ? "{$di['t']->_(Deleted)}" : "{$di['t']->_(Installed)}");
+                        }
+                    },
+                    {
+                        mData: "count",
+                        sWidth: "100px"
+                    },
+                    {
+                        mData: 'lasttime',
+                        bUseRendered: false,
+                        fnRender: function(obj, value) {
+                            if (!value) {
+                                return '-';
+                            }
+                            
+                            return moment(value * 1000).zone(0).format('lll');
+                        }
+                    },
+                    {
+                        mData: null,
+                        fnRender: function(obj) {
+                            return actionsTemplate({
+                                id: obj.aData.id,
+                                blocked: obj.aData.blocked
+                            });
+                        }
+                    }
+                ],
+                fnDrawCallback: function() {
+                    $(this).find('tbody').tableScroll();
+                }
+            });
+        });
+    </script>
+    {else}
+    <h3>{$di.t->_('Waiting for applications installed on the device… Why data may be unavailable?')}</h3>
+    {include file="content/{$di.locale}/noData.html"}
+    {/if}
+</div>

@@ -1,0 +1,33 @@
+<div class="col-lg-6 col-md-8 col-lg-offset-3 col-md-offset-2">
+    <h1 class="text-center">{$title}</h1>
+
+    {$di.flashMessages}
+    
+    {if !isset($success)}
+    <p class="text-center">{$di.t->_('Get in touch with our team for any question you may have!')}</p>
+    <form role="form" method="post">
+        <div class="form-group">
+            <label for="name">{$di.t->_('Name')}</label>
+            <input type="text" name="name" class="form-control" id="name" placeholder="{$di.t->_('Name')}">
+        </div>
+        <div class="form-group">
+            <label for="email">{$di.t->_('Email address')}</label>
+            <input type="text" name="email" class="form-control" id="email" placeholder="{$di.t->_('Email address')}">
+        </div>
+        <div class="form-group">
+            <label for="types">{$di.t->_('Question type')}</label>
+            {html_options id="types" name="type" class="form-control" options=$types}
+        </div>
+        <div class="form-group">
+            <label for="message">{$di.t->_('Message')}</label>
+            <textarea id="message" name="message" class="form-control" placeholder="{$di.t->_('Text of message...')}"></textarea>
+        </div>
+        <div class="form-group">
+            <p>{$di.t->_('Make sure you have read %1$sFAQ%2$s before submitting a ticket', ['<a href="http://www.topspyapp.com/help/">', '</a>'])}</p>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">{$di.t->_('Submit Ticket')}</button>
+        </div>
+    </form>
+    {/if}
+</div>

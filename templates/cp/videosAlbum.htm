@@ -1,0 +1,206 @@
+<style type="text/css">
+    .video-holder {
+        display: inline-block;
+        width: 187px;
+        height: 186px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        margin: 0 5px 5px 0;
+        padding: 5px;
+        overflow: hidden;
+    }
+
+    .video-holder img {
+        width: 175px;
+        height: 98px;
+    }
+
+    .video-holder img.play {
+        cursor: pointer;
+    }
+
+    .video-holder img.play:hover {
+        opacity: 0.5;
+    }
+
+    .video-holder .video-info {
+        position: relative;
+        font-size: 11px;
+        width: 175px;
+        height: 70px;
+        margin-top: 5px;
+        text-align: left;
+        overflow: hidden;
+    }
+
+    .video-holder .video-info .name {
+        font-weight: bold;
+        line-height: 15px;
+        max-height: 30px;
+        overflow: hidden;
+        word-break: break-all;
+    }
+
+    .video-holder .video-info .date {
+        margin-bottom: 3px;
+    }
+
+    .video-holder .video-info .bottom {
+        position: absolute;
+        bottom: 0px;
+        width: 100%;
+    }
+
+    .video-holder .video-info .status {
+        float: left;
+    }
+
+    .video-holder .video-info .status span {
+        font-size: 12px;
+        line-height: 22px;
+        font-weight: normal;
+    }
+
+    .video-holder .video-info .buttons {
+        float: right;
+    }
+</style>
+<div>
+    <h1 class="text-center">{$title}</h1>
+
+    {$di.flashMessages}
+
+    <div style="margin-bottom: 10px">
+        <a class="btn btn-default" href="{$di.router->getRouteUrl('videos')}">Back to albums list</a>
+    </div>
+
+    <div class="panel panel-default" id="playerContainer">
+        <div class="panel-heading">Player <button type="button" class="close" aria-hidden="true">&times;</button></div>
+        <div class="panel-body">
+            <div id="jpContainer" class="jp-video">
+                <div class="jp-type-single">
+                    <div id="player" class="jp-jplayer"></div>
+                    <div class="jp-gui">
+                        <table>
+                            <tr>
+                                <td>
+                                    <div class="jp-video-play">
+                                        <i class="fa fa-play-circle"></i>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                        <div class="jp-interface">
+                            <div class="jp-controls-holder">
+                                <ul class="jp-controls">
+                                    <li><a href="javascript:;" class="jp-play" tabindex="1"><i class="fa fa-play"></i></a></li>
+                                    <li><a href="javascript:;" class="jp-pause" tabindex="1"><i class="fa fa-pause"></i></a></li>
+                                    <li><a href="javascript:;" class="jp-stop" tabindex="1"><i class="fa fa-stop"></i></a></li>
+                                </ul>
+                                <div class="jp-progress">
+                                    <div class="jp-seek-bar">
+                                        <div class="jp-play-bar"></div>
+                                        <div class="jp-current-time"></div>
+                                        <div class="jp-duration"></div>
+                                    </div>
+                                </div>
+                                <div class="jp-volume-controls">
+                                    <a href="javascript:;" class="jp-mute" tabindex="1" title="mute"><i class="fa fa-volume-off"></i></a>
+                                    <a href="javascript:;" class="jp-unmute" tabindex="1" title="unmute"><i class="fa fa-volume-up"></i></a>
+                                    <div class="jp-volume-bar">
+                                        <div class="jp-volume-bar-value"></div>
+                                    </div>
+                                </div>
+                                <ul class="jp-toggles">
+                                    <li><a href="javascript:;" class="jp-full-screen" tabindex="1" title="full screen"><i class="fa fa-arrows-alt"></i></a></li>
+                                    <li><a href="javascript:;" class="jp-restore-screen" tabindex="1" title="restore screen"><i class="fa fa-compress"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="jp-no-solution">
+                    <span>Update Required</span>
+                    To play the media you will need to either update your browser to a recent version or update your <a href="http://get.adobe.com/flashplayer/" target="_blank">Flash plugin</a>.
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    {if count($videos)}
+    <div class="panel panel-default">
+        <div class="panel-heading">{$albumName}</div>
+        <div class="panel-body text-center">
+            {foreach from=$videos item=item}
+            <div class="video-holder">
+                <img src="{$item.thumbUrl}"{if $item.is_full} class="play" data-path="{$item.album}/{$item.filename}"{/if} alt="" />
+                     <div class="video-info">
+                    <div class="name">{$item.filename}</div>
+                    <div class="date" data-time="{$item.timestamp}"></div>
+                    <div class="bottom">
+                        <div class="status">
+                            {if $item.deleted}
+                            <span class="text-danger">Deleted</span>
+                            {else}
+                            {if $item.requested}<span class="text-warning">Awaiting download</span>{/if}
+                            {if $item.is_full}<span class="text-success">Available</span>{/if}
+                            {/if}
+                        </div>
+                        <div class="buttons">
+                            {if !$item.deleted}
+                            {if !$item.requested && !$item.is_full}
+                            <a href="?requestVideo={$item.filepath}" class="btn btn-xs btn-primary pull-right">Request video</a>
+                            {else if $item.requested}
+                            <a href="?cancelRequest={$item.filepath}" class="btn btn-xs btn-danger pull-right">Cancel</a>
+                            {/if}
+                            {/if}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {/foreach}
+        </div>
+    </div>
+    {/if}
+</div>
+<script type="text/javascript">
+    $(document).ready(function(e) {
+        $("#player").jPlayer({
+            ready: function() {
+                $('#playerContainer').hide();
+
+                $('.video-holder img.play').click(function() {
+                    $('#player').jPlayer("setMedia", {
+                        m4v: "{$di.router->getRouteUrl('videos')}?getVideo=" + $(this).attr('data-path')
+                    }).jPlayer("play");
+
+                    $('#playerContainer').show();
+                    window.scrollTo(0, $('#playerContainer').offset().top);
+                });
+            },
+            cssSelectorAncestor: '#jpContainer',
+            swfPath: '{$di.config.staticDomain}/jplayer',
+            supplied: 'm4v',
+            errorAlerts: true,
+            warningAlerts: true,
+            size: {
+                width: '100%',
+                height: '100%',
+                cssClass: 'flexible'
+            }
+        });
+
+        $('#playerContainer .close').on('click touchend', function() {
+            $('#playerContainer').hide();
+            $('#player').jPlayer("stop");
+        });
+
+        $('.video-holder .date').each(function() {
+            $(this).html(moment($(this).attr('data-time') * 1000).format('llll'));
+        });
+
+        $('#network').change(function() {
+            $(this).closest('form').submit();
+        });
+    });
+</script>

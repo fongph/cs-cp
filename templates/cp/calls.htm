@@ -1,0 +1,173 @@
+<div>
+    <h1 class="text-center">{$title}</h1>
+    
+    {if $hasRecords}
+    <div class="daterangepickerWrapper">
+        <div id="reportrange" class="btn btn-default pull-right">
+            <i class="fa fa-calendar fa-lg"></i>
+            <span></span>
+            <b class="caret"></b>
+        </div>
+    </div>
+
+    <div class="table-container">
+        <table class="dataTable" id="datatable" aria-describedby="datatables_info">
+            <thead>
+                <tr role="row">
+                    <th>{$di.t->_(Date)}</th>
+                    <th>{$di.t->_(Type)}</th>
+                    <th>{$di.t->_(Number)}</th>
+                    <th>{$di.t->_(Name)}</th>
+                    <th>{$di.t->_(Duration)}</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            moment.lang('{$di.locale}');
+
+            var calls = {
+                startDate: moment().subtract('days', 29).startOf('day'),
+                endDate: moment().endOf('day'),
+                table: null,
+                typeTmpl: _.template('<i class="call-<%= type %> hidden-xs" title="<%= title %>"></i><span class="visible-xs"><%= title %></span>'),
+                blackList: [],
+                selectRanges: {
+                    "{$di.t->_('Today')}": [moment().startOf('day'), moment().endOf('day')],
+                    "{$di.t->_('Yesterday')}": [moment().subtract('days', 1).startOf('day'), moment().subtract('days', 1).endOf('day')],
+                    "{$di.t->_('Last 7 Days')}": [moment().subtract('days', 6).startOf('day'), moment().endOf('day')],
+                    "{$di.t->_('Last 30 Days')}": [moment().subtract('days', 29).startOf('day'), moment().endOf('day')],
+                    "{$di.t->_('This Month')}": [moment().startOf('month'), moment().endOf('month')],
+                    "{$di.t->_('Last Month')}": [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
+                },
+                setRange: function(start, end) {
+                    if (start.isValid() && start.isValid()) {
+                        $('#reportrange span').html(start.format('LL') + ' - ' + end.format('LL'));
+
+                        _.find(this.selectRanges, function(period, name) {
+                            if ((moment(period[0]).format('l') === start.format('l')) && (moment(period[0]).format('l') === start.format('l'))) {
+                                $('#reportrange span').html(name);
+                                return true;
+                            }
+                            return false;
+                        });
+
+                        return '{$di.router->getRouteUrl("calls")}?' + $.param({
+                            timeFrom: moment(start).unix(),
+                            timeTo: moment(end).unix()
+                        });
+                    } else {
+                        return this.setRange(this.startDate, this.endDate);
+                    }
+                },
+                reloadTable: function(url) {
+                    if (this.table) {
+                        this.table.fnReloadAjax(url);
+                    }
+                },
+                init: function() {
+                    var table = $('#datatable').dataTable({
+                        bProcessing: true,
+                        bServerSide: true,
+                        sAjaxSource: this.setRange(this.startDate, this.endDate),
+                        bPaginate: true,
+                        bFilter: true,
+                        bSort: true,
+                        bInfo: true,
+                        bAutoWidth: false,
+                        bSortMulti: false,
+                        aaSorting: [[0, 'desc']],
+                        iDisplayLength: '{$authData.records_per_page}',
+                        oLanguage: {
+                            sUrl: "{$di.config.staticDomain}/js/datatables/language/{$di.locale}.txt"
+                        },
+                        aoColumns: [
+                            {
+                                bUseRendered: false,
+                                sWidth: '180px',
+                                fnRender: function(obj, value) {
+                                    return moment(value * 1000).zone(0).format('lll');
+                                }
+                            },
+                            {
+                                bUseRendered: false,
+                                sWidth: '80px',
+                                fnRender: function(obj, value) {
+                                    if (value === 'in') {
+                                        return calls.typeTmpl({
+                                            type: 'in',
+                                            title: "{$di.t->_('Incoming call')}"
+                                        });
+                                    } else if (value === 'out') {
+                                        return calls.typeTmpl({
+                                            type: 'out',
+                                            title: "{$di.t->_('Outgoing call')}"
+                                        });
+                                    } else {
+                                        return '*';
+                                    }
+                                }
+                            },
+                            {
+                                bUseRendered: false,
+                                fnRender: function(obj, value) {
+                                    if ($.inArray(value, calls.blackList) !== -1) {
+                                        return '<span class="text-danger">' + value + '</span>';
+                                    }
+                                    return value;
+                                }
+                            },
+                            null,
+                            {
+                                sWidth: '110px',
+                                fnRender: function(obj, value) {
+                                    return moment.utc(value * 1000).format("HH:mm:ss");
+                                }
+                            }
+                        ],
+                        fnDrawCallback: function() {
+                            calls.table = table;
+                            $(this).find('tbody').tableScroll();
+                        }
+                    });
+
+                    this.initRangePicker();
+                },
+                initRangePicker: function() {
+                    $('#reportrange').daterangepicker({
+                        ranges: this.selectRanges,
+                        startDate: this.startDate,
+                        endDate: this.endDate,
+                        format: 'LL',
+                        locale: {
+                            applyLabel: "{$di.t->_('Apply')}",
+                            cancelLabel: "{$di.t->_('Cancel')}",
+                            fromLabel: "{$di.t->_('From')}",
+                            toLabel: "{$di.t->_('To')}",
+                            customRangeLabel: "{$di.t->_('Custom Range')}",
+                            daysOfWeek: moment.langData()._weekdaysMin.slice(),
+                            monthNames: (function() {
+                                var res = [];
+                                for (var i = 0; i < 12; i++) {
+                                    res.push(moment([0, i]).format('MMM'));
+                                }
+                                return res;
+                            })(),
+                            firstDay: moment.langData()._week.dow
+                        }
+                    }, function(from, to) {
+                        calls.reloadTable(calls.setRange(from, to));
+                    });
+                }
+            };
+
+            calls.blackList = $.parseJSON('{json_encode($blackList)}');
+            calls.init();
+        });
+    </script>
+    {else}
+    <h3>{$di.t->_('Waiting for data… Why data may be unavailable?')}</h3>
+    {include file="content/{$di.locale}/noData.html"}
+    {/if}
+</div>

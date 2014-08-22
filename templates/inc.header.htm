@@ -1,0 +1,77 @@
+<div id="header" class="navbar-default">
+    <div class="container">
+        {if !empty($cpMenu)}
+        <button class="navbar-toggle left" id="toggle" type="button">
+            <span class="sr-only">{$di.t->_('Toggle navigation')}</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        {/if}
+        <div class="logo"><img src="{$di.config.staticDomain}/img/logo.png" alt="" /> TopSpy</div>
+        <button type="button" class="navbar-toggle right" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">{$di.t->_('Toggle navigation')}</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+    </div>
+    
+    <div class="menu">
+        <div class="container">
+            <div class="navbar-collapse collapse{*if $di.auth->hasIdentity()}left{else}center{/if*}">
+                <div class="navbar-inner">
+                    <ul class="nav navbar-nav">
+                        {if $di.auth->hasIdentity()}
+                        <li><a href="{$di.router->getRouteUrl('cp')}">{$di.t->_('Control Panel')}</a></li>
+                        <li><a href="{$di.router->getRouteUrl('profile')}" class="active">{$di.t->_('Profile')}</a></li>
+                        <li><a target="_blank" href="http://www.topspyapp.com/pricing-and-plans">{$di.t->_('Pricing & Plans')}</a></li>
+                        <li><a href="{$di.router->getRouteUrl('support')}">{$di.t->_('Support')}</a></li>
+                        <li><a href="{$di.router->getRouteUrl('logout')}">{$di.t->_('Log out')}</a></li>
+                        {else}
+                        <li><a target="_blank" href="http://www.topspyapp.com/pricing-and-plans/" rel="nofollow">{$di.t->_('Not a Member?')}</a></li>
+                        {/if}
+                    </ul>
+
+                    {if !$di.auth->hasIdentity()}
+                        {if count($di.config.locales) > 1}
+                            <ul class="nav navbar-nav navbar-right">
+                                <li class="dropdown">
+                                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                        {if !empty($di.locale)}{$di.config.locales[$di.locale]}{else}-{/if}
+                                        <b class="caret"></b>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        {foreach from=$di.config.locales key=locale item=lang}
+                                        <li><a href="{$di.router->getRouteUrl('main')}locale/{$locale}">{$lang}</a></li>
+                                        {/foreach}
+                                    </ul>
+                                </li>
+                            </ul>
+                        {/if}
+                    {/if}
+
+                    {if !empty($di.devicesList)}
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="dropdown devices-dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                <i class="device-status-s {$di.devicesList[$di.devId].os}{if $di.devicesList[$di.devId].online} online{/if}"></i>{$di.devicesList[$di.devId].ident}
+                                <b class="caret"></b>
+                            </a>
+                            <ul class="dropdown-menu">
+                                {foreach from=$di.devicesList key=id item=device}
+                                <li>
+                                    <a href="{$di.router->getRouteUrl('setDevice', ['devId'=>$id])}"><i class="device-status-s {$device.os}{if $device.online} online{/if}"></i> {$device.ident} <span class="text-info">{$device.plan|getPlanNormalName}</span></a>
+                                </li>
+                                {/foreach}
+                                <li class="divider" role="presentation"></li>
+                                <li><a href="{$di.router->getRouteUrl('profile')}"><i class="fa fa-check"></i> {$di.t->_('Add New')} !</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    {/if}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

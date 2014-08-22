@@ -1,0 +1,63 @@
+<div>
+    <h1 class="text-center">{$title}</h1>
+
+    {if !$paid}
+        {include file="cp/updatePackage.html"}
+    {elseif $hasRecords}
+    <div class="table-container">
+        <table class="dataTable" id="datatable" aria-describedby="datatables_info">
+            <thead>
+                <tr role="row">
+                    <th>{$di.t->_(Browser)}</th>
+                    <th>{$di.t->_(Title)}</th>
+                    <th>{$di.t->_(Url)}</th>
+                    <th>&nbsp;</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            var statusTemplate = _.template('<% if (deleted > 0) { %><span class="text-danger">{$di.t->_(Deleted)}</span><% } else { %><span>{$di.t->_(Active)}</span><% } %>');
+
+            $('#datatable').dataTable({
+                bProcessing: true,
+                bServerSide: true,
+                sAjaxSource: '{$di.router->getRouteUrl("bookmarks")}',
+                bPaginate: true,
+                bFilter: true,
+                bSort: true,
+                bInfo: true,
+                bAutoWidth: false,
+                bSortMulti: false,
+                iDisplayLength: '{$authData.records_per_page}',
+                oLanguage: {
+                    sUrl: "{$di.config.staticDomain}/js/datatables/language/{$di.locale}.txt"
+                },
+                aoColumns: [
+                    null,
+                    null,
+                    null,
+                    {
+                        fnRender: function(obj, value) {
+                            return statusTemplate({
+                                deleted: value
+                            });
+                        }
+                    }],
+                fnDrawCallback: function() {
+                    $(this).find('tbody').tableScroll();
+                }
+            });
+        });
+    </script>
+    {else}
+        {if $di.currentDevice.os=='android' && !$di.currentDevice.rooted}
+            {include file="content/{$di.locale}/rootPhoneBrowser.html"}
+        {else}
+            <h3>{$di.t->_('Waiting for browser information…')}</h3>
+            <h3>{$di.t->_('Why data may be unavailable?')}</h3>
+            {include file="content/{$di.locale}/noData.html"}
+        {/if}
+    {/if}
+</div>

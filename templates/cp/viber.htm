@@ -1,0 +1,373 @@
+<style type="text/css">
+    @media (max-width: 767px) {
+        .daterangepickerWrapper {
+            margin-top: 10px;
+        }
+    }
+
+    .nav.nav-pills {
+        margin-top: 10px;
+        overflow: hidden;
+    }
+</style>
+<div>
+    <h1 class="text-center">{$title}</h1>
+
+    {$di.flashMessages}
+
+    {if !$paid}
+        {include file="cp/updatePackage.html"}
+    {elseif $hasRecords}
+    <div class="row">
+        <div class="col-lg-6 col-md-6 col-sm-6 pull-right">
+            <div class="daterangepickerWrapper">
+                <div id="reportrange" class="btn btn-default pull-right">
+                    <i class="fa fa-calendar fa-lg"></i>
+                    <span></span>
+                    <b class="caret"></b>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-6 pull-left">
+            <ul class="nav nav-pills">
+                <li><a href="#private" data-toggle="tab">{$di.t->_('Private Messages')}</a></li>
+                <li><a href="#group" data-toggle="tab">{$di.t->_('Group Messages')}</a></li>
+                <li><a href="#calls" data-toggle="tab">{$di.t->_('Calls')}</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="tab-content">
+        <div class="tab-pane" id="private">
+            <div class="table-container">
+                <table class="dataTable" id="private-datatable" aria-describedby="datatables_info">
+                    <thead>
+                        <tr role="row">
+                            <th>{$di.t->_('Name')}</th>
+                            <th>{$di.t->_('Last Message')}</th>
+                            <th>{$di.t->_('Date')}</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+        <div class="tab-pane" id="group">
+            <div class="table-container">
+                <table class="dataTable" id="group-datatable" aria-describedby="datatables_info">
+                    <thead>
+                        <tr role="row">
+                            <th>{$di.t->_('Name')}</th>
+                            <th>{$di.t->_('Last Message')}</th>
+                            <th>{$di.t->_('Date')}</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+        <div class="tab-pane" id="calls">
+            <div class="table-container">
+                <table id="calls-datatable" aria-describedby="datatables_info">
+                    <thead>
+                        <tr role="row">
+                            <th>{$di.t->_('Name')}</th>
+                            <th>{$di.t->_('Type')}</th>
+                            <th>{$di.t->_('Duraion')}</th>
+                            <th>{$di.t->_('Date')}</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            moment.lang('{$di.locale}');
+            var typeTmpl = _.template('<i class="call-<%= type %> hidden-xs" title="<%= title %>"></i><span class="visible-xs"><%= title %></span>');
+
+            var startDate = moment().subtract('days', 29).startOf('day');
+
+            var selectRanges = {
+                "{$di.t->_('Today')}": [moment().startOf('day'), moment().endOf('day')],
+                "{$di.t->_('Yesterday')}": [moment().subtract('days', 1).startOf('day'), moment().subtract('days', 1).endOf('day')],
+                "{$di.t->_('Last 7 Days')}": [moment().subtract('days', 6).startOf('day'), moment().endOf('day')],
+                "{$di.t->_('Last 30 Days')}": [moment().subtract('days', 29).startOf('day'), moment().endOf('day')],
+                "{$di.t->_('This Month')}": [moment().startOf('month'), moment().endOf('month')],
+                "{$di.t->_('Last Month')}": [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
+            };
+
+            var viber = {
+                startDate: moment().subtract('days', 29).startOf('day'),
+                endDate: moment().endOf('day'),
+                currentTab: '',
+                privateTable: null,
+                groupTable: null,
+                callsTable: null,
+                privateMessageLinkTemplate: _.template('<a href="{$di.router->getRouteUrl("viberTab", ["tab"=>"private"])}/<%= id %>"><%= date %></a>'),
+                groupMessageLinkTemplate: _.template('<a href="{$di.router->getRouteUrl("viberTab", ["tab"=>"group"])}/<%= group %>"><%= date %></a>'),
+                setRange: function(start, end) {
+                    if (start.isValid() && end.isValid()) {
+                        this.startDate = start;
+                        this.endDate = end;
+                        $('#reportrange span').html(start.format('LL') + ' - ' + end.format('LL'));
+
+                        _.find(selectRanges, function(period, name) {
+                            if ((moment(period[0]).format('l') === start.format('l')) && (moment(period[0]).format('l') === start.format('l'))) {
+                                $('#reportrange span').html(name);
+                                return true;
+                            }
+                            return false;
+                        });
+
+                        var url = '';
+                        if (this.currentTab === 'private') {
+                            url = '{$di.config.domain}/cp/viber/private?';
+                        } else if (this.currentTab === 'group') {
+                            url = '{$di.config.domain}/cp/viber/group?';
+                        } else if (this.currentTab === 'calls') {
+                            url = '{$di.config.domain}/cp/viber/calls?';
+                        }
+
+                        return url + $.param({
+                            timeFrom: moment(start).unix(),
+                            timeTo: moment(end).unix()
+                        });
+                    } else {
+                        return setRange(this.startDate, this.endDate);
+                    }
+                },
+                initPrivate: function() {
+                    var privateTable = $('#private-datatable').dataTable({
+                        bProcessing: true,
+                        bServerSide: true,
+                        sAjaxSource: this.setRange(this.startDate, this.endDate),
+                        bPaginate: true,
+                        bFilter: false,
+                        bSort: true,
+                        bInfo: true,
+                        bAutoWidth: false,
+                        bSortMulti: false,
+                        iDisplayLength: '{$authData.records_per_page}',
+                        aaSorting: [[2, 'desc']],
+                        oLanguage: {
+                            sUrl: '{$di.config.staticDomain}/js/datatables/language/{$di.locale}.txt'
+                        },
+                        aoColumns: [{
+                                mData: "name"
+                            },
+                            {
+                                mData: "text",
+                                fnRender: function(obj, value) {
+                                    if (_.isString(value)) {
+                                        if (value.length > 200) {
+                                            return value.substr(0, 200) + '...';
+                                        }
+
+                                        return value;
+                                    }
+                                    return '';
+                                }
+                            },
+                            {
+                                mData: null,
+                                sWidth: '180px',
+                                fnRender: function(obj) {
+                                    return viber.privateMessageLinkTemplate({
+                                        date: moment(obj.aData.timestamp * 1000).zone(0).format('lll'),
+                                        id: encodeURIComponent(obj.aData.id)
+                                    });
+                                }
+                            }],
+                        fnDrawCallback: function() {
+                            viber.privateTable = privateTable;
+                            $(this).find('tbody').tableScroll();
+                        }
+                    });
+                },
+                initGroup: function() {
+                    var groupTable = $('#group-datatable').dataTable({
+                        bProcessing: true,
+                        bServerSide: true,
+                        sAjaxSource: this.setRange(this.startDate, this.endDate),
+                        bPaginate: true,
+                        bFilter: false,
+                        bSort: true,
+                        bInfo: true,
+                        bAutoWidth: false,
+                        bSortMulti: false,
+                        iDisplayLength: '{$authData.records_per_page}',
+                        aaSorting: [[2, 'desc']],
+                        oLanguage: {
+                            sUrl: '{$di.config.staticDomain}/js/datatables/language/{$di.locale}.txt'
+                        },
+                        aoColumns: [
+                            {
+                                mData: "name"
+                            },
+                            {
+                                mData: "text",
+                                fnRender: function(obj, value) {
+                                    if (value.length > 200) {
+                                        return value.substr(0, 200) + '...';
+                                    }
+
+                                    return value;
+                                }
+                            },
+                            {
+                                mData: null,
+                                bUseRendered: false,
+                                sWidth: '180px',
+                                fnRender: function(obj) {
+                                    return viber.groupMessageLinkTemplate({
+                                        date: moment(obj.aData.timestamp * 1000).zone(0).format('lll'),
+                                        group: encodeURIComponent(obj.aData.group)
+                                    });
+                                }
+                            }],
+                        fnDrawCallback: function() {
+                            viber.groupTable = groupTable;
+                            $(this).find('tbody').tableScroll();
+                        }
+                    });
+                },
+                initCalls: function() {
+                    var callsTable = $('#calls-datatable').dataTable({
+                        bProcessing: true,
+                        bServerSide: true,
+                        sAjaxSource: this.setRange(this.startDate, this.endDate),
+                        bPaginate: true,
+                        bFilter: true,
+                        bSort: true,
+                        bInfo: true,
+                        bAutoWidth: false,
+                        bSortMulti: false,
+                        iDisplayLength: '{$authData.records_per_page}',
+                        aaSorting: [[3, 'desc']],
+                        oLanguage: {
+                            sUrl: '{$di.config.staticDomain}/js/datatables/language/{$di.locale}.txt'
+                        },
+                        aoColumns: [
+                            null,
+                            {
+                                bUseRendered: false,
+                                sWidth: '80px',
+                                fnRender: function(obj, value) {
+                                    if (value === 'in') {
+                                        return typeTmpl({
+                                            type: 'in',
+                                            title: "{$di.t->_('Incoming call')}"
+                                        });
+                                    } else if (value === 'out') {
+                                        return typeTmpl({
+                                            type: 'out',
+                                            title: "{$di.t->_('Outgoing call')}"
+                                        });
+                                    } else {
+                                        return '*';
+                                    }
+                                }
+                            },
+                            {
+                                sWidth: '110px',
+                                fnRender: function(obj, value) {
+                                    return moment.utc(value * 1000).format("HH:mm:ss");
+                                }
+                            },
+                            {
+                                bUseRendered: false,
+                                sWidth: '180px',
+                                fnRender: function(obj, value) {
+                                    return moment(value * 1000).zone(0).format('lll');
+                                }
+                            }],
+                        fnDrawCallback: function() {
+                            viber.callsTable = callsTable;
+                            $(this).find('tbody').tableScroll();
+                        }
+                    });
+                },
+                setTab: function(hash) {
+                    this.currentTab = hash.split('#')[1];
+
+                    if (this.currentTab === 'private') {
+                        if (this.privateTable === null) {
+                            this.initPrivate();
+                        }
+                    } else if (this.currentTab === 'group') {
+                        if (this.groupTable === null) {
+                            this.initGroup();
+                        }
+                    } else if (this.currentTab === 'calls') {
+                        if (this.callsTable === null) {
+                            this.initCalls();
+                        }
+                    }
+
+                    this.reloadTable(this.setRange(this.startDate, this.endDate));
+                },
+                reloadTable: function(url) {
+                    if (this.currentTab === 'private') {
+                        if (this.privateTable !== null) {
+                            this.privateTable.fnReloadAjax(url);
+                        }
+                    } else if (this.currentTab === 'group') {
+                        if (this.groupTable !== null) {
+                            this.groupTable.fnReloadAjax(url);
+                        }
+                    } else if (this.currentTab === 'calls') {
+                        if (this.callsTable !== null) {
+                            this.callsTable.fnReloadAjax(url);
+                        }
+                    }
+                }
+            };
+
+            $('.nav-pills a').on('show.bs.tab', function(e) {
+                window.location.hash = e.target.hash;
+                window.scrollTo(0, 0);
+
+                viber.setTab(e.target.hash);
+            });
+
+            var url = document.location.toString();
+            if (url.match('#')) {
+                $('.nav-pills a[href=#' + url.split('#')[1] + ']').tab('show');
+            } else {
+                $('.nav-pills a[href=#private]').tab('show');
+            }
+
+            $('#reportrange').daterangepicker({
+                ranges: selectRanges,
+                startDate: startDate,
+                endDate: moment().endOf('day'),
+                format: 'LL',
+                locale: {
+                    applyLabel: "{$di.t->_('Apply')}",
+                    cancelLabel: "{$di.t->_('Cancel')}",
+                    fromLabel: "{$di.t->_('From')}",
+                    toLabel: "{$di.t->_('To')}",
+                    customRangeLabel: "{$di.t->_('Custom Range')}",
+                    daysOfWeek: moment.langData()._weekdaysMin.slice(),
+                    monthNames: (function() {
+                        var res = [];
+                        for (var i = 0; i < 12; i++) {
+                            res.push(moment([0, i]).format('MMM'));
+                        }
+                        return res;
+                    })(),
+                    firstDay: moment.langData()._week.dow
+                }
+            }, function(from, to) {
+                viber.reloadTable(viber.setRange(from, to));
+            });
+        });
+    </script>
+    {else}
+        {if $di.currentDevice.os=='android' && !$di.currentDevice.rooted}
+            {include file="content/{$di.locale}/rootPhone.html"}
+        {else}
+            <h3>{$di.t->_('Waiting for messages… Why data may be unavailable?')}</h3>
+            {include file="content/{$di.locale}/noData.html"}
+        {/if}
+    {/if}
+</div>

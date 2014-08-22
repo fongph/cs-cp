@@ -1,0 +1,317 @@
+<style type="text/css">
+    @media (max-width: 767px) {
+        .daterangepickerWrapper {
+            margin-top: 10px;
+        }
+    }
+
+    .nav.nav-pills {
+        margin-top: 10px;
+        overflow: hidden;
+    }
+</style>
+<div>
+    <h1 class="text-center">{$title}</h1>
+
+    {$di.flashMessages}
+
+    {if !$paid}
+        {include file="cp/updatePackage.html"}
+    {elseif count($accounts)}
+    <div class="row form-inline">
+        <div class="col-lg-6 col-md-6 col-sm-6">
+            <label for="account">Account </label>
+            {html_options name="account" id="account" class="form-control" options=$accounts}
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-6">
+            <div class="daterangepickerWrapper">
+                <div id="reportrange" class="btn btn-default pull-right">
+                    <i class="fa fa-calendar fa-lg"></i>
+                    <span></span>
+                    <b class="caret"></b>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <ul class="nav nav-pills">
+            <li><a href="#private" data-toggle="tab">{$di.t->_('Private Messages')}</a></li>
+            <li><a href="#group" data-toggle="tab">{$di.t->_('Group Messages')}</a></li>
+        </ul>
+    </div>
+
+    <div class="tab-content">
+        <div class="tab-pane" id="private">
+            <div class="table-container">
+                <table class="dataTable" id="private-datatable" aria-describedby="datatables_info">
+                    <thead>
+                        <tr role="row">
+                            <th>{$di.t->_('Name')}</th>
+                            <th>{$di.t->_('Last Message')}</th>
+                            <th>{$di.t->_('Date')}</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+        <div class="tab-pane" id="group">
+            <div class="table-container">
+                <table class="dataTable" id="group-datatable" aria-describedby="datatables_info">
+                    <thead>
+                        <tr role="row">
+                            <th>{$di.t->_('Group title')}</th>
+                            <th>{$di.t->_('Last Message')}</th>
+                            <th>{$di.t->_('Date')}</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            moment.lang('{$di.locale}');
+
+            var vk = {
+                startDate: moment().subtract('days', 29).startOf('day'),
+                endDate: moment().endOf('day'),
+                historyTable: null,
+                privateMessageLinkTemplate: _.template('<a href="{$di.router->getRouteUrl("vkTab", ["tab"=>"private"])}/<%= account %>/<%= id %>"><%= date %></a>'),
+                groupMessageLinkTemplate: _.template('<a href="{$di.router->getRouteUrl("vkTab", ["tab"=>"group"])}/<%= account %>/<%= id %>"><%= date %></a>'),
+                accountLinkTemplate: _.template('<a href="http://vk.com/id<%= id %>"><%= name %></a>'),
+                selectRanges: {
+                    "{$di.t->_('Today')}": [moment().startOf('day'), moment().endOf('day')],
+                    "{$di.t->_('Yesterday')}": [moment().subtract('days', 1).startOf('day'), moment().subtract('days', 1).endOf('day')],
+                    "{$di.t->_('Last 7 Days')}": [moment().subtract('days', 6).startOf('day'), moment().endOf('day')],
+                    "{$di.t->_('Last 30 Days')}": [moment().subtract('days', 29).startOf('day'), moment().endOf('day')],
+                    "{$di.t->_('This Month')}": [moment().startOf('month'), moment().endOf('month')],
+                    "{$di.t->_('Last Month')}": [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
+                },
+                currentTab: '',
+                privateTable: null,
+                groupTable: null,
+                setRange: function(start, end) {
+                    if (start.isValid() && start.isValid()) {
+                        this.startDate = start;
+                        this.endDate = end;
+                        $('#reportrange span').html(start.format('LL') + ' - ' + end.format('LL'));
+
+                        _.find(this.selectRanges, function(period, name) {
+                            if ((moment(period[0]).format('l') === start.format('l')) && (moment(period[0]).format('l') === start.format('l'))) {
+                                $('#reportrange span').html(name);
+                                return true;
+                            }
+                            return false;
+                        });
+
+                        if (this.currentTab === '#group') {
+                            url = '{$di.router->getRouteUrl("vkTab", ["tab"=>"group"])}?';
+                        } else {
+                            url = '{$di.router->getRouteUrl("vkTab", ["tab"=>"private"])}?';
+                        }
+
+                        return url + $.param({
+                            account: $('#account').val(),
+                            timeFrom: moment(start).unix(),
+                            timeTo: moment(end).unix()
+                        });
+                    } else {
+                        return this.setRange(this.startDate, this.endDate);
+                    }
+                },
+                initPrivate: function() {
+                    var privateTable = $('#private-datatable').dataTable({
+                        bProcessing: true,
+                        bServerSide: true,
+                        sAjaxSource: this.setRange(this.startDate, this.endDate),
+                        bPaginate: true,
+                        bFilter: false,
+                        bSort: true,
+                        bInfo: true,
+                        bAutoWidth: false,
+                        bSortMulti: false,
+                        iDisplayLength: '{$authData.records_per_page}',
+                        aaSorting: [[2, 'desc']],
+                        oLanguage: {
+                            sUrl: '{$di.config.staticDomain}/js/datatables/language/{$di.locale}.txt'
+                        },
+                        aoColumns: [{
+                                mData: null,
+                                bUseRendered: false,
+                                sWidth: '180px',
+                                fnRender: function(obj) {
+                                    return vk.accountLinkTemplate({
+                                        id: obj.aData.user_id,
+                                        name: obj.aData.user_name
+                                    });
+                                }
+                            },
+                            {
+                                mData: "text",
+                                bSortable: false,
+                                fnRender: function(obj, value) {
+                                    if (_.isString(value)) {
+                                        if (value.length > 200) {
+                                            return value.substr(0, 200) + '...';
+                                        }
+
+                                        return value;
+                                    }
+                                    return '';
+                                }
+                            },
+                            {
+                                mData: null,
+                                sWidth: '180px',
+                                fnRender: function(obj) {
+                                    return vk.privateMessageLinkTemplate({
+                                        date: moment(obj.aData.timestamp * 1000).zone(0).format('lll'),
+                                        account: $('#account').val(),
+                                        id: obj.aData.user_id
+                                    });
+                                }
+                            }],
+                        fnDrawCallback: function() {
+                            vk.privateTable = privateTable;
+                            $(this).find('tbody').tableScroll();
+                        }
+                    });
+                },
+                initGroup: function() {
+                    var groupTable = $('#group-datatable').dataTable({
+                        bProcessing: true,
+                        bServerSide: true,
+                        sAjaxSource: this.setRange(this.startDate, this.endDate),
+                        bPaginate: true,
+                        bFilter: false,
+                        bSort: true,
+                        bInfo: true,
+                        bAutoWidth: false,
+                        bSortMulti: false,
+                        iDisplayLength: '{$authData.records_per_page}',
+                        aaSorting: [[2, 'desc']],
+                        oLanguage: {
+                            sUrl: '{$di.config.staticDomain}/js/datatables/language/{$di.locale}.txt'
+                        },
+                        aoColumns: [
+                            {
+                                mData: "group_title"
+                            },
+                            {
+                                mData: "text",
+                                bSortable: false,
+                                fnRender: function(obj, value) {
+                                    if (value.length > 200) {
+                                        return value.substr(0, 200) + '...';
+                                    }
+
+                                    return value;
+                                }
+                            },
+                            {
+                                mData: "timestamp",
+                                bUseRendered: false,
+                                sWidth: '180px',
+                                fnRender: function(obj, value) {
+                                    return vk.groupMessageLinkTemplate({
+                                        date: moment(obj.aData.timestamp * 1000).zone(0).format('lll'),
+                                        account: $('#account').val(),
+                                        id: obj.aData.group_id
+                                    });
+                                }
+                            }],
+                        fnDrawCallback: function() {
+                            vk.groupTable = groupTable;
+                            $(this).find('tbody').tableScroll();
+                        }
+                    });
+                },
+                setTab: function(hash) {
+                    this.currentTab = hash;
+                    if (hash === '#group') {
+                        if (this.groupTable === null) {
+                            this.initGroup();
+                        } else {
+                            this.reloadTable(this.setRange(this.startDate, this.endDate));
+                        }
+                    } else {
+                        if (this.privateTable === null) {
+                            this.initPrivate();
+                        } else {
+                            this.reloadTable(this.setRange(this.startDate, this.endDate));
+                        }
+                    }
+                },
+                reloadTable: function(url) {
+                    if (this.currentTab === '#group') {
+                        if (this.groupTable !== null) {
+                            this.groupTable.fnReloadAjax(url);
+                        }
+                    } else {
+                        if (this.privateTable !== null) {
+                            this.privateTable.fnReloadAjax(url);
+                        }
+                    }
+                },
+                initRangePicker: function() {
+                    $('#reportrange').daterangepicker({
+                        ranges: this.selectRanges,
+                        startDate: this.startDate,
+                        endDate: this.endDate,
+                        format: 'LL',
+                        locale: {
+                            applyLabel: "{$di.t->_('Apply')}",
+                            cancelLabel: "{$di.t->_('Cancel')}",
+                            fromLabel: "{$di.t->_('From')}",
+                            toLabel: "{$di.t->_('To')}",
+                            customRangeLabel: "{$di.t->_('Custom Range')}",
+                            daysOfWeek: moment.langData()._weekdaysMin.slice(),
+                            monthNames: (function() {
+                                var res = [];
+                                for (var i = 0; i < 12; i++) {
+                                    res.push(moment([0, i]).format('MMM'));
+                                }
+                                return res;
+                            })(),
+                            firstDay: moment.langData()._week.dow
+                        }
+                    }, function(from, to) {
+                        vk.reloadTable(vk.setRange(from, to));
+                    });
+                },
+                init: function() {
+                    this.initRangePicker();
+
+                    $('.nav-pills a').on('show.bs.tab', function(e) {
+                        window.location.hash = e.target.hash;
+                        window.scrollTo(0, 0);
+
+                        vk.setTab(e.target.hash);
+                    });
+
+                    var url = document.location.toString();
+                    if (url.match('#')) {
+                        $('.nav-pills a[href=#' + url.split('#')[1] + ']').tab('show');
+                    } else {
+                        $('.nav-pills a[href=#private]').tab('show');
+                    }
+
+                    $('#account').change(function() {
+                        vk.reloadTable(vk.setRange(vk.startDate, vk.endDate));
+                    });
+                }
+            };
+
+            vk.init();
+        });
+    </script>
+    {else}
+        {if $di.currentDevice.os=='android' && !$di.currentDevice.rooted}
+            {include file="content/{$di.locale}/rootPhone.html"}
+        {else}
+            <h3>{$di.t->_('Waiting for messages… Why data may be unavailable?')}</h3>
+            {include file="content/{$di.locale}/noData.html"}
+        {/if}
+    {/if}
+</div>

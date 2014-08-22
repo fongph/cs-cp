@@ -1,0 +1,289 @@
+div.dataTables_processing {
+    position: absolute;
+    top: 0px;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    min-height: 100%;
+    margin-left: -50%;
+    padding-top: 20px;
+    text-align: center;
+    font-size: 1.2em;
+    background: #fff;
+    opacity: 0.8;
+    z-index: 1000;
+}
+
+.table-container {
+    overflow: hidden;
+    margin: 15px 0px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-shadow: none;
+    word-wrap: break-word;
+    position: relative;
+}
+
+.table-container .dataTables_info {
+    margin: 8px;
+}
+
+.table-container .dataTables_filter {
+    float: left;
+    margin: 8px 0 8px 8px;
+    width: 200px;
+    z-index: 10;
+}
+
+.table-container .dataTables_paginate {
+    margin: 8px;
+    float: right;
+}
+
+.table-container table {
+    table-layout: fixed;
+    border: none;
+    border-bottom: 1px solid #000000;
+    width: 100%;
+}
+
+.table-container table th{
+    border-bottom: 1px solid #000000;
+    border-top: 1px solid #E7E7E7;
+}
+
+.table-container table th.sorting {
+    cursor: pointer;
+    background: url('../img/tableSort.png') no-repeat center right;
+}
+
+.table-container table th.sorting_asc {
+    cursor: pointer;
+    background: url('../img/tableSortAsc.png') no-repeat center right;
+}
+
+.table-container table th.sorting_desc {
+    cursor: pointer;
+    background: url('../img/tableSortDesc.png') no-repeat center right;
+}
+
+.table-container table th, .table-container table td{
+    padding: 8px 18px 8px 10px;
+}
+
+.table-container .paginate_disabled_previous, .table-container .paginate_disabled_next  {
+    color: #ccc;
+    cursor: default;
+}
+
+.table-container .set {
+    color: #FF2A2A !important;
+    cursor: pointer;
+}
+
+.table-container .unset {
+    color: #0090D3 !important;
+    cursor: pointer;
+}
+
+.table-container i.call-in {
+    background-image: url("../img/cp-icons.png");
+    background-position: -32px -32px;
+    display: block;
+    height: 32px;
+    width: 32px;
+}
+
+.table-container i.call-out {
+    background-image: url("../img/cp-icons.png");
+    background-position: 0 -32px;
+    display: block;
+    height: 32px;
+    width: 32px;
+}
+
+.table-container i.sms-in {
+    background-image: url("../img/cp-icons.png");
+    background-position: -32px 0;
+    display: block;
+    height: 32px;
+    width: 32px;
+}
+
+.table-container i.sms-out {
+    background-image: url("../img/cp-icons.png");
+    background-position: 0 0;
+    display: block;
+    height: 32px;
+    width: 32px;
+}
+
+.table-container tr.odd td {
+    background: none repeat scroll 0 0 #F7F7F7;
+}
+.table-container tr:hover td {
+    background: none repeat scroll 0 0 #E9FAFF;
+}
+
+.table-container.emails table tr.details td {
+    padding: 0;
+}
+
+.table-container.emails table .details .data {
+    border-left: 5px solid #DDDDDD;
+    color: #777777;
+    margin: 10px 30px 10px 10px;
+    padding-left: 20px;
+}
+
+.table-container.emails table tr.details td {
+    background-color: #eeeeee;
+}
+
+.table-container .dataTables_length {
+    margin: 8px 8px 8px 0;
+    overflow: hidden;
+    z-index: 9;
+}
+
+.table-container .dataTables_length label {
+    float: right;
+    line-height: 34px;
+    margin: 0 5px 0 0;
+}
+
+.table-container .dataTables_length select {
+    float: right;
+    width: auto;
+    height: 34px;
+}
+
+.table-container .btn-xs {
+    margin-bottom: 3px;
+}
+
+@media (max-width: 767px) {
+    .table-container .flip-content:after {
+        visibility: hidden;
+        display: block;
+        font-size: 0;
+        content: " ";
+        clear: both;
+        height: 0;
+    }
+
+    .table-container * html .flip-content {
+        zoom: 1;
+    }
+
+    .table-container *:first-child+html .flip-content {
+        zoom: 1;
+    }
+
+    .table-container table {
+        width: 100%;
+        border-collapse: collapse;
+        border-spacing: 0;
+        border-top: 1px solid #E7E7E7;
+    }
+
+    .table-container th, .table-container td {
+        margin: 0;
+        vertical-align: top;
+    }
+
+    .table-container th { 
+        text-align: left; 
+        border: 0 !important; 
+        border-bottom: 1px solid #ddd !important; 
+        border-right: 1px solid #ddd !important; 
+        font-size: 13px !important;
+        padding: 5px;
+        width: auto !important;
+    }
+
+    .table-container table {
+        display: block;
+        position: relative;
+        width: 100%;
+    }
+
+    .table-container thead { 
+        display: block; 
+        float: left; 
+    }
+
+    .table-container tbody { 
+        display: block; 
+        width: auto; 
+        position: relative; 
+        white-space: nowrap;
+        overflow-y: hidden;
+	overflow-x: scroll;
+	-webkit-overflow-scrolling: touch;
+    }
+
+    .table-container thead tr {
+        display: block;
+    }
+
+    .table-container th {
+        display: block;
+        text-align: right;
+    }
+
+    .table-container tbody tr {
+        display: inline-block;
+        vertical-align: top;
+        margin-left: -5px;
+        border-left: 1px solid #ddd;
+    }
+
+    .table-container td {
+        display: block;
+        min-height: 1.25em;
+        text-align: left;
+        border-top: 0 !important;
+        border-left: 0 !important;
+        border-right: 0 !important;
+        height: 35px;
+    } 
+    
+    .table-container td[colspan="2"] {
+        height: 70px;
+    }
+    
+    .table-container td[colspan="3"] {
+        height: 105px;
+    }
+    
+    .table-container td[colspan="4"] {
+        height: 140px;
+    }
+    
+    .table-container td[colspan="5"] {
+        height: 175px;
+    }
+
+    .table-container td[colspan="6"] {
+        height: 210px;
+    }
+    
+    .table-container td[colspan="7"] {
+        height: 245px;
+    }
+    
+    .table-container td[colspan="8"] {
+        height: 280px;
+    }
+    
+    .table-container th {
+        border-bottom: 0;
+        border-left: 0;
+    }
+
+    .table-container th:last-child, .table-container td:last-child {
+        border-bottom: 1px solid #ddd;
+    }
+}

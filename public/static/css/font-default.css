@@ -1,0 +1,15 @@
+#header .menu a {
+    font-family: 'Yanone Kaffeesatz', sans-serif;
+    font-size: 22px;
+    font-weight: 300;
+}
+
+#header .logo {
+    font-family: 'Yanone Kaffeesatz', sans-serif;
+    font-size: 40px;
+}
+
+h1 {
+    font-family: 'Yanone Kaffeesatz', sans-serif;
+    font-size: 40px;
+}
