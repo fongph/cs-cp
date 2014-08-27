@@ -14,7 +14,6 @@ class Emails extends BaseController {
         $this->initCP();
     }
 
-    //TODO: make with DataTableRequest and build own page for every email
     public function indexAction() {
         $emailsModel = new \Models\Cp\Emails($this->di);
 

@@ -7,12 +7,20 @@ use System\DataTableRequestInvalidRequestData;
 class Emails extends \System\Model {
 
     const PATH_ALL_KEY = '*ALL*';
+    
+    const PATH_INBOX = 'inbox';
+    const PATH_SENT = 'sent';
+    const PATH_TRASH = 'trash';
 
     public function getDataTableData($devId, $params = array()) {
         $devId = $this->getDb()->quote($devId);
 
         if (count($params['sortColumns'])) {
-            $columns = ['e.`timestamp`', 'e.`from`', 'e.`subject`'];
+            if ($params['path'] === self::PATH_SENT) {
+                $columns = ['e.`timestamp`', 'e.`to`', 'e.`subject`'];
+            } else {
+                $columns = ['e.`timestamp`', 'e.`from`', 'e.`subject`'];
+            }
 
             $sort = '';
             foreach ($params['sortColumns'] as $column => $direction) {
@@ -24,7 +32,11 @@ class Emails extends \System\Model {
             $sort = '`timestamp` ASC';
         }
 
-        $select = "SELECT e.`timestamp`, e.`from`, e.`subject`";
+        if ($params['path'] === self::PATH_SENT) {
+            $select = "SELECT e.`timestamp`, e.`to`, e.`subject`";
+        } else {
+            $select = "SELECT e.`timestamp`, e.`from`, e.`subject`";
+        }
 
         $timeFrom = $this->getDb()->quote($params['timeFrom']);
         $timeTo = $this->getDb()->quote($params['timeTo']);
@@ -54,7 +66,7 @@ class Emails extends \System\Model {
                 . " ORDER BY {$sort} LIMIT {$params['start']}, {$params['length']}";
 
         $result = array(
-            'aaData' => $this->getDb()->query($query)->fetchAll(\PDO::FETCH_ASSOC)
+            'aaData' => $this->getDb()->query($query)->fetchAll(\PDO::FETCH_NUM)
         );
 
         if (empty($result['aaData'])) {

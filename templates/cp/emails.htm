@@ -121,20 +121,18 @@
                                 fnRender: function(obj) {
                                     return emails.linkTemplate({
                                         account: encodeURIComponent($('#account').val()),
-                                        id: encodeURIComponent(obj.aData.timestamp),
-                                        date: moment(obj.aData.timestamp * 1000).zone(0).format('lll')
+                                        id: encodeURIComponent(obj.aData[0]),
+                                        date: moment(obj.aData[0] * 1000).zone(0).format('lll')
                                     });
                                 }
                             },
                             {
-                                mData: "from",
                                 fnRender: function(obj) {
-                                    return _.escape(obj.aData['from']);
+                                    return _.escape(obj.aData[1]);
                                 }
                             },
                             {
-                                bSortable: false,
-                                mData: "subject"
+                                bSortable: false
                             }
                         ],
                         fnDrawCallback: function() {
