@@ -15,6 +15,7 @@ $di->setShared('router', function() use($config) {
     $router->add('resetPassword', new \System\Router\Route('/resetPassword', array('controller' => 'Index', 'action' => 'resetPassword', 'public' => true)));
     $router->add('unlockAccount', new \System\Router\Route('/unlockAccount', array('controller' => 'Index', 'action' => 'unlockAccount', 'public' => true)));
     $router->add('support', new \System\Router\Route('/support', array('controller' => 'Index', 'action' => 'support')));
+    $router->add('refundRequest', new \System\Router\Route('/refundRequest', array('controller' => 'Index', 'action' => 'refundRequest')));
     $router->add('profile', new \System\Router\Route('/profile', array('controller' => 'Profile', 'action' => 'index')));
 
     $router->add('cp', new \System\Router\Route('/cp', array('controller' => 'CP', 'action' => 'main')));

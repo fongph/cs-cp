@@ -90,6 +90,34 @@ class Index extends BaseController {
         $this->view->types = $supportModel->getTypesList();
         $this->setView('index/support.htm');
     }
+    
+    public function refundRequestAction() {
+        $this->view->title = $this->di['t']->_('Refund Request Form');
+
+        $supportModel = new \Models\Support($this->di);
+
+        if ($this->isPost() && isset($_POST['name'], $_POST['email'], $_POST['type'], $_POST['message'])) {
+            try {
+                $ticketId = $supportModel->submitTicket($_POST['name'], $_POST['email'], $_POST['type'], $_POST['message']);
+                $this->view->success = true;
+
+                $this->di['flashMessages']->add(FlashMessages::SUCCESS, $this->di['t']->_('Your ticket #%1$s has been successfully sent!<br/> Our Support Team will contact you within 1 business day.', array('ticketId' => $ticketId)));
+            } catch (\Models\SupportEmptyFieldException $e) {
+                $this->di['flashMessages']->add(FlashMessages::ERROR, $this->di['t']->_('Please, fill all the data carefully.'));
+            } catch (\Models\SupportInvalidEmailException $e) {
+                $this->di['flashMessages']->add(FlashMessages::ERROR, $this->di['t']->_('Please, fill all the data carefully.'));
+            } catch (\Models\SupportInvalidTypeException $e) {
+                $this->di['flashMessages']->add(FlashMessages::ERROR, $this->di['t']->_('Please, fill all the data carefully.'));
+            } catch (\Models\MailSendException $e) {
+                $this->di['flashMessages']->add(FlashMessages::ERROR, $this->di['t']->_('Error during send email. Please try again later.'));
+                logException($e, ROOT_PATH . 'mailExceptions.log');
+            }
+        }
+
+        $this->view->types = $supportModel->getTypesList();
+        $this->disableLayout();
+        $this->setView('refundRequest.htm');
+    }
 
     public function localeAction() {
         if (isset($this->di['config']['locales'][$this->params['value']])) {

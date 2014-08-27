@@ -150,8 +150,8 @@ if (APPLICATION_ENV == 'production') {
     return $default;
 } else if (APPLICATION_ENV == 'development') {
     return array_merge($default, array(
-        'domain' => 'http://cp.topspyapp.local',
-        'staticDomain' => 'http://cp.topspyapp.local/static',
+        'domain' => 'http://new-cp.topspyapp.local',
+        'staticDomain' => 'http://new-cp.topspyapp.local/static',
         'cookieDomain' => 'topspyapp.local',
         'db' => array(
             'host' => '66.232.96.3',

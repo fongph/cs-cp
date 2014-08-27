@@ -16,35 +16,65 @@ if (APPLICATION_ENV == 'development') {
     error_reporting(E_ALL ^ E_NOTICE);
 }
 
-function showErrorPage($die = true)
-{
-    ob_clean();
-    header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error', true, 500);
-    require(ROOT_PATH . '500.html');
 
-    if ($die) {
-        exit();
+
+if (APPLICATION_ENV === 'development') {
+    register_shutdown_function(function() {
+        $error = error_get_last();
+        if ($error !== null && (error_reporting() & $error['type'])) {
+            ob_clean();
+            echo '<pre>' . $error['message'] . '</pre>';
+            echo '<pre>FILE: ' . $error['file'] . ':' . $error['line'] . '</pre>';
+            die;
+        }
+    });
+
+    set_error_handler(function($errno, $errstr, $errfile, $errline) {
+        if (!(error_reporting() & $errno)) {
+            return;
+        }
+
+        ob_clean();
+        echo '<pre>' . $errstr . '</pre>';
+        echo '<pre>FILE: ' . $errfile . ':' . $errline . '</pre>';
+    });
+
+    set_exception_handler(function($e) {
+        ob_clean();
+        echo sprintf('<pre>Uncaught Exception - %s: "%s" at %s line %s</pre>', get_class($e), $e->getMessage(), $e->getFile(), $e->getLine());
+        echo '<pre>' . $e->getTraceAsString() . '</pre>';
+    });
+} else {
+    function showErrorPage($die = true)
+    {
+        ob_clean();
+        header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error', true, 500);
+        require(ROOT_PATH . '500.html');
+
+        if ($die) {
+            exit();
+        }
     }
+
+    register_shutdown_function(function() {
+        $error = error_get_last();
+        if ($error !== null && (error_reporting() & $error['type'])) {
+            showErrorPage(false);
+        }
+    });
+
+    set_error_handler(function($errno) {
+        if (!(error_reporting() & $errno)) {
+            return;
+        }
+
+        showErrorPage();
+    });
+
+    set_exception_handler(function() {
+        showErrorPage();
+    });
 }
-
-register_shutdown_function(function() {
-    $error = error_get_last();
-    if ($error !== null && (error_reporting() & $error['type'])) {
-        showErrorPage(false);
-    }
-});
-
-set_error_handler(function($errno) {
-    if (!(error_reporting() & $errno)) {
-        return;
-    }
-
-    showErrorPage();
-});
-
-set_exception_handler(function() {
-    showErrorPage();
-});
 
 ob_start();
 
@@ -69,8 +99,7 @@ $di['router']->execute($requestUri, function($route) use ($di) {
 
                 if (!(isset($route->target['public']) || $di->get('auth')->hasIdentity())) {
                     if (APPLICATION_ENV == 'development') {
-                        echo 'access denied!';
-                        die;
+                        throw new Exception('Access denied!');
                     } else {
                         $cnt->redirect($di->get('router')->getRouteUrl('main'));
                     }
