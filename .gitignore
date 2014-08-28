@@ -1,5 +1,5 @@
 /nbproject
 /vendor
 /tmp
+/logs
 composer.lock
-system.log

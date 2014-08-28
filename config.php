@@ -8,7 +8,7 @@ $default = array(
     'supportEmail' => 'orest@dataedu.com', //'support@topspyapp.com',
     'logger' => array(
         'stream' => array(
-            'filename' => ROOT_PATH . 'system.log'
+            'filename' => ROOT_PATH . 'logs/system.log'
         ),
         'mail' => array(
             'from' => 'orest@dataedu.com',
