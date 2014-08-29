@@ -168,8 +168,32 @@ class Settings extends \System\Model
             'blackListPhones' => $this->_buildBlackList($settings['bl_phones']),
             'online' => ($settings['last_visit'] > time() - 20 * 60),
             'lockActive' => $this->isLockFunctionalActive($devInfo['os'], $devInfo['os_version'], $devInfo['app_version']),
+            'blockSMSActive' => $this->isBlockSMSActive($devInfo['os'], $devInfo['os_version']),
             'reloadActive' => $this->isReloadFunctionalActive($devInfo['os'], $devInfo['app_version'])
         );
+    }
+
+    /**
+     * Check that sms block for black list work on device
+     * 
+     * ios+
+     * android < 4.4 +
+     * 
+     * @param type $os
+     * @param type $osVersion
+     * @param type $appVersion
+     * @return boolean
+     */
+    private function isBlockSMSActive($os, $osVersion)
+    {
+        if ($os == 'ios') {
+            return true;
+        }
+
+        if ($os == 'android') {
+            $devicesModel = new \Models\Devices($this->di);
+            return $devicesModel->compareOSVersion('android', '4.4', $osVersion, '<');
+        }
     }
 
     /**
@@ -189,23 +213,19 @@ class Settings extends \System\Model
         if ($os === 'android') {
             return true;
         }
-        
+
         if ($os === 'ios') {
-            $osVersion = str_replace('.', '', $osVersion);
-            if ($osVersion < 100) {
-                $osVersion *= 10;
-            }
-            
-            if ($osVersion < 710) {
+            $devicesModel = new \Models\Devices($this->di);
+            if ($devicesModel->compareOSVersion('ios', '7.1', $osVersion, '<')) {
                 return true;
             } elseif ($appVersion >= 42) {
                 return true;
             }
         }
-        
+
         return false;
     }
-    
+
     /**
      * Check that reload functional work on device
      * 
@@ -221,7 +241,7 @@ class Settings extends \System\Model
         if ($os === 'android' && $appVersion > 63) {
             return true;
         }
-        
+
         return false;
     }
 

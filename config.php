@@ -123,7 +123,12 @@ $default = array(
         ),
         'smsCommands' => array(
             'name' => 'Sms Commands',
-            'hideOS' => array('blackberry')
+            'hideOS' => array('blackberry'),
+            'versionOS' => array(
+                'android' => array(
+                    '<' => '4.4'
+                )
+            )
         ),
         'settings' => 'Phone Settings'
     ),

@@ -26,6 +26,8 @@ class Devices extends \System\Model
                                         ud.`dev_id`,
                                         ud.`ident`,
                                         ud.`os`,
+                                        ud.`os_version`,
+                                        ud.`app_version`,
                                         ud.`dev_model` model,
                                         IF(ds.`last_visit` > {$minOnlineTime}, 1, 0) online,
                                         l.`plan`,
@@ -153,6 +155,18 @@ class Devices extends \System\Model
 
         return $result;
     }
+    
+    public function compareOSVersion($os, $compVersion, $osVersion, $operator) {
+        if ($os == 'android') {
+            $parts = explode('_', $osVersion);
+            if (count($parts) != 2) {
+                return false;
+            }
+            $osVersion = $parts[1];
+        }
+        
+        return version_compare($osVersion, $compVersion, $operator);
+    }
 
     public function isModuleActive($data)
     {
@@ -201,6 +215,16 @@ class Devices extends \System\Model
                 }
             } elseif ($data['hideLocale'] == $this->di['locale']) {
                 return false;
+            }
+        }
+        
+        if (isset($data['versionOS'])) {
+            if (isset($data['versionOS'][$this->di['currentDevice']['os']])) {
+                foreach ($data['versionOS'][$this->di['currentDevice']['os']] as $operator => $compVersion) {
+                    if (!$this->compareOSVersion($this->di['currentDevice']['os'], $compVersion, $this->di['currentDevice']['os_version'], $operator)) {
+                        return false;
+                    }
+                }
             }
         }
 

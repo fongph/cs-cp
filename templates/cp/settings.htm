@@ -6,7 +6,7 @@
     <div class="row">
         <div class="col-lg-6 col-md-6">
             <div class="panel panel-default">
-                <div class="panel-heading">{$di.t->_('Blacklist Phone numbers')}<span class="blue-asterisk">*</span></div>
+                <div class="panel-heading">{if $data.blockSMSActive}{$di.t->_('Calls & SMS blocking')}{else}{$di.t->_('Blacklist Phone numbers')}{/if}<span class="blue-asterisk">*</span></div>
                 <div class="panel-body text-center">
                     {if count($data.blackListPhones)}
                     <ul class="list-group">
