@@ -38,7 +38,7 @@ class Mail extends \System\Model {
     }
 
     public function sendRestorePassword($email, $params) {
-        $subject = $this->di['t']->_('Retrieve password');
+        $subject = $this->di['t']->_('TopSpy: Retrieve password');
 
         $path = $this->_getTemplatePath('restorePassword.htm');
         $content = $this->_fetchTemplate($path, array(
@@ -50,7 +50,7 @@ class Mail extends \System\Model {
     }
     
     public function sendUnlockPassword($email, $unlockUrl) {
-        $subject = $this->di['t']->_('Account Locked');
+        $subject = $this->di['t']->_('TopSpy: Account Locked');
 
         $path = $this->_getTemplatePath('unlockPassword.htm');
         $content = $this->_fetchTemplate($path, array(

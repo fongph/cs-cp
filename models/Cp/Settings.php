@@ -186,14 +186,12 @@ class Settings extends \System\Model
      */
     private function isBlockSMSActive($os, $osVersion)
     {
-        if ($os == 'ios') {
-            return true;
-        }
-
         if ($os == 'android') {
             $devicesModel = new \Models\Devices($this->di);
             return $devicesModel->compareOSVersion('android', '4.4', $osVersion, '<');
         }
+        
+        return false;
     }
 
     /**

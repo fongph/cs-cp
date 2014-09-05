@@ -2,8 +2,8 @@
 
 $default = array(
     'build' => 24,
-    'domain' => 'http://new-cp.topspyapp.local',
-    'staticDomain' => 'http://new-cp.topspyapp.local/static',
+    'domain' => 'http://cp.topspyapp.com-test',
+    'staticDomain' => 'http://cp.topspyapp.com-test/static',
     'cookieDomain' => 'topspyapp.local',
     'supportEmail' => 'orest@dataedu.com', //'support@topspyapp.com',
     'logger' => array(
@@ -29,10 +29,10 @@ $default = array(
         )
     ),
     'mail' => array(
-        'host' => 'mail.topspyapp.com',
-        'port' => 587,
+        'host' => 'topspyapp.com',
+        'port' => 25,
         'username' => 'no-reply@topspyapp.com',
-        'password' => 'SuKg62Euaw',
+        'password' => 'LKE@#Qo3eS#Qe3',
         'from' => 'no-reply@topspyapp.com',
         'fromName' => 'Topspyapp.com',
         'logoImageUrl' => 'http://www.topspyapp.com/wp-content/themes/topspyapp/images/logo.png',
