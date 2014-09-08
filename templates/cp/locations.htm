@@ -105,7 +105,7 @@
                         findPoints[i][1],
                         findPoints[i][2],
                         findPoints[i][0],
-                        '<button class="btn btn-success btn-xs"><i class="fa fa-map-marker"></i> {$di.t->_("View on map")}</button>'
+                        '<button class="btn btn-success btn-xs"><i class="fa fa-map-marker"></i> {$di.t->_('View on map')}</button>'
                     ]);
                 }
 
@@ -282,7 +282,7 @@
     </script>
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCZfHRnq7tigC-COeQRmoa9Cxr0vbrK6xw&sensor=true"></script>
     {else}
-    <h3>{$di.t->_('Waiting for data…')}</h3>
+    <h3>{$di.t->_('Waiting for data...')}</h3>
     <h3>{$di.t->_('Why data may be unavailable?')}</h3>
     {include file="content/{$di.locale}/noData.html"}
     {include file="content/{$di.locale}/noDataLocations.html"}
