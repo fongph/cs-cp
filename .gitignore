@@ -1,5 +1,5 @@
 /nbproject
 /vendor
-#/tmp/*
-#/logs/*
+/tmp/*
+/logs/*
 composer.lock
