@@ -15,7 +15,7 @@ class Applications extends \System\Model {
 
         $sort = '`timestamp` ASC';
         if (count($params['sortColumns'])) {
-            $columns = ['`app_name`', '`app_version`', '`store_url`', '`count`', `lasttime`, '`deleted`'];
+            $columns = ['`app_name`', '`app_version`', '`store_url`', '`count`', '`lasttime`', '`app_name`'];
 
             $sort = '';
             foreach ($params['sortColumns'] as $column => $direction) {
@@ -25,13 +25,15 @@ class Applications extends \System\Model {
             }
         }
 
-        $select = "SELECT `app_id` id, `app_name` name, `app_version` version, `store_url` url, `deleted`, `count`, `lasttime`, `is_blocked` blocked";
+        $select = "SELECT a.`app_id` id, a.`app_name` name, a.`app_version` version, a.`store_url` url, a.`deleted`, COUNT(t.id) as count, MAX(t.`start`) lasttime, a.`is_blocked` blocked";
 
-        $fromWhere = "FROM `applications` WHERE `dev_id` = {$devId}";
+        $fromWhere = "FROM `applications` a
+            LEFT JOIN `applications_timelines` t ON a.`dev_id` = t.`dev_id` AND a.`app_id` = t.`name`
+            WHERE a.`dev_id` = {$devId}";
 
         $query = "{$select} {$fromWhere}"
                 . ($search ? " AND ({$search})" : '')
-                . " ORDER BY {$sort} LIMIT {$params['start']}, {$params['length']}";
+                . " GROUP BY a.`app_id` ORDER BY {$sort} LIMIT {$params['start']}, {$params['length']}";
 
         $result = array(
             'aaData' => $this->getDb()->query($query)->fetchAll(\PDO::FETCH_ASSOC)
