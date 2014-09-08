@@ -2,4 +2,5 @@
 /vendor
 /tmp/*
 /logs/*
+/utils/translations_result.php
 composer.lock
