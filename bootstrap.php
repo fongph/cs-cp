@@ -124,7 +124,7 @@ if (APPLICATION_ENV == 'development') {
     //$logger->pushHandler(new Monolog\Handler\PushoverHandler('aUA4Bj2fTRyi9B4YosYFAnzaSAw5Js', 'uCnHUMtNRZccsF15aBi4x9umaBdbTg', 'TEST', Monolog\Logger::DEBUG));
 } elseif (APPLICATION_ENV == 'production') {
     $logger->pushHandler(new Monolog\Handler\StreamHandler($config['logger']['stream']['filename'], Monolog\Logger::INFO));
-    //$logger->pushHandler(new Monolog\Handler\NativeMailerHandler($config['logger']['mail']['from'], $config['logger']['mail']['subject'], $config['logger']['mail']['to']));
+    $logger->pushHandler(new Monolog\Handler\NativeMailerHandler($config['logger']['mail']['from'], $config['logger']['mail']['subject'], $config['logger']['mail']['to']));
 }
 
 Monolog\ErrorHandler::register($logger);
