@@ -16,8 +16,6 @@ if (APPLICATION_ENV == 'development') {
     error_reporting(E_ALL ^ E_NOTICE);
 }
 
-
-
 if (APPLICATION_ENV === 'development') {
     register_shutdown_function(function() {
         $error = error_get_last();
