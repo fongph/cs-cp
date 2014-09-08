@@ -70,7 +70,8 @@
                                 return '-';
                             }
                             
-                            return moment(value * 1000).zone(0).format('lll');
+                            // show time in browser tz
+                            return moment(value * 1000).format('lll');
                         }
                     },
                     {
