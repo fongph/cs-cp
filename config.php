@@ -1,7 +1,7 @@
 <?php
 
 $default = array(
-    'build' => 24,
+    'build' => 25,
     'domain' => 'http://cp.topspyapp.com-test',
     'staticDomain' => 'http://cp.topspyapp.com-test/static',
     'cookieDomain' => 'topspyapp.local',
