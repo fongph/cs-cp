@@ -47,14 +47,14 @@
 
     {if $tab=='private'}
     <div class="panel-top">
-        <p class="text-info">Messages with <a href="http://vk.com/id{$list[0].id}">{$list[0].name}</a></p>
+        <p class="text-info">Messages with <a href="http://vk.com/id{$list[0].id}" target="_blank">{$list[0].name}</a></p>
         <a class="btn btn-default" href="{$di.router->getRouteUrl('vk')}#private">Back to VK log</a>
     </div>
     {elseif $tab=='group'}
     <div class="panel-top">
         <p class="text-info">Messages with 
             {foreach from=$users item=name key=userId name=users}
-                <a href="http://vk.com/id{$userId}">{$name}</a>{if !$smarty.foreach.users.last}, {/if}
+                <a href="http://vk.com/id{$userId}" target="_blank">{$name}</a>{if !$smarty.foreach.users.last}, {/if}
             {/foreach}
         </p>
         <a class="btn btn-default" href="{$di.router->getRouteUrl('vk')}#group">Back to VK log</a>
@@ -67,7 +67,7 @@
             <div class="popover {if $item.type == 'in'}right{else}left{/if}">
                 <div class="arrow"></div>
                 {if $item.type == 'in'}
-                <h3 class="popover-title in"><a href="http://vk.com/id{$item.id}">{$item.name}</a> <span></span></h3>
+                <h3 class="popover-title in"><a href="http://vk.com/id{$item.id}" target="_blank">{$item.name}</a> <span></span></h3>
                 {else}
                 <h3 class="popover-title out"><span></span></h3>
                 {/if}
