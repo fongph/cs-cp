@@ -98,10 +98,9 @@
                 var path = [];
                 var tableData = [];
                 for (var i = 0; i < findPoints.length; i++) {
-                    findPoints[i][4] = moment.unix(findPoints[i][4]).zone(0).format("LT");
                     path.push(new google.maps.LatLng(findPoints[i][1], findPoints[i][2]));
                     tableData.push([
-                        findPoints[i][4],
+                        moment.unix(findPoints[i][4]).zone(0).format("LT"),
                         findPoints[i][1],
                         findPoints[i][2],
                         findPoints[i][0],
