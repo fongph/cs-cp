@@ -31,7 +31,7 @@ class Index extends BaseController {
             } else {
                 $users = new Users($this->di);
                 try {
-                    if ($users->login($_POST['email'], $_POST['password'])) {
+                    if ($users->login($_POST['email'], $_POST['password'], isset($_POST['remember']))) {
                         $this->redirect($this->di['router']->getRouteUrl('profile'));
                     }
                 } catch (\Models\UsersInvalidEmail $e) {

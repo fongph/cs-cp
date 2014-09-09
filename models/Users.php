@@ -28,7 +28,7 @@ class Users extends \System\Model {
         return $passwordHash->CheckPassword($password, $hash);
     }
 
-    public function login($email, $password) {
+    public function login($email, $password, $remember = false) {
         $email = $this->getDb()->quote($email);
 
         if (($data = $this->getDb()
@@ -56,6 +56,14 @@ class Users extends \System\Model {
         $this->removeLoginAttempts($data['id']);
         $this->logAuth($data['id']);
         $this->di['auth']->setIdentity($data);
+        
+        if ($remember) {
+            $this->di['session']->setCookieParams(array(
+                'lifetime' => $this->di['config']['session']['rememberMeLifetime']
+            ));
+        }
+        
+        $this->di['session']->restart();
         $this->setLocale($data['locale'], false);
         return true;
     }

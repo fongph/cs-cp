@@ -80,8 +80,12 @@ $di->setShared('flashMessages', function () {
     return new \System\FlashMessages();
 });
 
-$di->setShared('auth', function () {
-    return new \System\Auth('name');
+$di->setShared('session', function () use ($di) {
+    return new \System\Session($di['config']['session']);
+});
+
+$di->setShared('auth', function () use ($di) {
+    return new \System\Auth($di['session'], 'auth');
 });
 
 $di->setShared('view', function() use ($di) {

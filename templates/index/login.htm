@@ -10,6 +10,11 @@
             <label for="password">{$di.t->_('Password')}</label>
             <input type="password" name="password" class="form-control" id="password" placeholder="{$di.t->_('Password')}" />
         </div>
+        <div class="checkbox">
+            <label>
+                <input type="checkbox" name="remember" value="1">{$di.t->_('Remember me')}
+            </label>
+        </div>
         <button type="submit" class="btn btn-primary">{$di.t->_('Log in')}</button>
     </form>
     <ul class="action-links">

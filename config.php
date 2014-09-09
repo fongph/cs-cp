@@ -4,8 +4,11 @@ $default = array(
     'build' => 25,
     'domain' => 'http://cp.topspyapp.com-test',
     'staticDomain' => 'http://cp.topspyapp.com-test/static',
-    'cookieDomain' => 'topspyapp.local',
+    'cookieDomain' => '.topspyapp.com-test',
     'supportEmail' => 'orest@dataedu.com', //'support@topspyapp.com',
+    'session' => array(
+        'rememberMeLifetime' => 2592000 // 30 days
+    ),
     'logger' => array(
         'stream' => array(
             'filename' => ROOT_PATH . 'logs/system.log'
@@ -157,7 +160,7 @@ if (APPLICATION_ENV == 'production') {
     return array_merge($default, array(
         'domain' => 'http://new-cp.topspyapp.local',
         'staticDomain' => 'http://new-cp.topspyapp.local/static',
-        'cookieDomain' => 'topspyapp.local',
+        'cookieDomain' => 'new-cp.topspyapp.local',
         'db' => array(
             'host' => '66.232.96.3',
             'username' => 'user_data',

@@ -129,7 +129,8 @@ class Devices extends \System\Model
     {
         if (!isset($_SESSION['devId']) || !isset($this->di['devicesList'][$_SESSION['devId']])) {
             if (count($this->di['devicesList'])) {
-                $devId = array_keys($this->di['devicesList'])[0];
+                $devices = array_keys($this->di['devicesList']);
+                $devId = $devices[0];
             } else {
                 $devId = null;
             }
