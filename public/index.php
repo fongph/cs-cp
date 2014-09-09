@@ -2,7 +2,6 @@
 
 //APPLICATION_ENV: development | testing | production
 
-session_start();
 define('ROOT_PATH', dirname(__FILE__) . '/../');
 define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'production'));
 define('INCLUDES_PATH', ROOT_PATH . 'includes/');
@@ -35,12 +34,14 @@ if (APPLICATION_ENV === 'development') {
         ob_clean();
         echo '<pre>' . $errstr . '</pre>';
         echo '<pre>FILE: ' . $errfile . ':' . $errline . '</pre>';
+        die;
     });
 
     set_exception_handler(function($e) {
         ob_clean();
         echo sprintf('<pre>Uncaught Exception - %s: "%s" at %s line %s</pre>', get_class($e), $e->getMessage(), $e->getFile(), $e->getLine());
         echo '<pre>' . $e->getTraceAsString() . '</pre>';
+        die;
     });
 } else {
     function showErrorPage($die = true)
