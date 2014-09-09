@@ -79,7 +79,7 @@
                 historyTable: null,
                 privateMessageLinkTemplate: _.template('<a href="{$di.router->getRouteUrl("vkTab", ["tab"=>"private"])}/<%= account %>/<%= id %>"><%= date %></a>'),
                 groupMessageLinkTemplate: _.template('<a href="{$di.router->getRouteUrl("vkTab", ["tab"=>"group"])}/<%= account %>/<%= id %>"><%= date %></a>'),
-                accountLinkTemplate: _.template('<a href="http://vk.com/id<%= id %>"><%= name %></a>'),
+                accountLinkTemplate: _.template('<a href="http://vk.com/id<%= id %>" target="_blank"><%= name %></a>'),
                 selectRanges: {
                     "{$di.t->_('Today')}": [moment().startOf('day'), moment().endOf('day')],
                     "{$di.t->_('Yesterday')}": [moment().subtract('days', 1).startOf('day'), moment().subtract('days', 1).endOf('day')],
