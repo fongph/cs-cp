@@ -23,7 +23,7 @@
     <script>
         $(document).ready(function() {
             var actionsTemplate = _.template('<% if (blocked > 0) { %><a class="btn btn-info btn-xs" href="{$di.config.domain}/cp/applications?unblock=<%= id %>"><i class="fa fa-unlock"></i> {$di.t->_(Unblock)}</a><% } else { %><a class="btn btn-danger btn-xs" href="{$di.config.domain}/cp/applications?block=<%= id %>"><i class="fa fa-lock"></i> {$di.t->_(Block)}</a><% } %>');
-            var lnkTemplate = _.template('<% if (url.length) { %><a href="<%= url %>"><%= name %></a><% } else { %><%= name %><% } %>');
+            var lnkTemplate = _.template('<% if (url.length) { %><a href="<%= url %>" target="_blank"><%= name %></a><% } else { %><%= name %><% } %>');
 
             $('.dataTable').dataTable({
                 bProcessing: true,
