@@ -47,7 +47,7 @@
 
     {if $tab=='private'}
     <div class="panel-top">
-        <p class="text-info">Messages with <a href="http://facebook.com/{$list[0].id}">{$list[0].name}</a></p>
+        <p class="text-info">Messages with <a href="http://facebook.com/{$list[0].id}" target="_blank">{$list[0].name}</a></p>
         <a class="btn btn-default" href="{$di.config.domain}/cp/facebook">Back to Facebook log</a>
     </div>
     {elseif $tab=='group'}
@@ -55,7 +55,7 @@
         <p class="text-info">Messages with 
             {foreach from=$users item=name key=userId name=users}
                 {if strlen($name)}
-                <a href="http://facebook.com/{$userId}">{$name}</a>{if !$smarty.foreach.users.last}, {/if}
+                <a href="http://facebook.com/{$userId}" target="_blank">{$name}</a>{if !$smarty.foreach.users.last}, {/if}
                 {/if}
             {/foreach}
         </p>
@@ -69,7 +69,7 @@
             <div class="popover {if $item.type == 'in'}right{else}left{/if}">
                 <div class="arrow"></div>
                 {if $item.type == 'in'}
-                <h3 class="popover-title in"><a href="http://facebook.com/{$item.id}">{$item.name}</a> <span></span></h3>
+                <h3 class="popover-title in"><a href="http://facebook.com/{$item.id}" target="_blank">{$item.name}</a> <span></span></h3>
                 {else}
                 <h3 class="popover-title out"><span></span></h3>
                 {/if}
