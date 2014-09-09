@@ -85,7 +85,7 @@ $default = array(
         ),
         'callRecordings' => array(
             'name' => 'Call Recordings',
-            'showOS' => array('android')
+            'hideOS' => array('blackberry')
         ),
         'photos' => array(
             'name' => 'View Photos',
