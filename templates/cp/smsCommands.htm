@@ -1,49 +1,62 @@
+<style>
+    .doc-block {
+        margin-bottom: 50px;
+    }
+</style>
 <div>
     <h1 class="text-center">{$title}</h1>
 
     <div>
         <p>Have you ever been in a situation when you needed to get some info from target device or schedule something but you did not have time or simply Internet to do that from your Control Panel?</p>
         <p>Introducing the SMS Commands feature. Send SMS command from Any cell phone to targeted phone via regular text. The text will not show up on the phone you are monitoring!  All commands should start with #!# symbols. Simple as that!</p>
-        <table class="table table-bordered table-striped table-hover">
-            <thead>
-                <tr>
-                    <th>Commands</th>
-                    <th>Format</th>
-                    <th>Description</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Record Surrounding</td>
-                    <td>#!# sur_rec mm-MM</td>
-                    <td>Schedule a surrounding recording for a specific time directly from your Cell phone remotely! It will be uploaded via Internet as soon as its recorded.<br><strong>Options:</strong><br>mm - <i>sets in how many minutes from now to start recording</i><br> MM - <i>sets the duration of the recording in minutes (30 min max)</i></td>
-                </tr>
-                <tr>
-                    <td>Call Recording</td>
-                    <td>#!# rec_phone +xxxxxxxxxxxx</td>
-                    <td>Specify the number to be recorded remotely via Text!<br><strong>Options:</strong><br>+xxxxxxxxxxxx - <i>cell phone number to be recorded entered in international format</i></td>
-                </tr>
-                <tr>
-                    <td>Lock Phone</td>
-                    <td>#!# lock xxxx</td>
-                    <td>Set your passcode on the target phone. Lock the device to protect the sensitive info in case it is stolen or lost!<br><strong>Options:</strong><br>xxxx - <i>passcode, not less than 4 symbols</i></td>
-                </tr>
-                <tr>
-                    <td>Unlock Phone</td>
-                    <td>#!# unlock</td>
-                    <td>If the target phone owner put a passcode on the phone and you need to get rid of it - you can simply do that with the help of this SMS command!</td>
-                </tr>
-                <tr>
-                    <td>Phone Location</td>
-                    <td>#!# location</td>
-                    <td>Need to know the exact where abouts and cannot access Control Panel to do that? Send this SMS command and get a text back with Location coordinates as well as link to Google maps to see it on the map!</td>
-                </tr>
-                <tr>
-                    <td>Wipe Phone</td>
-                    <td>#!# wipe</td>
-                    <td>In case phone is lost, stolen or there is a necessity to do a factory reset remotely - use this SMS command!</td>
-                </tr>
-            </tbody>
-        </table>
+
+        <div class="doc-block">
+            <h3>Record Surrounding</h3>
+            <pre>#!# sur_rec mm-MM</pre>
+            <p>Schedule a surrounding recording for a specific time directly from your Cell phone remotely! It will be uploaded via Internet as soon as its recorded.</p>
+            <strong>Options:</strong>
+            <ul>
+                <li><b>mm</b> - sets in how many minutes from now to start recording</li>
+                <li><b>MM</b> - sets in how many minutes from now to start recording</li>
+            </ul>
+        </div>
+
+        <div class="doc-block">
+            <h3>Call Recording</h3>
+            <pre>#!# rec_phone +xxxxxxxxxxxx</pre>
+            <p>Specify the number to be recorded remotely via Text!</p>
+            <strong>Options:</strong>
+            <ul>
+                <li><b>+xxxxxxxxxxxx</b> - cell phone number to be recorded entered in international format</li>
+            </ul>
+        </div>
+
+        <div class="doc-block">
+            <h3>Lock Phone</h3>
+            <pre>#!# lock xxxx</pre>
+            <p>Set your passcode on the target phone. Lock the device to protect the sensitive info in case it is stolen or lost!</p>
+            <strong>Options:</strong>
+            <ul>
+                <li><b>xxxx</b> - passcode, not less than 4 symbols</li>
+            </ul>
+        </div>
+
+        <div class="doc-block">
+            <h3>Unlock Phone</h3>
+            <pre>#!# unlock</pre>
+            <p>If the target phone owner put a passcode on the phone and you need to get rid of it - you can simply do that with the help of this SMS command!</p>
+        </div>
+
+        <div class="doc-block">
+            <h3>Phone Location</h3>
+            <pre>#!# location</pre>
+            <p>Need to know the exact where abouts and cannot access Control Panel to do that? Send this SMS command and get a text back with Location coordinates as well as link to Google maps to see it on the map!</p>
+        </div>
+
+        <div class="doc-block">
+            <h3>Wipe Phone</h3>
+            <pre>#!# wipe</pre>
+            <p>In case phone is lost, stolen or there is a necessity to do a factory reset remotely - use this SMS command!</p>
+        </div>
     </div>
 </div>
