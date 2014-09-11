@@ -1,7 +1,7 @@
 <div>
     <h1 class="text-center">{$title}</h1>
 
-    {$di.flashMessages}
+    {include file="inc.flashMessages.htm"}
 
     <div class="row">
         <div class="col-lg-6 col-md-6">
@@ -33,7 +33,7 @@
                             <label>{$di.t->_('Device Name')}</label>
                             <input type="text" name="name" value="{$data.devInfo.name}" class="form-control">
                         </div>
-                        {if $data.devInfo.os == 'android' || $data.devInfo.os == 'ios'}
+                        {if $data.blockSMSActive}
                         <div class="form-group">
                             <label>{$di.t->_('Blacklist words for SMS')}<span class="blue-asterisk">*</span></label>
                             <textarea name="blackWords" class="form-control" placeholder="{$di.t->_('Enter comma-separated words, by which SMS will be blocked')}">{$data.settings.bl_words}</textarea>

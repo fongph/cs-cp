@@ -44,7 +44,7 @@
 <div>
     <h1 class="text-center">{$title}</h1>
 
-    {$di.flashMessages}
+    {include file="inc.flashMessages.htm"}
 
     {if !$paid}
         {include file="cp/updatePackage.html"}
@@ -53,14 +53,14 @@
         <div class="col-lg-push-3 col-lg-6">
             <form method="post" action="" class="form-inline">
                 <div class="form-group">
-                    <label for="network">Upload recorded files via</label>
+                    <label for="network">{$di.t->_('Upload recorded files via')}</label>
                     {html_options name="network" id="network" class="form-control" options=$networksList selected=$network}
                 </div>
             </form>
         </div>
     </div>
 
-    <p class="text-primary text-center">Additional charges may apply for data transfer using mobile operator network.</p>
+    <p class="text-primary text-center">{$di.t->_('Additional charges may apply for data transfer using mobile operator network.')}</p>
 
     <div id="player" class="jp-jplayer"></div>
 
@@ -93,8 +93,8 @@
                 </div>
             </div>
             <div class="jp-no-solution">
-                <span>Update Required</span>
-                To play the media you will need to either update your browser to a recent version or update your <a href="http://get.adobe.com/flashplayer/" target="_blank">Flash plugin</a>.
+                <span>{$di.t->_('Update Required')}</span>
+                {$di.t->_('To play the media you will need to either update your browser to a recent version or update your <a href="http://get.adobe.com/flashplayer/" target="_blank">Flash plugin</a>.
             </div>
         </div>
     </div>
@@ -145,11 +145,11 @@
         <table class="dataTable" id="datatable" aria-describedby="datatables_info">
             <thead>
                 <tr role="row">
-                    <th>{$di.t->_(Date)}</th>
-                    <th>{$di.t->_(Number)}</th>
-                    <th>{$di.t->_(Name)}</th>
-                    <th>{$di.t->_(Status)}</th>
-                    <th>{$di.t->_(Actions)}</th>
+                    <th>{$di.t->_('Date')}</th>
+                    <th>{$di.t->_('Number')}</th>
+                    <th>{$di.t->_('Name')}</th>
+                    <th>{$di.t->_('Status')}</th>
+                    <th>{$di.t->_('Actions')}</th>
                 </tr>
             </thead>
         </table>

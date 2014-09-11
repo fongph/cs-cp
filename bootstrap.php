@@ -76,16 +76,12 @@ $di->setShared('router', function() use($config) {
     return $router;
 });
 
-$di->setShared('flashMessages', function () {
+$di->setShared('flashMessages', function () use ($di) {
     return new \System\FlashMessages();
 });
 
-$di->setShared('session', function () use ($di) {
-    return new \System\Session($di['config']['session']);
-});
-
 $di->setShared('auth', function () use ($di) {
-    return new \System\Auth($di['session'], 'auth');
+    return new \System\Auth('auth');
 });
 
 $di->setShared('view', function() use ($di) {
@@ -118,6 +114,9 @@ $di->setShared('S3', function () use ($di) {
 
     return $s3;
 });
+
+\System\Session::setConfig($di['config']['session']);
+\System\Session::start();
 
 $logger = new Monolog\Logger('logger');
 $logger->pushProcessor(new Monolog\Processor\WebProcessor());

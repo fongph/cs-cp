@@ -3,6 +3,7 @@
 namespace Models;
 
 use Hautelook\Phpass\PasswordHash;
+use System\Session;
 
 class Users extends \System\Model {
 
@@ -58,12 +59,9 @@ class Users extends \System\Model {
         $this->di['auth']->setIdentity($data);
         
         if ($remember) {
-            $this->di['session']->setCookieParams(array(
-                'lifetime' => $this->di['config']['session']['rememberMeLifetime']
-            ));
+            Session::rememberMe();
         }
         
-        $this->di['session']->restart();
         $this->setLocale($data['locale'], false);
         return true;
     }

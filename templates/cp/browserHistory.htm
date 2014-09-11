@@ -1,7 +1,7 @@
 <div>
     <h1 class="text-center">{$title}</h1>
 
-    {$di.flashMessages}
+    {include file="inc.flashMessages.htm"}
 
     {if !$paid}
         {include file="cp/updatePackage.html"}
@@ -16,8 +16,8 @@
     </form>
 
     <ul class="nav nav-pills" style="overflow: hidden;">
-        <li><a href="#history" data-toggle="tab">{$di.t->_(History)}</a></li>
-        <li><a href="#blocked" data-toggle="tab">{$di.t->_(Blocked)}</a></li>
+        <li><a href="#history" data-toggle="tab">{$di.t->_('History')}</a></li>
+        <li><a href="#blocked" data-toggle="tab">{$di.t->_('Blocked')}</a></li>
     </ul>
 
     <div class="tab-content">
@@ -79,8 +79,8 @@
                 endDate: moment().endOf('day'),
                 historyTable: null,
                 domainNameTmpl: _.template('<% if (active > 0) { %><span class="text-success"><% } %><%= domain %><% if (active > 0) { %></span><% } %>'),
-                actionsTmpl: _.template('<a class="btn btn-danger btn-xs" href="{$di.router->getRouteUrl("browserHistory")}?block=<%= url %>"><i class="fa fa-lock"></i> {$di.t->_(Lock)}</a>'),
-                blockedActionsTmpl: _.template('<a class="btn btn-success btn-xs" href="{$di.router->getRouteUrl("browserHistory")}?unblock=<%= domain %>"><i class="fa fa-unlock"></i> {$di.t->_(Unlock)}</a>'),
+                actionsTmpl: _.template('<a class="btn btn-danger btn-xs" href="{$di.router->getRouteUrl("browserHistory")}?block=<%= url %>"><i class="fa fa-lock"></i> {$di.t->_('Lock'')}</a>'),
+                blockedActionsTmpl: _.template('<a class="btn btn-success btn-xs" href="{$di.router->getRouteUrl("browserHistory")}?unblock=<%= domain %>"><i class="fa fa-unlock"></i> {$di.t->_('Unlock')}</a>'),
                 blackList: [],
                 selectRanges: {
                     "{$di.t->_('Today')}": [moment().startOf('day'), moment().endOf('day')],
@@ -175,7 +175,7 @@
                     $('#blocked-datatable').dataTable({
                         bProcessing: true,
                         bServerSide: true,
-                        sAjaxSource: '{$di.router->getRouteUrl("browserBlocked")}',
+                        sAjaxSource: '{$di.router->getRouteUrl('browserBlocked')}',
                         bPaginate: true,
                         bFilter: true,
                         bSort: true,

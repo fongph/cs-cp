@@ -7,7 +7,7 @@ $default = array(
     'cookieDomain' => '.topspyapp.com-test',
     'supportEmail' => 'orest@dataedu.com', //'support@topspyapp.com',
     'session' => array(
-        'rememberMeLifetime' => 2592000 // 30 days
+        'rememberMeTime' => 2592000 // 30 days
     ),
     'logger' => array(
         'stream' => array(

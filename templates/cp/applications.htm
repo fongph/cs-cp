@@ -1,7 +1,7 @@
 <div>
     <h1 class="text-center">{$title}</h1>
 
-    {$di.flashMessages}
+    {include file="inc.flashMessages.htm"}
 
     {if $hasRecords}
     <div class="table-container">
@@ -22,7 +22,7 @@
     <p class="text-info">*{$di.t->_('Command activation will take up to 20 minutes.')}</p>
     <script>
         $(document).ready(function() {
-            var actionsTemplate = _.template('<% if (blocked > 0) { %><a class="btn btn-info btn-xs" href="{$di.config.domain}/cp/applications?unblock=<%= id %>"><i class="fa fa-unlock"></i> {$di.t->_(Unblock)}</a><% } else { %><a class="btn btn-danger btn-xs" href="{$di.config.domain}/cp/applications?block=<%= id %>"><i class="fa fa-lock"></i> {$di.t->_(Block)}</a><% } %>');
+            var actionsTemplate = _.template('<% if (blocked > 0) { %><a class="btn btn-info btn-xs" href="{$di.config.domain}/cp/applications?unblock=<%= id %>"><i class="fa fa-unlock"></i> {$di.t->_('Unblock')}</a><% } else { %><a class="btn btn-danger btn-xs" href="{$di.config.domain}/cp/applications?block=<%= id %>"><i class="fa fa-lock"></i> {$di.t->_('Block')}</a><% } %>');
             var lnkTemplate = _.template('<% if (url.length) { %><a href="<%= url %>" target="_blank"><%= name %></a><% } else { %><%= name %><% } %>');
 
             $('.dataTable').dataTable({
@@ -55,7 +55,7 @@
                     {
                         mData: "deleted",
                         fnRender: function(obj) {
-                            return  ((obj.aData.deleted > 0) ? "{$di['t']->_(Deleted)}" : "{$di['t']->_(Installed)}");
+                            return  ((obj.aData.deleted > 0) ? "{$di['t']->_('Deleted')}" : "{$di['t']->_('Installed')}");
                         }
                     },
                     {

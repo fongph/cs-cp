@@ -39,7 +39,7 @@
 <div>
     <h1 class="text-center">{$title}</h1>
 
-    {$di.flashMessages}
+    {include file="inc.flashMessages.htm"}
 
     <div class="panel-top">
         <p class="text-info">Messages with <b>{if strlen($userName)}{$userName}{else}{$userPhone}{/if}</b></p>

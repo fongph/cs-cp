@@ -178,6 +178,7 @@ class Settings extends \System\Model
      * 
      * ios+
      * android < 4.4 +
+     * blackberry -
      * 
      * @param type $os
      * @param type $osVersion
@@ -189,6 +190,8 @@ class Settings extends \System\Model
         if ($os == 'android') {
             $devicesModel = new \Models\Devices($this->di);
             return $devicesModel->compareOSVersion('android', '4.4', $osVersion, '<');
+        } else if ($os == 'ios') {
+            return true;
         }
         
         return false;

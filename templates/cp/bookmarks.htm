@@ -11,9 +11,9 @@
         <table class="dataTable" id="datatable" aria-describedby="datatables_info">
             <thead>
                 <tr role="row">
-                    <th>{$di.t->_(Browser)}</th>
-                    <th>{$di.t->_(Title)}</th>
-                    <th>{$di.t->_(Url)}</th>
+                    <th>{$di.t->_('Browser')}</th>
+                    <th>{$di.t->_('Title')}</th>
+                    <th>{$di.t->_('Url')}</th>
                     <th>&nbsp;</th>
                 </tr>
             </thead>
@@ -21,12 +21,12 @@
     </div>
     <script type="text/javascript">
         $(document).ready(function() {
-            var statusTemplate = _.template('<% if (deleted > 0) { %><span class="text-danger">{$di.t->_(Deleted)}</span><% } else { %><span>{$di.t->_(Active)}</span><% } %>');
+            var statusTemplate = _.template('<% if (deleted > 0) { %><span class="text-danger">{$di.t->_('Deleted')}</span><% } else { %><span>{$di.t->_('Active')}</span><% } %>');
 
             $('#datatable').dataTable({
                 bProcessing: true,
                 bServerSide: true,
-                sAjaxSource: '{$di.router->getRouteUrl("bookmarks")}',
+                sAjaxSource: '{$di.router->getRouteUrl('bookmarks')}',
                 bPaginate: true,
                 bFilter: true,
                 bSort: true,
