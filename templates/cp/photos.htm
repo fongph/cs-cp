@@ -68,17 +68,17 @@
         <div class="col-lg-push-3 col-lg-6">
             <form method="post" action="" class="form-inline">
                 <div class="form-group">
-                    <label for="network">Upload recorded files via</label>
+                    <label for="network">{$di.t->_('Upload recorded files via')}</label>
                     {html_options name="network" id="network" class="form-control" options=$networksList selected=$network}
                 </div>
             </form>
         </div>
     </div>
     
-    <p class="text-primary text-center">Additional charges may apply for data transfer using mobile operator network.</p>
+    <p class="text-primary text-center">{$di.t->_('Additional charges may apply for data transfer using mobile operator network.')}</p>
 
     <div class="panel panel-default">
-        <div class="panel-heading">Recent Photos</div>
+        <div class="panel-heading">{$di.t->_('Recent Photos')}</div>
         <div class="panel-body text-center">
             {foreach from=$recentPhotos item=item}
             <a href="{$item.fullUrl}" class="recent-photos"><img data-name="{$item.filepath|pathinfo:$smarty.const.PATHINFO_BASENAME}" data-time="{$item.timestamp}" data-album="{$item.album}" data-deleted="{$item.deleted}" src="{$item.thumbUrl}" alt="" class="photo img-rounded" /></a>
@@ -88,7 +88,7 @@
 
     {if count($albums)}
     <div class="panel panel-default">
-        <div class="panel-heading">Albums</div>
+        <div class="panel-heading">{$di.t->_('Albums')}</div>
         <div class="panel-body text-center">
             {foreach from=$albums item=item}
             <a href="{$di.router->getRouteUrl('photos')}/album/{$item.album}" class="album">
@@ -101,7 +101,7 @@
     {/if}
     <script type="text/javascript">
         $(document).ready(function() {
-            var photoTmpl = _.template('<div class="photo-info"><strong class="text-info"><%= name %></strong><dl><dt>Date</dt><dd><%= time %></dd><dt>Album</dt><dd><%= album %></dd><dt>Deleted</dt><dd><% if (deleted > 0) { %>Yes<% } else { %>No<% } %></dd></dl></div>');
+            var photoTmpl = _.template('<div class="photo-info"><strong class="text-info"><%= name %></strong><dl><dt>{$di.t->_('Date')}</dt><dd><%= time %></dd><dt>{$di.t->_('Album')}</dt><dd><%= album %></dd><dt>Deleted</dt><dd><% if (deleted > 0) { %>{$di.t->_('Yes')}<% } else { %>{$di.t->_('No')}<% } %></dd></dl></div>');
 
             $('.photo').each(function() {
                 $(this).popover({

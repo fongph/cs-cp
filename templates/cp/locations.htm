@@ -49,11 +49,11 @@
                     <table id="datatable" aria-describedby="datatables_info">
                         <thead>
                             <tr role="row">
-                                <th>{$di.t->_(Time)}</th>
-                                <th>{$di.t->_(Latitude)}</th>
-                                <th>{$di.t->_(Longitude)}</th>
-                                <th>{$di.t->_(Address)}</th>
-                                <th>{$di.t->_(Actions)}</th>
+                                <th>{$di.t->_('Time')}</th>
+                                <th>{$di.t->_('Latitude')}</th>
+                                <th>{$di.t->_('Longitude')}</th>
+                                <th>{$di.t->_('Address')}</th>
+                                <th>{$di.t->_('Actions')}</th>
                             </tr>
                         </thead>
                     </table>
@@ -62,13 +62,13 @@
         </div>
 
         <div class="form-inline" id="slider-holder">
-            <label for="slider">Accuracy: <span class="text-primary" id="amount">480ft</span>&nbsp;</label>
+            <label for="slider">{$di.t->_('Accuracy:')} <span class="text-primary" id="amount">480ft</span>&nbsp;</label>
             <input type="text" id="slider" style="width: 500px;" />
-            <button class="btn btn-primary" id="all-data">All Data</button>
+            <button class="btn btn-primary" id="all-data">{$di.t->_('All Data')}</button>
         </div>
     </div>
     <div id="no-data">
-        No data for this date
+        {$di.t->_('No data for this date')}
     </div>
     <div id="loading">
         <img src="{$di.config.staticDomain}/img/ajaxPreloader.gif" alt="" />

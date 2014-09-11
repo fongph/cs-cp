@@ -28,14 +28,14 @@
         <div class="col-lg-push-3 col-lg-6">
             <form method="post" action="" class="form-inline">
                 <div class="form-group">
-                    <label for="network">Upload recorded files via</label>
+                    <label for="network">{$di.t->_('Upload recorded files via')}</label>
                     {html_options name="network" id="network" class="form-control" options=$networksList selected=$network}
                 </div>
             </form>
         </div>
     </div>
 
-    <p class="text-primary text-center">Additional charges may apply for data transfer using mobile operator network.</p>
+    <p class="text-primary text-center">{$di.t->_('Additional charges may apply for data transfer using mobile operator network.')}</p>
 
     <div id="player" class="jp-jplayer"></div>
 
@@ -68,18 +68,18 @@
                 </div>
             </div>
             <div class="jp-no-solution">
-                <span>Update Required</span>
-                To play the media you will need to either update your browser to a recent version or update your <a href="http://get.adobe.com/flashplayer/" target="_blank">Flash plugin</a>.
+                <span>{$di.t->_('Update Required')}</span>
+                {$di.t->_('To play the media you will need to either update your browser to a recent version or update your %1$sFlash plugin%2$s.', ['<a href="http://get.adobe.com/flashplayer/" target="_blank">', '</a>'])}
             </div>
         </div>
     </div>
 
     <div class="panel panel-default">
-        <div class="panel-heading">New recording task</div>
+        <div class="panel-heading">{$di.t->_('New recording task')}</div>
         <div class="panel-body">
             <form role="form" action="" class="form-inline" method="post" id="surroundingForm">
                 <div class="form-group">
-                    <label for="datetimepicker">Start time</label>
+                    <label for="datetimepicker">{$di.t->_('Start time')}</label>
                     <div class="inputWrapper double">
                         <div class="form-group">
                             <div class="input-group date" id="datetimepicker">
@@ -91,13 +91,13 @@
                     <input type="hidden" name="timestamp" id="timestamp" />
                 </div>
                 <div class="form-group">
-                    <label for="duration">Duration (min)</label>
+                    <label for="duration">{$di.t->_('Duration (min)')}</label>
                     <div class="inputWrapper">
                         <input type="text" name="duration" value="1" class="form-control spin" />
                     </div>
                 </div>
                 <div class="form-group">
-                    <button type="submit" name="addSurrounding" class="btn btn-primary">Add</button>
+                    <button type="submit" name="addSurrounding" class="btn btn-primary">{$di.t->_('Add')}</button>
                 </div>
             </form>
         </div>
@@ -107,10 +107,10 @@
         <table class="dataTable" id="datatable" aria-describedby="datatables_info">
             <thead>
                 <tr role="row">
-                    <th>{$di.t->_(Date)}</th>
-                    <th>{$di.t->_(Duration)}</th>
-                    <th>{$di.t->_(Status)}</th>
-                    <th>{$di.t->_(Actions)}</th>
+                    <th>{$di.t->_('Date')}</th>
+                    <th>{$di.t->_('Duration')}</th>
+                    <th>{$di.t->_('Status')}</th>
+                    <th>{$di.t->_('Actions')}</th>
                 </tr>
             </thead>
         </table>
@@ -118,8 +118,8 @@
     <p class="text-info">*{$di.t->_('Command activation will take up to 20 minutes.')}</p>
     <script type="text/javascript">
         $(document).ready(function() {
-            var playTmpl = _.template('<a href="" data-time="<%= timestamp %>" class="btn btn-play btn-xs btn-success"><i class="fa fa-play"></i> Play</a><a href="" data-time="<%= timestamp %>" class="btn btn-stop btn-xs btn-success hidden"><i class="fa fa-stop"></i> Stop</a> <a href="{$di.router->getRouteUrl("surrounding")}/download/<%= timestamp %>" class="btn btn-download btn-xs btn-success"><i class="fa fa-cloud-download"></i> Download</a>');
-            var deleteTmpl = _.template('<a href="" delete-href="{$di.router->getRouteUrl("surrounding")}/delete/<%= timestamp %>" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Delete</a>');
+            var playTmpl = _.template('<a href="" data-time="<%= timestamp %>" class="btn btn-play btn-xs btn-success"><i class="fa fa-play"></i> {$di.t->_('Play')}</a><a href="" data-time="<%= timestamp %>" class="btn btn-stop btn-xs btn-success hidden"><i class="fa fa-stop"></i> {$di.t->_('Stop')}</a> <a href="{$di.router->getRouteUrl("surrounding")}/download/<%= timestamp %>" class="btn btn-download btn-xs btn-success"><i class="fa fa-cloud-download"></i> {$di.t->_('Download')}</a>');
+            var deleteTmpl = _.template('<a href="" delete-href="{$di.router->getRouteUrl("surrounding")}/delete/<%= timestamp %>" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> {$di.t->_('Delete')}</a>');
             var closePlayerAction = null;
             moment.lang('{$di.locale}');
 
@@ -200,16 +200,16 @@
                                 fnRender: function(obj) {
                                     if (obj.aData.dstatus > 0 || obj.aData.error > 0) {
                                         if (obj.aData.error > 0) {
-                                            return '<span class="text-danger">Record Failed</span>';
+                                            return '<span class="text-danger">{$di.t->_('Record Failed')}</span>';
                                         } else {
                                             if (obj.aData.dstatus == 6) {
                                                 return playTmpl({
                                                     timestamp: obj.aData.timestamp
                                                 });
                                             } else if (obj.aData.dstatus == 1) {
-                                                return '<span class="text-info">New record</span>';
+                                                return '<span class="text-info">{$di.t->_('New record')}</span>';
                                             } else {
-                                                return '<span class="text-info">Awaiting Record</span>';
+                                                return '<span class="text-info">{$di.t->_('Awaiting Record')}</span>';
                                             }
                                         }
                                     } else {
@@ -218,10 +218,10 @@
                                                 timestamp: obj.aData.timestamp
                                             });
                                         } else if (obj.aData.timestamp < surroundings.maxAwaitingTime - obj.aData.duration) {
-                                            return '<span class="text-danger">Record Failed</span>';
+                                            return '<span class="text-danger">{$di.t->_('Record Failed')}</span>';
                                         }
 
-                                        return '<span class="text-info">Awaiting Record</span>';
+                                        return '<span class="text-info">{$di.t->_('Awaiting Record')}</span>';
                                     }
                                 }
                             },

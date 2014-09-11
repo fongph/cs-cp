@@ -114,17 +114,17 @@
         <div class="col-lg-push-3 col-lg-6">
             <form method="post" action="" class="form-inline">
                 <div class="form-group">
-                    <label for="network">Upload recorded files via</label>
+                    <label for="network">{$di.t->_('Upload recorded files via')}</label>
                     {html_options name="network" id="network" class="form-control" options=$networksList selected=$network}
                 </div>
             </form>
         </div>
     </div>
 
-    <p class="text-primary text-center">Additional charges may apply for data transfer using mobile operator network.</p>
+    <p class="text-primary text-center">{$di.t->_('Additional charges may apply for data transfer using mobile operator network.')}</p>
 
     <div class="panel panel-default" id="playerContainer">
-        <div class="panel-heading">Player <button type="button" class="close" aria-hidden="true">&times;</button></div>
+        <div class="panel-heading">{$di.t->_('Player')} <button type="button" class="close" aria-hidden="true">&times;</button></div>
         <div class="panel-body">
             <div id="jpContainer" class="jp-video">
                 <div class="jp-type-single">
@@ -169,8 +169,8 @@
                     </div>
                 </div>
                 <div class="jp-no-solution">
-                    <span>Update Required</span>
-                    To play the media you will need to either update your browser to a recent version or update your <a href="http://get.adobe.com/flashplayer/" target="_blank">Flash plugin</a>.
+                    <span>{$di.t->_('Update Required')}</span>
+                    {$di.t->_('To play the media you will need to either update your browser to a recent version or update your %1$sFlash plugin%2$s.', ['<a href="http://get.adobe.com/flashplayer/" target="_blank">', '</a>'])}
                 </div>
             </div>
         </div>
@@ -178,7 +178,7 @@
 
 
     <div class="panel panel-default">
-        <div class="panel-heading">Recent Videos</div>
+        <div class="panel-heading">{$di.t->_('Recent Videos')}</div>
         <div class="panel-body text-center">
             {foreach from=$recentVideos item=item}
             <div class="video-holder">
@@ -189,18 +189,18 @@
                     <div class="bottom">
                         <div class="status">
                             {if $item.deleted}
-                            <span class="text-danger">Deleted</span>
+                            <span class="text-danger">{$di.t->_('Deleted')}</span>
                             {else}
-                            {if $item.requested}<span class="text-warning">Awaiting download</span>{/if}
-                            {if $item.is_full}<span class="text-success">Available</span>{/if}
+                            {if $item.requested}<span class="text-warning">{$di.t->_('Awaiting download')}</span>{/if}
+                            {if $item.is_full}<span class="text-success">{$di.t->_('Available')}</span>{/if}
                             {/if}
                         </div>
                         <div class="buttons">
                             {if !$item.deleted}
                             {if !$item.requested && !$item.is_full}
-                            <a href="{$di.router->getRouteUrl('videos')}?requestVideo={$item.filepath}" class="btn btn-xs btn-primary pull-right">Request video</a>
+                            <a href="{$di.router->getRouteUrl('videos')}?requestVideo={$item.filepath}" class="btn btn-xs btn-primary pull-right">{$di.t->_('Request video')}</a>
                             {else if $item.requested}
-                            <a href="{$di.router->getRouteUrl('videos')}?cancelRequest={$item.filepath}" class="btn btn-xs btn-danger pull-right">Cancel</a>
+                            <a href="{$di.router->getRouteUrl('videos')}?cancelRequest={$item.filepath}" class="btn btn-xs btn-danger pull-right">{$di.t->_('Cancel')}</a>
                             {/if}
                             {/if}
                         </div>
@@ -213,18 +213,18 @@
 
     {if $cameraVideo || $noCameraVideo}
     <div class="panel panel-default">
-        <div class="panel-heading">{$di.t->_(Albums)}</div>
+        <div class="panel-heading">{$di.t->_('Albums')}</div>
         <div class="panel-body text-center">
             {if $cameraVideo}
             <a href="{$di.router->getRouteUrl('videos')}/camera" class="album">
                 <img src="{$cameraVideo.thumbUrl}" alt="" />
-                <div class="name">{$di.t->_(Camera)}</div>
+                <div class="name">{$di.t->_('Camera')}</div>
             </a>
             {/if}
             {if $noCameraVideo}
             <a href="{$di.router->getRouteUrl('videos')}/other" class="album">
                 <img src="{$noCameraVideo.thumbUrl}" alt="" />
-                <div class="name">{$di.t->_(Other)}</div>
+                <div class="name">{$di.t->_('Other')}</div>
             </a>
             {/if}
         </div>

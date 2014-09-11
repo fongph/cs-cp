@@ -43,17 +43,17 @@
 
     {if $tab=='private'}
     <div class="panel-top">
-        <p class="text-info">Messages with <b>{$list[0].name}</b></p>
-        <a class="btn btn-default" href="{$di.config.domain}/cp/whatsapp#private">Back to Whatsapp log</a>
+        <p class="text-info">{$di.t->_('Messages with')} <b>{$list[0].name}</b></p>
+        <a class="btn btn-default" href="{$di.config.domain}/cp/whatsapp#private">{$di.t->_('Back to Whatsapp log')}</a>
     </div>
     {elseif $tab=='group'}
     <div class="panel-top">
-        <p class="text-info">Messages with 
+        <p class="text-info">{$di.t->_('Messages with')} 
             {foreach from=$users item=name key=userId name=users}
                 <b>{$name}</b>{* ({$userId})*}{if !$smarty.foreach.users.last}, {/if}
             {/foreach}
         </p>
-        <a class="btn btn-default" href="{$di.config.domain}/cp/whatsapp#group">Back to Whatsapp log</a>
+        <a class="btn btn-default" href="{$di.config.domain}/cp/whatsapp#group">{$di.t->_('Back to Whatsapp log')}</a>
     </div>
     {/if}
 

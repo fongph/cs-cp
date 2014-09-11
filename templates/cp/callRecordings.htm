@@ -157,7 +157,7 @@
     <script type="text/javascript">
         $(document).ready(function() {
             var playTmpl = _.template('<a href="" data-time="<%= timestamp %>" class="btn btn-play btn-xs btn-success"><i class="fa fa-play"></i> {$di.t->_('Play')}</a><a href="" data-time="<%= timestamp %>" class="btn btn-stop btn-xs btn-success hidden"><i class="fa fa-stop"></i> {$di.t->_('Stop')}</a> <a href="{$di.router->getRouteUrl("callRecordings")}/download/<%= timestamp %>" class="btn btn-download btn-xs btn-success"><i class="fa fa-cloud-download"></i> {$di.t->_('Download')}</a>');
-            var deleteTmpl = _.template('<a href="" delete-href="{$di.router->getRouteUrl("callRecordings")}/delete/<%= timestamp %>" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Delete</a>');
+            var deleteTmpl = _.template('<a href="" delete-href="{$di.router->getRouteUrl("callRecordings")}/delete/<%= timestamp %>" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> {$di.t->_('Delete')}</a>');
             var closePlayerAction = null;
             moment.lang('{$di.locale}');
 

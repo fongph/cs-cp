@@ -71,11 +71,11 @@
     {include file="inc.flashMessages.htm"}
 
     <div style="margin-bottom: 10px">
-        <a class="btn btn-default" href="{$di.router->getRouteUrl('videos')}">Back to albums list</a>
+        <a class="btn btn-default" href="{$di.router->getRouteUrl('videos')}">{$di.t->_('Back to albums list')}</a>
     </div>
 
     <div class="panel panel-default" id="playerContainer">
-        <div class="panel-heading">Player <button type="button" class="close" aria-hidden="true">&times;</button></div>
+        <div class="panel-heading">{$di.t->_('Player')} <button type="button" class="close" aria-hidden="true">&times;</button></div>
         <div class="panel-body">
             <div id="jpContainer" class="jp-video">
                 <div class="jp-type-single">
@@ -120,8 +120,8 @@
                     </div>
                 </div>
                 <div class="jp-no-solution">
-                    <span>Update Required</span>
-                    To play the media you will need to either update your browser to a recent version or update your <a href="http://get.adobe.com/flashplayer/" target="_blank">Flash plugin</a>.
+                    <span>{$di.t->_('Update Required')}</span>
+                    {$di.t->_('To play the media you will need to either update your browser to a recent version or update your %1$sFlash plugin%2$s.', ['<a href="http://get.adobe.com/flashplayer/" target="_blank">', '</a>'])}
                 </div>
             </div>
         </div>
@@ -140,18 +140,18 @@
                     <div class="bottom">
                         <div class="status">
                             {if $item.deleted}
-                            <span class="text-danger">Deleted</span>
+                            <span class="text-danger">{$di.t->_('Deleted')}</span>
                             {else}
-                            {if $item.requested}<span class="text-warning">Awaiting download</span>{/if}
-                            {if $item.is_full}<span class="text-success">Available</span>{/if}
+                            {if $item.requested}<span class="text-warning">{$di.t->_('Awaiting download')}</span>{/if}
+                            {if $item.is_full}<span class="text-success">{$di.t->_('Available')}</span>{/if}
                             {/if}
                         </div>
                         <div class="buttons">
                             {if !$item.deleted}
                             {if !$item.requested && !$item.is_full}
-                            <a href="?requestVideo={$item.filepath}" class="btn btn-xs btn-primary pull-right">Request video</a>
+                            <a href="?requestVideo={$item.filepath}" class="btn btn-xs btn-primary pull-right">{$di.t->_('Request video')}</a>
                             {else if $item.requested}
-                            <a href="?cancelRequest={$item.filepath}" class="btn btn-xs btn-danger pull-right">Cancel</a>
+                            <a href="?cancelRequest={$item.filepath}" class="btn btn-xs btn-danger pull-right">{$di.t->_('Cancel')}</a>
                             {/if}
                             {/if}
                         </div>

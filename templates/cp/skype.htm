@@ -20,7 +20,7 @@
     {elseif count($accounts)}
     <div class="row form-inline">
         <div class="col-lg-6 col-md-6 col-sm-6">
-            <label for="account">Account </label>
+            <label for="account">{$di.t->_('Account')} </label>
             {html_options name="account" id="account" class="form-control" values=$accounts output=$accounts}
         </div>
         <div class="col-lg-6 col-md-6 col-sm-6">
@@ -144,7 +144,7 @@
                                 bUseRendered: false,
                                 fnRender: function(obj) {
                                     if (obj.aData.members > 1) {
-                                        return '<b>Group</b>';
+                                        return '<b>{$di.t->_('Group')}</b>';
                                     } else {
                                         return obj.aData.name;
                                     }
@@ -211,7 +211,7 @@
                                 bUseRendered: false,
                                 fnRender: function(obj) {
                                     if (obj.aData.members > 1) {
-                                        return '<b>Group</b>';
+                                        return '<b>{$di.t->_('Group')}</b>';
                                     } else {
                                         return obj.aData.name;
                                     }

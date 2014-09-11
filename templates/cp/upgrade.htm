@@ -5,10 +5,7 @@
         <div class="col-xs-12 text-center">
             <form method="POST" action="">
                 <div class="form-group">
-                    {$di.t->_('I want to buy %1$s plan for %2$s device!', [
-                    "<span class=\"text-info\">$plan</span>", 
-                    {html_options name="device" options=$devicesSelectList selected=$di.devId}]
-                    )}
+                    {$di.t->_('I want to buy %1$s plan for %2$s device!', ["<span class=\"text-info\">$plan</span>", {html_options name="device" options=$devicesSelectList selected=$di.devId}])}
                 </div>
                 <button type="submit" class="btn btn-success">{$di.t->_('Buy Now!')}</button>
             </form>

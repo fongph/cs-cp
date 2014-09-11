@@ -41,9 +41,9 @@
 
     {include file="inc.flashMessages.htm"}
 
-    <a class="btn btn-default" href="{$di.config.domain}/cp/skype#calls">Back to Skype Call log</a>
+    <a class="btn btn-default" href="{$di.config.domain}/cp/skype#calls">{$di.t->_('Back to Skype Call log')}</a>
 
-    <h4>Conference Call Members:</h4>
+    <h4>{$di.t->_('Conference Call Members:')}</h4>
     {foreach from=$users item=name key=userId name=users}
     {if strlen($name)}
     <p class="text-info">{$name} ({$userId})</p>

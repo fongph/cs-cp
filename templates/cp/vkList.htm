@@ -47,17 +47,17 @@
 
     {if $tab=='private'}
     <div class="panel-top">
-        <p class="text-info">Messages with <a href="http://vk.com/id{$list[0].id}" target="_blank">{$list[0].name}</a></p>
-        <a class="btn btn-default" href="{$di.router->getRouteUrl('vk')}#private">Back to VK log</a>
+        <p class="text-info">{$di.t->_('Messages with')} <a href="http://vk.com/id{$list[0].id}" target="_blank">{$list[0].name}</a></p>
+        <a class="btn btn-default" href="{$di.router->getRouteUrl('vk')}#private">{$di.t->_('Back to VK log')}</a>
     </div>
     {elseif $tab=='group'}
     <div class="panel-top">
-        <p class="text-info">Messages with 
+        <p class="text-info">{$di.t->_('Messages with')} 
             {foreach from=$users item=name key=userId name=users}
                 <a href="http://vk.com/id{$userId}" target="_blank">{$name}</a>{if !$smarty.foreach.users.last}, {/if}
             {/foreach}
         </p>
-        <a class="btn btn-default" href="{$di.router->getRouteUrl('vk')}#group">Back to VK log</a>
+        <a class="btn btn-default" href="{$di.router->getRouteUrl('vk')}#group">{$di.t->_('Back to VK log')}</a>
     </div>
     {/if}
 

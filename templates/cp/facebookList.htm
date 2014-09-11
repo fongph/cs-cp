@@ -47,19 +47,19 @@
 
     {if $tab=='private'}
     <div class="panel-top">
-        <p class="text-info">Messages with <a href="http://facebook.com/{$list[0].id}" target="_blank">{$list[0].name}</a></p>
-        <a class="btn btn-default" href="{$di.config.domain}/cp/facebook">Back to Facebook log</a>
+        <p class="text-info">{$di.t->_('Messages with')} <a href="http://facebook.com/{$list[0].id}" target="_blank">{$list[0].name}</a></p>
+        <a class="btn btn-default" href="{$di.config.domain}/cp/facebook">{$di.t->_('Back to Facebook log')}</a>
     </div>
     {elseif $tab=='group'}
     <div class="panel-top">
-        <p class="text-info">Messages with 
+        <p class="text-info">{$di.t->_('Messages with')} 
             {foreach from=$users item=name key=userId name=users}
                 {if strlen($name)}
                 <a href="http://facebook.com/{$userId}" target="_blank">{$name}</a>{if !$smarty.foreach.users.last}, {/if}
                 {/if}
             {/foreach}
         </p>
-        <a class="btn btn-default" href="{$di.config.domain}/cp/facebook">Back to Facebook log</a>
+        <a class="btn btn-default" href="{$di.config.domain}/cp/facebook">{$di.t->_('Back to Facebook log')}</a>
     </div>
     {/if}
 

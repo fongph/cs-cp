@@ -43,25 +43,25 @@
     {include file="inc.flashMessages.htm"}
 
     <div class="panel-top">
-        <a class="btn btn-default" href="{$di.router->getRouteUrl('emailsSelected', ['account'=>$account])}">Back to Emails log</a>
+        <a class="btn btn-default" href="{$di.router->getRouteUrl('emailsSelected', ['account'=>$account])}">{$di.t->_('Back to Emails log')}</a>
     </div>
 
     <div class="email-panel">
         <dl class="dl-horizontal">
-            <dt>Date:</dt>
+            <dt>{$di.t->_('Date:')}</dt>
             <dd id="timestamp" data-time="{$email.timestamp}"></dd>
-            <dt>From:</dt>
+            <dt>{$di.t->_('From:')}</dt>
             <dd>{$email.from|escape}</dd>
-            <dt>Subject:</dt>
+            <dt>{$di.t->_('Subject:')}</dt>
             <dd>{$email.subject|escape}</dd>
-            <dt>To:</dt>
+            <dt>{$di.t->_('To:')}</dt>
             <dd>{$email.to|escape}</dd>
         </dl>
 
         <p class="form-info image-form bg-warning">{$di.t->_('External images are not shown.')} <a href="" id="showImages">{$di.t->_('Show images')}</a></p>
 
         <div id="email-view">
-        <iframe>No-data</iframe>
+        <iframe>{$di.t->_('No-data')}</iframe>
         </div>
         <div id="loading">
             <img src="{$di.config.staticDomain}/img/loader.gif" alt="" />
