@@ -94,18 +94,18 @@
             </div>
             <div class="jp-no-solution">
                 <span>{$di.t->_('Update Required')}</span>
-                {$di.t->_('To play the media you will need to either update your browser to a recent version or update your <a href="http://get.adobe.com/flashplayer/" target="_blank">Flash plugin</a>.
+                {$di.t->_('To play the media you will need to either update your browser to a recent version or update your %1$sFlash plugin%2$s.', ['<a href="http://get.adobe.com/flashplayer/" target="_blank">', '</a>'])}
             </div>
         </div>
     </div>
 
     <div class="panel panel-default">
-        <div class="panel-heading">Phone Numbers to Record</div>
+        <div class="panel-heading">{$di.t->_('Phone Numbers to Record')}</div>
         <div class="panel-body text-center">
             {if $phoneNumbersList == 'all'}
-            <p class="text-primary">Record All Calls</p>
+            <p class="text-primary">{$di.t->_('Record All Calls')}</p>
             {elseif $phoneNumbersList == 'noRecord'}
-            <p class="text-primary">No phone numbers to record</p>
+            <p class="text-primary">{$di.t->_('No phone numbers to record')}</p>
             {else}
             {if count($phoneNumbersList)}
             <ul class="list-group">
@@ -117,17 +117,17 @@
             {/if}
             <form role="form" action="" class="form-inline" method="post">
                 <div class="form-group">
-                    <label>Phone Number</label>
+                    <label>{$di.t->_('Phone Number')}</label>
                     <input type="text" name="phone" value="" class="form-control" placeholder="+12345676789" />
                 </div>
                 <div class="form-group">
-                    <button type="submit" class="btn btn-success" name="addPhoneNumber">Add</button>
+                    <button type="submit" class="btn btn-success" name="addPhoneNumber">{$di.t->_('Add')}</button>
                 </div>
                 <div class="form-group">
-                    <label class="no-margin">OR</label>
+                    <label class="no-margin">{$di.t->_('OR')}</label>
                 </div>
                 <div class="form-group">
-                    <button type="submit" class="btn btn-warning" name="recordAll">Record All Calls</button>
+                    <button type="submit" class="btn btn-warning" name="recordAll">{$di.t->_('Record All Calls')}</button>
                 </div>
             </form>
         </div>
@@ -156,7 +156,7 @@
     </div>
     <script type="text/javascript">
         $(document).ready(function() {
-            var playTmpl = _.template('<a href="" data-time="<%= timestamp %>" class="btn btn-play btn-xs btn-success"><i class="fa fa-play"></i> Play</a><a href="" data-time="<%= timestamp %>" class="btn btn-stop btn-xs btn-success hidden"><i class="fa fa-stop"></i> Stop</a> <a href="{$di.router->getRouteUrl("callRecordings")}/download/<%= timestamp %>" class="btn btn-download btn-xs btn-success"><i class="fa fa-cloud-download"></i> Download</a>');
+            var playTmpl = _.template('<a href="" data-time="<%= timestamp %>" class="btn btn-play btn-xs btn-success"><i class="fa fa-play"></i> {$di.t->_('Play')}</a><a href="" data-time="<%= timestamp %>" class="btn btn-stop btn-xs btn-success hidden"><i class="fa fa-stop"></i> {$di.t->_('Stop')}</a> <a href="{$di.router->getRouteUrl("callRecordings")}/download/<%= timestamp %>" class="btn btn-download btn-xs btn-success"><i class="fa fa-cloud-download"></i> {$di.t->_('Download')}</a>');
             var deleteTmpl = _.template('<a href="" delete-href="{$di.router->getRouteUrl("callRecordings")}/delete/<%= timestamp %>" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Delete</a>');
             var closePlayerAction = null;
             moment.lang('{$di.locale}');
