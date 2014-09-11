@@ -26,7 +26,7 @@ class BaseController extends \System\Controller {
     protected function initCP() {
         $devicesModel = new \Models\Devices($this->di);
 
-        $devices = $devicesModel->getDevicesByUser($this->di['auth']->getIdentity()['id']);
+        $devices = $devicesModel->getDevicesByUser($this->auth['id']);
         $this->di->set('devicesList', $devices);
 
         $devId = $devicesModel->getCurrentDevId();

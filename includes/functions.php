@@ -1,6 +1,7 @@
 <?php
 
-function registerAutoload($config) {
+function registerAutoload($config)
+{
     spl_autoload_register(function($class) use ($config) {
         foreach ($config['namespaces'] as $begin => $path) {
             if (strpos($class, $begin) === 0 && ($class = str_replace($begin . NAMESPACE_SEPARATOR, '', $class))) {
@@ -13,7 +14,8 @@ function registerAutoload($config) {
     });
 }
 
-function p($var, $die = false) {
+function p($var, $die = false)
+{
     echo '<pre>';
     if ($var === false)
         echo 'false';
@@ -29,11 +31,13 @@ function p($var, $die = false) {
         die();
 }
 
-function d($var) {
+function d($var)
+{
     p($var, true);
 }
 
-function getPlanNormalName($name) {
+function getPlanNormalName($name)
+{
     switch ($name) {
         case 'PRO':
             return 'Pro';
@@ -44,7 +48,8 @@ function getPlanNormalName($name) {
     return $name;
 }
 
-function isErrorInArray($array) {
+function isErrorInArray($array)
+{
     foreach ($array as $value) {
         if (count($value)) {
             return true;
@@ -54,7 +59,8 @@ function isErrorInArray($array) {
     return false;
 }
 
-function getNameFromEmail($email) {
+function getNameFromEmail($email)
+{
     $parts = explode('@', $email);
 
     if (count($parts) == 2) {
@@ -64,15 +70,18 @@ function getNameFromEmail($email) {
     return 'Some Name';
 }
 
-function get(array $arr, $key, $default = null) {
+function get(array $arr, $key, $default = null)
+{
     return isset($arr[$key]) ? $arr[$key] : $default;
 }
 
-function validatePhoneNumber($value) {
+function validatePhoneNumber($value)
+{
     return preg_match('#^\+[0-9]{9,13}$#', $value);
 }
 
-function logException(Exception $e, $fileName, $showRequest = false) {
+function logException(Exception $e, $fileName, $showRequest = false)
+{
     $string = PHP_EOL .
             date("Y-m-d H:i:s") . PHP_EOL .
             $e->getMessage() . PHP_EOL .
@@ -82,20 +91,35 @@ function logException(Exception $e, $fileName, $showRequest = false) {
     file_put_contents($fileName, $string, FILE_APPEND);
 }
 
-function getIPCountry($ip) {
+function getIPCountry($ip)
+{
     require_once 'tabgeo_country_v4.php';
 
     return tabgeo_country_v4($ip);
 }
 
-function getRealIp() {
+function getRealIp()
+{
     if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
         return $_SERVER['HTTP_CLIENT_IP'];
     }
-    
+
     if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
         return $_SERVER['HTTP_X_FORWARDED_FOR'];
     }
-    
+
     return $_SERVER['REMOTE_ADDR'];
+}
+
+function compareOSVersion($os, $compVersion, $osVersion, $operator)
+{
+    if ($os == 'android') {
+        $parts = explode('_', $osVersion);
+        if (count($parts) != 2) {
+            return false;
+        }
+        $osVersion = $parts[1];
+    }
+
+    return version_compare($osVersion, $compVersion, $operator);
 }

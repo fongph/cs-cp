@@ -156,18 +156,6 @@ class Devices extends \System\Model
 
         return $result;
     }
-    
-    public function compareOSVersion($os, $compVersion, $osVersion, $operator) {
-        if ($os == 'android') {
-            $parts = explode('_', $osVersion);
-            if (count($parts) != 2) {
-                return false;
-            }
-            $osVersion = $parts[1];
-        }
-        
-        return version_compare($osVersion, $compVersion, $operator);
-    }
 
     public function isModuleActive($data)
     {
@@ -175,61 +163,11 @@ class Devices extends \System\Model
             return $data;
         }
 
-        if (isset($data['hideAll'])) {
-            return false;
-        }
-
-        if (isset($data['showOS'])) {
-            if (is_array($data['showOS'])) {
-                if (!in_array($this->di['currentDevice']['os'], $data['showOS'])) {
-                    return false;
-                }
-            } elseif ($data['showOS'] != $this->di['currentDevice']['os']) {
-                return false;
-            }
-        }
-
-        if (isset($data['hideOS'])) {
-            if (is_array($data['hideOS'])) {
-                if (in_array($this->di['currentDevice']['os'], $data['hideOS'])) {
-                    return false;
-                }
-            } elseif ($data['hideOS'] == $this->di['currentDevice']['os']) {
-                return false;
-            }
-        }
-
-        if (isset($data['showLocale'])) {
-            if (is_array($data['showLocale'])) {
-                if (!in_array($this->di['locale'], $data['showLocale'])) {
-                    return false;
-                }
-            } elseif ($data['showLocale'] != $this->di['locale']) {
-                return false;
-            }
-        }
-
-        if (isset($data['hideLocale'])) {
-            if (is_array($data['showLocale'])) {
-                if (in_array($this->di['locale'], $data['hideLocale'])) {
-                    return false;
-                }
-            } elseif ($data['hideLocale'] == $this->di['locale']) {
-                return false;
-            }
+        if (isset($data['show']) && is_callable($data['show']) && $data['show']($this->di['currentDevice'], $this->di)) {
+            return $data['name'];
         }
         
-        if (isset($data['versionOS'])) {
-            if (isset($data['versionOS'][$this->di['currentDevice']['os']])) {
-                foreach ($data['versionOS'][$this->di['currentDevice']['os']] as $operator => $compVersion) {
-                    if (!$this->compareOSVersion($this->di['currentDevice']['os'], $compVersion, $this->di['currentDevice']['os_version'], $operator)) {
-                        return false;
-                    }
-                }
-            }
-        }
-
-        return $data['name'];
+        return false;
     }
 
     //@todo update for billing

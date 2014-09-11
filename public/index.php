@@ -77,8 +77,8 @@ if (APPLICATION_ENV === 'development') {
 
 ob_start();
 
-$config = require ROOT_PATH . 'config.php';
 require ROOT_PATH . 'vendor/autoload.php';
+$config = require ROOT_PATH . 'config.php';
 
 $di = new System\DI();
 $di->set('config', $config);
