@@ -76,11 +76,11 @@ $di->setShared('router', function() use($config) {
     return $router;
 });
 
-$di->setShared('flashMessages', function () use ($di) {
+$di->setShared('flashMessages', function () {
     return new \System\FlashMessages();
 });
 
-$di->setShared('auth', function () use ($di) {
+$di->setShared('auth', function () {
     return new \System\Auth('auth');
 });
 
