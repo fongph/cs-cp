@@ -163,7 +163,7 @@ class Devices extends \System\Model
             return $data;
         }
 
-        if (isset($data['show']) && is_callable($data['show']) && $data['show']($this->di['currentDevice'], $this->di)) {
+        if (isset($data['show']) && is_callable($data['show']) && $data['show']($this->di)) {
             return $data['name'];
         }
         

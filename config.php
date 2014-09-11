@@ -62,8 +62,8 @@ $default = array(
         'locations' => 'View Locations',
         'bookmarks' => array(
             'name' => 'View Bookmarks',
-            'show' => function($data) {
-                if ($data['os'] == 'blackberry') {
+            'show' => function($di) {
+                if ($di['currentDevice']['os'] == 'blackberry') {
                     return false;
                 }
                 
@@ -72,8 +72,8 @@ $default = array(
         ),
         'browserHistory' => array(
             'name' => 'View Browser History',
-            'show' => function($data) {
-                if ($data['os'] == 'blackberry') {
+            'show' => function($di) {
+                if ($di['currentDevice']['os'] == 'blackberry') {
                     return false;
                 }
                 
@@ -82,8 +82,8 @@ $default = array(
         ),
         'calendar' => array(
             'name' => 'View Calendar',
-            'show' => function($data) {
-                if ($data['os'] == 'blackberry') {
+            'show' => function($di) {
+                if ($di['currentDevice']['os'] == 'blackberry') {
                     return false;
                 }
                 
@@ -92,8 +92,8 @@ $default = array(
         ),
         'contacts' => array(
             'name' => 'View Contacts',
-            'show' => function($data) {
-                if ($data['os'] == 'blackberry') {
+            'show' => function($di) {
+                if ($di['currentDevice']['os'] == 'blackberry') {
                     return false;
                 }
                 
@@ -102,8 +102,8 @@ $default = array(
         ),
         'keylogger' => array(
             'name' => 'Keylogger',
-            'show' => function($data) {
-                if ($data['os'] == 'blackberry') {
+            'show' => function($di) {
+                if ($di['currentDevice']['os'] == 'blackberry') {
                     return false;
                 }
                 
@@ -115,11 +115,11 @@ $default = array(
         ),
         'callRecordings' => array(
             'name' => 'Call Recordings',
-            'show' => function($data) {
-                if ($data['os'] == 'blackberry') {
+            'show' => function($di) {
+                if ($di['currentDevice']['os'] == 'blackberry') {
                     return false;
-                } elseif ($data['os'] == 'ios') {
-                    return preg_match('#^iphone 5#i', $data['model']);
+                } elseif ($di['currentDevice']['os'] == 'ios') {
+                    return preg_match('#^iphone 5#i', $di['currentDevice']['model']);
                 }
                 
                 return true;
@@ -127,8 +127,8 @@ $default = array(
         ),
         'photos' => array(
             'name' => 'View Photos',
-            'show' => function($data) {
-                if ($data['os'] == 'blackberry') {
+            'show' => function($di) {
+                if ($di['currentDevice']['os'] == 'blackberry') {
                     return false;
                 }
                 
@@ -137,8 +137,8 @@ $default = array(
         ),
         'videos' => array(
             'name' => 'View Videos',
-            'show' => function($data) {
-                if ($data['os'] == 'blackberry') {
+            'show' => function($di) {
+                if ($di['currentDevice']['os'] == 'blackberry') {
                     return false;
                 }
                 
@@ -147,8 +147,8 @@ $default = array(
         ),
         'viber' => array(
             'name' => 'Viber Tracking',
-            'show' => function($data) {
-                if ($data['os'] == 'blackberry') {
+            'show' => function($di) {
+                if ($di['currentDevice']['os'] == 'blackberry') {
                     return false;
                 }
                 
@@ -157,8 +157,8 @@ $default = array(
         ),
         'skype' => array(
             'name' => 'Skype Tracking',
-            'show' => function($data) {
-                if ($data['os'] == 'blackberry') {
+            'show' => function($di) {
+                if ($di['currentDevice']['os'] == 'blackberry') {
                     return false;
                 }
                 
@@ -167,8 +167,8 @@ $default = array(
         ),
         'whatsapp' => array(
             'name' => 'Whatsapp Tracking',
-            'show' => function($data) {
-                if ($data['os'] == 'blackberry') {
+            'show' => function($di) {
+                if ($di['currentDevice']['os'] == 'blackberry') {
                     return false;
                 }
                 
@@ -177,8 +177,8 @@ $default = array(
         ),
         'facebook' => array(
             'name' => 'Facebook Messages',
-            'show' => function($data) {
-                if ($data['os'] == 'blackberry') {
+            'show' => function($di) {
+                if ($di['currentDevice']['os'] == 'blackberry') {
                     return false;
                 }
                 
@@ -187,9 +187,11 @@ $default = array(
         ),
         'vk' => array(
             'name' => 'VK Messages',
-            //'showLocale' => array('ru-RU'),
-            'show' => function($data) {
-                if ($data['os'] == 'blackberry') {
+            'show' => function($di) {
+//                if ($di['locale'] != 'ru-RU') {
+//                    return false;
+//                }
+                if ($di['currentDevice']['os'] == 'blackberry') {
                     return false;
                 }
                 
@@ -198,8 +200,8 @@ $default = array(
         ),
         'emails' => array(
             'name' => 'View Emails',
-            'show' => function($data) {
-                if ($data['os'] == 'blackberry') {
+            'show' => function($di) {
+                if ($di['currentDevice']['os'] == 'blackberry') {
                     return false;
                 }
                 
@@ -208,8 +210,8 @@ $default = array(
         ),
         'applications' => array(
             'name' => 'View Applications',
-            'show' => function($data) {
-                if ($data['os'] == 'blackberry') {
+            'show' => function($di) {
+                if ($di['currentDevice']['os'] == 'blackberry') {
                     return false;
                 }
                 
@@ -218,11 +220,11 @@ $default = array(
         ),
         'smsCommands' => array(
             'name' => 'Sms Commands',
-            'show' => function($data) {
-                if ($data['os'] == 'blackberry') {
+            'show' => function($di) {
+                if ($di['currentDevice']['os'] == 'blackberry') {
                     return false;
-                } elseif ($data['os'] == 'android') {
-                    return compareOSVersion('android', '4.4', $data['os_version'], '<');
+                } elseif ($di['currentDevice']['os'] == 'android') {
+                    return compareOSVersion('android', '4.4', $di['currentDevice']['os_version'], '<');
                 }
                 
                 return true;
