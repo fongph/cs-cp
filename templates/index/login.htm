@@ -1,3 +1,26 @@
+<style>
+    .device-button, .device-button:active {
+        color: #0090d3;
+        padding-left: 50px;
+        background: url({$di.config.staticDomain}/img/loginpage-devices-icons.png) no-repeat #f1f2f1;
+    }
+    
+    .device-button.android {
+        background-position: 0 -43px;
+    }
+    
+    .device-button.iphone {
+        background-position: 0 -3px;
+    }
+    
+    .device-button.blackberry {
+        background-position: 0 -82px;
+    }
+    
+    .not-member .btn {
+        margin-bottom: 10px;
+    }
+</style>
 <div class="login-form col-lg-6 col-md-8 col-lg-offset-3 col-md-offset-2">
     <h1 class="text-center">{$di.t->_('Login')}</h1>
     {include file="inc.flashMessages.htm"}
@@ -16,13 +39,22 @@
             </label>
         </div>
         <button type="submit" class="btn btn-primary">{$di.t->_('Log in')}</button>
+        <a href="{$di.router->getRouteUrl('lostPassword')}" class="btn btn-lnk">{$di['t']->_('Lost Password')}</a>
     </form>
-    <ul class="action-links">
-        <li>
-            <a href="{$di.router->getRouteUrl('lostPassword')}">{$di['t']->_('Lost Password')}</a>
-        </li>
-        <li>
-            <a href="http://www.topspyapp.com/pricing-and-plans/" target="_blank">{$di['t']->_('Not a Member yet?')}</a>
-        </li>
-    </ul>
+
+    <div class="panel panel-default" style="margin-top: 20px;">
+        <div class="panel-heading">{$di['t']->_('NOT A MEMBER YET?')}</div>
+        <div class="panel-body not-member text-center">
+            <div>
+                <a href="" class="btn device-button iphone">{$di.t->_('iPhone | iPad')}</a>
+                <a href="" class="btn device-button android">{$di.t->_('Android')}</a>
+                <a href="" class="btn device-button blackberry">{$di.t->_('BlackBerry')}</a>
+            </div>
+            
+            <div>
+                <a href="" class="btn btn-primary">{$di['t']->_('View Demo')}</a>
+                <a href="" class="btn btn-warning">{$di['t']->_('Buy Now')}</a>
+            </div>
+        </div>
+    </div>
 </div>
