@@ -56,6 +56,32 @@ processDirectory('../controllers', $data);
 processDirectory('../models', $data);
 processDirectory('../templates', $data);
 
-$result = "<?php\nreturn " . var_export(array_combine($data, $data), true) . ";";
-$result = str_replace('\\\n', '\n', $result);
-file_put_contents('translations_result.php', $result);
+$locales = array('ru-RU');
+$translations = array();
+
+foreach ($locales as $value) {
+    $translations[$value] = require '../locales/' . $value . '.php';
+}
+
+$fp = @fopen('result/translations_export.csv', 'w');
+
+if (!is_resource($fp)) {
+    die('Can`t open file');
+}
+
+fputcsv($fp, array_merge(array('en', 'en_new'), $locales), ';');
+
+foreach ($data as $value) {
+    $array = array($value, '');
+    foreach ($locales as $locale) {
+        if (isset($translations[$locale][$value])) {
+            array_push($array, $translations[$locale][$value]);
+        } else {
+            array_push($array, '');
+        }
+    }
+    fputcsv($fp, $array, ';');
+}
+fclose($fp);
+
+echo count($data) . ' records exported';

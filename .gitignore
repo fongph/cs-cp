@@ -2,6 +2,6 @@
 /vendor
 /tmp/*
 /logs/*
-/utils/translations_result.php
+/utils/result/*
 composer.lock
 composer.phar
