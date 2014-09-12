@@ -110,9 +110,7 @@ $default = array(
                 return true;
             }
         ),
-        'surrounding' => array(
-            'name' => 'Surrounding Records'
-        ),
+        'surrounding' =>  'Surrounding Records',
         'callRecordings' => array(
             'name' => 'Call Recordings',
             'show' => function($di) {
