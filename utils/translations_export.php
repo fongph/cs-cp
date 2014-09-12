@@ -69,7 +69,7 @@ if (!is_resource($fp)) {
     die('Can`t open file');
 }
 
-fputcsv($fp, array_merge(array('en', 'en_new'), $locales), ';');
+fputcsv($fp, array_merge(array('en', 'en_new'), $locales));
 
 foreach ($data as $value) {
     $array = array($value, '');
@@ -80,7 +80,7 @@ foreach ($data as $value) {
             array_push($array, '');
         }
     }
-    fputcsv($fp, $array, ';');
+    fputcsv($fp, $array);
 }
 fclose($fp);
 
