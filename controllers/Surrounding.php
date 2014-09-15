@@ -34,9 +34,9 @@ class Surrounding extends BaseController {
                     }
                 } catch (\Models\Cp\SurroundingStartTimeInvalidException $e) {
                     $this->di['flashMessages']->add(FlashMessages::ERROR, $this->di['t']->_('Invalid start time. Start time should be set for at least 20 minutes ahead!'));
-                } catch (\Models\Cp\SurroundingStartTimeInvalidException $e) {
+                } catch (\Models\Cp\SurroundingDurationInvalidException $e) {
                     $this->di['flashMessages']->add(FlashMessages::ERROR, $this->di['t']->_('Invalid duration of the surrounding record!'));
-                } catch (\Models\Cp\SurroundingStartTimeInvalidException $e) {
+                } catch (\Models\Cp\SurroundingIntervalInvalidException $e) {
                     $this->di['flashMessages']->add(FlashMessages::ERROR, $this->di['t']->_('Surroundings record intervals overlap!'));
                 } catch (\Models\Cp\SurroundingLimitReachedException $e) {
                     $this->di['flashMessages']->add(FlashMessages::ERROR, $this->di['t']->_('You have reached the limit of recordings on your subscription plan.'));
