@@ -41,12 +41,13 @@ $default = array(
         'logoImageUrl' => 'http://www.topspyapp.com/wp-content/themes/topspyapp/images/logo.png',
         'logoUrl' => 'http://cp.topspyapp.com/'
     ),
-    'smarty' => array(
-        'template_dir' => ROOT_PATH . 'templates/',
-        'compile_dir' => ROOT_PATH . 'tmp/',
-        'caching' => false,
-        'compile_check' => true,
-        'force_compile' => true
+    'fenom' => array(
+        'templatesDir' => ROOT_PATH . 'templates/',
+        'compileDir' => ROOT_PATH . 'tmp/',
+        'options' => array(
+            'force_compile' => true,
+            'force_include' => true
+        )
     ),
     'locales' => array(
         'en-GB' => 'English',
