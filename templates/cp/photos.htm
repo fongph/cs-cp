@@ -59,17 +59,17 @@
 <div>
     <h1 class="text-center">{$title}</h1>
 
-    {include file="inc.flashMessages.htm"}
+    {include "inc.flashMessages.htm"}
 
     {if !$paid}
-        {include file="cp/updatePackage.html"}
+        {include "cp/updatePackage.html"}
     {elseif count($recentPhotos)}
     <div class="row networkForm">
         <div class="col-lg-push-3 col-lg-6">
             <form method="post" action="" class="form-inline">
                 <div class="form-group">
                     <label for="network">{$di.t->_('Upload recorded files via')}</label>
-                    {html_options name="network" id="network" class="form-control" options=$networksList selected=$network}
+                    {include "scripts/select.htm" name="network" id="network" class="form-control" options=$networksList selected=$network}
                 </div>
             </form>
         </div>
@@ -80,7 +80,7 @@
     <div class="panel panel-default">
         <div class="panel-heading">{$di.t->_('Recent Photos')}</div>
         <div class="panel-body text-center">
-            {foreach from=$recentPhotos item=item}
+            {foreach $recentPhotos as $item}
             <a href="{$item.fullUrl}" class="recent-photos"><img data-name="{$item.filepath|pathinfo:$smarty.const.PATHINFO_BASENAME}" data-time="{$item.timestamp}" data-album="{$item.album}" data-deleted="{$item.deleted}" src="{$item.thumbUrl}" alt="" class="photo img-rounded" /></a>
             {/foreach}
         </div>
@@ -90,7 +90,7 @@
     <div class="panel panel-default">
         <div class="panel-heading">{$di.t->_('Albums')}</div>
         <div class="panel-body text-center">
-            {foreach from=$albums item=item}
+            {foreach $albums as $item}
             <a href="{$di.router->getRouteUrl('photos')}/album/{$item.album}" class="album">
                 <img src="{$item.thumbUrl}" alt="" class="img-rounded" />
                 <div class="name">{$item.album}</div>
@@ -143,6 +143,6 @@
     </script>
     {else}
         <h3>{$di.t->_('Waiting for photos... Why data may be unavailable?')}</h3>
-        {include file="content/{$di.locale}/noData.html"}
+        {include "content/{$di.locale}/noData.html"}
     {/if}
 </div>

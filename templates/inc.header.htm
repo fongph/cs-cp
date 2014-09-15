@@ -42,7 +42,7 @@
                                         <b class="caret"></b>
                                     </a>
                                     <ul class="dropdown-menu">
-                                        {foreach from=$di.config.locales key=locale item=lang}
+                                        {foreach $di.config.locales as $locale => $lang}
                                         <li><a href="{$di.router->getRouteUrl('main')}locale/{$locale}">{$lang}</a></li>
                                         {/foreach}
                                     </ul>
@@ -59,7 +59,7 @@
                                 <b class="caret"></b>
                             </a>
                             <ul class="dropdown-menu">
-                                {foreach from=$di.devicesList key=id item=device}
+                                {foreach $di.devicesList as $id => $device}
                                 <li>
                                     <a href="{$di.router->getRouteUrl('setDevice', ['devId'=>$id])}"><i class="device-status-s {$device.os}{if $device.online} online{/if}"></i> {$device.ident} <span class="text-info">{$device.plan|getPlanNormalName}</span></a>
                                 </li>

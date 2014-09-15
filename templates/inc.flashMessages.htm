@@ -1,5 +1,5 @@
 {if count($di.flashMessages->hasData())}
-    {foreach from=$di.flashMessages->getData() item=message}
+    {foreach $di.flashMessages->getData() as $message}
     <div class="{$message.styles.block}" a="2">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
         <i class="{$message.styles.icon}"></i>

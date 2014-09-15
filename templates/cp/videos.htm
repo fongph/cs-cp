@@ -105,17 +105,17 @@
 <div>
     <h1 class="text-center">{$title}</h1>
 
-    {include file="inc.flashMessages.htm"}
+    {include "inc.flashMessages.htm"}
 
     {if !$paid}
-    {include file="cp/updatePackage.html"}
+    {include "cp/updatePackage.html"}
     {elseif count($recentVideos)}
     <div class="row networkForm">
         <div class="col-lg-push-3 col-lg-6">
             <form method="post" action="" class="form-inline">
                 <div class="form-group">
                     <label for="network">{$di.t->_('Upload recorded files via')}</label>
-                    {html_options name="network" id="network" class="form-control" options=$networksList selected=$network}
+                    {include "scripts/select.htm" name="network" id="network" class="form-control" options=$networksList selected=$network}
                 </div>
             </form>
         </div>
@@ -180,7 +180,7 @@
     <div class="panel panel-default">
         <div class="panel-heading">{$di.t->_('Recent Videos')}</div>
         <div class="panel-body text-center">
-            {foreach from=$recentVideos item=item}
+            {foreach $recentVideos as $item}
             <div class="video-holder">
                 <img src="{$item.thumbUrl}"{if $item.is_full} class="play" data-path="{$item.album}/{$item.filename}"{/if} alt="" />
                      <div class="video-info">
@@ -199,7 +199,7 @@
                             {if !$item.deleted}
                             {if !$item.requested && !$item.is_full}
                             <a href="{$di.router->getRouteUrl('videos')}?requestVideo={$item.filepath}" class="btn btn-xs btn-primary pull-right">{$di.t->_('Request video')}</a>
-                            {else if $item.requested}
+                            {elseif $item.requested}
                             <a href="{$di.router->getRouteUrl('videos')}?cancelRequest={$item.filepath}" class="btn btn-xs btn-danger pull-right">{$di.t->_('Cancel')}</a>
                             {/if}
                             {/if}
@@ -273,6 +273,6 @@
     </script>
     {else}
     <h3>{$di.t->_('Waiting for videos... Why data may be unavailable?')}</h3>
-    {include file="content/{$di.locale}/noData.html"}
+    {include "content/{$di.locale}/noData.html"}
     {/if}
 </div>

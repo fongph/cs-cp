@@ -13,10 +13,10 @@
 <div>
     <h1 class="text-center">{$title}</h1>
 
-    {include file="inc.flashMessages.htm"}
+    {include "inc.flashMessages.htm"}
 
     {if !$paid}
-        {include file="cp/updatePackage.html"}
+        {include "cp/updatePackage.html"}
     {elseif count($accounts)}
     <div class="row form-inline">
         <div class="col-lg-6 col-md-6 col-sm-6">
@@ -308,10 +308,10 @@
     </script>
     {else}
         {if $di.currentDevice.os=='android' && !$di.currentDevice.rooted}
-            {include file="content/{$di.locale}/rootPhone.html"}
+            {include "content/{$di.locale}/rootPhone.html"}
         {else}
             <h3>{$di.t->_('Waiting for messages... Why data may be unavailable?')}</h3>
-            {include file="content/{$di.locale}/noData.html"}
+            {include "content/{$di.locale}/noData.html"}
         {/if}
     {/if}
 </div>

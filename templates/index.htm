@@ -35,18 +35,18 @@
     <body>
         {if !empty($cpMenu)}
         <div class="cp-menu">
-            {include file='inc.cp.menu.htm'}
+            {include 'inc.cp.menu.htm'}
         </div>
         {/if}
         <div class="row-offcanvas wrapper">
             <div class="wrapper-container">
-                {include file='inc.header.htm'}
+                {include 'inc.header.htm'}
                 <div class="container">
                     <div class="row">
                         {if !empty($cpMenu)}
                         <div class="menu-wrapper">
                             <div class="cp-menu hidden-xs">
-                                {include file='inc.cp.menu.htm'}
+                                {include 'inc.cp.menu.htm'}
                             </div>
                         </div>
                         <div class="content-wrapper">
@@ -79,7 +79,7 @@
                     </div>
                 </div>
             </div>
-            {include file='inc.footer.htm'}
+            {include 'inc.footer.htm'}
         </div>
         <script type="text/javascript" src="{$di.config.staticDomain}/js/bootstrap.min.js?b{$di.config.build}"></script>
         <script type="text/javascript" src="{$di.config.staticDomain}/js/datatables/jquery.dataTables.js?b{$di.config.build}"></script>
