@@ -2,6 +2,7 @@
 
 //APPLICATION_ENV: development | testing | production
 
+
 define('ROOT_PATH', dirname(__FILE__) . '/../');
 define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'production'));
 define('INCLUDES_PATH', ROOT_PATH . 'includes/');
