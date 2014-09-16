@@ -81,7 +81,7 @@
         <div class="panel-heading">{$di.t->_('Recent Photos')}</div>
         <div class="panel-body text-center">
             {foreach $recentPhotos as $item}
-            <a href="{$item.fullUrl}" class="recent-photos"><img data-name="{$item.filepath|pathinfo:$smarty.const.PATHINFO_BASENAME}" data-time="{$item.timestamp}" data-album="{$item.album}" data-deleted="{$item.deleted}" src="{$item.thumbUrl}" alt="" class="photo img-rounded" /></a>
+            <a href="{$item.fullUrl}" class="recent-photos"><img data-name="{$item.filepath|pathinfo:$.const.PATHINFO_BASENAME}" data-time="{$item.timestamp}" data-album="{$item.album}" data-deleted="{$item.deleted}" src="{$item.thumbUrl}" alt="" class="photo img-rounded" /></a>
             {/foreach}
         </div>
     </div>

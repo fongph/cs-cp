@@ -31,8 +31,8 @@
     <div class="panel panel-default">
         <div class="panel-heading">{$albumName}</div>
         <div class="panel-body text-center">
-            {foreach from=$photos item=item}
-            <a href="{$item.fullUrl}" class="album-item"><img data-name="{$item.filepath|pathinfo:$smarty.const.PATHINFO_BASENAME}" data-time="{$item.timestamp}" data-album="{$item.album}" data-deleted="{$item.deleted}" src="{$item.thumbUrl}" alt="" class="photo img-rounded" /></a>
+            {foreach $photos as $item}
+            <a href="{$item.fullUrl}" class="album-item"><img data-name="{$item.filepath|pathinfo:$.const.PATHINFO_BASENAME}" data-time="{$item.timestamp}" data-album="{$item.album}" data-deleted="{$item.deleted}" src="{$item.thumbUrl}" alt="" class="photo img-rounded" /></a>
             {/foreach}
         </div>
     </div>

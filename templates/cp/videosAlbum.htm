@@ -131,7 +131,7 @@
     <div class="panel panel-default">
         <div class="panel-heading">{$albumName}</div>
         <div class="panel-body text-center">
-            {foreach from=$videos item=item}
+            {foreach $videos as $item}
             <div class="video-holder">
                 <img src="{$item.thumbUrl}"{if $item.is_full} class="play" data-path="{$item.album}/{$item.filename}"{/if} alt="" />
                      <div class="video-info">
@@ -150,7 +150,7 @@
                             {if !$item.deleted}
                             {if !$item.requested && !$item.is_full}
                             <a href="?requestVideo={$item.filepath}" class="btn btn-xs btn-primary pull-right">{$di.t->_('Request video')}</a>
-                            {else if $item.requested}
+                            {elseif $item.requested}
                             <a href="?cancelRequest={$item.filepath}" class="btn btn-xs btn-danger pull-right">{$di.t->_('Cancel')}</a>
                             {/if}
                             {/if}
