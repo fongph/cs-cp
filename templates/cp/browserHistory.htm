@@ -261,7 +261,7 @@
     </script>
     {else}
         <h3>{$di.t->_('Waiting for browser information...')}</h3>
-        <h3>{$di.t->_('Why data may be unavailable?')}</h3>
+        <h3>{$di.t->_('Why can the data be unavailable?')}</h3>
         {if $di.currentDevice.os=='android' && $di.currentDevice.app_version >= 64}
             {include file="content/{$di.locale}/noDataBrowserAndroid.html"}
         {else}
