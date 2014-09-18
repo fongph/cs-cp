@@ -123,9 +123,3 @@ function compareOSVersion($os, $compVersion, $osVersion, $operator)
 
     return version_compare($osVersion, $compVersion, $operator);
 }
-
-function countryByCode($code)
-{
-    $cc = (array) include 'country_codes.php';
-    return @$cc[$code] ?: $code;
-}

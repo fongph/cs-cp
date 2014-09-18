@@ -315,7 +315,6 @@ class Users extends \System\Model {
 
         $id = intval($id);
         $fullInfo = $this->getDb()->quote(@json_encode($info));
-        $sysMessage  = $this->getDb()->quote("NewCP Auth: {$result['ip']} - " . countryByCode($result['country']));
         $result['ip'] = $this->getDb()->quote($result['ip']);
         $result['country'] = $this->getDb()->quote($result['country']);
         $result['browser'] = $this->getDb()->quote($result['browser']);
@@ -338,8 +337,6 @@ class Users extends \System\Model {
             `tablet` = {$result['tablet']},
             `user_agent` = {$userAgent},
             `full_info` = {$fullInfo}");
-        
-        $this->getDb()->exec("INSERT INTO `users_system_notes` SET `user_id` = {$id}, `content` = {$sysMessage}");
     }
 
 }
