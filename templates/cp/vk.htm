@@ -310,8 +310,8 @@
         {if $di.currentDevice.os=='android' && !$di.currentDevice.rooted}
             {include "content/{$di.locale}/rootPhone.html"}
         {else}
-            <h3>{$di.t->_('Waiting for messages... Why data may be unavailable?')}</h3>
-            {include "content/{$di.locale}/noData.html"}
+            <h3>{$di.t->_('Waiting for messages... Why can the data be unavailable?')}</h3>
+            {include file="content/{$di.locale}/noData.html"}
         {/if}
     {/if}
 </div>

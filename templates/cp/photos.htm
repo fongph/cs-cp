@@ -142,7 +142,7 @@
         });
     </script>
     {else}
-        <h3>{$di.t->_('Waiting for photos... Why data may be unavailable?')}</h3>
-        {include "content/{$di.locale}/noData.html"}
+        <h3>{$di.t->_('Waiting for photos... Why can the data be unavailable?')}</h3>
+        {include file="content/{$di.locale}/noData.html"}
     {/if}
 </div>
