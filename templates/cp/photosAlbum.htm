@@ -21,7 +21,7 @@
 <div>
     <h1 class="text-center">{$title}</h1>
 
-    {include file="inc.flashMessages.htm"}
+    {include "inc.flashMessages.htm"}
 
     <div style="margin-bottom: 10px">
         <a class="btn btn-default" href="{$di.config.domain}/cp/photos">{$di.t->_('Back to albums list')}</a>
@@ -31,8 +31,8 @@
     <div class="panel panel-default">
         <div class="panel-heading">{$albumName}</div>
         <div class="panel-body text-center">
-            {foreach from=$photos item=item}
-            <a href="{$item.fullUrl}" class="album-item"><img data-name="{$item.filepath|pathinfo:$smarty.const.PATHINFO_BASENAME}" data-time="{$item.timestamp}" data-album="{$item.album}" data-deleted="{$item.deleted}" src="{$item.thumbUrl}" alt="" class="photo img-rounded" /></a>
+            {foreach $photos as $item}
+            <a href="{$item.fullUrl}" class="album-item"><img data-name="{$item.filepath|pathinfo:$.const.PATHINFO_BASENAME}" data-time="{$item.timestamp}" data-album="{$item.album}" data-deleted="{$item.deleted}" src="{$item.thumbUrl}" alt="" class="photo img-rounded" /></a>
             {/foreach}
         </div>
     </div>

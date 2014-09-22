@@ -85,12 +85,9 @@ $di->setShared('auth', function () {
 });
 
 $di->setShared('view', function() use ($di) {
-    $smarty = new \Smarty();
-    foreach ($di['config']['smarty'] as $key => $value) {
-        $smarty->{$key} = $value;
-    }
-
-    return new \System\View\Smarty($smarty);
+    $fenom = \Fenom::factory($di['config']['fenom']['templatesDir'], $di['config']['fenom']['compileDir'], $di['config']['fenom']['options']);
+    
+    return new \System\View\Fenom($fenom);
 });
 
 $di->setShared('locale', function()use($config) {

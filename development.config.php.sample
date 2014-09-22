@@ -1,0 +1,26 @@
+<?php
+
+return array_merge($default, array(
+    'domain' => 'http://new-cp.topspyapp.local',
+    'staticDomain' => 'http://new-cp.topspyapp.local/static',
+    'cookieDomain' => 'new-cp.topspyapp.local',
+    'db' => array(
+        'host' => 'localhost',
+        'username' => 'user',
+        'password' => 'password',
+        'dbname' => 'user_data',
+        'options' => array(
+            PDO::MYSQL_ATTR_INIT_COMMAND => 'set names latin1;',
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
+        )
+    ),
+    'fenom' => array(
+        'templatesDir' => ROOT_PATH . 'templates/',
+        'compileDir' => ROOT_PATH . 'tmp/',
+        'options' => array(
+            'auto_reload' => true,
+            'force_include' => true
+        )
+    )
+));

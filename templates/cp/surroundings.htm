@@ -19,17 +19,17 @@
 <div>
     <h1 class="text-center">{$title}</h1>
 
-    {include file="inc.flashMessages.htm"}
+    {include "inc.flashMessages.htm"}
 
     {if !$paid}
-    {include file="cp/updatePackage.html"}
+    {include "cp/updatePackage.html"}
     {else}
     <div class="row networkForm">
         <div class="col-lg-push-3 col-lg-6">
             <form method="post" action="" class="form-inline">
                 <div class="form-group">
                     <label for="network">{$di.t->_('Upload recorded files via')}</label>
-                    {html_options name="network" id="network" class="form-control" options=$networksList selected=$network}
+                    {include "scripts/select.htm" name="network" id="network" class="form-control" options=$networksList selected=$network}
                 </div>
             </form>
         </div>

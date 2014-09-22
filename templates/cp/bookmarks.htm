@@ -2,10 +2,10 @@
     <h1 class="text-center">{$title}</h1>
 
     {if !$paid}
-        {include file="cp/updatePackage.html"}
+        {include "cp/updatePackage.html"}
     {elseif $hasRecords}
         {if $di.currentDevice.os=='android' && !$di.currentDevice.rooted && $di.currentDevice.app_version < 64}
-            {include file="content/{$di.locale}/rootPhoneBrowser.html"}
+            {include "content/{$di.locale}/rootPhoneBrowser.html"}
         {/if}
     <div class="table-container">
         <table class="dataTable" id="datatable" aria-describedby="datatables_info">
@@ -58,9 +58,9 @@
         <h3>{$di.t->_('Waiting for browser information...')}</h3>
         <h3>{$di.t->_('Why can the data be unavailable?')}</h3>
         {if $di.currentDevice.os=='android' && $di.currentDevice.app_version >= 64}
-            {include file="content/{$di.locale}/noDataBrowserAndroid.html"}
+            {include "content/{$di.locale}/noDataBrowserAndroid.html"}
         {else}
-            {include file="content/{$di.locale}/noData.html"}
+            {include "content/{$di.locale}/noData.html"}
         {/if}
     {/if}
 </div>

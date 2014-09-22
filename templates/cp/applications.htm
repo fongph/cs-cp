@@ -1,7 +1,7 @@
 <div>
     <h1 class="text-center">{$title}</h1>
 
-    {include file="inc.flashMessages.htm"}
+    {include "inc.flashMessages.htm"}
 
     {if $hasRecords}
     <div class="table-container">
@@ -93,6 +93,6 @@
     </script>
     {else}
     <h3>{$di.t->_('Waiting for applications installed on the device... Why can the data be unavailable?')}</h3>
-    {include file="content/{$di.locale}/noData.html"}
+    {include "content/{$di.locale}/noData.html"}
     {/if}
 </div>

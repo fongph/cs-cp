@@ -3,7 +3,7 @@
     "require": {
         "php": ">=5.3.0",
         "rastor/system": "dev-master",
-        "smarty/smarty": "3.*",
+        "fenom/fenom": "2.*",
         "phpmailer/phpmailer": "5.*",
         "tpyo/amazon-s3-php-class": "0.5.0",
         "hautelook/phpass": "0.3.0",

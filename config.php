@@ -41,16 +41,17 @@ $default = array(
         'logoImageUrl' => 'http://www.topspyapp.com/wp-content/themes/topspyapp/images/logo.png',
         'logoUrl' => 'http://cp.topspyapp.com/'
     ),
-    'smarty' => array(
-        'template_dir' => ROOT_PATH . 'templates/',
-        'compile_dir' => ROOT_PATH . 'tmp/',
-        'caching' => false,
-        'compile_check' => true,
-        'force_compile' => true
+    'fenom' => array(
+        'templatesDir' => ROOT_PATH . 'templates/',
+        'compileDir' => ROOT_PATH . 'tmp/',
+        'options' => array(
+            'force_include' => true,
+            'strip' => true
+        )
     ),
     'locales' => array(
         'en-GB' => 'English',
-        //'ru-RU' => 'Russian'
+    //'ru-RU' => 'Russian'
     //'de-DE' => 'German',
     //'es-ES' => 'Spanish',
     //'it-IT' => 'Italian',
@@ -63,125 +64,125 @@ $default = array(
         'bookmarks' => array(
             'name' => 'View Bookmarks',
             'show' => function($di) {
-                if ($di['currentDevice']['os'] == 'blackberry') {
-                    return false;
-                }
-                
-                return true;
-            }
+        if ($di['currentDevice']['os'] == 'blackberry') {
+            return false;
+        }
+
+        return true;
+    }
         ),
         'browserHistory' => array(
             'name' => 'View Browser History',
             'show' => function($di) {
-                if ($di['currentDevice']['os'] == 'blackberry') {
-                    return false;
-                }
-                
-                return true;
-            }
+        if ($di['currentDevice']['os'] == 'blackberry') {
+            return false;
+        }
+
+        return true;
+    }
         ),
         'calendar' => array(
             'name' => 'View Calendar',
             'show' => function($di) {
-                if ($di['currentDevice']['os'] == 'blackberry') {
-                    return false;
-                }
-                
-                return true;
-            }
+        if ($di['currentDevice']['os'] == 'blackberry') {
+            return false;
+        }
+
+        return true;
+    }
         ),
         'contacts' => array(
             'name' => 'View Contacts',
             'show' => function($di) {
-                if ($di['currentDevice']['os'] == 'blackberry') {
-                    return false;
-                }
-                
-                return true;
-            }
+        if ($di['currentDevice']['os'] == 'blackberry') {
+            return false;
+        }
+
+        return true;
+    }
         ),
         'keylogger' => array(
             'name' => 'Keylogger',
             'show' => function($di) {
-                if ($di['currentDevice']['os'] == 'blackberry') {
-                    return false;
-                }
-                
-                return true;
-            }
+        if ($di['currentDevice']['os'] == 'blackberry') {
+            return false;
+        }
+
+        return true;
+    }
         ),
-        'surrounding' =>  'Surrounding Records',
+        'surrounding' => 'Surrounding Records',
         'callRecordings' => array(
             'name' => 'Call Recordings',
             'show' => function($di) {
-                if ($di['currentDevice']['os'] == 'blackberry') {
-                    return false;
-                } elseif ($di['currentDevice']['os'] == 'ios') {
-                    return preg_match('#^iphone 5#i', $di['currentDevice']['model']);
-                }
-                
-                return true;
-            }
+        if ($di['currentDevice']['os'] == 'blackberry') {
+            return false;
+        } elseif ($di['currentDevice']['os'] == 'ios') {
+            return preg_match('#^iphone 5#i', $di['currentDevice']['model']);
+        }
+
+        return true;
+    }
         ),
         'photos' => array(
             'name' => 'View Photos',
             'show' => function($di) {
-                if ($di['currentDevice']['os'] == 'blackberry') {
-                    return false;
-                }
-                
-                return true;
-            }
+        if ($di['currentDevice']['os'] == 'blackberry') {
+            return false;
+        }
+
+        return true;
+    }
         ),
         'videos' => array(
             'name' => 'View Videos',
             'show' => function($di) {
-                if ($di['currentDevice']['os'] == 'blackberry') {
-                    return false;
-                }
-                
-                return true;
-            }
+        if ($di['currentDevice']['os'] == 'blackberry') {
+            return false;
+        }
+
+        return true;
+    }
         ),
         'viber' => array(
             'name' => 'Viber Tracking',
             'show' => function($di) {
-                if ($di['currentDevice']['os'] == 'blackberry') {
-                    return false;
-                }
-                
-                return true;
-            }
+        if ($di['currentDevice']['os'] == 'blackberry') {
+            return false;
+        }
+
+        return true;
+    }
         ),
         'skype' => array(
             'name' => 'Skype Tracking',
             'show' => function($di) {
-                if ($di['currentDevice']['os'] == 'blackberry') {
-                    return false;
-                }
-                
-                return true;
-            }
+        if ($di['currentDevice']['os'] == 'blackberry') {
+            return false;
+        }
+
+        return true;
+    }
         ),
         'whatsapp' => array(
             'name' => 'Whatsapp Tracking',
             'show' => function($di) {
-                if ($di['currentDevice']['os'] == 'blackberry') {
-                    return false;
-                }
-                
-                return true;
-            }
+        if ($di['currentDevice']['os'] == 'blackberry') {
+            return false;
+        }
+
+        return true;
+    }
         ),
         'facebook' => array(
             'name' => 'Facebook Messages',
             'show' => function($di) {
-                if ($di['currentDevice']['os'] == 'blackberry') {
-                    return false;
-                }
-                
-                return true;
-            }
+        if ($di['currentDevice']['os'] == 'blackberry') {
+            return false;
+        }
+
+        return true;
+    }
         ),
         'vk' => array(
             'name' => 'VK Messages',
@@ -189,44 +190,44 @@ $default = array(
 //                if ($di['locale'] != 'ru-RU') {
 //                    return false;
 //                }
-                if ($di['currentDevice']['os'] == 'blackberry') {
-                    return false;
-                }
-                
-                return true;
-            }
+        if ($di['currentDevice']['os'] == 'blackberry') {
+            return false;
+        }
+
+        return true;
+    }
         ),
         'emails' => array(
             'name' => 'View Emails',
             'show' => function($di) {
-                if ($di['currentDevice']['os'] == 'blackberry') {
-                    return false;
-                }
-                
-                return true;
-            }
+        if ($di['currentDevice']['os'] == 'blackberry') {
+            return false;
+        }
+
+        return true;
+    }
         ),
         'applications' => array(
             'name' => 'View Applications',
             'show' => function($di) {
-                if ($di['currentDevice']['os'] == 'blackberry') {
-                    return false;
-                }
-                
-                return true;
-            }
+        if ($di['currentDevice']['os'] == 'blackberry') {
+            return false;
+        }
+
+        return true;
+    }
         ),
         'smsCommands' => array(
             'name' => 'Sms Commands',
             'show' => function($di) {
-                if ($di['currentDevice']['os'] == 'blackberry') {
-                    return false;
-                } elseif ($di['currentDevice']['os'] == 'android') {
-                    return compareOSVersion('android', '4.4', $di['currentDevice']['os_version'], '<');
-                }
-                
-                return true;
-            }
+        if ($di['currentDevice']['os'] == 'blackberry') {
+            return false;
+        } elseif ($di['currentDevice']['os'] == 'android') {
+            return compareOSVersion('android', '4.4', $di['currentDevice']['os_version'], '<');
+        }
+
+        return true;
+    }
         ),
         'settings' => 'Phone Settings'
     ),
@@ -252,22 +253,11 @@ $default = array(
 if (APPLICATION_ENV == 'production') {
     return $default;
 } else if (APPLICATION_ENV == 'development') {
-    return array_merge($default, array(
-        'domain' => 'http://new-cp.topspyapp.local',
-        'staticDomain' => 'http://new-cp.topspyapp.local/static',
-        'cookieDomain' => 'new-cp.topspyapp.local',
-        'db' => array(
-            'host' => '66.232.96.3',
-            'username' => 'user_data',
-            'password' => 'pai1Geo9',
-            'dbname' => 'user_data',
-            'options' => array(
-                PDO::MYSQL_ATTR_INIT_COMMAND => 'set names latin1;',
-                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
-            )
-        )
-    ));
+    if (file_exists(ROOT_PATH . 'development.config.php')) {
+        return require ROOT_PATH . 'development.config.php';
+    } else {
+        return $default;
+    }
 } else if (APPLICATION_ENV == 'testing') {
     return array_merge($default, array(
         'db' => array(

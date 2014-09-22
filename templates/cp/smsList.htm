@@ -39,7 +39,7 @@
 <div>
     <h1 class="text-center">{$title}</h1>
 
-    {include file="inc.flashMessages.htm"}
+    {include "inc.flashMessages.htm"}
 
     <div class="panel-top">
         <p class="text-info">Messages with <b>{if strlen($userName)}{$userName}{else}{$userPhone}{/if}</b></p>
@@ -47,7 +47,7 @@
     </div>
 
     <div class="messages-list">
-        {foreach from=$list item=item}
+        {foreach $list as $item}
         <div id="{$item.timestamp}">
             <div class="popover {if $item.type == 'in'}right{else}left{/if}{if $item.blocked > 0} text-danger{/if}">
                 <div class="arrow"></div>

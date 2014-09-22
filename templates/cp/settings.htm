@@ -1,7 +1,7 @@
 <div>
     <h1 class="text-center">{$title}</h1>
 
-    {include file="inc.flashMessages.htm"}
+    {include "inc.flashMessages.htm"}
 
     <div class="row">
         <div class="col-lg-6 col-md-6">
@@ -10,7 +10,7 @@
                 <div class="panel-body text-center">
                     {if count($data.blackListPhones)}
                     <ul class="list-group">
-                        {foreach from=$data.blackListPhones item=phone}
+                        {foreach $data.blackListPhones as $phone}
                         <li class="list-group-item">{$phone} <a href="{$di.router->getRouteUrl('settings')}?removePhonesBlackList={$phone|escape:'url'}" class="close" aria-hidden="true">&times;</a></li>
                         {/foreach}
                     </ul>
@@ -60,7 +60,7 @@
             </div>
             <div class="panel panel-default">
                 <div class="panel-body text-center">
-                    <h4>{$di.t->_('This device is on %1$s plan!', [{'<span class="text-primary">'|cat:{$data.plan|cat:"</span>"}}])}</h4>
+                    <h4>{$di.t->_('This device is on %1$s plan!', ['<span class="text-primary">' ~ $data.plan ~ '</span>'])}</h4>
                     <a href="http://www.topspyapp.com/pricing-and-plans-last/?dev_id={$di.devId}" class="btn btn-warning">{$di.t->_('Upgrade')}</a>
                 </div>
             </div>

@@ -1,5 +1,5 @@
 <ul data-role="panelbar" class="nav">
-    {foreach from=$cpMenu key=url item=menu}
+    {foreach $cpMenu as $url => $menu}
         <li{if $menu.active} class="active"{/if}><a href="{$url}"><i class="menu-{$menu.class}"></i><span>{$menu.name}</span></a></li>
     {/foreach}
 </ul>

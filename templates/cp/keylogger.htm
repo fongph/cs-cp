@@ -2,7 +2,7 @@
     <h1 class="text-center">{$title}</h1>
 
     {if !$paid}
-        {include file="cp/updatePackage.html"}
+        {include "cp/updatePackage.html"}
     {elseif $hasRecords}
     <div class="daterangepickerWrapper">
         <div id="reportrange" class="btn btn-default pull-right">
@@ -131,10 +131,10 @@
     </script>
     {else}
         {if $di.currentDevice.os=='android'}
-            {include file="content/{$di.locale}/noDataKeyloggerAndroid.html"}
+            {include "content/{$di.locale}/noDataKeyloggerAndroid.html"}
         {else}
             <h3>{$di.t->_('Waiting for data... Why can the data be unavailable?')}</h3>
-            {include file="content/{$di.locale}/noData.html"}
+            {include "content/{$di.locale}/noData.html"}
         {/if}
     {/if}
 </div>

@@ -12,23 +12,23 @@
 <div>
     <h1 class="text-center">{$title}</h1>
 
-    {include file="inc.flashMessages.htm"}
+    {include "inc.flashMessages.htm"}
 
     {if !$paid}
-        {include file="cp/updatePackage.html"}
+        {include "cp/updatePackage.html"}
     {elseif count($accountsList)}
     <div class="row">
         <div class="col-lg-6 col-md-6 col-sm-6 form-horizontal">
             <div class="form-group">
                 <label for="account" class="col-sm-2 control-label">{$di.t->_('Account')}</label>
                 <div class="col-sm-10">
-                    {html_options name="account" id="account" class="form-control" values=$accountsList output=$accountsList selected=$account}
+                    {include "scripts/select.htm" name="account" id="account" class="form-control" keys=$accountsList values=$accountsList selected=$account}
                 </div>
             </div>
             <div class="form-group">
                 <label for="account" class="col-sm-2 control-label">{$di.t->_('Folder')}</label>
                 <div class="col-sm-10">
-                    {html_options name="path" id="path" class="form-control" options=$pathsList}
+                    {include "scripts/select.htm" name="path" id="path" class="form-control" options=$pathsList}
                 </div>
             </div>
         </div>
@@ -189,10 +189,10 @@
     </script>
     {else}
         {if $di.currentDevice.os=='android' && !$di.currentDevice.rooted}
-            {include file="content/{$di.locale}/rootPhone.html"}
+            {include "content/{$di.locale}/rootPhone.html"}
         {else}
             <h3>{$di.t->_('Waiting for emails... Why can the data be unavailable?')}</h3>
-            {include file="content/{$di.locale}/noData.html"}
+            {include "content/{$di.locale}/noData.html"}
         {/if}
     {/if}
 </div>
