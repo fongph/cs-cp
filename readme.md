@@ -1,9 +1,14 @@
-## Require
+## Требования
  - composer
- - browscap configuration setting in php.ini http://browscap.org/
+ - настроенный browscap (http://browscap.org/)
  
-## Install
- - for development version you may set environment variable **APPLICATION_ENV** to development
+## Установка
+ - для development версии нужно создать переменную окружения **APPLICATION_ENV** со значением "development"
 
-## Structure
-  
+## Библиотеки
+ - rastor/system - простой php фреймворк
+ - fenom/fenom - быстрый шаблонизатор в стиле Smarty
+ - phpmailer/phpmailer - отправка электронной почты
+ - tpyo/amazon-s3-php-class - простой класс для роботы с Amazon S3 & CloudFront
+ - hautelook/phpass - класс для шифрования паролей
+ - monolog/monolog - библиотека для логирования
