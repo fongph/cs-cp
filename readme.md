@@ -2,8 +2,9 @@
  - composer
  - настроенный browscap (http://browscap.org/)
  
-## Установка
- - для development версии нужно создать переменную окружения **APPLICATION_ENV** со значением "development"
+## Установка development версии
+ - создать переменную окружения **APPLICATION_ENV** со значением "development"
+ - создать файл ***development.config.php*** по принципу ***development.config.php.sample***
 
 ## Библиотеки
  - ***rastor/system*** - простой php фреймворк
