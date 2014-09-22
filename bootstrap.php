@@ -86,6 +86,7 @@ $di->setShared('auth', function () {
 
 $di->setShared('view', function() use ($di) {
     $fenom = \Fenom::factory($di['config']['fenom']['templatesDir'], $di['config']['fenom']['compileDir'], $di['config']['fenom']['options']);
+    
     return new \System\View\Fenom($fenom);
 });
 
