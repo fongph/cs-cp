@@ -192,7 +192,7 @@
             {include "content/{$di.locale}/rootPhone.html"}
         {else}
             <h3>{$di.t->_('Waiting for emails... Why can the data be unavailable?')}</h3>
-            {include file="content/{$di.locale}/noData.html"}
+            {include "content/{$di.locale}/noData.html"}
         {/if}
     {/if}
 </div>
