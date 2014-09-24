@@ -1,7 +1,7 @@
 <?php
 
 $default = array(
-    'build' => 25,
+    'build' => 26,
     'domain' => 'http://cp.topspyapp.com-test',
     'staticDomain' => 'http://cp.topspyapp.com-test/static',
     'cookieDomain' => '.topspyapp.com-test',
@@ -51,11 +51,7 @@ $default = array(
     ),
     'locales' => array(
         'en-GB' => 'English',
-    //'ru-RU' => 'Russian'
-    //'de-DE' => 'German',
-    //'es-ES' => 'Spanish',
-    //'it-IT' => 'Italian',
-    //'uk-UA' => 'Ukrainian'
+        'ru-RU' => 'Русский'
     ),
     'cpMenu' => array(
         'calls' => 'View Calls',
@@ -64,170 +60,170 @@ $default = array(
         'bookmarks' => array(
             'name' => 'View Bookmarks',
             'show' => function($di) {
-        if ($di['currentDevice']['os'] == 'blackberry') {
-            return false;
-        }
+                if ($di['currentDevice']['os'] == 'blackberry') {
+                    return false;
+                }
 
-        return true;
-    }
+                return true;
+            }
         ),
         'browserHistory' => array(
             'name' => 'View Browser History',
             'show' => function($di) {
-        if ($di['currentDevice']['os'] == 'blackberry') {
-            return false;
-        }
+                if ($di['currentDevice']['os'] == 'blackberry') {
+                    return false;
+                }
 
-        return true;
-    }
+                return true;
+            }
         ),
         'calendar' => array(
             'name' => 'View Calendar',
             'show' => function($di) {
-        if ($di['currentDevice']['os'] == 'blackberry') {
-            return false;
-        }
+                if ($di['currentDevice']['os'] == 'blackberry') {
+                    return false;
+                }
 
-        return true;
-    }
+                return true;
+            }
         ),
         'contacts' => array(
             'name' => 'View Contacts',
             'show' => function($di) {
-        if ($di['currentDevice']['os'] == 'blackberry') {
-            return false;
-        }
+                if ($di['currentDevice']['os'] == 'blackberry') {
+                    return false;
+                }
 
-        return true;
-    }
+                return true;
+            }
         ),
         'keylogger' => array(
             'name' => 'Keylogger',
             'show' => function($di) {
-        if ($di['currentDevice']['os'] == 'blackberry') {
-            return false;
-        }
+                if ($di['currentDevice']['os'] == 'blackberry') {
+                    return false;
+                }
 
-        return true;
-    }
+                return true;
+            }
         ),
         'surrounding' => 'Surrounding Records',
         'callRecordings' => array(
             'name' => 'Call Recordings',
             'show' => function($di) {
-        if ($di['currentDevice']['os'] == 'blackberry') {
-            return false;
-        } elseif ($di['currentDevice']['os'] == 'ios') {
-            return preg_match('#^iphone 5#i', $di['currentDevice']['model']);
-        }
+                if ($di['currentDevice']['os'] == 'blackberry') {
+                    return false;
+                } elseif ($di['currentDevice']['os'] == 'ios') {
+                    return preg_match('#^iphone 5#i', $di['currentDevice']['model']);
+                }
 
-        return true;
-    }
+                return true;
+            }
         ),
         'photos' => array(
             'name' => 'View Photos',
             'show' => function($di) {
-        if ($di['currentDevice']['os'] == 'blackberry') {
-            return false;
-        }
+                if ($di['currentDevice']['os'] == 'blackberry') {
+                    return false;
+                }
 
-        return true;
-    }
+                return true;
+            }
         ),
         'videos' => array(
             'name' => 'View Videos',
             'show' => function($di) {
-        if ($di['currentDevice']['os'] == 'blackberry') {
-            return false;
-        }
+                if ($di['currentDevice']['os'] == 'blackberry') {
+                    return false;
+                }
 
-        return true;
-    }
+                return true;
+            }
         ),
         'viber' => array(
             'name' => 'Viber Tracking',
             'show' => function($di) {
-        if ($di['currentDevice']['os'] == 'blackberry') {
-            return false;
-        }
+                if ($di['currentDevice']['os'] == 'blackberry') {
+                    return false;
+                }
 
-        return true;
-    }
+                return true;
+            }
         ),
         'skype' => array(
             'name' => 'Skype Tracking',
             'show' => function($di) {
-        if ($di['currentDevice']['os'] == 'blackberry') {
-            return false;
-        }
+                if ($di['currentDevice']['os'] == 'blackberry') {
+                    return false;
+                }
 
-        return true;
-    }
+                return true;
+            }
         ),
         'whatsapp' => array(
             'name' => 'Whatsapp Tracking',
             'show' => function($di) {
-        if ($di['currentDevice']['os'] == 'blackberry') {
-            return false;
-        }
+                if ($di['currentDevice']['os'] == 'blackberry') {
+                    return false;
+                }
 
-        return true;
-    }
+                return true;
+            }
         ),
         'facebook' => array(
             'name' => 'Facebook Messages',
             'show' => function($di) {
-        if ($di['currentDevice']['os'] == 'blackberry') {
-            return false;
-        }
+                if ($di['currentDevice']['os'] == 'blackberry') {
+                    return false;
+                }
 
-        return true;
-    }
+                return true;
+            }
         ),
         'vk' => array(
             'name' => 'VK Messages',
             'show' => function($di) {
-//                if ($di['locale'] != 'ru-RU') {
-//                    return false;
-//                }
-        if ($di['currentDevice']['os'] == 'blackberry') {
-            return false;
-        }
+                if ($di['locale'] != 'ru-RU') {
+                    return false;
+                }
+                if ($di['currentDevice']['os'] == 'blackberry') {
+                    return false;
+                }
 
-        return true;
-    }
+                return true;
+            }
         ),
         'emails' => array(
             'name' => 'View Emails',
             'show' => function($di) {
-        if ($di['currentDevice']['os'] == 'blackberry') {
-            return false;
-        }
+                if ($di['currentDevice']['os'] == 'blackberry') {
+                    return false;
+                }
 
-        return true;
-    }
+                return true;
+            }
         ),
         'applications' => array(
             'name' => 'View Applications',
             'show' => function($di) {
-        if ($di['currentDevice']['os'] == 'blackberry') {
-            return false;
-        }
+                if ($di['currentDevice']['os'] == 'blackberry') {
+                    return false;
+                }
 
-        return true;
-    }
+                return true;
+            }
         ),
         'smsCommands' => array(
             'name' => 'Sms Commands',
             'show' => function($di) {
-        if ($di['currentDevice']['os'] == 'blackberry') {
-            return false;
-        } elseif ($di['currentDevice']['os'] == 'android') {
-            return compareOSVersion('android', '4.4', $di['currentDevice']['os_version'], '<');
-        }
+                if ($di['currentDevice']['os'] == 'blackberry') {
+                    return false;
+                } elseif ($di['currentDevice']['os'] == 'android') {
+                    return compareOSVersion('android', '4.4', $di['currentDevice']['os_version'], '<');
+                }
 
-        return true;
-    }
+                return true;
+            }
         ),
         'settings' => 'Phone Settings'
     ),

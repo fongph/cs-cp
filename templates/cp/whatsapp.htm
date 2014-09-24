@@ -13,10 +13,10 @@
 <div>
     <h1 class="text-center">{$title}</h1>
 
-    {include "inc.flashMessages.htm"}
+    {insert "inc.flashMessages.htm"}
 
     {if !$paid}
-        {include "cp/updatePackage.html"}
+        {insert "cp/updatePackage.html"}
     {elseif $hasRecords}
     <div class="row">
         <div class="col-lg-6 col-md-6 col-sm-6 pull-right">

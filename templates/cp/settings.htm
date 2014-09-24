@@ -1,7 +1,7 @@
 <div>
     <h1 class="text-center">{$title}</h1>
 
-    {include "inc.flashMessages.htm"}
+    {insert "inc.flashMessages.htm"}
 
     <div class="row">
         <div class="col-lg-6 col-md-6">
@@ -36,12 +36,12 @@
                         {if $data.blockSMSActive}
                         <div class="form-group">
                             <label>{$di.t->_('Blacklist words for SMS')}<span class="blue-asterisk">*</span></label>
-                            <textarea name="blackWords" class="form-control" placeholder="{$di.t->_('Enter comma-separated words, by which SMS will be blocked')}">{$data.settings.bl_words}</textarea>
+                            <textarea name="blackWords" class="form-control" placeholder="{$di.t->_('Enter the words (separated by comma), by which incoming SMS will be blocked')}">{$data.settings.bl_words}</textarea>
                         </div>
                         {/if}
                         <div class="checkbox">
                             <label>
-                                <input type="checkbox" name="simNotificactions"{if $data.settings.sim_notification} checked{/if} /> {$di.t->_('Receive SIM change notificactions')}<span class="blue-asterisk">*</span>
+                                <input type="checkbox" name="simNotificactions"{if $data.settings.sim_notification} checked{/if} /> {$di.t->_('Receive SIM change notifications')}<span class="blue-asterisk">*</span>
                             </label>
                         </div>
                         <button type="submit" name="deviceSettings" class="btn btn-primary">{$di.t->_('Update')}</button>
@@ -61,14 +61,14 @@
             <div class="panel panel-default">
                 <div class="panel-body text-center">
                     <h4>{$di.t->_('This device is on %1$s plan!', ['<span class="text-primary">' ~ $data.plan ~ '</span>'])}</h4>
-                    <a href="http://www.topspyapp.com/pricing-and-plans-last/?dev_id={$di.devId}" class="btn btn-warning">{$di.t->_('Upgrade')}</a>
+                    <a href="http://www.topspyapp.com/pricing-and-plans/?dev_id={$di.devId}" class="btn btn-warning">{$di.t->_('Upgrade')}</a>
                 </div>
             </div>
             {*
             <div class="panel panel-default">
                 <div class="panel-body text-center">
                     <div class="settings-box">
-                        <h5>{$di.t->_('New TopSpy app version is available!')}</h5>
+                        <h5>{$di.t->_('New version of the app is available!')}</h5>
                         <p>{$di.t->_('The TopSpy version you have installed is outdated. To update it, physical access to the target device is required.')}</p>
                         <p style="font-size: 14px;">
                             {$di.t->_('Click "Update device" and within 5 minutes you will see the confirmation pop-up on the target device screen.')}

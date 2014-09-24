@@ -2,7 +2,7 @@
     <h1 class="text-center">{$title}</h1>
 
     {if !$paid}
-        {include "cp/updatePackage.html"}
+        {insert "cp/updatePackage.html"}
     {elseif $hasRecords}
         {if $di.currentDevice.os=='android' && !$di.currentDevice.rooted && $di.currentDevice.app_version < 64}
             {include "content/{$di.locale}/rootPhoneBrowser.html"}
