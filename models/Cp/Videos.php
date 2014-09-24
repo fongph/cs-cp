@@ -23,7 +23,7 @@ class Videos extends \System\Model {
         $list = $this->getDb()->query("SELECT `timestamp`, `parent` album, `filepath`, `filename`, `is_full`, `requested`, `deleted` FROM `video` WHERE `dev_id` = {$escapedDevId} ORDER BY `timestamp` DESC LIMIT {$count}")->fetchAll();
 
         foreach ($list as $key => $value) {
-            $list[$key]['thumbUrl'] = $this->getCDNAuthorizedUrl($devId . '/video/' . $value['album'] . '/' . $value['filename'] . '.jpg');
+            $list[$key]['thumbUrl'] = $this->getCDNAuthorizedUrl(urlencode($devId) . '/video/' . urlencode($value['album']) . '/' . urlencode($value['filename']) . '.jpg');
         }
 
         return $list;
@@ -35,7 +35,7 @@ class Videos extends \System\Model {
         $list = $this->getDb()->query("SELECT `timestamp`, `parent` album, `filepath`, `filename`, `is_full`, `requested`, `deleted` FROM `video` WHERE `dev_id` = {$escapedDevId} AND `filepath` LIKE '%dcim/%' ORDER BY `timestamp` DESC")->fetchAll();
 
         foreach ($list as $key => $value) {
-            $list[$key]['thumbUrl'] = $this->getCDNAuthorizedUrl($devId . '/video/' . $value['album'] . '/' . $value['filename'] . '.jpg');
+            $list[$key]['thumbUrl'] = $this->getCDNAuthorizedUrl(urlencode($devId) . '/video/' . urlencode($value['album']) . '/' . urlencode($value['filename']) . '.jpg');
         }
 
         return $list;
@@ -47,7 +47,7 @@ class Videos extends \System\Model {
         $list = $this->getDb()->query("SELECT `timestamp`, `parent` album, `filepath`, `filename`, `is_full`, `requested`, `deleted` FROM `video` WHERE `dev_id` = {$escapedDevId} AND `filepath` NOT LIKE '%dcim/%' ORDER BY `timestamp` DESC")->fetchAll();
 
         foreach ($list as $key => $value) {
-            $list[$key]['thumbUrl'] = $this->getCDNAuthorizedUrl($devId . '/video/' . $value['album'] . '/' . $value['filename'] . '.jpg');
+            $list[$key]['thumbUrl'] = $this->getCDNAuthorizedUrl(urlencode($devId) . '/video/' . urlencode($value['album']) . '/' . urlencode($value['filename']) . '.jpg');
         }
 
         return $list;
@@ -60,7 +60,7 @@ class Videos extends \System\Model {
             return false;
         }
 
-        $value['thumbUrl'] = $this->getCDNAuthorizedUrl($devId . '/video/' . $value['album'] . '/' . $value['filename'] . '.jpg');
+        $value['thumbUrl'] = $this->getCDNAuthorizedUrl(urlencode($devId) . '/video/' . urlencode($value['album']) . '/' . urlencode($value['filename']) . '.jpg');
         return $value;
     }
 
@@ -71,7 +71,7 @@ class Videos extends \System\Model {
             return false;
         }
 
-        $value['thumbUrl'] = $this->getCDNAuthorizedUrl($devId . '/video/' . $value['album'] . '/' . $value['filename'] . '.jpg');
+        $value['thumbUrl'] = $this->getCDNAuthorizedUrl(urlencode($devId) . '/video/' . urlencode($value['album']) . '/' . urlencode($value['filename']) . '.jpg');
         return $value;
     }
 

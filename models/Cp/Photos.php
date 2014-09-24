@@ -55,8 +55,8 @@ class Photos extends \System\Model {
                                         ORDER BY `album`")->fetchAll();
 
         foreach ($list as $key => $value) {
-            $list[$key]['thumbUrl'] = $this->getCDNAuthorizedUrl($devId . '/photos/' . $value['album'] . '/thumb_' . $value['filename']);
-            $list[$key]['fullUrl'] = $this->getCDNAuthorizedUrl($devId . '/photos/' . $value['album'] . '/' . $value['filename']);
+            $list[$key]['thumbUrl'] = $this->getCDNAuthorizedUrl(urlencode($devId) . '/photos/' . urlencode($value['album']) . '/thumb_' . urlencode($value['filename']));
+            $list[$key]['fullUrl'] = $this->getCDNAuthorizedUrl(urlencode($devId) . '/photos/' . urlencode($value['album']) . '/' . urlencode($value['filename']));
         }
 
         return $list;
@@ -69,8 +69,8 @@ class Photos extends \System\Model {
         $list = $this->getDb()->query("SELECT `timestamp`, `parent` album, `filepath`, `tmp_name` filename, `deleted` FROM `photos` WHERE `dev_id` = {$escapedDevId} AND `saved` > 0 AND `parent` = {$escapedAlbum} ORDER BY `timestamp` DESC")->fetchAll();
 
         foreach ($list as $key => $value) {
-            $list[$key]['thumbUrl'] = $this->getCDNAuthorizedUrl($devId . '/photos/' . $value['album'] . '/thumb_' . $value['filename']);
-            $list[$key]['fullUrl'] = $this->getCDNAuthorizedUrl($devId . '/photos/' . $value['album'] . '/' . $value['filename']);
+            $list[$key]['thumbUrl'] = $this->getCDNAuthorizedUrl(urlencode($devId) . '/photos/' . urlencode($value['album']) . '/thumb_' . urlencode($value['filename']));
+            $list[$key]['fullUrl'] = $this->getCDNAuthorizedUrl(urlencode($devId) . '/photos/' . urlencode($value['album']) . '/' . urlencode($value['filename']));
         }
 
         return $list;

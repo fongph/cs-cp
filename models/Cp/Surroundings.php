@@ -16,12 +16,12 @@ class Surroundings extends \System\Model {
 
     public function getPlayUrl($devId, $timestamp) {
         $s3 = $this->di->get('S3');
-        return $s3->getAuthenticatedURL($this->di['config']['s3']['bucket'], $devId . '/surrounding/' . $timestamp . '.mp3', self::$_authLifeTime);
+        return $s3->getAuthenticatedURL($this->di['config']['s3']['bucket'], urlencode($devId) . '/surrounding/' . urlencode($timestamp) . '.mp3', self::$_authLifeTime);
     }
     
     public function getDownloadUrl($devId, $timestamp) {
         $s3 = $this->di->get('S3');
-        return $s3->getAuthenticatedURL($this->di['config']['s3']['bucket'], $devId . '/surrounding/' . $timestamp . '.mp3', self::$_authLifeTime, false, false, array(
+        return $s3->getAuthenticatedURL($this->di['config']['s3']['bucket'], urlencode($devId) . '/surrounding/' . urlencode($timestamp) . '.mp3', self::$_authLifeTime, false, false, array(
             'response-content-disposition' => 'attachment; filename=' . $timestamp . '.mp3'
         ));
     }
