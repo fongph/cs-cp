@@ -46,7 +46,7 @@ $default = array(
         'compileDir' => ROOT_PATH . 'tmp/',
         'options' => array(
             'force_include' => true,
-            'strip' => true
+            //'strip' => true
         )
     ),
     'locales' => array(
