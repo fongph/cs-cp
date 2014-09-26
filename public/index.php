@@ -4,7 +4,7 @@
 
 
 define('ROOT_PATH', dirname(__FILE__) . '/../');
-define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'production'));
+define('APPLICATION_ENV', 'development');
 define('INCLUDES_PATH', ROOT_PATH . 'includes/');
 define('NAMESPACE_SEPARATOR', '\\');
 
