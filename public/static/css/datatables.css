@@ -44,13 +44,17 @@ div.dataTables_processing {
 .table-container table {
     table-layout: fixed;
     border: none;
-    border-bottom: 1px solid #000000;
+    border-bottom: 1px solid #e7e7e7;
     width: 100%;
 }
 
 .table-container table th{
-    border-bottom: 1px solid #000000;
-    border-top: 1px solid #E7E7E7;
+    border-top: 1px solid #e7e7e7;
+    border-bottom: 1px solid #e7e7e7;
+}
+
+.table-container table th:first-child {
+    border-left: 0;
 }
 
 .table-container table th.sorting {
@@ -68,8 +72,13 @@ div.dataTables_processing {
     background: url('../img/tableSortDesc.png') no-repeat center right;
 }
 
-.table-container table th, .table-container table td{
+.table-container table th, .table-container table td {
     padding: 8px 18px 8px 10px;
+    border-left: 1px solid #e7e7e7;
+}
+
+.table-container table th:first-child, .table-container table td:first-child {
+    border-left: 0;
 }
 
 .table-container .paginate_disabled_previous, .table-container .paginate_disabled_next  {
@@ -220,8 +229,8 @@ div.dataTables_processing {
         position: relative; 
         white-space: nowrap;
         overflow-y: hidden;
-	overflow-x: scroll;
-	-webkit-overflow-scrolling: touch;
+        overflow-x: scroll;
+        -webkit-overflow-scrolling: touch;
     }
 
     .table-container thead tr {
@@ -249,19 +258,19 @@ div.dataTables_processing {
         border-right: 0 !important;
         height: 35px;
     } 
-    
+
     .table-container td[colspan="2"] {
         height: 70px;
     }
-    
+
     .table-container td[colspan="3"] {
         height: 105px;
     }
-    
+
     .table-container td[colspan="4"] {
         height: 140px;
     }
-    
+
     .table-container td[colspan="5"] {
         height: 175px;
     }
@@ -269,15 +278,15 @@ div.dataTables_processing {
     .table-container td[colspan="6"] {
         height: 210px;
     }
-    
+
     .table-container td[colspan="7"] {
         height: 245px;
     }
-    
+
     .table-container td[colspan="8"] {
         height: 280px;
     }
-    
+
     .table-container th {
         border-bottom: 0;
         border-left: 0;

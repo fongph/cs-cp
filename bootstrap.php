@@ -21,6 +21,7 @@ $di->setShared('router', function() use($config) {
     $router->add('calls', new \System\Router\Route('/cp/calls', array('controller' => 'Calls', 'action' => 'index')));
     $router->add('sms', new \System\Router\Route('/cp/sms', array('controller' => 'Sms', 'action' => 'index')));
     $router->add('locations', new \System\Router\Route('/cp/locations', array('controller' => 'Locations', 'action' => 'index')));
+    $router->add('activeDays', new \System\Router\Route('/cp/locations/activeDays', array('controller' => 'Locations', 'action' => 'disableDays')));
     $router->add('bookmarks', new \System\Router\Route('/cp/bookmarks', array('controller' => 'Bookmarks', 'action' => 'index')));
     $router->add('browserHistory', new \System\Router\Route('/cp/browserHistory', array('controller' => 'BrowserHistory', 'action' => 'index')));
     $router->add('browserBlocked', new \System\Router\Route('/cp/browserBlocked', array('controller' => 'BrowserHistory', 'action' => 'browserBlocked')));
