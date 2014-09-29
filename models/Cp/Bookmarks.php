@@ -20,7 +20,7 @@ class Bookmarks extends \System\Model {
 
         $sort = '`timestamp` ASC';
         if (count($params['sortColumns'])) {
-            $columns = ['`browser`', '`title`', '`url`', '`deleted`'];
+            $columns = ['`browser`', '`title`', '`url`'];
 
             $sort = '';
             foreach ($params['sortColumns'] as $column => $direction) {
@@ -30,10 +30,13 @@ class Bookmarks extends \System\Model {
             }
         }
 
-        $select = "SELECT `browser`, `title`, `url`, `deleted`";
+        $select = "SELECT `browser`, `title`, `url`";
 
-        $fromWhere = "FROM `browser_bookmarks` WHERE `dev_id` = {$devId}";
-
+        if ($params['deleted']) {
+            $fromWhere = "FROM `browser_bookmarks` WHERE `dev_id` = {$devId} AND `deleted` = 1";
+        } else {
+            $fromWhere = "FROM `browser_bookmarks` WHERE `dev_id` = {$devId} AND `deleted` = 0";
+        }
 
         $query = "{$select} {$fromWhere}"
                 . ($search ? " AND ({$search})" : '')

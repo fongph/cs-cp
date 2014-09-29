@@ -7,6 +7,14 @@
         {if $di.currentDevice.os=='android' && !$di.currentDevice.rooted && $di.currentDevice.app_version < 64}
             {include "content/{$di.locale}/rootPhoneBrowser.html"}
         {/if}
+    <div class="row">
+        <div class="col-xs-12">
+            <ul class="nav nav-pills">
+                <li><a href="#active" data-toggle="tab">{$di.t->_('Active')}</a></li>
+                <li><a href="#deleted" data-toggle="tab">{$di.t->_('Deleted')}</a></li>
+            </ul>
+        </div>
+    </div>
     <div class="table-container">
         <table class="dataTable" id="datatable" aria-describedby="datatables_info">
             <thead>
@@ -14,44 +22,74 @@
                     <th>{$di.t->_('Browser')}</th>
                     <th>{$di.t->_('Title')}</th>
                     <th>{$di.t->_('Url')}</th>
-                    <th>&nbsp;</th>
                 </tr>
             </thead>
         </table>
     </div>
     <script type="text/javascript">
         $(document).ready(function() {
-            var statusTemplate = _.template('<% if (deleted > 0) { %><span class="text-danger">{$di.t->_('Deleted')}</span><% } else { %><span>{$di.t->_('Active')}</span><% } %>');
-
-            $('#datatable').dataTable({
-                bProcessing: true,
-                bServerSide: true,
-                sAjaxSource: '{$di.router->getRouteUrl('bookmarks')}',
-                bPaginate: true,
-                bFilter: true,
-                bSort: true,
-                bInfo: true,
-                bAutoWidth: false,
-                bSortMulti: false,
-                iDisplayLength: '{$authData.records_per_page}',
-                oLanguage: {
-                    sUrl: "{$di.config.staticDomain}/js/datatables/language/{$di.locale}.txt"
+            var bookmarks = {
+                url: '{$di.router->getRouteUrl('bookmarks')}',
+                tab: null,
+                table: null,
+                getSourceUrl: function() {
+                    if (window.location.hash === '#deleted') {
+                        return this.url + '?deleted=1';
+                    } else {
+                        return this.url + '?deleted=0';
+                    }
                 },
-                aoColumns: [
-                    null,
-                    null,
-                    null,
-                    {
-                        fnRender: function(obj, value) {
-                            return statusTemplate({
-                                deleted: value
-                            });
+                reloadTable: function() {
+                    if (this.table) {
+                        this.table.fnReloadAjax(this.getSourceUrl(window.location.hash));
+                    }
+                },
+                setTab: function(tab) {
+                    if (this.table) {
+                        if (this.tab !== tab) {
+                            this.reloadTable();
                         }
-                    }],
-                fnDrawCallback: function() {
-                    $(this).find('tbody').tableScroll();
+                    } else {
+                        this.init();
+                    }
+
+                    this.tab = tab;
+                },
+                init: function() {
+                    var table = $('.dataTable').dataTable({
+                        bProcessing: true,
+                        bServerSide: true,
+                        sAjaxSource: this.getSourceUrl(),
+                        bPaginate: true,
+                        bFilter: true,
+                        bSort: true,
+                        bInfo: true,
+                        bAutoWidth: false,
+                        bSortMulti: false,
+                        iDisplayLength: '{$authData.records_per_page}',
+                        oLanguage: {
+                            sUrl: "{$di.config.staticDomain}/js/datatables/language/{$di.locale}.txt"
+                        },
+                        fnDrawCallback: function() {
+                            bookmarks.table = table;
+                            $(this).find('tbody').tableScroll();
+                        }
+                    });
                 }
+            };
+
+            $('.nav-pills a').on('shown.bs.tab', function(e) {
+                window.location.hash = e.target.hash;
+                bookmarks.setTab(e.target.hash);
+                window.scrollTo(0, 0);
             });
+
+            var url = document.location.toString();
+            if (url.match('#')) {
+                $('.nav-pills a[href=#' + url.split('#')[1] + ']').tab('show');
+            } else {
+                $('.nav-pills a[href=#active]').tab('show');
+            }
         });
     </script>
     {else}

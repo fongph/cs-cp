@@ -17,7 +17,7 @@ class Bookmarks extends BaseController {
         if ($this->isAjaxRequest()) {
             $dataTableRequest = new \System\DataTableRequest();
 
-            $dataTableRequest->getRequest($_GET);
+            $dataTableRequest->getRequest($_GET, array('deleted'));
             $this->checkDisplayLength($dataTableRequest->getDisplayLength());
             $this->makeJSONResponse($bookmarksModel->getDataTableData($this->di['devId'], $dataTableRequest->getResult()));
         }
