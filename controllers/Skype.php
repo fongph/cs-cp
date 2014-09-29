@@ -31,6 +31,7 @@ class Skype extends BaseController {
         }
 
         if ($this->view->paid) {
+            $this->view->account = $_GET['account'];
             $this->view->accounts = $skypeModel->getAccountsList($this->di['devId']);
         }
 
