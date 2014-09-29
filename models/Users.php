@@ -33,7 +33,19 @@ class Users extends \System\Model {
         $email = $this->getDb()->quote($email);
 
         if (($data = $this->getDb()
-                ->query("SELECT * FROM `users` WHERE `login` = {$email} LIMIT 1")
+                ->query("SELECT 
+                        `id`, 
+                        `user_login` login, 
+                        `user_pass` password,
+                        `locale`,
+                        `records_per_page`,
+                        `restore`,
+                        `lock`,
+                        `locked`
+                    FROM `g1_users`
+                    WHERE 
+                        `user_login` = {$email}
+                    LIMIT 1")
                 ->fetch()) === false) {
 
             throw new UsersInvalidEmail();
@@ -84,7 +96,7 @@ class Users extends \System\Model {
         $secretString = $this->_buildRestoreString($email);
 
         $secretValue = $this->getDb()->quote($secretString);
-        if (!$this->getDb()->exec("UPDATE `users` SET `lock` = {$secretValue}, `locked` = 1 WHERE `id` = {$userId}")) {
+        if (!$this->getDb()->exec("UPDATE `g1_users` SET `lock` = {$secretValue}, `locked` = 1 WHERE `id` = {$userId}")) {
             throw new \Exception('Error during lock user!');
         }
 
@@ -105,7 +117,7 @@ class Users extends \System\Model {
     public function simpleLogin($id, $hash) {
         $id = intval($id);
 
-        if ((($email = $this->getDb()->query("SELECT `login` FROM `users` WHERE `id` = {$id} LIMIT 1")->fetchColumn()) !== false) &&
+        if ((($email = $this->getDb()->query("SELECT `user_login` FROM `g1_users` WHERE `id` = {$id} LIMIT 1")->fetchColumn()) !== false) &&
                 ($this->_buildSimpleLoginString($id, $email) == $hash)) {
             $this->loginById($id);
             return true;
@@ -117,7 +129,7 @@ class Users extends \System\Model {
     public function simpleRestorePassword($id, $hash) {
         $id = intval($id);
 
-        if ((($email = $this->getDb()->query("SELECT `login` FROM `users` WHERE `id` = {$id} LIMIT 1")->fetchColumn()) !== false) &&
+        if ((($email = $this->getDb()->query("SELECT `user_login` FROM `g1_users` WHERE `id` = {$id} LIMIT 1")->fetchColumn()) !== false) &&
                 ($this->_buildSimpleLoginString($id, $email) == $hash)) {
             $this->lostPasswordSend($email);
             return true;
@@ -130,11 +142,11 @@ class Users extends \System\Model {
         $id = intval($id);
         $old = $this->getDb()->quote($old);
 
-        if ((($email = $this->getDb()->query("SELECT `login` FROM `users` WHERE `id` = {$id} AND `password` = {$old} LIMIT 1")->fetchColumn()) !== false) &&
+        if ((($email = $this->getDb()->query("SELECT `user_login` FROM `g1_users` WHERE `id` = {$id} AND `user_pass` = {$old} LIMIT 1")->fetchColumn()) !== false) &&
                 ($this->_buildSimpleLoginString($id, $email) == $hash)) {
             $new = $this->getDb()->quote($this->getHash($new));
 
-            return $this->getDb()->exec("UPDATE `users` SET `password` = {$new} WHERE `id` = {$id} LIMIT 1") == 1;
+            return $this->getDb()->exec("UPDATE `g1_users` SET `user_pass` = {$new} WHERE `id` = {$id} LIMIT 1") == 1;
         }
 
         return false;
@@ -146,7 +158,18 @@ class Users extends \System\Model {
 
     public function loginById($id) {
         $id = intval($id);
-        if (($data = $this->getDb()->query("SELECT * FROM `users` WHERE `id` = {$id} LIMIT 1")->fetch()) != false) {
+        if (($data = $this->getDb()->query("SELECT 
+                        `id`, 
+                        `user_login` login, 
+                        `user_pass` password,
+                        `locale`,
+                        `records_per_page`,
+                        `restore`,
+                        `lock`,
+                        `locked`
+                    FROM `g1_users`
+                    WHERE
+                        `id` = {$id} LIMIT 1")->fetch()) != false) {
             $this->di['auth']->setIdentity($data);
             $this->setLocale($data['locale'], false);
             return true;
@@ -174,7 +197,7 @@ class Users extends \System\Model {
         $id = $data['id'];
         $password = $this->getDb()->quote($this->getHash($value));
         return $this->getDb()
-                        ->exec("UPDATE `users` SET `password`={$password} WHERE `id`={$id}");
+                        ->exec("UPDATE `g1_users` SET `user_pass`={$password} WHERE `id`={$id}");
     }
 
     public function getRecordsPerPageList() {
@@ -194,7 +217,7 @@ class Users extends \System\Model {
             }
 
             $data = $this->di['auth']->getIdentity();
-            return $this->getDb()->exec("UPDATE `users` SET `records_per_page`={$value} WHERE `id`={$data['id']}");
+            return $this->getDb()->exec("UPDATE `g1_users` SET `records_per_page` = {$value} WHERE `id`={$data['id']}");
         }
 
         return false;
@@ -206,13 +229,13 @@ class Users extends \System\Model {
             $locale = $this->getDb()->quote($value);
             $data = $this->di['auth']->getIdentity();
 
-            return $this->getDb()->exec("UPDATE `users` SET `locale`={$locale} WHERE `id`={$data['id']}");
+            return $this->getDb()->exec("UPDATE `g1_users` SET `locale` = {$locale} WHERE `id`={$data['id']}");
         }
     }
 
     public function isUser($email) {
         $email = $this->getDb()->quote($email);
-        return $this->getDb()->query("SELECT COUNT(*) FROM `users` WHERE `login` = {$email} LIMIT 1")->fetchColumn() > 0;
+        return $this->getDb()->query("SELECT COUNT(*) FROM `g1_users` WHERE `user_login` = {$email} LIMIT 1")->fetchColumn() > 0;
     }
 
     protected function _buildRestoreString($email) {
@@ -227,7 +250,7 @@ class Users extends \System\Model {
         $secretString = $this->_buildRestoreString($email);
         $emailValue = $this->getDb()->quote($email);
         $secretValue = $this->getDb()->quote($secretString);
-        if (!$this->getDb()->exec("UPDATE `users` SET `restore` = {$secretValue} WHERE `login` = {$emailValue}")) {
+        if (!$this->getDb()->exec("UPDATE `g1_users` SET `restore` = {$secretValue} WHERE `user_login` = {$emailValue}")) {
             throw new Exception('Error during set restore key!');
         }
 
@@ -245,13 +268,13 @@ class Users extends \System\Model {
     public function canRestorePassword($email, $secretString) {
         $email = $this->getDb()->quote($email);
         $secretString = $this->getDb()->quote($secretString);
-        return $this->getDb()->query("SELECT COUNT(*) FROM `users` WHERE `login` = {$email} AND `restore` = {$secretString} LIMIT 1")->fetchColumn() > 0;
+        return $this->getDb()->query("SELECT COUNT(*) FROM `g1_users` WHERE `user_login` = {$email} AND `restore` = {$secretString} LIMIT 1")->fetchColumn() > 0;
     }
 
     public function unlockAccount($email, $secretString) {
         $email = $this->getDb()->quote($email);
         $secretString = $this->getDb()->quote($secretString);
-        return $this->getDb()->exec("UPDATE `users` SET `locked` = 0 WHERE `login` = {$email} AND `lock` = {$secretString} LIMIT 1") > 0;
+        return $this->getDb()->exec("UPDATE `g1_users` SET `locked` = 0 WHERE `user_login` = {$email} AND `lock` = {$secretString} LIMIT 1") > 0;
     }
 
     public function resetPassword($email, $newPassword, $newPasswordConfirm) {
@@ -265,7 +288,7 @@ class Users extends \System\Model {
 
         $password = $this->getDb()->quote($this->getHash($newPassword));
         $emailValue = $this->getDb()->quote($email);
-        if (!$this->getDb()->exec("UPDATE `users` SET `restore` = '' AND `password` = {$password} WHERE `login` = {$emailValue}")) {
+        if (!$this->getDb()->exec("UPDATE `g1_users` SET `restore` = '' AND `user_pass` = {$password} WHERE `login` = {$emailValue}")) {
             throw new Exception('Error during set restore key!');
         }
     }
