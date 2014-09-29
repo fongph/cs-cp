@@ -53,8 +53,8 @@
     {elseif $tab=='group'}
     <div class="panel-top">
         <p class="text-info">{$di.t->_('Messages with')} 
-            {foreach from=$users item=name key=userId name=users}
-                <a href="http://vk.com/id{$userId}" target="_blank">{$name}</a>{if !$smarty.foreach.users.last}, {/if}
+            {foreach $users as $userId => $name last=$last}
+                <a href="http://vk.com/id{$userId}" target="_blank">{$name}</a>{if !$last}, {/if}
             {/foreach}
         </p>
         <a class="btn btn-default" href="{$di.router->getRouteUrl('vk')}#group">{$di.t->_('Back to VK log')}</a>
@@ -62,7 +62,7 @@
     {/if}
 
     <div class="messages-list">
-        {foreach from=$list item=item}
+        {foreach $list as $item}
         <div id="{$item.timestamp}">
             <div class="popover {if $item.type == 'in'}right{else}left{/if}">
                 <div class="arrow"></div>
