@@ -288,7 +288,7 @@ class Users extends \System\Model {
 
         $password = $this->getDb()->quote($this->getHash($newPassword));
         $emailValue = $this->getDb()->quote($email);
-        if (!$this->getDb()->exec("UPDATE `g1_users` SET `restore` = '' AND `user_pass` = {$password} WHERE `login` = {$emailValue}")) {
+        if (!$this->getDb()->exec("UPDATE `g1_users` SET `restore` = '' AND `user_pass` = {$password} WHERE `user_login` = {$emailValue}")) {
             throw new Exception('Error during set restore key!');
         }
     }
