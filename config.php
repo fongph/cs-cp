@@ -2,9 +2,9 @@
 
 $default = array(
     'build' => 79,
-    'domain' => 'http://cp.topspyapp.com-test',
-    'staticDomain' => 'http://cp.topspyapp.com-test/static',
-    'cookieDomain' => '.topspyapp.com-test',
+    'domain' => 'http://cp-new.topspyapp.com',
+    'staticDomain' => 'http://cp-new.topspyapp.com/static',
+    'cookieDomain' => '.cp-new.topspyapp.com',
     'supportEmail' => 'orest@dataedu.com', //'support@topspyapp.com',
     'session' => array(
         'rememberMeTime' => 2592000 // 30 days
