@@ -320,11 +320,11 @@ body > .cp-menu {
 }
 
 .cp-menu i.menu-settings {
-    background-position: 0px -456px;
+    background-position: 0px -480px;
 }
 
 .cp-menu li:hover i.menu-settings, .cp-menu .active i.menu-settings {
-    background-position: -24px -456px;
+    background-position: -24px -480px;
 }
 
 .cp-menu .active a {
