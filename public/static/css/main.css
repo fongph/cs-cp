@@ -147,10 +147,11 @@ body > .cp-menu {
     background-image: url(../img/menu-left-icons.png);
     vertical-align: bottom;
     margin: 0 5px 0 0;
+    /*
     -webkit-transition: all 0.5s ease-out;
     -moz-transition: all 0.5s ease-out;
     -o-transition: all 0.5s ease-out;
-    transition: all 0.5s ease-out;
+    transition: all 0.5s ease-out;*/
 }
 
 .menu-wrapper .banner-holder {
@@ -159,171 +160,171 @@ body > .cp-menu {
 }
 
 .cp-menu i.menu-calls {
-    background-position: -0px -1008px;
+    background-position: 0px 0px;
 }
 
 .cp-menu li:hover i.menu-calls, .cp-menu .active i.menu-calls {
-    background-position: -24px -1008px;
+    background-position: -24px 0px;
 }
 
 .cp-menu i.menu-sms {
-    background-position: 0px -816px;
-}
-
-.cp-menu li:hover i.menu-sms, .cp-menu .active i.menu-sms {
-    background-position: -24px -816px;
-}
-
-.cp-menu i.menu-locations {
-    background-position: 0px -1224px;
-}
-
-.cp-menu li:hover i.menu-locations, .cp-menu .active i.menu-locations {
-    background-position: -24px -1224px;
-}
-
-.cp-menu i.menu-bookmarks {
-    background-position: 0px -2112px;
-}
-
-.cp-menu li:hover i.menu-bookmarks, .cp-menu .active i.menu-bookmarks {
-    background-position: -24px -2112px;
-}
-
-.cp-menu i.menu-browserHistory {
-    background-position: 0px -1464px;
-}
-
-.cp-menu li:hover i.menu-browserHistory, .cp-menu .active i.menu-browserHistory {
-    background-position: -24px -1464px;
-}
-
-.cp-menu i.menu-calendar {
-    background-position: 0px -1176px;
-}
-
-.cp-menu li:hover i.menu-calendar, .cp-menu .active i.menu-calendar {
-    background-position: -24px -1176px;
-}
-
-.cp-menu i.menu-contacts {
-    background-position: 0px -2352px;
-}
-
-.cp-menu li:hover i.menu-contacts, .cp-menu .active i.menu-contacts {
-    background-position: -24px -2352px;
-}
-
-.cp-menu i.menu-keylogger {
-    background-position: 0px -600px;
-}
-
-.cp-menu li:hover i.menu-keylogger, .cp-menu .active i.menu-keylogger {
-    background-position: -24px -600px;
-}
-
-.cp-menu i.menu-surrounding {
-    background-position: 0px -2184px;
-}
-
-.cp-menu li:hover i.menu-surrounding, .cp-menu .active i.menu-surrounding {
-    background-position: -24px -2184px;
-}
-
-.cp-menu i.menu-callRecordings {
-    background-position: 0px -2160px;
-}
-
-.cp-menu li:hover i.menu-callRecordings, .cp-menu .active i.menu-callRecordings {
-    background-position: -24px -2160px;
-}
-
-.cp-menu i.menu-photos {
-    background-position: 0px -408px;
-}
-
-.cp-menu li:hover i.menu-photos, .cp-menu .active i.menu-photos {
-    background-position: -24px -408px;
-}
-
-.cp-menu i.menu-videos {
-    background-position: 0px -432px;
-}
-
-.cp-menu li:hover i.menu-videos, .cp-menu .active i.menu-videos {
-    background-position: -24px -432px;
-}
-
-.cp-menu i.menu-viber {
-    background-position: 0px -72px;
-}
-
-.cp-menu li:hover i.menu-viber, .cp-menu .active i.menu-viber {
-    background-position: -24px -72px;
-}
-
-.cp-menu i.menu-skype {
-    background-position: 0px -48px;
-}
-
-.cp-menu li:hover i.menu-skype, .cp-menu .active i.menu-skype {
-    background-position: -24px -48px;
-}
-
-.cp-menu i.menu-whatsapp {
-    background-position: 0px -96px;
-}
-
-.cp-menu li:hover i.menu-whatsapp, .cp-menu .active i.menu-whatsapp {
-    background-position: -24px -96px;
-}
-
-.cp-menu i.menu-facebook {
-    background-position: 0px -192px;
-}
-
-.cp-menu li:hover i.menu-facebook, .cp-menu .active i.menu-facebook {
-    background-position: -24px -192px;
-}
-
-.cp-menu i.menu-vk {
-    background-position: 0px -2400px;
-}
-
-.cp-menu li:hover i.menu-vk, .cp-menu .active i.menu-vk {
-    background-position: -24px -2400px;
-}
-
-.cp-menu i.menu-emails {
     background-position: 0px -24px;
 }
 
-.cp-menu li:hover i.menu-emails, .cp-menu .active i.menu-emails {
+.cp-menu li:hover i.menu-sms, .cp-menu .active i.menu-sms {
     background-position: -24px -24px;
 }
 
-.cp-menu i.menu-applications {
-    background-position: 0px -1680px;
+.cp-menu i.menu-locations {
+    background-position: 0px -48px;
 }
 
-.cp-menu li:hover i.menu-applications, .cp-menu .active i.menu-applications {
-    background-position: -24px -1680px;
+.cp-menu li:hover i.menu-locations, .cp-menu .active i.menu-locations {
+    background-position: -24px -48px;
 }
 
-.cp-menu i.menu-smsCommands {
-    background-position: 0px -1344px;
+.cp-menu i.menu-bookmarks {
+    background-position: 0px -72px;
 }
 
-.cp-menu li:hover i.menu-smsCommands, .cp-menu .active i.menu-smsCommands {
-    background-position: -24px -1344px;
+.cp-menu li:hover i.menu-bookmarks, .cp-menu .active i.menu-bookmarks {
+    background-position: -24px -72px;
 }
 
-.cp-menu i.menu-settings {
+.cp-menu i.menu-browserHistory {
+    background-position: 0px -96px;
+}
+
+.cp-menu li:hover i.menu-browserHistory, .cp-menu .active i.menu-browserHistory {
+    background-position: -24px -96px;
+}
+
+.cp-menu i.menu-calendar {
+    background-position: 0px -120px;
+}
+
+.cp-menu li:hover i.menu-calendar, .cp-menu .active i.menu-calendar {
+    background-position: -24px -120px;
+}
+
+.cp-menu i.menu-contacts {
+    background-position: 0px -144px;
+}
+
+.cp-menu li:hover i.menu-contacts, .cp-menu .active i.menu-contacts {
+    background-position: -24px -144px;
+}
+
+.cp-menu i.menu-keylogger {
     background-position: 0px -168px;
 }
 
-.cp-menu li:hover i.menu-settings, .cp-menu .active i.menu-settings {
+.cp-menu li:hover i.menu-keylogger, .cp-menu .active i.menu-keylogger {
     background-position: -24px -168px;
+}
+
+.cp-menu i.menu-surrounding {
+    background-position: 0px -192px;
+}
+
+.cp-menu li:hover i.menu-surrounding, .cp-menu .active i.menu-surrounding {
+    background-position: -24px -192px;
+}
+
+.cp-menu i.menu-callRecordings {
+    background-position: 0px -216px;
+}
+
+.cp-menu li:hover i.menu-callRecordings, .cp-menu .active i.menu-callRecordings {
+    background-position: -24px -216px;
+}
+
+.cp-menu i.menu-photos {
+    background-position: 0px -240px;
+}
+
+.cp-menu li:hover i.menu-photos, .cp-menu .active i.menu-photos {
+    background-position: -24px -240px;
+}
+
+.cp-menu i.menu-videos {
+    background-position: 0px -264px;
+}
+
+.cp-menu li:hover i.menu-videos, .cp-menu .active i.menu-videos {
+    background-position: -24px -264px;
+}
+
+.cp-menu i.menu-viber {
+    background-position: 0px -288px;
+}
+
+.cp-menu li:hover i.menu-viber, .cp-menu .active i.menu-viber {
+    background-position: -24px -288px;
+}
+
+.cp-menu i.menu-skype {
+    background-position: 0px -312px;
+}
+
+.cp-menu li:hover i.menu-skype, .cp-menu .active i.menu-skype {
+    background-position: -24px -312px;
+}
+
+.cp-menu i.menu-whatsapp {
+    background-position: 0px -336px;
+}
+
+.cp-menu li:hover i.menu-whatsapp, .cp-menu .active i.menu-whatsapp {
+    background-position: -24px -336px;
+}
+
+.cp-menu i.menu-facebook {
+    background-position: 0px -360px;
+}
+
+.cp-menu li:hover i.menu-facebook, .cp-menu .active i.menu-facebook {
+    background-position: -24px -360px;
+}
+
+.cp-menu i.menu-vk {
+    background-position: 0px -384px;
+}
+
+.cp-menu li:hover i.menu-vk, .cp-menu .active i.menu-vk {
+    background-position: -24px -384px;
+}
+
+.cp-menu i.menu-emails {
+    background-position: 0px -408px;
+}
+
+.cp-menu li:hover i.menu-emails, .cp-menu .active i.menu-emails {
+    background-position: -24px -408px;
+}
+
+.cp-menu i.menu-applications {
+    background-position: 0px -432px;
+}
+
+.cp-menu li:hover i.menu-applications, .cp-menu .active i.menu-applications {
+    background-position: -24px -432px;
+}
+
+.cp-menu i.menu-smsCommands {
+    background-position: 0px -456px;
+}
+
+.cp-menu li:hover i.menu-smsCommands, .cp-menu .active i.menu-smsCommands {
+    background-position: -24px -456px;
+}
+
+.cp-menu i.menu-settings {
+    background-position: 0px -456px;
+}
+
+.cp-menu li:hover i.menu-settings, .cp-menu .active i.menu-settings {
+    background-position: -24px -456px;
 }
 
 .cp-menu .active a {
