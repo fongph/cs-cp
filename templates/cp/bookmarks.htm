@@ -70,6 +70,16 @@
                         oLanguage: {
                             sUrl: "{$di.config.staticDomain}/js/datatables/language/{$di.locale}.txt"
                         },
+                        aoColumns: [
+                            null,
+                            null,
+                            {
+                                bUseRendered: false,
+                                fnRender: function(obj, value) {
+                                    return  '<a href="' + value + '" target="_blank">' + value + '</a>';
+                                }
+                            }
+                        ],
                         fnDrawCallback: function() {
                             bookmarks.table = table;
                             $(this).find('tbody').tableScroll();
