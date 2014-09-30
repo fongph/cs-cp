@@ -131,7 +131,7 @@
                         bInfo: true,
                         bAutoWidth: false,
                         bSortMulti: false,
-                        iDisplayLength: '{$authData.records_per_page}',
+                        iDisplayLength: {$authData.records_per_page},
                         oLanguage: {
                             sUrl: '{$di.config.staticDomain}/js/datatables/language/{$di.locale}.txt'
                         },
@@ -182,7 +182,7 @@
                         bInfo: true,
                         bAutoWidth: false,
                         bSortMulti: false,
-                        iDisplayLength: '{$authData.records_per_page}',
+                        iDisplayLength: {$authData.records_per_page},
                         oLanguage: {
                             sUrl: "{$di.config.staticDomain}/js/datatables/language/{$di.locale}.txt"
                         },

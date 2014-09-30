@@ -1,5 +1,5 @@
 <div>
-    <h1 class="text-center">{$title}</h1>
+    <h1 class="text-center">{$title}{$authData.records_per_page}</h1>
     
     {if $hasRecords}
     <div class="daterangepickerWrapper">
@@ -78,7 +78,7 @@
                         bAutoWidth: false,
                         bSortMulti: false,
                         aaSorting: [[0, 'desc']],
-                        iDisplayLength: '{$authData.records_per_page}',
+                        iDisplayLength: {$authData.records_per_page},
                         oLanguage: {
                             sUrl: "{$di.config.staticDomain}/js/datatables/language/{$di.locale}.txt"
                         },
