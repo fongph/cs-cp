@@ -33,7 +33,7 @@ class Devices extends \System\Model
                                         l.`plan`,
                                         ds.`rooted`
                                 FROM `g1_users` u
-                                INNER JOIN `user_dev` ud ON u.`user_login` COLLATE utf8_unicode_ci = ud.`email`
+                                INNER JOIN `user_dev` ud ON u.`user_login` = ud.`email`
                                 INNER JOIN `dev_settings` ds ON ud.`dev_id` = ds.`dev_id`
                                 INNER JOIN `limitations` l ON ud.`dev_id` = l.`dev_id`
                                 WHERE u.`id` = {$id}")->fetchAll(\PDO::FETCH_ASSOC | \PDO::FETCH_UNIQUE);
