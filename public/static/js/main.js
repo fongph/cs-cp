@@ -14,7 +14,7 @@ $.fn.tableScroll = function() {
     $(this).on("touchmove", function(event) {
         if (start) {
             this.scrollLeft = scrollStartPos - event.originalEvent.touches[0].pageX;
-            event.preventDefault();
+            //event.preventDefault();
         }
     });
 };
