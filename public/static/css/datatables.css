@@ -97,35 +97,31 @@ div.dataTables_processing {
 }
 
 .table-container i.call-in {
-    background-image: url("../img/cp-icons.png");
-    background-position: -32px -32px;
+    background: url("../img/cp-icons.png") no-repeat center -102px;
     display: block;
-    height: 32px;
-    width: 32px;
+    height: 34px;
+    width: 100%;
 }
 
 .table-container i.call-out {
-    background-image: url("../img/cp-icons.png");
-    background-position: 0 -32px;
+    background: url("../img/cp-icons.png") no-repeat center -68px;
     display: block;
-    height: 32px;
-    width: 32px;
+    height: 34px;
+    width: 100%;
 }
 
 .table-container i.sms-in {
-    background-image: url("../img/cp-icons.png");
-    background-position: -32px 0;
+    background: url("../img/cp-icons.png") no-repeat center -34px;
     display: block;
-    height: 32px;
-    width: 32px;
+    height: 34px;
+    width: 100%;
 }
 
 .table-container i.sms-out {
-    background-image: url("../img/cp-icons.png");
-    background-position: 0 0;
+    background: url("../img/cp-icons.png") no-repeat center 0;
     display: block;
-    height: 32px;
-    width: 32px;
+    height: 34px;
+    width: 100%;
 }
 
 .table-container tr.odd td {

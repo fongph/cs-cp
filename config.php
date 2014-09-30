@@ -1,11 +1,11 @@
 <?php
 
 $default = array(
-    'build' => 79,
+    'build' => 81,
     'domain' => 'http://cp-new.topspyapp.com',
     'staticDomain' => 'http://cp-new.topspyapp.com/static',
     'cookieDomain' => '.cp-new.topspyapp.com',
-    'supportEmail' => 'orest@dataedu.com', //'support@topspyapp.com',
+    'supportEmail' => 'support@topspyapp.com',
     'session' => array(
         'rememberMeTime' => 2592000 // 30 days
     ),
@@ -51,7 +51,7 @@ $default = array(
     ),
     'locales' => array(
         'en-GB' => 'English',
-        'ru-RU' => 'Русский'
+        //'ru-RU' => 'Русский'
     ),
     'cpMenu' => array(
         'calls' => 'View Calls',
