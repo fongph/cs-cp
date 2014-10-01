@@ -1829,7 +1829,7 @@
 
 								// Setup the Android Fix - Only for HTML audio.
 								if($.jPlayer.platform.android) {
-									self.androidFix.setMedia = true;
+									//self.androidFix.setMedia = true;
 								}
 							} else {
 								self.flash.gate = true;
