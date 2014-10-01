@@ -2128,6 +2128,8 @@
 			v = this.options.muted ? 0 : v;
 
 			if(this.status.noVolume) {
+                                this.css.jq.gui.addClass('no-volume');
+                            
 				if(this.css.jq.volumeBar.length) {
 					this.css.jq.volumeBar.hide();
 				}
@@ -2138,6 +2140,8 @@
 					this.css.jq.volumeMax.hide();
 				}
 			} else {
+                                this.css.jq.gui.removeClass('no-volume');
+                            
 				if(this.css.jq.volumeBar.length) {
 					this.css.jq.volumeBar.show();
 				}
