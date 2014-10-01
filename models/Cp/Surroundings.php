@@ -22,7 +22,7 @@ class Surroundings extends \System\Model {
     public function getDownloadUrl($devId, $timestamp) {
         $s3 = $this->di->get('S3');
         return $s3->getAuthenticatedURL($this->di['config']['s3']['bucket'], urlencode($devId) . '/surrounding/' . urlencode($timestamp) . '.mp3', self::$_authLifeTime, false, false, array(
-            'response-content-disposition' => 'attachment; filename=' . $timestamp . '.mp3'
+            'response-content-disposition' => urlencode('attachment; filename=' . urlencode($timestamp) . '.mp3')
         ));
     }
     

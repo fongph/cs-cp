@@ -5,7 +5,7 @@
         "rastor/system": "dev-master",
         "fenom/fenom": "2.*",
         "phpmailer/phpmailer": "5.*",
-        "tpyo/amazon-s3-php-class": "0.5.0",
+        "rastor/amazon-s3-php-class": "dev-master",
         "hautelook/phpass": "0.3.0",
         "monolog/monolog": "1.*"
     },
