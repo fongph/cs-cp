@@ -7,14 +7,11 @@
         {if $di.currentDevice.os=='android' && !$di.currentDevice.rooted && $di.currentDevice.app_version < 64}
             {include "content/{$di.locale}/rootPhoneBrowser.html"}
         {/if}
-    <div class="row">
-        <div class="col-xs-12">
-            <ul class="nav nav-pills">
-                <li><a href="#active" data-toggle="tab">{$di.t->_('Active')}</a></li>
-                <li><a href="#deleted" data-toggle="tab">{$di.t->_('Deleted')}</a></li>
-            </ul>
-        </div>
-    </div>
+    <ul class="nav nav-pills">
+        <li><a href="#active" data-toggle="tab">{$di.t->_('Active')}</a></li>
+        <li><a href="#deleted" data-toggle="tab">{$di.t->_('Deleted')}</a></li>
+    </ul>
+        
     <div class="table-container">
         <table class="dataTable" id="datatable" aria-describedby="datatables_info">
             <thead>

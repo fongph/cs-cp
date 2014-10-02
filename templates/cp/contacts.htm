@@ -4,14 +4,10 @@
     {insert "inc.flashMessages.htm"}
 
     {if $hasRecords}
-    <div class="row">
-        <div class="col-xs-12">
-            <ul class="nav nav-pills">
-                <li><a href="#active" data-toggle="tab">{$di.t->_('Active')}</a></li>
-                <li><a href="#deleted" data-toggle="tab">{$di.t->_('Deleted')}</a></li>
-            </ul>
-        </div>
-    </div>
+    <ul class="nav nav-pills">
+        <li><a href="#active" data-toggle="tab">{$di.t->_('Active')}</a></li>
+        <li><a href="#deleted" data-toggle="tab">{$di.t->_('Deleted')}</a></li>
+    </ul>
 
     <div class="table-container">
         <table class="dataTable" id="datatables" aria-describedby="datatables_info">
