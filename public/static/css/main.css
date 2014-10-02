@@ -147,11 +147,6 @@ body > .cp-menu {
     background-image: url(../img/menu-left-icons.png);
     vertical-align: bottom;
     margin: 0 5px 0 0;
-    /*
-    -webkit-transition: all 0.5s ease-out;
-    -moz-transition: all 0.5s ease-out;
-    -o-transition: all 0.5s ease-out;
-    transition: all 0.5s ease-out;*/
 }
 
 .menu-wrapper .banner-holder {
@@ -221,22 +216,6 @@ body > .cp-menu {
 
 .cp-menu li:hover i.menu-keylogger, .cp-menu .active i.menu-keylogger {
     background-position: -24px -168px;
-}
-
-.cp-menu i.menu-surrounding {
-    background-position: 0px -192px;
-}
-
-.cp-menu li:hover i.menu-surrounding, .cp-menu .active i.menu-surrounding {
-    background-position: -24px -192px;
-}
-
-.cp-menu i.menu-callRecordings {
-    background-position: 0px -216px;
-}
-
-.cp-menu li:hover i.menu-callRecordings, .cp-menu .active i.menu-callRecordings {
-    background-position: -24px -216px;
 }
 
 .cp-menu i.menu-photos {

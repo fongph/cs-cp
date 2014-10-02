@@ -107,19 +107,6 @@ $default = array(
                 return true;
             }
         ),
-        'surrounding' => 'Surrounding Records',
-        'callRecordings' => array(
-            'name' => 'Call Recordings',
-            'show' => function($di) {
-                if ($di['currentDevice']['os'] == 'blackberry') {
-                    return false;
-                } elseif ($di['currentDevice']['os'] == 'ios') {
-                    return preg_match('#^iphone 5#i', $di['currentDevice']['model']);
-                }
-
-                return true;
-            }
-        ),
         'photos' => array(
             'name' => 'View Photos',
             'show' => function($di) {

