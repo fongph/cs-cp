@@ -28,7 +28,7 @@
     {insert "inc.flashMessages.htm"}
 
     {if $startTime}
-    <div class="container">
+    <div class="container-fluid">
         <div class="row" style="margin-bottom: 10px;">
             <div class="col-lg-1 col-md-1 col-sm-1"></div>
             <div class="col-lg-10 col-md-10 col-sm-10">
@@ -65,7 +65,7 @@
             </div>
         </div>
         
-        <div class="container">
+        <div class="container-fluid">
             <div class="row" id="slider-holder">
                 <div class="col-md-6"><label for="slider">{$di.t->_('Accuracy:')} <span class="text-primary" id="amount">480ft</span>&nbsp;</label></div>
                 <div class="col-md-6" id="allDataBlock">{$di.t->_('Now you see %1$s of %2$s', ['<span class="text-primary" id="percents"></span>', '<a href="" id="all-data">' ~ $di.t->_('all data') ~ '</a>'])}</div>
