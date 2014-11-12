@@ -1,11 +1,12 @@
 <?php
 
+use CS\Settings\GlobalSettings;
+
 $default = array(
-    'build' => 83,
-    'domain' => 'http://cp-new.topspyapp.com',
-    'staticDomain' => 'http://cp-new.topspyapp.com/static',
-    'cookieDomain' => '.cp-new.topspyapp.com',
-    'supportEmail' => 'support@topspyapp.com',
+    'build' => $build['version'],
+    'environment' => $build['environment'],
+    'site' => $build['site'],
+    'errorReporting' => E_ALL ^ E_NOTICE,
     'session' => array(
         'rememberMeTime' => 2592000 // 30 days
     ),
@@ -19,39 +20,20 @@ $default = array(
             'subject' => 'TS CP Logger'
         )
     ),
-    'db' => array(
-        'host' => '66.232.96.3',
-        'username' => 'user_data',
-        'password' => 'pai1Geo9',
-        'dbname' => 'user_data',
-        'options' => array(
-            //PDO::MYSQL_ATTR_INIT_COMMAND => 'set names utf8;',
-            PDO::MYSQL_ATTR_INIT_COMMAND => 'set names latin1;',
-            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
-        )
-    ),
-    'mail' => array(
-        'host' => 'topspyapp.com',
-        'port' => 25,
-        'username' => 'no-reply@topspyapp.com',
-        'password' => 'LKE@#Qo3eS#Qe3',
-        'from' => 'no-reply@topspyapp.com',
-        'fromName' => 'Topspyapp.com',
-        'logoImageUrl' => 'http://www.topspyapp.com/wp-content/themes/topspyapp/images/logo.png',
-        'logoUrl' => 'http://cp.topspyapp.com/'
+    'dbOptions' => array(
+        PDO::MYSQL_ATTR_INIT_COMMAND => 'set names utf8;',
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
     ),
     'fenom' => array(
         'templatesDir' => ROOT_PATH . 'templates/',
         'compileDir' => ROOT_PATH . 'tmp/',
         'options' => array(
-            'force_include' => true,
-            //'strip' => true
+            'force_include' => true
         )
     ),
     'locales' => array(
-        'en-GB' => 'English',
-        //'ru-RU' => 'Русский'
+        'en-GB' => 'English'
     ),
     'cpMenu' => array(
         'calls' => 'View Calls',
@@ -219,29 +201,38 @@ $default = array(
         'how-to-install/blackberry-instructions.html' => 'BlackBerry Installation Guide',
         'how-to-install/ios-instructions.html' => 'iPhone Installation Guide',
         'how-to-install/root-instructions.html' => 'Root Instructions'
-    ),
-    'simpleLoginKey' => 'TR$dtR!E:067mjpp-S%%;l@2|eRy.*~e',
-    's3' => array(
-        'key' => 'AKIAIHGTCBLPUEKBCRGA',
-        'secret' => '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',
-        'bucket' => 'topspy_user_media'
-    ),
-    'cloudFront' => array(
-        'domain' => 'http://media.topspyapp.com/',
-        'keyPairId' => 'APKAJEW3MLUPI6ZCDZBA',
-        'privateKeyFile' => ROOT_PATH . 'cloudFrontPrivateKey'
     )
 );
 
-if (APPLICATION_ENV == 'production') {
+if ($build['environment'] == 'production') {
+    $default['db'] = GlobalSettings::getMainDbConfig();
+    $default['dataDb'] = function($devId) {
+        return GlobalSettings::getDeviceDatabaseConfig($devId);
+    };
+
+    $default['domain'] = GlobalSettings::getControlPanelURL($build['site']);
+    $default['registration'] = GlobalSettings::getRegistrationPageURL($build['site']);
+    $default['staticDomain'] = GlobalSettings::getControlPanelStaticURL($build['site']);
+    $default['cookieDomain'] = GlobalSettings::getCookieDomain($build['site']);
+    $default['supportEmail'] = GlobalSettings::getSupportEmail($build['site']);
+
+    $default['s3'] = GlobalSettings::getS3Config();
+    $default['cloudFront'] = GlobalSettings::getCloudFrontConfig();
+
     return $default;
-} else if (APPLICATION_ENV == 'development') {
+} else if ($build['environment'] == 'development') {
+    $default['errorReporting'] = E_ALL ^ E_NOTICE;
+
+    $default['s3'] = GlobalSettings::getS3Config();
+    $default['cloudFront'] = GlobalSettings::getCloudFrontConfig();
+    $default['registration'] = 'http://www.google.com/registration/';
+
     if (file_exists(ROOT_PATH . 'development.config.php')) {
-        return require ROOT_PATH . 'development.config.php';
-    } else {
-        return $default;
+        require ROOT_PATH . 'development.config.php';
     }
-} else if (APPLICATION_ENV == 'testing') {
+
+    return $default;
+} else if ($build['environment'] == 'testing') { // deprecated
     return array_merge($default, array(
         'db' => array(
             'host' => 'localhost',

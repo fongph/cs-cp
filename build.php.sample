@@ -1,0 +1,9 @@
+<?php
+
+//APPLICATION_ENV: development | testing | production
+
+return array(
+    'version' => 0,
+    'environment' => 'production'
+    'site' => 1
+);

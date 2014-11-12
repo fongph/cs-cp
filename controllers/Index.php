@@ -2,12 +2,15 @@
 
 namespace Controllers;
 
-use \System\FlashMessages;
-use \Models\Users;
+use Models\Users,
+    System\FlashMessages,
+    CS\Users\UsersManager;
 
-class Index extends BaseController {
+class Index extends BaseController
+{
 
-    public function contentAction() {
+    public function contentAction()
+    {
         if (isset($this->di['config']['contents'][$this->params['uri']])) {
             $contentModel = new \Models\Content($this->di);
             $path = $contentModel->getTemplatePath($this->params['uri']);
@@ -18,34 +21,39 @@ class Index extends BaseController {
         }
     }
 
-    public function loginAction() {
+    public function loginAction()
+    {
         if ($this->di['auth']->hasIdentity()) {
             $this->redirect($this->di['router']->getRouteUrl('profile'));
         }
 
-        if ($this->isPost() && isset($_POST['email'], $_POST['password']) && (strlen($_POST['email']) || strlen($_POST['password']))) {
-            if (!strlen($_POST['email'])) {
+        if ($this->getRequest()->isPost()) {
+            $email = $this->getRequest()->post('email', '');
+            $password = $this->getRequest()->post('password', '');
+            $remember = $this->getRequest()->post('remember', 0);
+
+            if (!strlen($email)) {
                 $this->di['flashMessages']->add(FlashMessages::ERROR, $this->di['t']->_('The username field is empty'));
-            } else if (!strlen($_POST['password'])) {
+            } else if (!strlen($password)) {
                 $this->di['flashMessages']->add(FlashMessages::ERROR, $this->di['t']->_('The password field is empty'));
             } else {
                 $users = new Users($this->di);
                 try {
-                    if ($users->login($_POST['email'], $_POST['password'], isset($_POST['remember']))) {
+                    if ($users->login($email, $password, $remember)) {
                         $this->redirect($this->di['router']->getRouteUrl('profile'));
                     }
-                } catch (\Models\UsersInvalidEmail $e) {
+                } catch (\CS\Users\UserNotFoundException $e) {
                     $this->di['flashMessages']->add(FlashMessages::ERROR, $this->di['t']->_('Looks like that email address is not registered yet. Try to %1$sregister%2$s or retype again.', array(
-                                '<a href="http://www.topspyapp.com/pricing-and-plans">',
+                                '<a href="' . $this->di['config']['registration'] . '">',
                                 '</a>'
                     )));
-                } catch (\Models\UsersInvalidPassword $e) {
+                } catch (\CS\Users\InvalidPasswordException $e) {
                     $this->di['flashMessages']->add(FlashMessages::ERROR, $this->di['t']->_('The password you entered for the username %1$s is incorrect. %2$sLost your password%3$s?', array(
                                 '<b>' . htmlspecialchars($_POST['email']) . '</b>',
                                 '<a href="' . $this->di['router']->getRouteUrl('lostPassword') . '">',
                                 '</a>'
                     )));
-                } catch (\Models\UsersAccountLocked $e) {
+                } catch (\CS\Users\UserLockedException $e) {
                     $this->di['flashMessages']->add(FlashMessages::ERROR, $this->di['t']->_('This account has been locked'));
                 }
             }
@@ -55,7 +63,8 @@ class Index extends BaseController {
         $this->view->title = $this->di['t']->_('Login');
     }
 
-    public function logoutAction() {
+    public function logoutAction()
+    {
         $users = new Users($this->di);
         if ($this->di['auth']->hasIdentity()) {
             $this->di['flashMessages']->add(FlashMessages::SUCCESS, $this->di['t']->_('You have successfully logged out'));
@@ -64,78 +73,96 @@ class Index extends BaseController {
         $this->redirect($this->di['router']->getRouteUrl('main'));
     }
 
-    public function supportAction() {
+    public function supportAction()
+    {
         $this->view->title = $this->di['t']->_('Support');
 
         $supportModel = new \Models\Support($this->di);
-
-        if ($this->isPost() && isset($_POST['name'], $_POST['email'], $_POST['type'], $_POST['message'])) {
+        
+        if ($this->getRequest()->hasPost('name', 'email', 'type', 'message')) {
             try {
-                $ticketId = $supportModel->submitTicket($_POST['name'], $_POST['email'], $_POST['type'], $_POST['message']);
+                
+                $ticketId = $supportModel->submitTicket(
+                        $this->getRequest()->post('name'), 
+                        $this->getRequest()->post('email'), 
+                        $this->getRequest()->post('type'), 
+                        $this->getRequest()->post('message')
+                );
+
                 $this->view->success = true;
 
                 $this->di['flashMessages']->add(FlashMessages::SUCCESS, $this->di['t']->_('Your ticket #%1$s has been successfully sent!<br/> Our Support Team will contact you within 1 business day.', array('ticketId' => $ticketId)));
-            } catch (\Models\SupportEmptyFieldException $e) {
+            } catch (\Models\Support\SupportEmptyFieldException $e) {
                 $this->di['flashMessages']->add(FlashMessages::ERROR, $this->di['t']->_('Please, fill all the data carefully.'));
-            } catch (\Models\SupportInvalidEmailException $e) {
+            } catch (\Models\Support\SupportInvalidEmailException $e) {
                 $this->di['flashMessages']->add(FlashMessages::ERROR, $this->di['t']->_('Please, fill all the data carefully.'));
-            } catch (\Models\SupportInvalidTypeException $e) {
+            } catch (\Models\Support\SupportInvalidTypeException $e) {
                 $this->di['flashMessages']->add(FlashMessages::ERROR, $this->di['t']->_('Please, fill all the data carefully.'));
-            } catch (\Models\MailSendException $e) {
+            } catch (\CS\Mail\MailSendException $e) {
                 $this->di['flashMessages']->add(FlashMessages::ERROR, $this->di['t']->_('Error during send email. Please try again later.'));
-                logException($e, ROOT_PATH . 'mailExceptions.log');
             }
         }
 
         $this->view->types = $supportModel->getTypesList();
         $this->setView('index/support.htm');
     }
-    
-    public function localeAction() {
+
+    public function localeAction()
+    {
         if (isset($this->di['config']['locales'][$this->params['value']])) {
             $usersModel = new \Models\Users($this->di);
             $usersModel->setLocale($this->params['value']);
         }
 
-        if (isset($_SERVER['HTTP_REFERER'])) {
-            $this->redirect($_SERVER['HTTP_REFERER']);
+        $referer = $this->getRequest()->server('HTTP_REFERER');
+
+        if ($referer !== null) {
+            $this->redirect($referer);
         } else {
             $this->redirect($this->di['router']->getRouteUrl('main'));
         }
     }
 
-    public function lostPasswordAction() {
+    public function lostPasswordAction()
+    {
         if ($this->di['auth']->hasIdentity()) {
             $this->redirect($this->di['router']->getRouteUrl('main'));
         }
 
-        if (isset($_POST['email'])) {
-            $usersModel = new \Models\Users($this->di);
+        $email = $this->getRequest()->post('email');
+
+        if ($email !== null) {
+            $usersManager = new UsersManager($this->di->get('db'));
+            $usersManager->setSender($this->di['mailSender']);
+
             try {
-                $usersModel->lostPasswordSend($_POST['email']);
+                $usersManager->lostPassword($this->di['config']['site'], $email);
                 $this->di['flashMessages']->add(FlashMessages::SUCCESS, $this->di['t']->_('The confirmation link email has been sent to you. If it is not in your Inbox, check Spam, please!'));
                 $this->redirect($this->di['router']->getRouteUrl('main'));
-            } catch (\Models\UsersEmailNotFoundException $e) {
+            } catch (UsersEmailNotFoundException $e) {
                 $this->di['flashMessages']->add(FlashMessages::ERROR, $this->di['t']->_('Invalid email or there is no user registered with that email address'));
-            } catch (\Models\MailSendException $e) {
+            } catch (MailSendException $e) {
                 $this->di['flashMessages']->add(FlashMessages::ERROR, $this->di['t']->_('Error during send email. Please try again later.'));
-                logException($e, ROOT_PATH . 'mailExceptions.log');
             }
-            $this->redirect($this->di['router']->getRouteUrl('lostPassword'));
         }
 
         $this->view->title = $this->di['t']->_('Lost Password');
         $this->setView('index/lostPassword.htm');
     }
 
-    public function unlockAccountAction() {
+    public function unlockAccountAction()
+    {
         if ($this->di['auth']->hasIdentity()) {
             $this->redirect($this->di['router']->getRouteUrl('main'));
         }
 
-        if (isset($_GET['email'], $_GET['key']) && strlen($_GET['key'])) {
-            $usersModel = new \Models\Users($this->di);
-            if ($usersModel->unlockAccount($_GET['email'], $_GET['key'])) {
+        if ($this->getRequest()->hasGet('email', 'key')) {
+            $usersManager = new UsersManager($this->di->get('db'));
+
+            $email = $this->getRequest()->get('email');
+            $key = $this->getRequest()->get('key');
+
+            if ($usersManager->unlockAccount($this->di['config']['site'], $email, $key)) {
                 $this->di['flashMessages']->add(FlashMessages::SUCCESS, $this->di['t']->_('Your account has been unlocked. You may now log in.'));
             }
         }
@@ -143,31 +170,42 @@ class Index extends BaseController {
         $this->redirect($this->di['router']->getRouteUrl('main'));
     }
 
-    public function resetPasswordAction() {
+    public function resetPasswordAction()
+    {
         if ($this->di['auth']->hasIdentity()) {
             $this->redirect($this->di['router']->getRouteUrl('main'));
         }
 
-        if (isset($_GET['email'], $_GET['key']) && strlen($_GET['key'])) {
-            $usersModel = new \Models\Users($this->di);
-            if ($usersModel->canRestorePassword($_GET['email'], $_GET['key'])) {
-                if (isset($_POST['newPassword'], $_POST['newPassword2'])) {
-                    try {
-                        $usersModel->resetPassword($_GET['email'], $_POST['newPassword'], $_POST['newPassword2']);
-                        $this->di['flashMessages']->add(FlashMessages::SUCCESS, $this->di['t']->_('Your password has been successfully changed!'));
-                        $this->redirect($this->di['router']->getRouteUrl('main'));
-                    } catch (\Models\UsersPasswordsNotEqualException $e) {
-                        $this->di['flashMessages']->add(FlashMessages::ERROR, $this->di['t']->_('Your passwords do not match. Please try again!'));
-                    } catch (\Models\UsersPasswordTooShortException $e) {
-                        $this->di['flashMessages']->add(FlashMessages::ERROR, $this->di['t']->_('The password is too short. It must have at least 6 characters!'));
-                    }
-                }
-            } else {
-                $this->di['flashMessages']->add(FlashMessages::ERROR, $this->di['t']->_('You can\'t reset your password using this link!'));
-                $this->redirect($this->di['router']->getRouteUrl('main'));
-            }
-        } else {
+        if (!$this->getRequest()->hasGet('email', 'key')) {
             $this->redirect($this->di['router']->getRouteUrl('main'));
+        }
+
+        $usersManager = new UsersManager($this->di->get('db'));
+
+        $email = $this->getRequest()->get('email');
+        $key = $this->getRequest()->get('key');
+
+        if (!$usersManager->canResetPassword($this->di['config']['site'], $email, $key)) {
+            $this->di['flashMessages']->add(FlashMessages::ERROR, $this->di['t']->_('You can\'t reset your password using this link!'));
+            $this->redirect($this->di['router']->getRouteUrl('main'));
+        }
+
+        if ($this->getRequest()->hasPost('newPassword', 'newPassword2')) {
+            $password = $this->getRequest()->post('newPassword');
+            $passwordConfirm = $this->getRequest()->post('newPassword2');
+
+            try {
+                if ($usersManager->resetPassword($this->di['config']['site'], $email, $key, $password, $passwordConfirm)) {
+                    $this->di['flashMessages']->add(FlashMessages::SUCCESS, $this->di['t']->_('Your password has been successfully changed!'));
+                } else {
+                    $this->di['flashMessages']->add(FlashMessages::ERROR, $this->di['t']->_('You can\'t reset your password using this link!'));
+                }
+                $this->redirect($this->di['router']->getRouteUrl('main'));
+            } catch (PasswordsNotEqualException $e) {
+                $this->di['flashMessages']->add(FlashMessages::ERROR, $this->di['t']->_('Your passwords do not match. Please try again!'));
+            } catch (PasswordTooShortException $e) {
+                $this->di['flashMessages']->add(FlashMessages::ERROR, $this->di['t']->_('The password is too short. It must have at least 6 characters!'));
+            }
         }
 
         $this->view->title = $this->di['t']->_('Reset Password');

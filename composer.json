@@ -1,13 +1,42 @@
 {
+    "name": "cs-cp",
     "type": "project",
+    "repositories": [
+        {
+            "type": "git",
+            "url": "git@bitbucket.org:boomersweb/cs-models.git"
+        },
+        {
+            "type": "git",
+            "url": "git@bitbucket.org:boomersweb/cs-mail.git"
+        }, 
+        {
+            "type": "git",
+            "url": "git@bitbucket.org:boomersweb/cs-settings.git"
+        },
+        {
+            "type": "git",
+            "url": "git@bitbucket.org:boomersweb/cs-users.git"
+        },
+        {
+            "type": "git",
+            "url": "git@bitbucket.org:boomersweb/ip.git"
+        }
+    ],
     "require": {
         "php": ">=5.3.0",
         "rastor/system": "dev-master",
         "fenom/fenom": "2.*",
-        "phpmailer/phpmailer": "5.*",
-        "rastor/amazon-s3-php-class": "dev-master",
-        "hautelook/phpass": "0.3.0",
-        "monolog/monolog": "1.*"
+        "monolog/monolog": "1.*",
+        "filp/whoops": "~1.0",
+        "boomers/ip": "dev-master",
+        "boomers/cs-models": "dev-master",
+        "boomers/cs-mail": "dev-master",
+        "boomers/cs-settings": "dev-master",
+        "boomers/cs-users": "dev-master"
+    },
+    "require-dev": {
+        "maximebf/consolekit": "~1.0"
     },
     "autoload": {
         "psr-4": {

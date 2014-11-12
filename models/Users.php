@@ -2,119 +2,78 @@
 
 namespace Models;
 
-use Hautelook\Phpass\PasswordHash;
-use System\Session;
+use System\Model,
+    System\Session,
+    CS\Users\UsersManager,
+    CS\Models\User\UserRecord;
 
-class Users extends \System\Model {
+class Users extends Model
+{
 
-    protected $_restoreSecretKey = '87%*5gJ';
-    protected $_simpleLoginSecretKey = '~l\OF#chpB;GcOiSJ';
-    protected $_recordsPerPageList = array(10, 25, 50, 100);
-    static $loginAttempts = 5;
-    static $loginAttemptsPeriod = 300; // 5 min
+    protected $recordsPerPageList = array(10, 25, 50, 100);
 
-    public function __construct($di) {
+    public function __construct($di)
+    {
         parent::__construct($di);
     }
 
-    public function getHash($value) {
-        $passwordHash = new PasswordHash(8, true);
-
-        return $passwordHash->HashPassword($value);
+    public function getUserRecord()
+    {
+        return new UserRecord($this->getDb());
     }
 
-    public function checkPassword($password, $hash) {
-        $passwordHash = new PasswordHash(8, true);
-
-        return $passwordHash->CheckPassword($password, $hash);
+    public function getUsersManager()
+    {
+        return new UsersManager($this->getDb());
     }
 
-    public function login($email, $password, $remember = false) {
-        $email = $this->getDb()->quote($email);
+    public function login($email, $password, $remember = false)
+    {
+        $usersManager = new UsersManager($this->getDb());
+        $usersManager->setSender($this->di['mailSender']);
 
-        if (($data = $this->getDb()
-                ->query("SELECT 
-                        `id`, 
-                        `user_login` login, 
-                        `user_pass` password,
-                        `locale`,
-                        `records_per_page`,
-                        `restore`,
-                        `lock`,
-                        `locked`
-                    FROM `g1_users`
-                    WHERE 
-                        `user_login` = {$email}
-                    LIMIT 1")
-                ->fetch()) === false) {
+        $data = $usersManager->login($this->di['config']['site'], $email, $password);
 
-            throw new UsersInvalidEmail();
-        }
-
-        if ($data['locked']) {
-            throw new UsersAccountLocked();
-        }
-
-        if (!$this->checkPassword($password, $data['password'])) {
-            if ($this->getLoginAttemptsCount($data['id']) >= self::$loginAttempts - 1) {
-                $this->lock($data['id'], $data['login']);
-                throw new UsersAccountLocked();
-            }
-
-            $this->addLoginAttempt($data['id']);
-
-            throw new UsersInvalidPassword();
-        }
-
-        $this->removeLoginAttempts($data['id']);
-        $this->logAuth($data['id']);
         $this->di['auth']->setIdentity($data);
-        
+
         if ($remember) {
             Session::rememberMe();
         }
-        
+
         $this->setLocale($data['locale'], false);
         return true;
     }
 
-    public function getLoginAttemptsCount($userId) {
-        $minTime = time() - self::$loginAttemptsPeriod;
-        $userId = intval($userId);
+    public function setSettings($data)
+    {
+        $auth = $this->di['auth']->getIdentity();
 
-        return $this->getDb()->query("SELECT COUNT(*) FROM `users_auth_attempts` WHERE `user_id` = {$userId} AND `time` > {$minTime}")->fetchColumn();
-    }
+        $userRecord = $this->getUserRecord()
+                ->load($auth['id']);
 
-    public function addLoginAttempt($userId) {
-        $userId = intval($userId);
-        return $this->getDb()->exec("INSERT INTO `users_auth_attempts` SET `user_id` = {$userId}");
-    }
-
-    public function lock($userId, $email) {
-        $userId = intval($userId);
-
-        $secretString = $this->_buildRestoreString($email);
-
-        $secretValue = $this->getDb()->quote($secretString);
-        if (!$this->getDb()->exec("UPDATE `g1_users` SET `lock` = {$secretValue}, `locked` = 1 WHERE `id` = {$userId}")) {
-            throw new \Exception('Error during lock user!');
+        if (isset($data['locale'])) {
+            if (array_key_exists($this->di->getRequest()->post('locale'), $this->di['config']['locales'])) {
+                $userRecord->setLocale($data['locale']);
+            }
         }
 
-        $mailModel = new \Models\Mail($this->di);
-        $mailModel->sendUnlockPassword($email, $this->di['router']->getRouteUrl('unlockAccount') . '?' . http_build_query(array(
-                    'email' => $email,
-                    'key' => $secretString
-        )));
+        if (isset($data['recordsPerPage'])) {
+            if (!in_array($data['recordsPerPage'], $this->recordsPerPageList)) {
+                $data['recordsPerPage'] = $this->recordsPerPageList[0];
+            }
 
-        $this->removeLoginAttempts($userId);
+            $userRecord->setRecordsPerPage($data['recordsPerPage']);
+        }
+
+        $userRecord->save();
+
+        $this->reLogin();
+
+        return true;
     }
 
-    public function removeLoginAttempts($userId) {
-        $userId = intval($userId);
-        return $this->getDb()->exec("DELETE FROM `users_auth_attempts` WHERE `user_id` = {$userId}");
-    }
-
-    public function simpleLogin($id, $hash) {
+    public function simpleLogin($id, $hash)
+    {
         $id = intval($id);
 
         if ((($email = $this->getDb()->query("SELECT `user_login` FROM `g1_users` WHERE `id` = {$id} LIMIT 1")->fetchColumn()) !== false) &&
@@ -126,264 +85,48 @@ class Users extends \System\Model {
         return false;
     }
 
-    public function simpleRestorePassword($id, $hash) {
-        $id = intval($id);
+    public function loginById($id)
+    {
+        $usersManager = new UsersManager($this->getDb());
 
-        if ((($email = $this->getDb()->query("SELECT `user_login` FROM `g1_users` WHERE `id` = {$id} LIMIT 1")->fetchColumn()) !== false) &&
-                ($this->_buildSimpleLoginString($id, $email) == $hash)) {
-            $this->lostPasswordSend($email);
-            return true;
-        }
+        $data = $usersManager->loginById($id);
 
-        return false;
+        $this->di['auth']->setIdentity($data);
+
+        $this->setLocale($data['locale'], false);
+
+        return true;
     }
 
-    public function simpleCreatePassword($id, $hash, $old, $new) {
-        $id = intval($id);
-        $old = $this->getDb()->quote($old);
-
-        if ((($email = $this->getDb()->query("SELECT `user_login` FROM `g1_users` WHERE `id` = {$id} AND `user_pass` = {$old} LIMIT 1")->fetchColumn()) !== false) &&
-                ($this->_buildSimpleLoginString($id, $email) == $hash)) {
-            $new = $this->getDb()->quote($this->getHash($new));
-
-            return $this->getDb()->exec("UPDATE `g1_users` SET `user_pass` = {$new} WHERE `id` = {$id} LIMIT 1") == 1;
-        }
-
-        return false;
-    }
-
-    private function _buildSimpleLoginString($id, $email) {
-        return md5($id . $email . $this->_simpleLoginSecretKey);
-    }
-
-    public function loginById($id) {
-        $id = intval($id);
-        if (($data = $this->getDb()->query("SELECT 
-                        `id`, 
-                        `user_login` login, 
-                        `user_pass` password,
-                        `locale`,
-                        `records_per_page`,
-                        `restore`,
-                        `lock`,
-                        `locked`
-                    FROM `g1_users`
-                    WHERE
-                        `id` = {$id} LIMIT 1")->fetch()) != false) {
-            $this->di['auth']->setIdentity($data);
-            $this->setLocale($data['locale'], false);
-            return true;
-        }
-        return false;
-    }
-
-    public function reLogin() {
+    public function reLogin()
+    {
         $data = $this->di['auth']->getIdentity();
         return $this->loginById($data['id']);
     }
 
-    public function logout() {
+    public function logout()
+    {
         $this->di['auth']->clearIdentity();
     }
 
-    public function isPassword($value) {
-        $data = $this->di['auth']->getIdentity();
-        return $this->checkPassword($value, $data['password']);
+    public function getRecordsPerPageList()
+    {
+        return $this->recordsPerPageList;
     }
 
-    public function changePassword($value) {
-        $data = $this->di['auth']->getIdentity();
-
-        $id = $data['id'];
-        $password = $this->getDb()->quote($this->getHash($value));
-        return $this->getDb()
-                        ->exec("UPDATE `g1_users` SET `user_pass`={$password} WHERE `id`={$id}");
-    }
-
-    public function getRecordsPerPageList() {
-        return $this->_recordsPerPageList;
-    }
-
-    public function updateSettings($data) {
-        $this->setLocale($data['locale']);
-        $this->setRecordsPerPage($data['recordsPerPage']);
-        return $this->reLogin();
-    }
-
-    public function setRecordsPerPage($value) {
-        if ($this->di['auth']->hasIdentity()) {
-            if (!in_array($value, $this->_recordsPerPageList)) {
-                $value = $this->_recordsPerPageList[0];
-            }
-
-            $data = $this->di['auth']->getIdentity();
-            return $this->getDb()->exec("UPDATE `g1_users` SET `records_per_page` = {$value} WHERE `id`={$data['id']}");
-        }
-
-        return false;
-    }
-
-    public function setLocale($value, $update = true) {
+    public function setLocale($value, $update = true)
+    {
         setcookie('locale', $value, time() + 3600 * 24 * 30, '/');
         if ($update && $this->di['auth']->hasIdentity()) {
-            $locale = $this->getDb()->quote($value);
             $data = $this->di['auth']->getIdentity();
 
-            return $this->getDb()->exec("UPDATE `g1_users` SET `locale` = {$locale} WHERE `id`={$data['id']}");
+            $usersManager = new UsersManager($this->getDb());
+            $usersManager->getUser($data['id'])
+                    ->setLocale($value)
+                    ->save();
         }
+
+        return true;
     }
 
-    public function isUser($email) {
-        $email = $this->getDb()->quote($email);
-        return $this->getDb()->query("SELECT COUNT(*) FROM `g1_users` WHERE `user_login` = {$email} LIMIT 1")->fetchColumn() > 0;
-    }
-
-    protected function _buildRestoreString($email) {
-        return md5($email . time() . $this->_restoreSecretKey);
-    }
-
-    public function lostPasswordSend($email) {
-        if (!$this->isUser($email)) {
-            throw new UsersEmailNotFoundException();
-        }
-
-        $secretString = $this->_buildRestoreString($email);
-        $emailValue = $this->getDb()->quote($email);
-        $secretValue = $this->getDb()->quote($secretString);
-        if (!$this->getDb()->exec("UPDATE `g1_users` SET `restore` = {$secretValue} WHERE `user_login` = {$emailValue}")) {
-            throw new Exception('Error during set restore key!');
-        }
-
-        $resetUrl = $this->di['router']->getRouteUrl('resetPassword') . '?' . http_build_query(array(
-                    'email' => $email,
-                    'key' => $secretString,
-        ));
-
-        $mailModel = new \Models\Mail($this->di);
-        $mailModel->sendRestorePassword($email, array(
-            'resetUrl' => $resetUrl
-        ));
-    }
-
-    public function canRestorePassword($email, $secretString) {
-        $email = $this->getDb()->quote($email);
-        $secretString = $this->getDb()->quote($secretString);
-        return $this->getDb()->query("SELECT COUNT(*) FROM `g1_users` WHERE `user_login` = {$email} AND `restore` = {$secretString} LIMIT 1")->fetchColumn() > 0;
-    }
-
-    public function unlockAccount($email, $secretString) {
-        $email = $this->getDb()->quote($email);
-        $secretString = $this->getDb()->quote($secretString);
-        return $this->getDb()->exec("UPDATE `g1_users` SET `locked` = 0 WHERE `user_login` = {$email} AND `lock` = {$secretString} LIMIT 1") > 0;
-    }
-
-    public function resetPassword($email, $newPassword, $newPasswordConfirm) {
-        if ($newPassword !== $newPasswordConfirm) {
-            throw new UsersPasswordsNotEqualException();
-        }
-
-        if (strlen($newPassword) < 6) {
-            throw new UsersPasswordTooShortException();
-        }
-
-        $password = $this->getDb()->quote($this->getHash($newPassword));
-        $emailValue = $this->getDb()->quote($email);
-        if (!$this->getDb()->exec("UPDATE `g1_users` SET `restore` = '' AND `user_pass` = {$password} WHERE `user_login` = {$emailValue}")) {
-            throw new Exception('Error during set restore key!');
-        }
-    }
-
-    public function logAuth($id) {
-        $info = get_browser();
-
-        $result = array(
-            'ip' => '',
-            'country' => '',
-            'browser' => '',
-            'browserVersion' => '',
-            'platform' => '',
-            'platformVersion' => '',
-            'mobile' => 0,
-            'tablet' => 0
-        );
-
-        $result['ip'] = getRealIp();
-        $result['country'] = getIPCountry($result['ip']);
-
-        if (isset($info->browser, $info->version)) {
-            $result['browser'] = $info->browser;
-            $result['browserVersion'] = $info->version;
-        }
-
-        if (isset($info->platform, $info->platform_version)) {
-            $result['platform'] = $info->platform;
-            $result['platformVersion'] = $info->platform_version;
-        }
-
-        if (isset($info->ismobiledevice)) {
-            if ($info->ismobiledevice) {
-                $result['mobile'] = 1;
-            } else {
-                $result['mobile'] = 0;
-            }
-        }
-
-        if (isset($info->istablet)) {
-            if ($info->istablet) {
-                $result['tablet'] = 1;
-            } else {
-                $result['tablet'] = 0;
-            }
-        }
-
-        $id = intval($id);
-        $fullInfo = $this->getDb()->quote(@json_encode($info));
-        $result['ip'] = $this->getDb()->quote($result['ip']);
-        $result['country'] = $this->getDb()->quote($result['country']);
-        $result['browser'] = $this->getDb()->quote($result['browser']);
-        $result['browserVersion'] = $this->getDb()->quote($result['browserVersion']);
-        $result['platform'] = $this->getDb()->quote($result['platform']);
-        $result['platformVersion'] = $this->getDb()->quote($result['platformVersion']);
-        $result['mobile'] = $this->getDb()->quote($result['mobile']);
-        $result['tablet'] = $this->getDb()->quote($result['tablet']);
-        $userAgent = $this->getDb()->quote($_SERVER['HTTP_USER_AGENT']);
-
-        $this->getDb()->exec("INSERT INTO `users_auth_log` SET 
-            `user_id` = {$id},
-            `ip` = {$result['ip']},
-            `country` = {$result['country']},
-            `browser` = {$result['browser']},
-            `browser_version` = {$result['browserVersion']},
-            `platform` = {$result['platform']},
-            `platform_version` = {$result['platformVersion']},
-            `mobile` = {$result['mobile']},
-            `tablet` = {$result['tablet']},
-            `user_agent` = {$userAgent},
-            `full_info` = {$fullInfo}");
-    }
-
-}
-
-class UsersEmailNotFoundException extends \Exception {
-    
-}
-
-class UsersPasswordsNotEqualException extends \Exception {
-    
-}
-
-class UsersPasswordTooShortException extends \Exception {
-    
-}
-
-class UsersInvalidEmail extends \Exception {
-    
-}
-
-class UsersInvalidPassword extends \Exception {
-    
-}
-
-class UsersAccountLocked extends \Exception {
-    
 }

@@ -2,61 +2,75 @@
 
 namespace Controllers;
 
-use System\FlashMessages;
+use System\FlashMessages,
+    CS\Users\UsersManager,
+    CS\Users\PasswordsNotEqualException,
+    CS\Users\PasswordTooShortException,
+    CS\Users\InvalidPasswordException;
 
-class Profile extends BaseController {
+class Profile extends BaseController
+{
 
-    public function indexAction() {
-        $this->view->title = $this->di['t']->_('Your Profile');
+    public function indexAction()
+    {
+        $this->view->title = $this->di->getTranslator()->_('Your Profile');
 
-        if ($this->isPost()) {
-            if (isset($_POST['settings'])) {
-                $this->_processSettings();
-            } else if (isset($_POST['changePassword'])) {
-                $this->_processChangePassword();
+        if ($this->getRequest()->isPost()) {
+            if ($this->getRequest()->post('settings') !== null) {
+                $this->processSettings();
+            } else if ($this->getRequest()->post('changePassword') !== null) {
+                $this->processChangePassword();
             }
         }
 
         $usersModel = new \Models\Users($this->di);
-        
+
         $this->view->recordsPerPage = $this->auth['records_per_page'];
         $this->view->recordsPerPageList = $usersModel->getRecordsPerPageList();
         $this->setView('profile/index.htm');
     }
 
-    private function _processSettings() {
-        if (isset($_POST['locale'])) {
-            if (array_key_exists($_POST['locale'], $this->di['config']['locales'])) {
-                $settings = array(
-                    'locale' => $_POST['locale'],
-                    'recordsPerPage' => $_POST['recordsPerPage']
+    private function processSettings()
+    {
+        $usersModel = new \Models\Users($this->di);
+
+        $settings = array();
+
+        if ($this->getRequest()->post('locale') !== null) {
+            $settings['locale'] = $this->getRequest()->post('locale');
+        }
+
+        if ($this->getRequest()->post('recordsPerPage') !== null) {
+            $settings['recordsPerPage'] = $this->getRequest()->post('recordsPerPage');
+        }
+
+        if (count($settings) && $usersModel->setSettings($settings)) {
+            $this->di['flashMessages']->add(FlashMessages::SUCCESS, $this->di['t']->_('Your settings have been successfully updated!'));
+        }
+
+        $this->redirect($this->di['router']->getRouteUrl('profile'));
+    }
+
+    private function processChangePassword()
+    {
+        if ($this->getRequest()->hasPost('oldPassword', 'newPassword', 'newPassword2')) {
+            $usersManager = new UsersManager($this->di->get('db'));
+
+            try {
+                $usersManager->updatePassword(
+                        $this->auth['id'],
+                        $this->getRequest()->post('oldPassword'),
+                        $this->getRequest()->post('newPassword'),
+                        $this->getRequest()->post('newPassword2')
                 );
 
-                $usersModel = new \Models\Users($this->di);
-                if ($usersModel->updateSettings($settings) !== false) {
-                    $this->di['flashMessages']->add(FlashMessages::SUCCESS, $this->di['t']->_('Your settings have been successfully updated!'));
-                }
-                $this->redirect($this->di['router']->getRouteUrl('profile'));
-            }
-        }
-    }
-    
-    private function _processChangePassword(){
-        if (isset($_POST['oldPassword'], $_POST['newPassword'], $_POST['newPassword2'])) {
-            if ($_POST['newPassword'] !== $_POST['newPassword2']) {
+                $this->di['flashMessages']->add(FlashMessages::SUCCESS, $this->di['t']->_('Your password has been successfully changed!'));
+            } catch (PasswordsNotEqualException $e) {
                 $this->di['flashMessages']->add(FlashMessages::ERROR, $this->di['t']->_('Please enter the same password in the two password fields!'));
-            } elseif (strlen($_POST['newPassword']) < 6) {
+            } catch (PasswordTooShortException $e) {
                 $this->di['flashMessages']->add(FlashMessages::ERROR, $this->di['t']->_('Password is too short, must be 6 characters or more!'));
-            } else {
-                $usersModel = new \Models\Users($this->di);
-                
-                if (!$usersModel->isPassword($_POST['oldPassword'])) {
-                    $this->di['flashMessages']->add(FlashMessages::ERROR, $this->di['t']->_('Invalid old password!'));
-                } else {
-                    $usersModel->changePassword($_POST['newPassword']);
-                    $usersModel->reLogin();
-                    $this->di['flashMessages']->add(FlashMessages::SUCCESS, $this->di['t']->_('Your password has been successfully changed!'));
-                }
+            } catch (InvalidPasswordException $e) {
+                $this->di['flashMessages']->add(FlashMessages::ERROR, $this->di['t']->_('Invalid old password!'));
             }
         }
     }

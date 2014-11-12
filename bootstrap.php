@@ -1,7 +1,7 @@
 <?php
 
 $di->setShared('db', function() use ($config) {
-    $pdo = new \PDO("mysql:host={$config['db']['host']};dbname={$config['db']['dbname']}", $config['db']['username'], $config['db']['password'], $config['db']['options']);
+    $pdo = new \PDO("mysql:host={$config['db']['host']};dbname={$config['db']['dbname']}", $config['db']['username'], $config['db']['password'], $config['dbOptions']);
     //$this->exec("set profiling_history_size = {$config['db']['profiling']}; set profiling = 1;");
     return $pdo;
 });
@@ -69,21 +69,49 @@ $di->setShared('router', function() use($config) {
     return $router;
 });
 
-$di->setShared('flashMessages', function () {
-    return new \System\FlashMessages();
+$di->setShared('session', function () use ($config) {
+    System\Session::setConfig($config['session']);
+
+    return new System\Session();
 });
 
-$di->setShared('auth', function () {
-    return new \System\Auth('auth');
+$di->setShared('flashMessages', function () use ($di) {
+    return new \System\FlashMessages($di);
+});
+
+$di->setShared('auth', function () use ($di) {
+    return new \System\Auth($di);
+});
+
+$di->setShared('mailSender', function () use ($di) {
+    return new CS\Mail\MailSender();
 });
 
 $di->setShared('view', function() use ($di) {
     $fenom = \Fenom::factory($di['config']['fenom']['templatesDir'], $di['config']['fenom']['compileDir'], $di['config']['fenom']['options']);
-    
+
     return new \System\View\Fenom($fenom);
 });
 
-$di->setShared('locale', function()use($config) {
+$di->setShared('t', function () use ($di) {
+    $translator = new System\Translator($di, array_keys($di['config']['locales']));
+    
+    $locale = $di->get('request')->cookie('locale');
+    
+    if (!empty($locale) && key_exists($locale, $di['config']['locales'])) {
+        $translator->setLocale($locale);
+    } else {
+        $translator->setBestLocale();
+        setcookie('locale', $translator->getLocale(), time() + 3600 * 24 * 30, '/');
+    }
+    
+    $translator->setTranslations(require ROOT_PATH . 'locales/' . $translator->getLocale() . '.php');
+    
+    return $translator;
+});
+
+$di->setShared('locale', function() use($config) {
+    /*
     if (isset($_COOKIE['locale']) && key_exists($_COOKIE['locale'], $config['locales'])) {
         return $_COOKIE['locale'];
     } else {
@@ -91,11 +119,7 @@ $di->setShared('locale', function()use($config) {
 
         setcookie('locale', $locale, time() + 3600 * 24 * 30, '/');
         return $locale;
-    }
-});
-
-$di->setShared('t', function () use ($di) {
-    return new \System\Translator(require ROOT_PATH . 'locales/' . $di->get('locale') . '.php');
+    }*/
 });
 
 $di->setShared('S3', function () use ($di) {
@@ -104,22 +128,3 @@ $di->setShared('S3', function () use ($di) {
 
     return $s3;
 });
-
-\System\Session::setConfig($di['config']['session']);
-\System\Session::start();
-
-$logger = new Monolog\Logger('logger');
-$logger->pushProcessor(new Monolog\Processor\WebProcessor());
-
-if (APPLICATION_ENV == 'development') {
-    $logger->pushHandler(new Monolog\Handler\StreamHandler($config['logger']['stream']['filename'], Monolog\Logger::DEBUG));
-    $logger->pushHandler(new Monolog\Handler\ChromePHPHandler(Monolog\Logger::DEBUG));
-    //$logger->pushHandler(new Monolog\Handler\PushoverHandler('aUA4Bj2fTRyi9B4YosYFAnzaSAw5Js', 'uCnHUMtNRZccsF15aBi4x9umaBdbTg', 'TEST', Monolog\Logger::DEBUG));
-} elseif (APPLICATION_ENV == 'production') {
-    $logger->pushHandler(new Monolog\Handler\StreamHandler($config['logger']['stream']['filename'], Monolog\Logger::INFO));
-    $logger->pushHandler(new Monolog\Handler\NativeMailerHandler($config['logger']['mail']['from'], $config['logger']['mail']['subject'], $config['logger']['mail']['to']));
-}
-
-Monolog\ErrorHandler::register($logger);
-
-$di->set('logger', $logger);
