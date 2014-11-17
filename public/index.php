@@ -1,7 +1,6 @@
 <?php
 
 define('ROOT_PATH', dirname(__FILE__) . '/../');
-define('NAMESPACE_SEPARATOR', '\\');
 date_default_timezone_set('UTC');
 
 ob_start();
@@ -56,33 +55,31 @@ $requestUri = urldecode(array_shift($parts));
 $di->set('requestUri', $requestUri);
 
 $di['router']->execute($requestUri, function($route) use ($di) {
-    if ($route !== false) {
-        if (isset($route->target, $route->target['controller'], $route->target['action'])) {
-            if (class_exists('Controllers' . NAMESPACE_SEPARATOR . $route->target['controller'])) {
-                $controllerName = 'Controllers' . NAMESPACE_SEPARATOR . $route->target['controller'];
-                $cnt = new $controllerName($di);
+    if ($route !== false &&
+            isset($route->target, $route->target['controller'], $route->target['action']) &&
+            class_exists('Controllers\\' . $route->target['controller'])) {
+        
+        $controllerName = 'Controllers\\' . $route->target['controller'];
+        $controller = new $controllerName($di);
 
-                if (!(isset($route->target['public']) || $di->get('auth')->hasIdentity())) {
-                    if ($config['environment'] == 'development') {
-                        throw new Exception('Access denied!');
-                    }
-                    $cnt->redirect($di->get('router')->getRouteUrl('main'));
-                }
-
-                if (isset($route->params)) {
-                    $cnt->setParams($route->params);
-                }
-
-                if (!$cnt->callAction($route->target['action'])) {
-                    $cnt->error404();
-                }
-            } else {
-                $cnt = new Controllers\BaseController($di);
-                $cnt->error404();
+        //p($di->get('auth')->hasIdentity(), 1);
+        
+        if (!(isset($route->target['public']) || $di->get('auth')->hasIdentity())) {
+            if ($di['config']['environment'] == 'development') {
+                throw new Exception('Access denied!');
             }
+            $controller->redirect($di->get('router')->getRouteUrl('main'));
         }
-    } else {
-        $cnt = new Controllers\BaseController($di);
-        $cnt->error404();
+
+        if (isset($route->params)) {
+            $controller->setParams($route->params);
+        }
+
+        if ($controller->callAction($route->target['action'])) {
+            return;
+        }
     }
+
+    $cnt = new Controllers\BaseController($di);
+    $cnt->error404();
 });

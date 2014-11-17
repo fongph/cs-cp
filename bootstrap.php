@@ -42,6 +42,8 @@ $di->setShared('router', function() use($config) {
     $router->add('settings', new \System\Router\Route('/cp/settings', array('controller' => 'DeviceSettings', 'action' => 'index')));
     $router->add('smsCommands', new \System\Router\Route('/cp/smsCommands', array('controller' => 'SmsCommands', 'action' => 'index')));
     $router->add('upgrade', new \System\Router\Route('/cp/upgrade', array('controller' => 'CP', 'action' => 'upgrade')));
+    
+    $router->add('addDevice', new \System\Router\Route('/devices/add', array('controller' => 'Devices', 'action' => 'add')));
 
     $router->add('content', new \System\Router\Regex('/:uri', array('controller' => 'Index', 'action' => 'content', 'public' => true), array('uri' => '.+\.html')));
     $router->add('locale', new \System\Router\Regex('/locale/:value', array('controller' => 'Index', 'action' => 'locale', 'public' => true), array('value' => '.+')));

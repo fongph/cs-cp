@@ -38,6 +38,8 @@ class Users extends Model
 
         if ($remember) {
             Session::rememberMe();
+        } else {
+            Session::regenerateId();
         }
 
         $this->setLocale($data['locale'], false);

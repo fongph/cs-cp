@@ -20,6 +20,10 @@
         },
         {
             "type": "git",
+            "url": "git@bitbucket.org:boomersweb/cs-devices.git"
+        },
+        {
+            "type": "git",
             "url": "git@bitbucket.org:boomersweb/ip.git"
         }
     ],
@@ -33,7 +37,8 @@
         "boomers/cs-models": "dev-master",
         "boomers/cs-mail": "dev-master",
         "boomers/cs-settings": "dev-master",
-        "boomers/cs-users": "dev-master"
+        "boomers/cs-users": "dev-master",
+        "boomers/cs-devices": "dev-master"
     },
     "require-dev": {
         "maximebf/consolekit": "~1.0"

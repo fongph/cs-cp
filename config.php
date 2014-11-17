@@ -209,6 +209,7 @@ if ($build['environment'] == 'production') {
     $default['dataDb'] = function($devId) {
         return GlobalSettings::getDeviceDatabaseConfig($devId);
     };
+    $default['redis'] = GlobalSettings::getRedisConfig();
 
     $default['domain'] = GlobalSettings::getControlPanelURL($build['site']);
     $default['registration'] = GlobalSettings::getRegistrationPageURL($build['site']);
