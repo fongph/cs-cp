@@ -1,0 +1,32 @@
+<div>
+    <ol class="breadcrumb">
+        <li><a href="{$di.router->getRouteUrl('billing')}">{$di.t->_('Payments & Devices')}</a></li>
+        <li class="active">{$title}</li>
+    </ol>
+
+    {insert "inc.flashMessages.htm"}
+    
+    {set $href}<a href="{$di.router->getRouteUrl('addDevice')}" class="btn btn-xs btn-success">{/set}
+    {if count($devices)}
+        <p>{$di.t->_('Select device from list or %1$sAdd new%2$s', [$href,'</a>'])}</p>
+        <form method="POST" action="">
+            {foreach $devices as $id => $name}
+            <div class="radio">
+                <label>
+                    <input type="radio" name="device" id="device-{$id}" value="{$id}" />
+                    {$name}
+                </label>
+            </div>
+            {/foreach}
+            <button type="submit" class="btn btn-primary">{$di.t->_('Assign Device')}</button>
+        </form>
+    {else}
+        <p>{$di.t->_('You don\'t have unassigned devices. You can %1$sAdd new%2$s', [$href,'</a>'])}</p>
+    {/if}
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            
+        });
+    </script>
+</div>

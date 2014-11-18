@@ -36,6 +36,32 @@ class Devices extends \System\Model
                                 INNER JOIN `limitations` l ON ud.`dev_id` = l.`dev_id`
                                 WHERE u.`id` = {$id}")->fetchAll(\PDO::FETCH_ASSOC | \PDO::FETCH_UNIQUE);
     }
+    
+    public function getDevicesList($userId) {
+        $escapedUserId = $this->getDb()->quote($userId);
+        
+        return $this->getDb()->quote("SELECT
+                                            `id`,
+                                            `name` 
+                                        FROM `devices` 
+                                        WHERE
+                                            `user_id` = {$escapedUserId} AND
+                                            `deleted` = 0
+                                        LIMIT 1")->fetch(\PDO::FETCH_KEY_PAIR);
+    }
+    
+    public function getUnAssignedDevicesList($userId) {
+        $escapedUserId = $this->getDb()->quote($userId);
+        
+        return $this->getDb()->quote("SELECT
+                                            `id`,
+                                            `name` 
+                                        FROM `devices` 
+                                        WHERE
+                                            `user_id` = {$escapedUserId} AND
+                                            `deleted` = 0
+                                        LIMIT 1")->fetch(\PDO::FETCH_KEY_PAIR);
+    }
 
     public function setNetwork($devId, $feature, $net)
     {

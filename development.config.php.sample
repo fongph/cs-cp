@@ -16,6 +16,10 @@ $default['dataDb'] = function() {
     );
 };
 
+$default['redis'] = array(
+    'database' => 1
+);
+
 $default['domain'] = 'http://cp.cs:8080';
 $default['staticDomain'] = 'http://cp.cs:8080/static';
 $default['cookieDomain'] = '.cs';

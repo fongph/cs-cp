@@ -2,7 +2,9 @@
 
 $di->setShared('db', function() use ($config) {
     $pdo = new \PDO("mysql:host={$config['db']['host']};dbname={$config['db']['dbname']}", $config['db']['username'], $config['db']['password'], $config['dbOptions']);
-    //$this->exec("set profiling_history_size = {$config['db']['profiling']}; set profiling = 1;");
+    if ($config['environment'] == 'development') {
+        $pdo->exec("set profiling_history_size = 1000; set profiling = 1;");
+    }
     return $pdo;
 });
 
@@ -42,8 +44,11 @@ $di->setShared('router', function() use($config) {
     $router->add('settings', new \System\Router\Route('/cp/settings', array('controller' => 'DeviceSettings', 'action' => 'index')));
     $router->add('smsCommands', new \System\Router\Route('/cp/smsCommands', array('controller' => 'SmsCommands', 'action' => 'index')));
     $router->add('upgrade', new \System\Router\Route('/cp/upgrade', array('controller' => 'CP', 'action' => 'upgrade')));
-    
+
     $router->add('addDevice', new \System\Router\Route('/devices/add', array('controller' => 'Devices', 'action' => 'add')));
+    $router->add('billing', new \System\Router\Route('/billing', array('controller' => 'Billing', 'action' => 'index')));
+    $router->add('billingAssignDevice', new \System\Router\Route('/billing/assignDevice', array('controller' => 'Billing', 'action' => 'assignDevice')));
+
 
     $router->add('content', new \System\Router\Regex('/:uri', array('controller' => 'Index', 'action' => 'content', 'public' => true), array('uri' => '.+\.html')));
     $router->add('locale', new \System\Router\Regex('/locale/:value', array('controller' => 'Index', 'action' => 'locale', 'public' => true), array('value' => '.+')));
@@ -97,31 +102,31 @@ $di->setShared('view', function() use ($di) {
 
 $di->setShared('t', function () use ($di) {
     $translator = new System\Translator($di, array_keys($di['config']['locales']));
-    
+
     $locale = $di->get('request')->cookie('locale');
-    
+
     if (!empty($locale) && key_exists($locale, $di['config']['locales'])) {
         $translator->setLocale($locale);
     } else {
         $translator->setBestLocale();
         setcookie('locale', $translator->getLocale(), time() + 3600 * 24 * 30, '/');
     }
-    
+
     $translator->setTranslations(require ROOT_PATH . 'locales/' . $translator->getLocale() . '.php');
-    
+
     return $translator;
 });
 
 $di->setShared('locale', function() use($config) {
     /*
-    if (isset($_COOKIE['locale']) && key_exists($_COOKIE['locale'], $config['locales'])) {
-        return $_COOKIE['locale'];
-    } else {
-        $locale = \System\Translator::getBestLocale(array_keys($config['locales']));
+      if (isset($_COOKIE['locale']) && key_exists($_COOKIE['locale'], $config['locales'])) {
+      return $_COOKIE['locale'];
+      } else {
+      $locale = \System\Translator::getBestLocale(array_keys($config['locales']));
 
-        setcookie('locale', $locale, time() + 3600 * 24 * 30, '/');
-        return $locale;
-    }*/
+      setcookie('locale', $locale, time() + 3600 * 24 * 30, '/');
+      return $locale;
+      } */
 });
 
 $di->setShared('S3', function () use ($di) {

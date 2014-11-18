@@ -61,8 +61,6 @@ $di['router']->execute($requestUri, function($route) use ($di) {
         
         $controllerName = 'Controllers\\' . $route->target['controller'];
         $controller = new $controllerName($di);
-
-        //p($di->get('auth')->hasIdentity(), 1);
         
         if (!(isset($route->target['public']) || $di->get('auth')->hasIdentity())) {
             if ($di['config']['environment'] == 'development') {
