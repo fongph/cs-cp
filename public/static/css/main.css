@@ -59,6 +59,7 @@ body > .cp-menu {
 
 .wrapper-container > .container {
     margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 .wrapper-container .login-form {

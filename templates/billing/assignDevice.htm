@@ -6,7 +6,7 @@
 
     {insert "inc.flashMessages.htm"}
     
-    {set $href}<a href="{$di.router->getRouteUrl('addDevice')}" class="btn btn-xs btn-success">{/set}
+    {set $href}<a href="{$di.router->getRouteUrl('billingAddDevice')}" class="btn btn-xs btn-success">{/set}
     {if count($devices)}
         <p>{$di.t->_('Select device from list or %1$sAdd new%2$s', [$href,'</a>'])}</p>
         <form method="POST" action="">

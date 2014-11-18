@@ -45,8 +45,8 @@ $di->setShared('router', function() use($config) {
     $router->add('smsCommands', new \System\Router\Route('/cp/smsCommands', array('controller' => 'SmsCommands', 'action' => 'index')));
     $router->add('upgrade', new \System\Router\Route('/cp/upgrade', array('controller' => 'CP', 'action' => 'upgrade')));
 
-    $router->add('addDevice', new \System\Router\Route('/devices/add', array('controller' => 'Devices', 'action' => 'add')));
     $router->add('billing', new \System\Router\Route('/billing', array('controller' => 'Billing', 'action' => 'index')));
+    $router->add('billingAddDevice', new \System\Router\Route('/billing/addDevice', array('controller' => 'Billing', 'action' => 'addDevice')));
     $router->add('billingAssignDevice', new \System\Router\Route('/billing/assignDevice', array('controller' => 'Billing', 'action' => 'assignDevice')));
 
 
