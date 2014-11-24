@@ -2,45 +2,49 @@
 
 namespace Controllers;
 
-use System\FlashMessages;
+use System\FlashMessages,
+    Models\Modules,
+    CS\Devices\Limitations;
 
-class Videos extends BaseController {
+class Videos extends BaseModuleController
+{
 
-    protected $module = 'videos';
+    protected $module = Modules::VIDEOS;
 
-    protected function init() {
+    protected function init()
+    {
         parent::init();
-
         $this->initCP();
     }
 
     //TODO: reorganize
-    public function indexAction() {
+    public function indexAction()
+    {
         $videosModel = new \Models\Cp\Videos($this->di);
 
-        if ($this->isPost()) {
-            if (isset($_POST['network'])) {
-                $devicesModel = new \Models\Devices($this->di);
-                $devicesModel->setNetwork($this->di['devId'], 'videos', $_POST['network']);
+        if ($this->getRequest()->isPost()) {
+            if ($this->getRequest()->hasPost('network')) {
+                $settingsModel = new \Models\Cp\Settings($this->di);
+                $settingsModel->setNetwork($this->di['devId'], 'videos', $this->getRequest()->post('network'));
                 $this->di['flashMessages']->add(FlashMessages::SUCCESS, $this->di['t']->_('The changes have been successfully updated!'));
             }
             $this->redirect($this->di['router']->getRouteUrl('videos'));
         } else {
-            if (isset($_GET['getThumb'])) {
-                $url = $videosModel->getCDNAuthorizedUrl($this->di['devId'] . '/video/' . $_GET['getThumb']);
+            if ($this->getRequest()->hasGet('getThumb')) {
+                $url = $videosModel->getCDNAuthorizedUrl($this->di['devId'] . '/video/' . $this->getRequest()->get('getThumb'));
                 $this->redirect($url);
-            } else if (isset($_GET['getVideo'])) {
-                $url = $videosModel->getAuthorizedUrl($this->di['devId'] . '/video/' . $_GET['getVideo']);
+            } else if ($this->getRequest()->hasGet('getVideo')) {
+                $url = $videosModel->getCDNAuthorizedUrl($this->di['devId'] . '/video/' . $this->getRequest()->get('getVideo'));
                 $this->redirect($url);
             } else {
-                $this->_processVideoRequests($videosModel, $this->di['router']->getRouteUrl('videos'));
+                $this->processVideoRequests($videosModel, $this->di['router']->getRouteUrl('videos'));
             }
         }
 
         if ($this->view->paid) {
-            $devicesModel = new \Models\Devices($this->di);
-            $this->view->network = $devicesModel->getNetwork($this->di['devId'], 'videos');
-            $this->view->networksList = \Models\Devices::$networksList;
+            $settingsModel = new \Models\Cp\Settings($this->di);
+            $this->view->network = $settingsModel->getNetwork($this->di['devId'], 'videos');
+            $this->view->networksList = \Models\Cp\Settings::$networksList;
             $recentVideos = $videosModel->getRecentVideos($this->di['devId']);
 
             if ($recentVideos > 0) {
@@ -53,7 +57,8 @@ class Videos extends BaseController {
         $this->setView('cp/videos.htm');
     }
 
-    public function cameraAction() {
+    public function cameraAction()
+    {
         $videosModel = new \Models\Cp\Videos($this->di);
 
         $this->_processVideoRequests($videosModel, $this->di['router']->getRouteUrl('videosCamera'));
@@ -64,10 +69,11 @@ class Videos extends BaseController {
         $this->setView('cp/videosAlbum.htm');
     }
 
-    public function noCameraAction() {
+    public function noCameraAction()
+    {
         $videosModel = new \Models\Cp\Videos($this->di);
 
-        $this->_processVideoRequests($videosModel, $this->di['router']->getRouteUrl('videosNoCamera'));
+        $this->processVideoRequests($videosModel, $this->di['router']->getRouteUrl('videosNoCamera'));
 
         $this->view->videos = $videosModel->getNoCameraVideos($this->di['devId']);
 
@@ -75,10 +81,11 @@ class Videos extends BaseController {
         $this->setView('cp/videosAlbum.htm');
     }
 
-    protected function _processVideoRequests($videosModel, $redirectUrl) {
-        if (isset($_GET['requestVideo'])) {
+    protected function processVideoRequests($videosModel, $redirectUrl)
+    {
+        if ($this->getRequest()->hasGet('requestVideo')) {
             try {
-                if ($videosModel->setVideoRequested($this->di['devId'], $_GET['requestVideo'])) {
+                if ($videosModel->setVideoRequested($this->di['devId'], $this->getRequest()->get('requestVideo'))) {
                     $this->di['flashMessages']->add(FlashMessages::SUCCESS, $this->di['t']->_('The video has been successfully requested!'));
                 } else {
                     $this->di['flashMessages']->add(FlashMessages::ERROR, $this->di['t']->_('Error occurred during requesting the video!'));
@@ -94,9 +101,9 @@ class Videos extends BaseController {
             }
 
             $this->redirect($redirectUrl);
-        } else if (isset($_GET['cancelRequest'])) {
+        } else if ($this->getRequest()->hasGet('cancelRequest')) {
             try {
-                if ($videosModel->cancelVideoRequest($this->di['devId'], $_GET['cancelRequest'])) {
+                if ($videosModel->cancelVideoRequest($this->di['devId'], $this->getRequest()->get('cancelRequest'))) {
                     $this->di['flashMessages']->add(FlashMessages::SUCCESS, $this->di['t']->_('The video request has been successfully canceled!'));
                 } else {
                     $this->di['flashMessages']->add(FlashMessages::ERROR, $this->di['t']->_('Error occurred during cancelling the video request!'));
@@ -115,11 +122,18 @@ class Videos extends BaseController {
         }
     }
 
-    protected function postAction() {
+    protected function postAction()
+    {
         parent::postAction();
         $this->buildCpMenu();
 
         $this->view->title = $this->di['t']->_('View Videos');
+    }
+    
+    protected function isModulePaid()
+    {
+        $devicesLimitations = new Limitations($this->di['db']);
+        return $devicesLimitations->isAllowed($this->di['devId'], Limitations::VIDEO);
     }
 
 }

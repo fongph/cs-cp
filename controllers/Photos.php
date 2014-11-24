@@ -2,31 +2,36 @@
 
 namespace Controllers;
 
-use System\FlashMessages;
+use System\FlashMessages,
+    Models\Modules,
+    CS\Devices\Limitations;
 
-class Photos extends BaseController {
+class Photos extends BaseModuleController
+{
 
-    protected $module = 'photos';
+    protected $module = Modules::PHOTOS;
 
-    protected function init() {
+    protected function init()
+    {
         parent::init();
 
         $this->initCP();
     }
 
-    public function indexAction() {
+    public function indexAction()
+    {
         $photosModel = new \Models\Cp\Photos($this->di);
 
-        $devicesModel = new \Models\Devices($this->di);
-        if (isset($_POST['network'])) {
-            $devicesModel->setNetwork($this->di['devId'], 'photos', $_POST['network']);
+        if ($this->getRequest()->hasPost('network')) {
+            $settingsModel = new \Models\Cp\Settings($this->di);
+            $settingsModel->setNetwork($this->di['devId'], 'photos', $this->getRequest()->post('network'));
             $this->di['flashMessages']->add(FlashMessages::SUCCESS, $this->di['t']->_('The changes have been successfully updated!'));
-            $this->redirect($this->di['router']->getRouteUrl('photos'));
         }
 
         if ($this->view->paid) {
-            $this->view->network = $devicesModel->getNetwork($this->di['devId'], 'photos');
-            $this->view->networksList = \Models\Devices::$networksList;
+            $settingsModel = new \Models\Cp\Settings($this->di);
+            $this->view->network = $settingsModel->getNetwork($this->di['devId'], 'photos');
+            $this->view->networksList = \Models\Cp\Settings::$networksList;
 
             $this->view->recentPhotos = $photosModel->getRecentPhotos($this->di['devId']);
             $this->view->albums = $photosModel->getAlbums($this->di['devId']);
@@ -35,7 +40,8 @@ class Photos extends BaseController {
         $this->setView('cp/photos.htm');
     }
 
-    public function albumAction() {
+    public function albumAction()
+    {
         $photosModel = new \Models\Cp\Photos($this->di);
         $this->view->photos = $photosModel->getAlbumPhotos($this->di['devId'], $this->params['album']);
 
@@ -44,11 +50,18 @@ class Photos extends BaseController {
         $this->setView('cp/photosAlbum.htm');
     }
 
-    protected function postAction() {
+    protected function postAction()
+    {
         parent::postAction();
         $this->buildCpMenu();
 
         $this->view->title = $this->di['t']->_('View Photos');
+    }
+    
+    protected function isModulePaid()
+    {
+        $devicesLimitations = new Limitations($this->di['db']);
+        return $devicesLimitations->isAllowed($this->di['devId'], Limitations::PHOTOS);
     }
 
 }

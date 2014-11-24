@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "a83275cc39caf6271877d473aa2776fa",
+    "hash": "5ea58464528ad930ac208036e0d65f80",
     "packages": [
         {
             "name": "boomers/cs-devices",
@@ -12,7 +12,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-devices.git",
-                "reference": "83e3ec905a8cdb1ca9d94fbb6a2c93cb9ce601fc"
+                "reference": "f4402ba9bd99c5de918a9873150f89fa8b8e57ee"
             },
             "require": {
                 "boomers/cs-models": "dev-master",
@@ -31,7 +31,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2014-11-18 13:22:19"
+            "time": "2014-11-24 12:24:41"
         },
         {
             "name": "boomers/cs-mail",
@@ -65,7 +65,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-models.git",
-                "reference": "c888f74613d7001942b22a28dee611444492fa47"
+                "reference": "9493904b70977aeb0fce3f178db066e800760f5a"
             },
             "require": {
                 "php": ">=5.4.0"
@@ -79,7 +79,7 @@
                     "CS\\Models\\": "src/"
                 }
             },
-            "time": "2014-11-18 13:26:55"
+            "time": "2014-11-24 12:22:03"
         },
         {
             "name": "boomers/cs-settings",
@@ -87,7 +87,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-settings.git",
-                "reference": "a628bfce80a07ddda10226742255125665a8719a"
+                "reference": "82557a279df78b4bff72dedb5a80c1702c4ba64a"
             },
             "require": {
                 "php": ">=5.4.0"
@@ -98,7 +98,7 @@
                     "CS\\Settings\\": "src/"
                 }
             },
-            "time": "2014-11-14 16:04:03"
+            "time": "2014-11-24 08:12:16"
         },
         {
             "name": "boomers/cs-users",
@@ -580,17 +580,58 @@
             "time": "2012-12-21 11:40:51"
         },
         {
-            "name": "rastor/system",
-            "version": "dev-master",
+            "name": "rastor/amazon-s3-php-class",
+            "version": "0.5.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/oRastor/system.git",
-                "reference": "52bc07c8475a95878ebc2f646f2b2eeb8996d0b6"
+                "url": "https://github.com/oRastor/amazon-s3-php-class.git",
+                "reference": "5494ea2ef1e020cd65793ca50d697a93e822db03"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/oRastor/system/zipball/52bc07c8475a95878ebc2f646f2b2eeb8996d0b6",
-                "reference": "52bc07c8475a95878ebc2f646f2b2eeb8996d0b6",
+                "url": "https://api.github.com/repos/oRastor/amazon-s3-php-class/zipball/5494ea2ef1e020cd65793ca50d697a93e822db03",
+                "reference": "5494ea2ef1e020cd65793ca50d697a93e822db03",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.2.0"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "S3.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-2-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Donovan Schönknecht",
+                    "email": "don@tpyo.net"
+                },
+                {
+                    "name": "Orest Budzhak",
+                    "email": "doom4eg@gmail.com"
+                }
+            ],
+            "description": "A standalone Amazon S3 (REST) client for PHP 5.2.x using CURL that does not require PEAR.",
+            "homepage": "https://github.com/tpyo/amazon-s3-php-class",
+            "time": "2014-10-01 14:18:42"
+        },
+        {
+            "name": "rastor/system",
+            "version": "0.5.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/oRastor/system.git",
+                "reference": "9b999cc82e48ed02613af3f950d1b874da54f652"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/oRastor/system/zipball/9b999cc82e48ed02613af3f950d1b874da54f652",
+                "reference": "9b999cc82e48ed02613af3f950d1b874da54f652",
                 "shasum": ""
             },
             "require": {
@@ -620,7 +661,7 @@
                     "homepage": "http://rastor.name"
                 }
             ],
-            "time": "2014-11-17 09:53:05"
+            "time": "2014-11-21 07:33:34"
         },
         {
             "name": "react/promise",
@@ -669,26 +710,42 @@
     ],
     "packages-dev": [
         {
-            "name": "maximebf/consolekit",
-            "version": "1.0.3",
+            "name": "symfony/console",
+            "version": "dev-master",
+            "target-dir": "Symfony/Component/Console",
             "source": {
                 "type": "git",
-                "url": "https://github.com/maximebf/ConsoleKit.git",
-                "reference": "c46403e2cf98e8413168c523bdbb7c13a386abe5"
+                "url": "https://github.com/symfony/Console.git",
+                "reference": "84e6129790ce01232729d01603eb17086722e474"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/maximebf/ConsoleKit/zipball/c46403e2cf98e8413168c523bdbb7c13a386abe5",
-                "reference": "c46403e2cf98e8413168c523bdbb7c13a386abe5",
+                "url": "https://api.github.com/repos/symfony/Console/zipball/84e6129790ce01232729d01603eb17086722e474",
+                "reference": "84e6129790ce01232729d01603eb17086722e474",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.0"
+                "php": ">=5.3.3"
+            },
+            "require-dev": {
+                "psr/log": "~1.0",
+                "symfony/event-dispatcher": "~2.1",
+                "symfony/process": "~2.1"
+            },
+            "suggest": {
+                "psr/log": "For using the console logger",
+                "symfony/event-dispatcher": "",
+                "symfony/process": ""
             },
             "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.0-dev"
+                }
+            },
             "autoload": {
                 "psr-0": {
-                    "ConsoleKit": "src/"
+                    "Symfony\\Component\\Console\\": ""
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -697,32 +754,29 @@
             ],
             "authors": [
                 {
-                    "name": "Maxime Bouroumeau-Fuseau",
-                    "email": "maxime.bouroumeau@gmail.com",
-                    "homepage": "http://maximebf.com"
+                    "name": "Symfony Community",
+                    "homepage": "http://symfony.com/contributors"
+                },
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
                 }
             ],
-            "description": "Library to create command line utilities",
-            "homepage": "https://github.com/maximebf/ConsoleKit",
-            "keywords": [
-                "cli",
-                "commands",
-                "console",
-                "shell"
-            ],
-            "time": "2013-01-01 16:03:55"
+            "description": "Symfony Console Component",
+            "homepage": "http://symfony.com",
+            "time": "2014-11-20 13:24:36"
         }
     ],
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "rastor/system": 20,
         "boomers/ip": 20,
         "boomers/cs-models": 20,
         "boomers/cs-mail": 20,
         "boomers/cs-settings": 20,
         "boomers/cs-users": 20,
-        "boomers/cs-devices": 20
+        "boomers/cs-devices": 20,
+        "symfony/console": 20
     },
     "prefer-stable": false,
     "platform": {

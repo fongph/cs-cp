@@ -2,28 +2,68 @@
 
 namespace Models\Cp;
 
-class Settings extends \System\Model
+use CS\Devices\DeviceOptions;
+
+class Settings extends BaseModel
 {
+
+    public static $networksList = array(
+        'wifi' => 'Wi-Fi only',
+        'any' => 'Wi-Fi and Mobile Network'
+    );
+    public static $networkFeatures = array(
+        'photos' => 'photos_network',
+        'videos' => 'video_network'
+    );
+
+    public function setNetwork($devId, $feature, $net)
+    {
+        if (!isset(self::$networkFeatures[$feature])) {
+            throw new \Exception('Invalid feature');
+        }
+
+        if ($net !== 'any' && $net !== 'wifi') {
+            throw new DevicesInvalidNetworkException();
+        }
+
+        $column = self::$networkFeatures[$feature];
+        $devId = $this->getDB()->quote($devId);
+        $net = $this->getDB()->quote($net);
+
+        $this->getDb()->exec("UPDATE `dev_settings` SET `{$column}` = {$net} WHERE `dev_id` = {$devId}");
+    }
+
+    public function getNetwork($devId, $feature)
+    {
+        if (!isset(self::$networkFeatures[$feature])) {
+            throw new \Exception('Invalid feature');
+        }
+
+        $column = self::$networkFeatures[$feature];
+        $devId = $this->getDB()->quote($devId);
+
+        return $this->getDb()->query("SELECT `{$column}` FROM `dev_settings` WHERE `dev_id` = {$devId} LIMIT 1")->fetchColumn();
+    }
 
     public function addBlackListPhone($devId, $phone)
     {
         if (($blackString = $this->getPhoneBlackListString($devId)) === false) {
-            throw new \Exception("Device black phones list not found");
+            throw new Settings\SettingsNotFoundException("Device black phones list not found");
         }
 
         if (!validatePhoneNumber($phone)) {
-            throw new SettingsInvalidPhoneNumberException();
+            throw new Settings\InvalidPhoneNumberException();
         }
 
-        $list = $this->_buildBlackList($blackString);
+        $list = $this->buildBlackList($blackString);
 
         if (in_array($phone, $list)) {
-            throw new SettingsPhoneNumberExistException();
+            throw new Settings\PhoneNumberExistException();
         }
 
         array_push($list, $phone);
 
-        $newString = $this->_blackListToString($list);
+        $newString = $this->blackListToString($list);
 
         return $this->setPhonesBlackListString($devId, $newString);
     }
@@ -31,46 +71,40 @@ class Settings extends \System\Model
     public function removeBlackListPhone($devId, $phone)
     {
         if (($blackString = $this->getPhoneBlackListString($devId)) === false) {
-            throw new \Exception("Device black phones list not found");
+            throw new Settings\SettingsNotFoundException("Device black phones list not found");
         }
 
-        $list = $this->_buildBlackList($blackString);
+        $list = $this->buildBlackList($blackString);
 
         if (($key = array_search($phone, $list)) === false) {
-            throw new SettingsPhoneNumberNotFoundInListException();
+            throw new Settings\PhoneNumberNotFoundInListException();
         }
 
         unset($list[$key]);
-        $value = $this->_blackListToString($list);
+        $value = $this->blackListToString($list);
 
         return $this->setPhonesBlackListString($devId, $value);
     }
 
-    public function setDeviceSettings($devId, $name, $simNotifications, $blackWordsString)
+    public function setDeviceSettings($devId, $simNotifications, $blackWords)
     {
-        if (strlen($name) == 1 || strlen($name) > 32) {
-            throw new SettingsInvalidDeviceNameException();
-        }
+        $escapedDevId = $this->getDB()->quote($devId);
+        $blackWordsString = $this->getDB()->quote($this->rebuildBlackWordsList($blackWords));
+        $escapedSimNotifications = $this->getDB()->quote($simNotifications);
 
-        if ($blackWordsString !== null) {
-            $blackWordsString = $this->_rebuildBlackWordsList($blackWordsString);
-        } else {
-            $blackWordsString = '';
-        }
-
-        $devId = $this->getDB()->quote($devId);
-        $name = $this->getDB()->quote($name);
-        $blackWordsString = $this->getDB()->quote($blackWordsString);
-        $simNotifications = $this->getDB()->quote($simNotifications);
-
-        return $this->getDb()->exec("UPDATE `user_dev` SET `ident` = {$name} WHERE `dev_id` = {$devId}") |
-                $this->getDb()->exec("UPDATE `dev_settings` SET `bl_words` = {$blackWordsString}, `sim_notification` = {$simNotifications} WHERE `dev_id` = {$devId}");
+        return $this->getDb()->exec("UPDATE 
+                                            `dev_settings`
+                                        SET 
+                                            `bl_words` = {$blackWordsString},
+                                            `sim_notification` = {$escapedSimNotifications}
+                                        WHERE
+                                            `dev_id` = {$escapedDevId}");
     }
 
     public function lockDevice($devId, $password)
     {
         if (!preg_match('/^[0-9]{4}$/', $password)) {
-            throw new SettingsInvalidPasswordException();
+            throw new Settings\InvalidPasswordException();
         }
 
         return $this->setDeviceLockPassword($devId, $password);
@@ -78,56 +112,55 @@ class Settings extends \System\Model
 
     public function setDeviceLockPassword($devId, $password)
     {
-        $devId = $this->getDB()->quote($devId);
-        $password = intval($password);
+        $escapedDevId = $this->getDB()->quote($devId);
+        $escapedPassword = intval($password);
 
-        return $this->getDb()->exec("UPDATE `dev_settings` SET `lock_phone` = {$password} WHERE `dev_id` = {$devId} LIMIT 1");
+        return $this->getDb()->exec("UPDATE `dev_settings` SET `lock_phone` = {$escapedPassword} WHERE `dev_id` = {$escapedDevId} LIMIT 1");
     }
 
     public function getPhoneBlackListString($devId)
     {
-        $devId = $this->getDB()->quote($devId);
+        $escapedDevId = $this->getDB()->quote($devId);
 
-        return $this->getDb()->query("SELECT `bl_phones` FROM `dev_settings` WHERE `dev_id` = {$devId} LIMIT 1")->fetchColumn();
+        return $this->getDb()->query("SELECT `bl_phones` FROM `dev_settings` WHERE `dev_id` = {$escapedDevId} LIMIT 1")->fetchColumn();
     }
 
     public function setRebootDevice($devId)
     {
-        $devId = $this->getDB()->quote($devId);
+        $escapedDevId = $this->getDB()->quote($devId);
 
-        return $this->getDb()->exec("UPDATE `dev_settings` SET `reboot_dev` = 1 WHERE `dev_id` = {$devId}");
+        return $this->getDb()->exec("UPDATE `dev_settings` SET `reboot_dev` = 1 WHERE `dev_id` = {$escapedDevId} LIMIT 1");
     }
 
     public function setRebootApp($devId)
     {
-        $devId = $this->getDB()->quote($devId);
+        $escapedDevId = $this->getDB()->quote($devId);
 
-        return $this->getDb()->exec("UPDATE `dev_settings` SET `reboot_app` = 1 WHERE `dev_id` = {$devId}");
+        return $this->getDb()->exec("UPDATE `dev_settings` SET `reboot_app` = 1 WHERE `dev_id` = {$escapedDevId} LIMIT 1");
     }
 
     public function setPhonesBlackListString($devId, $value)
     {
-        $devId = $this->getDB()->quote($devId);
-        $value = $this->getDB()->quote($value);
+        $escapedDevId = $this->getDB()->quote($devId);
+        $escapedValue = $this->getDB()->quote($value);
 
-        return $this->getDb()->exec("UPDATE `dev_settings` SET `bl_phones` = {$value} WHERE `dev_id` = {$devId}");
+        return $this->getDb()->exec("UPDATE `dev_settings` SET `bl_phones` = {$escapedValue} WHERE `dev_id` = {$escapedDevId} LIMIT 1");
     }
 
-    public function delete($devId)
-    {
-        $devicesModel = new \Models\Devices($this->di);
-
-        return $devicesModel->delete($devId) & $devicesModel->deleteFiles($devId);
-    }
-
-    protected function _rebuildBlackWordsList($string)
+    protected function rebuildBlackWordsList($string)
     {
         $replacedString = str_replace(array(", ", " ", ",", "\r\n", "\n", "\r"), ",", $string);
         $wordsList = array_unique(explode(",", $replacedString));
+        foreach ($wordsList as $key => $value) {
+            if (strlen($value) == 0) {
+                unset($wordsList[$key]);
+                break;
+            }
+        }
         return implode(",", $wordsList);
     }
 
-    protected function _buildBlackList($string)
+    protected function buildBlackList($string)
     {
         $array = explode(',', $string);
 
@@ -140,133 +173,34 @@ class Settings extends \System\Model
         return $array;
     }
 
-    protected function _blackListToString($list)
+    protected function blackListToString($list)
     {
         return implode(',', $list);
     }
 
+    private function getDeviceSettings($devId)
+    {
+        $escapedDevId = $this->getDB()->quote($devId);
+
+        return $this->getDb()->query("SELECT * FROM `dev_settings` WHERE `dev_id` = {$escapedDevId} LIMIT 1")->fetch();
+    }
+
     public function getSettings($devId)
     {
-        $devicesModel = new \Models\Devices($this->di);
+        $devInfo = $this->di['currentDevice'];
 
-        if (($settings = $devicesModel->getSettings($devId)) === false) {
-            throw new \Exception("Device settings not found");
-        }
-
-        if (($devInfo = $devicesModel->getDeviceInfo($devId)) === false) {
-            throw new \Exception("Device info not found");
-        }
-
-        if (($plan = $devicesModel->getPlan($devId)) === false) {
-            throw new \Exception("Plan info not found");
+        if (($settings = $this->getDeviceSettings($devId)) === false) {
+            throw new Settings\SettingsNotFoundException("Device settings not found");
         }
 
         return array(
             'settings' => $settings,
-            'devInfo' => $devInfo,
-            'plan' => $plan,
-            'blackListPhones' => $this->_buildBlackList($settings['bl_phones']),
-            'online' => ($settings['last_visit'] > time() - 20 * 60),
-            'lockActive' => $this->isLockFunctionalActive($devInfo['os'], $devInfo['os_version'], $devInfo['app_version']),
-            'blockSMSActive' => $this->isBlockSMSActive($devInfo['os'], $devInfo['os_version']),
-            'reloadActive' => $this->isReloadFunctionalActive($devInfo['os'], $devInfo['app_version'])
+            'blackListPhones' => $this->buildBlackList($settings['bl_phones']),
+            'lockActive' => DeviceOptions::isLockActive($devInfo['os'], $devInfo['os_version']),
+            'blockSMSActive' => DeviceOptions::isBlockSMSActive($devInfo['os'], $devInfo['os_version']),
+            'rebootApplicationActive' => DeviceOptions::isRebootApplicationActive($devInfo['os']),
+            'rebootDeviceActive' => DeviceOptions::isRebootDeviceActive($devInfo['os'])
         );
     }
 
-    /**
-     * Check that sms block for black list work on device
-     * 
-     * ios+
-     * android < 4.4 +
-     * blackberry -
-     * 
-     * @param type $os
-     * @param type $osVersion
-     * @param type $appVersion
-     * @return boolean
-     */
-    private function isBlockSMSActive($os, $osVersion)
-    {
-        if ($os == 'android') {
-            return compareOSVersion('android', '4.4', $osVersion, '<');
-        } else if ($os == 'ios') {
-            return true;
-        }
-        
-        return false;
-    }
-
-    /**
-     * Check that lock functional work on device
-     * 
-     * android +
-     * ios < 7.1 +
-     * ios >= 7.1 with app version > 42 +
-     * 
-     * @param type $os
-     * @param type $osVersion
-     * @param type $appVersion
-     * @return boolean
-     */
-    private function isLockFunctionalActive($os, $osVersion, $appVersion)
-    {
-        if ($os === 'android') {
-            return true;
-        }
-
-        if ($os === 'ios') {
-            if (compareOSVersion('ios', '7.1', $osVersion, '<')) {
-                return true;
-            } elseif ($appVersion >= 42) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Check that reload functional work on device
-     * 
-     * android with app version > 63 +
-     * 
-     * @param type $os
-     * @param type $osVersion
-     * @param type $appVersion
-     * @return boolean
-     */
-    private function isReloadFunctionalActive($os, $appVersion)
-    {
-        if ($os === 'android' && $appVersion > 63) {
-            return true;
-        }
-
-        return false;
-    }
-
-}
-
-class SettingsInvalidPhoneNumberException extends \Exception
-{
-    
-}
-
-class SettingsPhoneNumberExistException extends \Exception
-{
-    
-}
-
-class SettingsPhoneNumberNotFoundInListException extends \Exception
-{
-    
-}
-
-class SettingsInvalidDeviceNameException extends \Exception
-{
-    
-}
-
-class SettingsInvalidPasswordException extends \Exception
-{
-    
 }

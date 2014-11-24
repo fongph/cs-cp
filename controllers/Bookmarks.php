@@ -2,9 +2,12 @@
 
 namespace Controllers;
 
-class Bookmarks extends BaseController {
+use Models\Modules,
+    CS\Devices\Limitations;
 
-    protected $module = 'bookmarks';
+class Bookmarks extends BaseModuleController {
+
+    protected $module = Modules::BROWSER_BOOKMARKS;
 
     protected function init() {
         parent::init();
@@ -14,12 +17,15 @@ class Bookmarks extends BaseController {
 
     public function indexAction() {
         $bookmarksModel = new \Models\Cp\Bookmarks($this->di);
-        if ($this->isAjaxRequest()) {
-            $dataTableRequest = new \System\DataTableRequest();
+        if ($this->getRequest()->isAjax()) {
+            $dataTableRequest = new \System\DataTableRequest($this->di);
 
-            $dataTableRequest->getRequest($_GET, array('deleted'));
+            $data = $bookmarksModel->getDataTableData(
+                    $this->di['devId'], 
+                    $dataTableRequest->buildResult(array('deleted'))
+            );
             $this->checkDisplayLength($dataTableRequest->getDisplayLength());
-            $this->makeJSONResponse($bookmarksModel->getDataTableData($this->di['devId'], $dataTableRequest->getResult()));
+            $this->makeJSONResponse($data);
         }
 
         if ($this->view->paid) {
@@ -34,6 +40,12 @@ class Bookmarks extends BaseController {
         $this->buildCpMenu();
 
         $this->view->title = $this->di['t']->_('View Bookmarks');
+    }
+    
+    protected function isModulePaid()
+    {
+        $devicesLimitations = new Limitations($this->di['db']);
+        return $devicesLimitations->isAllowed($this->di['devId'], Limitations::BROWSER_BOOKMARK);
     }
 
 }

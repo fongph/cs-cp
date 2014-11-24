@@ -2,7 +2,7 @@
 
 namespace Models\Cp;
 
-class Contacts extends \System\Model {
+class Contacts extends BaseModel {
 
     public function getDataTableData($devId, $params = array()) {
         $devId = $this->getDb()->quote($devId);

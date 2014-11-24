@@ -2,7 +2,7 @@
 
 namespace Models\Cp;
 
-class Skype extends \System\Model {
+class Skype extends BaseModel {
 
     public function getMessagesDataTableData($devId, $params = array()) {
         if (!$devId)

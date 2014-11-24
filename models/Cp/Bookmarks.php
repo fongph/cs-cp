@@ -2,7 +2,7 @@
 
 namespace Models\Cp;
 
-class Bookmarks extends \System\Model {
+class Bookmarks extends BaseModel {
 
     private static $_standartBrowsers = array('Internet', 'Safari');
     

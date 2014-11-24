@@ -83,7 +83,7 @@
     </div>
     <script type="text/javascript">
         $(document).ready(function() {
-            moment.lang('{$di.locale}');
+            moment.lang('{$di.t->getLocale()}');
             var typeTmpl = _.template('<i class="call-<%= type %> hidden-xs" title="<%= title %>"></i><span class="visible-xs"><%= title %></span>');
 
             var startDate = moment().subtract('days', 29).startOf('day');
@@ -151,7 +151,7 @@
                         iDisplayLength: {$authData.records_per_page},
                         aaSorting: [[2, 'desc']],
                         oLanguage: {
-                            sUrl: '{$di.config.staticDomain}/js/datatables/language/{$di.locale}.txt'
+                            sUrl: '{$di.config.staticDomain}/js/datatables/language/{$di.t->getLocale()}.txt'
                         },
                         aoColumns: [{
                                 mData: "name"
@@ -199,7 +199,7 @@
                         iDisplayLength: {$authData.records_per_page},
                         aaSorting: [[2, 'desc']],
                         oLanguage: {
-                            sUrl: '{$di.config.staticDomain}/js/datatables/language/{$di.locale}.txt'
+                            sUrl: '{$di.config.staticDomain}/js/datatables/language/{$di.t->getLocale()}.txt'
                         },
                         aoColumns: [
                             {
@@ -246,7 +246,7 @@
                         iDisplayLength: {$authData.records_per_page},
                         aaSorting: [[3, 'desc']],
                         oLanguage: {
-                            sUrl: '{$di.config.staticDomain}/js/datatables/language/{$di.locale}.txt'
+                            sUrl: '{$di.config.staticDomain}/js/datatables/language/{$di.t->getLocale()}.txt'
                         },
                         aoColumns: [
                             null,
@@ -366,10 +366,10 @@
     </script>
     {else}
         {if $di.currentDevice.os=='android' && !$di.currentDevice.rooted}
-            {include "content/{$di.locale}/rootPhone.html"}
+            {include "content/{$di.t->getLocale()}/rootPhone.html"}
         {else}
             <h3>{$di.t->_('Waiting for messages... Why can the data be unavailable?')}</h3>
-            {include "content/{$di.locale}/noData.html"}
+            {include "content/{$di.t->getLocale()}/noData.html"}
         {/if}
     {/if}
 </div>

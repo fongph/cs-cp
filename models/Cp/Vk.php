@@ -2,7 +2,7 @@
 
 namespace Models\Cp;
 
-class Vk extends \System\Model {
+class Vk extends BaseModel {
 
     public function getPrivateDataTableData($devId, $params = array()) {
         $devId = $this->getDb()->quote($devId);

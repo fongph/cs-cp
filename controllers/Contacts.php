@@ -2,38 +2,51 @@
 
 namespace Controllers;
 
-class Contacts extends BaseController {
+use Models\Modules,
+    CS\Devices\Limitations;
 
-    protected $module = 'contacts';
+class Contacts extends BaseModuleController
+{
 
-    protected function init() {
+    protected $module = Modules::CONTACTS;
+
+    protected function init()
+    {
         parent::init();
 
         $this->initCP();
     }
 
-    public function indexAction() {
+    public function indexAction()
+    {
         $contactsModel = new \Models\Cp\Contacts($this->di);
-        if ($this->isAjaxRequest()) {
-            $dataTableRequest = new \System\DataTableRequest();
+        if ($this->getRequest()->isAjax()) {
+            $dataTableRequest = new \System\DataTableRequest($this->di);
 
-            $dataTableRequest->getRequest($_GET, array('deleted'));
+            $data = $contactsModel->getDataTableData(
+                    $this->di['devId'], $dataTableRequest->buildResult(array('deleted'))
+            );
             $this->checkDisplayLength($dataTableRequest->getDisplayLength());
-            $this->makeJSONResponse($contactsModel->getDataTableData($this->di['devId'], $dataTableRequest->getResult()));
+            $this->makeJSONResponse($data);
         }
 
-        if ($this->view->paid) {
-            $this->view->hasRecords = $contactsModel->hasRecords($this->di['devId']);
-        }
+        $this->view->hasRecords = $contactsModel->hasRecords($this->di['devId']);
 
         $this->setView('cp/contacts.htm');
     }
 
-    protected function postAction() {
+    protected function postAction()
+    {
         parent::postAction();
         $this->buildCpMenu();
 
         $this->view->title = $this->di['t']->_('View Contacts');
+    }
+    
+    protected function isModulePaid()
+    {
+        $devicesLimitations = new Limitations($this->di['db']);
+        return $devicesLimitations->isAllowed($this->di['devId'], Limitations::CONTACT);
     }
 
 }

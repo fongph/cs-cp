@@ -2,29 +2,36 @@
 
 namespace Controllers;
 
-use System\FlashMessages;
+use System\FlashMessages,
+    Models\Modules,
+    CS\Devices\Limitations;
 
-class Applications extends BaseController {
+class Applications extends BaseModuleController
+{
 
-    protected $module = 'applications';
+    protected $module = Modules::APPLICATIONS;
 
-    protected function init() {
+    protected function init()
+    {
         parent::init();
 
         $this->initCP();
     }
 
-    public function indexAction() {
+    public function indexAction()
+    {
         $applicationsModel = new \Models\Cp\Applications($this->di);
-        if ($this->isAjaxRequest()) {
-            $dataTableRequest = new \System\DataTableRequest();
+        if ($this->getRequest()->isAjax()) {
+            $dataTableRequest = new \System\DataTableRequest($this->di);
 
-            $dataTableRequest->getRequest($_GET);
+            $data = $applicationsModel->getDataTableData(
+                    $this->di['devId'], $dataTableRequest->buildResult()
+            );
             $this->checkDisplayLength($dataTableRequest->getDisplayLength());
-            $this->makeJSONResponse($applicationsModel->getDataTableData($this->di['devId'], $dataTableRequest->getResult()));
-        } else if (isset($_GET['block'])) {
+            $this->makeJSONResponse($data);
+        } else if ($this->getRequest()->get('block') !== null) {
             try {
-                $applicationsModel->setBlock($this->di['devId'], $_GET['block']);
+                $applicationsModel->setBlock($this->di['devId'], $this->getRequest()->get('block'));
                 $this->di['flashMessages']->add(FlashMessages::SUCCESS, $this->di['t']->_('The application has been successfully blocked!'));
             } catch (\Models\Cp\ApplicationsAlreadyBlockedException $e) {
                 $this->di['flashMessages']->add(FlashMessages::INFO, $this->di['t']->_('The application has already been blocked!'));
@@ -33,9 +40,9 @@ class Applications extends BaseController {
             }
 
             $this->redirect($this->di['router']->getRouteUrl('applications'));
-        } else if (isset($_GET['unblock'])) {
+        } else if ($this->getRequest()->get('unblock') !== null) {
             try {
-                $applicationsModel->setUnblock($this->di['devId'], $_GET['unblock']);
+                $applicationsModel->setUnblock($this->di['devId'], $this->getRequest()->get('unblock'));
                 $this->di['flashMessages']->add(FlashMessages::SUCCESS, $this->di['t']->_('The application has been successfully unblocked!'));
             } catch (\Models\Cp\ApplicationsAlreadyUnblockedException $e) {
                 $this->di['flashMessages']->add(FlashMessages::INFO, $this->di['t']->_('The application has already been unblocked!'));
@@ -50,10 +57,18 @@ class Applications extends BaseController {
         $this->setView('cp/applications.htm');
     }
 
-    protected function postAction() {
+    protected function postAction()
+    {
         parent::postAction();
         $this->buildCpMenu();
 
         $this->view->title = $this->di['t']->_('View Applications');
     }
+
+    protected function isModulePaid()
+    {
+        $devicesLimitations = new Limitations($this->di['db']);
+        return $devicesLimitations->isAllowed($this->di['devId'], Limitations::APPLICATIONS);
+    }
+
 }

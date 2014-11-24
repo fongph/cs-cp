@@ -25,7 +25,7 @@
     </div>
     <script type="text/javascript">
         $(document).ready(function() {
-            moment.lang('{$di.locale}');
+            moment.lang('{$di.t->getLocale()}');
 
             var keylogger = {
                 startDate: moment().subtract('days', 29).startOf('day'),
@@ -73,7 +73,7 @@
                         iDisplayLength: {$authData.records_per_page},
                         aaSorting: [[0, 'desc']],
                         oLanguage: {
-                            sUrl: "{$di.config.staticDomain}/js/datatables/language/{$di.locale}.txt"
+                            sUrl: "{$di.config.staticDomain}/js/datatables/language/{$di.t->getLocale()}.txt"
                         },
                         aoColumns: [{
                                 fnRender: function(obj, value) {
@@ -131,10 +131,10 @@
     </script>
     {else}
         {if $di.currentDevice.os=='android'}
-            {include "content/{$di.locale}/noDataKeyloggerAndroid.html"}
+            {include "content/{$di.t->getLocale()}/noDataKeyloggerAndroid.html"}
         {else}
             <h3>{$di.t->_('Waiting for data... Why can the data be unavailable?')}</h3>
-            {include "content/{$di.locale}/noData.html"}
+            {include "content/{$di.t->getLocale()}/noData.html"}
         {/if}
     {/if}
 </div>

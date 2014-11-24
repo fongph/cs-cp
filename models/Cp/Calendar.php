@@ -2,7 +2,7 @@
 
 namespace Models\Cp;
 
-class Calendar extends \System\Model {
+class Calendar extends BaseModel {
 
     public function getEventsList($devId, $from, $to, $timeOffset = 0) {
         if (!$devId)

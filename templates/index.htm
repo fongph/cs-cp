@@ -52,27 +52,6 @@
                             </div>
                         </div>
                         <div class="content-wrapper">
-                            <div style="background: #028fd6; text-align: center;">
-                                {if $di.devicesList[$di.devId].plan=='Lite'}
-                                <a href="{$di.config.domain}/cp/upgrade?p=1">
-                                    <div class="hidden-xs">
-                                        <img src="{$di.config.staticDomain}/banners/upgrade-pro.png" alt="" />
-                                    </div>
-                                    <div class="visible-xs">
-                                        <img src="{$di.config.staticDomain}/banners/upgrade-pro-mobile.png" alt="" />
-                                    </div>
-                                </a>
-                                {elseif $di.devicesList[$di.devId].plan=='PRO'}
-                                <a href="{$di.config.domain}/cp/upgrade">
-                                    <div class="hidden-xs">
-                                        <img src="{$di.config.staticDomain}/banners/upgrade-pro-plus.png" alt="" />
-                                    </div>
-                                    <div class="visible-xs">
-                                        <img src="{$di.config.staticDomain}/banners/upgrade-pro-plus-mobile.png" alt="" />
-                                    </div>
-                                </a>
-                                {/if}
-                            </div>
                             {$content}
                         </div>
                         {else}

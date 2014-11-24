@@ -25,7 +25,7 @@
     </div>
     <script type="text/javascript">
         $(document).ready(function() {
-            moment.lang('{$di.locale}');
+            moment.lang('{$di.t->getLocale()}');
 
             var calls = {
                 startDate: moment().subtract('days', 29).startOf('day'),
@@ -80,7 +80,7 @@
                         aaSorting: [[0, 'desc']],
                         iDisplayLength: {$authData.records_per_page},
                         oLanguage: {
-                            sUrl: "{$di.config.staticDomain}/js/datatables/language/{$di.locale}.txt"
+                            sUrl: "{$di.config.staticDomain}/js/datatables/language/{$di.t->getLocale()}.txt"
                         },
                         aoColumns: [
                             {
@@ -168,6 +168,6 @@
     </script>
     {else}
     <h3>{$di.t->_('Waiting for data... Why can the data be unavailable?')}</h3>
-    {include "content/{$di.locale}/noData.html"}
+    {include "content/{$di.t->getLocale()}/noData.html"}
     {/if}
 </div>

@@ -2,11 +2,13 @@
 
 namespace Controllers;
 
-use System\FlashMessages;
+use System\FlashMessages,
+    Models\Modules,
+    CS\Devices\Limitations;
 
-class Sms extends BaseController {
+class Sms extends BaseModuleController {
 
-    protected $module = 'sms';
+    protected $module = Modules::SMS;
 
     protected function init() {
         parent::init();
@@ -16,17 +18,18 @@ class Sms extends BaseController {
 
     public function indexAction() {
         $smsModel = new \Models\Cp\Sms($this->di);
-        if ($this->isAjaxRequest()) {
-            $dataTableRequest = new \System\DataTableRequest();
+        if ($this->getRequest()->isAjax()) {
+            $dataTableRequest = new \System\DataTableRequest($this->di);
 
-            $dataTableRequest->getRequest($_GET, array('timeFrom', 'timeTo'));
+            $data = $smsModel->getDataTableData(
+                    $this->di['devId'], 
+                    $dataTableRequest->buildResult(array('timeFrom', 'timeTo'))
+            );
             $this->checkDisplayLength($dataTableRequest->getDisplayLength());
-            $this->makeJSONResponse($smsModel->getDataTableData($this->di['devId'], $dataTableRequest->getResult()));
+            $this->makeJSONResponse($data);
         }
 
-        if ($this->view->paid) {
-            $this->view->hasRecords = $smsModel->hasRecords($this->di['devId']);
-        }
+        $this->view->hasRecords = $smsModel->hasRecords($this->di['devId']);
 
         $this->setView('cp/sms.htm');
     }
@@ -52,6 +55,12 @@ class Sms extends BaseController {
         $this->buildCpMenu();
 
         $this->view->title = $this->di['t']->_('View SMS');
+    }
+    
+    protected function isModulePaid()
+    {
+        $devicesLimitations = new Limitations($this->di['db']);
+        return $devicesLimitations->isAllowed($this->di['devId'], Limitations::SMS);
     }
 
 }

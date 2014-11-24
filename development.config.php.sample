@@ -7,14 +7,12 @@ $default['db'] = array(
     'dbname' => 'main'
 );
 
-$default['dataDb'] = function() {
-    return array(
-        'host' => 'localhost',
-        'username' => 'root',
-        'password' => '',
-        'dbname' => 'data'
-    );
-};
+$default['dataDb'] = array(
+    'host' => 'localhost',
+    'username' => 'root',
+    'password' => '',
+    'dbname' => 'data'
+);
 
 $default['redis'] = array(
     'database' => 1

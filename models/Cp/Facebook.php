@@ -2,7 +2,7 @@
 
 namespace Models\Cp;
 
-class Facebook extends \System\Model {
+class Facebook extends BaseModel {
 
     public function getDataTableData($devId, $params = array()) {
         if (!$devId)

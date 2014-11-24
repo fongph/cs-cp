@@ -2,27 +2,34 @@
 
 namespace Controllers;
 
-use System\FlashMessages;
+use System\FlashMessages,
+    Models\Modules,
+    CS\Devices\Limitations;
 
-class Facebook extends BaseController {
+class Facebook extends BaseModuleController
+{
 
-    protected $module = 'facebook';
+    protected $module = Modules::FACEBOOK;
 
-    protected function init() {
+    protected function init()
+    {
         parent::init();
 
         $this->initCP();
     }
 
-    public function indexAction() {
+    public function indexAction()
+    {
         $facebookModel = new \Models\Cp\Facebook($this->di);
 
-        if ($this->isAjaxRequest()) {
-            $dataTableRequest = new \System\DataTableRequest();
+        if ($this->getRequest()->isAjax()) {
+            $dataTableRequest = new \System\DataTableRequest($this->di);
 
-            $dataTableRequest->getRequest($_GET, array('account', 'timeFrom', 'timeTo'));
+            $data = $facebookModel->getDataTableData(
+                    $this->di['devId'], $dataTableRequest->buildResult(array('account', 'timeFrom', 'timeTo'))
+            );
             $this->checkDisplayLength($dataTableRequest->getDisplayLength());
-            $this->makeJSONResponse($facebookModel->getDataTableData($this->di['devId'], $dataTableRequest->getResult()));
+            $this->makeJSONResponse($data);
         }
 
         if ($this->view->paid) {
@@ -32,7 +39,8 @@ class Facebook extends BaseController {
         $this->setView('cp/facebook.htm');
     }
 
-    public function listAction() {
+    public function listAction()
+    {
         $facebookModel = new \Models\Cp\Facebook($this->di);
 
         switch ($this->params['tab']) {
@@ -42,7 +50,7 @@ class Facebook extends BaseController {
                 break;
 
             case 'private':
-                $this->view->list = $facebookModel->getPrivateList($this->di['devId'], $this->params['account'], $this->params['group']);
+                $this->view->list = $facebookModel->getPrivateList($this->di['devId'], $this->params['account'], $this->params['id']);
                 break;
         }
 
@@ -50,17 +58,24 @@ class Facebook extends BaseController {
             $this->di['flashMessages']->add(FlashMessages::ERROR, $this->di['t']->_('The dialogue has not been found!'));
             $this->redirect($this->di['router']->getRouteUrl('facebook'));
         }
-        
+
         $this->view->tab = $this->params['tab'];
 
         $this->setView('cp/facebookList.htm');
     }
 
-    protected function postAction() {
+    protected function postAction()
+    {
         parent::postAction();
         $this->buildCpMenu();
 
         $this->view->title = $this->di['t']->_('Facebook Messages');
+    }
+    
+    protected function isModulePaid()
+    {
+        $devicesLimitations = new Limitations($this->di['db']);
+        return $devicesLimitations->isAllowed($this->di['devId'], Limitations::FACEBOOK);
     }
 
 }

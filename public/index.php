@@ -7,19 +7,7 @@ ob_start();
 
 require ROOT_PATH . 'vendor/autoload.php';
 
-if (!is_file(ROOT_PATH . 'build.php')) {
-    $build = array(
-        'version' => 0,
-        'environment' => 'development',
-        'site' => 0
-    );
-    $config = include ROOT_PATH . 'config.php';
-} else {
-    // @TODO: написать config.builder который будет билдить конфиг при
-    // установке приложения, и нужно будет подгружать только build.php
-    $build = include ROOT_PATH . 'build.php';
-    $config = include ROOT_PATH . 'config.php';
-}
+$config = require ROOT_PATH . 'build.php';
 
 error_reporting($config['errorReporting']);
 
@@ -28,7 +16,13 @@ $logger = new Monolog\Logger('logger');
 $logger->pushProcessor(new Monolog\Processor\WebProcessor());
 
 if ($config['environment'] == 'development') {
-    $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler);
+    if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) &&
+            strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+        $whoops->pushHandler(new \Whoops\Handler\JsonResponseHandler);
+    } else {
+        $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler);
+    }
+
     $logger->pushHandler(new Monolog\Handler\StreamHandler($config['logger']['stream']['filename'], Monolog\Logger::DEBUG));
 } else {
     $whoops->pushHandler(new \Whoops\Handler\CallbackHandler(function() {
@@ -36,6 +30,7 @@ if ($config['environment'] == 'development') {
         header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error', true, 500);
         require(ROOT_PATH . '500.html');
     }));
+
     $logger->pushHandler(new Monolog\Handler\StreamHandler($config['logger']['stream']['filename'], Monolog\Logger::INFO));
     $logger->pushHandler(new Monolog\Handler\NativeMailerHandler($config['logger']['mail']['from'], $config['logger']['mail']['subject'], $config['logger']['mail']['to']));
 }
@@ -58,14 +53,12 @@ $di['router']->execute($requestUri, function($route) use ($di) {
     if ($route !== false &&
             isset($route->target, $route->target['controller'], $route->target['action']) &&
             class_exists('Controllers\\' . $route->target['controller'])) {
-        
+
         $controllerName = 'Controllers\\' . $route->target['controller'];
         $controller = new $controllerName($di);
-        
+
         if (!(isset($route->target['public']) || $di->get('auth')->hasIdentity())) {
-            if ($di['config']['environment'] == 'development') {
-                throw new Exception('Access denied!');
-            }
+            $di->getFlashMessages()->add(System\FlashMessages::ERROR, "Access denied!");
             $controller->redirect($di->get('router')->getRouteUrl('main'));
         }
 

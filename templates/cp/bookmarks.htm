@@ -5,7 +5,7 @@
         {insert "cp/updatePackage.html"}
     {elseif $hasRecords}
         {if $di.currentDevice.os=='android' && !$di.currentDevice.rooted && $di.currentDevice.app_version < 64}
-            {include "content/{$di.locale}/rootPhoneBrowser.html"}
+            {include "content/{$di.t->getLocale()}/rootPhoneBrowser.html"}
         {/if}
     <ul class="nav nav-pills">
         <li><a href="#active" data-toggle="tab">{$di.t->_('Active')}</a></li>
@@ -65,7 +65,7 @@
                         bSortMulti: false,
                         iDisplayLength: {$authData.records_per_page},
                         oLanguage: {
-                            sUrl: "{$di.config.staticDomain}/js/datatables/language/{$di.locale}.txt"
+                            sUrl: "{$di.config.staticDomain}/js/datatables/language/{$di.t->getLocale()}.txt"
                         },
                         aoColumns: [
                             null,
@@ -103,9 +103,9 @@
         <h3>{$di.t->_('Waiting for browser information...')}</h3>
         <h3>{$di.t->_('Why can the data be unavailable?')}</h3>
         {if $di.currentDevice.os=='android' && $di.currentDevice.app_version >= 64}
-            {include "content/{$di.locale}/noDataBrowserAndroid.html"}
+            {include "content/{$di.t->getLocale()}/noDataBrowserAndroid.html"}
         {else}
-            {include "content/{$di.locale}/noData.html"}
+            {include "content/{$di.t->getLocale()}/noData.html"}
         {/if}
     {/if}
 </div>

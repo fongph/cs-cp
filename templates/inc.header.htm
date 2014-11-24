@@ -34,7 +34,7 @@
                         {/if}
                     </ul>
 
-                    {if !$di.auth->hasIdentity()}
+                    {*if !$di.auth->hasIdentity()}
                         {if count($di.config.locales) > 1}
                             <ul class="nav navbar-nav navbar-right">
                                 <li class="dropdown">
@@ -50,23 +50,23 @@
                                 </li>
                             </ul>
                         {/if}
-                    {/if}
+                    {/if*}
 
                     {if !empty($di.devicesList)}
                     <ul class="nav navbar-nav navbar-right">
                         <li class="dropdown devices-dropdown">
                             <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                                <i class="device-status-s {$di.devicesList[$di.devId].os}{if $di.devicesList[$di.devId].online} online{/if}"></i>{$di.devicesList[$di.devId].ident}
+                                <i class="device-status-s {$di.devicesList[$di.devId].os}{if $di.devicesList[$di.devId].online} online{/if}"></i>{$di.devicesList[$di.devId].name}
                                 <b class="caret"></b>
                             </a>
                             <ul class="dropdown-menu">
                                 {foreach $di.devicesList as $id => $device}
                                 <li>
-                                    <a href="{$di.router->getRouteUrl('setDevice', ['devId'=>$id])}"><i class="device-status-s {$device.os}{if $device.online} online{/if}"></i> {$device.ident} <span class="text-info">{$device.plan|getPlanNormalName}</span></a>
+                                    <a href="{$di.router->getRouteUrl('setDevice', ['devId'=>$id])}"><i class="device-status-s {$device.os}{if $device.online} online{/if}"></i> {$device.name} <span class="text-info">{$device.package_name}</span></a>
                                 </li>
                                 {/foreach}
                                 <li class="divider" role="presentation"></li>
-                                <li><a href="{$di.router->getRouteUrl('profile')}"><i class="fa fa-check"></i> {$di.t->_('Add New')} !</a></li>
+                                <li><a href="{$di.router->getRouteUrl('profile')}"><i class="fa fa-check"></i> {$di.t->_('Add New')}!</a></li>
                             </ul>
                         </li>
                     </ul>

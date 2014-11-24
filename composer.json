@@ -29,10 +29,11 @@
     ],
     "require": {
         "php": ">=5.3.0",
-        "rastor/system": "dev-master",
+        "rastor/system": "~0.5",
         "fenom/fenom": "2.*",
         "monolog/monolog": "1.*",
         "filp/whoops": "~1.0",
+        "rastor/amazon-s3-php-class": "0.5.1",
         "boomers/ip": "dev-master",
         "boomers/cs-models": "dev-master",
         "boomers/cs-mail": "dev-master",
@@ -41,7 +42,7 @@
         "boomers/cs-devices": "dev-master"
     },
     "require-dev": {
-        "maximebf/consolekit": "~1.0"
+        "symfony/console": "3.0.*@dev"
     },
     "autoload": {
         "psr-4": {

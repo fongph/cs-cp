@@ -2,7 +2,7 @@
 
 namespace Models\Cp;
 
-class BrowserHistory extends \System\Model {
+class BrowserHistory extends BaseModel {
 
     public function getDataTableData($devId, $params = array()) {
         $devId = $this->getDb()->quote($devId);
@@ -127,14 +127,14 @@ class BrowserHistory extends \System\Model {
 
     public function addSiteBlock($devId, $domain) {
         if (($host = $this->getHostFromUrl($domain)) === false) {
-            throw new BrowserHistoryInvalidDomainNameException('Invalid domain name');
+            throw new BrowserHistory\InvalidDomainNameException('Invalid domain name');
         }
 
         $devId = $this->getDB()->quote($devId);
         $host = $this->getDB()->quote($host);
 
         if (!$this->getDb()->exec("INSERT INTO `browser_blocked` SET `dev_id` =  {$devId}, `domain` = {$host}, `unblocked` = 0 ON DUPLICATE KEY UPDATE `unblocked` = 0")) {
-            throw new BrowserHistoryDomainAlreadyExistsException('Domain already exist');
+            throw new BrowserHistory\DomainAlreadyExistsException('Domain already exist');
         }
 
         return true;
@@ -142,7 +142,7 @@ class BrowserHistory extends \System\Model {
 
     public function addSiteUnblock($devId, $domain) {
         if (($host = $this->getHostFromUrl($domain)) === false) {
-            throw new BrowserHistoryInvalidDomainNameException('Invalid domain name');
+            throw new BrowserHistory\InvalidDomainNameException('Invalid domain name');
         }
 
         $escapedDevId = $this->getDB()->quote($devId);
@@ -150,10 +150,10 @@ class BrowserHistory extends \System\Model {
 
         if ($this->getDb()->exec("UPDATE `browser_blocked` SET `unblocked` = 1 WHERE `dev_id` = $escapedDevId AND `domain` = $escapedHost LIMIT 1") !== 1) {
             if ($this->exist($devId, $host)) {
-                throw new BrowserHistoryDomainAlreadyUnblockedException('Domain already unblocked');
+                throw new BrowserHistory\DomainAlreadyUnblockedException('Domain already unblocked');
             }
             
-            throw new BrowserHistoryUndefinedException('Application to unblock not found');
+            throw new BrowserHistory\UndefinedException('Application to unblock not found');
         }
         
         return true;

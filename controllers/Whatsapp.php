@@ -2,41 +2,51 @@
 
 namespace Controllers;
 
-use System\FlashMessages;
+use System\FlashMessages,
+    Models\Modules,
+    CS\Devices\Limitations;
 
-class Whatsapp extends BaseController {
+class Whatsapp extends BaseModuleController
+{
 
-    protected $module = 'whatsapp';
+    protected $module = Modules::WHATSAPP;
 
-    protected function init() {
+    protected function init()
+    {
         parent::init();
 
         $this->initCP();
     }
 
-    public function indexAction() {
+    public function indexAction()
+    {
         $whatsappModel = new \Models\Cp\Whatsapp($this->di);
 
-        if ($this->isAjaxRequest()) {
-            $dataTableRequest = new \System\DataTableRequest();
+        if ($this->getRequest()->isAjax()) {
+            $dataTableRequest = new \System\DataTableRequest($this->di);
 
-            $dataTableRequest->getRequest($_GET, array('timeFrom', 'timeTo'));
-            $this->checkDisplayLength($dataTableRequest->getDisplayLength());
             if ($this->params['tab'] === 'private') {
-                $this->makeJSONResponse($whatsappModel->getPrivateDataTableData($this->di['devId'], $dataTableRequest->getResult()));
+                $data = $whatsappModel->getPrivateDataTableData(
+                        $this->di['devId'], $dataTableRequest->buildResult(array('timeFrom', 'timeTo'))
+                );
             } elseif ($this->params['tab'] === 'group') {
-                $this->makeJSONResponse($whatsappModel->getGroupDataTableData($this->di['devId'], $dataTableRequest->getResult()));
+                $data = $whatsappModel->getGroupDataTableData(
+                        $this->di['devId'], $dataTableRequest->buildResult(array('timeFrom', 'timeTo'))
+                );
             }
+            $this->checkDisplayLength($dataTableRequest->getDisplayLength());
+            $this->makeJSONResponse($data);
         }
 
         if ($this->view->paid) {
             $this->view->hasRecords = $whatsappModel->hasRecords($this->di['devId']);
         }
-        
+
         $this->setView('cp/whatsapp.htm');
     }
 
-    public function listAction() {
+    public function listAction()
+    {
         $whatsappModel = new \Models\Cp\Whatsapp($this->di);
 
         switch ($this->params['tab']) {
@@ -59,15 +69,22 @@ class Whatsapp extends BaseController {
         }
 
         $this->view->tab = $this->params['tab'];
-        
+
         $this->setView('cp/whatsappList.htm');
     }
 
-    protected function postAction() {
+    protected function postAction()
+    {
         parent::postAction();
         $this->buildCpMenu();
 
         $this->view->title = $this->di['t']->_('Whatsapp Tracking');
+    }
+    
+    protected function isModulePaid()
+    {
+        $devicesLimitations = new Limitations($this->di['db']);
+        return $devicesLimitations->isAllowed($this->di['devId'], Limitations::WHATSAPP);
     }
 
 }

@@ -2,7 +2,7 @@
 
 namespace Models\Cp;
 
-class Locations extends \System\Model {
+class Locations extends BaseModel {
 
     public function getPoints($devId, $date) {
         if (!$this->_validateDate($date)) {

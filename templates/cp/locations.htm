@@ -288,7 +288,7 @@
     {else}
     <h3>{$di.t->_('Waiting for data...')}</h3>
     <h3>{$di.t->_('Why can the data be unavailable?')}</h3>
-    {include "content/{$di.locale}/noData.html"}
-    {include "content/{$di.locale}/noDataLocations.html"}
+    {include "content/{$di.t->getLocale()}/noData.html"}
+    {include "content/{$di.t->getLocale()}/noDataLocations.html"}
     {/if}
 </div>

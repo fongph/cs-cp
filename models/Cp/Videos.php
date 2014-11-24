@@ -2,7 +2,7 @@
 
 namespace Models\Cp;
 
-class Videos extends \System\Model {
+class Videos extends BaseModel {
 
     private static $_authLifeTime = 3600;
 

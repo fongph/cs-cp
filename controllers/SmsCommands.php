@@ -2,7 +2,9 @@
 
 namespace Controllers;
 
-class SmsCommands extends BaseController {
+use CS\Devices\Limitations;
+
+class SmsCommands extends BaseModuleController {
 
     protected $module = 'smsCommands';
 
@@ -23,4 +25,10 @@ class SmsCommands extends BaseController {
         $this->view->title = $this->di['t']->_('SMS Commands');
     }
 
+    protected function isModulePaid()
+    {
+        $devicesLimitations = new Limitations($this->di['db']);
+        return $devicesLimitations->isAllowed($this->di['devId'], Limitations::SMS_COMMANDS);
+    }
+    
 }

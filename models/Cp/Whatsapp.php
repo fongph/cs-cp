@@ -2,12 +2,9 @@
 
 namespace Models\Cp;
 
-class Whatsapp extends \System\Model {
+class Whatsapp extends BaseModel {
 
     public function getPrivateDataTableData($devId, $params = array()) {
-        if (!$devId)
-            return null;
-
         $devId = $this->getDb()->quote($devId);
 
         $search = '';
@@ -80,9 +77,6 @@ class Whatsapp extends \System\Model {
     }
 
     public function getGroupDataTableData($devId, $params = array()) {
-        if (!$devId)
-            return null;
-
         $devId = $this->getDb()->quote($devId);
 
         $search = '';

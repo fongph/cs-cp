@@ -13,10 +13,14 @@ class Billing extends BaseController
         if ($this->getRequest()->isAjax()) {
             $billingModel = new \Models\Billing($this->di);
 
-            $dataTableRequest = new \System\DataTableRequest();
-            $dataTableRequest->getRequest($this->getRequest()->get(), array('active'));
+            $dataTableRequest = new \System\DataTableRequest($this->di);
+
+            $data = $billingModel->getDataTableData(
+                    $this->auth['id'], 
+                    $dataTableRequest->buildResult(array('active'))
+            );
             $this->checkDisplayLength($dataTableRequest->getDisplayLength());
-            $this->makeJSONResponse($billingModel->getDataTableData($this->auth['id'], $dataTableRequest->getResult()));
+            $this->makeJSONResponse($data);
         }
 
         $this->view->title = $this->di->getTranslator()->_('Payments & Devices');
@@ -28,7 +32,6 @@ class Billing extends BaseController
     public function assignDeviceAction()
     {
         $devicesManager = new DevicesManager($this->di['db']);
-        //$devicesModel = new \Models\Devices($this->di);
 
         $license = $this->getRequest()->get('license');
         if ($license == null ||

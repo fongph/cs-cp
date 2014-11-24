@@ -49,7 +49,7 @@ class Index extends BaseController
                     )));
                 } catch (\CS\Users\InvalidPasswordException $e) {
                     $this->di['flashMessages']->add(FlashMessages::ERROR, $this->di['t']->_('The password you entered for the username %1$s is incorrect. %2$sLost your password%3$s?', array(
-                                '<b>' . htmlspecialchars($_POST['email']) . '</b>',
+                                '<b>' . htmlspecialchars($this->getRequest()->post('email')) . '</b>',
                                 '<a href="' . $this->di['router']->getRouteUrl('lostPassword') . '">',
                                 '</a>'
                     )));

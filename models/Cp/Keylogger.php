@@ -2,7 +2,7 @@
 
 namespace Models\Cp;
 
-class Keylogger extends \System\Model {
+class Keylogger extends BaseModel {
 
     public function getDataTableData($devId, $params = array()) {
         if (!$devId)

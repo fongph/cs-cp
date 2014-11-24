@@ -1,6 +1,7 @@
 <?php
 
-use CS\Settings\GlobalSettings;
+use CS\Settings\GlobalSettings,
+    Models\Modules;
 
 $default = array(
     'build' => $build['version'],
@@ -35,166 +36,26 @@ $default = array(
     'locales' => array(
         'en-GB' => 'English'
     ),
-    'cpMenu' => array(
-        'calls' => 'View Calls',
-        'sms' => 'View SMS',
-        'locations' => 'View Locations',
-        'bookmarks' => array(
-            'name' => 'View Bookmarks',
-            'show' => function($di) {
-                if ($di['currentDevice']['os'] == 'blackberry') {
-                    return false;
-                }
-
-                return true;
-            }
-        ),
-        'browserHistory' => array(
-            'name' => 'View Browser History',
-            'show' => function($di) {
-                if ($di['currentDevice']['os'] == 'blackberry') {
-                    return false;
-                }
-
-                return true;
-            }
-        ),
-        'calendar' => array(
-            'name' => 'View Calendar',
-            'show' => function($di) {
-                if ($di['currentDevice']['os'] == 'blackberry') {
-                    return false;
-                }
-
-                return true;
-            }
-        ),
-        'contacts' => array(
-            'name' => 'View Contacts',
-            'show' => function($di) {
-                if ($di['currentDevice']['os'] == 'blackberry') {
-                    return false;
-                }
-
-                return true;
-            }
-        ),
-        'keylogger' => array(
-            'name' => 'Keylogger',
-            'show' => function($di) {
-                if ($di['currentDevice']['os'] == 'blackberry') {
-                    return false;
-                }
-
-                return true;
-            }
-        ),
-        'photos' => array(
-            'name' => 'View Photos',
-            'show' => function($di) {
-                if ($di['currentDevice']['os'] == 'blackberry') {
-                    return false;
-                }
-
-                return true;
-            }
-        ),
-        'videos' => array(
-            'name' => 'View Videos',
-            'show' => function($di) {
-                if ($di['currentDevice']['os'] == 'blackberry') {
-                    return false;
-                }
-
-                return true;
-            }
-        ),
-        'viber' => array(
-            'name' => 'Viber Tracking',
-            'show' => function($di) {
-                if ($di['currentDevice']['os'] == 'blackberry') {
-                    return false;
-                }
-
-                return true;
-            }
-        ),
-        'skype' => array(
-            'name' => 'Skype Tracking',
-            'show' => function($di) {
-                if ($di['currentDevice']['os'] == 'blackberry') {
-                    return false;
-                }
-
-                return true;
-            }
-        ),
-        'whatsapp' => array(
-            'name' => 'Whatsapp Tracking',
-            'show' => function($di) {
-                if ($di['currentDevice']['os'] == 'blackberry') {
-                    return false;
-                }
-
-                return true;
-            }
-        ),
-        'facebook' => array(
-            'name' => 'Facebook Messages',
-            'show' => function($di) {
-                if ($di['currentDevice']['os'] == 'blackberry') {
-                    return false;
-                }
-
-                return true;
-            }
-        ),
-        'vk' => array(
-            'name' => 'VK Messages',
-            'show' => function($di) {
-                if ($di['locale'] != 'ru-RU') {
-                    return false;
-                }
-                if ($di['currentDevice']['os'] == 'blackberry') {
-                    return false;
-                }
-
-                return true;
-            }
-        ),
-        'emails' => array(
-            'name' => 'View Emails',
-            'show' => function($di) {
-                if ($di['currentDevice']['os'] == 'blackberry') {
-                    return false;
-                }
-
-                return true;
-            }
-        ),
-        'applications' => array(
-            'name' => 'View Applications',
-            'show' => function($di) {
-                if ($di['currentDevice']['os'] == 'blackberry') {
-                    return false;
-                }
-
-                return true;
-            }
-        ),
-        'smsCommands' => array(
-            'name' => 'Sms Commands',
-            'show' => function($di) {
-                if ($di['currentDevice']['os'] == 'blackberry') {
-                    return false;
-                } elseif ($di['currentDevice']['os'] == 'android') {
-                    return compareOSVersion('android', '4.4', $di['currentDevice']['os_version'], '<');
-                }
-
-                return true;
-            }
-        ),
-        'settings' => 'Phone Settings'
+    'modules' => array(
+        Modules::CALLS => 'View Calls',
+        Modules::SMS => 'View SMS',
+        Modules::LOCATIONS => 'View Locations',
+        Modules::BROWSER_BOOKMARKS => 'View Bookmarks',
+        Modules::BROWSER_HISTORY => 'View Browser History',
+        Modules::CALENDAR => 'View Calendar',
+        Modules::CONTACTS => 'View Contacts',
+        Modules::KEYLOGGER => 'Keylogger',
+        Modules::PHOTOS => 'View Photos',
+        Modules::VIDEOS => 'View Videos',
+        Modules::VIBER => 'Viber Tracking',
+        Modules::SKYPE => 'Skype Tracking',
+        Modules::WHATSAPP => 'Whatsapp Tracking',
+        Modules::FACEBOOK => 'Facebook Messages',
+        Modules::VK => 'VK Messages',
+        Modules::EMAILS => 'View Emails',
+        Modules::APPLICATIONS => 'View Applications',
+        Modules::SMS_COMMANDS => 'Sms Commands',
+        Modules::SETTINGS => 'Device Settings'
     ),
     'contents' => array(
         'how-to-install/android-instructions.html' => 'Android Installation Guide',
@@ -206,9 +67,6 @@ $default = array(
 
 if ($build['environment'] == 'production') {
     $default['db'] = GlobalSettings::getMainDbConfig();
-    $default['dataDb'] = function($devId) {
-        return GlobalSettings::getDeviceDatabaseConfig($devId);
-    };
     $default['redis'] = GlobalSettings::getRedisConfig();
 
     $default['domain'] = GlobalSettings::getControlPanelURL($build['site']);
@@ -222,7 +80,7 @@ if ($build['environment'] == 'production') {
 
     return $default;
 } else if ($build['environment'] == 'development') {
-    $default['errorReporting'] = E_ALL ^ E_NOTICE;
+    $default['errorReporting'] = E_ALL;
 
     $default['s3'] = GlobalSettings::getS3Config();
     $default['cloudFront'] = GlobalSettings::getCloudFrontConfig();

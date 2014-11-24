@@ -2,9 +2,7 @@
 
 namespace Models\Cp;
 
-use System\DataTableRequestInvalidRequestData;
-
-class Emails extends \System\Model {
+class Emails extends BaseModel {
 
     const PATH_ALL_KEY = '*ALL*';
     

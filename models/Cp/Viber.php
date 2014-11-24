@@ -2,7 +2,7 @@
 
 namespace Models\Cp;
 
-class Viber extends \System\Model {
+class Viber extends BaseModel {
 
     public function getPrivateDataTableData($devId, $params = array()) {
         if (!$devId)

@@ -74,6 +74,17 @@ class Users extends Model
         return true;
     }
 
+    public function setRecordsPerPage($value) {
+        $auth = $this->di['auth']->getIdentity();
+
+        $userRecord = $this->getUserRecord()
+                ->load($auth['id']);
+        
+        $userRecord->setRecordsPerPage($value);
+        
+        return $userRecord->save();
+    }
+    
     public function simpleLogin($id, $hash)
     {
         $id = intval($id);

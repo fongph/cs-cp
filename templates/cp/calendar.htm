@@ -21,7 +21,7 @@
     <script>
         $(document).ready(function() {
             var calendar = $('#calendar').calendar({
-                language: '{$di.locale}',
+                language: '{$di.t->getLocale()}',
                 events_source: '{$di.config.domain}/cp/calendar',
                 view: 'month',
                 tmpl_path: '{$di.config.staticDomain}/tpl/',
@@ -64,6 +64,6 @@
     {else}
     <h3>{$di.t->_('There are no calendar events on the device')}</h3>
     <h3>{$di.t->_('Waiting for data... Why can the data be unavailable?')}</h3>
-    {include "content/{$di.locale}/noData.html"}
+    {include "content/{$di.t->getLocale()}/noData.html"}
     {/if}
 </div>

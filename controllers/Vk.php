@@ -2,31 +2,40 @@
 
 namespace Controllers;
 
-use System\FlashMessages;
+use System\FlashMessages,
+    Models\Modules,
+    CS\Devices\Limitations;
 
-class Vk extends BaseController {
+class Vk extends BaseModuleController
+{
 
-    protected $module = 'vk';
+    protected $module = Modules::VK;
 
-    protected function init() {
+    protected function init()
+    {
         parent::init();
 
         $this->initCP();
     }
 
-    public function indexAction() {
+    public function indexAction()
+    {
         $vkModel = new \Models\Cp\Vk($this->di);
 
-        if ($this->isAjaxRequest()) {
-            $dataTableRequest = new \System\DataTableRequest();
+        if ($this->getRequest()->isAjax()) {
+            $dataTableRequest = new \System\DataTableRequest($this->di);
 
-            $dataTableRequest->getRequest($_GET, array('account', 'timeFrom', 'timeTo'));
-            $this->checkDisplayLength($dataTableRequest->getDisplayLength());
             if ($this->params['tab'] === 'private') {
-                $this->makeJSONResponse($vkModel->getPrivateDataTableData($this->di['devId'], $dataTableRequest->getResult()));
+                $data = $vkModel->getPrivateDataTableData(
+                        $this->di['devId'], $dataTableRequest->buildResult(array('account', 'timeFrom', 'timeTo'))
+                );
             } elseif ($this->params['tab'] === 'group') {
-                $this->makeJSONResponse($vkModel->getGroupDataTableData($this->di['devId'], $dataTableRequest->getResult()));
+                $data = $vkModel->getGroupDataTableData(
+                        $this->di['devId'], $dataTableRequest->buildResult(array('account', 'timeFrom', 'timeTo'))
+                );
             }
+            $this->checkDisplayLength($dataTableRequest->getDisplayLength());
+            $this->makeJSONResponse($data);
         }
 
         if ($this->view->paid) {
@@ -36,7 +45,8 @@ class Vk extends BaseController {
         $this->setView('cp/vk.htm');
     }
 
-    public function listAction() {
+    public function listAction()
+    {
         $vkModel = new \Models\Cp\Vk($this->di);
 
         switch ($this->params['tab']) {
@@ -59,11 +69,18 @@ class Vk extends BaseController {
         $this->setView('cp/vkList.htm');
     }
 
-    protected function postAction() {
+    protected function postAction()
+    {
         parent::postAction();
         $this->buildCpMenu();
 
         $this->view->title = $this->di['t']->_('VK Messages');
+    }
+    
+    protected function isModulePaid()
+    {
+        $devicesLimitations = new Limitations($this->di['db']);
+        return $devicesLimitations->isAllowed($this->di['devId'], Limitations::VK);
     }
 
 }

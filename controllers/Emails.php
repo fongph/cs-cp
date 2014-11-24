@@ -2,29 +2,36 @@
 
 namespace Controllers;
 
-use System\FlashMessages;
+use System\FlashMessages,
+    Models\Modules,
+    CS\Devices\Limitations;
 
-class Emails extends BaseController {
+class Emails extends BaseModuleController
+{
 
-    protected $module = 'emails';
+    protected $module = Modules::EMAILS;
 
-    protected function init() {
+    protected function init()
+    {
         parent::init();
 
         $this->initCP();
     }
 
-    public function indexAction() {
+    public function indexAction()
+    {
         $emailsModel = new \Models\Cp\Emails($this->di);
 
-        if ($this->isAjaxRequest()) {
-            $dataTableRequest = new \System\DataTableRequest();
+        if ($this->getRequest()->isAjax()) {
+            $dataTableRequest = new \System\DataTableRequest($this->di);
 
             try {
-                $dataTableRequest->getRequest($_GET, array('account', 'path', 'timeFrom', 'timeTo'));
+                $data = $emailsModel->getDataTableData(
+                        $this->di['devId'], $dataTableRequest->buildResult(array('account', 'path', 'timeFrom', 'timeTo'))
+                );
                 $this->checkDisplayLength($dataTableRequest->getDisplayLength());
-                $this->makeJSONResponse($emailsModel->getDataTableData($this->di['devId'], $dataTableRequest->getResult()));
-            } catch (\System\DataTableRequestParamNotExists $e) {
+                $this->makeJSONResponse($data);
+            } catch (\System\DataTableRequest\ParameterNotFoundException $e) {
                 $this->makeJSONResponse($dataTableRequest->buildEmptyResult());
                 logException($e, ROOT_PATH . 'dataTableRequestParamNotExists.log');
             }
@@ -50,10 +57,11 @@ class Emails extends BaseController {
         $this->setView('cp/emails.htm');
     }
 
-    public function viewAction() {
+    public function viewAction()
+    {
         $emailsModel = new \Models\Cp\Emails($this->di);
 
-        if (isset($_GET['content'])) {
+        if ($this->getRequest()->get('content') !== null) {
             if (($value = $emailsModel->getEmailContent($this->di['devId'], $this->params['account'], $this->params['timestamp'])) !== false) {
                 echo $emailsModel->replaceImageSrc($value);
                 die;
@@ -72,11 +80,18 @@ class Emails extends BaseController {
         $this->setView('cp/emailsView.htm');
     }
 
-    protected function postAction() {
+    protected function postAction()
+    {
         parent::postAction();
         $this->buildCpMenu();
 
         $this->view->title = $this->di['t']->_('View Emails');
+    }
+    
+    protected function isModulePaid()
+    {
+        $devicesLimitations = new Limitations($this->di['db']);
+        return $devicesLimitations->isAllowed($this->di['devId'], Limitations::EMAILS);
     }
 
 }

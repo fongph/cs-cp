@@ -2,7 +2,7 @@
 
 namespace Models\Cp;
 
-class Applications extends \System\Model {
+class Applications extends BaseModel {
 
     public function getDataTableData($devId, $params = array()) {
         $devId = $this->getDb()->quote($devId);

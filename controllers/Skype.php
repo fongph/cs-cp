@@ -2,32 +2,44 @@
 
 namespace Controllers;
 
-class Skype extends BaseController {
+use Models\Modules,
+    CS\Devices\Limitations;
 
-    protected $module = 'skype';
+class Skype extends BaseModuleController
+{
 
-    protected function init() {
+    protected $module = Modules::SKYPE;
+
+    protected function init()
+    {
         parent::init();
 
         $this->initCP();
     }
 
-    public function indexAction() {
+    public function indexAction()
+    {
         $skypeModel = new \Models\Cp\Skype($this->di);
 
-        if ($this->isAjaxRequest()) {
-            $dataTableRequest = new \System\DataTableRequest();
+        if ($this->getRequest()->isAjax()) {
+            $dataTableRequest = new \System\DataTableRequest($this->di);
 
-            $dataTableRequest->getRequest($_GET, array('account', 'timeFrom', 'timeTo'));
-            $this->checkDisplayLength($dataTableRequest->getDisplayLength());
             switch ($this->params['tab']) {
                 case 'messages':
-                    $this->makeJSONResponse($skypeModel->getMessagesDataTableData($this->di['devId'], $dataTableRequest->getResult()));
+                    $data = $skypeModel->getMessagesDataTableData(
+                            $this->di['devId'], 
+                            $dataTableRequest->buildResult(array('account', 'timeFrom', 'timeTo'))
+                    );
                     break;
                 case 'calls':
-                    $this->makeJSONResponse($skypeModel->getCallsDataTableData($this->di['devId'], $dataTableRequest->getResult()));
+                    $data = $skypeModel->getCallsDataTableData(
+                            $this->di['devId'], 
+                            $dataTableRequest->buildResult(array('account', 'timeFrom', 'timeTo'))
+                    );
                     break;
             }
+            $this->checkDisplayLength($dataTableRequest->getDisplayLength());
+            $this->makeJSONResponse($data);
         }
 
         if ($this->view->paid) {
@@ -37,7 +49,8 @@ class Skype extends BaseController {
         $this->setView('cp/skype.htm');
     }
 
-    public function listAction() {
+    public function listAction()
+    {
         $skypeModel = new \Models\Cp\Skype($this->di);
 
         switch ($this->params['tab']) {
@@ -59,29 +72,37 @@ class Skype extends BaseController {
             $this->di['flashMessages']->add(FlashMessages::ERROR, $this->di['t']->_('The dialogue has not been found!'));
             $this->redirect($this->di['router']->getRouteUrl('skype'));
         }
-        
+
         $this->view->tab = $this->params['tab'];
 
         $this->setView('cp/skypeList.htm');
     }
 
-    public function conferenceAction() {
+    public function conferenceAction()
+    {
         $skypeModel = new \Models\Cp\Skype($this->di);
-        
+
         $this->view->users = $skypeModel->getConferenceUsers($this->di['devId'], $this->params['account'], $this->params['id']);
-        
+
         if (!count($this->view->users)) {
             $this->error404();
         }
-        
+
         $this->setView('cp/skypeConference.htm');
     }
 
-    protected function postAction() {
+    protected function postAction()
+    {
         parent::postAction();
         $this->buildCpMenu();
 
         $this->view->title = $this->di['t']->_('Skype Tracking');
+    }
+    
+    protected function isModulePaid()
+    {
+        $devicesLimitations = new Limitations($this->di['db']);
+        return $devicesLimitations->isAllowed($this->di['devId'], Limitations::SKYPE);
     }
 
 }
