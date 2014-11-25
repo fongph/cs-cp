@@ -17,12 +17,24 @@ $di->setShared('dataDb', function() use ($di) {
     } else {
         $dbConfig = $di['config']['dataDb'];
     }
-    
+
     $pdo = new \PDO("mysql:host={$dbConfig['host']};dbname={$dbConfig['dbname']}", $dbConfig['username'], $dbConfig['password'], $di['config']['dbOptions']);
     if ($di['config']['environment'] == 'development') {
         $pdo->exec("set profiling_history_size = 1000; set profiling = 1;");
     }
     return $pdo;
+});
+
+$di->setShared('mailSender', function() use ($di) {
+    $mailSender = new \CS\Mail\MailSender();
+    if ($di['config']['environment'] == 'development') {
+        $mailSender->setProcessor(new \CS\Mail\Processor\FileProcessor(ROOT_PATH . 'logs/mailSender.log'));
+    } else {
+        //@TODO: add production support
+    }
+
+    return $mailSender->setLocale($di['t']->getLocale())
+            ->setSiteId($di['config']['site']);
 });
 
 $di->setShared('router', function() use($config) {
@@ -82,7 +94,7 @@ $di->setShared('router', function() use($config) {
     $router->add('skypeListConference', new \System\Router\Regex('/cp/skype/:account/conference/:id', array('controller' => 'Skype', 'action' => 'conference'), array('account' => '[^/]+', 'id' => '[a-z0-9\.,\-_]+')));
     $router->add('whatsappList', new \System\Router\Regex('/cp/whatsapp/:tab/:id', array('controller' => 'Whatsapp', 'action' => 'list'), array('tab' => 'private|group', 'id' => '[0-9]+')));
     $router->add('facebookList', new \System\Router\Regex('/cp/facebook/:account/:tab/:id', array('controller' => 'Facebook', 'action' => 'list'), array('account' => '[^/]+', 'tab' => 'private|group', 'id' => '[a-zA-Z0-9\:]+')));
-    $router->add('emailsSelected', new \System\Router\Regex('/cp/emails/:account', array('controller' => 'Emails', 'action' => 'index'), array('account' => '[^/]+')));//[-._@a-zA-Z0-9]{6,60}
+    $router->add('emailsSelected', new \System\Router\Regex('/cp/emails/:account', array('controller' => 'Emails', 'action' => 'index'), array('account' => '[^/]+'))); //[-._@a-zA-Z0-9]{6,60}
     $router->add('emailsView', new \System\Router\Regex('/cp/emails/:account/:timestamp', array('controller' => 'Emails', 'action' => 'view'), array('account' => '[^/]+', 'timestamp' => '[\d]{1,10}')));
 
     $router->add('adminLogin', new \System\Router\Route('/admin/login', array('controller' => 'Admin', 'action' => 'login', 'public' => true)));
@@ -104,10 +116,6 @@ $di->setShared('flashMessages', function () use ($di) {
 
 $di->setShared('auth', function () use ($di) {
     return new \System\Auth($di);
-});
-
-$di->setShared('mailSender', function () use ($di) {
-    return new CS\Mail\MailSender();
 });
 
 $di->setShared('view', function() use ($di) {

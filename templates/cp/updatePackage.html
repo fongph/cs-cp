@@ -1,202 +1,352 @@
 <style>
-    .pricing-table {
-        margin-bottom: 20px;
+    .table_title {
         overflow: hidden;
-    } 
-
-    .pricing-table > div {
-        position: relative;
+        text-align: center !important;
+        padding: 10px 0;
+        text-align: left;
+        border: 1px solid #e8e8e8;
     }
-
-    .pricing-table > div .price {
-        position: relative;
-        color: #fb9502;
-        font-size: 20px;
-        height: 60px;
-        line-height: 60px;
-        background: #f2f2f2;
-        padding-right: 15px;
-        border-left: 1px solid #dcdcdc;
-        border-right: 1px solid #dcdcdc;
-    }
-
-    .pricing-table > div .priceLabel {
-        height: 60px;
-        line-height: 60px;
-        border: 1px solid #dcdcdc;
-        border-bottom: none;
-        background: #f2f2f2;
-        font-size: 24px;
-        text-transform: uppercase;
-        font-weight: bold;
-        color: #656565;
-        padding-left: 20px;
-    }
-
-    .pricing-table > div .price span {
-        font-size: 38px;
-        font-weight: bold;
-    }
-
-    .pricing-table > div .price sup {
-        position: absolute;
-        top: 20px;
-    }
-
-    .pricing-table > div .price sub {
-        position: absolute;
-        top: 41px;
-    }
-
-    .pricing-table ul {
-        margin: 0 0 20px 0;
-        padding: 0;
-        width: 100%;
-        border: 1px solid #dcdcdc;
-        font-family: 'Yanone Kaffeesatz', sans-serif;
-    }
-
-    .pricing-table ul li {
-        list-style: none;
-        font-size: 17px;
-        line-height: 16px;
-        color: #656565;
-        padding: 7px 0 7px 15px;
-        border-bottom: 1px solid #dcdcdc;
-        line-height: 21px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-
-    @media (min-width: 767px) {
-        .pricing-table ul li {
-            height: 36px;
-        }
-        
-        .pricing-table ul li.buttonHolder {
-            height: 80px !important;
-        }
-        
-        .pricing-table ul li.support {
-            height: 55px;
-        }
-
-        .pricing-table > div {
-            width: 25%;
-            float: left;
-            padding-right: 3px;
+    @media only screen and (max-width: 1199px) {
+        .table_title {
+            padding: 10px 150px;
         }
     }
-
-    @media (max-width: 767px) {
-        .pricing-table > div {
-            margin: 0 auto 30px auto;
-            max-width: 230px;
+    @media only screen and (max-width: 991px) {
+        .table_title {
+            padding: 10px 120px;
         }
     }
-
-    .pricing-table ul li span {
-        font-weight: normal;
+    @media only screen and (max-width: 480px) {
+        .table_title {
+            padding: 10px 0px;
+        }
     }
-
-    .pricing-table .highlited ul {
-        border: 0;
-    }
-
-    .pricing-table .highlited ul li .text-success {
-        color: #fff;
-    }
-
-    .pricing-table .highlited ul li {
-        background: #44aee1;
-        border: 0;
-        color: #fff;
-    }
-
-    .pricing-table .highlited ul li:nth-child(even) {
-        background: #0b94d5;
-    }
-
-    .pricing-table .highlited .price {
-        background: #0b94d5;
-        border: 0;
-        color: #fff;
-    }
-
-    .pricing-table ul li:nth-child(even) {
-        background: #f2f2f2;
-    }
-
-
-    .pricing-table ul li:nth-child(even) {
-        background: #f2f2f2;
-    }
-
-    .pricing-table ul li:last-child {
-        border: 0;
-    }
-
-    .pricing-table ul li label {
-        font-weight: normal;
-        margin: 0;
-        cursor: pointer;
-    }
-
-    .pricing-table .title {
-        border-radius: 5px 5px 0 0;
-        height: 90px;
-        width: 100%;
-    }
-
-    .pricing-table .title.business {
-        height: 49px;
-        margin-top: 41px;
-        background: url("{$di.config.staticDomain}/img/pricing-table/business.png") bottom center no-repeat;
-    }
-
-    .pricing-table .title.pro {
-        height: 49px;
-        margin-top: 41px;
-        background: url("{$di.config.staticDomain}/img/pricing-table/pro.png") bottom center no-repeat;
-    }
-
-    .pricing-table .title.pro-plus {
-        height: 72px;
-        margin-top: 18px;
-        background: url("{$di.config.staticDomain}/img/pricing-table/pro-plus.png") bottom center no-repeat;
-    }
-
-    .pricing-table .buyButton {
-        width: 100px;
-        padding: 8px 15px 10px;
-        margin: 10px 0 0 0 !important;
-        font-family: 'Yanone Kaffeesatz', sans-serif;
-        color: #353535 !important;
-        background-color: #f5a700;
-        border: medium none;
-        border-radius: 15px;
+    .table_title span {
         display: inline-block;
-        text-decoration: none;
-        text-align: center;
-        font-size: 25px;
+    }
+    .table_title h3 {
+        color: #16a89e;
+        font-weight: 400;
+        font-size: 18px;
+        margin: 0;
+        padding-bottom: 10px;
+    }
+
+    .table {
+        color: #4d4f5b;
+        position: relative;
+        border-top: 1px solid #16a89e;
+    }
+    .table:first-child {
+        margin: 0;
+    }
+    .table:first-child:before {
+        content: "";
+        display: block;
+        position: absolute;
+        top: 185px;
+        left: -80px;
+        width: 72px;
+        height: 475px;
+        background: url(../images/img_basis_table.png) no-repeat;
+    }
+    @media only screen and (max-width: 991px) {
+        .table:first-child:before {
+            display: none;
+        }
+    }
+    .table:first-child:after {
+        content: "";
+        display: block;
+        position: absolute;
+        top: 185px;
+        right: -82px;
+        width: 74px;
+        height: 774px;
+        background: url(../images/img_premium_table.png) no-repeat;
+    }
+    @media only screen and (max-width: 991px) {
+        .table:first-child:after {
+            display: none;
+        }
+    }
+    .table thead tr th {
         font-weight: normal;
-        letter-spacing: normal;
-        line-height: normal;
+        text-align: center;
+        vertical-align: middle;
+        font-size: 12px;
+        border-color: #16a89e;
+        border-bottom: 1px solid #16a89e;
+    }
+    @media only screen and (max-width: 480px) {
+        .table thead tr th {
+            min-width: 56px;
+            padding: 8px 2px;
+        }
+    }
+    .table thead tr th:first-child {
+        border: 1px solid #8f8f8f !important;
+        font-size: 19px;
+        text-transform: uppercase;
+    }
+    @media only screen and (max-width: 480px) {
+        .table thead tr th:first-child {
+            font-size: 16px;
+        }
+    }
+    .table thead tr th i {
+        color: #cecece;
+        font-size: 21px;
+        margin-right: 5px;
+    }
+    @media only screen and (max-width: 991px) {
+        .table thead tr th i {
+            margin: 0;
+        }
+    }
+    .table thead tr th span span {
+        font-size: 16px;
+    }
+    .table tbody tr td {
+        color: #868686;
+        text-align: center;
+        vertical-align: middle;
+        font-size: 11px;
+        padding: 0 8px;
+        height: 35px;
+        width: 200px;
+    }
+    .table tbody tr td:first-child {
+        font-size: 14px;
+        text-align: right;
+    }
+    .table tbody tr td i.fa fa-times {
+        font-size: 20px;
+        min-width: 0;
+    }
+    .table tbody tr td i.fa fa-times:before {
+        margin: 0;
+    }
+    .table tfoot tr td {
+        padding: 0 !important;
+        width: auto;
+        border: none;
+        line-height: 0;
+    }
+    .table tfoot tr td:first-child {
+        text-align: left;
+    }
+    @media only screen and (max-width: 991px) {
+        .table tfoot tr td {
+            padding: 8px 16px !important;
+        }
+    }
+    .table tfoot tr td > * {
+        display: table-cell;
+        vertical-align: middle;
+        line-height: 1;
+        padding: 0 12px;
+    }
+    @media only screen and (max-width: 991px) {
+        .table tfoot tr td > * {
+            display: block;
+            width: 100%;
+            text-align: center;
+        }
+    }
+    .table tfoot tr td .label_inline {
+        width: 450px;
+        padding-right: 0 !important;
+    }
+    .table tfoot tr td h4 {
+        font-weight: bold;
+        display: inline-block;
+        font-size: 18px;
+        width: 123px;
+        color: #16a89e;
+        text-transform: uppercase;
+        line-height: 1;
+    }
+    @media only screen and (max-width: 480px) {
+        .table tfoot tr td h4 {
+            margin-right: 0;
+        }
+    }
+    .table tfoot tr td .select_row {
+        padding: 0 !important;
+    }
+    .table tfoot tr td button {
+        display: inline-block !important;
+    }
+    @media only screen and (max-width: 991px) {
+        .table tfoot tr td button {
+            margin-top: 10px;
+        }
     }
 
-    .pricing-table .buyButton:hover {
-        text-decoration: underline;
+    .fa-times {
+        color: #cf4857;
     }
-
-    .pricing-table .buyAnnually {
-        color: #656565;
-        font-size: 15px;
-        margin-top: 10px;
+    
+    .fa-check {
+        color: #16a89e;
+    }
+    
+    // aaaaa
+    .label_inline {
+        margin-bottom: 10px;
+    }
+    .label_inline label {
+        display: inline-block;
+        vertical-align: middle;
+    }
+    @media only screen and (max-width: 991px) {
+        .label_inline {
+            display: none !important;
+        }
+    }
+    .select_row {
+        display: none !important;
+    }
+    @media only screen and (max-width: 991px) {
+        .select_row {
+            display: inline-block !important;
+        }
+    }
+    .label_block {
+        overflow: hidden;
     }
 </style>
 <h3 class="text-center">{$di.t->_('Unfortunately your package does not include this feature.')}</h3>
 <h3 class="text-center">{$di.t->_('Update Now to Extend!')}</h3>
 
+<table class="table table-bordered">
+    <caption>
+        <div class="table_title">
+            <h3>Free with every plan:</h3>
+            <span><i class="fa fa-check"></i>Remote control</span>
+            <span><i class="fa fa-check"></i>Software updates</span>
+            <span><i class="fa fa-check"></i>Remote Device Lock</span>
+            <span><i class="fa fa-check"></i>Instant location </span>
+            <span><i class="fa fa-check"></i>SIM card change alert</span>
+        </div>
+    </caption>
+    <thead>
+        <tr>
+            <th>FEATURES:</th>
+            <th>
+    <div class="lg_text_table"><i class="icon-android"></i><span>Android</span></div>
+    <div class="sm_text_table"><span>(2.2 - 4.4)</span></div>
+</th>
+<th>
+<div class="lg_text_table"><i class="icon-apple"></i><span>iOS</span></div>
+<div class="sm_text_table"><span>(3.1.3 - 7.1.1)<br>jailbreak needed</span></div>
+</th>
+<th>
+<div class="lg_text_table"><i class="icon-blackberry"></i><span class="hidden-xs">BlackBerry</span><span class="visible-xs">BB</span></div>
+<div class="sm_text_table"><span>(1.0 - 7.1)</span></div>
+</th>
+</tr>
+</thead>
+<tfoot>
+    <tr>
+        <td colspan="4">
+            <div class="label_inline">
+                <h4>Basic</h4>
+                <label class="label_radio"><input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked><span><strong>3</strong> month</span><span>$34.98</span></label><label class="label_radio"><input type="radio" name="optionsRadios" id="optionsRadios2" value="option2"><span><strong>6</strong> month</span><span>$69.96</span></label><label class="label_radio"><input type="radio" name="optionsRadios" id="optionsRadios3" value="option3"><span><strong>12</strong> month</span><span>$139.92</span></label>
+            </div>
+            <div class="select_row">
+                <h4>Basic</h4>
+                <select class="select_inverse">
+                    <option value="">3 month $34.98</option>
+                    <option value="">6 month $69.96</option>
+                    <option value="">12 month $139.92</option>
+                </select>
+            </div>
+            <div class="_limits">
+                <!-- Block block-limits-pricing only for premium include -->
+            </div>
+            <div class="text-center"><button class="btn btn-default">Buy Basic</button></div>
+        </td>
+    </tr>
+</tfoot>
+<tbody>
+    <tr>
+        <td>Calls history</td>
+        <td><b>700</b> calls</td>
+        <td><b>700</b> calls</td>
+        <td><b>700</b> calls</td>
+    </tr>
+    <tr>
+        <td>SMS history</td>
+        <td><b>300</b> SMS</td>
+        <td><b>300</b> SMS</td>
+        <td><b>300</b> SMS</td>
+    </tr>
+    <tr>
+        <td>SMS blocking</td>
+        <td><i class="fa fa-check"></i><br>(except 4.4)</td>
+        <td><i class="fa fa-check"></i></td>
+        <td><i class="fa fa-times"></i></td>
+    </tr>
+    <tr>
+        <td>Location history</td>
+        <td><i class="fa fa-check"></i></td>
+        <td><i class="fa fa-check"></i></td>
+        <td><i class="fa fa-check"></i></td>
+    </tr>
+    <tr>
+        <td>Contacts</td>
+        <td><i class="fa fa-check"></i></td>
+        <td><i class="fa fa-check"></i></td>
+        <td><i class="fa fa-times"></i></td>
+    </tr>
+    <tr>
+        <td>Calendar</td>
+        <td><i class="fa fa-check"></i></td>
+        <td><i class="fa fa-check"></i></td>
+        <td><i class="fa fa-times"></i></td>
+    </tr>
+    <tr>
+        <td>Browsing history</td>
+        <td><i class="fa fa-check"></i></td>
+        <td><i class="fa fa-check"></i></td>
+        <td><i class="fa fa-times"></i></td>
+    </tr>
+    <tr>
+        <td>Bookmarks</td>
+        <td><i class="fa fa-check"></i></td>
+        <td><i class="fa fa-check"></i></td>
+        <td><i class="fa fa-times"></i></td>
+    </tr>
+    <tr>
+        <td>Photos</td>
+        <td><i class="fa fa-check"></i></td>
+        <td><i class="fa fa-check"></i></td>
+        <td><i class="fa fa-times"></i></td>
+    </tr>
+    <tr>
+        <td>Emails</td>
+        <td><i class="fa fa-check"></i><br>(ROOT for all)</td>
+        <td><i class="fa fa-check"></i></td>
+        <td><i class="fa fa-times"></i></td>
+    </tr>
+    <tr>
+        <td>Applications</td>
+        <td><i class="fa fa-check"></i></td>
+        <td><i class="fa fa-check"></i></td>
+        <td><i class="fa fa-times"></i></td>
+    </tr>
+    <tr>
+        <td>Websites &amp; Apps blocking</td>
+        <td><i class="fa fa-check"></i></td>
+        <td><i class="fa fa-check"></i></td>
+        <td><i class="fa fa-times"></i></td>
+    </tr>
+</tbody>
+</table>
+
+{*
 <div class="pricing-table">
     <div class="text-left hidden-xs">
         <div class="title"></div>
@@ -219,12 +369,12 @@
             <li>{$di.t->_('View user Photos')}</li>
             <li>{$di.t->_('Read Emails')} *</li>
             <li>{$di.t->_('Remote Control')}</li>
-            
+
             <li>{$di.t->_('Block applications')}</li>
             <li>{$di.t->_('Software updates')}</li>
             <li>{$di.t->_('SIM card change alert')}</li>
             <li>{$di.t->_('Remote Device Lock')}</li>
-            
+
             <li>{$di.t->_('Viber/WhatsApp/Skype')} *</li>
             <li>{$di.t->_('View user Videos')}</li>
             <li>{$di.t->_('Facebook Messages')} *</li>
@@ -620,7 +770,7 @@
     _gaq.push(['_setAllowLinker', true]);
     _gaq.push(['_setAllowHash', false]);
     _gaq.push(['_trackPageview']);
-    (function() {
+    (function () {
         var ga = document.createElement('script');
         ga.type = 'text/javascript';
         ga.async = true;
@@ -630,8 +780,8 @@
     })();
 
     function _gaLink(a) {
-        _gaq.push(['_set', 'hitCallback', function() {
-                _gaq.push(['_set', 'hitCallback', function() {
+        _gaq.push(['_set', 'hitCallback', function () {
+                _gaq.push(['_set', 'hitCallback', function () {
                         _gaq.push(['_link', a.href]);
                     }]);
                 _gaq.push(['_trackEvent', 'cpBuyClick', a.rel]);
@@ -641,11 +791,11 @@
         return false;
     }
 
-    $(document).ready(function() {
+    $(document).ready(function () {
         var buyLink = '{$packageLink}';
-        
+
         function planHandler(element) {
-            var strReplace = function(search, replace, subject) {
+            var strReplace = function (search, replace, subject) {
                 return subject.split(search).join(replace);
             };
 
@@ -668,14 +818,14 @@
             $('#' + id_c).html(cents.substr(0, 2));
         }
 
-        $('input[id^="plan_"]:checked').each(function() {
+        $('input[id^="plan_"]:checked').each(function () {
             planHandler($(this));
         });
 
-        $('input[id^="plan_"]').click(function() {
+        $('input[id^="plan_"]').click(function () {
             planHandler($(this));
         });
     });
-</script>
+</script>*}
 
 <p class="text-info">{$di.t->_('* In case of Android OS: device should be ROOTED and our application should have Super User privileges')}</p>

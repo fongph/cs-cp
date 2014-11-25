@@ -68,13 +68,4 @@ abstract class BaseModuleController extends BaseController
         }
     }
 
-    protected function checkDisplayLength($value = 10)
-    {
-        if ($value !== $this->auth['records_per_page']) {
-            $usersModel = new \Models\Users($this->di);
-            $usersModel->setRecordsPerPage($value);
-            $usersModel->reLogin();
-        }
-    }
-
 }

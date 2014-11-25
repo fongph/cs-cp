@@ -139,7 +139,7 @@ class Index extends BaseController
                 $usersManager->lostPassword($this->di['config']['site'], $email);
                 $this->di['flashMessages']->add(FlashMessages::SUCCESS, $this->di['t']->_('The confirmation link email has been sent to you. If it is not in your Inbox, check Spam, please!'));
                 $this->redirect($this->di['router']->getRouteUrl('main'));
-            } catch (UsersEmailNotFoundException $e) {
+            } catch (\CS\Users\UsersEmailNotFoundException $e) {
                 $this->di['flashMessages']->add(FlashMessages::ERROR, $this->di['t']->_('Invalid email or there is no user registered with that email address'));
             } catch (MailSendException $e) {
                 $this->di['flashMessages']->add(FlashMessages::ERROR, $this->di['t']->_('Error during send email. Please try again later.'));

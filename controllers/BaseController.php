@@ -2,9 +2,7 @@
 
 namespace Controllers;
 
-use System\Controller,
-    CS\Devices\Manager as DevicesManager,
-    System\FlashMessages;
+use System\Controller;
 
 class BaseController extends Controller
 {
@@ -33,4 +31,14 @@ class BaseController extends Controller
             $this->view->authData = $this->auth;
         }
     }
+
+    protected function checkDisplayLength($value = 10)
+    {
+        if ($value !== $this->auth['records_per_page']) {
+            $usersModel = new \Models\Users($this->di);
+            $usersModel->setRecordsPerPage($value);
+            $usersModel->reLogin();
+        }
+    }
+
 }
