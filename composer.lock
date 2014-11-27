@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "1d56b319076d607abc8cc1c91302b011",
+    "hash": "504fa39eeffcfa306d2863a6b213e1ec",
     "packages": [
         {
             "name": "boomers/cs-devices",
@@ -705,9 +705,7 @@
             ],
             "description": "A lightweight implementation of CommonJS Promises/A for PHP",
             "time": "2014-10-15 20:05:57"
-        }
-    ],
-    "packages-dev": [
+        },
         {
             "name": "symfony/console",
             "version": "dev-master",
@@ -766,16 +764,17 @@
             "time": "2014-11-20 13:24:36"
         }
     ],
+    "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
+        "symfony/console": 20,
         "boomers/ip": 20,
         "boomers/cs-models": 20,
         "boomers/cs-mail": 20,
         "boomers/cs-settings": 20,
         "boomers/cs-users": 20,
-        "boomers/cs-devices": 20,
-        "symfony/console": 20
+        "boomers/cs-devices": 20
     },
     "prefer-stable": false,
     "platform": {
