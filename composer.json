@@ -29,7 +29,7 @@
     ],
     "require": {
         "php": ">=5.3.0",
-        "rastor/system": "~0.5",
+        "rastor/system": "0.5.1",
         "fenom/fenom": "2.*",
         "monolog/monolog": "1.*",
         "filp/whoops": "~1.0",

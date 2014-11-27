@@ -187,12 +187,30 @@
     .fa-times {
         color: #cf4857;
     }
-    
+
     .fa-check {
         color: #16a89e;
     }
-    
-    // aaaaa
+
+    .label_radio {
+        color: #606060;
+    }
+    .label_radio span {
+        display: block;
+        font-weight: normal;
+        font-size: 15px;
+        text-align: left;
+    }
+    .label_radio span strong {
+        font-size: 25px;
+        text-align: left;
+    }
+    .label_radio span + span {
+        font-size: 17px;
+        font-weight: bold;
+        text-align: left;
+    }
+
     .label_inline {
         margin-bottom: 10px;
     }
@@ -205,6 +223,7 @@
             display: none !important;
         }
     }
+
     .select_row {
         display: none !important;
     }
@@ -213,6 +232,7 @@
             display: inline-block !important;
         }
     }
+
     .label_block {
         overflow: hidden;
     }
@@ -827,5 +847,3 @@
         });
     });
 </script>*}
-
-<p class="text-info">{$di.t->_('* In case of Android OS: device should be ROOTED and our application should have Super User privileges')}</p>
