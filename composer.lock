@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "5ea58464528ad930ac208036e0d65f80",
+    "hash": "1d56b319076d607abc8cc1c91302b011",
     "packages": [
         {
             "name": "boomers/cs-devices",
@@ -12,7 +12,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-devices.git",
-                "reference": "7803638ec24baf79d6afe3bbac0d97afa30e2b4b"
+                "reference": "d68dfedcb560890c3a093451cf14812cdb7ef272"
             },
             "require": {
                 "boomers/cs-models": "dev-master",
@@ -31,7 +31,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2014-11-25 09:51:54"
+            "time": "2014-11-26 09:49:15"
         },
         {
             "name": "boomers/cs-mail",
@@ -65,7 +65,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-models.git",
-                "reference": "9493904b70977aeb0fce3f178db066e800760f5a"
+                "reference": "2bf6b89e13486aed7f33d5023dcb01eb33e65555"
             },
             "require": {
                 "php": ">=5.4.0"
@@ -79,7 +79,7 @@
                     "CS\\Models\\": "src/"
                 }
             },
-            "time": "2014-11-24 12:22:03"
+            "time": "2014-11-27 08:25:45"
         },
         {
             "name": "boomers/cs-settings",
@@ -87,7 +87,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-settings.git",
-                "reference": "c337fb4de17d67027498f5f1d952f5bee7b6b3de"
+                "reference": "dbacc3f8073038fcb72167ad97a7661885334379"
             },
             "require": {
                 "php": ">=5.4.0"
@@ -98,7 +98,7 @@
                     "CS\\Settings\\": "src/"
                 }
             },
-            "time": "2014-11-25 09:46:15"
+            "time": "2014-11-27 10:18:18"
         },
         {
             "name": "boomers/cs-users",
@@ -106,7 +106,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-users.git",
-                "reference": "ebca9de0b6b5dc8b88cd4baa903ba3b85dd46b90"
+                "reference": "62344413a9855921e57a74cedb4ebbe5ccb7bb7a"
             },
             "require": {
                 "boomers/cs-mail": "dev-master",
@@ -127,7 +127,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2014-11-24 15:21:33"
+            "time": "2014-11-25 11:00:07"
         },
         {
             "name": "boomers/ip",
@@ -622,20 +622,19 @@
         },
         {
             "name": "rastor/system",
-            "version": "0.5.0",
+            "version": "0.5.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/oRastor/system.git",
-                "reference": "9b999cc82e48ed02613af3f950d1b874da54f652"
+                "reference": "f094ab2ff152afa292be23283aac5ff96e8f0422"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/oRastor/system/zipball/9b999cc82e48ed02613af3f950d1b874da54f652",
-                "reference": "9b999cc82e48ed02613af3f950d1b874da54f652",
+                "url": "https://api.github.com/repos/oRastor/system/zipball/f094ab2ff152afa292be23283aac5ff96e8f0422",
+                "reference": "f094ab2ff152afa292be23283aac5ff96e8f0422",
                 "shasum": ""
             },
             "require": {
-                "ext-intl": "*",
                 "php": ">=5.4.0"
             },
             "require-dev": {
@@ -661,7 +660,7 @@
                     "homepage": "http://rastor.name"
                 }
             ],
-            "time": "2014-11-21 07:33:34"
+            "time": "2014-11-27 10:41:00"
         },
         {
             "name": "react/promise",
