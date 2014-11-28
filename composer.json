@@ -29,6 +29,7 @@
     ],
     "require": {
         "php": ">=5.3.0",
+        "ext-pdo": "*",
         "symfony/console": "3.0.*@dev",
         "rastor/system": "~0.5",
         "fenom/fenom": "2.*",

@@ -106,10 +106,24 @@
                                 mData: 'currency'
                             },
                             {
-                                mData: 'activation_date'
+                                mData: 'activation_date',
+                                mRender: function(value) {
+                                    if (value == 0) {
+                                        return '-';
+                                    }
+                                    
+                                    return moment(value * 1000).zone(0).format('ll');
+                                }
                             },
                             {
-                                mData: 'expiration_date'
+                                mData: 'expiration_date',
+                                mRender: function(value) {
+                                    if (value == 0) {
+                                        return '-';
+                                    }
+                                    
+                                    return moment(value * 1000).zone(0).format('ll');
+                                }
                             },
                             {
                                 mData: 'status'

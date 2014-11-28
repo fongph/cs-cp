@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "954fd47ab72f2f9c2fbc3fe1310acba4",
+    "hash": "642023ded5e666fd03292ce4bcc29932",
     "packages": [
         {
             "name": "boomers/cs-devices",
@@ -65,7 +65,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-models.git",
-                "reference": "2bf6b89e13486aed7f33d5023dcb01eb33e65555"
+                "reference": "fc035ab52085e18ad9ba661634bd6fcdecb756c7"
             },
             "require": {
                 "php": ">=5.4.0"
@@ -79,7 +79,7 @@
                     "CS\\Models\\": "src/"
                 }
             },
-            "time": "2014-11-27 08:25:45"
+            "time": "2014-11-28 12:53:20"
         },
         {
             "name": "boomers/cs-settings",
@@ -106,14 +106,14 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-users.git",
-                "reference": "f3826c3d04c2b87a55be5fda4b4c3a3479272b51"
+                "reference": "6c0155444d712a7af2cc21da916ab12b0a74720f"
             },
             "require": {
                 "boomers/cs-mail": "dev-master",
                 "boomers/cs-models": "dev-master",
                 "boomers/cs-settings": "dev-master",
                 "boomers/ip": "dev-master",
-                "php": ">=5.4.0"
+                "php": ">=5.5.0"
             },
             "require-dev": {
                 "phpunit/phpunit": "4.*"
@@ -127,7 +127,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2014-11-27 15:40:14"
+            "time": "2014-11-28 09:05:10"
         },
         {
             "name": "boomers/ip",
@@ -779,7 +779,8 @@
     },
     "prefer-stable": false,
     "platform": {
-        "php": ">=5.3.0"
+        "php": ">=5.3.0",
+        "ext-pdo": "*"
     },
     "platform-dev": []
 }
