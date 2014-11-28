@@ -20,14 +20,15 @@ abstract class BaseModuleController extends BaseController
         $devices = $devicesManager->getUserActiveDevices($this->auth['id']);
         $this->di->set('devicesList', $devices);
 
-        $devId = $devicesModel->getCurrentDevId();
-        $this->di->set('devId', $devId);
-        $this->di->set('currentDevice', $devices[$devId]);
-
-        if ($devId === null) {
+        if (($devId = $devicesModel->getCurrentDevId()) === null) {
             $this->di['flashMessages']->add(FlashMessages::INFO, $this->di['t']->_('No devices have been added to your Control Panel!'));
             $this->redirect($this->di['router']->getRouteUrl('profile'));
-        } else if (isset($this->di['config']['modules'][$this->module])) {
+        }
+
+        if (isset($this->di['config']['modules'][$this->module])) {
+            $this->di->set('devId', $devId);
+            $this->di->set('currentDevice', $devices[$devId]);
+
             $this->moduleCheck();
         }
     }
@@ -35,7 +36,7 @@ abstract class BaseModuleController extends BaseController
     protected function moduleCheck()
     {
         $modulesModel = new Modules($this->di);
-        
+
         if ($modulesModel->isModuleActive($this->module) === false) {
             $this->redirect($this->di['router']->getRouteUrl(Modules::CALLS));
         }
@@ -51,7 +52,7 @@ abstract class BaseModuleController extends BaseController
     }
 
     protected abstract function isModulePaid();
-    
+
     protected function buildCpMenu()
     {
         $modulesModel = new Modules($this->di);
