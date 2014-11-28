@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "504fa39eeffcfa306d2863a6b213e1ec",
+    "hash": "954fd47ab72f2f9c2fbc3fe1310acba4",
     "packages": [
         {
             "name": "boomers/cs-devices",
@@ -87,7 +87,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-settings.git",
-                "reference": "dbacc3f8073038fcb72167ad97a7661885334379"
+                "reference": "7eac5c4bb6ce0bbe1c137812287eb573020e20f2"
             },
             "require": {
                 "php": ">=5.4.0"
@@ -98,7 +98,7 @@
                     "CS\\Settings\\": "src/"
                 }
             },
-            "time": "2014-11-27 10:18:18"
+            "time": "2014-11-28 08:17:57"
         },
         {
             "name": "boomers/cs-users",
@@ -106,7 +106,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-users.git",
-                "reference": "62344413a9855921e57a74cedb4ebbe5ccb7bb7a"
+                "reference": "f3826c3d04c2b87a55be5fda4b4c3a3479272b51"
             },
             "require": {
                 "boomers/cs-mail": "dev-master",
@@ -127,7 +127,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2014-11-25 11:00:07"
+            "time": "2014-11-27 15:40:14"
         },
         {
             "name": "boomers/ip",
@@ -622,19 +622,20 @@
         },
         {
             "name": "rastor/system",
-            "version": "0.5.1",
+            "version": "0.5.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/oRastor/system.git",
-                "reference": "f094ab2ff152afa292be23283aac5ff96e8f0422"
+                "reference": "920202e20b6b7f039b4178a4d46388dd4b7265a3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/oRastor/system/zipball/f094ab2ff152afa292be23283aac5ff96e8f0422",
-                "reference": "f094ab2ff152afa292be23283aac5ff96e8f0422",
+                "url": "https://api.github.com/repos/oRastor/system/zipball/920202e20b6b7f039b4178a4d46388dd4b7265a3",
+                "reference": "920202e20b6b7f039b4178a4d46388dd4b7265a3",
                 "shasum": ""
             },
             "require": {
+                "ext-intl": "*",
                 "php": ">=5.4.0"
             },
             "require-dev": {
@@ -660,7 +661,7 @@
                     "homepage": "http://rastor.name"
                 }
             ],
-            "time": "2014-11-27 10:41:00"
+            "time": "2014-11-28 08:27:10"
         },
         {
             "name": "react/promise",
