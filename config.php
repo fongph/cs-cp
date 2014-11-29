@@ -16,9 +16,9 @@ $default = array(
             'filename' => ROOT_PATH . 'logs/system.log'
         ),
         'mail' => array(
-            'from' => 'orest@dataedu.com',
-            'to' => 'orest@dataedu.com',
-            'subject' => 'TS CP Logger'
+            'from' => 'b.orest@dizboard.com',
+            'to' => 'b.orest@dizboard.com',
+            'subject' => 'Pumpic CP Logger'
         )
     ),
     'dbOptions' => array(
