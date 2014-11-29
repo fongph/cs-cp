@@ -25,7 +25,10 @@ if ($config['environment'] == 'development') {
 
     $logger->pushHandler(new Monolog\Handler\StreamHandler($config['logger']['stream']['filename'], Monolog\Logger::DEBUG));
 } else {
-    $whoops->pushHandler(new \Whoops\Handler\CallbackHandler(function() {
+    $whoops->pushHandler(new \Whoops\Handler\CallbackHandler(function($exception, $inspector, $run) {
+        p($exception);
+        p($inspector);
+        d($run);
         ob_clean();
         header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error', true, 500);
         require(ROOT_PATH . '500.html');
@@ -34,6 +37,8 @@ if ($config['environment'] == 'development') {
     $logger->pushHandler(new Monolog\Handler\StreamHandler($config['logger']['stream']['filename'], Monolog\Logger::INFO));
     $logger->pushHandler(new Monolog\Handler\NativeMailerHandler($config['logger']['mail']['from'], $config['logger']['mail']['subject'], $config['logger']['mail']['to']));
 }
+
+$logger->addCritical("123");
 
 Monolog\ErrorHandler::register($logger);
 $whoops->register();
