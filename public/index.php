@@ -16,15 +16,18 @@ $logger = new Monolog\Logger('logger');
 $logger->pushProcessor(new Monolog\Processor\WebProcessor());
 
 if ($config['environment'] == 'development') {
+    $logger->pushHandler(new Monolog\Handler\StreamHandler($config['logger']['stream']['filename'], Monolog\Logger::DEBUG));
+    
     if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) &&
             strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
         $whoops->pushHandler(new \Whoops\Handler\JsonResponseHandler);
     } else {
         $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler);
     }
-
-    $logger->pushHandler(new Monolog\Handler\StreamHandler($config['logger']['stream']['filename'], Monolog\Logger::DEBUG));
 } else {
+    $logger->pushHandler(new Monolog\Handler\StreamHandler($config['logger']['stream']['filename'], Monolog\Logger::INFO));
+    $logger->pushHandler(new Monolog\Handler\NativeMailerHandler($config['logger']['mail']['from'], $config['logger']['mail']['subject'], $config['logger']['mail']['to']));
+    
     $whoops->pushHandler(new \Whoops\Handler\CallbackHandler(function($exception, $inspector, $run) {
         p($exception);
         p($inspector);
@@ -33,9 +36,6 @@ if ($config['environment'] == 'development') {
         header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error', true, 500);
         require(ROOT_PATH . '500.html');
     }));
-
-    $logger->pushHandler(new Monolog\Handler\StreamHandler($config['logger']['stream']['filename'], Monolog\Logger::INFO));
-    $logger->pushHandler(new Monolog\Handler\NativeMailerHandler($config['logger']['mail']['from'], $config['logger']['mail']['subject'], $config['logger']['mail']['to']));
 }
 
 $logger->addCritical("123");
