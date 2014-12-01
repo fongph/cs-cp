@@ -45,8 +45,6 @@ $di->set('config', $config);
 $di->set('request', new System\Request($_GET, $_POST, $_COOKIE, $_SERVER));
 $di->set('logger', $logger);
 
-$a = new LOJO();
-
 require ROOT_PATH . 'bootstrap.php';
 
 $parts = explode('?', $di->get('request')->server('REQUEST_URI'));
