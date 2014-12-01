@@ -1,3 +1,11 @@
+<style>
+    .add-device-block {
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 10px;
+        text-align: center;
+    }
+</style>
 <div>
     <ol class="breadcrumb">
         <li><a href="{$di.router->getRouteUrl('billing')}">{$di.t->_('Payments & Devices')}</a></li>
@@ -5,28 +13,20 @@
     </ol>
 
     {insert "inc.flashMessages.htm"}
-    
-    {set $href}<a href="{$di.router->getRouteUrl('billingAddDevice')}" class="btn btn-xs btn-success">{/set}
-    {if count($devices)}
-        <p>{$di.t->_('Select device from list or %1$sAdd new%2$s', [$href,'</a>'])}</p>
-        <form method="POST" action="">
-            {foreach $devices as $id => $name}
-            <div class="radio">
-                <label>
-                    <input type="radio" name="device" id="device-{$id}" value="{$id}" />
-                    {$name}
-                </label>
-            </div>
-            {/foreach}
-            <button type="submit" class="btn btn-primary">{$di.t->_('Assign Device')}</button>
-        </form>
-    {else}
-        <p>{$di.t->_('You don\'t have unassigned devices. You can %1$sAdd new%2$s', [$href,'</a>'])}</p>
-    {/if}
 
-    <script type="text/javascript">
-        $(document).ready(function () {
-            
-        });
-    </script>
+    <h4 class="text-center">{$di.t->_('Pick device')}</h4>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4 col-md-4 col-sm-6 col-lg-offset-4 col-md-offset-4 col-sm-offset-3">
+                <div class="add-device-block">
+                    {foreach $devices as $id => $name}
+                    <a href="{$di.router->getRouteUrl('billingAssignDevice')}?license={$license}&device={$id}" class="btn btn-success">{$name}</a>
+                    {/foreach}
+                    <h4>{$di.t->_('or')}</h4>
+                    <a href="{$di.router->getRouteUrl('billingAddDevice')}?license={$license}" class="btn btn-primary">{$di.t->_('Add new device')}</a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
