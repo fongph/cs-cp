@@ -36,13 +36,16 @@ if ($config['environment'] == 'development') {
     }));
 }
 
-$whoops->register();
+// Whoops must be registered last for showing 500 Error page
 Monolog\ErrorHandler::register($logger);
+$whoops->register();
 
 $di = new System\DI();
 $di->set('config', $config);
 $di->set('request', new System\Request($_GET, $_POST, $_COOKIE, $_SERVER));
 $di->set('logger', $logger);
+
+$a = new LOJO();
 
 require ROOT_PATH . 'bootstrap.php';
 
