@@ -26,15 +26,16 @@ $di->setShared('dataDb', function() use ($di) {
 });
 
 $di->setShared('mailSender', function() use ($di) {
-    $mailSender = new \CS\Mail\MailSender();
     if ($di['config']['environment'] == 'development') {
-        $mailSender->setProcessor(new \CS\Mail\Processor\FileProcessor(ROOT_PATH . 'logs/mailSender.log'));
+        $mailSender = new CS\Mail\MailSender(new \CS\Mail\Processor\FileProcessor(ROOT_PATH . 'logs/mailSender.log'));
     } else {
-        //@TODO: add production support
+        $mailSender = new CS\Mail\MailSender(new \CS\Mail\Processor\RemoteProcessor(
+                GlobalSettings::getMailSenderURL($di['config']['site']), GlobalSettings::getMailSenderSecret($di['config']['site'])
+        ));
     }
 
     return $mailSender->setLocale($di['t']->getLocale())
-            ->setSiteId($di['config']['site']);
+                    ->setSiteId($di['config']['site']);
 });
 
 $di->setShared('router', function() use($config) {
