@@ -24,7 +24,8 @@ body > .cp-menu {
 }
 
 #header .logo img {
-    margin-bottom: 12px;
+    margin-bottom: 8px;
+    height: 45px;
 }
 
 #header .menu {
