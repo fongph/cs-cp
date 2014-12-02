@@ -23,7 +23,8 @@
             <textarea id="message" name="message" class="form-control" placeholder="{$di.t->_('Text of message...')}"></textarea>
         </div>
         <div class="form-group">
-            <p>{$di.t->_('To submit a refund request please fill in our online %1$sRefund Request Form%2$s', ['<a href="http://www.topspyapp.com/refund-request" target="_blank">', '</a>'])}</p>
+            {set $lnk}<a href="{$refundPolicyUrl}" target="_blank">{/set}
+            <p>{$di.t->_('To submit a refund request please fill in our online %1$sRefund Request Form%2$s', [$lnk, '</a>'])}</p>
         </div>
         <div class="form-group">
             <button type="submit" class="btn btn-primary">{$di.t->_('Submit Ticket')}</button>

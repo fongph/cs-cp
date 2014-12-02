@@ -23,6 +23,7 @@ $default['staticDomain'] = 'http://cp.cs:8080/static';
 $default['cookieDomain'] = '.cs';
 $default['supportEmail'] = 'b.orest@dizboard.com';
 $default['demoDomain'] = 'http://demo.cp.cs';
+$default['refundPolicyPage'] = '';
 
 $default['fenom']['options'] = array(
     'force_compile' => true
