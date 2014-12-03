@@ -12,9 +12,10 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-devices.git",
-                "reference": "4eb7d77fa8fc4b273e35d166223eb930e52c8392"
+                "reference": "b03f708bdbefc209bc990930e06a2ffea84082af"
             },
             "require": {
+                "boomers/cs-mail": "dev-master",
                 "boomers/cs-models": "dev-master",
                 "php": ">=5.4.0",
                 "predis/predis": "1.0.0"
@@ -31,7 +32,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2014-12-02 16:20:20"
+            "time": "2014-12-03 16:04:30"
         },
         {
             "name": "boomers/cs-mail",
@@ -65,7 +66,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-models.git",
-                "reference": "0ed25184096f01ce96c58f1874e822560aea0114"
+                "reference": "b330b61f84d34cc8e99f1e24088eb084e4347734"
             },
             "require": {
                 "php": ">=5.4.0"
@@ -79,7 +80,7 @@
                     "CS\\Models\\": "src/"
                 }
             },
-            "time": "2014-12-03 07:49:10"
+            "time": "2014-12-03 16:13:45"
         },
         {
             "name": "boomers/cs-settings",
