@@ -12,7 +12,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-devices.git",
-                "reference": "bdf4dd25208e9ace21279a5dad187a3d4d7596d7"
+                "reference": "4eb7d77fa8fc4b273e35d166223eb930e52c8392"
             },
             "require": {
                 "boomers/cs-models": "dev-master",
@@ -31,7 +31,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2014-12-02 10:45:29"
+            "time": "2014-12-02 16:20:20"
         },
         {
             "name": "boomers/cs-mail",
@@ -65,7 +65,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-models.git",
-                "reference": "78a858bc3f78310aeaf8f0ab207205ecc1d79b5a"
+                "reference": "0ed25184096f01ce96c58f1874e822560aea0114"
             },
             "require": {
                 "php": ">=5.4.0"
@@ -79,7 +79,7 @@
                     "CS\\Models\\": "src/"
                 }
             },
-            "time": "2014-12-02 10:53:20"
+            "time": "2014-12-03 07:49:10"
         },
         {
             "name": "boomers/cs-settings",
@@ -714,12 +714,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Console.git",
-                "reference": "84e6129790ce01232729d01603eb17086722e474"
+                "reference": "352bbc031f6414f804bd414909b568410af1a7cb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Console/zipball/84e6129790ce01232729d01603eb17086722e474",
-                "reference": "84e6129790ce01232729d01603eb17086722e474",
+                "url": "https://api.github.com/repos/symfony/Console/zipball/352bbc031f6414f804bd414909b568410af1a7cb",
+                "reference": "352bbc031f6414f804bd414909b568410af1a7cb",
                 "shasum": ""
             },
             "require": {
@@ -762,7 +762,7 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "http://symfony.com",
-            "time": "2014-11-20 13:24:36"
+            "time": "2014-12-02 20:20:06"
         }
     ],
     "packages-dev": [],
