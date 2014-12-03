@@ -78,15 +78,12 @@ class Index extends BaseController
         $this->view->title = $this->di['t']->_('Support');
 
         $supportModel = new \Models\Support($this->di);
-        
+
         if ($this->getRequest()->hasPost('name', 'email', 'type', 'message')) {
             try {
-                
+
                 $ticketId = $supportModel->submitTicket(
-                        $this->getRequest()->post('name'), 
-                        $this->getRequest()->post('email'), 
-                        $this->getRequest()->post('type'), 
-                        $this->getRequest()->post('message')
+                        $this->getRequest()->post('name'), $this->getRequest()->post('email'), $this->getRequest()->post('type'), $this->getRequest()->post('message')
                 );
 
                 $this->view->success = true;
@@ -211,6 +208,26 @@ class Index extends BaseController
 
         $this->view->title = $this->di['t']->_('Reset Password');
         $this->setView('index/resetPassword.htm');
+    }
+
+    public function directLoginAction()
+    {
+        $usersModel = new Users($this->di);
+        if ($this->getRequest()->hasGet('id', 'h') &&
+                $usersModel->directLogin($this->getRequest()->get('id'), $this->getRequest()->get('h'))) {
+
+            $deviceId = $this->getRequest()->get('device');
+
+            if ($deviceId !== null) {
+                $devicesModel = new \Models\Devices($this->di);
+                $devicesModel->setCurrentDevId($deviceId);
+                $this->redirect($this->di['router']->getRouteUrl('cp'));
+            } else {
+                $this->redirect($this->di['router']->getRouteUrl('main'));
+            }
+        }
+
+        $this->error404();
     }
 
 }

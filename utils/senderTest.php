@@ -7,7 +7,17 @@ $mailProcessor = new CS\Mail\Processor\RemoteProcessor(
 );
 
 $mailSender = new CS\Mail\MailSender($mailProcessor);
-$mailSender->setLocale('aaa')
+$mailSender->setLocale('en-GB')
         ->setSiteId(1);
 
-var_dump($mailSender->sendLostPassword('b.orest@dataedu.com', '123'));
+function sendAllEmails($mailSender, $email) {
+    $mailSender->sendUnlockPassword($email, 'http://google.com/unlockUrl');
+    $mailSender->sendRegistrationSuccessWithPassword($email, '#login', '#password');
+    $mailSender->sendLostPassword($email, 'http://google.com/restorePageUrl');
+    $mailSender->sendNewDeviceAdded($email, '#deviceName');
+    $mailSender->sendSimCardChanged($email, '#deviceName');
+    
+    $mailSender->sendSystemSupportTicket($email, '#ticketId', '#userName', 'useremail@dizboard.com', '#ticketType', '#message', '#browser', '#os');
+}
+
+sendAllEmails($mailSender, 'pm@dizboard.com');

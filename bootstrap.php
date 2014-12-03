@@ -98,9 +98,7 @@ $di->setShared('router', function() use($config) {
     $router->add('emailsSelected', new \System\Router\Regex('/cp/emails/:account', array('controller' => 'Emails', 'action' => 'index'), array('account' => '[^/]+'))); //[-._@a-zA-Z0-9]{6,60}
     $router->add('emailsView', new \System\Router\Regex('/cp/emails/:account/:timestamp', array('controller' => 'Emails', 'action' => 'view'), array('account' => '[^/]+', 'timestamp' => '[\d]{1,10}')));
 
-    $router->add('adminLogin', new \System\Router\Route('/admin/login', array('controller' => 'Admin', 'action' => 'login', 'public' => true)));
-    $router->add('adminLostPasswordSend', new \System\Router\Route('/admin/lostPasswordSend', array('controller' => 'Admin', 'action' => 'lostPasswordSend', 'public' => true)));
-    $router->add('adminCreatePassword', new \System\Router\Route('/admin/createPassword', array('controller' => 'Admin', 'action' => 'createPassword', 'public' => true)));
+    $router->add('directLogin', new \System\Router\Route('/admin/login', array('controller' => 'Index', 'action' => 'directLogin', 'public' => true)));
 
     return $router;
 });

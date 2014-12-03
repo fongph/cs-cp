@@ -5,7 +5,8 @@ namespace Models;
 use System\Model,
     System\Session,
     CS\Users\UsersManager,
-    CS\Models\User\UserRecord;
+    CS\Models\User\UserRecord,
+    CS\Settings\GlobalSettings;
 
 class Users extends Model
 {
@@ -74,35 +75,42 @@ class Users extends Model
         return true;
     }
 
-    public function setRecordsPerPage($value) {
+    public function setRecordsPerPage($value)
+    {
         $auth = $this->di['auth']->getIdentity();
 
         $userRecord = $this->getUserRecord()
                 ->load($auth['id']);
-        
+
         $userRecord->setRecordsPerPage($value);
-        
+
         return $userRecord->save();
     }
-    
-    public function simpleLogin($id, $hash)
-    {
-        $id = intval($id);
 
-        if ((($email = $this->getDb()->query("SELECT `user_login` FROM `g1_users` WHERE `id` = {$id} LIMIT 1")->fetchColumn()) !== false) &&
-                ($this->_buildSimpleLoginString($id, $email) == $hash)) {
-            $this->loginById($id);
-            return true;
+    public function directLogin($id, $hash)
+    {
+        $usersManager = $this->getUsersManager();
+
+        try {
+            $data = $usersManager->getDirectLoginUserData(
+                    $this->di['config']['site'], $id, $hash, GlobalSettings::getDirectLoginSalt($this->di['config']['site'])
+            );
+        } catch (\CS\Users\DirectLoginException $e) {
+            $this->di['logger']->addAlert("Direct Login Error: " . $e->getMessage());
+            return false;
         }
 
-        return false;
+        $this->di['auth']->setIdentity($data);
+        $this->setLocale($data['locale'], false);
+        
+        return true;
     }
 
     public function loginById($id)
     {
-        $usersManager = new UsersManager($this->getDb());
+        $usersManager = $this->getUsersManager();
 
-        $data = $usersManager->loginById($id);
+        $data = $usersManager->getUserDataById($this->di['config']['site'], $id);
 
         $this->di['auth']->setIdentity($data);
 
