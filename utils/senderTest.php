@@ -17,6 +17,7 @@ function sendAllEmails($mailSender, $email) {
     $mailSender->sendNewDeviceAdded($email, '#deviceName');
     $mailSender->sendSimCardChanged($email, '#deviceName');
     
+    $mailSender->sendNewPurchase($email, 'support@pumpic.com', 'User name', 'Product name', 100);
     $mailSender->sendSystemSupportTicket($email, '#ticketId', '#userName', 'useremail@dizboard.com', '#ticketType', '#message', '#browser', '#os');
 }
 

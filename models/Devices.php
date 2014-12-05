@@ -78,41 +78,6 @@ class Devices extends \System\Model
         return $this->getLimitation()->hasOption($limitation);
     }
 
-    //@todo update for billing
-    public function isPaid_($module)
-    {
-        switch ($module) {
-            case 'keylogger':
-                return $this->di['currentDevice']['plan'] == 'PRO Plus';
-
-            case 'photos':
-                return ($this->di['currentDevice']['plan'] == 'PRO Plus') || ($this->di['currentDevice']['plan'] == 'PRO');
-
-            case 'videos':
-                return $this->di['currentDevice']['plan'] == 'PRO Plus';
-
-            case 'viber':
-                return $this->di['currentDevice']['plan'] == 'PRO Plus';
-
-            case 'whatsapp':
-                return $this->di['currentDevice']['plan'] == 'PRO Plus';
-
-            case 'skype':
-                return $this->di['currentDevice']['plan'] == 'PRO Plus';
-
-            case 'facebook':
-                return $this->di['currentDevice']['plan'] == 'PRO Plus';
-
-            case 'vk':
-                return $this->di['currentDevice']['plan'] == 'PRO Plus';
-
-            case 'emails':
-                return ($this->di['currentDevice']['plan'] == 'PRO Plus') || ($this->di['currentDevice']['plan'] == 'PRO');
-        }
-
-        return true;
-    }
-
 }
 
 class DevicesInvalidNetworkException extends \Exception
