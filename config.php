@@ -75,6 +75,8 @@ if ($build['environment'] == 'production') {
     $default['cookieDomain'] = GlobalSettings::getCookieDomain($build['site']);
     $default['supportEmail'] = GlobalSettings::getSupportEmail($build['site']);
     $default['demoDomain'] = GlobalSettings::getDemoControlPanelURL($build['site']);
+    
+    $default['session']['cookieParams']['domain'] = $default['cookieDomain'];
   
     $default['s3'] = GlobalSettings::getS3Config();
     $default['cloudFront'] = GlobalSettings::getCloudFrontConfig();

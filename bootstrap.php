@@ -132,7 +132,7 @@ $di->setShared('t', function () use ($di) {
         $translator->setLocale($locale);
     } else {
         $translator->setBestLocale();
-        setcookie('locale', $translator->getLocale(), time() + 3600 * 24 * 30, '/');
+        setcookie('locale', $translator->getLocale(), time() + 3600 * 24 * 30, '/', $di['config']['cookieDomain']);
     }
 
     $translator->setTranslations(require ROOT_PATH . 'locales/' . $translator->getLocale() . '.php');
