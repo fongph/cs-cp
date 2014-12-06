@@ -17,18 +17,23 @@ $logger->pushProcessor(new Monolog\Processor\WebProcessor());
 
 if ($config['environment'] == 'development') {
     $logger->pushHandler(new Monolog\Handler\StreamHandler($config['logger']['stream']['filename'], Monolog\Logger::DEBUG));
-    
+
     if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) &&
             strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
         $whoops->pushHandler(new \Whoops\Handler\JsonResponseHandler);
     } else {
         $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler);
     }
+
+    $whoops->pushHandler(new \Whoops\Handler\CallbackHandler(function($exception, $inspector, $run) use ($logger) {
+        $logger->addError($exception->getMessage());
+    }));
 } else {
     $logger->pushHandler(new Monolog\Handler\StreamHandler($config['logger']['stream']['filename'], Monolog\Logger::INFO));
     $logger->pushHandler(new Monolog\Handler\NativeMailerHandler($config['logger']['mail']['from'], $config['logger']['mail']['subject'], $config['logger']['mail']['to']));
-    
-    $whoops->pushHandler(new \Whoops\Handler\CallbackHandler(function($exception, $inspector, $run) {
+
+    $whoops->pushHandler(new \Whoops\Handler\CallbackHandler(function($exception, $inspector, $run) use ($logger) {
+        $logger->addError($exception->getMessage());
         ob_clean();
         header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error', true, 500);
         require(ROOT_PATH . '500.html');
@@ -36,8 +41,6 @@ if ($config['environment'] == 'development') {
     }));
 }
 
-// Whoops must be registered last for showing 500 Error page
-Monolog\ErrorHandler::register($logger);
 $whoops->register();
 
 $di = new System\DI();
