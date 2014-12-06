@@ -4,34 +4,8 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "815c07ce6e0c8e7907d84afdfdff70ac",
+    "hash": "57275afa908baacffe3e3b7100785a37",
     "packages": [
-        {
-            "name": "boomers/cs-billing",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "git@bitbucket.org:boomersweb/cs-billing.git",
-                "reference": "2def2cee62a369aaf7275ead7a6d38b1489ce0af"
-            },
-            "require": {
-                "boomers/cs-models": "dev-master",
-                "php": ">=5.4.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "4.*"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "CS\\Billing\\": "src/"
-                }
-            },
-            "license": [
-                "MIT"
-            ],
-            "time": "2014-12-05 08:45:51"
-        },
         {
             "name": "boomers/cs-devices",
             "version": "dev-master",
@@ -174,31 +148,6 @@
                 ]
             },
             "time": "2014-11-11 13:33:06"
-        },
-        {
-            "name": "boomers/seller",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "git@bitbucket.org:boomersweb/seller.git",
-                "reference": "f3463fac9b10ad7ba31cbec3b0e2d684786741e5"
-            },
-            "require": {
-                "php": ">=5.4.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "4.*"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Seller\\": "src/"
-                }
-            },
-            "license": [
-                "MIT"
-            ],
-            "time": "2014-12-02 15:11:19"
         },
         {
             "name": "fenom/fenom",
@@ -826,9 +775,7 @@
         "boomers/cs-mail": 20,
         "boomers/cs-settings": 20,
         "boomers/cs-users": 20,
-        "boomers/cs-devices": 20,
-        "boomers/cs-billing": 20,
-        "boomers/seller": 20
+        "boomers/cs-devices": 20
     },
     "prefer-stable": false,
     "platform": {

@@ -189,6 +189,7 @@
                         aoColumns: [
                             {
                                 mData: "domain",
+                                bUseRendered: false,
                                 fnRender: function(obj, value) {
                                     return browserHistory.domainNameTmpl({
                                         domain: encodeURIComponent(value),
