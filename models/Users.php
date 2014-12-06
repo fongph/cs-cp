@@ -137,7 +137,7 @@ class Users extends Model
 
     public function setLocale($value, $update = true)
     {
-        setcookie('locale', $value, time() + 3600 * 24 * 30, '/', $config['cookieDomain']);
+        setcookie('locale', $value, time() + 3600 * 24 * 30, '/', $this->di['config']['cookieDomain']);
         if ($update && $this->di['auth']->hasIdentity()) {
             $data = $this->di['auth']->getIdentity();
 
