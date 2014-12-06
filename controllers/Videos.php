@@ -61,7 +61,7 @@ class Videos extends BaseModuleController
     {
         $videosModel = new \Models\Cp\Videos($this->di);
 
-        $this->_processVideoRequests($videosModel, $this->di['router']->getRouteUrl('videosCamera'));
+        $this->processVideoRequests($videosModel, $this->di['router']->getRouteUrl('videosCamera'));
 
         $this->view->videos = $videosModel->getCameraVideos($this->di['devId']);
 
