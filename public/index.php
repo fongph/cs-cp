@@ -26,14 +26,18 @@ if ($config['environment'] == 'development') {
     }
 
     $whoops->pushHandler(new \Whoops\Handler\CallbackHandler(function($exception, $inspector, $run) use ($logger) {
-        $logger->addError($exception->getMessage());
+        $logger->addError(sprintf(
+                        'Uncaught Exception %s: "%s" at %s line %s', get_class($exception), $exception->getMessage(), $exception->getFile(), $exception->getLine()
+        ));
     }));
 } else {
     $logger->pushHandler(new Monolog\Handler\StreamHandler($config['logger']['stream']['filename'], Monolog\Logger::INFO));
     $logger->pushHandler(new Monolog\Handler\NativeMailerHandler($config['logger']['mail']['from'], $config['logger']['mail']['subject'], $config['logger']['mail']['to']));
 
     $whoops->pushHandler(new \Whoops\Handler\CallbackHandler(function($exception, $inspector, $run) use ($logger) {
-        $logger->addError($exception->getMessage());
+        $logger->addError(sprintf(
+                        'Uncaught Exception %s: "%s" at %s line %s', get_class($exception), $exception->getMessage(), $exception->getFile(), $exception->getLine()
+        ));
         ob_clean();
         header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error', true, 500);
         require(ROOT_PATH . '500.html');
