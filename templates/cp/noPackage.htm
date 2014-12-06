@@ -1,0 +1,11 @@
+<div>
+    <h1 class="text-center">{$title}</h1>
+
+    {insert "inc.flashMessages.htm"}
+
+    <h4 class="text-center" style="margin-top: 30px;">{$di.t->_('You don\'t  have plan assigned to this device.')}</h4>
+
+    <div class="text-center">
+        <a href="{$di.config.registration}" class="btn btn-success">{$di.t->_('Buy a new Plan!')}</a>
+    </div>
+</div>

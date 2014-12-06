@@ -25,30 +25,33 @@ abstract class BaseModuleController extends BaseController
             $this->redirect($this->di['router']->getRouteUrl('profile'));
         }
 
-        if (isset($this->di['config']['modules'][$this->module])) {
-            $this->di->set('devId', $devId);
-            $this->di->set('currentDevice', $devices[$devId]);
-
-            $this->moduleCheck();
+        if (!isset($this->di['config']['modules'][$this->module])) {
+            throw new \Exception("Module not found!");
         }
+
+        $this->di->set('devId', $devId);
+        $this->di->set('currentDevice', $devices[$devId]);
+        
+        $this->moduleCheck();
     }
 
     protected function moduleCheck()
     {
+        if ($this->di['currentDevice']['package_name'] == null) {
+            $this->postAction();
+            $this->setView('cp/noPackage.htm');
+            $this->view->title = $this->di['t']->_('No Plan');
+            $this->response();
+            die;
+        }
+        
         $modulesModel = new Modules($this->di);
 
         if ($modulesModel->isModuleActive($this->module) === false) {
             $this->redirect($this->di['router']->getRouteUrl(Modules::CALLS));
         }
-
+        
         $this->view->paid = $this->isModulePaid();
-        if (!$this->view->paid) {
-            if ($this->di->getRouter()->getRouteName() != $this->module) {
-                $this->redirect($this->di->getRouter()->getRouteUrl($this->module));
-            }
-
-            $this->view->packageLink = '';
-        }
     }
 
     protected abstract function isModulePaid();

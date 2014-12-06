@@ -38,7 +38,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-devices.git",
-                "reference": "2374030c7791fbb8c1a099da646f844894a86a28"
+                "reference": "18ef8112c862dbc1d86b6f3c7a31f50b3aa3a541"
             },
             "require": {
                 "boomers/cs-mail": "dev-master",
@@ -58,7 +58,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2014-12-05 14:01:28"
+            "time": "2014-12-06 13:10:35"
         },
         {
             "name": "boomers/cs-mail",
@@ -114,7 +114,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-settings.git",
-                "reference": "32ed7dcc4ef207a82e36d950a334468a90d67265"
+                "reference": "b839e303298ddcd36db48f97e18f4b4960976e9b"
             },
             "require": {
                 "php": ">=5.4.0"
@@ -125,7 +125,7 @@
                     "CS\\Settings\\": "src/"
                 }
             },
-            "time": "2014-12-05 13:39:37"
+            "time": "2014-12-06 13:08:30"
         },
         {
             "name": "boomers/cs-users",
