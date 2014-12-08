@@ -35,6 +35,7 @@
         "fenom/fenom": "2.*",
         "monolog/monolog": "1.*",
         "filp/whoops": "~1.0",
+        "predis/predis": "~1.0",
         "rastor/amazon-s3-php-class": "0.5.1",
         "boomers/ip": "dev-master",
         "boomers/cs-models": "dev-master",

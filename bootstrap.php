@@ -103,10 +103,16 @@ $di->setShared('router', function() use($config) {
     return $router;
 });
 
-$di->setShared('session', function () use ($config) {
-    System\Session::setConfig($config['session']);
+$di->setShared('session', function () use ($di) {
+    
+    System\Session::setConfig($di['config']['session']);
+    if ($di['config']['environment'] == 'production') {
+        $redisConfig = CS\Settings\GlobalSettings::getRedisConfig('sessions', $di['config']['site']);
+        $redisClient = new Predis\Client($redisConfig);
+        System\Session::setSessionHandler(new System\Session\Handler\RedisSessionHandler($redisClient));
+    }
 
-    return new System\Session();
+    return new System\Session;
 });
 
 $di->setShared('flashMessages', function () use ($di) {
