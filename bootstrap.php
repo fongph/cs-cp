@@ -109,7 +109,7 @@ $di->setShared('session', function () use ($di) {
     if ($di['config']['environment'] == 'production') {
         $redisConfig = CS\Settings\GlobalSettings::getRedisConfig('sessions', $di['config']['site']);
         $redisClient = new Predis\Client($redisConfig);
-        System\Session::setSessionHandler(new System\Session\Handler\RedisSessionHandler($redisClient));
+        System\Session::setSessionHandler(new System\Session\Handler\RedisSessionHandler($redisClient, '', true));
     }
 
     return new System\Session;

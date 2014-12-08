@@ -88,7 +88,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-settings.git",
-                "reference": "d3eeb72401e031f8a8d0f6113f3d655e9bca8211"
+                "reference": "2c8f8e1484fe6db1bc67dc133387904761720242"
             },
             "require": {
                 "php": ">=5.4.0"
@@ -99,7 +99,7 @@
                     "CS\\Settings\\": "src/"
                 }
             },
-            "time": "2014-12-08 09:06:37"
+            "time": "2014-12-08 10:52:38"
         },
         {
             "name": "boomers/cs-users",
@@ -623,16 +623,16 @@
         },
         {
             "name": "rastor/system",
-            "version": "0.5.4.2",
+            "version": "0.5.4.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/oRastor/system.git",
-                "reference": "5582b9e47c8cde09fac36a5f23e17357e1fd8e3f"
+                "reference": "663017580af5cd3af4bd2608da76922e2e1a73f5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/oRastor/system/zipball/5582b9e47c8cde09fac36a5f23e17357e1fd8e3f",
-                "reference": "5582b9e47c8cde09fac36a5f23e17357e1fd8e3f",
+                "url": "https://api.github.com/repos/oRastor/system/zipball/663017580af5cd3af4bd2608da76922e2e1a73f5",
+                "reference": "663017580af5cd3af4bd2608da76922e2e1a73f5",
                 "shasum": ""
             },
             "require": {
@@ -663,7 +663,7 @@
                     "homepage": "http://rastor.name"
                 }
             ],
-            "time": "2014-12-08 09:28:43"
+            "time": "2014-12-08 14:45:05"
         },
         {
             "name": "react/promise",
