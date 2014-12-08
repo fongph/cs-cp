@@ -128,6 +128,7 @@ class Users extends Model
     public function logout()
     {
         $this->di['auth']->clearIdentity();
+        unset($this->di['session']['devId']);
     }
 
     public function getRecordsPerPageList()
