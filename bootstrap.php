@@ -110,9 +110,6 @@ $di->setShared('session', function () use ($di) {
         $redisConfig = CS\Settings\GlobalSettings::getRedisConfig('sessions', $di['config']['site']);
         $redisClient = new Predis\Client($redisConfig);
         System\Session::setSessionHandler(new System\Session\Handler\RedisSessionHandler($redisClient));
-    } else {
-        $redisClient = new Predis\Client(array('database' => 1));
-        System\Session::setSessionHandler(new System\Session\Handler\RedisSessionHandler($redisClient));
     }
 
     return new System\Session;
