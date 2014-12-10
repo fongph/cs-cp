@@ -12,7 +12,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-devices.git",
-                "reference": "18ef8112c862dbc1d86b6f3c7a31f50b3aa3a541"
+                "reference": "a5e7a44e06277057e11cbfeb9454938cf03366ae"
             },
             "require": {
                 "boomers/cs-mail": "dev-master",
@@ -32,7 +32,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2014-12-06 13:10:35"
+            "time": "2014-12-09 10:08:00"
         },
         {
             "name": "boomers/cs-mail",
