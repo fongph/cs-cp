@@ -30,7 +30,7 @@
                         <li><a href="{$di.router->getRouteUrl('support')}">{$di.t->_('Support')}</a></li>
                         <li><a href="{$di.router->getRouteUrl('logout')}">{$di.t->_('Log out')}</a></li>
                         {else}
-                        <li><a target="_blank" href="http://www.topspyapp.com/pricing-and-plans/" rel="nofollow">{$di.t->_('Not a Member?')}</a></li>
+                        <li><a target="_blank" href="{$di.config.registration}" rel="nofollow">{$di.t->_('Not a Member?')}</a></li>
                         {/if}
                     </ul>
 
