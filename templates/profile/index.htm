@@ -3,28 +3,32 @@
         .mobile-applications .row {
             text-align: center;
         }
-        
+
         .mobile-applications .row > div {
             margin-bottom: 8px;
         }
-        
+
         .mobile-applications .pull-left, .mobile-applications .pull-right {
             float: none !important;
         }
     }
-    
+
     @media (max-width: 480px) {
         .hidden-xxs {
             display: none;
         }
-        
+
         .add-device .pull-left, .add-device .pull-right {
             float: none !important;
         }
-        
+
         .add-device {
             text-align: center;
         }
+    }
+
+    .add-buttons .btn {
+        width: 195px;
     }
 </style>
 
@@ -40,11 +44,11 @@
                 <ul class="add-buttons">
                     <li>
                         <span class="hidden-xxs">{$di.t->_('Do you want to monitor on iPhone?')}</span>
-                        <a href="{$di.router->getRouteUrl('main')}how-to-install/ios-instructions.html" class="btn btn-success pull-right">{$di.t->_('Add iPhone')}</a>
+                        <a href="{$di.router->getRouteUrl('main')}how-to-install/ios-instructions.html" class="btn btn-success pull-right">{$di.t->_('How to Install on iOS')}</a>
                     </li>
                     <li>
                         <span class="hidden-xxs">{$di.t->_('Do you want to monitor on Android?')}</span>
-                        <a href="{$di.router->getRouteUrl('main')}how-to-install/android-instructions.html" class="btn btn-success pull-right">{$di.t->_('Add Android')}</a>
+                        <a href="{$di.router->getRouteUrl('main')}how-to-install/android-instructions.html" class="btn btn-success pull-right">{$di.t->_('How to Install on Android')}</a>
                     </li>
                     <li class="last">
                         <span class="hidden-xxs">{$di.t->_('Do you want to monitor on BlackBerry?')}</span>
