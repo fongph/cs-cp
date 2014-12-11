@@ -82,7 +82,7 @@ class Index extends BaseController
         if ($this->getRequest()->hasPost('name', 'email', 'type', 'message')) {
             try {
 
-                $ticketId = $supportModel->submitTicket(
+                $ticketId = $supportModel->sendSystemSupportTicket(
                         $this->getRequest()->post('name'), $this->getRequest()->post('email'), $this->getRequest()->post('type'), $this->getRequest()->post('message')
                 );
 
