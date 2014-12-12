@@ -18,9 +18,9 @@ test:
     php_mess_detector:
         allowed_warnings: true
     php_code_sniffer:
-        standard: "PSR2"
-        allowed_errors: true
-        allowed_warnings: true
+        standard: "PSR1,PSR2"
+        allowed_errors: -1
+        allowed_warnings: -1
     php_cpd:
         allow_failures: true
     lint:
