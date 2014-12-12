@@ -22,14 +22,14 @@ class Calendar extends BaseModuleController
     {
         $calendarModel = new \Models\Cp\Calendar($this->di);
         if ($this->getRequest()->isAjax()) {
-            $from = floor($this->getRequest()->get('from', 0) / 1000);
-            $to = ceil($this->getRequest()->get('to', 0) / 1000);
+            $timeFrom = floor($this->getRequest()->get('from', 0) / 1000);
+            $timeTo = ceil($this->getRequest()->get('to', 0) / 1000);
 
-            if ($to - $from > 60 * 60 * 24 * 32) {
+            if ($timeTo - $timeFrom > 60 * 60 * 24 * 32) {
                 $this->error404();
             }
 
-            $this->makeJSONResponse($calendarModel->getEventsList($this->di['devId'], $from, $to, $this->getRequest()->get('offset', 0)));
+            $this->makeJSONResponse($calendarModel->getEventsList($this->di['devId'], $timeFrom, $timeTo, $this->getRequest()->get('offset', 0)));
         }
 
         $this->view->hasRecords = $calendarModel->hasRecords($this->di['devId']);

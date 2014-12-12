@@ -4,12 +4,7 @@ namespace Models\Cp;
 
 class Bookmarks extends BaseModel {
 
-    private static $_standartBrowsers = array('Internet', 'Safari');
-    
     public function getDataTableData($devId, $params = array()) {
-        if (!$devId)
-            return null;
-
         $devId = $this->getDb()->quote($devId);
 
         $search = '';
