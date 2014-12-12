@@ -10,22 +10,18 @@ build_settings:
 setup:
     composer:
         action: "install"
-    shell:
-        - "cd %BUILD_PATH% && mkdir sandbox/tmp"
-        - "cd %BUILD_PATH% && chmod 0775 sandbox/tmp"
-
+    
 test:
     php_unit:
         config: 
             - "phpunit.xml"
     php_mess_detector:
-        allowed_warnings: 10
+        allowed_warnings: true
     php_code_sniffer:
         standard: "PSR2"
-        allowed_errors: 10
-        allowed_warnings: 10
+        allowed_errors: true
+        allowed_warnings: true
     php_cpd:
         allow_failures: true
     lint:
     php_loc:
-    pdepend:
