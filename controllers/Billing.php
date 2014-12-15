@@ -54,6 +54,20 @@ class Billing extends BaseController
 
             $devicesManager->assignLicenseToDevice($license, $device);
             $this->di['flashMessages']->add(FlashMessages::SUCCESS, $this->di['t']->_('Device successfully assigned to your license!'));
+
+            $licInfo = (new \Models\Billing($this->di))
+                ->getLicenseDeviceInfo($license);
+
+            if($licInfo !== false){
+                (new \Models\Users($this->di))
+                    ->addSystemNote($this->auth['id'],
+                        "Assign {$licInfo['product_name']} to device {$licInfo['device_name']} " . json_encode(array(
+                            'device_id' => $licInfo['dev_id'],
+                            'license_id' => $licInfo['license_id']
+                        ))
+                    );
+            }
+            
             $this->redirect($this->di['router']->getRouteUrl('billing'));
         }
 

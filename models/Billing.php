@@ -50,4 +50,21 @@ class Billing extends \System\Model
         return $result;
     }
 
+    public function getLicenseDeviceInfo($licId)
+    {
+        $licId = (int)$licId;
+        return $this->getDb()->query("
+            SELECT *,
+                l.id license_id,
+                d.id dev_id, 
+                d.name device_name,
+                p.id product_id,
+                p.name product_name
+            FROM licenses l
+            JOIN devices d ON l.device_id = d.id
+            JOIN products p ON l.product_id = p.id
+            WHERE l.id = {$licId}"
+        )->fetch(\PDO::FETCH_ASSOC);
+    }
+
 }

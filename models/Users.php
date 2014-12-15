@@ -151,4 +151,15 @@ class Users extends Model
         return true;
     }
 
+    public function addSystemNote($user_id, $message)
+    {
+        $user_id = (int)$user_id;
+        $message = $this->getDb()->quote($message);
+
+        return $this->getDb()->exec("
+            INSERT INTO users_system_notes
+            SET user_id = {$user_id},
+                content = {$message}");
+    }
+    
 }
