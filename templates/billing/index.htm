@@ -1,3 +1,16 @@
+<style>
+    hr {
+        margin: 5px 0;
+    }
+    
+    .list-group {
+        margin-top: 20px;
+    }
+    
+    .list-group .right-data {
+        float: right;
+    }
+</style>
 <div>
     <h1 class="text-center">{$title}</h1>
 
@@ -26,6 +39,12 @@
     </div>
     
     <a href="{$di.router->getRouteUrl('billingAddDevice')}" class="btn btn-success">{$di.t->_('Add Device')}</a>
+    
+    <ul class="list-group">
+        <li class="list-group-item">Premium Support <div class="right-data">expire at <b>14.01.2015</b></div></li>
+        <li class="list-group-item">Naebalovo #2 <div class="right-data"><a href="" class="btn btn-xs btn-success">Buy Now</a></div></li>
+        <li class="list-group-item">Naebalovo #3 <div class="right-data"><a href="" class="btn btn-xs btn-success">Buy Now</a></div></li>
+    </ul>
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -36,8 +55,8 @@
                 tab: null,
                 table: null,
                 unlimitValue: '{$unlimitedValue}',
-                limitsTmpl: _.template('Calls: <b><%= call %></b>, SMS: <b><%= sms %></b>'),
-                deviceTmpl: _.template('<a class="btn btn-success btn-xs" href="{$di.router->getRouteUrl('billingAssignDevice')}?license=<%= id %>"><i class="fa fa-arrows-h"></i> {$di.t->_('Assign Device')}</a>'),
+                limitsTmpl: _.template('Calls: <b><%= call %></b><hr/> SMS: <b><%= sms %></b>'),
+                deviceTmpl: _.template('<a class="btn btn-success btn-xs" href="{$di.router->getRouteUrl('billingAssignDevice')}?license=<%= id %>"><i class="fa fa-plug"></i> {$di.t->_('Assign Device')}</a>'),
                 getSourceUrl: function () {
                     if (window.location.hash === '#active') {
                         return this.url + '?active=1';
@@ -47,10 +66,10 @@
                 },
                 getLimitationValue: function(name, value) {
                     if ((name == 'sms' || name == 'call') && value == this.unlimitValue) {
-                        return '{$di.t->_('unlimited')}';
+                        return "{$di.t->_('unlimited')}";
                     }
                     
-                    return value;
+                    return value + ' <a class="btn btn-xs btn-success" href=""><i class="fa fa-arrows-v"></i> Buy unlimited</a>';
                 },
                 reloadTable: function () {
                     if (this.table) {
