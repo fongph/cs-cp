@@ -5,9 +5,6 @@ namespace Models\Cp;
 class Viber extends BaseModel {
 
     public function getPrivateDataTableData($devId, $params = array()) {
-        if (!$devId)
-            return null;
-
         $devId = $this->getDb()->quote($devId);
 
         $search = '';
