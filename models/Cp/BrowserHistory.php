@@ -118,7 +118,7 @@ class BrowserHistory extends BaseModel {
         return false;
     }
 
-    function exist($devId, $host) {
+    public function exist($devId, $host) {
         $devId = $this->getDB()->quote($devId);
         $host = $this->getDB()->quote($host);
 
@@ -130,10 +130,10 @@ class BrowserHistory extends BaseModel {
             throw new BrowserHistory\InvalidDomainNameException('Invalid domain name');
         }
 
-        $devId = $this->getDB()->quote($devId);
-        $host = $this->getDB()->quote($host);
+        $escapedDevId = $this->getDB()->quote($devId);
+        $escapedHost = $this->getDB()->quote($host);
 
-        if (!$this->getDb()->exec("INSERT INTO `browser_blocked` SET `dev_id` =  {$devId}, `domain` = {$host}, `unblocked` = 0 ON DUPLICATE KEY UPDATE `unblocked` = 0")) {
+        if (!$this->getDb()->exec("INSERT INTO `browser_blocked` SET `dev_id` =  {$escapedDevId}, `domain` = {$escapedHost}, `unblocked` = 0 ON DUPLICATE KEY UPDATE `unblocked` = 0")) {
             throw new BrowserHistory\DomainAlreadyExistsException('Domain already exist');
         }
 
@@ -148,12 +148,12 @@ class BrowserHistory extends BaseModel {
         $escapedDevId = $this->getDB()->quote($devId);
         $escapedHost = $this->getDB()->quote($host);
 
-        if ($this->getDb()->exec("UPDATE `browser_blocked` SET `unblocked` = 1 WHERE `dev_id` = $escapedDevId AND `domain` = $escapedHost LIMIT 1") !== 1) {
+        if ($this->getDb()->exec("UPDATE `browser_blocked` SET `unblocked` = 1 WHERE `dev_id` = {$escapedDevId} AND `domain` = {$escapedHost} LIMIT 1") !== 1) {
             if ($this->exist($devId, $host)) {
                 throw new BrowserHistory\DomainAlreadyUnblockedException('Domain already unblocked');
             }
             
-            throw new BrowserHistory\UndefinedException('Application to unblock not found');
+            throw new BrowserHistory\UndefinedException('Domain to unblock not found');
         }
         
         return true;
@@ -165,20 +165,4 @@ class BrowserHistory extends BaseModel {
         return $this->getDb()->query("SELECT `dev_id` FROM `browser_history` WHERE `dev_id` = {$devId} LIMIT 1")->fetchColumn() !== false;
     }
 
-}
-
-class BrowserHistoryInvalidDomainNameException extends \Exception {
-    
-}
-
-class BrowserHistoryDomainAlreadyExistsException extends \Exception {
-    
-}
-
-class BrowserHistoryDomainAlreadyUnblockedException extends \Exception {
-    
-}
-
-class BrowserHistoryUndefinedException extends \Exception {
-    
 }
