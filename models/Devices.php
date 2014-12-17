@@ -35,16 +35,16 @@ class Devices extends \System\Model
         
         if ($devId === null || !isset($this->di['devicesList'][$devId])) {
             $devId = null;
+            
             if (count($this->di['devicesList'])) {
                 $devices = array_keys($this->di['devicesList']);
                 $devId = $devices[0];
             }
 
             $this->setCurrentDevId($devId);
-            return $devId;
         }
 
-        return $this->di['session']['devId'];
+        return $devId;
     }
 
     public function setCurrentDevId($devId)
