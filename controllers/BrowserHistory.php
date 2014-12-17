@@ -30,29 +30,9 @@ class BrowserHistory extends BaseModuleController
             $this->checkDisplayLength($dataTableRequest->getDisplayLength());
             $this->makeJSONResponse($data);
         } else if ($this->getRequest()->get('block') !== null) {
-            try {
-                $browserHistoryModel->addSiteBlock($this->di['devId'], $this->getRequest()->get('block'));
-                $this->di['flashMessages']->add(FlashMessages::SUCCESS, $this->di['t']->_('The domain has been successfully added!'));
-            } catch (\Models\Cp\BrowserHistoryInvalidDomainNameException $e) {
-                $this->di['flashMessages']->add(FlashMessages::ERROR, $this->di['t']->_('Invalid domain name!'));
-            } catch (\Models\Cp\BrowserHistoryDomainAlreadyExistsException $e) {
-                $this->di['flashMessages']->add(FlashMessages::INFO, $this->di['t']->_('The domain already exists on the list!'));
-            }
-
-            $this->redirect($this->di['router']->getRouteUrl('browserHistory') . '#blocked');
+            $this->blockDomain($this->getRequest()->get('block'), $browserHistoryModel);
         } else if ($this->getRequest()->get('unblock') !== null) {
-            try {
-                $browserHistoryModel->addSiteUnblock($this->di['devId'], $this->getRequest()->get('unblock'));
-                $this->di['flashMessages']->add(FlashMessages::SUCCESS, $this->di['t']->_('The domain has been successfully unlocked!'));
-            } catch (\Models\Cp\BrowserHistoryInvalidDomainNameException $e) {
-                $this->di['flashMessages']->add(FlashMessages::ERROR, $this->di['t']->_('Invalid domain name!'));
-            } catch (\Models\Cp\BrowserHistoryDomainAlreadyUnblockedException $e) {
-                $this->di['flashMessages']->add(FlashMessages::INFO, $this->di['t']->_('The domain has already been unlocked!'));
-            } catch (\Models\Cp\BrowserHistoryUndefinedException $e) {
-                $this->di['flashMessages']->add(FlashMessages::INFO, $this->di['t']->_('The domain already exists on the list!'));
-            }
-
-            $this->redirect($this->di['router']->getRouteUrl('browserHistory') . '#blocked');
+            $this->unblockDomain($this->getRequest()->get('unblock'), $browserHistoryModel);
         }
 
         if ($this->view->paid) {
@@ -85,11 +65,41 @@ class BrowserHistory extends BaseModuleController
 
         $this->view->title = $this->di['t']->_('View Browser History');
     }
-    
+
     protected function isModulePaid()
     {
         $devicesLimitations = new Limitations($this->di['db']);
         return $devicesLimitations->isAllowed($this->di['devId'], Limitations::BROWSER_HISTORY);
+    }
+
+    private function blockDomain($domain, $browserHistoryModel)
+    {
+        try {
+            $browserHistoryModel->addSiteBlock($this->di['devId'], $domain);
+            $this->di['flashMessages']->add(FlashMessages::SUCCESS, $this->di['t']->_('The domain has been successfully added!'));
+        } catch (\Models\Cp\BrowserHistoryInvalidDomainNameException $e) {
+            $this->di['flashMessages']->add(FlashMessages::ERROR, $this->di['t']->_('Invalid domain name!'));
+        } catch (\Models\Cp\BrowserHistoryDomainAlreadyExistsException $e) {
+            $this->di['flashMessages']->add(FlashMessages::INFO, $this->di['t']->_('The domain already exists on the list!'));
+        }
+
+        $this->redirect($this->di['router']->getRouteUrl('browserHistory') . '#blocked');
+    }
+
+    private function unblockDomain($domain, $browserHistoryModel)
+    {
+        try {
+            $browserHistoryModel->addSiteUnblock($this->di['devId'], $domain);
+            $this->di['flashMessages']->add(FlashMessages::SUCCESS, $this->di['t']->_('The domain has been successfully unlocked!'));
+        } catch (\Models\Cp\BrowserHistoryInvalidDomainNameException $e) {
+            $this->di['flashMessages']->add(FlashMessages::ERROR, $this->di['t']->_('Invalid domain name!'));
+        } catch (\Models\Cp\BrowserHistoryDomainAlreadyUnblockedException $e) {
+            $this->di['flashMessages']->add(FlashMessages::INFO, $this->di['t']->_('The domain has already been unlocked!'));
+        } catch (\Models\Cp\BrowserHistoryUndefinedException $e) {
+            $this->di['flashMessages']->add(FlashMessages::INFO, $this->di['t']->_('The domain already exists on the list!'));
+        }
+
+        $this->redirect($this->di['router']->getRouteUrl('browserHistory') . '#blocked');
     }
 
 }
