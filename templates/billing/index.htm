@@ -42,8 +42,8 @@
     
     <ul class="list-group">
         <li class="list-group-item">Premium Support <div class="right-data">expire at <b>14.01.2015</b></div></li>
-        <li class="list-group-item">Naebalovo #2 <div class="right-data"><a href="" class="btn btn-xs btn-success">Buy Now</a></div></li>
-        <li class="list-group-item">Naebalovo #3 <div class="right-data"><a href="" class="btn btn-xs btn-success">Buy Now</a></div></li>
+        <li class="list-group-item">Naebalovo #2 <div class="right-data"><a href="?bundle2" class="btn btn-xs btn-success">Buy Now</a></div></li>
+        <li class="list-group-item">Naebalovo #3 <div class="right-data"><a href="?bundle3" class="btn btn-xs btn-success">Buy Now</a></div></li>
     </ul>
 
     <script type="text/javascript">
@@ -69,7 +69,15 @@
                         return "{$di.t->_('unlimited')}";
                     }
                     
-                    return value + ' <a class="btn btn-xs btn-success" href=""><i class="fa fa-arrows-v"></i> Buy unlimited</a>';
+                    if (name == 'sms') {
+                        return value + ' <a class="btn btn-xs btn-success" href="?unlimited-sms"><i class="fa fa-arrows-v"></i> Buy unlimited</a>';
+                    }
+                    
+                    if (name == 'call') {
+                        return value + ' <a class="btn btn-xs btn-success" href="?unlimited-calls"><i class="fa fa-arrows-v"></i> Buy unlimited</a>';
+                    }
+                    
+                    return value;
                 },
                 reloadTable: function () {
                     if (this.table) {
