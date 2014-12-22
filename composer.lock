@@ -12,7 +12,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-devices.git",
-                "reference": "a5e7a44e06277057e11cbfeb9454938cf03366ae"
+                "reference": "86534f8434f996f4cdc7c039b7ef70d32551fd7e"
             },
             "require": {
                 "boomers/cs-mail": "dev-master",
@@ -32,7 +32,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2014-12-09 10:08:00"
+            "time": "2014-12-11 13:14:57"
         },
         {
             "name": "boomers/cs-mail",
@@ -66,7 +66,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-models.git",
-                "reference": "b330b61f84d34cc8e99f1e24088eb084e4347734"
+                "reference": "961da2fb7c27fc7655b794acbc49fd9d43f4d7b1"
             },
             "require": {
                 "php": ">=5.4.0"
@@ -80,7 +80,7 @@
                     "CS\\Models\\": "src/"
                 }
             },
-            "time": "2014-12-03 16:13:45"
+            "time": "2014-12-17 15:53:54"
         },
         {
             "name": "boomers/cs-settings",
@@ -88,7 +88,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-settings.git",
-                "reference": "2c8f8e1484fe6db1bc67dc133387904761720242"
+                "reference": "64fb62da7d01b83508a60dd499694ebe993d801e"
             },
             "require": {
                 "php": ">=5.4.0"
@@ -99,7 +99,7 @@
                     "CS\\Settings\\": "src/"
                 }
             },
-            "time": "2014-12-08 10:52:38"
+            "time": "2014-12-22 15:28:08"
         },
         {
             "name": "boomers/cs-users",
@@ -107,7 +107,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-users.git",
-                "reference": "0c012f0f8db2c92502c3f6cce3f287b5bba67fea"
+                "reference": "166a31ce4ed3f502d5754316981d687eb4c1aba5"
             },
             "require": {
                 "boomers/cs-mail": "dev-master",
@@ -128,7 +128,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2014-12-03 14:08:35"
+            "time": "2014-12-17 15:16:41"
         },
         {
             "name": "boomers/ip",
@@ -259,16 +259,16 @@
         },
         {
             "name": "guzzlehttp/guzzle",
-            "version": "5.0.3",
+            "version": "5.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/guzzle.git",
-                "reference": "6c72627de1d66832e4270e36e56acdb0d1d8f282"
+                "reference": "f1085bb4e023766a66b7b051914ec73bdf7202b5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/6c72627de1d66832e4270e36e56acdb0d1d8f282",
-                "reference": "6c72627de1d66832e4270e36e56acdb0d1d8f282",
+                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/f1085bb4e023766a66b7b051914ec73bdf7202b5",
+                "reference": "f1085bb4e023766a66b7b051914ec73bdf7202b5",
                 "shasum": ""
             },
             "require": {
@@ -313,20 +313,20 @@
                 "rest",
                 "web service"
             ],
-            "time": "2014-11-04 07:09:15"
+            "time": "2014-12-19 20:27:15"
         },
         {
             "name": "guzzlehttp/ringphp",
-            "version": "1.0.4",
+            "version": "1.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/RingPHP.git",
-                "reference": "9187999f80720b9494692d2167d75144acb2ad05"
+                "reference": "a903f51b692427318bc813217c0e6505287e79a4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/RingPHP/zipball/9187999f80720b9494692d2167d75144acb2ad05",
-                "reference": "9187999f80720b9494692d2167d75144acb2ad05",
+                "url": "https://api.github.com/repos/guzzle/RingPHP/zipball/a903f51b692427318bc813217c0e6505287e79a4",
+                "reference": "a903f51b692427318bc813217c0e6505287e79a4",
                 "shasum": ""
             },
             "require": {
@@ -363,7 +363,7 @@
                     "homepage": "https://github.com/mtdowling"
                 }
             ],
-            "time": "2014-12-02 05:01:22"
+            "time": "2014-12-11 05:50:32"
         },
         {
             "name": "guzzlehttp/streams",
