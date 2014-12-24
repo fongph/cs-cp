@@ -66,7 +66,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-models.git",
-                "reference": "961da2fb7c27fc7655b794acbc49fd9d43f4d7b1"
+                "reference": "935a48ee30e030afd0f1a160506f56169674364e"
             },
             "require": {
                 "php": ">=5.4.0"
@@ -80,7 +80,7 @@
                     "CS\\Models\\": "src/"
                 }
             },
-            "time": "2014-12-17 15:53:54"
+            "time": "2014-12-23 14:02:19"
         },
         {
             "name": "boomers/cs-settings",
@@ -88,7 +88,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-settings.git",
-                "reference": "64fb62da7d01b83508a60dd499694ebe993d801e"
+                "reference": "d3d8a009cbf49f74f04d9c931444f73c2764ca1a"
             },
             "require": {
                 "php": ">=5.4.0"
@@ -99,7 +99,7 @@
                     "CS\\Settings\\": "src/"
                 }
             },
-            "time": "2014-12-22 15:28:08"
+            "time": "2014-12-23 09:52:16"
         },
         {
             "name": "boomers/cs-users",
