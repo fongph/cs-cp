@@ -40,14 +40,32 @@
     
     <a href="{$di.router->getRouteUrl('billingAddDevice')}" class="btn btn-success">{$di.t->_('Add Device')}</a>
     
+    {if count($bundles)}
     <ul class="list-group">
-        <li class="list-group-item">Premium Support <div class="right-data">expire at <b>14.01.2015</b></div></li>
-        <li class="list-group-item">Naebalovo #2 <div class="right-data"><a href="?bundle2" class="btn btn-xs btn-success">Buy Now</a></div></li>
-        <li class="list-group-item">Naebalovo #3 <div class="right-data"><a href="?bundle3" class="btn btn-xs btn-success">Buy Now</a></div></li>
+        {foreach $bundles as $item}
+        <li class="list-group-item">
+            {$item.name}
+            <div class="right-data">
+                {if $item.continuous == 1}
+                    <b>available</b>
+                {elseif $item.expiration_date > 0}
+                    expire at <b class="expire-date" data-time="{$item.expiration_date}"></b>
+                {else}
+                    <a href="{$buyUrl}?product={$item.group}" class="btn btn-xs btn-success">{$di.t->_('Buy Now')}</a>
+                {/if}
+            </div>
+        </li>
+        {/foreach}
     </ul>
+    {/if}
 
     <script type="text/javascript">
         $(document).ready(function () {
+            $('.expire-date').each(function(){
+                var timestamp = parseInt($(this).attr('data-time'), 10);
+                $(this).html(moment(timestamp * 1000).zone(0).format('ll'));
+            });
+            
             moment.lang('{$di.t->getLocale()}');
 
             var billing = {
@@ -64,17 +82,17 @@
                         return this.url + '?active=0';
                     }
                 },
-                getLimitationValue: function(name, value) {
+                getLimitationValue: function(name, value, deviceId) {
                     if ((name == 'sms' || name == 'call') && value == this.unlimitValue) {
                         return "{$di.t->_('unlimited')}";
                     }
                     
-                    if (name == 'sms') {
-                        return value + ' <a class="btn btn-xs btn-success" href="?unlimited-sms"><i class="fa fa-arrows-v"></i> Buy unlimited</a>';
+                    if (name == 'sms' && deviceId) {
+                        return value + ' <a class="btn btn-xs btn-success" href="{$buyUrl}?product=unlimited-sms&device=' + deviceId + '"><i class="fa fa-arrows-v"></i> Buy unlimited</a>';
                     }
                     
-                    if (name == 'call') {
-                        return value + ' <a class="btn btn-xs btn-success" href="?unlimited-calls"><i class="fa fa-arrows-v"></i> Buy unlimited</a>';
+                    if (name == 'call' && deviceId) {
+                        return value + ' <a class="btn btn-xs btn-success" href="{$buyUrl}?product=unlimited-calls&device=' + deviceId + '"><i class="fa fa-arrows-v"></i> Buy unlimited</a>';
                     }
                     
                     return value;
@@ -178,8 +196,8 @@
                                     var data = arguments[2];
                                     
                                     return billing.limitsTmpl({
-                                        call: billing.getLimitationValue('call', data.call),
-                                        sms: billing.getLimitationValue('sms', data.sms)
+                                        call: billing.getLimitationValue('call', data.call, data.deviceId),
+                                        sms: billing.getLimitationValue('sms', data.sms, data.deviceId)
                                     });
                                 }
                             }

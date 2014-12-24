@@ -62,7 +62,8 @@ $default = array(
         'how-to-install/blackberry-instructions.html' => 'BlackBerry Installation Guide',
         'how-to-install/ios-instructions.html' => 'iPhone Installation Guide',
         'how-to-install/root-instructions.html' => 'Root Instructions'
-    )
+    ),
+    'bundlesNamespace' => 'first'
 );
 
 if ($build['environment'] == 'production') {

@@ -3,6 +3,7 @@
 namespace Controllers;
 
 use System\FlashMessages,
+    CS\Settings\GlobalSettings,
     CS\Devices\Manager as DevicesManager;
 
 class Billing extends BaseController
@@ -10,9 +11,9 @@ class Billing extends BaseController
 
     public function indexAction()
     {
+        $billingModel = new \Models\Billing($this->di);
+        
         if ($this->getRequest()->isAjax()) {
-            $billingModel = new \Models\Billing($this->di);
-
             $dataTableRequest = new \System\DataTableRequest($this->di);
 
             $data = $billingModel->getDataTableData(
@@ -24,7 +25,9 @@ class Billing extends BaseController
 
         $this->view->title = $this->di->getTranslator()->_('Payments & Devices');
         $this->view->unlimitedValue = \CS\Models\Limitation\LimitationRecord::UNLIMITED_VALUE;
-
+        $this->view->buyUrl = GlobalSettings::getMainURL($this->di['config']['site']) . '/buy.html';
+        $this->view->bundles = $billingModel->getBundlesList($this->auth['id']);
+        
         $this->setView('billing/index.htm');
     }
 
@@ -56,18 +59,17 @@ class Billing extends BaseController
             $this->di['flashMessages']->add(FlashMessages::SUCCESS, $this->di['t']->_('Device successfully assigned to your license!'));
 
             $licInfo = (new \Models\Billing($this->di))
-                ->getLicenseDeviceInfo($license);
+                    ->getLicenseDeviceInfo($license);
 
-            if($licInfo !== false){
+            if ($licInfo !== false) {
                 (new \Models\Users($this->di))
-                    ->addSystemNote($this->auth['id'],
-                        "Assign {$licInfo['product_name']} to device {$licInfo['device_name']} " . json_encode(array(
-                            'device_id' => $licInfo['dev_id'],
-                            'license_id' => $licInfo['license_id']
-                        ))
-                    );
+                        ->addSystemNote($this->auth['id'], "Assign {$licInfo['product_name']} to device {$licInfo['device_name']} " . json_encode(array(
+                                    'device_id' => $licInfo['dev_id'],
+                                    'license_id' => $licInfo['license_id']
+                                ))
+                );
             }
-            
+
             $this->redirect($this->di['router']->getRouteUrl('billing'));
         }
 
@@ -124,7 +126,7 @@ class Billing extends BaseController
             $this->di->getFlashMessages()->add(FlashMessages::SUCCESS, "Your device successfully added!");
             $this->redirect($this->di['router']->getRouteUrl('billing'));
         }
-        
+
         if ($info['expired']) {
             $this->di->getFlashMessages()->add(FlashMessages::INFO, "Code was expired. We've generated new code for you. Please enter it on mobile phone.");
         } else {
