@@ -9,12 +9,34 @@ class Billing extends \System\Model
     {
         $userId = $this->getDb()->quote($user);
 
+        $unlimitedValue = $this->getDb()->quote(\CS\Models\Limitation\LimitationRecord::UNLIMITED_VALUE);
+        
         $select = "SELECT lic.`id`, p.`name`, lic.`amount`, lic.`currency`,
             lic.`activation_date`, lic.`expiration_date`, lic.`status`,
             d.`id` `deviceId`,
             d.`name` `device`,
             IF(dlim.`id` IS NULL, lim.`sms`, dlim.`sms`) `sms`,
-            IF(dlim.`id` IS NULL, lim.`call`, dlim.`call`) `call`";
+            IF(dlim.`id` IS NULL, lim.`call`, dlim.`call`) `call`,
+            (SELECT 
+                    MAX(`expiration_date`) 
+                FROM `licenses` smsl
+                INNER JOIN `products` smsp ON smsl.`product_id` = smsp.`id`
+                INNER JOIN `limitations` smslim ON smslim.`id` = smsp.`limitation_id`
+                WHERE 
+                    smsl.`device_id` = lic.`device_id` AND
+                    smsl.`product_type` = 'option' AND
+                    smslim.sms = {$unlimitedValue}
+            ) as `sms_expire_date`,
+            (SELECT 
+                    MAX(`expiration_date`) 
+                FROM `licenses` callsl
+                INNER JOIN `products` callsp ON callsl.`product_id` = callsp.`id`
+                INNER JOIN `limitations` callslim ON callslim.`id` = callsp.`limitation_id`
+                WHERE 
+                    callsl.`device_id` = lic.`device_id` AND
+                    callsl.`product_type` = 'option' AND
+                    callslim.call = {$unlimitedValue}
+            ) as `calls_expire_date`";
 
         $fromWhere = "FROM `licenses` lic
                             INNER JOIN `products` p ON lic.`product_id` = p.`id`

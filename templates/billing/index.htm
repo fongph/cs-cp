@@ -10,6 +10,12 @@
     .list-group .right-data {
         float: right;
     }
+    
+    .option-expire {
+        font-size: 10px;
+        font-weight: normal;
+        font-style: italic;
+    }
 </style>
 <div>
     <h1 class="text-center">{$title}</h1>
@@ -49,7 +55,7 @@
                 {if $item.continuous == 1}
                     <b>available</b>
                 {elseif $item.expiration_date > 0}
-                    expire at <b class="expire-date" data-time="{$item.expiration_date}"></b>
+                    {$di.t->_('expires at')} <b class="expire-date" data-time="{$item.expiration_date}"></b>
                 {else}
                     <a href="{$buyUrl}?product={$item.group}" class="btn btn-xs btn-success">{$di.t->_('Buy Now')}</a>
                 {/if}
@@ -82,17 +88,30 @@
                         return this.url + '?active=0';
                     }
                 },
-                getLimitationValue: function(name, value, deviceId) {
-                    if ((name == 'sms' || name == 'call') && value == this.unlimitValue) {
+                getSmsValue: function (value, deviceId, expireDate) {
+                    if (value == this.unlimitValue) {
+                        if (expireDate) {
+                            return '{$di.t->_('unlimited')}<br/> <span class="option-expire">expires at ' + moment(expireDate * 1000).zone(0).format('ll') + '</span>';
+                        }
+                        return '{$di.t->_('unlimited')}';
+                    }
+                    
+                    if (deviceId) {
+                        return value + ' <a class="btn btn-xs btn-success" href="{$buyUrl}?product=unlimited-sms&device=' + deviceId + '"><i class="fa fa-arrows-v"></i> {$di.t->_('Buy unlimited')}</a>';
+                    }
+                    
+                    return value;
+                },
+                getCallsValue: function (value, deviceId, expireDate) {
+                    if (value == this.unlimitValue) {
+                        if (expireDate) {
+                            return '{$di.t->_('unlimited')}<br/> <span class="option-expire">expires at ' + moment(expireDate * 1000).zone(0).format('ll') + '</span>';
+                        }
                         return "{$di.t->_('unlimited')}";
                     }
                     
-                    if (name == 'sms' && deviceId) {
-                        return value + ' <a class="btn btn-xs btn-success" href="{$buyUrl}?product=unlimited-sms&device=' + deviceId + '"><i class="fa fa-arrows-v"></i> Buy unlimited</a>';
-                    }
-                    
-                    if (name == 'call' && deviceId) {
-                        return value + ' <a class="btn btn-xs btn-success" href="{$buyUrl}?product=unlimited-calls&device=' + deviceId + '"><i class="fa fa-arrows-v"></i> Buy unlimited</a>';
+                    if (deviceId) {
+                        return value + ' <a class="btn btn-xs btn-success" href="{$buyUrl}?product=unlimited-calls&device=' + deviceId + '"><i class="fa fa-arrows-v"></i> {$di.t->_('Buy unlimited')}</a>';
                     }
                     
                     return value;
@@ -196,8 +215,8 @@
                                     var data = arguments[2];
                                     
                                     return billing.limitsTmpl({
-                                        call: billing.getLimitationValue('call', data.call, data.deviceId),
-                                        sms: billing.getLimitationValue('sms', data.sms, data.deviceId)
+                                        call: billing.getCallsValue(data.call, data.deviceId, data.calls_expire_date),
+                                        sms: billing.getSmsValue(data.sms, data.deviceId, data.sms_expire_date)
                                     });
                                 }
                             }
