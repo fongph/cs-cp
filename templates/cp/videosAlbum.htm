@@ -196,7 +196,7 @@
         });
 
         $('.video-holder .date').each(function() {
-            $(this).html(moment($(this).attr('data-time') * 1000).format('llll'));
+            $(this).html(moment($(this).attr('data-time') * 1000).zone(0).format('llll'));
         });
 
         $('#network').change(function() {
