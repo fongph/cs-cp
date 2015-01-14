@@ -12,7 +12,7 @@ class Billing extends BaseController
     public function indexAction()
     {
         $billingModel = new \Models\Billing($this->di);
-        
+
         if ($this->getRequest()->isAjax()) {
             $dataTableRequest = new \System\DataTableRequest($this->di);
 
@@ -27,7 +27,7 @@ class Billing extends BaseController
         $this->view->unlimitedValue = \CS\Models\Limitation\LimitationRecord::UNLIMITED_VALUE;
         $this->view->buyUrl = GlobalSettings::getMainURL($this->di['config']['site']) . '/buy.html';
         $this->view->bundles = $billingModel->getBundlesList($this->auth['id']);
-        
+
         $this->setView('billing/index.htm');
     }
 
@@ -138,6 +138,50 @@ class Billing extends BaseController
         } else {
             $this->redirect($this->di['router']->getRouteUrl('billingAddDevice'));
         }
+    }
+
+    public function licenseAction()
+    {
+        $this->view->title = $this->di->getTranslator()->_('Plan view');
+
+        $billingModel = new \Models\Billing($this->di);
+        $license = $billingModel->getUserLicenseInfo($this->auth['id'], $this->params['id']);
+
+        if ($license == false) {
+            $this->di->getFlashMessages()->add(FlashMessages::ERROR, "Plan was not found!");
+            $this->redirect($this->di['router']->getRouteUrl('billing'));
+        }
+
+        $this->view->license = $license;
+        $this->setView('billing/license.htm');
+    }
+
+    public function disableLicenseAction()
+    {
+        $billingModel = new \Models\Billing($this->di);
+        $license = $billingModel->getUserLicenseInfo($this->auth['id'], $this->params['id'], false);
+
+        if ($license == false) {
+            $this->di->getFlashMessages()->add(FlashMessages::ERROR, "Plan was not found!");
+            $this->redirect($this->di['router']->getRouteUrl('billing'));
+        }
+
+        $billingModel->disableSubscription($license['payment_method'], $license['reference_number']);
+        $this->redirect($this->di->getRouter()->getRouteUrl('billingLicense', array('id' => $license['id'])));
+    }
+
+    public function enableLicenseAction()
+    {
+        $billingModel = new \Models\Billing($this->di);
+        $license = $billingModel->getUserLicenseInfo($this->auth['id'], $this->params['id'], false);
+
+        if ($license == false) {
+            $this->di->getFlashMessages()->add(FlashMessages::ERROR, "Plan was not found!");
+            $this->redirect($this->di->getRouter()->getRouteUrl('billing'));
+        }
+
+        $billingModel->disableSubscription($license['payment_method'], $license['reference_number']);
+        $this->redirect($this->di->getRouter()->getRouteUrl('billingLicense', array('id' => $license['id'])));
     }
 
 }

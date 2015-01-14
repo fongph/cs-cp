@@ -1,0 +1,56 @@
+<style>
+    dd {
+        padding-left: 20px;
+    }
+</style>
+<div>
+    <h1 class="text-center">{$title}</h1>
+
+    {insert "inc.flashMessages.htm"}
+
+    <dl>
+        <dt>{$di.t->_('Subscription plan')}</dt>
+        <dd>{$license.name}</dd>
+        <dt>{$di.t->_('Price')}</dt>
+        <dd>{$license.amount} {$license.currency}</dd>
+        <dt>{$di.t->_('Date of purchase')}</dt>
+        <dd data-time="{$license.activation_date}">-</dd>
+        <dt>{$di.t->_('Expiration date')}</dt>
+        <dd data-time="{$license.expiration_date}">-</dd>
+        <dt>{$di.t->_('Status')}</dt>
+        <dd>{$license.status}</dd>
+        {if $license.payment_method == 'fastspring'}
+            {if isset($license.details.cancelable)}
+            <dt>{$di.t->_('Subscription auto-renew')}</dt>
+            <dd>
+                {if $license.details.cancelable === 'false'}
+                {$di.t->_('off')} <a href="{$di.router->getRouteUrl('billingLicenseEnable', ['id' => $license.id])}" class="btn btn-xs btn-success">{$di.t->_('enable')}</a>
+                {else}
+                {$di.t->_('on')} <a href="{$di.router->getRouteUrl('billingLicenseDisable', ['id' => $license.id])}" id="disableSubscription" class="btn btn-xs btn-danger">{$di.t->_('disable')}</a>
+                {/if}
+            </dd>
+            {/if}
+        {/if}
+    </dl>
+    {if $license.payment_method == 'fastspring'}
+        <a href="{$license.details.customerUrl}" target="_blank">{$di.t->_('Subscription details at FastSpring')}</a>
+    {/if}
+
+    <div style="margin-top: 20px;">
+        <a href="{$di.router->getRouteUrl('billing')}" class="btn btn-default"><i class="fa fa-angle-left"></i> {$di.t->_('Back')}</a>
+    </div>
+    
+    <script>
+        $(document).ready(function () {
+            $('dd[data-time]').each(function () {
+                if ($(this).attr('data-time') > 0) {
+                    $(this).html(moment($(this).attr('data-time') * 1000).zone(0).format('lll'));
+                }
+            });
+            
+            $('#disableSubscription').click(function(){
+                confirm("{$di.t->_('Disable subscription auto-renew?')}");
+            });
+        });
+    </script>
+</div>

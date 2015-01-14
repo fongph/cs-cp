@@ -4,8 +4,35 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "d8468e76e193da87b86426fd572c91bd",
+    "hash": "693dbad6964e81ea56c0316aaee284eb",
     "packages": [
+        {
+            "name": "boomers/cs-billing",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "git@bitbucket.org:boomersweb/cs-billing.git",
+                "reference": "b8c2f834908b7c589a9d4020674856f2d71c0a31"
+            },
+            "require": {
+                "boomers/cs-models": "dev-master",
+                "boomers/seller": "dev-master",
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "4.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "CS\\Billing\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "time": "2015-01-14 10:19:46"
+        },
         {
             "name": "boomers/cs-devices",
             "version": "dev-master",
@@ -66,7 +93,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-models.git",
-                "reference": "f236703b6c510272fd7257d684397240754b2dc6"
+                "reference": "eaf82ef281345caf61e0f108d482397c917f9c25"
             },
             "require": {
                 "php": ">=5.4.0"
@@ -80,7 +107,7 @@
                     "CS\\Models\\": "src/"
                 }
             },
-            "time": "2014-12-24 13:21:42"
+            "time": "2014-12-26 09:31:54"
         },
         {
             "name": "boomers/cs-settings",
@@ -88,7 +115,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-settings.git",
-                "reference": "d3d8a009cbf49f74f04d9c931444f73c2764ca1a"
+                "reference": "8fc10b80ef38854258e8ad289e636facac308a27"
             },
             "require": {
                 "php": ">=5.4.0"
@@ -99,7 +126,7 @@
                     "CS\\Settings\\": "src/"
                 }
             },
-            "time": "2014-12-23 09:52:16"
+            "time": "2015-01-14 10:26:33"
         },
         {
             "name": "boomers/cs-users",
@@ -150,17 +177,43 @@
             "time": "2014-11-11 13:33:06"
         },
         {
+            "name": "boomers/seller",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "git@bitbucket.org:boomersweb/seller.git",
+                "reference": "58a7a9dd57bde092e77fdc340546857b47d276c6"
+            },
+            "require": {
+                "guzzlehttp/guzzle": "~5.0",
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "4.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Seller\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "time": "2015-01-14 08:22:02"
+        },
+        {
             "name": "fenom/fenom",
-            "version": "2.3.2",
+            "version": "2.4.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bzick/fenom.git",
-                "reference": "f532658cc431d2b68c1ffba12b1122e6dc098ad4"
+                "reference": "47cee02dd3ed48575fb07fa1716ffad39178451e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bzick/fenom/zipball/f532658cc431d2b68c1ffba12b1122e6dc098ad4",
-                "reference": "f532658cc431d2b68c1ffba12b1122e6dc098ad4",
+                "url": "https://api.github.com/repos/bzick/fenom/zipball/47cee02dd3ed48575fb07fa1716ffad39178451e",
+                "reference": "47cee02dd3ed48575fb07fa1716ffad39178451e",
                 "shasum": ""
             },
             "require": {
@@ -197,7 +250,7 @@
                 "templater",
                 "templating"
             ],
-            "time": "2014-11-05 21:55:32"
+            "time": "2015-01-08 13:06:52"
         },
         {
             "name": "filp/whoops",
@@ -417,16 +470,16 @@
         },
         {
             "name": "monolog/monolog",
-            "version": "1.11.0",
+            "version": "1.12.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Seldaek/monolog.git",
-                "reference": "ec3961874c43840e96da3a8a1ed20d8c73d7e5aa"
+                "reference": "1fbe8c2641f2b163addf49cc5e18f144bec6b19f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/ec3961874c43840e96da3a8a1ed20d8c73d7e5aa",
-                "reference": "ec3961874c43840e96da3a8a1ed20d8c73d7e5aa",
+                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/1fbe8c2641f2b163addf49cc5e18f144bec6b19f",
+                "reference": "1fbe8c2641f2b163addf49cc5e18f144bec6b19f",
                 "shasum": ""
             },
             "require": {
@@ -440,7 +493,7 @@
                 "aws/aws-sdk-php": "~2.4, >2.4.8",
                 "doctrine/couchdb": "~1.0@dev",
                 "graylog2/gelf-php": "~1.0",
-                "phpunit/phpunit": "~3.7.0",
+                "phpunit/phpunit": "~4.0",
                 "raven/raven": "~0.5",
                 "ruflin/elastica": "0.90.*",
                 "videlalvaro/php-amqplib": "~2.4"
@@ -459,7 +512,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.11.x-dev"
+                    "dev-master": "1.12.x-dev"
                 }
             },
             "autoload": {
@@ -485,7 +538,7 @@
                 "logging",
                 "psr-3"
             ],
-            "time": "2014-09-30 13:30:58"
+            "time": "2014-12-29 21:29:35"
         },
         {
             "name": "predis/predis",
@@ -666,16 +719,16 @@
         },
         {
             "name": "react/promise",
-            "version": "v2.1.0",
+            "version": "v2.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/reactphp/promise.git",
-                "reference": "937b04f1b0ee8f6d180e75a0830aac778ca4bcd6"
+                "reference": "365fcee430dfa4ace1fbc75737ca60ceea7eeeef"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/reactphp/promise/zipball/937b04f1b0ee8f6d180e75a0830aac778ca4bcd6",
-                "reference": "937b04f1b0ee8f6d180e75a0830aac778ca4bcd6",
+                "url": "https://api.github.com/repos/reactphp/promise/zipball/365fcee430dfa4ace1fbc75737ca60ceea7eeeef",
+                "reference": "365fcee430dfa4ace1fbc75737ca60ceea7eeeef",
                 "shasum": ""
             },
             "require": {
@@ -692,7 +745,7 @@
                     "React\\Promise\\": "src/"
                 },
                 "files": [
-                    "src/functions.php"
+                    "src/functions_include.php"
                 ]
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -706,21 +759,21 @@
                 }
             ],
             "description": "A lightweight implementation of CommonJS Promises/A for PHP",
-            "time": "2014-10-15 20:05:57"
+            "time": "2014-12-30 13:32:42"
         },
         {
             "name": "symfony/console",
-            "version": "v2.6.1",
+            "version": "v2.6.3",
             "target-dir": "Symfony/Component/Console",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Console.git",
-                "reference": "ef825fd9f809d275926547c9e57cbf14968793e8"
+                "reference": "6ac6491ff60c0e5a941db3ccdc75a07adbb61476"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Console/zipball/ef825fd9f809d275926547c9e57cbf14968793e8",
-                "reference": "ef825fd9f809d275926547c9e57cbf14968793e8",
+                "url": "https://api.github.com/repos/symfony/Console/zipball/6ac6491ff60c0e5a941db3ccdc75a07adbb61476",
+                "reference": "6ac6491ff60c0e5a941db3ccdc75a07adbb61476",
                 "shasum": ""
             },
             "require": {
@@ -763,7 +816,7 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "http://symfony.com",
-            "time": "2014-12-02 20:19:20"
+            "time": "2015-01-06 17:50:02"
         }
     ],
     "packages-dev": [],
@@ -775,9 +828,12 @@
         "boomers/cs-mail": 20,
         "boomers/cs-settings": 20,
         "boomers/cs-users": 20,
-        "boomers/cs-devices": 20
+        "boomers/cs-devices": 20,
+        "boomers/cs-billing": 20,
+        "boomers/seller": 20
     },
     "prefer-stable": false,
+    "prefer-lowest": false,
     "platform": {
         "php": ">=5.3.0",
         "ext-pdo": "*"

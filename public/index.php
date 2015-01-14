@@ -65,7 +65,7 @@ $di['router']->execute($requestUri, function($route) use ($di) {
 
         $controllerName = 'Controllers\\' . $route->target['controller'];
         $controller = new $controllerName($di);
-
+        
         if (!(isset($route->target['public']) || $di->get('auth')->hasIdentity())) {
             $di->getFlashMessages()->add(System\FlashMessages::ERROR, "Access denied!");
             $controller->redirect($di->get('router')->getRouteUrl('main'));

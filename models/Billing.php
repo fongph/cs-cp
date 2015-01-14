@@ -2,6 +2,9 @@
 
 namespace Models;
 
+use CS\Billing\Manager as BillingManager,
+    System\FlashMessages as FlashMessages;
+
 class Billing extends \System\Model
 {
 
@@ -10,7 +13,7 @@ class Billing extends \System\Model
         $userId = $this->getDb()->quote($user);
 
         $unlimitedValue = $this->getDb()->quote(\CS\Models\Limitation\LimitationRecord::UNLIMITED_VALUE);
-        
+
         $select = "SELECT lic.`id`, p.`name`, lic.`amount`, lic.`currency`,
             lic.`activation_date`, lic.`expiration_date`, lic.`status`,
             d.`id` `deviceId`,
@@ -75,7 +78,7 @@ class Billing extends \System\Model
         $productType = $this->getDb()->quote(\CS\Models\Product\ProductRecord::TYPE_BUNDLE);
         $licenseStatus = $this->getDb()->quote(\CS\Models\License\LicenseRecord::STATUS_ACTIVE);
         $namespace = $this->getDb()->quote($this->di['config']['bundlesNamespace']);
-        
+
         return $this->getDb()->query("SELECT
                                             p.`name`,
                                             p.`group`,
@@ -117,6 +120,100 @@ class Billing extends \System\Model
             JOIN products p ON l.product_id = p.id
             WHERE l.id = {$licId}"
                 )->fetch(\PDO::FETCH_ASSOC);
+    }
+
+    public function getUserLicenseInfo($userId, $licenseId, $returnDetails = true)
+    {
+        $user = $this->getDb()->quote($userId);
+        $license = $this->getDb()->quote($licenseId);
+
+        $result = $this->getDb()->query("SELECT 
+                        lic.`id`, p.`name`, lic.`amount`, lic.`currency`,
+                        lic.`activation_date`, lic.`expiration_date`, 
+                        lic.`status`, sub.`payment_method`, sub.`reference_number`
+                    FROM `licenses` lic
+                    INNER JOIN `products` p ON p.`id` = lic.`product_id`
+                    LEFT JOIN `subscriptions` sub ON sub.`license_id` = lic.`id`
+                    WHERE
+                        lic.`id` = {$license} AND
+                        lic.`user_id` = {$user}
+                    LIMIT 1")->fetch();
+
+        if ($returnDetails 
+                && isset($result['payment_method'], $result['reference_number'])
+                && ($info = $this->getSubscriptionInfo($result['payment_method'], $result['reference_number'])) !== null) {
+            
+            $result['details'] = $info;
+        }
+        
+        return $result;
+    }
+
+    private function getSubscriptionInfo($paymentMethod, $referenceNumber)
+    {
+        $billingManager = new BillingManager($this->getDb());
+        $gateway = $this->getSellerGateway($paymentMethod);
+
+        if (!($gateway instanceof \Seller\AbstractGateway)) {
+            return;
+        }
+
+        try {
+            return $billingManager->getSubscriptionInfo($gateway, $referenceNumber);
+        } catch (CS\Billing\GatewayMethodNotSupportedException $e) {
+            
+        } catch (\Exception $e) {
+            $this->getDI()->get('logger')->addCritical('Get subscription status exception: ' . $e->getMessage());
+        }
+    }
+
+    public function getSellerGateway($paymentMethod)
+    {
+        if ($paymentMethod === \CS\Models\Order\OrderRecord::PAYMENT_METHOD_FASTSPRING) {
+            return $this->di['fastSpringGateway'];
+        }
+    }
+
+    public function disableSubscription($paymentMethod, $referenceNumber)
+    {
+        $billingManager = new BillingManager($this->getDb());
+        $gateway = $this->getSellerGateway($paymentMethod);
+
+        if (!($gateway instanceof \Seller\AbstractGateway)) {
+            $this->getDI()->getFlashMessages()->add(FlashMessages::ERROR, "Subscription auto-renew can't be disabled!");
+            return;
+        }
+
+        try {
+            $billingManager->cancelSubscription($gateway, $referenceNumber);
+            $this->getDI()->getFlashMessages()->add(FlashMessages::SUCCESS, "Subscription auto-renew successfully disabled!");
+        } catch (CS\Billing\GatewayMethodNotSupportedException $e) {
+            $this->getDI()->getFlashMessages()->add(FlashMessages::ERROR, "Subscription auto-renew can't be disabled!");
+        } catch (\Exception $e) {
+            $this->getDI()->getFlashMessages()->add(FlashMessages::ERROR, "Error during operation!");
+            $this->getDI()->get('logger')->addCritical('Get subscription status exception: ' . $e->getMessage());
+        }
+    }
+
+    public function enableSubscription($paymentMethod, $referenceNumber)
+    {
+        $billingManager = new BillingManager($this->getDb());
+        $gateway = $this->getSellerGateway($paymentMethod);
+
+        if (!($gateway instanceof \Seller\AbstractGateway)) {
+            $this->getDI()->getFlashMessages()->add(FlashMessages::ERROR, "Subscription auto-renew can't be enabled!");
+            return;
+        }
+
+        try {
+            $billingManager->unCancelSubscription($gateway, $referenceNumber);
+            $this->getDI()->getFlashMessages()->add(FlashMessages::SUCCESS, "Subscription auto-renew successfully enabled!");
+        } catch (CS\Billing\GatewayMethodNotSupportedException $e) {
+            $this->getDI()->getFlashMessages()->add(FlashMessages::ERROR, "Subscription auto-renew can't be enabled!");
+        } catch (\Exception $e) {
+            $this->getDI()->getFlashMessages()->add(FlashMessages::ERROR, "Error during operation!");
+            $this->getDI()->get('logger')->addCritical('Get subscription status exception: ' . $e->getMessage());
+        }
     }
 
 }

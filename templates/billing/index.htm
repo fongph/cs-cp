@@ -33,9 +33,8 @@
                 <tr role="row">
                     <th>{$di.t->_('Plan')}</th>
                     <th>{$di.t->_('Amount')}</th>
-                    <th>{$di.t->_('Currency')}</th>
                     <th>{$di.t->_('Date of purchase')}</th>
-                    <th>{$di.t->_('Expired date')}</th>
+                    <th>{$di.t->_('Expiration date')}</th>
                     <th>{$di.t->_('Status')}</th>
                     <th>{$di.t->_('Device name')}</th>
                     <th>{$di.t->_('Limits')}</th>
@@ -161,13 +160,20 @@
                         },
                         aoColumns: [
                             {
-                                mData: 'name'
+                                mData: 'name',
+                                mRender: function() {
+                                    var data = arguments[2];
+                                    var lnk = '{$di.router->getRouteUrl('billingLicense')}'.replace(':id', data.id);
+                                    
+                                    return data.name + '<br/>' + '<a href="' + lnk + '" class="btn btn-info btn-xs">{$di.t->_('Details')}</a>';
+                                }
                             },
                             {
-                                mData: 'amount'
-                            },
-                            {
-                                mData: 'currency'
+                                mData: 'amount',
+                                mRender: function() {
+                                    var data = arguments[2];
+                                    return data.amount + ' ' + data.currency;
+                                }
                             },
                             {
                                 mData: 'activation_date',

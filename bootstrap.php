@@ -77,7 +77,9 @@ $di->setShared('router', function() use($config) {
     $router->add('billing', new \System\Router\Route('/billing', array('controller' => 'Billing', 'action' => 'index')));
     $router->add('billingAddDevice', new \System\Router\Route('/billing/addDevice', array('controller' => 'Billing', 'action' => 'addDevice')));
     $router->add('billingAssignDevice', new \System\Router\Route('/billing/assignDevice', array('controller' => 'Billing', 'action' => 'assignDevice')));
-
+    $router->add('billingLicense', new \System\Router\Regex('/billing/license/:id', array('controller' => 'Billing', 'action' => 'license'), array('id' => '[0-9]+')));
+    $router->add('billingLicenseDisable', new \System\Router\Regex('/billing/license/:id/disable', array('controller' => 'Billing', 'action' => 'disableLicense'), array('id' => '[0-9]+')));
+    $router->add('billingLicenseEnable', new \System\Router\Regex('/billing/license/:id/enable', array('controller' => 'Billing', 'action' => 'enableLicense'), array('id' => '[0-9]+')));
 
     $router->add('content', new \System\Router\Regex('/:uri', array('controller' => 'Index', 'action' => 'content', 'public' => true), array('uri' => '.+\.html')));
     $router->add('locale', new \System\Router\Regex('/locale/:value', array('controller' => 'Index', 'action' => 'locale', 'public' => true), array('value' => '.+')));
@@ -104,7 +106,7 @@ $di->setShared('router', function() use($config) {
 });
 
 $di->setShared('session', function () use ($di) {
-    
+
     System\Session::setConfig($di['config']['session']);
     if ($di['config']['environment'] == 'production') {
         $redisConfig = CS\Settings\GlobalSettings::getRedisConfig('sessions', $di['config']['site']);
@@ -151,4 +153,15 @@ $di->setShared('S3', function () use ($di) {
     $s3->setSigningKey($di['config']['cloudFront']['keyPairId'], $di['config']['cloudFront']['privatKeyFilename']);
 
     return $s3;
+});
+
+$di->setShared('fastSpringGateway', function () {
+    $fastSpringConfig = GlobalSettings::getFastSpringConfig();
+
+    $gateway = new \Seller\FastSpring\Gateway();
+
+    return $gateway->setStoreId($fastSpringConfig['storeId'])
+                    ->setPrivateKey($fastSpringConfig['privateKey'])
+                    ->setUserName('api@dizboard.com')//$fastSpringConfig['userName'])
+                    ->setUserPassword('c0RdI48G7Est');//$fastSpringConfig['userPassword']);
 });
