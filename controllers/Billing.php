@@ -180,7 +180,7 @@ class Billing extends BaseController
             $this->redirect($this->di->getRouter()->getRouteUrl('billing'));
         }
 
-        $billingModel->disableSubscription($license['payment_method'], $license['reference_number']);
+        $billingModel->enableSubscription($license['payment_method'], $license['reference_number']);
         $this->redirect($this->di->getRouter()->getRouteUrl('billingLicense', array('id' => $license['id'])));
     }
 
