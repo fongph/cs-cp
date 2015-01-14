@@ -11,7 +11,7 @@
         vertical-align: middle;
         border: 1px solid transparent;
         border-radius: 4px;
-        
+
         color: #0090d3;
         padding-left: 50px;
         cursor: default;
@@ -32,10 +32,6 @@
 
     .device-button.blackberry {
         background-position: 0 -82px;
-    }
-
-    .not-member .btn {
-        margin-bottom: 10px;
     }
 </style>
 <div class="login-form col-lg-6 col-md-8 col-lg-offset-3 col-md-offset-2">
@@ -61,17 +57,9 @@
 
     <div class="panel panel-default" style="margin-top: 20px;">
         <div class="panel-heading">{$di['t']->_('NOT A MEMBER YET?')}</div>
-        <div class="panel-body not-member text-center">
-            <div style="margin-bottom: 5px;">
-                <div class="device-button iphone">{$di.t->_('iPhone | iPad')}</div>
-                <div class="device-button android">{$di.t->_('Android')}</div>
-                <div class="device-button blackberry">{$di.t->_('BlackBerry')}</div>
-            </div>
-
-            <div>
-                <a href="{$di.config.demoDomain}" class="btn btn-primary">{$di['t']->_('View Demo')}</a>
-                <a href="{$di.config.registration}" class="btn btn-warning">{$di['t']->_('Buy Now')}</a>
-            </div>
+        <div class="panel-body text-center">
+            <a href="{$di.config.registration}" class="btn btn-warning">{$di['t']->_('Buy Now')}</a>
+            <a href="{$di.config.demoDomain}" class="btn btn-primary">{$di['t']->_('View Demo')}</a>
         </div>
     </div>
 </div>
