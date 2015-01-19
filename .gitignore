@@ -5,5 +5,6 @@
 /utils/result/*
 /.idea
 composer.phar
+composer.lock
 development.config.php
 build.php
