@@ -1,0 +1,48 @@
+<style>
+    .media {
+        position: relative;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+    
+    .media .media-body {
+        padding: 3px 20px 3px 3px;
+    }
+    
+    .media .close {
+        position: absolute;
+        top: 0px;
+        right: 5px;
+    }
+</style>
+<div>
+    <h1 class="text-center">{$title}</h1>
+
+    {insert "inc.flashMessages.htm"}
+    {foreach $zones as $zone}
+    <div class="media">
+        <div class="media-left">
+            <a href="{$di.router->getRouteUrl('locationsZonesEdit', ['id' => $zone['id']])}">
+                <img class="media-object" src="{$zone.icon}" alt="{$zone.name}" />
+            </a>
+        </div>
+        <div class="media-body">
+            <div>{$zone.name}</div>
+            <div>Trigger On: {$zone.trigger}</div>
+            {if $zone.enable}
+                <div>Enabled</div>
+            {else}
+                <div>Disabled</div>
+            {/if}
+        </div>
+        <a href="{$di.router->getRouteUrl('locationsZones')}?delete={$zone.id}" class="close" aria-hidden="true">×</a>
+    </div>
+    {/foreach}
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('.media .close').click(function(){
+                return confirm("Really delete record!");
+            });
+        });
+    </script>
+</div>
