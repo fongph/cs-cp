@@ -34,13 +34,19 @@ class Locations extends BaseModuleController
                 break;
             
             default:
-                $this->zones();
+                $this->locations();
                 break;
         }
         
         //p($this->getRequest()->server('REQUEST_URI'), 1);
     }
 
+    private function locations(){
+        $this->view->startTime = 123;
+        
+        $this->setView('cp/locationsData.htm');
+    }
+    
     private function zones()
     {
         $zonesModel = new Zones($this->di);
@@ -68,8 +74,9 @@ class Locations extends BaseModuleController
         $this->view->triggerList = $zonesModel->getTrigerList();
 
         $zoneData = $this->getRequest()->post('zoneData', '');
+        $scheduleData = $this->getRequest()->post('scheduleData', '');
         $name = $this->getRequest()->post('name', '');
-        $trigger = $this->getRequest()->post('trigger', Zones::TRIGER_ENTER);
+        $trigger = $this->getRequest()->post('trigger', Zones::TRIGGER_ENTER);
         $emailAlert = $this->getRequest()->post('email-alert', '');
         $smsAlert = $this->getRequest()->post('sms-alert', '');
         $enable = $this->getRequest()->post('enable', '1');
@@ -83,13 +90,15 @@ class Locations extends BaseModuleController
                 $this->getDI()->getFlashMessages()->add(FlashMessages::ERROR, $this->di['t']->_('Invalid zone!'));
             }
 
-            $zonesModel->addZone($this->di['devId'], $zoneData, $name, $trigger, $emailAlert, $smsAlert, $enable);
+            $schedule = Zones::schedulesToRecurrenceList($scheduleData);
+            $zonesModel->addZone($this->di['devId'], $zoneData, $name, $trigger, $emailAlert, $smsAlert, $schedule, $enable);
 
             $this->getDI()->getFlashMessages()->add(FlashMessages::SUCCESS, $this->di['t']->_('Zone successfully added!'));
             $this->redirect($this->di['router']->getRouteUrl('locationsZones'));
         }
 
         $this->view->zoneData = $zoneData;
+        $this->view->scheduleData = '';
         $this->view->name = $name;
         $this->view->triggerListSelected = $trigger;
         $this->view->emailNotification = $emailAlert;
@@ -111,6 +120,7 @@ class Locations extends BaseModuleController
         $this->view->triggerList = $zonesModel->getTrigerList();
 
         $zoneData = $this->getRequest()->post('zoneData', $data['latitude'] . '|' . $data['longitude'] . '|' . $data['radius']);
+        $scheduleData = $this->getRequest()->post('scheduleData', Zones::recurrenceListToSchedules($data['schedule']));
         $name = $this->getRequest()->post('name', $data['name']);
         $trigger = $this->getRequest()->post('trigger', $data['trigger']);
         $enable = $this->getRequest()->post('enable', $data['enable']);
@@ -122,7 +132,7 @@ class Locations extends BaseModuleController
             $emailAlert = $this->getRequest()->post('email-alert', $data['email_alert']);
             $smsAlert = $this->getRequest()->post('sms-alert', $data['sms_alert']);
         }
-
+        
         if ($this->getRequest()->hasPost('zoneData', 'name', 'trigger', 'enable')) {
             if (!Zones::validateName($name)) {
                 $this->getDI()->getFlashMessages()->add(FlashMessages::ERROR, $this->di['t']->_('Invalid name!'));
@@ -132,13 +142,16 @@ class Locations extends BaseModuleController
                 $this->getDI()->getFlashMessages()->add(FlashMessages::ERROR, $this->di['t']->_('Invalid zone!'));
             }
 
-            $zonesModel->updateZone($this->params['id'], $this->di['devId'], $zoneData, $name, $trigger, $emailAlert, $smsAlert, $enable);
+            $schedule = Zones::schedulesToRecurrenceList($scheduleData);
+            
+            $zonesModel->updateZone($this->params['id'], $this->di['devId'], $zoneData, $name, $trigger, $emailAlert, $smsAlert, $schedule, $enable);
 
             $this->getDI()->getFlashMessages()->add(FlashMessages::SUCCESS, $this->di['t']->_('Zone successfully updated!'));
             $this->redirect($this->di['router']->getRouteUrl('locationsZones'));
         }
 
         $this->view->zoneData = $zoneData;
+        $this->view->scheduleData = $scheduleData;
         $this->view->name = $name;
         $this->view->triggerListSelected = $trigger;
         $this->view->emailNotification = $emailAlert;

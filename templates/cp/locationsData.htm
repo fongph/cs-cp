@@ -1,0 +1,288 @@
+<style>
+    #slider-holder {
+        padding: 10px;
+    }
+
+    #map-canvas {
+        margin-top: 10px;
+        border: 1px solid gray;
+    }
+
+    #loading {
+        text-align: center;
+    }
+
+    #data-holder, #no-data {
+        display: none;
+    }
+    
+    @media (min-width: 767px) {
+        #allDataBlock {
+            text-align: right;
+        }
+    }
+</style>
+<div>
+    <h1 class="text-center">{$title}</h1>
+
+    <div class="container-fluid">
+        {insert "inc.flashMessages.htm"}
+
+        <div class="container-fluid">
+            <div class="row" style="margin-bottom: 10px;">
+                <div class="col-lg-1 col-md-1 col-sm-1"></div>
+                <div class="col-lg-10 col-md-10 col-sm-10">
+                    <div id="paginator"></div>
+                </div>
+                <div class="col-lg-1 col-md-1 col-sm-1"></div>
+            </div>
+        </div>
+
+        <ul class="nav nav-pills" style="overflow: hidden;">
+            <li class="active"><a href="#map" data-toggle="tab">{$di.t->_('Map View')}</a></li>
+            <li><a href="#table" data-toggle="tab">{$di.t->_('Table View')}</a></li>
+            <li><a href="{$di.router->getRouteUrl('locationsZones')}">{$di.t->_('Geo-fences')}</a></li>
+        </ul>
+
+        <div class="tab-content">
+            <div class="tab-pane active" id="map">
+                <div id="map-canvas" style="display: block; width: 100%; height: 400px;"></div>
+            </div>
+            <div class="tab-pane" id="table">
+                <div class="table-container">
+                    <table id="datatable" aria-describedby="datatables_info">
+                        <thead>
+                            <tr role="row">
+                                <th>{$di.t->_('Time')}</th>
+                                <th>{$di.t->_('Latitude')}</th>
+                                <th>{$di.t->_('Longitude')}</th>
+                                <th>{$di.t->_('Address')}</th>
+                                <th>{$di.t->_('Actions')}</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" id="slider-holder">
+            <div class="col-md-6"><label for="slider">{$di.t->_('Accuracy:')} <span class="text-primary" id="amount">480ft</span>&nbsp;</label></div>
+            <div class="col-md-6" id="allDataBlock">{$di.t->_('Now you see %1$s of %2$s', ['<span class="text-primary" id="percents"></span>', '<a href="" id="all-data">' ~ $di.t->_('all data') ~ '</a>'])}</div>
+            <div class="col-md-12"><input type="text" id="slider" style="width: 100%;" /></div>
+        </div>
+
+        <div id="no-data">
+            {$di.t->_('No data for this date')}
+        </div>
+        
+        <div id="loading">
+            <img src="{$di.config.staticDomain}/img/ajaxPreloader.gif" alt="" />
+        </div>
+    </div>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            var pointsList = [];
+            var infoWindow = new google.maps.InfoWindow();
+            var map;
+            var polyline;
+            var markers = [];
+
+            var filterPoints = function(value, noEmpty) {
+                var rate = 3.2808399;
+                var findPoints = [];
+
+                if (value >= 3000) {
+                    findPoints = pointsList;
+                } else {
+                    for (var i = 0; i < pointsList.length; i++) {
+                        if (pointsList[i][3] * rate < value) {
+                            findPoints.push(pointsList[i]);
+                        }
+                    }
+                }
+
+                var path = [];
+                var tableData = [];
+                for (var i = 0; i < findPoints.length; i++) {
+                    path.push(new google.maps.LatLng(findPoints[i][1], findPoints[i][2]));
+                    tableData.push([
+                        moment.unix(findPoints[i][4]).zone(0).format("LT"),
+                        findPoints[i][1],
+                        findPoints[i][2],
+                        findPoints[i][0],
+                        '<button class="btn btn-success btn-xs"><i class="fa fa-map-marker"></i> {$di.t->_('View on map')}</button>'
+                    ]);
+                }
+
+                datatable.fnClearTable();
+                datatable.fnAddData(tableData);
+                datatable.fnDraw();
+
+                if (!(map instanceof google.maps.Map)) {
+                    map = new google.maps.Map(document.getElementById("map-canvas"), {
+                        mapTypeId: google.maps.MapTypeId.ROADMAP
+                    });
+                }
+
+                if (path.length) {
+                    map.setCenter(path[0]);
+                    map.setZoom(13);
+                } else {
+                    if (pointsList.length && noEmpty) {
+                        $('#all-data').click();
+                        $("#amount").html('3000+ ft');
+                        return false;
+                    } else {
+                        map.setZoom(1);
+                        map.setCenter(new google.maps.LatLng(0, 0));
+                    }
+                }
+
+                if (polyline instanceof google.maps.Polyline) {
+                    polyline.setMap(null);
+                }
+
+                if (markers.length) {
+                    for (var i = 0; i < markers.length; i++) {
+                        markers[i].setMap(null);
+                    }
+
+                    markers = [];
+                }
+
+                if (path.length) {
+                    polyline = new google.maps.Polyline({
+                        path: path,
+                        strokeColor: "0090d3",
+                        strokeOpacity: 0,
+                        icons: [{
+                                icon: {
+                                    path: 'M 0,-1 0,1',
+                                    strokeOpacity: 1,
+                                    scale: 3
+                                },
+                                offset: '0',
+                                repeat: '15px'
+                            }]
+                    });
+                    polyline.setMap(map);
+
+                    var blueicon = '{$di.config.staticDomain}/img/marker-blue.png';
+                    var curricon = '{$di.config.staticDomain}/img/marker-curr.png';
+
+                    for (var i = 0; i < path.length; i++) {
+                        if (i === 0) {
+                            var marker = new google.maps.Marker({
+                                position: new google.maps.LatLng(pointsList[0][1], pointsList[0][2]),
+                                icon: curricon,
+                                animation: google.maps.Animation.BOUNCE,
+                                crossOnDrag: false,
+                                map: map
+                            });
+                        } else {
+                            var marker = new google.maps.Marker({
+                                position: path[i],
+                                icon: blueicon,
+                                crossOnDrag: false,
+                                map: map
+                            });
+                        }
+
+                        $('#datatable tbody tr button').eq(i).click((function(marker, i) {
+                            return function() {
+                                $('.nav-pills a[href=#map]').tab('show');
+                                google.maps.event.trigger(marker, 'click');
+                            };
+                        })(marker, i));
+
+                        google.maps.event.addListener(marker, 'click', (function(marker, i) {
+                            return function() {
+                                if (findPoints[i][0]) {
+                                    infoWindow.setContent(moment.unix(findPoints[i][4]).zone(0).format("LT") + ' - ' + findPoints[i][0]);
+                                } else {
+                                    infoWindow.setContent(moment.unix(findPoints[i][4]).zone(0).format("LT"));
+                                }
+
+                                infoWindow.open(map, marker);
+                            };
+                        })(marker, i));
+
+                        markers.push(marker);
+                    }
+                }
+
+                var percent = findPoints.length * 100 / pointsList.length;
+                $("#percents").text(percent.toFixed(0) + '%');
+            };
+
+            var getData = function(date) {
+                $('#data-holder, #no-data').hide();
+                $('#loading').show();
+
+                $.post('{$di.config.domain}/cp/locations', {
+                    date: date
+                }, function(response) {
+                    if (response.success !== undefined && response.success) {
+                        pointsList = response.result;
+                        if (_.isArray(pointsList) && pointsList.length) {
+                            filterPoints(slider.getValue(), true);
+                            $('#data-holder').show();
+                        } else {
+                            $('#no-data').show();
+                        }
+                        $('#loading').hide();
+                    } else {
+                        console.log('error');
+                    }
+                }, 'json');
+            };
+
+            $('#all-data').click(function(e) {
+                e.preventDefault();
+                slider.setValue(3000);
+                filterPoints(3000, true);
+                $("#amount").html('3000+ ft');
+            });
+
+            var startDate = moment.unix({$startTime}).zone(0).format('MM-DD-YYYY');
+
+            $('#paginator').datepaginator({
+                selectedDate: startDate,
+                selectedDateFormat: 'MM-DD-YYYY',
+                showOffDays: false,
+                showStartOfWeek: false,
+                onSelectedDateChanged: function(event, date) {
+                    getData(date.format('MM-DD-YYYY'));
+                }
+            });
+
+            var datatable = $('#datatable').dataTable({
+                bSort: false,
+                bPaginate: false,
+                bFilter: false,
+                fnDrawCallback: function() {
+                    $(this).find('tbody').tableScroll();
+                }
+            });
+
+            var slider = $('#slider').slider({
+                value: 480,
+                min: 30,
+                max: 3000,
+                step: 30,
+                tooltip: 'hide'
+            }).on('slide', function(e) {
+                if (e.value >= 3000) {
+                    $("#amount").html('3000+ ft');
+                } else {
+                    $("#amount").html(e.value + ' ft');
+                }
+            }).on('slideStop', function(e) {
+                filterPoints(e.value, false);
+            }).data('slider');
+
+            getData(startDate);
+        });
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.9"></script>
+</div>

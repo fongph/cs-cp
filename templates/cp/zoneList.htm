@@ -4,11 +4,11 @@
         border: 1px solid #ddd;
         border-radius: 4px;
     }
-    
+
     .media .media-body {
         padding: 3px 20px 3px 3px;
     }
-    
+
     .media .close {
         position: absolute;
         top: 0px;
@@ -18,29 +18,41 @@
 <div>
     <h1 class="text-center">{$title}</h1>
 
-    {insert "inc.flashMessages.htm"}
-    {foreach $zones as $zone}
-    <div class="media">
-        <div class="media-left">
-            <a href="{$di.router->getRouteUrl('locationsZonesEdit', ['id' => $zone['id']])}">
-                <img class="media-object" src="{$zone.icon}" alt="{$zone.name}" />
-            </a>
-        </div>
-        <div class="media-body">
-            <div>{$zone.name}</div>
-            <div>Trigger On: {$zone.trigger}</div>
-            {if $zone.enable}
+    <div class="container-fluid">
+        {insert "inc.flashMessages.htm"}
+
+        <ul class="nav nav-pills" style="overflow: hidden;">
+            <li><a href="{$di.router->getRouteUrl('locations')}#map">{$di.t->_('Map View')}</a></li>
+            <li><a href="{$di.router->getRouteUrl('locations')}#table">{$di.t->_('Table View')}</a></li>
+            <li class="active"><a href="{$di.router->getRouteUrl('locationsZones')}">{$di.t->_('Geo-fences')}</a></li>
+        </ul>
+
+        {foreach $zones as $zone}
+        <div class="media">
+            <div class="media-left">
+                <a href="{$di.router->getRouteUrl('locationsZonesEdit', ['id' => $zone['id']])}">
+                    <img class="media-object" src="{$zone.icon}" alt="{$zone.name}" />
+                </a>
+            </div>
+            <div class="media-body">
+                <div>{$zone.name}</div>
+                <div>Trigger On: {$zone.trigger}</div>
+                {if $zone.enable}
                 <div>Enabled</div>
-            {else}
+                {else}
                 <div>Disabled</div>
-            {/if}
+                {/if}
+            </div>
+            <a href="{$di.router->getRouteUrl('locationsZones')}?delete={$zone.id}" class="close" aria-hidden="true">×</a>
         </div>
-        <a href="{$di.router->getRouteUrl('locationsZones')}?delete={$zone.id}" class="close" aria-hidden="true">×</a>
+        {/foreach}
+        <div class="text-right" style="margin-top: 20px;">
+            <a href="{$di.router->getRouteUrl('locationsZonesAdd')}" class="btn btn-primary add-more"><i class="fa fa-plus"></i> {$di.t->_('Add more')}</a>
+        </div>
     </div>
-    {/foreach}
     <script type="text/javascript">
-        $(document).ready(function(){
-            $('.media .close').click(function(){
+        $(document).ready(function () {
+            $('.media .close').click(function () {
                 return confirm("Really delete record!");
             });
         });

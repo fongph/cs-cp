@@ -15,11 +15,57 @@
     #data-holder, #no-data {
         display: none;
     }
-    
+
     @media (min-width: 767px) {
         #allDataBlock {
             text-align: right;
         }
+    }
+
+    .scheduler-element {
+        position: relative;
+        border: 1px solid #ddd; 
+        border-radius: 5px; 
+        padding: 10px;
+        margin-bottom: 10px;
+        text-align: center;
+    }
+
+    .scheduler-element .slider {
+        width: 70%;
+    }
+
+    .scheduler-element .scheduler-days {
+        width: 100%;
+        text-align: center;
+    }
+
+    .scheduler-element .scheduler-days td {
+        width: 14.28%;
+        text-align: center;
+    }
+
+    .scheduler-element .scheduler-humanValue {
+        margin: 8px 0;
+    }
+
+    .scheduler-element .close {
+        position: absolute;
+        top: 0px;
+        right: 5px;
+    }
+
+    .scheduler-element p {
+        display: none;
+    }
+
+    .scheduler-element.error p {
+        display: block;
+        margin: 0;
+    }
+
+    .scheduler-element.error {
+        border-color: #a94442;
     }
 </style>
 <div>
@@ -27,15 +73,23 @@
 
     <div class="container-fluid">
         {insert "inc.flashMessages.htm"}
+        
+        <ul class="nav nav-pills" style="overflow: hidden;">
+            <li><a href="{$di.router->getRouteUrl('locations')}#map">{$di.t->_('Map View')}</a></li>
+            <li><a href="{$di.router->getRouteUrl('locations')}#table">{$di.t->_('Table View')}</a></li>
+            <li class="active"><a href="{$di.router->getRouteUrl('locationsZones')}">{$di.t->_('Geo-fences')}</a></li>
+        </ul>
+
         <div class="row">
             <div class="col-lg-6">
                 <div id="map-canvas" style="display: block; width: 100%; height: 400px;"></div>
             </div>
             <div class="col-lg-6">
                 <div class="panel panel-default" style="margin-top: 10px;">
-                    <form method="post" action="">
+                    <form method="post" action="" id="zoneEditor">
                         <div class="panel-body">
                             <input id="zoneData" name="zoneData" type="hidden" value="{$zoneData}" />
+                            <input id="scheduleData" name="scheduleData" type="hidden" value="{$scheduleData}" />
                             <div class="form-group">
                                 <label>{$di.t->_('Name')}</label>
                                 <input name="name" value="{$name}" class="form-control" />
@@ -56,15 +110,19 @@
                                 <div class="checkbox">
                                     <label>
                                         <input type="checkbox" value="1" name="email-alert"{if $emailNotification} checked="checked"{/if}/>
-                                        {$di.t->_('Email')}
+                                               {$di.t->_('Email')}
                                     </label>
                                 </div>
                                 <div class="checkbox">
                                     <label>
                                         <input type="checkbox" value="1" name="sms-alert"{if $smsNotification} checked="checked"{/if}/>
-                                        {$di.t->_('SMS')}
+                                               {$di.t->_('SMS')}
                                     </label>
                                 </div>
+                            </div>
+                            <div class="form-group">
+                                <label>{$di.t->_('Scheduling')}</label>
+                                <div id="scheduler" style=""></div>
                             </div>
                             <div class="form-group">
                                 <div class="btn-group" data-toggle="buttons">
@@ -85,18 +143,32 @@
     </div>
     <script src="https://maps.googleapis.com/maps/api/js?v=3.9&libraries=drawing"></script>
     <script type="text/javascript" src="{$di.config.staticDomain}/js/zone-selector.js?b{$di.config.build}"></script>
+    <script type="text/javascript" src="{$di.config.staticDomain}/js/scheduler.js?b{$di.config.build}"></script>
     <script type="text/javascript">
-        $(document).ready(function(){
+        $(document).ready(function () {
             var zs = new zoneSelector('map-canvas', {
-                circleCallback: function(data){
+                circleCallback: function (data) {
                     $("#zoneData").val(data);
                 }
             });
-            
+
             var a = zs.deserializeCircle($('#zoneData').val());
-            
+
             zs.setZone(a);
             zs.setMapLocation(a);
+
+            scheduler = new Scheduler($('#scheduler'));
+            if ($('#scheduleData').val().length) {
+                scheduler.deserialize($('#scheduleData').val());
+            }
+
+            $('#zoneEditor').submit(function (e) {
+                try {
+                    $('#scheduleData').val(scheduler.serialize());
+                } catch (e) {
+                    return false;
+                }
+            });
         });
     </script>
 </div>
