@@ -13,8 +13,10 @@ class Zones extends BaseModel
         500 => 14,
         0 => 15
     );
+    
     private static $zoneIconSize = array(100, 100);
     private static $daysNames = array('SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA');
+    public static $countLimit = 200;
 
     const TRIGGER_ENTER = 'enter';
     const TRIGGER_LEAVE = 'leave';
@@ -44,6 +46,13 @@ class Zones extends BaseModel
 
         return is_numeric($parts[0]) && is_numeric($parts[1]) && is_numeric($parts[2]) &&
                 abs($parts[0]) <= 90 && $parts[1] >= 0 && $parts[1] <= 180 && $parts[2] > 0;
+    }
+
+    public function getDeviceZonesCount($devId)
+    {
+        $devId = $this->getDb()->quote($devId);
+        
+        return $this->getDb()->query("SELECT COUNT(*) FROM `geo_zones` WHERE `dev_id` = {$devId} AND `deleted` = 0")->fetchColumn();
     }
 
     public function addZone($devId, $zoneData, $name, $trigger, $emailAlert, $smsAlert, $scheduleData, $enable)
@@ -192,7 +201,9 @@ class Zones extends BaseModel
             try {
                 $string = self::checkScheduleElement($value);
                 array_push($result, $string);
-            } catch (\Exception $e) {}
+            } catch (\Exception $e) {
+                
+            }
         }
 
         return implode('@', $result);
@@ -201,7 +212,7 @@ class Zones extends BaseModel
     public static function recurrenceListToSchedules($value)
     {
         $parts = explode('@', $value);
-        
+
         $result = array();
         foreach ($parts as $value) {
             if (strlen($value)) {

@@ -106,7 +106,7 @@
                 for (var i = 0; i < findPoints.length; i++) {
                     path.push(new google.maps.LatLng(findPoints[i][1], findPoints[i][2]));
                     tableData.push([
-                        moment.unix(findPoints[i][4]).zone(0).format("LT"),
+                        moment.unix(findPoints[i][4]).utcOffset(0).format("LT"),
                         findPoints[i][1],
                         findPoints[i][2],
                         findPoints[i][0],
@@ -198,9 +198,9 @@
                         google.maps.event.addListener(marker, 'click', (function(marker, i) {
                             return function() {
                                 if (findPoints[i][0]) {
-                                    infoWindow.setContent(moment.unix(findPoints[i][4]).zone(0).format("LT") + ' - ' + findPoints[i][0]);
+                                    infoWindow.setContent(moment.unix(findPoints[i][4]).utcOffset(0).format("LT") + ' - ' + findPoints[i][0]);
                                 } else {
-                                    infoWindow.setContent(moment.unix(findPoints[i][4]).zone(0).format("LT"));
+                                    infoWindow.setContent(moment.unix(findPoints[i][4]).utcOffset(0).format("LT"));
                                 }
 
                                 infoWindow.open(map, marker);
@@ -244,7 +244,7 @@
                 $("#amount").html('3000+ ft');
             });
 
-            var startDate = moment.unix({$startTime}).zone(0).format('MM-DD-YYYY');
+            var startDate = moment.unix({$startTime}).utcOffset(0).format('MM-DD-YYYY');
 
             $('#paginator').datepaginator({
                 selectedDate: startDate,

@@ -38,9 +38,9 @@
                 <div>{$zone.name}</div>
                 <div>Trigger On: {$zone.trigger}</div>
                 {if $zone.enable}
-                <div>Enabled</div>
+                <div class="text-success">Enabled</div>
                 {else}
-                <div>Disabled</div>
+                <div class="text-muted">Disabled</div>
                 {/if}
             </div>
             <a href="{$di.router->getRouteUrl('locationsZones')}?delete={$zone.id}" class="close" aria-hidden="true">×</a>
