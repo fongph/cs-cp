@@ -1091,3 +1091,14 @@ body > .cp-menu {
 .no-margin {
     margin: 0 !important;
 }
+
+.add-device-block {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    text-align: center;
+}
+
+.add-device-button-wrapper {
+    margin-bottom: 7px;
+}

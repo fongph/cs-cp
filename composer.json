@@ -33,6 +33,10 @@
         {
             "type": "git",
             "url": "git@bitbucket.org:boomersweb/seller.git"
+        },
+        {
+            "type": "git",
+            "url": "git@bitbucket.org:boomersweb/cs-icloud.git"
         }
     ],
     "require": {
@@ -52,7 +56,8 @@
         "boomers/cs-users": "dev-master",
         "boomers/cs-devices": "dev-master",
         "boomers/cs-billing": "dev-master",
-        "boomers/seller": "dev-master"
+        "boomers/seller": "dev-master",
+        "boomers/cs-icloud": "dev-master"
     },
     "autoload": {
         "psr-4": {

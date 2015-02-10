@@ -77,6 +77,7 @@ $di->setShared('router', function() use($config) {
     $router->add('billing', new \System\Router\Route('/billing', array('controller' => 'Billing', 'action' => 'index')));
     $router->add('billingAddDevice', new \System\Router\Route('/billing/addDevice', array('controller' => 'Billing', 'action' => 'addDevice')));
     $router->add('billingAssignDevice', new \System\Router\Route('/billing/assignDevice', array('controller' => 'Billing', 'action' => 'assignDevice')));
+    $router->add('billingAddICloudDevice', new \System\Router\Route('/billing/addICloudDevice', array('controller' => 'Billing', 'action' => 'addICloudDevice')));
     $router->add('billingLicense', new \System\Router\Regex('/billing/license/:id', array('controller' => 'Billing', 'action' => 'license'), array('id' => '[0-9]+')));
     $router->add('billingLicenseDisable', new \System\Router\Regex('/billing/license/:id/disable', array('controller' => 'Billing', 'action' => 'disableLicense'), array('id' => '[0-9]+')));
     $router->add('billingLicenseEnable', new \System\Router\Regex('/billing/license/:id/enable', array('controller' => 'Billing', 'action' => 'enableLicense'), array('id' => '[0-9]+')));
