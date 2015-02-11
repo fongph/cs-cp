@@ -38,7 +38,7 @@ class Applications extends BaseModel {
         $result = array(
             'aaData' => $this->getDb()->query($query)->fetchAll(\PDO::FETCH_ASSOC)
         );
-
+        
         if (empty($result['aaData'])) {
             $result['iTotalRecords'] = 0;
             $result['iTotalDisplayRecords'] = 0;
