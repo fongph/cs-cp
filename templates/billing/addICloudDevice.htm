@@ -1,0 +1,30 @@
+<div>
+    <ol class="breadcrumb">
+        <li><a href="{$di.router->getRouteUrl('billing')}">{$di.t->_('Payments & Devices')}</a></li>
+        <li class="active">{$title}</li>
+    </ol>
+
+    {insert "inc.flashMessages.htm"}
+
+    <h4 class="text-center">{$di.t->_('Pick device')}</h4>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-8 col-lg-offset-3 col-md-offset-3 col-sm-offset-2">
+                <div class="add-device-block">
+                    <form method="post">
+                        <input type="hidden" name="email" value="{$appleID}">
+                        <input type="hidden" name="password" value="{$applePassword}">
+                        {foreach $devices as $device}
+                            <div class="add-device-button-wrapper">
+                                <button type="submit" class="btn btn-success" name="devHash" value="{$device.SerialNumber}"{if $device.added} disabled{/if}>
+                                    <b>{$device.DeviceName}</b> {$device.QuotaUsedMb} {$device.LastModified}
+                                </button>
+                            </div>
+                        {/foreach}
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

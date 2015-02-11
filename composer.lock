@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "e0d138c5776dea0382f1ee016eb82168",
+    "hash": "dbaa12faa01ce8b91167aff214259d53",
     "packages": [
         {
             "name": "boomers/cs-billing",
@@ -39,7 +39,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-devices.git",
-                "reference": "86534f8434f996f4cdc7c039b7ef70d32551fd7e"
+                "reference": "fbd1db12b57cf01fef5d986d59a802e4825912f5"
             },
             "require": {
                 "boomers/cs-mail": "dev-master",
@@ -59,7 +59,33 @@
             "license": [
                 "MIT"
             ],
-            "time": "2014-12-11 13:14:57"
+            "time": "2015-02-10 11:03:47"
+        },
+        {
+            "name": "boomers/cs-icloud",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "git@bitbucket.org:boomersweb/cs-icloud.git",
+                "reference": "b53307a881c18f984ffea89e65b74a8552ca3304"
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "PB\\",
+                    "proto/pb_icloud.php"
+                ],
+                "psr-4": {
+                    "CS\\ICloud\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "time": "2015-01-29 10:09:53"
         },
         {
             "name": "boomers/cs-mail",
@@ -93,7 +119,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-models.git",
-                "reference": "eaf82ef281345caf61e0f108d482397c917f9c25"
+                "reference": "e42132f1a800150c0374620518c652ca3bc9a6eb"
             },
             "require": {
                 "php": ">=5.4.0"
@@ -107,7 +133,7 @@
                     "CS\\Models\\": "src/"
                 }
             },
-            "time": "2014-12-26 09:31:54"
+            "time": "2015-02-10 10:28:56"
         },
         {
             "name": "boomers/cs-settings",
@@ -830,7 +856,8 @@
         "boomers/cs-users": 20,
         "boomers/cs-devices": 20,
         "boomers/cs-billing": 20,
-        "boomers/seller": 20
+        "boomers/seller": 20,
+        "boomers/cs-icloud": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
