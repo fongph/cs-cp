@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "dbaa12faa01ce8b91167aff214259d53",
+    "hash": "edbab8c7f389b7a7377d970eca9921ca",
     "packages": [
         {
             "name": "boomers/cs-billing",
@@ -67,7 +67,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-icloud.git",
-                "reference": "b53307a881c18f984ffea89e65b74a8552ca3304"
+                "reference": "4bf7876c40024e370c6ea64e82500ec6d8ce0461"
             },
             "require": {
                 "php": ">=5.3.0"
@@ -75,7 +75,7 @@
             "type": "library",
             "autoload": {
                 "classmap": [
-                    "PB\\",
+                    "PB/",
                     "proto/pb_icloud.php"
                 ],
                 "psr-4": {
@@ -85,7 +85,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2015-01-29 10:09:53"
+            "time": "2015-02-11 15:44:18"
         },
         {
             "name": "boomers/cs-mail",
