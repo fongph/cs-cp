@@ -38,15 +38,17 @@ class Applications extends BaseModel {
         $result = array(
             'aaData' => $this->getDb()->query($query)->fetchAll(\PDO::FETCH_ASSOC)
         );
+        
+        $countQueryWhere = "FROM `applications` a WHERE a.`dev_id` = {$devId}";
 
         if (empty($result['aaData'])) {
             $result['iTotalRecords'] = 0;
             $result['iTotalDisplayRecords'] = 0;
         } else {
-            $result['iTotalRecords'] = $this->getDb()->query("SELECT COUNT(*) {$fromWhere}")->fetchColumn();
+            $result['iTotalRecords'] = $this->getDb()->query("SELECT COUNT(*) {$countQueryWhere}")->fetchColumn();
 
             if ($search) {
-                $result['iTotalDisplayRecords'] = $this->getDb()->query("SELECT COUNT(*) {$fromWhere} AND ({$search})")->fetchColumn();
+                $result['iTotalDisplayRecords'] = $this->getDb()->query("SELECT COUNT(*) {$countQueryWhere} AND ({$search})")->fetchColumn();
             } else {
                 $result['iTotalDisplayRecords'] = $result['iTotalRecords'];
             }
