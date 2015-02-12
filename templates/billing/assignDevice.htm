@@ -12,13 +12,15 @@
         <div class="row">
             <div class="col-lg-4 col-md-4 col-sm-6 col-lg-offset-4 col-md-offset-4 col-sm-offset-3">
                 <div class="add-device-block">
-                    {foreach $devices as $id => $name}
-                    <div class="add-device-button-wrapper">
-                        <a href="{$di.router->getRouteUrl('billingAssignDevice')}?license={$license}&device={$id}" class="btn btn-success">{$name}</a>
-                    </div>
-                    {/foreach}
-                    {if $iCloudLicenseAvailable}
+                    {if $devices}
+                        {foreach $devices as $id => $name}
+                        <div class="add-device-button-wrapper">
+                            <a href="{$di.router->getRouteUrl('billingAssignDevice')}?license={$license}&device={$id}" class="btn btn-success">{$name}</a>
+                        </div>
+                        {/foreach}
                         <h4>{$di.t->_('or')}</h4>
+                    {/if}
+                    {if $iCloudLicenseAvailable}
                         <a href="{$di.router->getRouteUrl('billingAddICloudDevice')}?license={$license}" class="btn btn-primary">{$di.t->_('Add new iCloud device')}</a>
                     {/if}
                     <h4>{$di.t->_('or')}</h4>

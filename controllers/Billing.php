@@ -167,7 +167,7 @@ class Billing extends BaseController
 
         $list = $devicesManager->getUserUnAssignedDevicesList($this->auth['id']);
 
-        if (!count($list)) {
+        if (!count($list) && !$this->view->iCloudLicenseAvailable) {
             $this->redirect($this->di['router']->getRouteUrl('billingAddDevice') . '?license=' . $license);
         }
 
