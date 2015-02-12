@@ -64,9 +64,10 @@ class Billing extends BaseController
                         if($device['SerialNumber'] === $_POST['devHash'] && !$device['added']){
                             
                             $devicesManager->setDeviceDbConfigGenerator(function($devId){
-                                //@todo uncomment
-                                //return GlobalSettings::getShardDB($devId);
-                                return $this->di['config']['dataDb'];
+                                if ($this->di['config']['environment'] == 'production') {
+                                    return GlobalSettings::getDeviceDatabaseConfig($devId);
+
+                                } else return $this->di['config']['dataDb'];
                             });
 
                             $devicesManager
