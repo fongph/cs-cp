@@ -3,7 +3,6 @@
 namespace Controllers;
 
 use CS\ICloud\Backup as ICloudBackup,
-    CS\Models\Device\DeviceRecord,
     CS\Models\License\LicenseRecord,
     CS\Users\UsersNotes,
     System\FlashMessages,
@@ -40,7 +39,7 @@ class Billing extends BaseController
     {
         $devicesManager = new DevicesManager($this->di['db']);
         $licenseRecord = new LicenseRecord($this->di['db']);
-        
+
         try {
            
             $licenseRecord->load($this->getRequest()->get('license'));
@@ -70,36 +69,43 @@ class Billing extends BaseController
                                 return $this->di['config']['dataDb'];
                             });
 
-
-                            $userNotes = new UsersNotes($this->di['db']);
                             $devicesManager
                                 ->setUserId($this->auth['id'])
                                 ->setLicense($licenseRecord)
                                 ->setDeviceUniqueId($device['SerialNumber'])
                                 ->setAppleId($_POST['email'])
                                 ->setApplePassword($_POST['password'])
-                                ->setBackupUrl($device['url'])
+                                ->setDeviceHash($device['backupUDID'])
                                 ->setName($device['DeviceName'])
                                 ->setModel($device['MarketingName'])
                                 ->setOsVer($device['ProductVersion'])
                                 ->setLastBackup($device['LastModified'])
                                 ->setQuotaUsed($device['QuotaUsed'])
-                                ->setAfterAdd(function(DeviceRecord $deviceRecord) use($userNotes){
+                                ->setAfterSave(function() use ($devicesManager){
                                     $this->di['flashMessages']->add(FlashMessages::SUCCESS, $this->di['t']->_(
                                         'New device added'
                                     ));
+
+                                    $userNotes = new UsersNotes($this->di['db']);
                                     $userNotes->addSystemNote($this->auth['id'], UsersNotes::TYPE_SYSTEM, null, null,
-                                        "New device added {$deviceRecord->getName()} " . json_encode(array(
-                                            'dev_id' => $deviceRecord->getUniqueId()
+                                        "New device added {$devicesManager->getProcessedDevice()->getName()} " . json_encode(array(
+                                            'dev_id' => $devicesManager->getProcessedDevice()->getUniqueId()
                                         )));
-                                })
-                                ->setAfterAssign(function(DeviceRecord $deviceRecord) use($userNotes, $licenseRecord) {
                                     $userNotes->addSystemNote($this->auth['id'], UsersNotes::TYPE_SYSTEM, null, null,
-                                        "Assign {$licenseRecord->getOrderProduct()->getProduct()->getName()} to device {$deviceRecord->getName()} " . json_encode(array(
-                                            'device_id' => $deviceRecord->getId(),
-                                            'license_id' => $licenseRecord->getId()
+                                        "Assign {$devicesManager->getLicense()->getOrderProduct()->getProduct()->getName()} to device {$devicesManager->getProcessedDevice()->getName()} " . json_encode(array(
+                                            'device_id' => $devicesManager->getProcessedDevice()->getId(),
+                                            'license_id' => $devicesManager->getLicense()->getId()
                                         ))
                                     );
+
+                                    $queueManager = new \CS\Queue\Manager($this->di['queueClient']);
+
+                                    if($queueManager->addDownloadTask($devicesManager->getICloudDevice())){
+                                        $devicesManager->getICloudDevice()->setProcessing(1);
+
+                                    } else $devicesManager->getICloudDevice()->setLastError($queueManager->getError());
+
+                                    $devicesManager->getICloudDevice()->save();
                                 })
                                 ->addICloudDevice();
 
@@ -124,12 +130,12 @@ class Billing extends BaseController
 
         } catch (\CS\ICloud\AuthorizationException $e) {
             $this->di['flashMessages']->add(FlashMessages::ERROR, $this->di['t']->_('Wrong Apple ID or password'));
-            $this->redirect($this->di['router']->getRouteUrl('billingAddICloudDevice'));
+            $this->redirect($this->di['router']->getRouteUrl('billingAddICloudDevice') . '?license=' . $this->getRequest()->get('license'));
 
         } catch (\Exception $e) {
             $this->di['logger']->addCritical(get_class($e) . " {$e->getMessage()} {$e->getFile()}[{$e->getLine()}] " . p($e));
             $this->di['flashMessages']->add(FlashMessages::ERROR, $this->di['t']->_('Unexpected Error. Please try later or contact us!'));
-            $this->redirect($this->di['router']->getRouteUrl('billingAddICloudDevice.htm'));
+            $this->redirect($this->di['router']->getRouteUrl('billing'));
         }
 
         $this->view->title = $this->di->getTranslator()->_('Assign iCloud Device');

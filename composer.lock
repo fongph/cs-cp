@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "edbab8c7f389b7a7377d970eca9921ca",
+    "hash": "b3219f94ece0484405134ba1bc956885",
     "packages": [
         {
             "name": "boomers/cs-billing",
@@ -39,7 +39,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-devices.git",
-                "reference": "fbd1db12b57cf01fef5d986d59a802e4825912f5"
+                "reference": "09dac48a77e7bea18a0d18187efef8ee23384781"
             },
             "require": {
                 "boomers/cs-mail": "dev-master",
@@ -59,7 +59,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2015-02-10 11:03:47"
+            "time": "2015-02-12 11:50:24"
         },
         {
             "name": "boomers/cs-icloud",
@@ -119,7 +119,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-models.git",
-                "reference": "e42132f1a800150c0374620518c652ca3bc9a6eb"
+                "reference": "a57dbca8c5db1d204505baf0b2a5e6ec82d87e98"
             },
             "require": {
                 "php": ">=5.4.0"
@@ -133,7 +133,29 @@
                     "CS\\Models\\": "src/"
                 }
             },
-            "time": "2015-02-10 10:28:56"
+            "time": "2015-02-12 11:14:37"
+        },
+        {
+            "name": "boomers/cs-queue",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "git@bitbucket.org:boomersweb/cs-queue.git",
+                "reference": "11babc423de8048076a2351058059eb66da8326a"
+            },
+            "require": {
+                "boomers/cs-settings": "dev-master",
+                "monolog/monolog": "1.*",
+                "php": ">=5.3.0",
+                "videlalvaro/php-amqplib": "2.2.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "CS\\Queue\\": "src/"
+                }
+            },
+            "time": "2015-02-12 13:14:20"
         },
         {
             "name": "boomers/cs-settings",
@@ -141,7 +163,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-settings.git",
-                "reference": "8fc10b80ef38854258e8ad289e636facac308a27"
+                "reference": "cbff4ae1cf6618132b469cbef78471215b6db91d"
             },
             "require": {
                 "php": ">=5.4.0"
@@ -152,7 +174,7 @@
                     "CS\\Settings\\": "src/"
                 }
             },
-            "time": "2015-01-14 10:26:33"
+            "time": "2015-02-06 16:10:27"
         },
         {
             "name": "boomers/cs-users",
@@ -843,6 +865,51 @@
             "description": "Symfony Console Component",
             "homepage": "http://symfony.com",
             "time": "2015-01-06 17:50:02"
+        },
+        {
+            "name": "videlalvaro/php-amqplib",
+            "version": "v2.2.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/videlalvaro/php-amqplib.git",
+                "reference": "6ef2ca9a45bb9fb20872f824f4c7c1518315bd3f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/videlalvaro/php-amqplib/zipball/6ef2ca9a45bb9fb20872f824f4c7c1518315bd3f",
+                "reference": "6ef2ca9a45bb9fb20872f824f4c7c1518315bd3f",
+                "shasum": ""
+            },
+            "require": {
+                "ext-bcmath": "*",
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "3.7.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "PhpAmqpLib": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "LGPL-2.1"
+            ],
+            "authors": [
+                {
+                    "name": "Alvaro Videla"
+                }
+            ],
+            "description": "This library is a pure PHP implementation of the AMQP protocol. It's been tested against RabbitMQ.",
+            "homepage": "https://github.com/videlalvaro/php-amqplib/",
+            "keywords": [
+                "message",
+                "queue",
+                "rabbitmq"
+            ],
+            "time": "2013-12-22 12:49:53"
         }
     ],
     "packages-dev": [],
@@ -857,7 +924,8 @@
         "boomers/cs-devices": 20,
         "boomers/cs-billing": 20,
         "boomers/seller": 20,
-        "boomers/cs-icloud": 20
+        "boomers/cs-icloud": 20,
+        "boomers/cs-queue": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

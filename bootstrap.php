@@ -166,3 +166,18 @@ $di->setShared('fastSpringGateway', function () {
                     ->setUserName('api@dizboard.com')//$fastSpringConfig['userName'])
                     ->setUserPassword('c0RdI48G7Est');//$fastSpringConfig['userPassword']);
 });
+
+$di->setShared('queueClient', function () use($config) {
+    $queueConfig  = GlobalSettings::getQueueConfig();
+
+    if ($config['environment'] == 'production') {
+        return new \CS\Queue\RabbitClient(
+            $queueConfig['host'],$queueConfig['port'],$queueConfig['user'],$queueConfig['password'],$queueConfig['vhost']
+        );
+
+    } else {
+        $queueClient = new \CS\Queue\QueueToFile;
+        $queueClient->setDirectory(__DIR__ . "/logs");
+        return $queueClient;
+    }
+});
