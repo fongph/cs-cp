@@ -39,6 +39,7 @@ class Applications extends BaseModel {
             'aaData' => $this->getDb()->query($query)->fetchAll(\PDO::FETCH_ASSOC)
         );
         
+
         $countQueryWhere = "FROM `applications` a WHERE a.`dev_id` = {$devId}";
 
         if (empty($result['aaData'])) {

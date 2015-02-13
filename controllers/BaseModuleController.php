@@ -60,9 +60,12 @@ abstract class BaseModuleController extends BaseController
     {
         $modulesModel = new Modules($this->di);
         $this->view->cpMenu = array();
-
+        
+        //temporary add instagram module for test users
         if ($this->di['isTestUser']($this->auth['id'])) {
-            $this->di['config']['modules'][Modules::INSTAGRAM] = 'Instagram Tracking';
+            $config = $this->di['config'];
+            $config['modules'][Modules::INSTAGRAM] = 'Instagram Tracking';
+            $this->di->set('config', $config);
         }
         
         foreach ($this->di['config']['modules'] as $routeName => $name) {
