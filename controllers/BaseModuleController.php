@@ -61,6 +61,10 @@ abstract class BaseModuleController extends BaseController
         $modulesModel = new Modules($this->di);
         $this->view->cpMenu = array();
 
+        if ($this->di['isTestUser']($this->auth['id'])) {
+            $this->di['config']['modules'][Modules::INSTAGRAM] = 'Instagram Tracking';
+        }
+        
         foreach ($this->di['config']['modules'] as $routeName => $name) {
             if ($modulesModel->isModuleActive($routeName) !== false) {
                 $this->view->cpMenu[$this->di['router']->getRouteUrl($routeName)] = array(

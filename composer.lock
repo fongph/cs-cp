@@ -12,7 +12,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-billing.git",
-                "reference": "b8c2f834908b7c589a9d4020674856f2d71c0a31"
+                "reference": "f57956ec3c6a5d211725938389b1d5d70d3b2a6a"
             },
             "require": {
                 "boomers/cs-models": "dev-master",
@@ -31,7 +31,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2015-01-14 10:19:46"
+            "time": "2015-02-03 10:54:50"
         },
         {
             "name": "boomers/cs-devices",
@@ -141,9 +141,10 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-queue.git",
-                "reference": "9665f3474370a49177d296c25df9170001304954"
+                "reference": "7c8390197dd24ce6e6547a27d4185818d5e67c13"
             },
             "require": {
+                "boomers/cs-models": "dev-master",
                 "boomers/cs-settings": "dev-master",
                 "monolog/monolog": "1.*",
                 "php": ">=5.3.0",
@@ -155,7 +156,7 @@
                     "CS\\Queue\\": "src/"
                 }
             },
-            "time": "2015-02-12 15:01:36"
+            "time": "2015-02-13 10:58:03"
         },
         {
             "name": "boomers/cs-settings",
@@ -163,7 +164,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-settings.git",
-                "reference": "cbff4ae1cf6618132b469cbef78471215b6db91d"
+                "reference": "141f87b145660faf13dafd14ff2ff1b7828af7ae"
             },
             "require": {
                 "php": ">=5.4.0"
@@ -174,7 +175,7 @@
                     "CS\\Settings\\": "src/"
                 }
             },
-            "time": "2015-02-06 16:10:27"
+            "time": "2015-02-13 08:49:28"
         },
         {
             "name": "boomers/cs-users",
@@ -252,16 +253,16 @@
         },
         {
             "name": "fenom/fenom",
-            "version": "2.4.3",
+            "version": "2.5.2",
             "source": {
                 "type": "git",
-                "url": "https://github.com/bzick/fenom.git",
-                "reference": "47cee02dd3ed48575fb07fa1716ffad39178451e"
+                "url": "https://github.com/fenom-template/fenom.git",
+                "reference": "45a3abed885b18e5ca7063786a3b8ffd3111a8c7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bzick/fenom/zipball/47cee02dd3ed48575fb07fa1716ffad39178451e",
-                "reference": "47cee02dd3ed48575fb07fa1716ffad39178451e",
+                "url": "https://api.github.com/repos/fenom-template/fenom/zipball/45a3abed885b18e5ca7063786a3b8ffd3111a8c7",
+                "reference": "45a3abed885b18e5ca7063786a3b8ffd3111a8c7",
                 "shasum": ""
             },
             "require": {
@@ -298,7 +299,7 @@
                 "templater",
                 "templating"
             ],
-            "time": "2015-01-08 13:06:52"
+            "time": "2015-02-10 11:37:55"
         },
         {
             "name": "filp/whoops",
@@ -360,16 +361,16 @@
         },
         {
             "name": "guzzlehttp/guzzle",
-            "version": "5.1.0",
+            "version": "5.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/guzzle.git",
-                "reference": "f1085bb4e023766a66b7b051914ec73bdf7202b5"
+                "reference": "475b29ccd411f2fa8a408e64576418728c032cfa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/f1085bb4e023766a66b7b051914ec73bdf7202b5",
-                "reference": "f1085bb4e023766a66b7b051914ec73bdf7202b5",
+                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/475b29ccd411f2fa8a408e64576418728c032cfa",
+                "reference": "475b29ccd411f2fa8a408e64576418728c032cfa",
                 "shasum": ""
             },
             "require": {
@@ -414,7 +415,7 @@
                 "rest",
                 "web service"
             ],
-            "time": "2014-12-19 20:27:15"
+            "time": "2015-01-28 01:03:29"
         },
         {
             "name": "guzzlehttp/ringphp",
@@ -811,17 +812,17 @@
         },
         {
             "name": "symfony/console",
-            "version": "v2.6.3",
+            "version": "v2.6.4",
             "target-dir": "Symfony/Component/Console",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Console.git",
-                "reference": "6ac6491ff60c0e5a941db3ccdc75a07adbb61476"
+                "reference": "e44154bfe3e41e8267d7a3794cd9da9a51cfac34"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Console/zipball/6ac6491ff60c0e5a941db3ccdc75a07adbb61476",
-                "reference": "6ac6491ff60c0e5a941db3ccdc75a07adbb61476",
+                "url": "https://api.github.com/repos/symfony/Console/zipball/e44154bfe3e41e8267d7a3794cd9da9a51cfac34",
+                "reference": "e44154bfe3e41e8267d7a3794cd9da9a51cfac34",
                 "shasum": ""
             },
             "require": {
@@ -864,7 +865,7 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "http://symfony.com",
-            "time": "2015-01-06 17:50:02"
+            "time": "2015-01-25 04:39:26"
         },
         {
             "name": "videlalvaro/php-amqplib",

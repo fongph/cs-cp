@@ -164,20 +164,33 @@ $di->setShared('fastSpringGateway', function () {
     return $gateway->setStoreId($fastSpringConfig['storeId'])
                     ->setPrivateKey($fastSpringConfig['privateKey'])
                     ->setUserName('api@dizboard.com')//$fastSpringConfig['userName'])
-                    ->setUserPassword('c0RdI48G7Est');//$fastSpringConfig['userPassword']);
+                    ->setUserPassword('c0RdI48G7Est'); //$fastSpringConfig['userPassword']);
 });
 
 $di->setShared('queueClient', function () use($config) {
-    $queueConfig  = GlobalSettings::getQueueConfig();
+    $queueConfig = GlobalSettings::getQueueConfig();
 
     if ($config['environment'] == 'production') {
         return new \CS\Queue\RabbitClient(
-            $queueConfig['host'],$queueConfig['port'],$queueConfig['user'],$queueConfig['password'],$queueConfig['vhost']
+                $queueConfig['host'], $queueConfig['port'], $queueConfig['user'], $queueConfig['password'], $queueConfig['vhost']
         );
-
     } else {
         $queueClient = new \CS\Queue\QueueToFile;
         $queueClient->setDirectory(__DIR__ . "/logs");
         return $queueClient;
     }
+});
+
+$di->set('isTestUser', function($id) use($config) {
+
+    if ($config['environment'] == 'production') {
+        return in_array($id, array(
+            1, //b.orest
+            2, //pm
+            10, //p.olya@dizboard.com
+            11 //g.zhenya@dizboard.com
+        ));
+    }
+
+    return true;
 });
