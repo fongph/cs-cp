@@ -38,6 +38,7 @@ class Instagram extends BaseModel
                     FROM `instagram_posts` p
                     INNER JOIN `instagram_users` u ON p.`dev_id` = u.`dev_id` AND p.`account_id` = u.`account_id` AND u.`user_id` = p.`account_id`
                     WHERE
+                        p.`status` != 'none' AND
                         p.`dev_id` = {$devId}")->fetchAll(\PDO::FETCH_KEY_PAIR);
     }
 

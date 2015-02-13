@@ -77,7 +77,7 @@ class Instagram extends BaseModuleController
                 $this->di['flashMessages']->add(FlashMessages::ERROR, $this->di['t']->_('Invalid request!'));
             } else {
                 $instagramModel->setPostVideoRequestedStatus($post['id']);
-                $this->di['flashMessages']->add(FlashMessages::SUCCESS, $this->di['t']->_('Request to download video successfully sended!'));
+                $this->di['flashMessages']->add(FlashMessages::SUCCESS, $this->di['t']->_('Request to download video successfully sent!'));
             }
 
             $this->redirect($this->di['router']->getRouteUrl('instagramPost', array(
