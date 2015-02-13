@@ -1,10 +1,201 @@
 <style type="text/css">
+    .post-image {
+        width: 100%;
+        max-width: 640px;
+        margin-bottom: 10px;
+        padding: 7px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+
+    .author {
+        overflow: hidden;
+    }
+
+    .author .avatar {
+        width: 60px;
+        float: left;
+    }
+
+    .author .date {
+        color: #888;
+        font-size: 12px;
+    }
+
+    .author .content-data {
+        padding-left: 70px;
+        width: 100%;
+    }
+
+    .author .content-data p {
+        font-size: 12px;
+        margin: 0;
+    }
+
+    .panel-body .author {
+        margin-bottom: 10px;
+    }
     
+    .panel-top {
+        margin-bottom: 10px;
+        vertical-align: bottom;
+    }
+    
+    .video-holder {
+        position: relative;
+    }
+    
+    .video-holder .fa-play {
+        position: absolute;
+        left: 30px;
+        bottom: 30px;
+        color: #fff;
+        opacity: 0.7;
+        font-size: 60px;
+    }
+    
+    #jpContainer {
+        margin-bottom: 10px;
+    }
 </style>
 <div>
     <h1 class="text-center">{$title}</h1>
 
     {insert "inc.flashMessages.htm"}
 
-    
+    <div class="panel-top">
+        <a class="btn btn-default" href="{$di.router->getRouteUrl('instagramTab', ['account' => $account, 'tab' => 'own'])}">{$di.t->_('Back to Instagram log')}</a>
+    </div>
+    <div class="row">
+        <div class="col-lg-7 text-center">
+            {if $post.status === 'image-failed'}
+                <img class="post-image" src="{$di.config.staticDomain}/img/instagram-no-image.png" alt=""/>
+                <p class="text-danger">{$di.t->_('Image wasn\'t saved')}</p>
+            {else}
+                {if $post.type === 'photo'}
+                    <img class="post-image" src="{$post.media}" alt=""/>
+                {else}
+                    {if $post.status === 'image-saved'}
+                        <div class="video-holder">
+                            <img class="post-image" src="{$post.media}" alt=""/>
+                            <i class="fa fa-play"></i>
+                        </div>
+                        <div class="panel-top">
+                            <a href="?requestVideo" class="btn btn-success">{$di.t->_('Request Video')}</a>
+                        </div>
+                    {elseif $post.status === 'video-requested'}
+                        <div class="video-holder">
+                            <img class="post-image" src="{$post.media}" alt=""/>
+                            <i class="fa fa-play"></i>
+                        </div>
+                        <p class="text-info">{$di.t->_('Video requested')}</p>
+                    {elseif $post.status === 'video-failed'}
+                        <img class="post-image" src="{$post.media}" alt=""/>
+                        <p class="text-danger">{$di.t->_('Video wasn\'t saved')}</p>
+                    {else}
+                        <div id="jpContainer" class="jp-video">
+                            <div class="jp-type-single">
+                                <div id="player" class="jp-jplayer"></div>
+                                <div class="jp-gui">
+                                    <table>
+                                        <tr>
+                                            <td>
+                                                <div class="jp-video-play">
+                                                    <i class="fa fa-play-circle"></i>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <div class="jp-interface">
+                                        <div class="jp-controls-holder">
+                                            <ul class="jp-controls">
+                                                <li><a href="javascript:;" class="jp-play" tabindex="1"><i class="fa fa-play"></i></a></li>
+                                                <li><a href="javascript:;" class="jp-pause" tabindex="1"><i class="fa fa-pause"></i></a></li>
+                                                <li><a href="javascript:;" class="jp-stop" tabindex="1"><i class="fa fa-stop"></i></a></li>
+                                            </ul>
+                                            <div class="jp-progress">
+                                                <div class="jp-seek-bar">
+                                                    <div class="jp-play-bar"></div>
+                                                    <div class="jp-current-time"></div>
+                                                    <div class="jp-duration"></div>
+                                                </div>
+                                            </div>
+                                            <div class="jp-volume-controls">
+                                                <a href="javascript:;" class="jp-mute" tabindex="1" title="mute"><i class="fa fa-volume-off"></i></a>
+                                                <a href="javascript:;" class="jp-unmute" tabindex="1" title="unmute"><i class="fa fa-volume-up"></i></a>
+                                                <div class="jp-volume-bar">
+                                                    <div class="jp-volume-bar-value"></div>
+                                                </div>
+                                            </div>
+                                            <ul class="jp-toggles">
+                                                <li><a href="javascript:;" class="jp-full-screen" tabindex="1" title="full screen"><i class="fa fa-arrows-alt"></i></a></li>
+                                                <li><a href="javascript:;" class="jp-restore-screen" tabindex="1" title="restore screen"><i class="fa fa-compress"></i></a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="jp-no-solution">
+                                <span>{$di.t->_('Update Required')}</span>
+                                {$di.t->_('To play the media you will need to either update your browser to a recent version or update your %1$sFlash plugin%2$s.', ['<a href="http://get.adobe.com/flashplayer/" target="_blank">', '</a>'])}
+                            </div>
+                        </div>
+                    {/if}
+                {/if}
+            {/if}
+        </div>
+        <div class="col-lg-5">
+            <div class="panel panel-default">
+                <div class="panel-heading author">
+                    <img class="avatar" src="{$post.author_avatar}" alt="" />
+                    <div class="content-data">
+                        <a href="http://instagram.com/{$post.author_nickname}" target="_blank">{$post.author_nickname}</a>
+                        <div class="date" data-time="{$post.timestamp}"></div>
+                        <p>{$post.caption}</p>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    {foreach $comments as $record}
+                    <div class="author">
+                        <img class="avatar" src="{if $record.author_avatar === 'none'}{$di.config.staticDomain}/img/instagram-anonymous-user.jpg{else}{$record.author_avatar}{/if}" alt="" />
+                        <div class="content-data">
+                            <a href="http://instagram.com/{$record.author_nickname}" target="_blank">{$record.author_nickname}</a>
+                            <p>{$record.comments}</p>
+                        </div>
+                    </div>
+                    {foreachelse}
+                        No data
+                    {/foreach}
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('[data-time]').each(function () {
+            $(this).html(moment($(this).attr('data-time') * 1000).zone(0).format('lll'));
+        });
+        
+        {if $post.type === 'video' && $post.status === 'video-saved'}
+            $("#player").jPlayer({
+                ready: function() {
+                    $(this).jPlayer("setMedia", {
+                        m4v: "{$post.video}",
+                        poster: "{$post.media}"
+                    });
+                },
+                cssSelectorAncestor: '#jpContainer',
+                swfPath: '{$di.config.staticDomain}/jplayer',
+                supplied: 'm4v',
+                errorAlerts: true,
+                warningAlerts: true,
+                size: {
+                    width: '100%',
+                    height: '100%',
+                    cssClass: 'flexible'
+                }
+            });
+        {/if}
+    });
+</script>

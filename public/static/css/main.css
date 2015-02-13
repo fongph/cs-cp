@@ -928,6 +928,10 @@ body > .cp-menu {
     z-index: 10;
 }
 
+.jp-video img {
+    vertical-align: top;
+}
+
 .jp-seek-bar {
     width: 100% !important;
 }

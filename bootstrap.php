@@ -100,7 +100,8 @@ $di->setShared('router', function() use($config) {
     $router->add('facebookList', new \System\Router\Regex('/cp/facebook/:account/:tab/:id', array('controller' => 'Facebook', 'action' => 'list'), array('account' => '[^/]+', 'tab' => 'private|group', 'id' => '[a-zA-Z0-9\:]+')));
     $router->add('emailsSelected', new \System\Router\Regex('/cp/emails/:account', array('controller' => 'Emails', 'action' => 'index'), array('account' => '[^/]+'))); //[-._@a-zA-Z0-9]{6,60}
     $router->add('emailsView', new \System\Router\Regex('/cp/emails/:account/:timestamp', array('controller' => 'Emails', 'action' => 'view'), array('account' => '[^/]+', 'timestamp' => '[\d]{1,10}')));
-    $router->add('instagramPost', new \System\Router\Regex('/cp/instagram/:account/:post', array('controller' => 'Instagram', 'action' => 'view'), array('account' => '[0-9]+', 'post' => '[0-9]+')));
+    $router->add('instagramTab', new \System\Router\Regex('/cp/instagram/:account/:tab', array('controller' => 'Instagram', 'action' => 'tab'), array('account' => '[0-9]+', 'tab' => 'own|friends|commented')));
+    $router->add('instagramPost', new \System\Router\Regex('/cp/instagram/:account/post/:post', array('controller' => 'Instagram', 'action' => 'view'), array('account' => '[0-9]+', 'post' => '[0-9]+')));
 
     $router->add('directLogin', new \System\Router\Route('/admin/login', array('controller' => 'Index', 'action' => 'directLogin', 'public' => true)));
 
@@ -165,5 +166,5 @@ $di->setShared('fastSpringGateway', function () {
     return $gateway->setStoreId($fastSpringConfig['storeId'])
                     ->setPrivateKey($fastSpringConfig['privateKey'])
                     ->setUserName('api@dizboard.com')//$fastSpringConfig['userName'])
-                    ->setUserPassword('c0RdI48G7Est');//$fastSpringConfig['userPassword']);
+                    ->setUserPassword('c0RdI48G7Est'); //$fastSpringConfig['userPassword']);
 });

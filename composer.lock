@@ -39,7 +39,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-devices.git",
-                "reference": "9d62f3c7dc5ebe6821912a8ee1fb80a89e90787c"
+                "reference": "09dac48a77e7bea18a0d18187efef8ee23384781"
             },
             "require": {
                 "boomers/cs-mail": "dev-master",
@@ -59,7 +59,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2015-01-27 14:42:18"
+            "time": "2015-02-12 11:50:24"
         },
         {
             "name": "boomers/cs-mail",
@@ -93,7 +93,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-models.git",
-                "reference": "a82ee841757b07460bf5254388c6fb77feb196ea"
+                "reference": "a57dbca8c5db1d204505baf0b2a5e6ec82d87e98"
             },
             "require": {
                 "php": ">=5.4.0"
@@ -107,7 +107,7 @@
                     "CS\\Models\\": "src/"
                 }
             },
-            "time": "2015-02-06 08:27:35"
+            "time": "2015-02-12 11:14:37"
         },
         {
             "name": "boomers/cs-settings",
@@ -115,7 +115,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-settings.git",
-                "reference": "8fc10b80ef38854258e8ad289e636facac308a27"
+                "reference": "141f87b145660faf13dafd14ff2ff1b7828af7ae"
             },
             "require": {
                 "php": ">=5.4.0"
@@ -126,7 +126,7 @@
                     "CS\\Settings\\": "src/"
                 }
             },
-            "time": "2015-01-14 10:26:33"
+            "time": "2015-02-13 08:49:28"
         },
         {
             "name": "boomers/cs-users",
@@ -204,16 +204,16 @@
         },
         {
             "name": "fenom/fenom",
-            "version": "2.5.1",
+            "version": "2.5.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fenom-template/fenom.git",
-                "reference": "5dc7bbfd56f599e1e8a30ac8dba176256cf509a1"
+                "reference": "45a3abed885b18e5ca7063786a3b8ffd3111a8c7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fenom-template/fenom/zipball/5dc7bbfd56f599e1e8a30ac8dba176256cf509a1",
-                "reference": "5dc7bbfd56f599e1e8a30ac8dba176256cf509a1",
+                "url": "https://api.github.com/repos/fenom-template/fenom/zipball/45a3abed885b18e5ca7063786a3b8ffd3111a8c7",
+                "reference": "45a3abed885b18e5ca7063786a3b8ffd3111a8c7",
                 "shasum": ""
             },
             "require": {
@@ -250,7 +250,7 @@
                 "templater",
                 "templating"
             ],
-            "time": "2015-02-02 09:11:30"
+            "time": "2015-02-10 11:37:55"
         },
         {
             "name": "filp/whoops",
