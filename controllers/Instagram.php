@@ -22,7 +22,9 @@ class Instagram extends BaseModuleController
     {
         $instagramModel = new \Models\Cp\Instagram($this->di);
 
-        if (($account = $instagramModel->getFirstAccount($this->di['devId'])) !== null) {
+        
+        if (($account = $instagramModel->getFirstAccount($this->di['devId'])) !== false) {
+            
             $this->redirect($this->getDI()->getRouter()->getRouteUrl('instagramTab', array('account' => $account, 'tab' => 'own')));
         }
 

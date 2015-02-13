@@ -188,8 +188,8 @@ $di->set('isTestUser', function($id) use($config) {
 
     if ($config['environment'] == 'production') {
         return in_array($id, array(
-            1, //b.orest
-            2, //pm
+            1, //b.orest@dizboard.com
+            2, //pm@dizboard.com
             10, //p.olya@dizboard.com
             11 //g.zhenya@dizboard.com
         ));
