@@ -1,15 +1,3 @@
-<style>
-    .add-device-block {
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        padding: 10px;
-        text-align: center;
-    }
-    
-    .add-device-button-wrapper {
-        margin-bottom: 7px;
-    }
-</style>
 <div>
     <ol class="breadcrumb">
         <li><a href="{$di.router->getRouteUrl('billing')}">{$di.t->_('Payments & Devices')}</a></li>
@@ -24,11 +12,17 @@
         <div class="row">
             <div class="col-lg-4 col-md-4 col-sm-6 col-lg-offset-4 col-md-offset-4 col-sm-offset-3">
                 <div class="add-device-block">
-                    {foreach $devices as $id => $name}
-                    <div class="add-device-button-wrapper">
-                        <a href="{$di.router->getRouteUrl('billingAssignDevice')}?license={$license}&device={$id}" class="btn btn-success">{$name}</a>
-                    </div>
-                    {/foreach}
+                    {if $devices}
+                        {foreach $devices as $id => $name}
+                        <div class="add-device-button-wrapper">
+                            <a href="{$di.router->getRouteUrl('billingAssignDevice')}?license={$license}&device={$id}" class="btn btn-success">{$name}</a>
+                        </div>
+                        {/foreach}
+                        <h4>{$di.t->_('or')}</h4>
+                    {/if}
+                    {if $iCloudLicenseAvailable}
+                        <a href="{$di.router->getRouteUrl('billingAddICloudDevice')}?license={$license}" class="btn btn-primary">{$di.t->_('Add new iCloud device')}</a>
+                    {/if}
                     <h4>{$di.t->_('or')}</h4>
                     <a href="{$di.router->getRouteUrl('billingAddDevice')}?license={$license}" class="btn btn-primary">{$di.t->_('Add new device')}</a>
                 </div>

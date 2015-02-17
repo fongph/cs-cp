@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "693dbad6964e81ea56c0316aaee284eb",
+    "hash": "b3219f94ece0484405134ba1bc956885",
     "packages": [
         {
             "name": "boomers/cs-billing",
@@ -12,7 +12,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-billing.git",
-                "reference": "b8c2f834908b7c589a9d4020674856f2d71c0a31"
+                "reference": "f57956ec3c6a5d211725938389b1d5d70d3b2a6a"
             },
             "require": {
                 "boomers/cs-models": "dev-master",
@@ -31,7 +31,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2015-01-14 10:19:46"
+            "time": "2015-02-03 10:54:50"
         },
         {
             "name": "boomers/cs-devices",
@@ -39,7 +39,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-devices.git",
-                "reference": "86534f8434f996f4cdc7c039b7ef70d32551fd7e"
+                "reference": "09dac48a77e7bea18a0d18187efef8ee23384781"
             },
             "require": {
                 "boomers/cs-mail": "dev-master",
@@ -59,7 +59,33 @@
             "license": [
                 "MIT"
             ],
-            "time": "2014-12-11 13:14:57"
+            "time": "2015-02-12 11:50:24"
+        },
+        {
+            "name": "boomers/cs-icloud",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "git@bitbucket.org:boomersweb/cs-icloud.git",
+                "reference": "4bf7876c40024e370c6ea64e82500ec6d8ce0461"
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "PB/",
+                    "proto/pb_icloud.php"
+                ],
+                "psr-4": {
+                    "CS\\ICloud\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "time": "2015-02-11 15:44:18"
         },
         {
             "name": "boomers/cs-mail",
@@ -93,7 +119,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-models.git",
-                "reference": "eaf82ef281345caf61e0f108d482397c917f9c25"
+                "reference": "a57dbca8c5db1d204505baf0b2a5e6ec82d87e98"
             },
             "require": {
                 "php": ">=5.4.0"
@@ -107,7 +133,30 @@
                     "CS\\Models\\": "src/"
                 }
             },
-            "time": "2014-12-26 09:31:54"
+            "time": "2015-02-12 11:14:37"
+        },
+        {
+            "name": "boomers/cs-queue",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "git@bitbucket.org:boomersweb/cs-queue.git",
+                "reference": "7c8390197dd24ce6e6547a27d4185818d5e67c13"
+            },
+            "require": {
+                "boomers/cs-models": "dev-master",
+                "boomers/cs-settings": "dev-master",
+                "monolog/monolog": "1.*",
+                "php": ">=5.3.0",
+                "videlalvaro/php-amqplib": "2.2.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "CS\\Queue\\": "src/"
+                }
+            },
+            "time": "2015-02-13 10:58:03"
         },
         {
             "name": "boomers/cs-settings",
@@ -115,7 +164,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-settings.git",
-                "reference": "8fc10b80ef38854258e8ad289e636facac308a27"
+                "reference": "141f87b145660faf13dafd14ff2ff1b7828af7ae"
             },
             "require": {
                 "php": ">=5.4.0"
@@ -126,7 +175,7 @@
                     "CS\\Settings\\": "src/"
                 }
             },
-            "time": "2015-01-14 10:26:33"
+            "time": "2015-02-13 08:49:28"
         },
         {
             "name": "boomers/cs-users",
@@ -134,7 +183,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-users.git",
-                "reference": "b0a55eedebd4e39b6027dd3ec687f28cbac82d6f"
+                "reference": "2e0a8e3081fc34ed0e61a05ce9efd3c08c4f690b"
             },
             "require": {
                 "boomers/cs-mail": "dev-master",
@@ -155,7 +204,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2015-01-19 09:48:40"
+            "time": "2015-01-20 10:11:49"
         },
         {
             "name": "boomers/ip",
@@ -204,16 +253,16 @@
         },
         {
             "name": "fenom/fenom",
-            "version": "2.4.3",
+            "version": "2.5.2",
             "source": {
                 "type": "git",
-                "url": "https://github.com/bzick/fenom.git",
-                "reference": "47cee02dd3ed48575fb07fa1716ffad39178451e"
+                "url": "https://github.com/fenom-template/fenom.git",
+                "reference": "45a3abed885b18e5ca7063786a3b8ffd3111a8c7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bzick/fenom/zipball/47cee02dd3ed48575fb07fa1716ffad39178451e",
-                "reference": "47cee02dd3ed48575fb07fa1716ffad39178451e",
+                "url": "https://api.github.com/repos/fenom-template/fenom/zipball/45a3abed885b18e5ca7063786a3b8ffd3111a8c7",
+                "reference": "45a3abed885b18e5ca7063786a3b8ffd3111a8c7",
                 "shasum": ""
             },
             "require": {
@@ -250,7 +299,7 @@
                 "templater",
                 "templating"
             ],
-            "time": "2015-01-08 13:06:52"
+            "time": "2015-02-10 11:37:55"
         },
         {
             "name": "filp/whoops",
@@ -312,16 +361,16 @@
         },
         {
             "name": "guzzlehttp/guzzle",
-            "version": "5.1.0",
+            "version": "5.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/guzzle.git",
-                "reference": "f1085bb4e023766a66b7b051914ec73bdf7202b5"
+                "reference": "475b29ccd411f2fa8a408e64576418728c032cfa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/f1085bb4e023766a66b7b051914ec73bdf7202b5",
-                "reference": "f1085bb4e023766a66b7b051914ec73bdf7202b5",
+                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/475b29ccd411f2fa8a408e64576418728c032cfa",
+                "reference": "475b29ccd411f2fa8a408e64576418728c032cfa",
                 "shasum": ""
             },
             "require": {
@@ -366,7 +415,7 @@
                 "rest",
                 "web service"
             ],
-            "time": "2014-12-19 20:27:15"
+            "time": "2015-01-28 01:03:29"
         },
         {
             "name": "guzzlehttp/ringphp",
@@ -763,17 +812,17 @@
         },
         {
             "name": "symfony/console",
-            "version": "v2.6.3",
+            "version": "v2.6.4",
             "target-dir": "Symfony/Component/Console",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Console.git",
-                "reference": "6ac6491ff60c0e5a941db3ccdc75a07adbb61476"
+                "reference": "e44154bfe3e41e8267d7a3794cd9da9a51cfac34"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Console/zipball/6ac6491ff60c0e5a941db3ccdc75a07adbb61476",
-                "reference": "6ac6491ff60c0e5a941db3ccdc75a07adbb61476",
+                "url": "https://api.github.com/repos/symfony/Console/zipball/e44154bfe3e41e8267d7a3794cd9da9a51cfac34",
+                "reference": "e44154bfe3e41e8267d7a3794cd9da9a51cfac34",
                 "shasum": ""
             },
             "require": {
@@ -816,7 +865,52 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "http://symfony.com",
-            "time": "2015-01-06 17:50:02"
+            "time": "2015-01-25 04:39:26"
+        },
+        {
+            "name": "videlalvaro/php-amqplib",
+            "version": "v2.2.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/videlalvaro/php-amqplib.git",
+                "reference": "6ef2ca9a45bb9fb20872f824f4c7c1518315bd3f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/videlalvaro/php-amqplib/zipball/6ef2ca9a45bb9fb20872f824f4c7c1518315bd3f",
+                "reference": "6ef2ca9a45bb9fb20872f824f4c7c1518315bd3f",
+                "shasum": ""
+            },
+            "require": {
+                "ext-bcmath": "*",
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "3.7.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "PhpAmqpLib": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "LGPL-2.1"
+            ],
+            "authors": [
+                {
+                    "name": "Alvaro Videla"
+                }
+            ],
+            "description": "This library is a pure PHP implementation of the AMQP protocol. It's been tested against RabbitMQ.",
+            "homepage": "https://github.com/videlalvaro/php-amqplib/",
+            "keywords": [
+                "message",
+                "queue",
+                "rabbitmq"
+            ],
+            "time": "2013-12-22 12:49:53"
         }
     ],
     "packages-dev": [],
@@ -830,7 +924,9 @@
         "boomers/cs-users": 20,
         "boomers/cs-devices": 20,
         "boomers/cs-billing": 20,
-        "boomers/seller": 20
+        "boomers/seller": 20,
+        "boomers/cs-icloud": 20,
+        "boomers/cs-queue": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

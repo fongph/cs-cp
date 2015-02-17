@@ -31,6 +31,7 @@ class Modules
     const KEYLOGGER = 'keylogger';
     const SMS_COMMANDS = 'smsCommands';
     const SETTINGS = 'settings';
+    const INSTAGRAM = 'instagram';
 
     private static $moduleCheckMethods = array(
         self::BROWSER_BOOKMARKS => 'isBrowserBookmarksActive',

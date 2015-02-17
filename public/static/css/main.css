@@ -175,11 +175,11 @@ body > .cp-menu {
     background-position: -24px -48px;
 }
 
-.cp-menu i.menu-bookmarks {
+.cp-menu i.menu-browserBookmarks {
     background-position: 0px -72px;
 }
 
-.cp-menu li:hover i.menu-bookmarks, .cp-menu .active i.menu-bookmarks {
+.cp-menu li:hover i.menu-browserBookmarks, .cp-menu .active i.menu-browserBookmarks {
     background-position: -24px -72px;
 }
 
@@ -928,6 +928,10 @@ body > .cp-menu {
     z-index: 10;
 }
 
+.jp-video img {
+    vertical-align: top;
+}
+
 .jp-seek-bar {
     width: 100% !important;
 }
@@ -1090,4 +1094,15 @@ body > .cp-menu {
 
 .no-margin {
     margin: 0 !important;
+}
+
+.add-device-block {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    text-align: center;
+}
+
+.add-device-button-wrapper {
+    margin-bottom: 7px;
 }

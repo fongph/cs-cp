@@ -28,41 +28,40 @@ class Locations extends BaseModuleController
             case 'locationsZonesAdd':
                 $this->zoneAdd();
                 break;
-            
+
             case 'locationsZonesEdit':
                 $this->zoneEdit();
                 break;
-            
+
             default:
                 $this->locations();
                 break;
         }
-        
-        //p($this->getRequest()->server('REQUEST_URI'), 1);
     }
 
-    private function locations(){
+    private function locations()
+    {
         $this->view->startTime = 123;
-        
+
         $this->setView('cp/locationsData.htm');
     }
-    
+
     private function zones()
     {
         $zonesModel = new Zones($this->di);
-        
+
         if ($this->getRequest()->hasGet('delete')) {
             $id = $this->getRequest()->get('delete');
             if ($zonesModel->canDeleteZone($this->di['devId'], $id) === false) {
                 $this->getDI()->getFlashMessages()->add(FlashMessages::ERROR, $this->di['t']->_('Geo-fence not found!'));
                 $this->redirect($this->di['router']->getRouteUrl('locationsZones'));
             }
-            
+
             $zonesModel->deleteZone($this->di['devId'], $id);
             $this->getDI()->getFlashMessages()->add(FlashMessages::SUCCESS, $this->di['t']->_('Geo-fence successfully deleted!'));
             $this->redirect($this->di['router']->getRouteUrl('locationsZones'));
         }
-        
+
         $this->view->zones = $zonesModel->getZonesList($this->di['devId']);
         $this->setView('cp/zoneList.htm');
     }
@@ -75,7 +74,7 @@ class Locations extends BaseModuleController
             $this->getDI()->getFlashMessages()->add(FlashMessages::ERROR, $this->di['t']->_('Geo-fences limit reached!'));
             $this->redirect($this->di['router']->getRouteUrl('locationsZones'));
         }
-        
+
         $this->view->triggerList = $zonesModel->getTrigerList();
 
         $zoneData = $this->getRequest()->post('zoneData', '');
@@ -112,16 +111,16 @@ class Locations extends BaseModuleController
 
         $this->setView('cp/zone.htm');
     }
-    
+
     private function zoneEdit()
     {
         $zonesModel = new Zones($this->di);
-        
+
         if (($data = $zonesModel->getDeviceZone($this->di['devId'], $this->params['id'])) === false) {
             $this->getDI()->getFlashMessages()->add(FlashMessages::ERROR, $this->di['t']->_('Geo-fence not found!'));
             $this->redirect($this->di['router']->getRouteUrl('locationsZones'));
         }
-        
+
         $this->view->triggerList = $zonesModel->getTrigerList();
 
         $zoneData = $this->getRequest()->post('zoneData', $data['latitude'] . '|' . $data['longitude'] . '|' . $data['radius']);
@@ -129,7 +128,7 @@ class Locations extends BaseModuleController
         $name = $this->getRequest()->post('name', $data['name']);
         $trigger = $this->getRequest()->post('trigger', $data['trigger']);
         $enable = $this->getRequest()->post('enable', $data['enable']);
-        
+
         if ($this->getRequest()->isPost()) {
             $emailAlert = $this->getRequest()->post('email-alert', 0);
             $smsAlert = $this->getRequest()->post('sms-alert', 0);
@@ -137,7 +136,7 @@ class Locations extends BaseModuleController
             $emailAlert = $this->getRequest()->post('email-alert', $data['email_alert']);
             $smsAlert = $this->getRequest()->post('sms-alert', $data['sms_alert']);
         }
-        
+
         if ($this->getRequest()->hasPost('zoneData', 'name', 'trigger', 'enable')) {
             if (!Zones::validateName($name)) {
                 $this->getDI()->getFlashMessages()->add(FlashMessages::ERROR, $this->di['t']->_('Invalid name!'));
@@ -148,7 +147,7 @@ class Locations extends BaseModuleController
             }
 
             $schedule = Zones::schedulesToRecurrenceList($scheduleData);
-            
+
             $zonesModel->updateZone($this->params['id'], $this->di['devId'], $zoneData, $name, $trigger, $emailAlert, $smsAlert, $schedule, $enable);
 
             $this->getDI()->getFlashMessages()->add(FlashMessages::SUCCESS, $this->di['t']->_('Geo-fence successfully updated!'));
@@ -168,7 +167,7 @@ class Locations extends BaseModuleController
 
     public function indexAction()
     {
-        if ($this->auth['id'] == 1) {
+        if ($this->di['isTestUser']($this->auth['id'])) {
             return $this->privateRouter();
         }
 

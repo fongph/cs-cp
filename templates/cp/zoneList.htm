@@ -21,12 +21,10 @@
     <div class="container-fluid">
         {insert "inc.flashMessages.htm"}
 
-        <ul class="nav nav-pills" style="overflow: hidden;">
-            <li><a href="{$di.router->getRouteUrl('locations')}#map">{$di.t->_('Map View')}</a></li>
-            <li><a href="{$di.router->getRouteUrl('locations')}#table">{$di.t->_('Table View')}</a></li>
-            <li class="active"><a href="{$di.router->getRouteUrl('locationsZones')}">{$di.t->_('Geo-fences')}</a></li>
-        </ul>
+        <h3 class="text-center">{$di.t->_('Geofences')}</h3>
 
+        <a class="btn btn-default" href="{$di.router->getRouteUrl('locations')}">{$di.t->_('View locations')}</a>
+        
         {foreach $zones as $zone}
         <div class="media">
             <div class="media-left">
