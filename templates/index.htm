@@ -52,10 +52,12 @@
                             </div>
                         </div>
                         <div class="content-wrapper">
+                            {insert 'inc.banners.htm'}
                             {$content}
                         </div>
                         {else}
-                        {$content}
+                            {insert 'inc.banners.htm'}
+                            {$content}
                         {/if}
                     </div>
                 </div>
