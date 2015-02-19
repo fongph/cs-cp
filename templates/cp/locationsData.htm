@@ -1,6 +1,6 @@
 <style>
     #slider-holder {
-        padding: 10px;
+        padding: 15px;
     }
 
     #map-canvas {
@@ -12,7 +12,7 @@
         text-align: center;
     }
 
-    #data-holder, #no-data, #content-data {
+    #data-holder, #no-data {
         display: none;
     }
 
@@ -21,6 +21,12 @@
         padding-top: 10px;
     }
 
+    .scrollFix {
+        line-height: 1.35;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+    
     @media (min-width: 767px) {
         #allDataBlock {
             text-align: right;
@@ -37,7 +43,8 @@
 
     <div class="container-fluid">
         {insert "inc.flashMessages.htm"}
-
+        
+        {if $startTime > 0 || $hasZones}
         <div class="container-fluid">
             <div class="row" style="margin-bottom: 10px;">
                 <div class="col-lg-1 col-md-1 col-sm-1"></div>
@@ -47,29 +54,46 @@
                 <div class="col-lg-1 col-md-1 col-sm-1"></div>
             </div>
         </div>
+        
+        <div id="data-holder">
+            <ul class="nav nav-pills" style="overflow: hidden;">
+                <li class="active"><a href="#map" data-toggle="tab">{$di.t->_('Map View')}</a></li>
+                <li><a href="#table" data-toggle="tab">{$di.t->_('Table View')}</a></li>
+            </ul>
 
-        <ul class="nav nav-pills" style="overflow: hidden;">
-            <li class="active"><a href="#map" data-toggle="tab">{$di.t->_('Map View')}</a></li>
-            <li><a href="#table" data-toggle="tab">{$di.t->_('Table View')}</a></li>
-        </ul>
-
-        <div class="tab-content" id="content-data">
-            <div class="tab-pane active" id="map">
-                <div id="map-canvas" style="display: block; width: 100%; height: 400px;"></div>
+            <div class="tab-content">
+                <div class="tab-pane active" id="map">
+                    <div id="map-canvas" style="display: block; width: 100%; height: 400px;"></div>
+                </div>
+                <div class="tab-pane" id="table">
+                    <div class="table-container">
+                        <table id="datatable" aria-describedby="datatables_info">
+                            <thead>
+                                <tr role="row">
+                                    <th>{$di.t->_('Type')}</th>
+                                    <th>{$di.t->_('Time')}</th>
+                                    <th>{$di.t->_('Location')}</th>
+                                    <th>{$di.t->_('Actions')}</th>
+                                    <th>{$di.t->_('Alerts')}</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
             </div>
-            <div class="tab-pane" id="table">
-                <div class="table-container">
-                    <table id="datatable" aria-describedby="datatables_info">
-                        <thead>
-                            <tr role="row">
-                                <th>{$di.t->_('Time')}</th>
-                                <th>{$di.t->_('Latitude')}</th>
-                                <th>{$di.t->_('Longitude')}</th>
-                                <th>{$di.t->_('Address')}</th>
-                                <th>{$di.t->_('Actions')}</th>
-                            </tr>
-                        </thead>
-                    </table>
+
+            <div class="row" id="slider-holder">
+                <div class="col-sm-10">
+                    <div class="row">
+                        <div class="col-sm-6"><label for="slider">{$di.t->_('Accuracy:')} <span class="text-primary" id="amount">480ft</span>&nbsp;</label></div>
+                        <div class="col-sm-6" id="allDataBlock">{$di.t->_('Now you see %1$s of %2$s', ['<span class="text-primary" id="percents"></span>', '<a href="" id="all-data">' ~ $di.t->_('all data') ~ '</a>'])}</div>
+                    </div>
+                    <div>
+                        <input type="text" id="slider" style="width: 100%;" />
+                    </div>
+                </div>
+                <div class="col-sm-2" id="geo-fences-holder">
+                    <a href="{$di.router->getRouteUrl('locationsZones')}" class="btn btn-danger">{$di.t->_('Geo-fences')}</a>
                 </div>
             </div>
         </div>
@@ -77,39 +101,264 @@
         <div id="no-data">
             {$di.t->_('No data for this date')}
         </div>
-        
+
         <div id="loading">
             <img src="{$di.config.staticDomain}/img/ajaxPreloader.gif" alt="" />
         </div>
         
-        <div id="no-data">
-            {$di.t->_('No data for this date')}
-        </div>
-        
-        <div id="no-data-global">
-            <h3>{$di.t->_('Waiting for data...')}</h3>
-            <h3>{$di.t->_('Why can the data be unavailable?')}</h3>
-            {include "content/{$di.t->getLocale()}/noData.html"}
-            {include "content/{$di.t->getLocale()}/noDataLocations.html"}
-            <p>{$di.t->_('They will appear on map as soon as received from phone you are tracking. You can also add %1$sGeoFences%2$s to monitor now.')}</p>
-        </div>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                locations = {
+                    map: null,
+                    zones: [],
+                    polyline: 1,
+                    data: [],
+                    path: [],
+                    infoWindow: null,
+                    getTotalBounds: function () {
+                        var bounds = new google.maps.LatLngBounds();
 
-        <div class="row" id="slider-holder">
-            <div class="col-sm-10">
-                <div class="row">
-                    <div class="col-sm-6"><label for="slider">{$di.t->_('Accuracy:')} <span class="text-primary" id="amount">480ft</span>&nbsp;</label></div>
-                    <div class="col-sm-6" id="allDataBlock">{$di.t->_('Now you see %1$s of %2$s', ['<span class="text-primary" id="percents"></span>', '<a href="" id="all-data">' ~ $di.t->_('all data') ~ '</a>'])}</div>
-                </div>
-                <div>
-                    <input type="text" id="slider" style="width: 100%;" />
-                </div>
-            </div>
-            <div class="col-sm-2" id="geo-fences-holder">
-                <a href="{$di.router->getRouteUrl('locationsZones')}" class="btn btn-danger">{$di.t->_('Geo-fences')}</a>
-            </div>
-        </div>
+                        $.each(this.zones, function () {
+                            bounds.union(this.getBounds());
+                        });
+                        
+                        $.each(this.path, function () {
+                            bounds.extend(this);
+                        });
+
+                        return bounds;
+                    },
+                    updateMapBounds: function(){
+                        google.maps.event.trigger(this.getMap(), "resize");
+                        this.getMap().fitBounds(this.getTotalBounds());
+                    },
+                    showInfoWindow: function (content, position) {
+                        if (this.infoWindow === null) {
+                            this.infoWindow = new google.maps.InfoWindow();
+                        }
+                        
+                        this.infoWindow.close();
+                        this.infoWindow.setContent('<div class="scrollFix">' + content + '</div>');
+                        this.infoWindow.setPosition(position);
+                        this.infoWindow.open(this.getMap());
+                    },
+                    getMap: function () {
+                        if (this.map === null) {
+                            this.map = new google.maps.Map(document.getElementById("map-canvas"), {
+                                mapTypeId: google.maps.MapTypeId.ROADMAP,
+                                center: new google.maps.LatLng(0, 0),
+                                zoom: 0
+                            });
+                        } 
+                        
+                        return this.map;
+                    },
+                    loadZones: function () {
+                        var self = this;
+
+                        return $.getJSON("{$di.router->getRouteUrl('locationsZones')}", function (data) {
+                            console.log('locations: loadZones start');
+                            self.zones = [];
+
+                            $(data).each(function () {
+                                var zone = new google.maps.Circle({
+                                    strokeOpacity: 0.6,
+                                    strokeWeight: 2,
+                                    fillColor: '#0000ff',
+                                    fillOpacity: 0.1,
+                                    map: self.getMap(),
+                                    center: new google.maps.LatLng(parseFloat(this.latitude), parseFloat(this.longitude)),
+                                    radius: parseInt(this.radius),
+                                    clickable: true
+                                });
+
+                                var circleName = this.name;
+                                
+                                var image = {
+                                    url: "{$di.config.staticDomain}/img/zone-icon.png",
+                                    size: new google.maps.Size(20, 20),
+                                    anchor: new google.maps.Point(10, 10)
+                                };
+                                
+                                zone.marker = new google.maps.Marker({
+                                    position: zone.getCenter(),
+                                    icon: image,
+                                    crossOnDrag: false,
+                                    map: self.getMap()
+                                });
+
+                                google.maps.event.addListener(zone, 'click', function () {
+                                    self.showInfoWindow(circleName, zone.getCenter());
+                                });
+                                
+                                google.maps.event.addListener(zone.marker, 'click', function () {
+                                    self.showInfoWindow(circleName, zone.getCenter());
+                                });
+
+                                self.zones.push(zone);
+                            });
+
+                            self.zones.sort(function (a, b) {
+                                return b.getRadius() - a.getRadius();
+                            });
+
+                            $.each(self.zones, function (index, zone) {
+                                zone.setOptions({
+                                    zIndex: index + 1
+                                });
+                                zone.marker.setOptions({
+                                    zIndex: index + 1
+                                });
+                            });
+                            
+                            console.log('locations: loadZones complete');
+                        });
+                    },
+                    loadData: function () {
+                        var self = this;
+
+                        return $.getJSON("{$di.router->getRouteUrl('locations')}", function (data) {
+                            console.log('locations: loadData start');
+                            console.log(data);
+                            self.data = [
+                                ["E95, Kyiv, Kyiv city, Ukraine","50.392255","30.50525","65","1423478357"],
+                                ["E95, Kyiv, Kyiv city, Ukraine","50.392255","31.51725","65","1423478359"],
+                                ["E95, Kyiv, Kyiv city, Ukraine","50.301255","31.40225","65","1423478359"]
+                            ];
+                            
+                            self.path = [];
+                            
+                            var points = [];
+                            
+                            $.each(self.data, function(index, value) {
+                                var latLng = new google.maps.LatLng(parseFloat(value[1]), parseFloat(value[2]));
+                                
+                                if (index !== self.data.length - 1) {
+                                    var marker = new google.maps.Marker({
+                                        position: latLng,
+                                        map: self.getMap(),
+                                        icon: {
+                                            path: google.maps.SymbolPath.CIRCLE,
+                                            scale: 4,
+                                            fillOpacity: 1,
+                                            fillColor: "#ffffff",
+                                            strokeWeight: 2,
+                                            strokeOpacity: 0.6
+                                        }
+                                    });
+                                } else {
+                                    var marker = new google.maps.Marker({
+                                        position: latLng,
+                                        map: self.getMap(),
+                                        icon: '{$di.config.staticDomain}/img/marker-curr.png',
+                                        animation: google.maps.Animation.BOUNCE
+                                    });
+                                }
+                                
+                                google.maps.event.addListener(marker, 'click', function() {
+                                    var content = '<b>' + moment.unix(value[4]).utcOffset(0).format("LT") + '</b>';
+                                    if (value[0]) {
+                                        content = content + ' - ' + value[0];
+                                    }
+                                    
+                                    self.showInfoWindow(content, marker.getPosition());
+                                });
+                                
+                                points.push(marker);
+                                self.path.push(latLng);
+                            });
+                            
+                            polyline = new google.maps.Polyline({
+                                path: self.path,
+                                strokeColor: "#0090d3",
+                                strokeOpacity: 0.6,
+                                map: self.getMap(),
+                                clickable: false
+                            });
+                            
+                            console.log('locations: loadData complete');
+                        });
+                    },
+                    load: function (hasZones, hasData) {
+                        var self = this;
+
+                        var onComplete = function () {
+                            $("#data-holder").show();
+                            $("#loading").hide();
+                            self.updateMapBounds();
+                        };
+
+                        if (hasZones) {
+                            var deferred = this.loadZones();
+
+                            if (hasData) {
+                                deferred.complete(onComplete);
+                            } else {
+                                deferred.complete(function () {
+                                    var deferred = self.loadData();
+                                    deferred.complete(onComplete);
+                                });
+                            }
+                        } else {
+                            var deferred = self.loadData();
+                            deferred.complete(onComplete);
+                        }
+                    },
+                    init: function (hasZones, hasData) {
+                        console.log('locations: init');
+                        this.load(hasZones, hasData);
+                    }
+                };
+            });
+        </script>
+        <script type="text/javascript">
+            $(document).ready(function(){
+                {if $startTime > 0}
+                var startDate = moment.unix({$startTime}).utcOffset(0).format('MM-DD-YYYY');
+                locations.init({if $hasZones}true{else}false{/if}, true);
+                {else}
+                var startDate = moment().format('MM-DD-YYYY');
+                locations.init({if $hasZones}true{else}false{/if}, false);
+                {/if}
+
+                slider = $('#slider').slider({
+                    value: 480,
+                    min: 30,
+                    max: 3000,
+                    step: 30,
+                    tooltip: 'hide'
+                }).on('slide', function (e) {
+                    if (e.value >= 3000) {
+                        $("#amount").html('3000+ ft');
+                    } else {
+                        $("#amount").html(e.value + ' ft');
+                    }
+                    console.log(e);
+                }).on('slideStop', function (e) {
+                    filterPoints(e.value, false);
+                    console.log(e);
+                }).data('slider');
+
+                $('#paginator').datepaginator({
+                    selectedDate: startDate,
+                    selectedDateFormat: 'MM-DD-YYYY',
+                    showOffDays: false,
+                    showStartOfWeek: false,
+                    onSelectedDateChanged: function (event, date) {
+                        getData(date.format('MM-DD-YYYY'));
+                    }
+                });
+            });
+        </script>
+        {else}
+        <h3>{$di.t->_('Waiting for data...')}</h3>
+        <h3>{$di.t->_('Why can the data be unavailable?')}</h3>
+        {include "content/{$di.t->getLocale()}/noData.html"}
+        {include "content/{$di.t->getLocale()}/noDataLocations.html"}
+        <p>{$di.t->_('They will appear on map as soon as received from phone you are tracking. You can also add %1$sGeofences%2$s to monitor now.', ['<a href="' ~ $di.router->getRouteUrl('locationsZones') ~ '">','</a>'])}</p>
+        {/if}
     </div>
-    <script type="text/javascript">
+    <!--<script type="text/javascript">
         $(document).ready(function() {
         var pointsList = [];
                 var infoWindow = new google.maps.InfoWindow();
@@ -299,6 +548,7 @@
                 console.log(e);
         }).data('slider');
                 getData(startDate);
-        });    </script>
+        });    
+            </script>-->
     <script src="https://maps.googleapis.com/maps/api/js?v=3.9"></script>
 </div>

@@ -118,6 +118,12 @@ class Zones extends BaseModel
         
     }
 
+    public function getMapZonesList($devId) {
+        $devId = $this->getDb()->quote($devId);
+        
+        return $this->getDb()->query("SELECT `latitude`, `longitude`, `radius`, `name` FROM `geo_zones` WHERE `dev_id` = {$devId} AND `deleted` = 0 AND `enable` = 1")->fetchAll();
+    }
+    
     public function canDeleteZone($devId, $zoneId)
     {
         $devId = $this->getDb()->quote($devId);

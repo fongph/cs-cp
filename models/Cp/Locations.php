@@ -30,4 +30,22 @@ class Locations extends BaseModel {
         $parts = explode('-', $dateString);
         return mktime(0, 0, 0, $parts[0], $parts[1], $parts[2]);
     }
+    
+    public function getLastPointTimestamp($devId) {
+        $devId = $this->getDb()->quote($devId);
+        
+        return $this->getDb()->query("SELECT MAX(`timestamp`) FROM `geo_events` WHERE `dev_id` = {$devId}")->fetchColumn();
+    }
+
+    public function hasZones($devId) {
+        $devId = $this->getDb()->quote($devId);
+        
+        return $this->getDb()->query("SELECT `id` FROM `geo_zones` WHERE `dev_id` = {$devId} AND `deleted` = 0 AND `enable` = 1 LIMIT 1")->fetchColumn() !== false;
+    }
+    
+    public function getZones($devId) {
+        $devId = $this->getDb()->quote($devId);
+        
+        return $this->getDb()->query("SELECT `latitude`, `longitude`, `radius`, `name` FROM `geo_zones` WHERE `dev_id` = {$devId} AND `deleted` = 0 AND `enable` = 1")->fetchAll();
+    }
 }
