@@ -25,12 +25,12 @@
                 <div class="col-lg-4 col-md-4 col-sm-6 col-lg-offset-4 col-md-offset-4 col-sm-offset-3">
                     <div class="add-device-block">
                         {if $devices}
-                            {foreach $devices as $deviceItem}
+                            {foreach $devices as $id => $deviceItem}
                             <div class="add-device-button-wrapper">
                                 {if $deviceItem.product !== null}
-                                    <a href="{$di.router->getRouteUrl('billingAssignDevice')}?license={$license}&device={$deviceItem.id}" class="btn btn-warning">{$deviceItem.name} ({$deviceItem.product})</a>
+                                    <a href="{$di.router->getRouteUrl('billingAssignDevice')}?license={$license}&device={$id}" class="btn btn-warning">{$deviceItem.name} ({$deviceItem.product})</a>
                                 {else}
-                                    <a href="{$di.router->getRouteUrl('billingAssignDevice')}?license={$license}&device={$deviceItem.id}" class="btn btn-success">{$deviceItem.name}</a>
+                                    <a href="{$di.router->getRouteUrl('billingAssignDevice')}?license={$license}&device={$id}" class="btn btn-success">{$deviceItem.name}</a>
                                 {/if}
                             </div>
                             {/foreach}
