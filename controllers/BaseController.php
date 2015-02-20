@@ -33,7 +33,8 @@ class BaseController extends Controller
         
         if (isset($this->auth['options']['internal-trial-license'])) {
             $advertisingModel = new \Models\Advertising($this->di);
-            $this->view->showInternalTrialLicenseProlongBanner = $advertisingModel->showInternalTrialLicenseProlongBanner($this->auth['options']['internal-trial-license']);
+
+            $this->view->internalTrialLicenseDaysLeft = $advertisingModel->getInternalTrialLicenseDaysLeft($this->auth['id'], $this->auth['options']['internal-trial-license']);
         }
     }
 
