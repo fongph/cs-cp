@@ -166,6 +166,11 @@ class Billing extends BaseController
 
         $device = $this->getRequest()->get('device');
         if ($device !== null) {
+            if (!isset($list[$device])) {
+                $this->di['flashMessages']->add(FlashMessages::ERROR, $this->di['t']->_('Invalid device!'));
+                $this->redirect($this->di['router']->getRouteUrl('billing'));
+            }
+
             if (!$this->getRequest()->hasGet('confirm') && $devicesManager->hasDevicePackageLicense($device)) {
                 $this->view->deviceConfirm = $device;
             } else {
