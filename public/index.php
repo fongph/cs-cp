@@ -16,6 +16,7 @@ $logger = new Monolog\Logger('logger');
 $logger->pushProcessor(new Monolog\Processor\WebProcessor());
 
 if ($config['environment'] == 'development') {
+    error_reporting(E_ALL);
     $logger->pushHandler(new Monolog\Handler\StreamHandler($config['logger']['stream']['filename'], Monolog\Logger::DEBUG));
 
     if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) &&

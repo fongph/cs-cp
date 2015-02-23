@@ -4,8 +4,8 @@
         <option value="{$key}"{if $selected! && ($selected == $key)} selected{/if}>{$value}</option>
     {/foreach}
 {elseif $keys! && $values!}
-    {for $counter=0 to=(count($keys)-1)}
+    {foreach 0..(count($keys)-1) as $counter}
         <option value="{$keys[$counter]}"{if $selected! && ($selected == $keys[$counter])} selected{/if}>{$values[$counter]}</option>
-    {/for}
+    {/foreach}
 {/if}
 </select>

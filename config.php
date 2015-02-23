@@ -7,7 +7,7 @@ $default = array(
     'build' => $build['version'],
     'environment' => $build['environment'],
     'site' => $build['site'],
-    'errorReporting' => E_ALL ^ E_NOTICE,
+    'errorReporting' => E_ALL ^ E_NOTICE ^ E_DEPRECATED,
     'session' => array(
         'rememberMeTime' => 2592000 // 30 days
     ),
