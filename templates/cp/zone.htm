@@ -147,7 +147,9 @@
             var zs = new zoneSelector('map-canvas', {
                 circleCallback: function (data) {
                     $("#zoneData").val(data);
-                }
+                },
+                defaultMapCenter: new google.maps.LatLng(40.782865, -73.965355),
+                defaultMapZoom: 13
             });
 
             var a = zs.deserializeCircle($('#zoneData').val());
@@ -155,7 +157,7 @@
             zs.setZone(a);
             zs.setMapLocation(a);
 
-            scheduler = new Scheduler($('#scheduler'));
+            var scheduler = new Scheduler($('#scheduler'));
             if ($('#scheduleData').val().length) {
                 scheduler.deserialize($('#scheduleData').val());
             }

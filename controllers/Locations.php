@@ -44,7 +44,7 @@ class Locations extends BaseModuleController
         $locations = new \Models\Cp\Locations($this->di);
         
         if ($this->getRequest()->isAjax()) {
-            $this->makeJSONResponse(array());
+            $this->makeJSONResponse($locations->getDayPoints($this->di['devId'], $this->getRequest()->get('dayStart', 0)));
         }
         
         $this->view->startTime = $locations->getLastPointTimestamp($this->di['devId']);
@@ -103,13 +103,13 @@ class Locations extends BaseModuleController
                 $this->getDI()->getFlashMessages()->add(FlashMessages::ERROR, $this->di['t']->_('Geofence not selected!'));
             } else if (!Zones::validateZoneData($zoneData)) {
                 $this->getDI()->getFlashMessages()->add(FlashMessages::ERROR, $this->di['t']->_('Invalid zone!'));
+            } else {
+                $schedule = Zones::schedulesToRecurrenceList($scheduleData);
+                $zonesModel->addZone($this->di['devId'], $zoneData, $name, $trigger, $emailAlert, $smsAlert, $schedule, $enable);
+
+                $this->getDI()->getFlashMessages()->add(FlashMessages::SUCCESS, $this->di['t']->_('Geofence successfully added!'));
+                $this->redirect($this->di['router']->getRouteUrl('locationsZones'));
             }
-
-            $schedule = Zones::schedulesToRecurrenceList($scheduleData);
-            $zonesModel->addZone($this->di['devId'], $zoneData, $name, $trigger, $emailAlert, $smsAlert, $schedule, $enable);
-
-            $this->getDI()->getFlashMessages()->add(FlashMessages::SUCCESS, $this->di['t']->_('Geofence successfully added!'));
-            $this->redirect($this->di['router']->getRouteUrl('locationsZones'));
         }
 
         $this->view->zoneData = $zoneData;
@@ -155,14 +155,14 @@ class Locations extends BaseModuleController
                 $this->getDI()->getFlashMessages()->add(FlashMessages::ERROR, $this->di['t']->_('Geofence not selected!'));
             } else if (!Zones::validateZoneData($zoneData)) {
                 $this->getDI()->getFlashMessages()->add(FlashMessages::ERROR, $this->di['t']->_('Invalid geofence!'));
+            } else {
+                $schedule = Zones::schedulesToRecurrenceList($scheduleData);
+
+                $zonesModel->updateZone($this->params['id'], $this->di['devId'], $zoneData, $name, $trigger, $emailAlert, $smsAlert, $schedule, $enable);
+
+                $this->getDI()->getFlashMessages()->add(FlashMessages::SUCCESS, $this->di['t']->_('Geofence successfully updated!'));
+                $this->redirect($this->di['router']->getRouteUrl('locationsZones'));
             }
-
-            $schedule = Zones::schedulesToRecurrenceList($scheduleData);
-
-            $zonesModel->updateZone($this->params['id'], $this->di['devId'], $zoneData, $name, $trigger, $emailAlert, $smsAlert, $schedule, $enable);
-
-            $this->getDI()->getFlashMessages()->add(FlashMessages::SUCCESS, $this->di['t']->_('Geofence successfully updated!'));
-            $this->redirect($this->di['router']->getRouteUrl('locationsZones'));
         }
 
         $this->view->zoneData = $zoneData;

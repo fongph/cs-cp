@@ -44,8 +44,7 @@ zoneSelector = function (id, options) {
 
     this.setMapLocation = function (circle) {
         if (circle instanceof google.maps.Circle) {
-            map.setZoom(self.getViewZoom(circle));
-            map.setCenter(circle.getCenter());
+            map.fitBounds(circle.getBounds());
         } else if (options.useGeolocation && navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function (position) {
                 map.setCenter(new google.maps.LatLng(position.coords.latitude, position.coords.longitude));
@@ -68,13 +67,6 @@ zoneSelector = function (id, options) {
             circle.setRadius(options.minRadius);
         } else if (circle.getRadius() > options.maxRadius) {
             circle.setRadius(options.maxRadius);
-        }
-
-        var zoom = self.getViewZoom(circle);
-
-        if (map.zoom < zoom) {
-            map.setZoom(zoom);
-            map.setCenter(circle.getCenter());
         }
     };
 
@@ -111,7 +103,7 @@ zoneSelector = function (id, options) {
         if (event.type !== google.maps.drawing.OverlayType.CIRCLE) {
             event.overlay.setMap(null);
         } else {
-            if (circle && circle.getMap === 'function' && circle.getMap() !== null) {
+            if (circle && $.isFunction(circle.getMap) && circle.getMap() !== null) {
                 circle.setMap(null);
             }
 
@@ -127,32 +119,6 @@ zoneSelector = function (id, options) {
 
     map.setZoom(options.defaultMapZoom);
     map.setCenter(options.defaultMapCenter);
-};
-
-zoneSelector.prototype.getViewZoom = function (circle) {
-    var scales = {
-        10000: 10,
-        4000: 11,
-        2000: 12,
-        1000: 13,
-        500: 14,
-        0: 15
-    };
-
-    var max = null;
-    for (var radius in scales) {
-        radius = parseInt(radius, 10);
-
-        if ((circle.radius >= radius) && (max === null || radius > max)) {
-            max = radius;
-        }
-    }
-
-    if (max === null) {
-        return 1;
-    }
-
-    return scales[max];
 };
 
 zoneSelector.prototype.serializeCircle = function (circle) {

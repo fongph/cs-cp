@@ -208,7 +208,7 @@ class Zones extends BaseModel
                 $string = self::checkScheduleElement($value);
                 array_push($result, $string);
             } catch (\Exception $e) {
-                
+                $this->di['logger']->addCritical("Invalid schedule record!");
             }
         }
 
