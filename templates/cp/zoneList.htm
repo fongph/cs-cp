@@ -1,0 +1,58 @@
+<style>
+    .media {
+        position: relative;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+
+    .media .media-body {
+        padding: 3px 20px 3px 3px;
+    }
+
+    .media .close {
+        position: absolute;
+        top: 0px;
+        right: 5px;
+    }
+</style>
+<div>
+    <h1 class="text-center">{$title}</h1>
+
+    <div class="container-fluid">
+        {insert "inc.flashMessages.htm"}
+
+        <h3 class="text-center">{$di.t->_('Geofences')}</h3>
+
+        <a class="btn btn-default" href="{$di.router->getRouteUrl('locations')}">{$di.t->_('View locations')}</a>
+        
+        {foreach $zones as $zone}
+        <div class="media">
+            <div class="media-left">
+                <a href="{$di.router->getRouteUrl('locationsZonesEdit', ['id' => $zone['id']])}">
+                    <img class="media-object" src="{$zone.icon}" alt="{$zone.name}" />
+                </a>
+            </div>
+            <div class="media-body">
+                <div>{$zone.name}</div>
+                <div>Trigger On: {$zone.trigger}</div>
+                {if $zone.enable}
+                <div class="text-success">Enabled</div>
+                {else}
+                <div class="text-muted">Disabled</div>
+                {/if}
+            </div>
+            <a href="{$di.router->getRouteUrl('locationsZones')}?delete={$zone.id}" class="close" aria-hidden="true">×</a>
+        </div>
+        {/foreach}
+        <div class="text-right" style="margin-top: 20px;">
+            <a href="{$di.router->getRouteUrl('locationsZonesAdd')}" class="btn btn-primary add-more"><i class="fa fa-plus"></i> {$di.t->_('Add more')}</a>
+        </div>
+    </div>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.media .close').click(function () {
+                return confirm("Really delete record!");
+            });
+        });
+    </script>
+</div>

@@ -1,0 +1,174 @@
+<style>
+    #slider-holder {
+        padding: 10px;
+    }
+
+    #map-canvas {
+        margin-top: 10px;
+        border: 1px solid gray;
+    }
+
+    #loading {
+        text-align: center;
+    }
+
+    #data-holder, #no-data {
+        display: none;
+    }
+
+    @media (min-width: 767px) {
+        #allDataBlock {
+            text-align: right;
+        }
+    }
+
+    .scheduler-element {
+        position: relative;
+        border: 1px solid #ddd; 
+        border-radius: 5px; 
+        padding: 10px;
+        margin-bottom: 10px;
+        text-align: center;
+    }
+
+    .scheduler-element .slider {
+        width: 70%;
+    }
+
+    .scheduler-element .scheduler-days {
+        width: 100%;
+        text-align: center;
+    }
+
+    .scheduler-element .scheduler-days td {
+        width: 14.28%;
+        text-align: center;
+    }
+
+    .scheduler-element .scheduler-humanValue {
+        margin: 8px 0;
+    }
+
+    .scheduler-element .close {
+        position: absolute;
+        top: 0px;
+        right: 5px;
+    }
+
+    .scheduler-element p {
+        display: none;
+    }
+
+    .scheduler-element.error p {
+        display: block;
+        margin: 0;
+    }
+
+    .scheduler-element.error {
+        border-color: #a94442;
+    }
+</style>
+<div>
+    <h1 class="text-center">{$title}</h1>
+
+    <div class="container-fluid">
+        {insert "inc.flashMessages.htm"}
+        
+        <h3 class="text-center">{$di.t->_('Geofences')}</h3>
+        
+        <a class="btn btn-default" href="{$di.router->getRouteUrl('locations')}">{$di.t->_('View locations')}</a>
+
+        <div class="row">
+            <div class="col-lg-6">
+                <div id="map-canvas" style="display: block; width: 100%; height: 400px;"></div>
+            </div>
+            <div class="col-lg-6">
+                <div class="panel panel-default" style="margin-top: 10px;">
+                    <form method="post" action="" id="zoneEditor">
+                        <div class="panel-body">
+                            <input id="zoneData" name="zoneData" type="hidden" value="{$zoneData}" />
+                            <input id="scheduleData" name="scheduleData" type="hidden" value="{$scheduleData}" />
+                            <div class="form-group">
+                                <label>{$di.t->_('Name')}</label>
+                                <input name="name" value="{$name}" class="form-control" />
+                                <p class="help-block">{$di.t->_('No more than 17 symbols')}</p>
+                            </div>
+                            <div class="form-group">
+                                <label>{$di.t->_('Trigger')}</label>
+                                {include "scripts/select.htm" name="trigger" id="trigger" class="form-control" options=$triggerList selected=$triggerListSelected}
+                            </div>
+                            <div class="form-group">
+                                <label>{$di.t->_('Alert')}</label>
+                                <div class="checkbox disabled">
+                                    <label>
+                                        <input type="checkbox" checked="checked" disabled>
+                                        {$di.t->_('Control panel')}
+                                    </label>
+                                </div>
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" value="1" name="email-alert"{if $emailNotification} checked="checked"{/if}/>
+                                               {$di.t->_('Email')}
+                                    </label>
+                                </div>
+                                {*<div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" value="1" name="sms-alert"{if $smsNotification} checked="checked"{/if}/>
+                                               {$di.t->_('SMS')}
+                                    </label>
+                                </div>*}
+                            </div>
+                            <div class="form-group">
+                                <label>{$di.t->_('Scheduling')}</label>
+                                <div id="scheduler" style=""></div>
+                            </div>
+                            <div class="form-group">
+                                <div class="btn-group" data-toggle="buttons">
+                                    <label class="btn btn-success{if $enable} active{/if}">
+                                        <input type="radio" name="enable" value="1" autocomplete="off"{if $enable} checked="checked"{/if}/> {$di.t->_('Enabled')}
+                                    </label>
+                                    <label class="btn btn-default{if !$enable} active{/if}">
+                                        <input type="radio" name="enable" value="0" autocomplete="off"{if !$enable} checked="checked"{/if}/> {$di.t->_('Disabled')}
+                                    </label>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary">{$di.t->_('Save')}</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.9&libraries=drawing"></script>
+    <script type="text/javascript" src="{$di.config.staticDomain}/js/zone-selector.js?b{$di.config.build}"></script>
+    <script type="text/javascript" src="{$di.config.staticDomain}/js/scheduler.js?b{$di.config.build}"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var zs = new zoneSelector('map-canvas', {
+                circleCallback: function (data) {
+                    $("#zoneData").val(data);
+                },
+                defaultMapCenter: new google.maps.LatLng(40.782865, -73.965355),
+                defaultMapZoom: 13
+            });
+
+            var a = zs.deserializeCircle($('#zoneData').val());
+
+            zs.setZone(a);
+            zs.setMapLocation(a);
+
+            var scheduler = new Scheduler($('#scheduler'));
+            if ($('#scheduleData').val().length) {
+                scheduler.deserialize($('#scheduleData').val());
+            }
+
+            $('#zoneEditor').submit(function (e) {
+                try {
+                    $('#scheduleData').val(scheduler.serialize());
+                } catch (e) {
+                    return false;
+                }
+            });
+        });
+    </script>
+</div>

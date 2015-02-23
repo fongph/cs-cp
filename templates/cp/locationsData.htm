@@ -1,0 +1,696 @@
+<style>
+    #slider-holder {
+        padding: 15px;
+    }
+
+    #map-canvas {
+        margin-top: 10px;
+        border: 1px solid gray;
+    }
+
+    #loading {
+        text-align: center;
+    }
+
+    #data-holder, #no-data, #allDataBlock {
+        display: none;
+    }
+
+    #geo-fences-holder {
+        text-align: center;
+        padding-top: 10px;
+    }
+
+    .scrollFix {
+        line-height: 1.35;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+    
+    @media (min-width: 767px) {
+        #allDataBlock {
+            text-align: right;
+        }
+
+        #geo-fences-holder {
+            text-align: right;
+            padding: 0;
+        }
+    }
+</style>
+<div>
+    <h1 class="text-center">{$title}</h1>
+
+    <div class="container-fluid">
+        {insert "inc.flashMessages.htm"}
+        
+        {if $startTime > 0 || $hasZones}
+        <div class="container-fluid">
+            <div class="row" style="margin-bottom: 10px;">
+                <div class="col-lg-1 col-md-1 col-sm-1"></div>
+                <div class="col-lg-10 col-md-10 col-sm-10">
+                    <div id="paginator"></div>
+                </div>
+                <div class="col-lg-1 col-md-1 col-sm-1"></div>
+            </div>
+        </div>
+        
+        <div id="data-holder">
+            <ul class="nav nav-pills" style="overflow: hidden;">
+                <li class="active"><a href="#map" data-toggle="tab">{$di.t->_('Map View')}</a></li>
+                <li><a href="#table" data-toggle="tab">{$di.t->_('Table View')}</a></li>
+            </ul>
+
+            <div class="tab-content">
+                <div class="tab-pane active" id="map">
+                    <div id="map-canvas" style="display: block; width: 100%; height: 400px;"></div>
+                </div>
+                <div class="tab-pane" id="table">
+                    <div class="table-container">
+                        <table id="datatable" aria-describedby="datatables_info">
+                            <thead>
+                                <tr role="row">
+                                    <th>{$di.t->_('Type')}</th>
+                                    <th>{$di.t->_('Time')}</th>
+                                    <th>{$di.t->_('Location')}</th>
+                                    <th>{$di.t->_('Actions')}</th>
+                                    <th>{$di.t->_('Alerts')}</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row" id="slider-holder">
+                <div class="col-sm-10">
+                    <div class="row">
+                        <div class="col-sm-6"><label for="slider">{$di.t->_('Accuracy:')} <span class="text-primary" id="amount">480ft</span>&nbsp;</label></div>
+                        <div class="col-sm-6" id="allDataBlock">{$di.t->_('Now you see %1$s of %2$s', ['<span class="text-primary" id="percents"></span>', '<a href="" id="all-data">' ~ $di.t->_('all data') ~ '</a>'])}</div>
+                    </div>
+                    <div>
+                        <input type="text" id="slider" style="width: 100%;" />
+                    </div>
+                </div>
+                <div class="col-sm-2" id="geo-fences-holder">
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" id="onlyGeofences"> {$di.t->_('Geofences only')}
+                        </label>
+                    </div>
+                    <a href="{$di.router->getRouteUrl('locationsZones')}" class="btn btn-danger">{$di.t->_('Geofences')}</a>
+                </div>
+            </div>
+        </div>
+        
+        <div id="no-data">
+            {$di.t->_('No data for this date')}
+        </div>
+
+        <div id="loading">
+            <img src="{$di.config.staticDomain}/img/ajaxPreloader.gif" alt="" />
+        </div>
+        
+        <script type="text/javascript">
+            $(document).ready(function () {
+                locations = {
+                    map: null,
+                    dataTable: null,
+                    zones: [],
+                    polyline: 1,
+                    data: [],
+                    path: [],
+                    infoWindow: null,
+                    getTotalBounds: function () {
+                        var bounds = new google.maps.LatLngBounds();
+
+                        $.each(this.zones, function () {
+                            bounds.union(this.getBounds());
+                        });
+                        
+                        $.each(this.path, function () {
+                            bounds.extend(this);
+                        });
+
+                        return bounds;
+                    },
+                    updateMapBounds: function(){
+                        google.maps.event.trigger(this.getMap(), "resize");
+                        this.getMap().fitBounds(this.getTotalBounds());
+                    },
+                    showInfoWindow: function (content, position) {
+                        if (this.infoWindow === null) {
+                            this.infoWindow = new google.maps.InfoWindow();
+                        }
+                        
+                        this.infoWindow.close();
+                        this.infoWindow.setContent('<div class="scrollFix">' + content + '</div>');
+                        this.infoWindow.setPosition(position);
+                        this.infoWindow.open(this.getMap());
+                    },
+                    getMap: function () {
+                        if (this.map === null) {
+                            this.map = new google.maps.Map(document.getElementById("map-canvas"), {
+                                mapTypeId: google.maps.MapTypeId.ROADMAP,
+                                center: new google.maps.LatLng(0, 0),
+                                zoom: 0
+                            });
+                        } 
+                        
+                        return this.map;
+                    },
+                    getTable: function() {
+                        if (this.dataTable === null) {
+                            this.dataTable = $('#datatable').dataTable({
+                                bSort: false,
+                                bPaginate: false,
+                                bFilter: false,
+                                fnDrawCallback: function() {
+                                    $(this).find('tbody').tableScroll();
+                                }
+                            });
+                        }
+                        
+                        return this.dataTable;
+                    },
+                    fillTable: function(data){
+                        var result = [];
+                        
+                        $.each(data, function(){
+                            var type = (function(type){
+                                if (type === 'zone-enter') {
+                                    return 'Geo-Fence Entered';
+                                }
+
+                                if (type === 'zone-left') {
+                                    return 'Geo-Fence Left';
+                                }
+
+                                return 'Check-in';
+                            })(this.type);
+                            
+                            var location = (function(data){
+                                var result = data.latitude + ',' + data.longitude;
+                                
+                                if (data.zone) {
+                                    return '<b>' + data.zone + '</b> ' + result;
+                                } else if (data.address) {
+                                    return '<b>' + data.address + '</b> ' + result;
+                                }
+                                
+                                return result;
+                            })(this);
+                            
+                            var alerts = (function(email){
+                               if (email > 0) {
+                                   return 'Email alert sent';
+                               }
+                               
+                               return '';
+                            })(this.email_notified);
+                            
+                            result.push([
+                                type,
+                                moment.unix(this.timestamp).utcOffset(0).format("LT"),
+                                location,
+                                '<button class="btn btn-success btn-xs"><i class="fa fa-map-marker"></i> {$di.t->_('View on map')}</button>',
+                                alerts
+                            ]);
+                        });
+                        
+                        this.getTable().fnAddData(result);
+                        this.getTable().fnDraw();
+                    },
+                    loadZones: function () {
+                        var self = this;
+
+                        return $.getJSON("{$di.router->getRouteUrl('locationsZones')}", function (data) {
+                            self.zones = [];
+
+                            $(data).each(function () {
+                                var zone = new google.maps.Circle({
+                                    strokeOpacity: 0.6,
+                                    strokeWeight: 2,
+                                    fillColor: '#0000ff',
+                                    fillOpacity: 0.1,
+                                    map: self.getMap(),
+                                    center: new google.maps.LatLng(parseFloat(this.latitude), parseFloat(this.longitude)),
+                                    radius: parseInt(this.radius),
+                                    clickable: true
+                                });
+
+                                var circleName = this.name;
+                                
+                                var image = {
+                                    url: "{$di.config.staticDomain}/img/zone-icon.png",
+                                    size: new google.maps.Size(20, 20),
+                                    anchor: new google.maps.Point(10, 10)
+                                };
+                                
+                                zone.marker = new google.maps.Marker({
+                                    position: zone.getCenter(),
+                                    icon: image,
+                                    crossOnDrag: false,
+                                    map: self.getMap()
+                                });
+
+                                google.maps.event.addListener(zone, 'click', function () {
+                                    self.showInfoWindow(circleName, zone.getCenter());
+                                });
+                                
+                                google.maps.event.addListener(zone.marker, 'click', function () {
+                                    self.showInfoWindow(circleName, zone.getCenter());
+                                });
+
+                                self.zones.push(zone);
+                            });
+
+                            self.zones.sort(function (a, b) {
+                                return b.getRadius() - a.getRadius();
+                            });
+
+                            $.each(self.zones, function (index, zone) {
+                                zone.setOptions({
+                                    zIndex: index + 1
+                                });
+                                zone.marker.setOptions({
+                                    zIndex: index + 1
+                                });
+                            });
+                            
+                            
+                        });
+                    },
+                    clearData: function () {
+                        if (this.polyline.markers === undefined) {
+                            return;
+                        }
+                        
+                        $.each(this.polyline.markers, function() {
+                            this.setMap(null);
+                        });
+                        
+                        this.polyline.setMap(null);
+                    },
+                    clearZones: function () {
+                        $.each(this.zones, function() {
+                            this.marker.setMap(null);
+                            this.setMap(null);
+                        });
+                    },
+                    filter: function(data) {
+                        return true;
+                    },
+                    updateData: function() {
+                        var self = this,
+                            markers = [],
+                            filtered = [];
+                        
+                        this.clearData();
+                        this.getTable().fnClearTable();
+                        
+                        this.path = [],
+
+                        $.each(this.data, function() {
+                            if (self.filter(this)) {
+                                filtered.push(this);
+                            }
+                        });
+                        
+                        this.fillTable(filtered);
+
+                        $.each(filtered, function(index, value) {
+                            var latLng = new google.maps.LatLng(parseFloat(value.latitude), parseFloat(value.longitude));
+
+                            if (index !== filtered.length - 1) {
+                                var marker = new google.maps.Marker({
+                                    position: latLng,
+                                    map: self.getMap(),
+                                    icon: {
+                                        path: google.maps.SymbolPath.CIRCLE,
+                                        scale: 4,
+                                        fillOpacity: 1,
+                                        fillColor: "#ffffff",
+                                        strokeWeight: 2,
+                                        strokeOpacity: 0.6
+                                    }
+                                });
+                            } else {
+                                var marker = new google.maps.Marker({
+                                    position: latLng,
+                                    map: self.getMap(),
+                                    icon: '{$di.config.staticDomain}/img/marker-curr.png',
+                                    animation: google.maps.Animation.BOUNCE
+                                });
+                            }
+
+                            google.maps.event.addListener(marker, 'click', function() {
+                                var content = '<b>' + moment.unix(value.timestamp).utcOffset(0).format("LT") + '</b>';
+                                if (value.address) {
+                                    content = content + ' - ' + value.address;
+                                }
+
+                                self.showInfoWindow(content, marker.getPosition());
+                            });
+                            
+                            $('#datatable tbody tr button').eq(index).click((function(marker) {
+                                return function() {
+                                    $('.nav-pills a[href=#map]').tab('show');
+                                    google.maps.event.trigger(marker, 'click');
+                                };
+                            })(marker));
+
+                            markers.push(marker);
+                            self.path.push(latLng);
+                        });
+
+                        this.polyline = new google.maps.Polyline({
+                            path: self.path,
+                            strokeColor: "#0090d3",
+                            strokeOpacity: 0.6,
+                            map: self.getMap(),
+                            clickable: false
+                        });
+
+                        this.polyline.markers = markers;
+                        
+                        var percent = filtered.length * 100 / this.data.length;
+                        
+                        if (isNaN(percent)) {
+                            $("#allDataBlock").hide();
+                        } else {
+                            $("#percents").text(percent.toFixed(0) + '%');
+                            $("#allDataBlock").show();
+                        }
+                    },
+                    loadData: function (dayStart) {
+                        var self = this;
+                        
+                        return $.getJSON("{$di.router->getRouteUrl('locations')}", {
+                            "dayStart": dayStart.unix()
+                        }, function (data) {
+                            self.data = data;
+                            
+                            self.updateData();
+                        });
+                    },
+                    load: function (hasZones, hasData, dayStart) {
+                        var self = this;
+
+                        var onComplete = function () {
+                            $("#data-holder").show();
+                            $("#loading").hide();
+                            self.updateMapBounds();
+                        };
+
+                        if (hasZones) {
+                            var deferred = this.loadZones();
+
+                            if (hasData) {
+                                deferred.complete(function () {
+                                    var deferred = self.loadData(dayStart);
+                                    deferred.complete(onComplete);
+                                });
+                            } else {
+                                deferred.complete(onComplete);
+                            }
+                        } else {
+                            var deferred = self.loadData(dayStart);
+                            deferred.complete(onComplete);
+                        }
+                    },
+                    init: function (hasZones, hasData, dayStart) {
+                        var self = this;
+                        
+                        this.load(hasZones, hasData, dayStart);
+                        
+                        var updateValue = function(value) {
+                            if (value >= 3000) {
+                                $("#amount").html('3000+ ft');
+                            } else {
+                                $("#amount").html(value + ' ft');
+                            }
+                        };
+                        
+                        var slider = $('#slider').slider({
+                            value: 480,
+                            min: 30,
+                            max: 3000,
+                            step: 30,
+                            tooltip: 'hide'
+                        }).on('slide', function (e) {
+                            updateValue(e.value);
+                        }).on('slideStop', function (e) {
+                            self.updateData();
+                            updateValue(e.value);
+                        }).data('slider');
+                        
+                        $('#paginator').datepaginator({
+                            selectedDate: dayStart,
+                            selectedDateFormat: 'MM-DD-YYYY',
+                            showOffDays: false,
+                            showStartOfWeek: false,
+                            onSelectedDateChanged: function (event, date) {
+                                self.loadData(date.startOf('day'));
+                            }
+                        });
+                        
+                        $("#onlyGeofences").change(function(){
+                            self.updateData();
+                        });
+                        
+                        $('#all-data').click(function(e) {
+                            e.preventDefault();
+                            slider.setValue(3000);
+                            self.updateData();
+                            updateValue(3000);
+                        });
+                        
+                        this.getTable();
+                        
+                        self.filter = function(data) {
+                            if (data.accuracy === undefined) {
+                                return false;
+                            }
+                            
+                            if ($("#onlyGeofences").is(':checked') && data.type === 'check-in') {
+                                return false;
+                            }
+
+                            return data.accuracy * 3.2808399 < slider.getValue();  
+                        };
+                    }
+                };
+            });
+        </script>
+        <script type="text/javascript">
+            $(document).ready(function(){                
+                {if $startTime > 0}
+                locations.init({if $hasZones}true{else}false{/if}, true, moment.unix({$startTime}).utcOffset(0).startOf('day'));
+                {else}
+                locations.init({if $hasZones}true{else}false{/if}, false, moment().utcOffset(0).startOf('day'));
+                {/if}
+            });
+        </script>
+        {else}
+        <h3>{$di.t->_('Waiting for data...')}</h3>
+        <h3>{$di.t->_('Why can the data be unavailable?')}</h3>
+        {include "content/{$di.t->getLocale()}/noData.html"}
+        {include "content/{$di.t->getLocale()}/noDataLocations.html"}
+        <p>{$di.t->_('They will appear on map as soon as received from phone you are tracking. You can also add %1$sGeofences%2$s to monitor now.', ['<a href="' ~ $di.router->getRouteUrl('locationsZones') ~ '">','</a>'])}</p>
+        {/if}
+    </div>
+    <!--<script type="text/javascript">
+        $(document).ready(function() {
+        var pointsList = [];
+                var infoWindow = new google.maps.InfoWindow();
+                var map;
+                var polyline;
+                var markers = [];
+                var filterPoints = function(value, noEmpty) {
+                var rate = 3.2808399;
+                        var findPoints = [];
+                        if (value >= 3000) {
+                findPoints = pointsList;
+                } else {
+                for (var i = 0; i < pointsList.length; i++) {
+                if (pointsList[i][3] * rate < value) {
+                findPoints.push(pointsList[i]);
+                }
+                }
+                }
+
+                var path = [];
+                        var tableData = [];
+                        for (var i = 0; i < findPoints.length; i++) {
+                path.push(new google.maps.LatLng(findPoints[i][1], findPoints[i][2]));
+                        tableData.push([
+                                moment.unix(findPoints[i][4]).utcOffset(0).format("LT"),
+                                findPoints[i][1],
+                                findPoints[i][2],
+                                findPoints[i][0],
+                                '<button class="btn btn-success btn-xs"><i class="fa fa-map-marker"></i> {$di.t->_('View on map')}</button>'
+                        ]);
+                }
+
+                datatable.fnClearTable();
+                        datatable.fnAddData(tableData);
+                        datatable.fnDraw();
+                        if (!(map instanceof google.maps.Map)) {
+                map = new google.maps.Map(document.getElementById("map-canvas"), {
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+                });
+                }
+
+                if (path.length) {
+                map.setCenter(path[0]);
+                        map.setZoom(13);
+                } else {
+                if (pointsList.length && noEmpty) {
+                $('#all-data').click();
+                        $("#amount").html('3000+ ft');
+                        return false;
+                } else {
+                map.setZoom(1);
+                        map.setCenter(new google.maps.LatLng(0, 0));
+                }
+                }
+
+                if (polyline instanceof google.maps.Polyline) {
+                polyline.setMap(null);
+                }
+
+                if (markers.length) {
+                for (var i = 0; i < markers.length; i++) {
+                markers[i].setMap(null);
+                }
+
+                markers = [];
+                }
+
+                if (path.length) {
+                polyline = new google.maps.Polyline({
+                path: path,
+                        strokeColor: "0090d3",
+                        strokeOpacity: 0,
+                        icons: [{
+                        icon: {
+                        path: 'M 0,-1 0,1',
+                                strokeOpacity: 1,
+                                scale: 3
+                        },
+                                offset: '0',
+                                repeat: '15px'
+                        }]
+                });
+                        polyline.setMap(map);
+                        var blueicon = '{$di.config.staticDomain}/img/marker-blue.png';
+                        var curricon = '{$di.config.staticDomain}/img/marker-curr.png';
+                        for (var i = 0; i < path.length; i++) {
+                if (i === 0) {
+                var marker = new google.maps.Marker({
+                position: new google.maps.LatLng(pointsList[0][1], pointsList[0][2]),
+                        icon: curricon,
+                        animation: google.maps.Animation.BOUNCE,
+                        crossOnDrag: false,
+                        map: map
+                });
+                } else {
+                var marker = new google.maps.Marker({
+                position: path[i],
+                        icon: blueicon,
+                        crossOnDrag: false,
+                        map: map
+                });
+                }
+
+                $('#datatable tbody tr button').eq(i).click((function(marker, i) {
+                return function() {
+                $('.nav-pills a[href=#map]').tab('show');
+                        google.maps.event.trigger(marker, 'click');
+                };
+                })(marker, i));
+                        google.maps.event.addListener(marker, 'click', (function(marker, i) {
+                        return function() {
+                        if (findPoints[i][0]) {
+                        infoWindow.setContent(moment.unix(findPoints[i][4]).utcOffset(0).format("LT") + ' - ' + findPoints[i][0]);
+                        } else {
+                        infoWindow.setContent(moment.unix(findPoints[i][4]).utcOffset(0).format("LT"));
+                        }
+
+                        infoWindow.open(map, marker);
+                        };
+                        })(marker, i));
+                        markers.push(marker);
+                }
+                }
+
+                var percent = findPoints.length * 100 / pointsList.length;
+                        $("#percents").text(percent.toFixed(0) + '%');
+                };
+                var getData = function(date) {
+                $('#data-holder, #no-data').hide();
+                        $('#loading').show();
+                        $.post('{$di.config.domain}/cp/locations', {
+                        date: date
+                        }, function(response) {
+                        if (response.success !== undefined && response.success) {
+                        pointsList = response.result;
+                                if (_.isArray(pointsList) && pointsList.length) {
+                        filterPoints(slider.getValue(), true);
+                                $('#data-holder').show();
+                        } else {
+                        $('#no-data').show();
+                        }
+                        $('#loading').hide();
+                        } else {
+                        console.log('error');
+                        }
+                        }, 'json');
+                };
+                $('#all-data').click(function(e) {
+        e.preventDefault();
+                slider.setValue(3000);
+                filterPoints(3000, true);
+                $("#amount").html('3000+ ft');
+        });
+                var startDate = moment.unix({$startTime}).utcOffset(0).format('MM-DD-YYYY');
+                $('#paginator').datepaginator({
+        selectedDate: startDate,
+                selectedDateFormat: 'MM-DD-YYYY',
+                showOffDays: false,
+                showStartOfWeek: false,
+                onSelectedDateChanged: function(event, date) {
+                getData(date.format('MM-DD-YYYY'));
+                }
+        });
+                var datatable = $('#datatable').dataTable({
+        bSort: false,
+                bPaginate: false,
+                bFilter: false,
+                fnDrawCallback: function() {
+                $(this).find('tbody').tableScroll();
+                }
+        });
+                var slider = $('#slider').slider({
+        value: 480,
+                min: 30,
+                max: 3000,
+                step: 30,
+                tooltip: 'hide'
+        }).on('slide', function(e) {
+        if (e.value >= 3000) {
+        $("#amount").html('3000+ ft');
+        } else {
+        $("#amount").html(e.value + ' ft');
+        }
+        console.log(e);
+        }).on('slideStop', function(e) {
+        filterPoints(e.value, false);
+                console.log(e);
+        }).data('slider');
+                getData(startDate);
+        });    
+            </script>-->
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.9"></script>
+</div>
