@@ -34,15 +34,17 @@
             </div>
             <div class="media-body">
                 <div>{$zone.name}</div>
-                <div>Trigger On: {$zone.trigger}</div>
+                <div>{$di.t->_('Trigger on:')} {$zone.trigger}</div>
                 {if $zone.enable}
-                <div class="text-success">Enabled</div>
+                <div class="text-success">{$di.t->_('Enabled')}</div>
                 {else}
-                <div class="text-muted">Disabled</div>
+                <div class="text-muted">{$di.t->_('Disabled')}</div>
                 {/if}
             </div>
             <a href="{$di.router->getRouteUrl('locationsZones')}?delete={$zone.id}" class="close" aria-hidden="true">×</a>
         </div>
+        {foreachelse}
+        <div class="text-center">{$di.t->_('Not added yet!')}</div>
         {/foreach}
         <div class="text-right" style="margin-top: 20px;">
             <a href="{$di.router->getRouteUrl('locationsZonesAdd')}" class="btn btn-primary add-more"><i class="fa fa-plus"></i> {$di.t->_('Add more')}</a>
