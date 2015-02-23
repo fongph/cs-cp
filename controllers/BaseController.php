@@ -30,6 +30,12 @@ class BaseController extends Controller
         if ($this->auth) {
             $this->view->authData = $this->auth;
         }
+        
+        if (isset($this->auth['options']['internal-trial-license'])) {
+            $advertisingModel = new \Models\Advertising($this->di);
+
+            $this->view->internalTrialLicenseDaysLeft = $advertisingModel->getInternalTrialLicenseDaysLeft($this->auth['id'], $this->auth['options']['internal-trial-license']);
+        }
     }
 
     protected function checkDisplayLength($value = 10)

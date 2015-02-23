@@ -1,0 +1,179 @@
+{if isset($internalTrialLicenseDaysLeft)}
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:300,600' rel='stylesheet' type='text/css'>
+<style type="text/css">
+    .internal-trial-banner {
+        position: relative;
+        overflow: hidden;
+        width: 100%;
+        height: 79px;
+        text-align: center;
+        margin-bottom: 10px;
+        background: url({$di.config.staticDomain}/img/trial-banner/bg-lg.png) 0 0 no-repeat #286594;
+    }
+
+    .internal-trial-banner .banner-phone {
+        display: none;
+        vertical-align: middle;
+        margin-right: 20px;
+        width: 228px;
+        height: 79px;
+        background: url({$di.config.staticDomain}/img/trial-banner/phone.png) 0 0 no-repeat;
+    }
+
+    .internal-trial-banner .banner-expire {
+        position: relative;
+        display: inline-block;
+        vertical-align: middle;
+        line-height: 79px;
+        margin-right: 20px;
+        color: #feff8b;
+        font-family: 'Open Sans', Helvetica, Arial, sans-serif;
+        font-weight: 300;
+        font-size: 33px;
+    }
+
+    .internal-trial-banner .banner-digit {
+        display: inline-block;
+        width: 37px;
+        color: #666872;
+        font-weight: 600;
+        font-size: 34px;
+        margin-left: 2px;
+        background: url({$di.config.staticDomain}/img/trial-banner/digit-bg.png) 0 50% no-repeat;
+    }
+    
+    .internal-trial-banner .banner-expire b {
+        font-family: 'Open Sans', Helvetica, Arial, sans-serif;
+        font-weight: 600;
+        font-size: 40px;
+        text-transform: uppercase;
+    }
+    
+    .internal-trial-banner .banner-expire .digit {
+        height: 41px;
+        width: 37px;
+        color: #666872;
+        background: url({$di.config.staticDomain}/img/trial-banner/digits.png) 0 0 no-repeat;
+    }
+
+    .internal-trial-banner .banner-expire .digit.first {
+        position: absolute;
+        top: 19px;
+        left: 225px;
+    }
+
+    .internal-trial-banner .banner-arrow {
+        display: none;
+        vertical-align: middle;
+        margin-right: 20px;
+        width: 69px;
+        height: 79px;
+        background: url({$di.config.staticDomain}/img/trial-banner/arrow.png) 0 50% no-repeat;
+    }
+
+    .internal-trial-banner .banner-expire .digit.second {
+        position: absolute;
+        top: 19px;
+        left: 263px;
+    }
+
+    .internal-trial-banner .banner-expire .digit.val0 {
+        background-position: 0 0;
+    }
+
+    .internal-trial-banner .banner-expire .digit.val2 {
+        background-position: 0 -41px;
+    }
+
+    .internal-trial-banner .banner-expire .digit.val3 {
+        background-position: 0 -82px;
+    }
+
+    .internal-trial-banner .banner-expire .digit.val4 {
+        background-position: 0 -123px;
+    }
+
+    .internal-trial-banner .banner-expire .digit.val5 {
+        background-position: 0 -164px;
+    }
+
+    .internal-trial-banner .banner-expire .digit.val6 {
+        background-position: 0 -205px;
+    }
+
+    .internal-trial-banner .banner-expire .digit.val7 {
+        background-position: 0 -246px;
+    }
+
+    .internal-trial-banner .banner-btn {
+        border-radius: 4px;
+        font-family: 'Open Sans', Helvetica, Arial, sans-serif;
+        font-size: 19px;
+        font-weight: 300;
+        background-color: #cf4757;
+        color: white;
+        text-shadow: 0 1px 0 rgba(186, 120, 26, 0.4);
+        padding: 8px 16px;
+        display: inline-block;
+    }
+    
+    .internal-trial-banner .banner-btn:hover, 
+    .internal-trial-banner .banner-btn:focus, 
+    .internal-trial-banner .banner-btn:active {
+        color: white;
+        background-color: #d45b69;
+        text-decoration: none;
+    }
+    
+    .internal-trial-banner .button-holder {
+        display: inline-block;
+    }
+
+    @media (min-width: 1200px) {
+        .internal-trial-banner .banner-phone {
+            display: inline-block;
+        }
+    }
+    
+    @media (min-width: 992px) {
+        .internal-trial-banner .banner-arrow {
+            display: inline-block;
+        }
+    }
+    
+    @media (max-width: 640px) {
+        .internal-trial-banner {
+            height: 150px;
+            background: url({$di.config.staticDomain}/img/trial-banner/bg-xs.png) 0 0 no-repeat #398fa7;
+        }
+        
+        .internal-trial-banner .button-holder {
+            margin-top: 10px;
+            display: block;
+        }
+        
+        .internal-trial-banner .banner-expire {
+            margin: 0;
+        }
+    }
+</style>
+
+<div class="internal-trial-banner">
+    
+    <div class="banner-phone"></div>
+    
+    {if $internalTrialLicenseDaysLeft > 1}
+    <div class="banner-expire">
+        Trial Expires in <span class="banner-digit">0</span><span class="banner-digit">{$internalTrialLicenseDaysLeft}</span> Days
+    </div>
+    {elseif $internalTrialLicenseDaysLeft == 1}
+        <div class="banner-expire">Trial Expires <b>Today</b></div>
+    {else}
+        <div class="banner-expire">Trial has <b>EXPIRED</b></div>
+    {/if}
+    <div class="banner-arrow"></div>
+    <div class="button-holder">
+        <a href="{$di.config.registration}" class="btn banner-btn">Upgrade</a>
+    </div>
+</div>
+{/if}
