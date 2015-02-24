@@ -279,6 +279,11 @@
                 }
             }).on('slideStop', function(e) {
                 filterPoints(e.value, false);
+                if (e.value >= 3000) {
+                    $("#amount").html('3000+ ft');
+                } else {
+                    $("#amount").html(e.value + ' ft');
+                }
             }).data('slider');
 
             getData(startDate);
