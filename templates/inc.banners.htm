@@ -166,14 +166,22 @@
     <div class="banner-expire">
         Trial Expires in <span class="banner-digit">0</span><span class="banner-digit">{$internalTrialLicenseDaysLeft}</span> Days
     </div>
-    {elseif $internalTrialLicenseDaysLeft == 1}
-        <div class="banner-expire">Trial Expires <b>Today</b></div>
-    {else}
-        <div class="banner-expire">Trial has <b>EXPIRED</b></div>
-    {/if}
     <div class="banner-arrow"></div>
     <div class="button-holder">
         <a href="{$di.config.registration}" class="btn banner-btn">Upgrade</a>
     </div>
+    {elseif $internalTrialLicenseDaysLeft == 1}
+        <div class="banner-expire">Trial Expires <b>Today</b></div>
+        <div class="banner-arrow"></div>
+        <div class="button-holder">
+            <a href="{$di.config.registration}" class="btn banner-btn">Upgrade</a>
+        </div>
+    {else}
+        <div class="banner-expire">Trial has <b>EXPIRED</b></div>
+        <div class="banner-arrow"></div>
+        <div class="button-holder">
+            <a href="{$di.config.registration}" class="btn banner-btn">Buy Pumpic</a>
+        </div>
+    {/if}
 </div>
 {/if}
