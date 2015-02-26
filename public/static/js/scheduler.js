@@ -106,7 +106,11 @@
                 throw new Error("At least one day must be selected!");
             }
 
-            return this.slider.getValue().join('|') + '|' + days.join(',');
+            var sliderValue = this.slider.getValue();
+            
+            sliderValue = [sliderValue[0] * 60, sliderValue[1] * 60];
+
+            return sliderValue.join('|') + '|' + days.join(',');
         },
         deserialize: function (value) {
             var parts = value.split('|');
@@ -116,8 +120,8 @@
 
             var days = parts[2].split(',');
 
-            this.slider.setValue([parseInt(parts[0], 10), parseInt(parts[1], 10)]);
-            this.updateRange(parseInt(parts[0], 10), parseInt(parts[1], 10));
+            this.slider.setValue([parseInt(parts[0], 10) / 60, parseInt(parts[1], 10) / 60]);
+            this.updateRange(parseInt(parts[0], 10) / 60, parseInt(parts[1], 10) / 60);
 
             var daysList = this.getDaysList(),
                     id = this.getId();
