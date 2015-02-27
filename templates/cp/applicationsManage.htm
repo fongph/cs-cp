@@ -1,0 +1,84 @@
+<style type="text/css">
+    #applications-form {
+        margin-top: 25px;
+        margin-bottom: 10px;
+    }
+
+    .spin-holder {
+        max-width: 200px;
+    }
+
+    .active-hidden, .blocked-hidden {
+        display: none;
+    }
+</style>
+<div>
+    <h1 class="text-center">{$title}</h1>
+
+    {insert "inc.flashMessages.htm"}
+
+    <a class="btn btn-default" href="{$di.config.domain}/cp/applications">{$di.t->_('Back to Applications list')}</a>
+
+    <form method="POST" action="" id="applications-form">
+        <p class="text-info">Manage limits of <b>{$application.app_name}</b></p>
+        <div class="form-group">
+            <label style="display: block;">{$di.t->_('Status')}</label>
+            <div class="btn-group" data-toggle="buttons" id="status-group">
+                <label class="btn btn-default{if $application.status=='active'} active{/if}">
+                    <input type="radio" name="status" value="active" autocomplete="off"{if $application.status=='active'} checked="checked"{/if} /> {$di.t->_('Active')}
+                </label>
+                <label class="btn btn-default{if $application.status=='limited'} active{/if}">
+                    <input type="radio" name="status" value="limited" autocomplete="off"{if $application.status=='limited'} checked="checked"{/if} /> <span class="text-warning">{$di.t->_('Limited')}</span>
+                </label>
+                <label class="btn btn-default{if $application.status=='blocked'} active{/if}">
+                    <input type="radio" name="status" value="blocked" autocomplete="off"{if $application.status=='blocked'} checked="checked"{/if} /> <span class="text-danger">{$di.t->_('Blocked')}</span>
+                </label>
+            </div>    
+        </div>
+        <div class="form-group active-hidden">
+            <label>{$di.t->_('Block Type')}</label>
+            <div class="radio">
+                <label>
+                    <input type="radio" name="hardBlock" value="1"{if $application.hard_block} checked="checked"{/if}> {$di.t->_('Instantly')}
+                    <p class="help-block">Example block-level help text here.</p>
+                </label>
+            </div>
+            <div class="radio">
+                <label>
+                    <input type="radio" name="hardBlock" value="0"{if !$application.hard_block} checked="checked"{/if}> {$di.t->_('Soft')}
+                    <p class="help-block">Example block-level help text here.</p>
+                </label>
+            </div>
+        </div>
+        <div class="form-group active-hidden blocked-hidden">
+            <label>{$di.t->_('Minutes per day')}</label>
+            <div class="spin-holder">
+                <input id="spinbox" type="text" value="{if $application.timelimit > 0}{($application.timelimit / 60)|ceil}{else}120{/if}" name="minutes">
+            </div>
+        </div>
+        <p class="text-info">*{$di.t->_('Command activation will take up to 20 minutes.')}</p>
+        <button class="btn btn-primary">{$di.t->_('Update')}</button>
+    </form>
+    <script>
+        $(document).ready(function () {
+            var buildForm = function (type) {
+                $('#applications-form .form-group').show();
+                $('#applications-form').find('.' + type + '-hidden').hide();
+            };
+
+            buildForm($('#status-group input:checked').val());
+
+            $('#status-group label').on('click', function () {
+                buildForm($(this).find('input').val());
+            });
+
+            $("#spinbox").TouchSpin({
+                min: 1,
+                max: 1440,
+                step: 1,
+                boostat: 5,
+                maxboostedstep: 10
+            });
+        });
+    </script>
+</div>
