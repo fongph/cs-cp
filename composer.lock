@@ -119,7 +119,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-models.git",
-                "reference": "212a06ed7f9fc24df7715033966ddb9114e1aeea"
+                "reference": "7f8c223a1a02c3f5b0e89892f8ec7bf00014fbfc"
             },
             "require": {
                 "php": ">=5.4.0"
@@ -133,7 +133,7 @@
                     "CS\\Models\\": "src/"
                 }
             },
-            "time": "2015-02-20 10:24:41"
+            "time": "2015-02-27 15:53:19"
         },
         {
             "name": "boomers/cs-queue",

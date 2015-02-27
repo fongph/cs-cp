@@ -158,6 +158,7 @@ class Wizard extends BaseController {
                                 ->setUniqueId($device['SerialNumber'])
                                 ->setName($device['DeviceName'])
                                 ->setModel($device['MarketingName'])
+                                ->setOS(DeviceRecord::OS_ICLOUD)
                                 ->setOSVersion($device['ProductVersion']);
                             
                             $iCloudRecord = new DeviceICloudRecord($this->di->get('db'));
