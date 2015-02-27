@@ -7,6 +7,27 @@ use CS\Billing\Manager as BillingManager,
 
 class Billing extends \System\Model
 {
+    
+    public function getAvailablePackages($userId)
+    {
+        $userId = (int)$userId;
+
+        $result = $this->getDb()->query("
+            SELECT
+                lic.`id` license_id,
+                p.`name`,
+                lic.`expiration_date`
+            FROM `licenses` lic
+            INNER JOIN `products` p ON lic.`product_id` = p.`id`
+            WHERE  lic.`user_id` = {$userId}
+              AND  lic.`product_type` = 'package'
+              AND  lic.`status` = 'available'");
+        
+        if($result === false)
+            return array();
+        
+        return $result->fetchAll(\PDO::FETCH_ASSOC);
+    }
 
     public function getDataTableData($user, $params = array())
     {

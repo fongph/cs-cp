@@ -1,0 +1,46 @@
+<style type="text/css">
+    .breadcrumb .active a {
+        color: #39753e;
+    }
+</style>
+<ol class="breadcrumb">
+
+    {var $stepName = $di.t->_('Package Selection')}
+    {if $di->getRouter()->getFindRoute()->isAvailableStep('wizardPackage')}
+        <li{if $di->getRouter()->getFindRoute()->isCurrentStep('sdsd')} class="active"{/if}>
+            <a href="{$di->getRouter()->getRouteUrl('wizardPackage')}">{$stepName}</a>
+        </li>
+    {else}<li>{$stepName}</li>{/if}
+
+    
+    {var $stepName = $di.t->_('Platform Selection')}
+    {if $di->getRouter()->getFindRoute()->isAvailableStep('wizardPlatform')}
+        <li{if $di->getRouter()->getFindRoute()->isCurrentStep('wizardPlatform')} class="active"{/if}>
+            <a href="{$di->getRouter()->getRouteUrl('wizardPlatform')}">{$stepName}</a>
+        </li>
+    {else}<li>{$stepName}</li>{/if}
+
+    
+    {var $stepName = $di.t->_('Setup your Device')}
+    {if $di->getRouter()->getFindRoute()->isAvailableStep('wizardSetup')}
+        <li{if $di->getRouter()->getFindRoute()->isCurrentStep('wizardSetup')} class="active"{/if}>
+            <a href="{$di->getRouter()->getRouteUrl('wizardSetup')}">{$stepName}</a>
+        </li>
+    {else}<li>{$stepName}</li>{/if}
+    
+    
+    {var $stepName = $di.t->_('Register your Device')}
+    {if $di->getRouter()->getFindRoute()->isAvailableStep('wizardRegister')}
+        <li{if $di->getRouter()->getFindRoute()->isCurrentStep('wizardRegister')} class="active"{/if}>
+            <a href="{$di->getRouter()->getRouteUrl('wizardRegister')}">{$stepName}</a>
+        </li>
+    {else}<li>{$stepName}</li>{/if}
+    
+    {var $stepName = $di.t->_('Finishing steps')}
+    {if $di->getRouter()->getFindRoute()->isAvailableStep('wizardFinish')}
+        <li{if $di->getRouter()->getFindRoute()->isCurrentStep('wizardFinish')} class="active"{/if}>
+            <a href="{$di->getRouter()->getRouteUrl('wizardFinish')}">{$stepName}</a>
+        </li>
+    {else}<li>{$stepName}</li>{/if}
+    
+</ol>

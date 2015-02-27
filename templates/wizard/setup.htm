@@ -1,0 +1,26 @@
+<div>
+    <h1 class="text-center">{$title}</h1>
+    {insert "inc.flashMessages.htm"}
+    {var $step='platform'}
+    {insert "wizard/inc.steps.breadcrumb.htm"}
+    {if count($devices)}
+        <div class="wizard-container">
+            {foreach $devices as $devId => $device}
+                <div class="row">
+                    <form method="post">
+                        <button class="btn btn-primary{if $device.active} disabled{/if}" type="submit" name="device_id" value="{$devId}"{if $device.active} disabled{/if}>
+                            {$device.name}{if $device.active} {$device.package_name}{/if}
+                        </button>
+                    </form>
+                </div>
+            {/foreach}
+        </div>
+    {/if}
+    {if $platform == 'android'}
+        {insert "wizard/inc.setup.android.htm"}
+    {elseif $platform == 'ios'}
+        {insert "wizard/inc.setup.ios.htm"}
+    {elseif $platform == 'icloud'}
+        {insert "wizard/inc.setup.icloud.htm"}
+    {/if}
+</div>

@@ -1,6 +1,7 @@
 <?php
 
 use CS\Settings\GlobalSettings;
+use Components\WizardRouter;
 use Models\Modules;
 
 $di->setShared('db', function() use ($config) {
@@ -85,6 +86,12 @@ $di->setShared('router', function() use($config) {
     $router->add('billingLicenseDisable', new \System\Router\Regex('/billing/license/:id/disable', array('controller' => 'Billing', 'action' => 'disableLicense'), array('id' => '[0-9]+')));
     $router->add('billingLicenseEnable', new \System\Router\Regex('/billing/license/:id/enable', array('controller' => 'Billing', 'action' => 'enableLicense'), array('id' => '[0-9]+')));
 
+    $router->add(WizardRouter::STEP_PACKAGE, new WizardRouter('/wizard', WizardRouter::STEP_PACKAGE, $_GET, array('.*' => 'Package')));
+    $router->add(WizardRouter::STEP_PLATFORM, new WizardRouter('/wizard/platform', WizardRouter::STEP_PLATFORM, $_GET, array('.*' => 'Platform')));
+    $router->add(WizardRouter::STEP_SETUP, new WizardRouter('/wizard/setup', WizardRouter::STEP_SETUP, $_GET, array('.*' => 'Setup')));
+    $router->add(WizardRouter::STEP_REGISTER, new WizardRouter('/wizard/register', WizardRouter::STEP_REGISTER, $_GET, array('android|ios' => 'registerApp','icloud' => 'registerICloud')));
+    $router->add(WizardRouter::STEP_FINISH, new WizardRouter('/wizard/finish', WizardRouter::STEP_FINISH, $_GET, array('.*' => 'finish')));
+    
     $router->add('applicationsManage', new \System\Router\Regex('/cp/applications/:id/manage', array('controller' => 'Applications', 'action' => 'index'), array('id' => '[^/]+')));
     $router->add('content', new \System\Router\Regex('/:uri', array('controller' => 'Index', 'action' => 'content', 'public' => true), array('uri' => '.+\.html')));
     $router->add('locale', new \System\Router\Regex('/locale/:value', array('controller' => 'Index', 'action' => 'locale', 'public' => true), array('value' => '.+')));

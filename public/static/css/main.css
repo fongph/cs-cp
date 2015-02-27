@@ -1106,3 +1106,14 @@ body > .cp-menu {
 .add-device-button-wrapper {
     margin-bottom: 7px;
 }
+
+.wizard-container {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    text-align: center;
+    padding: 10px;
+    margin-top: 15px;
+}
+.wizard-container .row {
+    margin: 10px 0;
+}
