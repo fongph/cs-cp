@@ -93,7 +93,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-mail.git",
-                "reference": "088630052729cb8a553342fc14efafcfd0bdc09b"
+                "reference": "9dd8628baa260a044af1ead7d8c415a11bfb4b41"
             },
             "require": {
                 "guzzlehttp/guzzle": "~5.0",
@@ -111,7 +111,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2015-02-20 10:56:36"
+            "time": "2015-03-02 11:01:17"
         },
         {
             "name": "boomers/cs-models",
@@ -119,7 +119,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-models.git",
-                "reference": "7f8c223a1a02c3f5b0e89892f8ec7bf00014fbfc"
+                "reference": "c4dd9e3d4baca70b6bccd17e4c3b6db644533711"
             },
             "require": {
                 "php": ">=5.4.0"
@@ -133,7 +133,7 @@
                     "CS\\Models\\": "src/"
                 }
             },
-            "time": "2015-02-27 15:53:19"
+            "time": "2015-03-02 13:28:26"
         },
         {
             "name": "boomers/cs-queue",
@@ -164,7 +164,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-settings.git",
-                "reference": "751ea65f1b723fd32598640599d87adb78356352"
+                "reference": "360046acb107cfac6cb929dd880406335fd1b137"
             },
             "require": {
                 "php": ">=5.4.0"
@@ -175,7 +175,7 @@
                     "CS\\Settings\\": "src/"
                 }
             },
-            "time": "2015-02-16 12:15:12"
+            "time": "2015-02-24 12:38:33"
         },
         {
             "name": "boomers/cs-users",
@@ -183,7 +183,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-users.git",
-                "reference": "1a10387570ef0ff0eceded397cb5e6936e817626"
+                "reference": "bb96de7ac10dfb893a757f5e3512ed3bfea94742"
             },
             "require": {
                 "boomers/cs-mail": "dev-master",
@@ -204,7 +204,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2015-02-23 08:40:45"
+            "time": "2015-02-27 14:33:59"
         },
         {
             "name": "boomers/ip",
@@ -419,16 +419,16 @@
         },
         {
             "name": "guzzlehttp/ringphp",
-            "version": "1.0.5",
+            "version": "1.0.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/RingPHP.git",
-                "reference": "a903f51b692427318bc813217c0e6505287e79a4"
+                "reference": "f43ab34aad69ca0ba04172cf2c3cd5c12fc0e5a4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/RingPHP/zipball/a903f51b692427318bc813217c0e6505287e79a4",
-                "reference": "a903f51b692427318bc813217c0e6505287e79a4",
+                "url": "https://api.github.com/repos/guzzle/RingPHP/zipball/f43ab34aad69ca0ba04172cf2c3cd5c12fc0e5a4",
+                "reference": "f43ab34aad69ca0ba04172cf2c3cd5c12fc0e5a4",
                 "shasum": ""
             },
             "require": {
@@ -465,7 +465,8 @@
                     "homepage": "https://github.com/mtdowling"
                 }
             ],
-            "time": "2014-12-11 05:50:32"
+            "description": "Provides a simple API and specification that abstracts away the details of HTTP into a single PHP function.",
+            "time": "2015-02-26 20:43:09"
         },
         {
             "name": "guzzlehttp/streams",
