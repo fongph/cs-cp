@@ -81,7 +81,7 @@ class Wizard extends BaseController {
                     });
                 
                 if($deviceObserver->assignLicenseToDevice()) {
-                    $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_FINISH));
+                    $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_FINISH, array('deviceId'=>$deviceObserver->getDevice()->getId())));
                     
                 } else throw new \Exception("Can't assign Device {$deviceObserver->getDevice()->getId()} to License {$deviceObserver->getLicense()->getId()}");
                     
@@ -112,7 +112,7 @@ class Wizard extends BaseController {
                 
             } elseif ($info['assigned']) {
                 $this->di->getFlashMessages()->add(FlashMessages::SUCCESS, "Your device successfully added!");
-                $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_FINISH));
+                $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_FINISH, array('deviceId'=>$info['assigned_device_id'])));
                 
             } elseif ($info['expired']) {
                 $this->di->getFlashMessages()->add(FlashMessages::INFO, "Code was expired. We've generated new code for you. Please enter it on mobile phone.");
@@ -202,7 +202,9 @@ class Wizard extends BaseController {
                             
                             try {
                                 if($deviceObserver->addICloudDevice()){
-                                    $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_FINISH));
+                                    $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_FINISH, array(
+                                        'deviceId' => $deviceObserver->getDevice()->getId()
+                                    )));
                                 } else throw new \Exception("USER {$this->auth['id']} Can't add ICloudDevice {$deviceObserver->getDevice()->getId()} to License {$this->getLicense()->getId()}");
                                 
                             } catch (\Exception $e) {
@@ -237,6 +239,20 @@ class Wizard extends BaseController {
     
     public function finishAction()
     {
+        $device = $this->getDevice(@$_GET['deviceId']);
+        
+        if($_POST){
+            if(isset($_POST['deviceName']) && strlen($_POST['deviceName']) > 2){
+                $device->setName($_POST['deviceName']);
+                $device->save();
+                $this->redirect($this->di->getRouter()->getRouteUrl('setDevice', array('devId'=>$device->getId())));
+            } else {
+                $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('Invalid Device Name'));
+                $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_FINISH, array('deviceId'=>$device->getId())));
+            }
+        }
+
+        $this->view->device = $device;
         $this->setView('wizard/finish.htm');
     }
 
@@ -271,7 +287,7 @@ class Wizard extends BaseController {
             try {
                 $device = new DeviceRecord($this->di->get('db'));
                 $device->load($devId);
-                if($device->getUserId() != $this->auth['id'])
+                if($device->getUserId() != $this->auth['id'] || $device->getDeleted())
                     throw new DeviceNotFoundException;
 
             } catch (DeviceNotFoundException $e) {

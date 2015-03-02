@@ -71,9 +71,13 @@ class WizardRouter implements RouteInterface {
         return self::$currentStep === $name;
     }
 
-    public function getUri(array $params = array())
+    public function getUri(array $customParams = array())
     {
-        if(self::$currentStep == self::STEP_FINISH && $this->targetStep != self::STEP_FINISH || empty($this->params) && empty($params)) {
+        $params = array();
+        foreach(array_merge($this->params, $customParams) as $p => $v)
+            if($v) $params[$p] = $v;
+        
+        if(empty($params) || self::$currentStep == self::STEP_FINISH && $this->targetStep != self::STEP_FINISH) {
             return $this->uri;
             
         } else return "{$this->uri}?{$this->getParamString($params)}";
