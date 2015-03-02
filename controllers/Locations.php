@@ -81,7 +81,7 @@ class Locations extends BaseModuleController
     {
         $zonesModel = new Zones($this->di);
 
-        if ($zonesModel->getDeviceZonesCount($this->di['devId']) > Zones::$countLimit) {
+        if ($zonesModel->getDeviceZonesCount($this->di['devId']) >= Zones::$countLimit) {
             $this->getDI()->getFlashMessages()->add(FlashMessages::ERROR, $this->di['t']->_('Geofences limit reached!'));
             $this->redirect($this->di['router']->getRouteUrl('locationsZones'));
         }
