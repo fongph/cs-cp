@@ -167,7 +167,7 @@ class Wizard extends BaseController {
                                 ->setApplePassword($_POST['password'])
                                 ->setDeviceHash($device['backupUDID'])
                                 ->setLastBackup($device['LastModified'])
-                                ->setQuotaUsed($device['QuotaUsed']);
+                                ->setQuotaUsed($device['QuotaUsedMb']);
                             
                             $deviceObserver = new DeviceObserver($this->di->get('logger'));
                             $deviceObserver
