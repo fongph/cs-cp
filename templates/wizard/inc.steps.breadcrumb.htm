@@ -1,9 +1,12 @@
 <style type="text/css">
-    .breadcrumb .active a {
+    .setup-wizard-breadcrumb.breadcrumb .active a {
         color: #39753e;
     }
+    .setup-wizard-breadcrumb.breadcrumb > li + li:before {
+        content: '> ';
+    }
 </style>
-<ol class="breadcrumb">
+<ol class="breadcrumb setup-wizard-breadcrumb">
 
     {var $stepName = $di.t->_('Package Selection')}
     {if $di->getRouter()->getFindRoute()->isAvailableStep('wizardPackage')}
