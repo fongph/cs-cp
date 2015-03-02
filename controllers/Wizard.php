@@ -215,7 +215,7 @@ class Wizard extends BaseController {
                     $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('Invalid Device!'));
                 }
 
-                $this->view->title = $this->di->getTranslator()->_('Choose iCloud Device');
+                //$this->view->title = $this->di->getTranslator()->_('Choose iCloud Device');
                 $this->view->appleID = $_POST['email'];
                 $this->view->applePassword = $_POST['password'];
                 $this->view->devices = $devices;
@@ -231,7 +231,7 @@ class Wizard extends BaseController {
             $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_REGISTER));
         }
 
-        $this->view->title = $this->di->getTranslator()->_('iCloud Account');
+        //$this->view->title = $this->di->getTranslator()->_('iCloud Account');
         $this->setView('wizard/register.icloud.account.htm');
     }
     
