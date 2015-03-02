@@ -10,7 +10,7 @@
 
     {var $stepName = $di.t->_('Package Selection')}
     {if $di->getRouter()->getFindRoute()->isAvailableStep('wizardPackage')}
-        <li{if $di->getRouter()->getFindRoute()->isCurrentStep('sdsd')} class="active"{/if}>
+        <li{if $di->getRouter()->getFindRoute()->isCurrentStep('wizardPackage')} class="active"{/if}>
             <a href="{$di->getRouter()->getRouteUrl('wizardPackage')}">{$stepName}</a>
         </li>
     {else}<li>{$stepName}</li>{/if}

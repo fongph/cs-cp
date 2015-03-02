@@ -292,7 +292,10 @@ class Wizard extends BaseController {
 
             } catch (DeviceNotFoundException $e) {
                 $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('Device not found'));
-                $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_SETUP));
+                if($this->di->getRouter()->getFindRoute()->isCurrentStep(WizardRouter::STEP_FINISH))
+                    $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_PACKAGE));
+                elseif($this->di->getRouter()->getFindRoute()->isCurrentStep(WizardRouter::STEP_SETUP))
+                    $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_SETUP));
             }
         return $device;
     }
