@@ -102,7 +102,7 @@ class Locations extends BaseModuleController
             } else if (!strlen($zoneData)) {
                 $this->getDI()->getFlashMessages()->add(FlashMessages::ERROR, $this->di['t']->_('Geofence not selected!'));
             } else if (!Zones::validateZoneData($zoneData)) {
-                $this->getDI()->getFlashMessages()->add(FlashMessages::ERROR, $this->di['t']->_('Invalid zone!'));
+                $this->getDI()->getFlashMessages()->add(FlashMessages::ERROR, $this->di['t']->_('Invalid geofence!'));
             } else {
                 $schedule = Zones::schedulesToRecurrenceList($scheduleData);
                 $zonesModel->addZone($this->di['devId'], $zoneData, $name, $trigger, $emailAlert, $smsAlert, $schedule, $enable);
