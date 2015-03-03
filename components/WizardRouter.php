@@ -86,7 +86,7 @@ class WizardRouter implements RouteInterface {
     public function getParamString(array $params = array())
     {
         $parts = array();
-        foreach(array_merge($this->params, $params) as $p => $v) if($v)
+        foreach($params as $p => $v)
             $parts[] = "{$p}={$v}";
         return implode('&', $parts);
     }
