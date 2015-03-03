@@ -68,7 +68,7 @@ class Instagram extends BaseModuleController
         $post = $instagramModel->getPost($this->di['devId'], $this->params['account'], $this->params['post']);
 
         if ($post === false) {
-            $this->di['flashMessages']->add(FlashMessages::ERROR, $this->di['t']->_('Post not found!'));
+            $this->di['flashMessages']->add(FlashMessages::ERROR, $this->di['t']->_('The post was not found.'));
             $this->redirect($this->di['router']->getRouteUrl('instagram'));
         }
 
@@ -77,7 +77,7 @@ class Instagram extends BaseModuleController
                 $this->di['flashMessages']->add(FlashMessages::ERROR, $this->di['t']->_('Invalid request!'));
             } else {
                 $instagramModel->setPostVideoRequestedStatus($post['id']);
-                $this->di['flashMessages']->add(FlashMessages::SUCCESS, $this->di['t']->_('Request to download video successfully sent!'));
+                $this->di['flashMessages']->add(FlashMessages::SUCCESS, $this->di['t']->_('The request to download the video was successfully sent.'));
             }
 
             $this->redirect($this->di['router']->getRouteUrl('instagramPost', array(
