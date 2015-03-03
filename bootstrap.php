@@ -39,7 +39,9 @@ $di->setShared('mailSender', function() use ($di) {
                     ->setSiteId($di['config']['site']);
 });
 
-$di->setShared('router', function() use($config) {
+$di->set('isWizardEnabled', $di['config']['environment'] == 'development' || in_array(@$_SERVER['HTTP_X_REAL_IP'], array('176.38.120.13')));
+
+$di->setShared('router', function() use($config, $di) {
     $router = new \System\Router();
     $router->setBaseUrl($config['domain']);
     $router->add('main', new \System\Router\Route('/', array('controller' => 'Index', 'action' => 'login', 'public' => true)));
@@ -86,7 +88,7 @@ $di->setShared('router', function() use($config) {
     $router->add('billingLicenseDisable', new \System\Router\Regex('/billing/license/:id/disable', array('controller' => 'Billing', 'action' => 'disableLicense'), array('id' => '[0-9]+')));
     $router->add('billingLicenseEnable', new \System\Router\Regex('/billing/license/:id/enable', array('controller' => 'Billing', 'action' => 'enableLicense'), array('id' => '[0-9]+')));
 
-    if(in_array($_SERVER['REMOTE_ADDR'], array('176.38.120.13'))){
+    if($di->get('isWizardEnabled')){
         $router->add(WizardRouter::STEP_PACKAGE, new WizardRouter('/wizard', WizardRouter::STEP_PACKAGE, $_GET, array('.*' => 'Package')));
         $router->add(WizardRouter::STEP_PLATFORM, new WizardRouter('/wizard/platform', WizardRouter::STEP_PLATFORM, $_GET, array('.*' => 'Platform')));
         $router->add(WizardRouter::STEP_SETUP, new WizardRouter('/wizard/setup', WizardRouter::STEP_SETUP, $_GET, array('.*' => 'Setup')));

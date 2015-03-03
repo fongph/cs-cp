@@ -30,6 +30,34 @@
     .add-buttons .btn {
         width: 195px;
     }
+
+    .panel.devices-list .row.head{
+        font-weight: bold;
+    }
+    .panel.devices-list .row:not(:last-child){
+        border-bottom: 1px solid #aaa;
+    }
+    .panel.devices-list .panel-body{
+        padding: 10px 30px;
+    }
+    .panel.devices-list .row div {
+        min-height: 50px;
+        padding-top: 15px;
+    }
+    .add-device-row {
+        text-align: center;
+    }
+    @media (max-width: 767px) {
+        .panel.devices-list .row div {
+            min-height: 35px;
+            padding-top: 7px;
+        }
+    }
+    @media (min-width: 768px) {
+        .pull-right-md {
+            float: right;
+        }
+    }
 </style>
 
 <h1 class="text-center">{$title}</h1>
@@ -42,6 +70,53 @@
 
 <div class="row">
     <div class="col-lg-12 col-md-12">
+        {if $availabledevices}
+            <div class="panel panel-default devices-list">
+                <div class="panel-heading">{$di.t->_('Device List')}</div>
+                <div class="panel-body">
+                    {if count($availabledevices)}
+                        <div class="row head hidden-xs head">
+                            <div class="col-sm-6 head">{$di.t->_('Name')}</div>
+                            <div class="col-sm-2 head">{$di.t->_('OS')}</div>
+                            <div class="col-sm-3 head">{$di.t->_('License')}</div>
+                            <div class="col-sm-1 head">{$di.t->_('Status')}</div>
+                        </div>
+                        {foreach $availabledevices as $id => $device}
+                            <div class="row">
+                                <div class="col-sm-6">{$device.name}</div>
+                                <div class="col-sm-2">
+                                    {if $device.os == 'icloud' || $device.os == 'ios'}
+                                        iOS
+                                    {elseif $device.os == 'android'}
+                                        Android
+                                    {else}
+                                        {$device.os}
+                                    {/if}
+                                    {if $device.os_version}{$device.os_version}{/if}
+                                </div>
+                                <div class="col-sm-3">
+                                    {if $device.active}
+                                        {$device.package_name}
+                                    {else}
+                                        Inactive
+                                    {/if}
+                                </div>
+                                <div class="col-sm-1">
+                                    {if $device.online}Online{else}Offline{/if}
+                                </div>
+                            </div>
+                        {/foreach}
+                    {/if}
+                    <div class="row add-device-row">
+                        <div class="col-sm-12">
+                            <a href="/wizard" class="btn btn-primary pull-right-md">
+                                {$di.t->_('Add Device')}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {/if}
         <div class="panel panel-default add-device">
             <div class="panel-heading">{$di.t->_('Add new phone')}</div>
             <div class="panel-body">

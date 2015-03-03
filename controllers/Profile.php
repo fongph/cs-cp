@@ -6,7 +6,8 @@ use System\FlashMessages,
     CS\Users\UsersManager,
     CS\Users\PasswordsNotEqualException,
     CS\Users\PasswordTooShortException,
-    CS\Users\InvalidPasswordException;
+    CS\Users\InvalidPasswordException,
+    CS\Devices\Manager as DeviceManager;
 
 class Profile extends BaseController
 {
@@ -24,6 +25,11 @@ class Profile extends BaseController
         }
 
         $usersModel = new \Models\Users($this->di);
+        if($this->di->get('isWizardEnabled')){
+            $deviceManager = new DeviceManager($this->di->get('db'));
+            $this->view->availabledevices = $deviceManager->getUserActiveDevices($this->auth['id']);
+            
+        } else $this->view->availabledevices = false;
 
         $this->view->recordsPerPage = $this->auth['records_per_page'];
         $this->view->recordsPerPageList = $usersModel->getRecordsPerPageList();
