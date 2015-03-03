@@ -78,6 +78,18 @@ class Wizard extends BaseController {
                                 'device_id' => $deviceObserver->getDevice()->getId(),
                                 'license_id' => $deviceObserver->getLicense()->getId()
                             )));
+                        if($deviceObserver->getDevice()->getOS() == 'icloud'){
+                            $queueManager = new \CS\Queue\Manager($this->di['queueClient']);
+                            $iCloudDevice = new DeviceICloudRecord($this->di->get('db'));
+                            
+                            $iCloudDevice->loadByDevId($deviceObserver->getDevice()->getId());
+                            
+                            if ($queueManager->addDownloadTask($iCloudDevice)) {
+                                $iCloudDevice->setProcessing(1);
+
+                            } else $iCloudDevice->setLastError($queueManager->getError());
+                            $iCloudDevice->save();
+                        }
                     });
                 
                 if($deviceObserver->assignLicenseToDevice()) {
