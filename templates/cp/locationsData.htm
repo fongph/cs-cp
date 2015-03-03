@@ -479,6 +479,10 @@
                                 return false;
                             }
 
+                            if (slider.getValue() >= 3000) {
+                                return true;
+                            }
+
                             return data.accuracy * 3.2808399 < slider.getValue();  
                         };
                     }
