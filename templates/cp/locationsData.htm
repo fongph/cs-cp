@@ -222,7 +222,7 @@
                         this.getTable().fnDraw();
                         
                         this.getTable().find('tbody > tr').each(function(index) {
-                            if (data[index].type !== 'check-in') {
+                            if (data[index] !== undefined && data[index].type !== 'check-in') {
                                 $(this).addClass('warning');
                             }
                         });
