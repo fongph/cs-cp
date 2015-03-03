@@ -40,13 +40,13 @@
             <div class="radio">
                 <label>
                     <input type="radio" name="hardBlock" value="1"{if $application.hard_block} checked="checked"{/if}> {$di.t->_('Instantly')}
-                    <p class="help-block">Example block-level help text here.</p>
+                    <p class="help-block">{$di.t->_('The application will be shut down (even if running) without any notifications right after the limit expires.')}</p>
                 </label>
             </div>
             <div class="radio">
                 <label>
                     <input type="radio" name="hardBlock" value="0"{if !$application.hard_block} checked="checked"{/if}> {$di.t->_('Soft')}
-                    <p class="help-block">Example block-level help text here.</p>
+                    <p class="help-block">{$di.t->_('After the limit expires the application will keep running until closed. After being closed, one does not simply open the application.')}</p>
                 </label>
             </div>
         </div>

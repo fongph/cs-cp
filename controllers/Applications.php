@@ -101,7 +101,7 @@ class Applications extends BaseModuleController
         $applicationsModel = new \Models\Cp\Applications($this->di);
 
         if (($application = $applicationsModel->getApplicationData($this->di['devId'], $this->params['id'])) === false) {
-            $this->di['flashMessages']->add(FlashMessages::INFO, $this->di['t']->_('The application has not been found!'));
+            $this->di['flashMessages']->add(FlashMessages::INFO, $this->di['t']->_('The application was not found.'));
             $this->redirect($this->di['router']->getRouteUrl('applications'));
         }
 
@@ -112,9 +112,9 @@ class Applications extends BaseModuleController
 
             try {
                 $applicationsModel->setApplicationLimits($this->di['devId'], $this->params['id'], $status, $hardBlock, $seconds);
-                $this->di['flashMessages']->add(FlashMessages::SUCCESS, $this->di['t']->_('The application limits has been successfully updated!'));
+                $this->di['flashMessages']->add(FlashMessages::SUCCESS, $this->di['t']->_('The application limits has been successfully updated.'));
             } catch (\Models\Cp\ApplicationsInvalidStatusException $e) {
-                $this->di['flashMessages']->add(FlashMessages::ERROR, $this->di['t']->_('Invalid request!'));
+                $this->di['flashMessages']->add(FlashMessages::ERROR, $this->di['t']->_('Invalid request.'));
             }
             $this->redirect($this->di['router']->getRouteUrl('applications'));
         }
