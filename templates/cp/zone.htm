@@ -73,10 +73,12 @@
 
     <div class="container-fluid">
         {insert "inc.flashMessages.htm"}
-        
-        <h3 class="text-center">{$di.t->_('Geofences')}</h3>
-        
-        <a class="btn btn-default" href="{$di.router->getRouteUrl('locations')}">{$di.t->_('View locations')}</a>
+
+        <ol class="breadcrumb">
+            <li><a href="{$di.router->getRouteUrl('locations')}">{$di.t->_('View locations')}</a></li>
+            <li><a href="{$di.router->getRouteUrl('locationsZones')}">{$di.t->_('Geofences')}</a></li>
+            {if $edit}<li class="active">{$di.t->_('Edit')}</li>{else}<li class="active">{$di.t->_('New')}</li>{/if}
+        </ol>
 
         <div class="row">
             <div class="col-lg-6">
@@ -119,7 +121,12 @@
                                 </div>*}
                             </div>
                             <div class="form-group">
-                                <label>{$di.t->_('Scheduling')}</label>
+                                <div class="checkbox">
+                                    <label style="font-weight: 700;">
+                                        <input type="checkbox" id="scheduling" {if strlen($scheduleData)} checked="checked"{/if}/>
+                                               {$di.t->_('Scheduling')}
+                                    </label>
+                                </div>
                                 <div id="scheduler" style=""></div>
                             </div>
                             <div class="form-group">
@@ -164,11 +171,27 @@
 
             $('#zoneEditor').submit(function (e) {
                 try {
-                    $('#scheduleData').val(scheduler.serialize());
+                    if ($("#scheduling").is(':checked')) {
+                        $('#scheduleData').val(scheduler.serialize());
+                    } else {
+                        $('#scheduleData').val('');
+                    }
                 } catch (e) {
                     return false;
                 }
             });
+
+            var changeScheduling = function () {
+                if ($("#scheduling").is(':checked')) {
+                    $('#scheduler').show();
+                } else {
+                    $('#scheduler').hide();
+                }
+            };
+
+            $('#scheduling').change(changeScheduling);
+            
+            changeScheduling();
         });
     </script>
 </div>

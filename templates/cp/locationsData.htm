@@ -67,7 +67,7 @@
                 </div>
                 <div class="tab-pane" id="table">
                     <div class="table-container">
-                        <table id="datatable" aria-describedby="datatables_info">
+                        <table id="datatable" class="table" aria-describedby="datatables_info">
                             <thead>
                                 <tr role="row">
                                     <th>{$di.t->_('Type')}</th>
@@ -220,8 +220,14 @@
                         
                         this.getTable().fnAddData(result);
                         this.getTable().fnDraw();
+                        
+                        this.getTable().find('tbody > tr').each(function(index) {
+                            if (data[index].type !== 'check-in') {
+                                $(this).addClass('warning');
+                            }
+                        });
                     },
-                    loadZones: function () {
+                    loadZones: function (zoneContent) {
                         var self = this;
 
                         return $.getJSON("{$di.router->getRouteUrl('locationsZones')}", function (data) {
@@ -239,7 +245,7 @@
                                     clickable: true
                                 });
 
-                                var circleName = this.name;
+                                var zoneData = this;
                                 
                                 var image = {
                                     url: "{$di.config.staticDomain}/img/zone-icon.png",
@@ -255,11 +261,11 @@
                                 });
 
                                 google.maps.event.addListener(zone, 'click', function () {
-                                    self.showInfoWindow(circleName, zone.getCenter());
+                                    self.showInfoWindow(zoneContent(zoneData), zone.getCenter());
                                 });
                                 
                                 google.maps.event.addListener(zone.marker, 'click', function () {
-                                    self.showInfoWindow(circleName, zone.getCenter());
+                                    self.showInfoWindow(zoneContent(zoneData), zone.getCenter());
                                 });
 
                                 self.zones.push(zone);
@@ -277,8 +283,6 @@
                                     zIndex: index + 1
                                 });
                             });
-                            
-                            
                         });
                     },
                     clearData: function () {
@@ -394,7 +398,7 @@
                             self.updateData();
                         });
                     },
-                    load: function (hasZones, hasData, dayStart) {
+                    load: function (hasZones, hasData, dayStart, zoneContent) {
                         var self = this;
 
                         var onComplete = function () {
@@ -404,7 +408,7 @@
                         };
 
                         if (hasZones) {
-                            var deferred = this.loadZones();
+                            var deferred = this.loadZones(zoneContent);
 
                             if (hasData) {
                                 deferred.complete(function () {
@@ -419,10 +423,10 @@
                             deferred.complete(onComplete);
                         }
                     },
-                    init: function (hasZones, hasData, dayStart) {
+                    init: function (hasZones, hasData, dayStart, zoneContent) {
                         var self = this;
                         
-                        this.load(hasZones, hasData, dayStart);
+                        this.load(hasZones, hasData, dayStart, zoneContent);
                         
                         var updateValue = function(value) {
                             if (value >= 3000) {
@@ -490,11 +494,47 @@
             });
         </script>
         <script type="text/javascript">
-            $(document).ready(function(){                
+            $(document).ready(function(){
+                var zoneInfoWindowContent = function(data) {
+                    var $content = $('<div class="zone-info"> ' +
+                            '<div><a href="" class="zone-name" style="font-size: 15px; font-weight: bold;"></a></div>' +
+                            '<div><b>{$di.t->_('Trigger on:')}</b> <span class="trigger-value"></span></div>' +
+                            '<div><b>{$di.t->_('Alert to:')}</b> <span class="alert-value"></span></div>' +
+                            '<div class="scheduling"><b>{$di.t->_('Scheduled')}</b></div>' +
+                            '</div>');
+                    
+                    var url = '{$di.router->getRouteUrl('locationsZonesEdit', ['id' => '#'])}'.replace('#', data.id)
+                    
+                    $content.find('.zone-name').html(data.name).attr('href', url);
+                    $content.find('.zone-edit').attr('href', url);
+                    
+                    var alertTo = ['{$di.t->_('Control panel')}'];
+                    
+                    if (data.email_alert != '0') {
+                        alertTo.unshift('{$di.t->_('Email')}');
+                    }
+                    
+                    $content.find('.alert-value').html(alertTo.join(', '));
+                    
+                    if (data.trigger === 'enter') {
+                        $content.find('.trigger-value').html('{$di.t->_('Enter')}');
+                    } else if (data.trigger === 'leave') {
+                        $content.find('.trigger-value').html('{$di.t->_('Leave')}');
+                    } else {
+                        $content.find('.trigger-value').html('{$di.t->_('Enter')}, {$di.t->_('Leave')}');
+                    }
+                    
+                    if (data.schedule == '0') {
+                        $content.find('.scheduling').remove();
+                    }
+                    
+                    return $content.html();
+                };
+            
                 {if $startTime > 0}
-                locations.init({if $hasZones}true{else}false{/if}, true, moment.unix({$startTime}).utcOffset(0).startOf('day'));
+                locations.init({if $hasZones}true{else}false{/if}, true, moment.unix({$startTime}).utcOffset(0).startOf('day'), zoneInfoWindowContent);
                 {else}
-                locations.init({if $hasZones}true{else}false{/if}, false, moment().utcOffset(0).startOf('day'));
+                locations.init({if $hasZones}true{else}false{/if}, false, moment().utcOffset(0).startOf('day'), zoneInfoWindowContent);
                 {/if}
             });
         </script>

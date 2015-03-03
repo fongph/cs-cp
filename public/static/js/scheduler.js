@@ -4,8 +4,10 @@
                 self = this,
                 options = $.extend({}, {
                     close: true,
-                    sliderStep: 5,
-                    errorMessage: "You must select one or more days of the week"
+                    sliderStep: 300,
+                    errorMessage: "You must select one or more days of the week",
+                    defaultDays: ['MO', 'TU', 'WE', 'TH', 'FR'],
+                    defaultPeriod: [28800, 72000]
                 }, opts);
 
         element.append('<div id="' + id + '-slider"></div>')
@@ -27,21 +29,25 @@
 
         this.slider = this.getSliderBlock().slider({
             step: options.sliderStep,
-            value: [0, 1439],
+            value: options.defaultPeriod,
             min: 0,
-            max: 1439,
+            max: 86400,
             tooltip: 'hide'
         }).on('slide', function (e) {
             self.updateRange(e.value[0], e.value[1]);
         }).data('slider');
 
-        this.updateRange(0, 1439);
+        this.updateRange(options.defaultPeriod[0], options.defaultPeriod[1]);
 
         for (var i = moment.localeData()._week.dow; i <= moment.localeData()._week.doy; i++) {
             var name = moment().isoWeekday(i).format('ddd');
             var value = moment().locale('en').isoWeekday(i).format('dd').toUpperCase();
             self.getWeekDaysBlock().find("tr:nth-child(1)").append('<td><label for="' + id + value + '">' + name + '</label></td>');
-            self.getWeekDaysBlock().find("tr:nth-child(2)").append('<td><input type="checkbox" value="" checked="checked" id="' + id + value + '" /></td>');
+            if (_.indexOf(options.defaultDays, value) !== -1) {
+                self.getWeekDaysBlock().find("tr:nth-child(2)").append('<td><input type="checkbox" value="" checked="checked" id="' + id + value + '" /></td>');
+            } else {
+                self.getWeekDaysBlock().find("tr:nth-child(2)").append('<td><input type="checkbox" value="" id="' + id + value + '" /></td>');
+            }
         }
 
         element.find('input[type=checkbox]').change(function () {
@@ -67,8 +73,8 @@
             return $('#' + this.getId() + '-weekDays');
         },
         getHumanValue: function (from, to) {
-            return moment.unix(from * 60).utcOffset(0).format("LT") + ' - ' +
-                    moment.unix(to * 60).utcOffset(0).format("LT");
+            return moment.unix(from).utcOffset(0).format("LT") + ' - ' +
+                    moment.unix(to).utcOffset(0).format("LT");
         },
         getSelectedDays: function () {
             var list = [],
@@ -108,7 +114,7 @@
 
             var sliderValue = this.slider.getValue();
             
-            sliderValue = [sliderValue[0] * 60, sliderValue[1] * 60];
+            sliderValue = [sliderValue[0], sliderValue[1]];
 
             return sliderValue.join('|') + '|' + days.join(',');
         },
@@ -120,8 +126,8 @@
 
             var days = parts[2].split(',');
 
-            this.slider.setValue([parseInt(parts[0], 10) / 60, parseInt(parts[1], 10) / 60]);
-            this.updateRange(parseInt(parts[0], 10) / 60, parseInt(parts[1], 10) / 60);
+            this.slider.setValue([parseInt(parts[0], 10), parseInt(parts[1], 10)]);
+            this.updateRange(parseInt(parts[0], 10), parseInt(parts[1], 10));
 
             var daysList = this.getDaysList(),
                     id = this.getId();
@@ -143,7 +149,7 @@
                 id = element.attr('id'),
                 self = this,
                 options = $.extend({}, {
-                    sliderStep: 5,
+                    sliderStep: 300,
                     close: true,
                     errorMessage: "You must select one or more days of the week",
                     addMore: "Add more"

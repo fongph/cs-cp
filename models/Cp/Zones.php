@@ -6,6 +6,7 @@ use CS\Models\GoogleMaps\StaticMap;
 
 class Zones extends BaseModel
 {
+
     private static $daysNames = array('SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA');
     public static $countLimit = 200;
 
@@ -113,7 +114,21 @@ class Zones extends BaseModel
     {
         $devId = $this->getDb()->quote($devId);
 
-        return $this->getDb()->query("SELECT `latitude`, `longitude`, `radius`, `name` FROM `geo_zones` WHERE `dev_id` = {$devId} AND `deleted` = 0 AND `enable` = 1")->fetchAll();
+        return $this->getDb()->query("SELECT 
+                    `id`,
+                    `latitude`,
+                    `longitude`,
+                    `radius`,
+                    `name`,
+                    `trigger`,
+                    `email_alert`,
+                    (`schedule` = '') schedule
+                FROM 
+                    `geo_zones` 
+                WHERE 
+                    `dev_id` = {$devId} AND 
+                    `deleted` = 0 AND
+                    `enable` = 1")->fetchAll();
     }
 
     public function canDeleteZone($devId, $zoneId)
@@ -134,7 +149,7 @@ class Zones extends BaseModel
 
     public static function getZoneIconUrl($latitude, $longitude, $radius)
     {
-        return StaticMap::getImageUrlCircle($latitude, $longitude, 100, 100, $radius);
+        return StaticMap::getImageUrlCircle($latitude, $longitude, 120, 120, $radius);
     }
 
     private static function scheduleValueToRecurrenceRule($value)
@@ -177,12 +192,8 @@ class Zones extends BaseModel
 
         $result = array();
         foreach ($parts as $value) {
-            try {
-                $string = self::checkScheduleElement($value);
-                array_push($result, $string);
-            } catch (\Exception $e) {
-                $this->di['logger']->addCritical("Invalid schedule record!");
-            }
+            $string = self::checkScheduleElement($value);
+            array_push($result, $string);
         }
 
         return implode('@', $result);

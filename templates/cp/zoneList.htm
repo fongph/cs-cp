@@ -21,9 +21,10 @@
     <div class="container-fluid">
         {insert "inc.flashMessages.htm"}
 
-        <h3 class="text-center">{$di.t->_('Geofences')}</h3>
-
-        <a class="btn btn-default" href="{$di.router->getRouteUrl('locations')}">{$di.t->_('View locations')}</a>
+        <ol class="breadcrumb">
+            <li><a href="{$di.router->getRouteUrl('locations')}">{$di.t->_('View locations')}</a></li>
+            <li class="active">{$di.t->_('Geofences')}</li>
+        </ol>
         
         {foreach $zones as $zone}
         <div class="media">
@@ -33,8 +34,10 @@
                 </a>
             </div>
             <div class="media-body">
-                <div>{$zone.name}</div>
-                <div>{$di.t->_('Trigger on:')} {$zone.trigger}</div>
+                <a href="{$di.router->getRouteUrl('locationsZonesEdit', ['id' => $zone['id']])}" style="font-weight: 700;">{$zone.name}</a>
+                <div><b>{$di.t->_('Trigger on:')}</b> {if $zone.trigger==='enter'}{$di.t->_('Enter')}{elseif $zone.trigger==='leave'}{$di.t->_('Leave')}{else}{$di.t->_('Enter')}, {$di.t->_('Leave')}{/if}</div>
+                <div><b>{$di.t->_('Alert to:')}</b> {if $zone.email_alert}{$di.t->_('Email')}, {/if}{$di.t->_('Control panel')}</div>
+                {if strlen($zone.schedule)}<div><b>{$di.t->_('Scheduled')}</b></div>{/if}
                 {if $zone.enable}
                 <div class="text-success">{$di.t->_('Enabled')}</div>
                 {else}

@@ -42,11 +42,11 @@ class Locations extends BaseModuleController
     private function locations()
     {
         $locations = new \Models\Cp\Locations($this->di);
-        
+
         if ($this->getRequest()->isAjax()) {
             $this->makeJSONResponse($locations->getDayPoints($this->di['devId'], $this->getRequest()->get('dayStart', 0)));
         }
-        
+
         $this->view->startTime = $locations->getLastPointTimestamp($this->di['devId']);
         $this->view->hasZones = $locations->hasZones($this->di['devId']);
 
@@ -60,7 +60,7 @@ class Locations extends BaseModuleController
         if ($this->getRequest()->isAjax()) {
             $this->makeJSONResponse($zonesModel->getMapZonesList($this->di['devId']));
         }
-        
+
         if ($this->getRequest()->hasGet('delete')) {
             $id = $this->getRequest()->get('delete');
             if ($zonesModel->canDeleteZone($this->di['devId'], $id) === false) {
@@ -104,7 +104,12 @@ class Locations extends BaseModuleController
             } else if (!Zones::validateZoneData($zoneData)) {
                 $this->getDI()->getFlashMessages()->add(FlashMessages::ERROR, $this->di['t']->_('Invalid geofence!'));
             } else {
-                $schedule = Zones::schedulesToRecurrenceList($scheduleData);
+                if (strlen($scheduleData)) {
+                    $schedule = Zones::schedulesToRecurrenceList($scheduleData);
+                } else {
+                    $schedule = '';
+                }
+                
                 $zonesModel->addZone($this->di['devId'], $zoneData, $name, $trigger, $emailAlert, $smsAlert, $schedule, $enable);
 
                 $this->getDI()->getFlashMessages()->add(FlashMessages::SUCCESS, $this->di['t']->_('Geofence successfully added!'));
@@ -113,12 +118,14 @@ class Locations extends BaseModuleController
         }
 
         $this->view->zoneData = $zoneData;
-        $this->view->scheduleData = '';
+        $this->view->scheduleData = $scheduleData;
         $this->view->name = $name;
         $this->view->triggerListSelected = $trigger;
         $this->view->emailNotification = $emailAlert;
         $this->view->smsNotification = $smsAlert;
         $this->view->enable = $enable;
+        $this->view->edit = false;
+        
 
         $this->setView('cp/zone.htm');
     }
@@ -156,15 +163,19 @@ class Locations extends BaseModuleController
             } else if (!Zones::validateZoneData($zoneData)) {
                 $this->getDI()->getFlashMessages()->add(FlashMessages::ERROR, $this->di['t']->_('Invalid geofence!'));
             } else {
-                $schedule = Zones::schedulesToRecurrenceList($scheduleData);
-
+                if (strlen($scheduleData)) {
+                    $schedule = Zones::schedulesToRecurrenceList($scheduleData);
+                } else {
+                    $schedule = '';
+                }
+                
                 $zonesModel->updateZone($this->params['id'], $this->di['devId'], $zoneData, $name, $trigger, $emailAlert, $smsAlert, $schedule, $enable);
 
                 $this->getDI()->getFlashMessages()->add(FlashMessages::SUCCESS, $this->di['t']->_('Geofence successfully updated!'));
                 $this->redirect($this->di['router']->getRouteUrl('locationsZones'));
             }
         }
-
+        
         $this->view->zoneData = $zoneData;
         $this->view->scheduleData = $scheduleData;
         $this->view->name = $name;
@@ -172,6 +183,7 @@ class Locations extends BaseModuleController
         $this->view->emailNotification = $emailAlert;
         $this->view->smsNotification = $smsAlert;
         $this->view->enable = $enable;
+        $this->view->edit = true;
 
         $this->setView('cp/zone.htm');
     }
