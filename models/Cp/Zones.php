@@ -2,19 +2,10 @@
 
 namespace Models\Cp;
 
+use CS\Models\GoogleMaps\StaticMap;
+
 class Zones extends BaseModel
 {
-
-    private static $googleMapsScales = array(
-        10000 => 10,
-        4000 => 11,
-        2000 => 12,
-        1000 => 13,
-        500 => 14,
-        0 => 15
-    );
-    
-    private static $zoneIconSize = array(100, 100);
     private static $daysNames = array('SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA');
     public static $countLimit = 200;
 
@@ -51,7 +42,7 @@ class Zones extends BaseModel
     public function getDeviceZonesCount($devId)
     {
         $devId = $this->getDb()->quote($devId);
-        
+
         return $this->getDb()->query("SELECT COUNT(*) FROM `geo_zones` WHERE `dev_id` = {$devId} AND `deleted` = 0")->fetchColumn();
     }
 
@@ -118,12 +109,13 @@ class Zones extends BaseModel
         
     }
 
-    public function getMapZonesList($devId) {
+    public function getMapZonesList($devId)
+    {
         $devId = $this->getDb()->quote($devId);
-        
+
         return $this->getDb()->query("SELECT `latitude`, `longitude`, `radius`, `name` FROM `geo_zones` WHERE `dev_id` = {$devId} AND `deleted` = 0 AND `enable` = 1")->fetchAll();
     }
-    
+
     public function canDeleteZone($devId, $zoneId)
     {
         $devId = $this->getDb()->quote($devId);
@@ -142,26 +134,7 @@ class Zones extends BaseModel
 
     public static function getZoneIconUrl($latitude, $longitude, $radius)
     {
-        return 'http://maps.googleapis.com/maps/api/staticmap?center=' .
-                $latitude . ',' . $longitude . '&zoom=' .
-                self::getGoogleMapsZoom($radius) .
-                '&size=' . implode('x', self::$zoneIconSize) . '&sensor=false';
-    }
-
-    public static function getGoogleMapsZoom($radius)
-    {
-        $max = null;
-        foreach (self::$googleMapsScales as $minRadius => $zoom) {
-            if (($radius >= $minRadius) && ($max === null || $minRadius > $max)) {
-                $max = $minRadius;
-            }
-        }
-
-        if ($max === null) {
-            return 1;
-        }
-
-        return self::$googleMapsScales[$max];
+        return StaticMap::getImageUrlCircle($latitude, $longitude, 100, 100, $radius);
     }
 
     private static function scheduleValueToRecurrenceRule($value)

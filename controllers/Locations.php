@@ -81,7 +81,7 @@ class Locations extends BaseModuleController
     {
         $zonesModel = new Zones($this->di);
 
-        if ($zonesModel->getDeviceZonesCount($this->di['devId']) > Zones::$countLimit) {
+        if ($zonesModel->getDeviceZonesCount($this->di['devId']) >= Zones::$countLimit) {
             $this->getDI()->getFlashMessages()->add(FlashMessages::ERROR, $this->di['t']->_('Geofences limit reached!'));
             $this->redirect($this->di['router']->getRouteUrl('locationsZones'));
         }
@@ -102,7 +102,7 @@ class Locations extends BaseModuleController
             } else if (!strlen($zoneData)) {
                 $this->getDI()->getFlashMessages()->add(FlashMessages::ERROR, $this->di['t']->_('Geofence not selected!'));
             } else if (!Zones::validateZoneData($zoneData)) {
-                $this->getDI()->getFlashMessages()->add(FlashMessages::ERROR, $this->di['t']->_('Invalid zone!'));
+                $this->getDI()->getFlashMessages()->add(FlashMessages::ERROR, $this->di['t']->_('Invalid geofence!'));
             } else {
                 $schedule = Zones::schedulesToRecurrenceList($scheduleData);
                 $zonesModel->addZone($this->di['devId'], $zoneData, $name, $trigger, $emailAlert, $smsAlert, $schedule, $enable);

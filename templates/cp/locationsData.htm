@@ -430,6 +430,8 @@
                             } else {
                                 $("#amount").html(value + ' ft');
                             }
+                            
+                            self.updateData();
                         };
                         
                         var slider = $('#slider').slider({
@@ -475,6 +477,10 @@
                             
                             if ($("#onlyGeofences").is(':checked') && data.type === 'check-in') {
                                 return false;
+                            }
+
+                            if (slider.getValue() >= 3000) {
+                                return true;
                             }
 
                             return data.accuracy * 3.2808399 < slider.getValue();  
