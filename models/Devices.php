@@ -77,6 +77,28 @@ class Devices extends \System\Model
         return $this->getLimitation()->hasOption($limitation);
     }
 
+    public function iCloudMergeWithLocalInfo($userId, array $iCloudDevices)
+    {
+        if(empty($iCloudDevices)) return $iCloudDevices;
+
+        $devicesManager = new DevicesManager($this->getDb());
+        $localDevices = array();
+        foreach($devicesManager->getUserActiveDevices($userId) as $dbDevice){
+            $localDevices[$dbDevice['unique_id']] = array(
+                'active' => $dbDevice['active']
+            );
+        }
+        foreach($iCloudDevices as &$iCloudDev){
+            if(array_key_exists($iCloudDev['SerialNumber'], $localDevices)){
+
+                $iCloudDev['added'] = true;
+                $iCloudDev['active'] = $localDevices[$iCloudDev['SerialNumber']]['active'];
+
+            } else $iCloudDev['added'] = $iCloudDev['active'] = false;
+        }
+        return $iCloudDevices;
+    }
+
 }
 
 class DevicesInvalidNetworkException extends \Exception
