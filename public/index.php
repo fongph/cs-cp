@@ -59,6 +59,19 @@ $parts = explode('?', $di->get('request')->server('REQUEST_URI'));
 $requestUri = urldecode(array_shift($parts));
 $di->set('requestUri', $requestUri);
 
+// robots.txt
+//if(isset($requestUri) and preg_match('/^\/robots\.txt/is', $requestUri)) {    
+//     if(file_exists(dirname(__FILE__).'/robots.txt')) {
+//        $robotsTxt = @file_get_contents(dirname(__FILE__).'/robots.txt');        
+//        header("Content-Type:text/plain");
+//        echo $robotsTxt;
+//        die();
+//     } else {
+//        $cnt = new Controllers\BaseController($di);
+//        $cnt->error404();
+//     }
+//}
+
 $di['router']->execute($requestUri, function($route) use ($di) {
     if ($route !== false &&
             isset($route->target, $route->target['controller'], $route->target['action']) &&
@@ -80,6 +93,8 @@ $di['router']->execute($requestUri, function($route) use ($di) {
             return;
         }
     }
+    
+    
 
     $cnt = new Controllers\BaseController($di);
     $cnt->error404();
