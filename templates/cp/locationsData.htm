@@ -390,9 +390,11 @@
                     loadData: function (dayStart) {
                         var self = this;
                         
+                        console.log(dayStart.unix());
+                        
                         return $.getJSON("{$di.router->getRouteUrl('locations')}", {
                             "dayStart": dayStart.unix()
-                        }, function (data) {
+                        }, function (data) {                            
                             self.data = data;
                             
                             self.updateData();
@@ -457,7 +459,7 @@
                             showOffDays: false,
                             showStartOfWeek: false,
                             onSelectedDateChanged: function (event, date) {
-                                self.loadData(date.startOf('day'));
+                                self.loadData(localAsUtc(date.startOf('day')));
                             }
                         });
                         
