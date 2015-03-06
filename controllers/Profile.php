@@ -4,9 +4,14 @@ namespace Controllers;
 
 use System\FlashMessages,
     CS\Users\UsersManager,
+    CS\Queue\BackupQueueUnit,
+    CS\ICloud\AuthorizationException,
+    CS\Users\InvalidPasswordException,
     CS\Users\PasswordsNotEqualException,
     CS\Users\PasswordTooShortException,
-    CS\Users\InvalidPasswordException,
+    CS\Models\Device\DeviceICloudRecord,
+    CS\Models\Device\DeviceNotFoundException,
+    CS\ICloud\Backup as ICloudBackup,
     CS\Devices\Manager as DeviceManager;
 
 class Profile extends BaseController
@@ -27,7 +32,7 @@ class Profile extends BaseController
         $usersModel = new \Models\Users($this->di);
         if($this->di->get('isWizardEnabled')){
             $deviceManager = new DeviceManager($this->di->get('db'));
-            $this->view->availabledevices = $deviceManager->getUserActiveDevices($this->auth['id']);
+            $this->view->availabledevices = $deviceManager->getUserProfileDevices($this->auth['id']);
             
         } else $this->view->availabledevices = false;
 
@@ -80,5 +85,64 @@ class Profile extends BaseController
             }
         }
     }
+    
+    public function changeICloudPasswordAction()
+    {
+        try {
+            if($this->getRequest()->hasGet('iCloudId')){
 
+                $iCloudRecord = new DeviceICloudRecord($this->di->get('db'));
+                $iCloudRecord->load($this->getRequest()->get('iCloudId'));
+                
+                $deviceRecord = $iCloudRecord->getDeviceRecord();
+                if($deviceRecord->getUserId() !== $this->auth['id'] || $deviceRecord->getDeleted())
+                    throw new DeviceNotFoundException;
+
+                
+                if ($this->getRequest()->isAjax() && $this->getRequest()->hasPost('newPassword')) {
+
+                    //todo check auth count
+                    try {
+
+                        $iCloud = new ICloudBackup($iCloudRecord->getAppleId(), $this->getRequest()->post('newPassword'));
+                        $iCloud->authenticate(); //or throw exception
+
+                        $iCloudRecord->setApplePassword($this->getRequest()->post('newPassword'));
+                        if($iCloudRecord->getLastError() == BackupQueueUnit::ERROR_AUTHENTICATION)
+                            $iCloudRecord->setLastError(BackupQueueUnit::ERROR_NONE);
+                        $iCloudRecord->save();
+
+                        $this->di->getFlashMessages()->add(FlashMessages::SUCCESS, $this->di->getTranslator()->_('You have successfully updated iCloud password. New iCloud backup will be loaded shortly.'));
+                        $this->ajaxResponse(true, array(
+                            'location' => $this->di->getRouter()->getRouteUri('profile')
+                        ));
+                        
+                    } catch (AuthorizationException $e) {
+                        $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_("Oops, iCloud password didn't work. Please try again. {$this->getRequest()->post('newPassword')}"));
+                        $this->ajaxResponse(false, array(
+                            'location' => $this->di->getRouter()->getRouteUri('profileICloudPasswordReset')."?iCloudId={$this->getRequest()->get('iCloudId')}"
+                        ));
+                    }
+                    
+                }
+                $this->view->title = $this->di->getTranslator()->_('Change iCloud Password');
+                $this->view->iCloud = $iCloudRecord;
+                $this->setView('profile/changeICloudPassword.htm');
+                
+            } else throw new DeviceNotFoundException;
+            
+        } catch (DeviceNotFoundException $e){
+            $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('Device Not Found'));
+            $this->redirect($this->di->getRouter()->getRouteUri('profile'));
+        }
+    }
+    
+    public function ajaxResponse($status, $data = null)
+    {
+        $this->makeJSONResponse(array(
+            'status' => (bool)$status,
+            'data' => $data,
+        ));
+    }
+    
 }
