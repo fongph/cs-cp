@@ -27,6 +27,10 @@
         white-space: nowrap;
     }
     
+    a[data-zone] {
+        font-weight: 700;
+    }
+    
     @media (min-width: 767px) {
         #allDataBlock {
             text-align: right;
@@ -70,8 +74,8 @@
                         <table id="datatable" class="table" aria-describedby="datatables_info">
                             <thead>
                                 <tr role="row">
-                                    <th>{$di.t->_('Type')}</th>
                                     <th>{$di.t->_('Time')}</th>
+                                    <th>{$di.t->_('Type')}</th>
                                     <th>{$di.t->_('Location')}</th>
                                     <th>{$di.t->_('Actions')}</th>
                                     <th>{$di.t->_('Alerts')}</th>
@@ -162,9 +166,72 @@
                     getTable: function() {
                         if (this.dataTable === null) {
                             this.dataTable = $('#datatable').dataTable({
-                                bSort: false,
+                                aaSorting: [[0, "desc"]],
                                 bPaginate: false,
                                 bFilter: false,
+                                aoColumns: [
+                                    {
+                                        mData: "timestamp",
+                                        sWidth: '100px',
+                                        fnRender: function(row) {
+                                            return moment.utc(row.aData.timestamp * 1000).format("LT");
+                                        }
+                                    },
+                                    {
+                                        mData: "type",
+                                        bUseRendered: false,
+                                        fnRender: function(row) {
+                                            if (row.aData.type === 'zone-enter') {
+                                                return 'Geo-Fence Entered';
+                                            }
+
+                                            if (row.aData.type === 'zone-leave') {
+                                                return 'Geo-Fence Left';
+                                            }
+
+                                            return 'Check-in';
+                                        }
+                                    },
+                                    {
+                                        bSortable: false,
+                                        mData: null,
+                                        fnRender: function(row) {
+                                            var result = '<br/>Latitude: ' + row.aData.latitude + '<br/>Langitude: ' + row.aData.longitude;
+
+                                            if (row.aData.zone) {
+                                                return '<a href="" data-zone="' + row.aData.zone_id + '">' + row.aData.zone + '</a>' + result;
+                                            } else if (row.aData.address) {
+                                                return '<b>' + row.aData.address + '</b>' + result;
+                                            }
+
+                                            return result;
+                                        }
+                                    },
+                                    {
+                                        bSortable: false,
+                                        mData: null,
+                                        fnRender: function() {
+                                            return '<button class="btn btn-success btn-xs view-on-map"><i class="fa fa-map-marker"></i> {$di.t->_('View on map')}</button>';
+                                        }
+                                    },
+                                    {
+                                        bSortable: false,
+                                        mData: null,
+                                        fnRender: function(row) {
+                                            var alerts = [];
+                                            
+                                            if (row.aData.type != 'check-in') {
+                                                alerts.unshift('Control panel alert sent');
+                                            }
+                                            
+                                            if (row.aData.email_notified > 0) {
+                                                alerts.unshift('Email alert sent');
+                                            }
+
+                                            return alerts.join(', ');
+                                        }
+                                    }
+                                ],
                                 fnDrawCallback: function() {
                                     $(this).find('tbody').tableScroll();
                                 }
@@ -176,49 +243,7 @@
                     fillTable: function(data){
                         var result = [];
                         
-                        $.each(data, function(){
-                            var type = (function(type){
-                                if (type === 'zone-enter') {
-                                    return 'Geo-Fence Entered';
-                                }
-
-                                if (type === 'zone-leave') {
-                                    return 'Geo-Fence Left';
-                                }
-
-                                return 'Check-in';
-                            })(this.type);
-                            
-                            var location = (function(data){
-                                var result = data.latitude + ',' + data.longitude;
-                                
-                                if (data.zone) {
-                                    return '<b>' + data.zone + '</b> ' + result;
-                                } else if (data.address) {
-                                    return '<b>' + data.address + '</b> ' + result;
-                                }
-                                
-                                return result;
-                            })(this);
-                            
-                            var alerts = (function(email){
-                               if (email > 0) {
-                                   return 'Email alert sent';
-                               }
-                               
-                               return '';
-                            })(this.email_notified);
-                            
-                            result.push([
-                                type,
-                                moment.unix(this.timestamp).utcOffset(0).format("LT"),
-                                location,
-                                '<button class="btn btn-success btn-xs"><i class="fa fa-map-marker"></i> {$di.t->_('View on map')}</button>',
-                                alerts
-                            ]);
-                        });
-                        
-                        this.getTable().fnAddData(result);
+                        this.getTable().fnAddData(data);
                         this.getTable().fnDraw();
                         
                         this.getTable().find('tbody > tr').each(function(index) {
@@ -226,6 +251,18 @@
                                 $(this).addClass('warning');
                             }
                         });
+
+                        $.each(this.zones, function() {
+                            $('#datatable a[data-zone=' + this.id + ']').click((function(marker) {
+                                return function(e) {
+                                    e.preventDefault();
+                                    $('.nav-pills a[href=#map]').tab('show');
+                                    google.maps.event.trigger(marker, 'click');
+                                };
+                            })(this.marker));
+                        });
+                        
+                        //this.getTable().dataTable().fnSort([[0, "desc"]]);
                     },
                     loadZones: function (zoneContent) {
                         var self = this;
@@ -259,6 +296,8 @@
                                     crossOnDrag: false,
                                     map: self.getMap()
                                 });
+                                
+                                zone.id = this.id;
 
                                 google.maps.event.addListener(zone, 'click', function () {
                                     self.showInfoWindow(zoneContent(zoneData), zone.getCenter());
@@ -357,7 +396,7 @@
                                 self.showInfoWindow(content, marker.getPosition());
                             });
                             
-                            $('#datatable tbody tr button').eq(index).click((function(marker) {
+                            $('#datatable .view-on-map').eq(filtered.length - index - 1).click((function(marker) {
                                 return function() {
                                     $('.nav-pills a[href=#map]').tab('show');
                                     google.maps.event.trigger(marker, 'click');
@@ -389,8 +428,6 @@
                     },
                     loadData: function (dayStart) {
                         var self = this;
-                        
-                        console.log(dayStart.unix());
                         
                         return $.getJSON("{$di.router->getRouteUrl('locations')}", {
                             "dayStart": dayStart.unix()
