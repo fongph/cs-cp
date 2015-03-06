@@ -128,6 +128,13 @@ class Applications extends BaseModuleController
         parent::postAction();
         $this->buildCpMenu();
 
+        if ($this->di['isTestUser']($this->auth['id'])) {
+            if (($this->di['currentDevice']['os'] === 'android' && $this->di['currentDevice']['app_version'] < 5) ||
+                    ($this->di['currentDevice']['os'] === 'ios' && $this->di['currentDevice']['app_version'] < 3)) {
+                $this->view->showUpdateBlock = $this->di['currentDevice']['os'];
+            }
+        }
+        
         $this->view->title = $this->di['t']->_('View Applications');
     }
 

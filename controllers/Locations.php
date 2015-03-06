@@ -109,7 +109,7 @@ class Locations extends BaseModuleController
                 } else {
                     $schedule = '';
                 }
-                
+
                 $zonesModel->addZone($this->di['devId'], $zoneData, $name, $trigger, $emailAlert, $smsAlert, $schedule, $enable);
 
                 $this->getDI()->getFlashMessages()->add(FlashMessages::SUCCESS, $this->di['t']->_('Geo-fence has been successfully added.'));
@@ -125,7 +125,7 @@ class Locations extends BaseModuleController
         $this->view->smsNotification = $smsAlert;
         $this->view->enable = $enable;
         $this->view->edit = false;
-        
+
 
         $this->setView('cp/zone.htm');
     }
@@ -168,14 +168,14 @@ class Locations extends BaseModuleController
                 } else {
                     $schedule = '';
                 }
-                
+
                 $zonesModel->updateZone($this->params['id'], $this->di['devId'], $zoneData, $name, $trigger, $emailAlert, $smsAlert, $schedule, $enable);
 
                 $this->getDI()->getFlashMessages()->add(FlashMessages::SUCCESS, $this->di['t']->_('Geo-fence has been successfully updated.'));
                 $this->redirect($this->di['router']->getRouteUrl('locationsZones'));
             }
         }
-        
+
         $this->view->zoneData = $zoneData;
         $this->view->scheduleData = $scheduleData;
         $this->view->name = $name;
@@ -223,6 +223,14 @@ class Locations extends BaseModuleController
     {
         parent::postAction();
         $this->buildCpMenu();
+
+        
+        if ($this->di['isTestUser']($this->auth['id'])) {
+            if (($this->di['currentDevice']['os'] === 'android' && $this->di['currentDevice']['app_version'] < 5) ||
+                    ($this->di['currentDevice']['os'] === 'ios' && $this->di['currentDevice']['app_version'] < 3)) {
+                $this->view->showUpdateBlock = $this->di['currentDevice']['os'];
+            }
+        }
 
         $this->view->title = $this->di['t']->_('View Locations');
     }

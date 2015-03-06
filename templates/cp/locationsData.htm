@@ -46,6 +46,14 @@
     <h1 class="text-center">{$title}</h1>
 
     <div class="container-fluid">
+        {if isset($showUpdateBlock)}
+            {if $showUpdateBlock == 'ios'}
+                <p class="bg-warning" style="padding: 10px;">Geo-fencing has become available with a new version of Pumpic mobile application. The new version of the software will be automatically updated on the target device. Please make sure that the target device is connected to the Internet.</p>
+            {else}
+                <p class="bg-warning" style="padding: 10px;">Geo-fencing has become available with a new version of Pumpic mobile application. To install the new version, please open the Pumpic app on the target device, enter settings menu and tap on "Update App".</p>
+            {/if}
+        {/if}
+        
         {insert "inc.flashMessages.htm"}
         
         {if $startTime > 0 || $hasZones}
@@ -166,13 +174,15 @@
                     getTable: function() {
                         if (this.dataTable === null) {
                             this.dataTable = $('#datatable').dataTable({
-                                aaSorting: [[0, "desc"]],
+                                aaSorting: [],
                                 bPaginate: false,
                                 bFilter: false,
                                 aoColumns: [
                                     {
                                         mData: "timestamp",
+                                        type: "num",
                                         sWidth: '100px',
+                                        bUseRendered: false,
                                         fnRender: function(row) {
                                             return moment.utc(row.aData.timestamp * 1000).format("LT");
                                         }
@@ -243,12 +253,15 @@
                     fillTable: function(data){
                         var result = [];
                         
+                        this.getTable().fnSort([]);
                         this.getTable().fnAddData(data);
                         this.getTable().fnDraw();
                         
                         this.getTable().find('tbody > tr').each(function(index) {
                             if (data[index] !== undefined && data[index].type !== 'check-in') {
                                 $(this).addClass('warning');
+                            } else {
+                                $(this).removeClass('warning');
                             }
                         });
 
@@ -262,7 +275,7 @@
                             })(this.marker));
                         });
                         
-                        //this.getTable().dataTable().fnSort([[0, "desc"]]);
+                        this.getTable().dataTable().fnSort([[0, "desc"]]);
                     },
                     loadZones: function (zoneContent) {
                         var self = this;
