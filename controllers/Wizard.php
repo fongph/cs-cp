@@ -336,7 +336,7 @@ class Wizard extends BaseController {
             if(!in_array($platform, array('android', 'ios', 'icloud'))){
                 $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('Invalid Platform'));
                 $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_PLATFORM, array(
-                    'licenseId' => $this->getParam('licenseId')
+                    'platform' => false
                 )));
             }
         }
