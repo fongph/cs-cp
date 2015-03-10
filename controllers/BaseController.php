@@ -59,10 +59,13 @@ class BaseController extends Controller
         }
     }
 
-    protected function checkDemo($redirectUrl)
+    protected function checkDemo($redirectUrl, $addFlashMessage = true)
     {
         if ($this->demo) {
-            $this->di->getFlashMessages()->add(FlashMessages::INFO, $this->di['t']->_('Not available in demo.'));
+            if ($addFlashMessage) {
+                $this->di->getFlashMessages()->add(FlashMessages::INFO, $this->di['t']->_('Not available in demo.'));
+            }
+            
             $this->redirect($redirectUrl);
         }
     }

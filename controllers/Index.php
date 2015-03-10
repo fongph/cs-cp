@@ -65,9 +65,7 @@ class Index extends BaseController
 
     public function logoutAction()
     {
-        if ($this->demo) {
-            $this->redirect(\CS\Settings\GlobalSettings::getMainURL($this->di['config']['site']));
-        }
+        $this->checkDemo(\CS\Settings\GlobalSettings::getMainURL($this->di['config']['site']), false);
         
         $users = new Users($this->di);
         if ($this->di['auth']->hasIdentity()) {
@@ -218,9 +216,7 @@ class Index extends BaseController
 
     public function directLoginAction()
     {
-        if ($this->demo) {
-            $this->redirect($this->di['router']->getRouteUrl('cp'));
-        }
+        $this->checkDemo($this->di['router']->getRouteUrl('main'), false);
         
         $usersModel = new Users($this->di);
         if ($this->getRequest()->hasGet('id', 'h') &&
