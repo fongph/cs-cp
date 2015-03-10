@@ -69,23 +69,26 @@ class Index extends BaseController
 
     public function loginRedirect()
     {
-        $devicesManager = new DeviceManager($this->di->get('db'));
-        $devices = $devicesManager->getUserActiveDevices($this->auth['id']);
+        if($this->di->get('isWizardEnabled')) {
+            $devicesManager = new DeviceManager($this->di->get('db'));
+            $devices = $devicesManager->getUserActiveDevices($this->auth['id']);
 
-        foreach($devices as $device)
-            if($device['active'])
-                $this->redirect($this->di->getRouter()->getRouteUrl('cp'));
+            foreach($devices as $device)
+                if($device['active'])
+                    $this->redirect($this->di->getRouter()->getRouteUrl('cp'));
 
-        $billing = new Billing($this->di);
-        $packages = $billing->getAvailablePackages($this->di->getAuth()->getIdentity()['id']);
+            $billing = new Billing($this->di);
+            $packages = $billing->getAvailablePackages($this->di->getAuth()->getIdentity()['id']);
 
-        if(count($packages) == 1) {
-            $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_PLATFORM, array('licenseId' => $packages[0]['license_id'])));
-        } elseif(count($packages)) {
-            $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_PACKAGE));
-        } else {
-            $this->redirect($this->di->getRouter()->getRouteUrl('profile'));
-        }
+            if(count($packages) == 1) {
+                $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_PLATFORM, array('licenseId' => $packages[0]['license_id'])));
+            } elseif(count($packages)) {
+                $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_PACKAGE));
+            } else {
+                $this->redirect($this->di->getRouter()->getRouteUrl('profile'));
+            }
+            
+        } else $this->redirect($this->di->getRouter()->getRouteUrl('profile'));
     }
 
     public function logoutAction()
