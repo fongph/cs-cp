@@ -24,6 +24,11 @@ class Wizard extends BaseController {
     /** @var Logger */
     protected $logger;
     
+    public function preAction()
+    {
+        $this->checkDemo($this->di['router']->getRouteUrl('cp'));
+    }
+    
     protected function redirectAction()
     {
         $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_PACKAGE, array(
@@ -38,7 +43,7 @@ class Wizard extends BaseController {
         $this->logger = $this->di->get('logger');
         $this->view->title = null;
     }
-    
+
     public function packageAction()
     {
         $billingModel = new BillingModel($this->di);

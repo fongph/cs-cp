@@ -44,11 +44,15 @@ $console->register('build')
         ->addOption(
                 'without-module', 'w', InputOption::VALUE_IS_ARRAY | InputOption::VALUE_REQUIRED, 'Modules that will not be included in the build', array()
         )
+        ->addOption(
+                'demo', 'd', InputOption::VALUE_REQUIRED, 'Is a demo version of application', 0
+        )
         ->setDescription('Generate build.php file')
         ->setCode(function (InputInterface $input, OutputInterface $output) {
             $site = $input->getArgument('site');
             $environment = $input->getOption('environment');
             $modules = $input->getOption('without-module');
+            $demo = $input->getOption('demo');
 
             if ($site < 0 || $site > 255) {
                 $output->writeln("<error>Site must be between 0 and 255!<.error>");
@@ -63,7 +67,8 @@ $console->register('build')
             $build = array(
                 'version' => time(),
                 'environment' => $environment,
-                'site' => $site
+                'site' => $site,
+                'demo' => $demo
             );
 
             $config = require ROOT_PATH . 'config.php';
@@ -82,6 +87,36 @@ $console->register('build')
             $output->writeln("Build created!");
         });
 
+$console->register('load-demo-user')
+        ->setDescription('Export demo user data from db to file')
+        ->setCode(function (InputInterface $input, OutputInterface $output) {
+            if (!is_file(ROOT_PATH . 'build.php')) {
+                $output->writeln("<error>build.php file file not found!</error>");
+                return;
+            }
+
+            $config = include ROOT_PATH . 'build.php';
+
+            $di = new System\DI();
+            $di->set('config', $config);
+
+            require ROOT_PATH . 'bootstrap.php';
+
+            $usersManager = new CS\Users\UsersManager($di->get('db'));
+            try {
+                $userData = $usersManager->getUserDataById($di['config']['site'], $di['config']['demo']);
+            } catch (CS\Users\UserNotFoundException $e) {
+                $output->writeln("<error>Demo user not found!</error>");
+            }
+            
+            if (file_put_contents(ROOT_PATH . 'demoUserData.php', '<?php return ' . var_export_min($userData, true) . ';', LOCK_EX) == false) {
+                $output->writeln("<error>File write error!</error>");
+                return;
+            }
+
+            $output->writeln('User data successfully exported to file!');
+        });
+        
 $console->register('add-user')
         ->setDefinition(array(
             new InputArgument('email', InputArgument::REQUIRED, 'User email'),

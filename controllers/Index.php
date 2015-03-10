@@ -65,6 +65,10 @@ class Index extends BaseController
 
     public function logoutAction()
     {
+        if ($this->demo) {
+            $this->redirect(\CS\Settings\GlobalSettings::getMainURL($this->di['config']['site']));
+        }
+        
         $users = new Users($this->di);
         if ($this->di['auth']->hasIdentity()) {
             $this->di['flashMessages']->add(FlashMessages::SUCCESS, $this->di['t']->_('You have successfully logged out'));
@@ -75,6 +79,8 @@ class Index extends BaseController
 
     public function supportAction()
     {
+        $this->checkDemo($this->di['router']->getRouteUrl('cp'));
+        
         $this->view->title = $this->di['t']->_('Support');
 
         $supportModel = new \Models\Support($this->di);
@@ -109,7 +115,7 @@ class Index extends BaseController
     {
         if (isset($this->di['config']['locales'][$this->params['value']])) {
             $usersModel = new \Models\Users($this->di);
-            $usersModel->setLocale($this->params['value']);
+            $usersModel->setLocale($this->params['value'], !$this->demo);
         }
 
         $referer = $this->getRequest()->server('HTTP_REFERER');
@@ -212,6 +218,10 @@ class Index extends BaseController
 
     public function directLoginAction()
     {
+        if ($this->demo) {
+            $this->redirect($this->di['router']->getRouteUrl('cp'));
+        }
+        
         $usersModel = new Users($this->di);
         if ($this->getRequest()->hasGet('id', 'h') &&
                 $usersModel->directLogin($this->getRequest()->get('id'), $this->getRequest()->get('h'))) {

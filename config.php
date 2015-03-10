@@ -7,6 +7,7 @@ $default = array(
     'build' => $build['version'],
     'environment' => $build['environment'],
     'site' => $build['site'],
+    'demo' => $build['demo'],
     'errorReporting' => E_ALL ^ E_NOTICE ^ E_DEPRECATED,
     'session' => array(
         'rememberMeTime' => 2592000 // 30 days
@@ -95,7 +96,7 @@ if ($build['environment'] == 'production') {
     }
 
     return $default;
-} else if ($build['environment'] == 'testing') { // deprecated
+} else if ($build['environment'] == 'testing') { // not using now
     return array_merge($default, array(
         'db' => array(
             'host' => 'localhost',

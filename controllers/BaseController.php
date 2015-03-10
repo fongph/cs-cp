@@ -2,17 +2,23 @@
 
 namespace Controllers;
 
-use System\Controller;
+use System\Controller,
+    System\FlashMessages;
 
 class BaseController extends Controller
 {
 
     protected $auth = null;
+    protected $demo = false;
 
     protected function init()
     {
         if ($this->di['auth']->hasIdentity()) {
             $this->auth = $this->di['auth']->getIdentity();
+        }
+
+        if ($this->di['config']['demo']) {
+            $this->demo = true;
         }
     }
 
@@ -30,7 +36,7 @@ class BaseController extends Controller
         if ($this->auth) {
             $this->view->authData = $this->auth;
         }
-        
+
         if (isset($this->auth['options']['internal-trial-license'])) {
             $advertisingModel = new \Models\Advertising($this->di);
 
@@ -41,9 +47,23 @@ class BaseController extends Controller
     protected function checkDisplayLength($value = 10)
     {
         if ($value !== $this->auth['records_per_page']) {
-            $usersModel = new \Models\Users($this->di);
-            $usersModel->setRecordsPerPage($value);
-            $usersModel->reLogin();
+            if ($this->demo) {
+                $data = $this->di['auth']->getIdentity();
+                $data['records_per_page'] = $value;
+                $this->di['auth']->setIdentity($data);
+            } else {
+                $usersModel = new \Models\Users($this->di);
+                $usersModel->setRecordsPerPage($value);
+                $usersModel->reLogin();
+            }
+        }
+    }
+
+    protected function checkDemo($redirectUrl)
+    {
+        if ($this->demo) {
+            $this->di->getFlashMessages()->add(FlashMessages::INFO, $this->di['t']->_('Not available in demo.'));
+            $this->redirect($redirectUrl);
         }
     }
 
