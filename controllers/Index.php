@@ -3,8 +3,12 @@
 namespace Controllers;
 
 use Models\Users,
+    Models\Billing,
+    Models\Devices,
     System\FlashMessages,
-    CS\Users\UsersManager;
+    CS\Users\UsersManager,
+    Components\WizardRouter,
+    CS\Devices\Manager as DeviceManager;
 
 class Index extends BaseController
 {
@@ -23,8 +27,8 @@ class Index extends BaseController
 
     public function loginAction()
     {
-        if ($this->di['auth']->hasIdentity()) {
-            $this->redirect($this->di['router']->getRouteUrl('profile'));
+        if ($this->di->getAuth()->hasIdentity()) {
+            $this->loginRedirect();
         }
 
         if ($this->getRequest()->isPost()) {
@@ -40,7 +44,7 @@ class Index extends BaseController
                 $users = new Users($this->di);
                 try {
                     if ($users->login($email, $password, $remember)) {
-                        $this->redirect($this->di['router']->getRouteUrl('profile'));
+                        $this->loginRedirect();
                     }
                 } catch (\CS\Users\UserNotFoundException $e) {
                     $this->di['flashMessages']->add(FlashMessages::ERROR, $this->di['t']->_('Looks like that email address is not registered yet. Try to %1$sregister%2$s or retype again.', array(
@@ -61,6 +65,27 @@ class Index extends BaseController
 
         $this->setView('index/login.htm');
         $this->view->title = $this->di['t']->_('Login');
+    }
+
+    public function loginRedirect()
+    {
+        $devicesManager = new DeviceManager($this->di->get('db'));
+        $devices = $devicesManager->getUserActiveDevices($this->auth['id']);
+
+        foreach($devices as $device)
+            if($device['active'])
+                $this->redirect($this->di->getRouter()->getRouteUrl('cp'));
+
+        $billing = new Billing($this->di);
+        $packages = $billing->getAvailablePackages($this->di->getAuth()->getIdentity()['id']);
+
+        if(count($packages) == 1) {
+            $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_PLATFORM, array('licenseId' => $packages[0]['license_id'])));
+        } elseif(count($packages)) {
+            $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_PACKAGE));
+        } else {
+            $this->redirect($this->di->getRouter()->getRouteUrl('profile'));
+        }
     }
 
     public function logoutAction()
