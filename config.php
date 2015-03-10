@@ -71,12 +71,18 @@ if ($build['environment'] == 'production') {
     $default['db'] = GlobalSettings::getMainDbConfig();
     $default['redis'] = GlobalSettings::getRedisConfig();
 
-    $default['domain'] = GlobalSettings::getControlPanelURL($build['site']);
+    if ($build['demo']) {
+        $default['domain'] = GlobalSettings::getDemoControlPanelURL($build['site']);
+        $default['staticDomain'] = GlobalSettings::getDemoControlPanelStaticURL($build['site']);
+    } else {
+        $default['domain'] = GlobalSettings::getControlPanelURL($build['site']);
+        $default['staticDomain'] = GlobalSettings::getControlPanelStaticURL($build['site']);
+        $default['demoDomain'] = GlobalSettings::getDemoControlPanelURL($build['site']);
+    }
+    
     $default['registration'] = GlobalSettings::getRegistrationPageURL($build['site']);
-    $default['staticDomain'] = GlobalSettings::getControlPanelStaticURL($build['site']);
     $default['cookieDomain'] = GlobalSettings::getCookieDomain($build['site']);
     $default['supportEmail'] = GlobalSettings::getSupportEmail($build['site']);
-    $default['demoDomain'] = GlobalSettings::getDemoControlPanelURL($build['site']);
     
     $default['session']['cookieParams']['domain'] = $default['cookieDomain'];
   
