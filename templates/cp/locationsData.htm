@@ -27,6 +27,10 @@
         white-space: nowrap;
     }
     
+    a[data-zone] {
+        font-weight: 700;
+    }
+    
     @media (min-width: 767px) {
         #allDataBlock {
             text-align: right;
@@ -42,6 +46,14 @@
     <h1 class="text-center">{$title}</h1>
 
     <div class="container-fluid">
+        {if isset($showUpdateBlock)}
+            {if $showUpdateBlock == 'ios'}
+                <p class="bg-warning" style="padding: 10px;">Geo-fencing has become available with a new version of Pumpic mobile application. The new version of the software will be automatically updated on the target device. Please make sure that the target device is connected to the Internet.</p>
+            {else}
+                <p class="bg-warning" style="padding: 10px;">Geo-fencing has become available with a new version of Pumpic mobile application. To install the new version, please open the Pumpic app on the target device, enter settings menu and tap on "Update App".</p>
+            {/if}
+        {/if}
+        
         {insert "inc.flashMessages.htm"}
         
         {if $startTime > 0 || $hasZones}
@@ -70,8 +82,8 @@
                         <table id="datatable" class="table" aria-describedby="datatables_info">
                             <thead>
                                 <tr role="row">
-                                    <th>{$di.t->_('Type')}</th>
                                     <th>{$di.t->_('Time')}</th>
+                                    <th>{$di.t->_('Type')}</th>
                                     <th>{$di.t->_('Location')}</th>
                                     <th>{$di.t->_('Actions')}</th>
                                     <th>{$di.t->_('Alerts')}</th>
@@ -95,10 +107,10 @@
                 <div class="col-sm-2" id="geo-fences-holder">
                     <div class="checkbox">
                         <label>
-                            <input type="checkbox" id="onlyGeofences"> {$di.t->_('Geofences only')}
+                            <input type="checkbox" id="onlyGeofences"> {$di.t->_('Geo-fences only')}
                         </label>
                     </div>
-                    <a href="{$di.router->getRouteUrl('locationsZones')}" class="btn btn-danger">{$di.t->_('Geofences')}</a>
+                    <a href="{$di.router->getRouteUrl('locationsZones')}" class="btn btn-danger">{$di.t->_('Geo-fences')}</a>
                 </div>
             </div>
         </div>
@@ -162,9 +174,74 @@
                     getTable: function() {
                         if (this.dataTable === null) {
                             this.dataTable = $('#datatable').dataTable({
-                                bSort: false,
+                                aaSorting: [],
                                 bPaginate: false,
                                 bFilter: false,
+                                aoColumns: [
+                                    {
+                                        mData: "timestamp",
+                                        type: "num",
+                                        sWidth: '100px',
+                                        bUseRendered: false,
+                                        fnRender: function(row) {
+                                            return moment.utc(row.aData.timestamp * 1000).format("LT");
+                                        }
+                                    },
+                                    {
+                                        mData: "type",
+                                        bUseRendered: false,
+                                        fnRender: function(row) {
+                                            if (row.aData.type === 'zone-enter') {
+                                                return 'Geo-Fence Entered';
+                                            }
+
+                                            if (row.aData.type === 'zone-leave') {
+                                                return 'Geo-Fence Left';
+                                            }
+
+                                            return 'Check-in';
+                                        }
+                                    },
+                                    {
+                                        bSortable: false,
+                                        mData: null,
+                                        fnRender: function(row) {
+                                            var result = '<br/>Latitude: ' + row.aData.latitude + '<br/>Langitude: ' + row.aData.longitude;
+
+                                            if (row.aData.zone) {
+                                                return '<a href="" data-zone="' + row.aData.zone_id + '">' + row.aData.zone + '</a>' + result;
+                                            } else if (row.aData.address) {
+                                                return '<b>' + row.aData.address + '</b>' + result;
+                                            }
+
+                                            return result;
+                                        }
+                                    },
+                                    {
+                                        bSortable: false,
+                                        mData: null,
+                                        fnRender: function() {
+                                            return '<button class="btn btn-success btn-xs view-on-map"><i class="fa fa-map-marker"></i> {$di.t->_('View on map')}</button>';
+                                        }
+                                    },
+                                    {
+                                        bSortable: false,
+                                        mData: null,
+                                        fnRender: function(row) {
+                                            var alerts = [];
+                                            
+                                            if (row.aData.type != 'check-in') {
+                                                alerts.unshift('Control panel alert sent');
+                                            }
+                                            
+                                            if (row.aData.email_notified > 0) {
+                                                alerts.unshift('Email alert sent');
+                                            }
+
+                                            return alerts.join(', ');
+                                        }
+                                    }
+                                ],
                                 fnDrawCallback: function() {
                                     $(this).find('tbody').tableScroll();
                                 }
@@ -176,56 +253,29 @@
                     fillTable: function(data){
                         var result = [];
                         
-                        $.each(data, function(){
-                            var type = (function(type){
-                                if (type === 'zone-enter') {
-                                    return 'Geo-Fence Entered';
-                                }
-
-                                if (type === 'zone-leave') {
-                                    return 'Geo-Fence Left';
-                                }
-
-                                return 'Check-in';
-                            })(this.type);
-                            
-                            var location = (function(data){
-                                var result = data.latitude + ',' + data.longitude;
-                                
-                                if (data.zone) {
-                                    return '<b>' + data.zone + '</b> ' + result;
-                                } else if (data.address) {
-                                    return '<b>' + data.address + '</b> ' + result;
-                                }
-                                
-                                return result;
-                            })(this);
-                            
-                            var alerts = (function(email){
-                               if (email > 0) {
-                                   return 'Email alert sent';
-                               }
-                               
-                               return '';
-                            })(this.email_notified);
-                            
-                            result.push([
-                                type,
-                                moment.unix(this.timestamp).utcOffset(0).format("LT"),
-                                location,
-                                '<button class="btn btn-success btn-xs"><i class="fa fa-map-marker"></i> {$di.t->_('View on map')}</button>',
-                                alerts
-                            ]);
-                        });
-                        
-                        this.getTable().fnAddData(result);
+                        this.getTable().fnSort([]);
+                        this.getTable().fnAddData(data);
                         this.getTable().fnDraw();
                         
                         this.getTable().find('tbody > tr').each(function(index) {
                             if (data[index] !== undefined && data[index].type !== 'check-in') {
                                 $(this).addClass('warning');
+                            } else {
+                                $(this).removeClass('warning');
                             }
                         });
+
+                        $.each(this.zones, function() {
+                            $('#datatable a[data-zone=' + this.id + ']').click((function(marker) {
+                                return function(e) {
+                                    e.preventDefault();
+                                    $('.nav-pills a[href=#map]').tab('show');
+                                    google.maps.event.trigger(marker, 'click');
+                                };
+                            })(this.marker));
+                        });
+                        
+                        this.getTable().dataTable().fnSort([[0, "desc"]]);
                     },
                     loadZones: function (zoneContent) {
                         var self = this;
@@ -259,6 +309,8 @@
                                     crossOnDrag: false,
                                     map: self.getMap()
                                 });
+                                
+                                zone.id = this.id;
 
                                 google.maps.event.addListener(zone, 'click', function () {
                                     self.showInfoWindow(zoneContent(zoneData), zone.getCenter());
@@ -357,7 +409,7 @@
                                 self.showInfoWindow(content, marker.getPosition());
                             });
                             
-                            $('#datatable tbody tr button').eq(index).click((function(marker) {
+                            $('#datatable .view-on-map').eq(filtered.length - index - 1).click((function(marker) {
                                 return function() {
                                     $('.nav-pills a[href=#map]').tab('show');
                                     google.maps.event.trigger(marker, 'click');
@@ -389,8 +441,6 @@
                     },
                     loadData: function (dayStart) {
                         var self = this;
-                        
-                        console.log(dayStart.unix());
                         
                         return $.getJSON("{$di.router->getRouteUrl('locations')}", {
                             "dayStart": dayStart.unix()
@@ -545,7 +595,7 @@
         <h3>{$di.t->_('Why can the data be unavailable?')}</h3>
         {include "content/{$di.t->getLocale()}/noData.html"}
         {include "content/{$di.t->getLocale()}/noDataLocations.html"}
-        <p>{$di.t->_('They will appear on map as soon as received from phone you are tracking. You can also add %1$sGeofences%2$s to monitor now.', ['<a href="' ~ $di.router->getRouteUrl('locationsZones') ~ '">','</a>'])}</p>
+        <p>{$di.t->_('They will appear on map as soon as received from phone you are tracking. You can also add %1$sGeo-fences%2$s to monitor now.', ['<a href="' ~ $di.router->getRouteUrl('locationsZones') ~ '">','</a>'])}</p>
         {/if}
     </div>
     <script src="https://maps.googleapis.com/maps/api/js?v=3.9"></script>

@@ -46,6 +46,7 @@ class Locations extends BaseModel
                 ge.`timestamp`,
                 ge.`type`,
                 ge.`address`,
+                gz.`id` as zone_id,
                 gz.`name` as zone,
                 TRIM(TRAILING '0' FROM ge.`latitude`) as latitude,
                 TRIM(TRAILING '0' FROM ge.`longitude`) as longitude,
