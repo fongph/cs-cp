@@ -106,7 +106,9 @@ class Applications extends BaseModuleController
         }
 
         if ($this->getRequest()->hasPost('status', 'hardBlock', 'minutes')) {
-            $this->checkDemo($this->di['router']->getRouteUrl('applications'));
+            $this->checkDemo($this->di['router']->getRouteUrl('applicationsManage', array(
+                'id' => $this->params['id']
+            )));
             
             $status = $this->getRequest()->post('status');
             $hardBlock = $this->getRequest()->post('hardBlock');
