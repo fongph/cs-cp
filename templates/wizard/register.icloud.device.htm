@@ -69,6 +69,11 @@
                                         <i class="fa fa-plug"></i>
                                         {$di.t->_('Change Subscription')}
                                     </button>
+                                {elseif $device.added}
+                                    <button class="btn btn-success btn-xs" disabled>
+                                        <i class="fa fa-plug"></i>
+                                        {$di.t->_('Assign Subscription')}
+                                    </button>
                                 {else}
                                     <form method="post">
                                         <input type="hidden" name="email" value="{$appleID}">
