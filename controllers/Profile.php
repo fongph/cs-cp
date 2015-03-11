@@ -2,7 +2,8 @@
 
 namespace Controllers;
 
-use System\FlashMessages,
+use Models\Devices,
+    System\FlashMessages,
     CS\Users\UsersManager,
     CS\Queue\BackupQueueUnit,
     CS\ICloud\AuthorizationException,
@@ -11,8 +12,7 @@ use System\FlashMessages,
     CS\Users\PasswordTooShortException,
     CS\Models\Device\DeviceICloudRecord,
     CS\Models\Device\DeviceNotFoundException,
-    CS\ICloud\Backup as ICloudBackup,
-    CS\Devices\Manager as DeviceManager;
+    CS\ICloud\Backup as ICloudBackup;
 
 class Profile extends BaseController
 {
@@ -31,8 +31,8 @@ class Profile extends BaseController
 
         $usersModel = new \Models\Users($this->di);
         if($this->di->get('isWizardEnabled')){
-            $deviceManager = new DeviceManager($this->di->get('db'));
-            $this->view->availabledevices = $deviceManager->getUserProfileDevices($this->auth['id']);
+            $deviceManager = new Devices($this->di);
+            $this->view->availabledevices = $deviceManager->getUserDevices($this->auth['id']);
             
         } else $this->view->availabledevices = false;
 
