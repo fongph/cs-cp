@@ -39,7 +39,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-devices.git",
-                "reference": "b530ef9ca17d0becfbf41b67d347c3b9664c9770"
+                "reference": "18da5bb2b94bda0e30d76bc73355416addc5abf2"
             },
             "require": {
                 "boomers/cs-mail": "dev-master",
@@ -59,7 +59,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2015-03-06 15:42:17"
+            "time": "2015-03-11 14:32:01"
         },
         {
             "name": "boomers/cs-icloud",
@@ -67,7 +67,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-icloud.git",
-                "reference": "4bf7876c40024e370c6ea64e82500ec6d8ce0461"
+                "reference": "02ee5d4c50ed8d02c5c7c1ae7195dc3283f92949"
             },
             "require": {
                 "php": ">=5.3.0"
@@ -85,7 +85,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2015-02-11 15:44:18"
+            "time": "2015-03-11 14:22:13"
         },
         {
             "name": "boomers/cs-mail",
@@ -141,7 +141,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-queue.git",
-                "reference": "60828c006c51c63dccabe227b92ce9d3c1761f9a"
+                "reference": "d4d4b02b62712891625f71c99b31a1b7e1f8b96a"
             },
             "require": {
                 "boomers/cs-models": "dev-master",
@@ -156,7 +156,7 @@
                     "CS\\Queue\\": "src/"
                 }
             },
-            "time": "2015-02-26 15:10:44"
+            "time": "2015-03-11 14:26:50"
         },
         {
             "name": "boomers/cs-settings",
