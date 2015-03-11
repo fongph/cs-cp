@@ -122,7 +122,7 @@ class Zones extends BaseModel
                     `name`,
                     `trigger`,
                     `email_alert`,
-                    (`schedule` = '') schedule
+                    (LENGTH(`schedule`) > 0) schedule
                 FROM 
                     `geo_zones` 
                 WHERE 
