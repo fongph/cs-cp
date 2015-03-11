@@ -114,7 +114,7 @@ class Wizard extends BaseController {
         $this->view->platform = $this->getPlatform();
         
         $deviceModel = new Devices($this->di);
-        $this->view->availabledevices = $deviceModel->getUserDevices($this->auth['id']);
+        $this->view->availabledevices = $deviceModel->getUserDevices($this->auth['id'], $this->getPlatform());
         $this->setView('wizard/setup.htm');
     }
 
