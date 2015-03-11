@@ -37,7 +37,7 @@ class Zones extends BaseModel
         }
 
         return is_numeric($parts[0]) && is_numeric($parts[1]) && is_numeric($parts[2]) &&
-                abs($parts[0]) <= 90 && $parts[1] >= 0 && $parts[1] <= 180 && $parts[2] > 0;
+                abs($parts[0]) <= 90 && abs($parts[1]) <= 180 && $parts[2] > 0;
     }
 
     public function getDeviceZonesCount($devId)
@@ -122,7 +122,7 @@ class Zones extends BaseModel
                     `name`,
                     `trigger`,
                     `email_alert`,
-                    (`schedule` = '') schedule
+                    (LENGTH(`schedule`) > 0) schedule
                 FROM 
                     `geo_zones` 
                 WHERE 
