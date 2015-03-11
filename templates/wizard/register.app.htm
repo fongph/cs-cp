@@ -1,6 +1,12 @@
 <div>
+    {insert "wizard/inc.steps.breadcrumb.htm"}
     <h1 class="text-center">{$title}</h1>
     {insert "inc.flashMessages.htm"}
-    {insert "wizard/inc.steps.breadcrumb.htm"}
     {insert "wizard/inc.add.code.htm"}
+
+    {if $platform == 'android'}
+        {insert "wizard/inc.register.android.htm"}
+    {elseif $platform == 'ios'}
+        {insert "wizard/inc.register.ios.htm"}
+    {/if}
 </div>

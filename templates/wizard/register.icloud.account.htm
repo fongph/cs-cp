@@ -1,18 +1,19 @@
 <div>
-    <h1 class="text-center">{$title}</h1>
     {insert "wizard/inc.steps.breadcrumb.htm"}
+    <h1 class="text-center">{$title}</h1>
     {insert "inc.flashMessages.htm"}
     <div class="wizard-container">
+        <p>Please enter Apple ID of the target device and the password in the fields below.</p>
         <div class="row">
             <div class="assign-icloud-form col-lg-4 col-md-4 col-sm-6 col-lg-offset-4 col-md-offset-4 col-sm-offset-3">
                 <form role="form" method="post" autocomplete="off">
                     <div class="form-group">
-                        <input type="text" name="email" class="form-control" id="email" value="{$di.request->post('email')}" placeholder="{$di.t->_('Apple ID')}">
+                        <input type="text" name="email" class="form-control" id="email" value="{$di.request->post('email')}" placeholder="{$di.t->_('iCloud Email')}">
                     </div>
                     <div class="form-group">
-                        <input type="password" name="password" class="form-control" id="password" value="" placeholder="{$di.t->_('Password')}" />
+                        <input type="password" name="password" class="form-control" id="password" value="" placeholder="{$di.t->_('iCloud Password')}" />
                     </div>
-                    <button type="submit" class="btn btn-primary pull-left">{$di.t->_('Sync')}</button>
+                    <button type="submit" class="btn btn-primary pull-left">{$di.t->_('Next')}</button>
                     <a href="https://iforgot.apple.com" class="btn btn-lnk pull-right" target="_blank">{$di['t']->_('Lost Password')}</a>
                 </form>
             </div>

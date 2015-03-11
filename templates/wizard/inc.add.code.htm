@@ -3,12 +3,13 @@
         border: 1px solid #ccc;
         border-radius: 5px;
         margin: 10px 0;
-        padding: 10px;
+        padding: 10px 30px;
         text-align: center;
+        display: inline-block;
     }
 </style>
-<div class="col-lg-4 col-md-4 col-sm-6 col-lg-offset-4 col-md-offset-4 col-sm-offset-3 text-center">
-    <p class="text-muted">{$di.t->_('Dear customer, here you should add the device you are going to monitor. Please use the PIN code generated below to connect the target device to your Control Panel.')}</p>
+<div class="wizard-container">
+    <p class="text-muted">Dear customer, here you should add the device you are going to monitor. Please use the PIN code generated below to connect the target device to your Control Panel.</p>
     <div class="add-code-block">
         {if $code}
             <h3>{$di.t->_('Your code is:')} {$code}</h3>

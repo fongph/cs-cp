@@ -1,8 +1,8 @@
 <div>
-    <h1 class="text-center">{$title}</h1>
-    {insert "inc.flashMessages.htm"}
-    {var $step='platform'}
     {insert "wizard/inc.steps.breadcrumb.htm"}
+    <h1 class="text-center">{$title}</h1>
+    <p class="text-center">{$di.t->_('Please select the Platform (Operating System) of the target device.')}</p>
+    {insert "inc.flashMessages.htm"}
     <div class="wizard-container">
         <div class="row">
             <a href="{$di.router->getRouteUrl('wizardSetup', [
@@ -20,8 +20,7 @@
             ])}" class="btn btn-primary{if !$iCloudAvailable} disabled{/if}">iCloud <sup style="color: #c84d4d">*</sup></a>
         </div>
         <div class="row">
-            <sup style="color: #c84d4d">*</sup> - {$di->getTranslator()->_('iCloud Available for Premium Licenses')}
+            <sup style="color: #c84d4d">*</sup> - {$di.t->_('iCloud is available for Premium Subscription only. It allows you to monitor iPhones, iPads and iPods Touch without jailbreak.')}
         </div>
     </div>
-    <div class="wizard-container">Instructions</div>
 </div>
