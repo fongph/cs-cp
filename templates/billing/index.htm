@@ -79,7 +79,11 @@
                 table: null,
                 unlimitValue: '{$unlimitedValue}',
                 limitsTmpl: _.template('Calls: <b><%= call %></b><hr/> SMS: <b><%= sms %></b>'),
-                deviceTmpl: _.template('<a class="btn btn-success btn-xs" href="{$di.router->getRouteUrl('billingAssignDevice')}?license=<%= id %>"><i class="fa fa-plug"></i> {$di.t->_('Assign Device')}</a>'),
+                {if $di->get('isWizardEnabled')}
+                    deviceTmpl: _.template('<a class="btn btn-success btn-xs" href="{$di.router->getRouteUrl('wizardPlatform')}?licenseId=<%= id %>"><i class="fa fa-plug"></i> {$di.t->_('Assign Device')}</a>'),
+                {else}
+                    deviceTmpl: _.template('<a class="btn btn-success btn-xs" href="{$di.router->getRouteUrl('billingAssignDevice')}?license=<%= id %>"><i class="fa fa-plug"></i> {$di.t->_('Assign Device')}</a>'),
+                {/if}
                 getSourceUrl: function () {
                     if (window.location.hash === '#active') {
                         return this.url + '?active=1';
@@ -96,7 +100,11 @@
                     }
                     
                     if (deviceId) {
-                        return value + ' <a class="btn btn-xs btn-success btn-buy" href="{$buyUrl}?product=unlimited-sms&device=' + deviceId + '"><i class="fa fa-arrows-v"></i> {$di.t->_('Buy unlimited')}</a>';
+                        {if $di->get('isWizardEnabled')}
+                            return value;
+                        {else}
+                            return value + ' <a class="btn btn-xs btn-success btn-buy" href="{$buyUrl}?product=unlimited-sms&device=' + deviceId + '"><i class="fa fa-arrows-v"></i> {$di.t->_('Buy unlimited')}</a>';
+                        {/if}
                     }
                     
                     return value;
@@ -110,7 +118,11 @@
                     }
                     
                     if (deviceId) {
-                        return value + ' <a class="btn btn-xs btn-success btn-buy" href="{$buyUrl}?product=unlimited-calls&device=' + deviceId + '"><i class="fa fa-arrows-v"></i> {$di.t->_('Buy unlimited')}</a>';
+                        {if $di->get('isWizardEnabled')}
+                            return value;
+                        {else}
+                            return value + ' <a class="btn btn-xs btn-success btn-buy" href="{$buyUrl}?product=unlimited-calls&device=' + deviceId + '"><i class="fa fa-arrows-v"></i> {$di.t->_('Buy unlimited')}</a>';
+                        {/if}
                     }
                     
                     return value;
