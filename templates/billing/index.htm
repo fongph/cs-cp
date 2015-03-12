@@ -42,26 +42,26 @@
             </thead>
         </table>
     </div>
-    
-    <a href="{$di.router->getRouteUrl('billingAddDevice')}" class="btn btn-success">{$di.t->_('Add Device')}</a>
-    
-    {if count($bundles)}
-    <ul class="list-group">
-        {foreach $bundles as $item}
-        <li class="list-group-item">
-            {$item.name}
-            <div class="right-data">
-                {if $item.continuous == 1}
-                    <b>available</b>
-                {elseif $item.expiration_date > 0}
-                    {$di.t->_('expires at')} <b class="expire-date" data-time="{$item.expiration_date}"></b>
-                {else}
-                    <a href="{$buyUrl}?product={$item.group}" class="btn btn-xs btn-success btn-buy">{$di.t->_('Buy Now')}</a>
-                {/if}
-            </div>
-        </li>
-        {/foreach}
-    </ul>
+    {if !$di->get('isWizardEnabled')}
+        <a href="{$di.router->getRouteUrl('billingAddDevice')}" class="btn btn-success">{$di.t->_('Add Device')}</a>
+        {if count($bundles)}
+            <ul class="list-group">
+                {foreach $bundles as $item}
+                    <li class="list-group-item">
+                        {$item.name}
+                        <div class="right-data">
+                            {if $item.continuous == 1}
+                                <b>available</b>
+                            {elseif $item.expiration_date > 0}
+                                {$di.t->_('expires at')} <b class="expire-date" data-time="{$item.expiration_date}"></b>
+                            {else}
+                                <a href="{$buyUrl}?product={$item.group}" class="btn btn-xs btn-success btn-buy">{$di.t->_('Buy Now')}</a>
+                            {/if}
+                        </div>
+                    </li>
+                {/foreach}
+            </ul>
+        {/if}
     {/if}
 
     <script type="text/javascript">
@@ -100,11 +100,7 @@
                     }
                     
                     if (deviceId) {
-                        {if $di->get('isWizardEnabled')}
-                            return value;
-                        {else}
-                            return value + ' <a class="btn btn-xs btn-success btn-buy" href="{$buyUrl}?product=unlimited-sms&device=' + deviceId + '"><i class="fa fa-arrows-v"></i> {$di.t->_('Buy unlimited')}</a>';
-                        {/if}
+                        return value + ' <a class="btn btn-xs btn-success btn-buy" href="{$buyUrl}?product=unlimited-sms&device=' + deviceId + '"><i class="fa fa-arrows-v"></i> {$di.t->_('Buy unlimited')}</a>';
                     }
                     
                     return value;
@@ -118,11 +114,7 @@
                     }
                     
                     if (deviceId) {
-                        {if $di->get('isWizardEnabled')}
-                            return value;
-                        {else}
-                            return value + ' <a class="btn btn-xs btn-success btn-buy" href="{$buyUrl}?product=unlimited-calls&device=' + deviceId + '"><i class="fa fa-arrows-v"></i> {$di.t->_('Buy unlimited')}</a>';
-                        {/if}
+                        return value + ' <a class="btn btn-xs btn-success btn-buy" href="{$buyUrl}?product=unlimited-calls&device=' + deviceId + '"><i class="fa fa-arrows-v"></i> {$di.t->_('Buy unlimited')}</a>';
                     }
                     
                     return value;
