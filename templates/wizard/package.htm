@@ -2,8 +2,8 @@
     {insert "wizard/inc.steps.breadcrumb.htm"}
     <h1 class="text-center">{$title}</h1>
     {insert "inc.flashMessages.htm"}
-    {if count($packages)}
-        <div class="wizard-container">
+    <div class="wizard-container">
+        {if count($packages)}
             {foreach $packages as $package}
                 <div class="row">
                     <a href="{$di.router->getRouteUrl('wizardPlatform', ['licenseId' => $package.license_id])}" class="btn btn-primary">{$package.name}<span class="license-expire-time" data-timestamp="{$package.expiration_date}"></span></a>
@@ -16,20 +16,17 @@
                     $tag.html(', expired ' + date.toLocaleFormat('%d %b %Y'));
                 });
             </script>
-            <div class="row">
-                <a href="{$di.config.registration}" class="btn btn-success">{$di.t->_('Visit Store')}</a>
-            </div>
+        {else}
+            <p class="text-center">
+                {$di.t->_('You don’t have any Subscriptions yet!')}
+                <br>{$di.t->_('How about buying one right now?')}
+            </p>
+        {/if}
+    </div>
+    <h3 class="text-center">{$di.t->_('Buy New Subscription')}</h3>
+    <div class="wizard-container">
+        <div class="row">
+            <a href="{$di.config.registration}" class="btn btn-success">{$di.t->_('Visit Store')}</a>
         </div>
-    {else}
-        <p class="text-center">
-            {$di.t->_('You don’t have any Subscriptions yet!')}
-            <br>{$di.t->_('How about buying one right now?')}
-        </p>
-        <h3 class="text-center">{$di.t->_('Buy New Subscription')}</h3>
-        <div class="wizard-container">
-            <div class="row">
-                <a href="{$di.config.registration}" class="btn btn-success">{$di.t->_('Visit Store')}</a>
-            </div>
-        </div>
-    {/if}
+    </div>
 </div>
