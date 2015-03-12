@@ -71,7 +71,7 @@ class Index extends BaseController
     {
         if($this->di->get('isWizardEnabled')) {
             $devicesManager = new DeviceManager($this->di->get('db'));
-            $devices = $devicesManager->getUserActiveDevices($this->auth['id']);
+            $devices = $devicesManager->getUserActiveDevices($this->di->getAuth()->getIdentity()['id']);
 
             foreach($devices as $device)
                 if($device['active'])
