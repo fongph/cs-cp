@@ -43,7 +43,7 @@ class Wizard extends BaseController {
     {
         $billingModel = new BillingModel($this->di);
         $this->view->packages = $billingModel->getAvailablePackages($this->auth['id']);
-        $this->view->title = $this->di->getTranslator()->_('Subscription Selection');
+        $this->view->title = $this->di->getTranslator()->_('Select a Subscription Plan');
         $this->setView('wizard/package.htm');
     }
     
@@ -51,7 +51,7 @@ class Wizard extends BaseController {
     {
         $this->view->license = $license = $this->getLicense();
         $this->view->product = $product = $license->getOrderProduct()->getProduct();
-        $this->view->iCloudAvailable = $product->getGroup() == 'premium';
+        $this->view->iCloudAvailable = ($product->getGroup() == 'premium');
         $this->view->title = $this->di->getTranslator()->_('Select a Platform');
         $this->setView('wizard/platform.htm');
     }
