@@ -1,0 +1,35 @@
+<p class="text-left">You can easily track the target iOS device without jailbreak. However, previously make sure that:</p>
+<p class="text-left">1) iCloud Backup is enabled on the target iPhone, iPad or iPod Touch.</p>
+<p class="text-left">To make sure, take the target Apple iOS device. Then go to <b>Settings</b> > <b>iCloud</b> > <b>Storage & Backup</b>. If <b>iCloud Backup</b> is off, please turn it <b>ON</b> (as shown below).</p>
+<p>
+    <img class="img-thumbnail" src="{$di.config.staticDomain}/images/how-to-install/icloud-instructions/1.png" width="270" height="460" />
+    &nbsp;
+    <img class="img-thumbnail" src="{$di.config.staticDomain}/images/how-to-install/icloud-instructions/2.png" width="270" height="460" />
+    &nbsp;
+    <img class="img-thumbnail" src="{$di.config.staticDomain}/images/how-to-install/icloud-instructions/3.png" width="270" height="460" />
+</p>
+
+<p class="text-left">2) You have Apple ID of the target iOS device and know the password.</p>
+<p class="text-left">If both of the aforementioned requirements are satisfied, you can proceed to the next step of these guidelines.</p>
+<p class="text-left"><b>Note</b>: iCloud backs up the data from the target device automatically once per 24 hours. In addition, the following requirements should be also satisfied:</p>
+<ol class="text-left" style="list-style: disc">
+    <li>the target device is connected to Wi-Fi;</li>
+    <li>it is connected to the power source;</li>
+    <li>the screen is locked.</li>
+</ol>
+<p class="text-left">
+    It all means that the data from the target devices might be sent to your Control Panel with a day delay.
+    If you need the data updates to be uploaded as soon as possible, you can perform <b>iCloud Backup</b> manually.
+    Go to <b>Settings</b> > <b>iCloud</b> > <b>Storage & Backup</b> (as shown above) and tap <b>Back Up Now</b>.
+</p>
+<p>
+    <a class="btn btn-primary" href="{$di->getRouter()->getRouteUrl('wizardRegister')}">
+        {$di.t->_('Next')}
+    </a>
+</p>
+<p class="text-left"><b>Note</b>: You can skip the preparation now. However, you will need to return to this step latter.</p>
+<p>
+    <a class="btn btn-primary" href="{$di->getRouter()->getRouteUrl('wizardRegister')}">
+        {$di.t->_('Skip')}
+    </a>
+</p>

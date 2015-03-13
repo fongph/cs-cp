@@ -65,8 +65,10 @@
                                     <a href="{$di.router->getRouteUrl('setDevice', ['devId'=>$id])}"><i class="device-status-s {$device.os}{if $device.online} online{/if}"></i> {$device.name} {if $device.package_name == null}<span class="text-muted">no-plan</span>{else}<span class="text-info">{$device.package_name}</span>{/if}</a>
                                 </li>
                                 {/foreach}
-                                <li class="divider" role="presentation"></li>
-                                <li><a href="{$di.router->getRouteUrl('billingAddDevice')}"><i class="fa fa-check"></i> {$di.t->_('Add New')}!</a></li>
+                                {if !$di->get('isWizardEnabled')}
+                                    <li class="divider" role="presentation"></li>
+                                    <li><a href="{$di.router->getRouteUrl('billingAddDevice')}"><i class="fa fa-check"></i> {$di.t->_('Add New')}!</a></li>
+                                {/if}
                             </ul>
                         </li>
                     </ul>
