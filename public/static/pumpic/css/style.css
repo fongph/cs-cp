@@ -1,5 +1,19 @@
 @import url(http://fonts.googleapis.com/css?family=Open+Sans:400,700,300,600);
 
+textarea:hover, 
+input:hover, 
+textarea:active, 
+input:active, 
+textarea:focus, 
+input:focus,
+button:focus,
+button:active,
+button:hover
+{
+    -webkit-box-shadow: none !important;
+    box-shadow: none !important;
+}
+
 body {
     background: #f3f3f3;
     font-family: 'Open Sans', sans-serif;
@@ -17,6 +31,10 @@ body {
 #header .menu a {
     font-family: 'Open Sans', sans-serif;
     font-weight: 300;
+}
+
+#header .logo {
+    background: url(../img/logo.png) no-repeat;
 }
 
 @media (min-width: 767px) {
@@ -60,4 +78,18 @@ body {
 h1 {
     font-family: 'Open Sans', sans-serif;
     font-size: 40px;
+}
+
+.cp-menu li i {
+    background-image: url(../img/menu-left-icons.png);
+}
+
+.cp-menu a {
+    color: #16a89e;
+}
+
+.cp-menu .active a {
+    font-weight: bold;
+    color: #525359;
+    text-decoration: none;
 }
