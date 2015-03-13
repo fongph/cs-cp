@@ -151,8 +151,7 @@
                                                 {$di.t->_('Change password')}
                                             </a>
                                         {elseif $device.last_error}
-                                            {$di.t->_('Error loading backup.')}
-                                            Please contact <a href="mailto:support@pumpic.com">support</a>
+                                            {$di.t->_('Error loading backup. Please contact %ssupport%s.', ['<a href="mailto:support@pumpic.com">', '</a>'])}
                                         {else}
                                             {$di.t->_('Awaiting for iCloud Backup')}
                                         {/if}

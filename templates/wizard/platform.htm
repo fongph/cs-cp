@@ -1,23 +1,34 @@
+<style type="text/css">
+    .button-holder {
+        display: inline-block;
+    }
+    .button-holder .btn {
+        min-width: 100%;
+    }
+</style>
 <div>
     {insert "wizard/inc.steps.breadcrumb.htm"}
     <h1 class="text-center">{$title}</h1>
-    <p class="text-center">{$di.t->_('Please select the Platform (Operating System) of the target device.')}</p>
+    
     {insert "inc.flashMessages.htm"}
     <div class="wizard-container">
-        <div class="row">
-            <a href="{$di.router->getRouteUrl('wizardSetup', [
+        <p class="text-center">{$di.t->_('Please select the Platform (Operating System) of the target device.')}</p>
+        <div class="button-holder">
+            <div class="row">
+                <a href="{$di.router->getRouteUrl('wizardSetup', [
                 'platform' => 'android',
-            ])}" class="btn btn-primary">Android</a>
-        </div>
-        <div class="row">
-            <a href="{$di.router->getRouteUrl('wizardSetup', [
+                ])}" class="btn btn-primary">Android</a>
+            </div>
+            <div class="row">
+                <a href="{$di.router->getRouteUrl('wizardSetup', [
                 'platform' => 'ios',
-            ])}" class="btn btn-primary">iOS</a>
-        </div>
-        <div class="row">
-            <a href="{$di.router->getRouteUrl('wizardSetup', [
+                ])}" class="btn btn-primary">iOS</a>
+            </div>
+            <div class="row">
+                <a href="{$di.router->getRouteUrl('wizardSetup', [
                 'platform' => 'icloud',
-            ])}" class="btn btn-primary{if !$iCloudAvailable} disabled{/if}">iCloud <sup style="color: #c84d4d">*</sup></a>
+                ])}" class="btn btn-primary{if !$iCloudAvailable} disabled{/if}">iCloud <sup style="color: #c84d4d">*</sup></a>
+            </div>
         </div>
         <div class="row">
             <sup style="color: #c84d4d">*</sup> - {$di.t->_('iCloud is available for Premium Subscription only. It allows you to monitor iPhones, iPads and iPods Touch without jailbreak.')}
