@@ -13,7 +13,7 @@ class BaseController extends Controller
     {
         if ($this->di['auth']->hasIdentity()) {
             $this->auth = $this->di['auth']->getIdentity();
-        }
+        }        
     }
 
     public function error404()
