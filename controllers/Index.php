@@ -70,6 +70,10 @@ class Index extends BaseController
     public function loginRedirect()
     {
         if($this->di->get('isWizardEnabled')) {
+
+            if($this->getRequest()->get('redirect'))
+                $this->redirect($this->getRequest()->get('redirect'));
+            
             $devicesManager = new DeviceManager($this->di->get('db'));
             $devices = $devicesManager->getUserActiveDevices($this->di->getAuth()->getIdentity()['id']);
 
