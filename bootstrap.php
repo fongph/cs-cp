@@ -209,6 +209,7 @@ $di->set('isTestUser', function($id) use($config) {
             10, //p.olya@dizboard.com
             11, //g.zhenya@dizboard.com
             275, //demouser@pumpic.com
+            280 //eugene-msa@yandex.ru
         ));
     }
 
