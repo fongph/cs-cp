@@ -74,7 +74,11 @@
             moment.lang('{$di.t->getLocale()}');
 
             var billing = {
-                url: '{$di.config.domain}/billing',
+                {if $di->get('isWizardEnabled')}
+                    url: '{$di->getRouter()->getRouteUrl('billing')}',
+                {else}
+                    url: '{$di.config.domain}/billing',
+                {/if}
                 tab: null,
                 table: null,
                 unlimitValue: '{$unlimitedValue}',

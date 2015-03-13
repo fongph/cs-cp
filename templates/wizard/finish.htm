@@ -13,10 +13,12 @@
                 <form role="form" method="post" autocomplete="off">
                     <div class="form-group text-left">
                         <label for="deviceName">{$di.t->_('Device Name')}</label>
-                        <input type="text" name="deviceName" class="form-control" id="deviceName" value="{if $di.request->post('deviceName')}{$di.request->post('deviceName')}{else}{$device->getName()}{/if}" placeholder="{$di.t->_('Device Name')}">
+                        <div class="row">
+                            <input style="width: 65%" type="text" name="deviceName" class="form-control pull-left" id="deviceName" value="{if $di.request->post('deviceName')}{$di.request->post('deviceName')}{else}{$device->getName()}{/if}" placeholder="{$di.t->_('Device Name')}">
+                            <button style="width: 30%" type="submit" class="btn btn-primary pull-right">{$di.t->_('Update')}</button>
+                        </div>
                     </div>
-                    <button type="submit" class="btn btn-primary pull-left">{$di.t->_('Update')}</button>
-                    <a href="{$di->getRouter()->getRouteUrl('cp')}" class="btn btn-success pull-right">{$di.t->_('Go to Control Panel')}</a>
+                    <a href="{$di->getRouter()->getRouteUrl('setDevice', ['devId'=>$device->getId()])}" class="btn btn-success">{$di.t->_('Go to Control Panel')}</a>
                 </form>
             </div>
         </div>

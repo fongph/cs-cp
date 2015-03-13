@@ -66,6 +66,9 @@ class Wizard extends BaseController {
             if(isset($devices[$_POST['device_id']]) && $devices[$_POST['device_id']]['active']){
                 $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('Device Already Has License'));
                 $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_SETUP));
+            } elseif ($license->getOrderProduct()->getProduct()->getGroup() != 'premium'){
+                $this->di->getFlashMessages()->add(FlashMessages::WARNING, $this->di->getTranslator()->_('iCloud is available for Premium Subscription only. It allows you to monitor iPhones, iPads and iPods Touch without jailbreak.'));
+                $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_PACKAGE));
             }
 
             try {
@@ -151,7 +154,7 @@ class Wizard extends BaseController {
     {
         $licenseRecord = $this->getLicense();
         if ($licenseRecord->getOrderProduct()->getProduct()->getGroup() != 'premium'){
-            $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('iCloud is Available for Premium Packages Only'));
+            $this->di->getFlashMessages()->add(FlashMessages::WARNING, $this->di->getTranslator()->_('iCloud is available for Premium Subscription only. It allows you to monitor iPhones, iPads and iPods Touch without jailbreak.'));
             $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_PACKAGE));
         }
 
@@ -273,14 +276,14 @@ class Wizard extends BaseController {
         $device = $this->getDevice(@$_GET['deviceId']);
         
         if($_POST){
-            if(isset($_POST['deviceName']) && strlen($_POST['deviceName']) > 2){
-                $device->setName($_POST['deviceName']);
-                $device->save();
-                $this->redirect($this->di->getRouter()->getRouteUrl('setDevice', array('devId'=>$device->getId())));
-            } else {
-                $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('Invalid Device Name'));
-                $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_FINISH, array('deviceId'=>$device->getId())));
-            }
+            
+            if(isset($_POST['deviceName']) && strlen($_POST['deviceName'])){
+                $device->setName($_POST['deviceName'])->save();
+                $this->di->getFlashMessages()->add(FlashMessages::SUCCESS, $this->di->getTranslator()->_("Device name was successfully updated"));
+                
+            } else $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_("Device name shouldn't be empty"));
+            
+            $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_FINISH, array('deviceId'=>$device->getId())));
         }
 
         $this->view->device = $device;
