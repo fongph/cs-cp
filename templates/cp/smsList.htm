@@ -51,11 +51,19 @@
         <div id="{$item.timestamp}">
             <div class="popover {if $item.type == 'in'}right{else}left{/if}{if $item.blocked > 0} text-danger{/if}">
                 <div class="arrow"></div>
-                {if $item.type == 'in'}
-                <h3 class="popover-title in"><b>{if strlen($item.name)}{$item.name}{else}{$item.phone}{/if}</b> <span></span></h3>
-                {else}
-                <h3 class="popover-title out"><span></span></h3>
-                {/if}
+                
+                <h3 class="popover-title{if $item.type == 'in'} in{else} out{/if}">
+                    {if $item.type == 'in'}
+                    <b>{if strlen($item.name)}{$item.name}{else}{$item.phone}{/if}</b> <span class="date"></span>
+                    {else}
+                    <span class="date"></span>
+                    {/if}
+                    
+                    {if $item.deleted}
+                        <span class="label label-danger" style="float: right;">Deleted</span>
+                    {/if}
+                </h3>
+                
                 <div class="popover-content">
                     <p>{$item.content}</p>
                 </div>
@@ -78,7 +86,7 @@
             }
 
             var date = moment.unix(timestamp).zone(0).format("LLL");
-            $(this).find('.popover-title span').html(date);
+            $(this).find('.popover-title span.date').html(date);
 
             last = moment.unix(timestamp).zone(0).format("LL");
         });
