@@ -18,13 +18,22 @@ body > .cp-menu {
     background: transparent;
 }
 
-#header .logo {
+#header .logo-holder {
     display: block;
     float: left;
+    height: 65px;
+    padding-top: 8px;
 }
 
-#header .logo img {
-    margin-bottom: 8px;
+#header .logo {
+    display: block;
+    width: 172px;
+    height: 44px;
+    background: url(../img/logo.png) no-repeat;
+}
+
+#header .toggle-left, #header .toggle-right {
+    display: none;
 }
 
 #header .menu {
@@ -468,17 +477,38 @@ body > .cp-menu {
         padding: 10px;
     }
 
-    .navbar-toggle {
-        margin: 0;
-        margin: 13px 0;
-    }
-
-    .navbar-toggle.left {
+    #header .toggle-left, #header .toggle-right {
+        display: block;
         float: left;
+        width: 44px;
+        padding-top: 12px;
+    }
+    
+    #header .toggle-left {
+        margin-left: -100%;
+        text-align: left;
+    }
+    
+    #header .toggle-right {
+        margin-left: -44px;
+        text-align: right;
+    }
+    
+    #header .navbar-toggle {
+        margin: 0;
     }
 
-    .navbar-toggle.right {
-        float: right;
+    #header .logo-holder {
+        float: left;
+        width: 100%;
+        overflow: hidden;
+        padding-left: 50px;
+        padding-right: 50px;
+        text-align: center
+    }
+    
+    #header .logo {
+        margin: 0 auto;
     }
 
     .cp-menu li i {
@@ -1128,4 +1158,12 @@ body > .cp-menu {
 
 .wizard-container p:last-child {
     margin-bottom: 0;
+}
+
+.block-or {
+    color: red; 
+    font-size: 20px; 
+    font-weight: bold;
+    line-height: 50px;
+    text-transform: uppercase;
 }

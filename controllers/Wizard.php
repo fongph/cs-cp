@@ -4,11 +4,11 @@ use Components\WizardRouter;
 use CS\Devices\DeviceCode;
 use CS\Devices\DeviceCodeGenerationException;
 use CS\Devices\DeviceObserver;
-use CS\Devices\Manager as DeviceManager,
-    CS\Models\License\LicenseRecord,
-    CS\Models\License\LicenseNotFoundException,
-    Models\Billing as BillingModel,
-    System\FlashMessages;
+use CS\Devices\Manager as DeviceManager;
+use CS\Models\License\LicenseRecord;
+use CS\Models\License\LicenseNotFoundException;
+use Models\Billing as BillingModel;
+use System\FlashMessages;
 use CS\ICloud\AuthorizationException;
 use CS\ICloud\Backup as iCloudBackup;
 use CS\Models\Device\DeviceICloudRecord;
@@ -74,7 +74,6 @@ class Wizard extends BaseController {
                     ->setDevice($this->getDevice($_POST['device_id']))
                     ->setLicense($license)
                     ->setAfterSave(function() use ($deviceObserver) {
-                        $this->di->getFlashMessages()->add(FlashMessages::SUCCESS, $this->di->getTranslator()->_('Device successfully assigned to your license!'));
                         $userNotes = new UsersNotes($this->di->get('db'));
                         $userNotes->addSystemNote($this->auth['id'], UsersNotes::TYPE_SYSTEM, null, null, "Assign {$deviceObserver->getLicense()->getOrderProduct()->getProduct()->getName()} to device {$deviceObserver->getDevice()->getName()} " . json_encode(array(
                                 'device_id' => $deviceObserver->getDevice()->getId(),
@@ -132,7 +131,6 @@ class Wizard extends BaseController {
                 $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_REGISTER));
                 
             } elseif ($info['assigned']) {
-                $this->di->getFlashMessages()->add(FlashMessages::SUCCESS, "Your device successfully added!");
                 $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_FINISH, array('deviceId'=>$info['assigned_device_id'])));
                 
             } elseif ($info['expired']) {
@@ -170,7 +168,7 @@ class Wizard extends BaseController {
                 $devModel = new Devices($this->di);
                 
                 if (empty($devices)) {
-                    $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('Account has no devices. Please try another'));
+                    $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('There are no uploaded backups for this iCloud account'));
                     $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_REGISTER));
                     
                 } else $devices = $devModel->iCloudMergeWithLocalInfo($this->auth['id'], $devices);
@@ -204,7 +202,6 @@ class Wizard extends BaseController {
                                 ->setICloudDevice($iCloudRecord)
                                 ->setLicense($licenseRecord)
                                 ->setAfterSave(function() use ($deviceObserver) {
-                                    $this->di->getFlashMessages()->add(FlashMessages::SUCCESS, $this->di->getTranslator()->_('New Device Added'));
                                     /** @var $mailSender \CS\Mail\MailSender */
                                     $mailSender = $this->di->get('mailSender');
                                     $mailSender->sendNewDeviceAdded($this->auth['login'], $deviceObserver->getDevice()->getName());

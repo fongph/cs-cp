@@ -1,22 +1,28 @@
 <div id="header" class="navbar-default">
     <div class="container">
+        <div class="logo-holder">
+            <a href="{$di.config.domain}" class="logo"></a>
+        </div>
         {if !empty($cpMenu)}
-        <button class="navbar-toggle left" id="toggle" type="button">
-            <span class="sr-only">{$di.t->_('Toggle navigation')}</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-        </button>
+        <div class="toggle-left">
+            <button class="navbar-toggle" id="toggle" type="button">
+                <span class="sr-only">{$di.t->_('Toggle navigation')}</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        </div>
         {/if}
-        <a href="{$di.config.domain}" class="logo"><img src="{$di.config.staticDomain}/img/logo.png" alt="" /></a>
-        <button type="button" class="navbar-toggle right" data-toggle="collapse" data-target=".navbar-collapse">
-            <span class="sr-only">{$di.t->_('Toggle navigation')}</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-        </button>
+        <div class="toggle-right">
+            <button type="button" class="navbar-toggle right" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">{$di.t->_('Toggle navigation')}</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        </div>
     </div>
-    
+
     <div class="menu">
         <div class="container">
             <div class="navbar-collapse collapse{*if $di.auth->hasIdentity()}left{else}center{/if*}">
@@ -35,21 +41,21 @@
                     </ul>
 
                     {*if !$di.auth->hasIdentity()}
-                        {if count($di.config.locales) > 1}
-                            <ul class="nav navbar-nav navbar-right">
-                                <li class="dropdown">
-                                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                                        {if !empty($di.locale)}{$di.config.locales[$di.locale]}{else}-{/if}
-                                        <b class="caret"></b>
-                                    </a>
-                                    <ul class="dropdown-menu">
-                                        {foreach $di.config.locales as $locale => $lang}
-                                        <li><a href="{$di.router->getRouteUrl('main')}locale/{$locale}">{$lang}</a></li>
-                                        {/foreach}
-                                    </ul>
-                                </li>
+                    {if count($di.config.locales) > 1}
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                {if !empty($di.locale)}{$di.config.locales[$di.locale]}{else}-{/if}
+                                <b class="caret"></b>
+                            </a>
+                            <ul class="dropdown-menu">
+                                {foreach $di.config.locales as $locale => $lang}
+                                <li><a href="{$di.router->getRouteUrl('main')}locale/{$locale}">{$lang}</a></li>
+                                {/foreach}
                             </ul>
-                        {/if}
+                        </li>
+                    </ul>
+                    {/if}
                     {/if*}
 
                     {if !empty($di.devicesList)}
@@ -65,8 +71,10 @@
                                     <a href="{$di.router->getRouteUrl('setDevice', ['devId'=>$id])}"><i class="device-status-s {$device.os}{if $device.online} online{/if}"></i> {$device.name} {if $device.package_name == null}<span class="text-muted">no-plan</span>{else}<span class="text-info">{$device.package_name}</span>{/if}</a>
                                 </li>
                                 {/foreach}
-                                <li class="divider" role="presentation"></li>
-                                <li><a href="{$di.router->getRouteUrl('billingAddDevice')}"><i class="fa fa-check"></i> {$di.t->_('Add New')}!</a></li>
+                                {if !$di->get('isWizardEnabled')}
+                                    <li class="divider" role="presentation"></li>
+                                    <li><a href="{$di.router->getRouteUrl('billingAddDevice')}"><i class="fa fa-check"></i> {$di.t->_('Add New')}!</a></li>
+                                {/if}
                             </ul>
                         </li>
                     </ul>
