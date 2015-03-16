@@ -39,7 +39,7 @@ $di->setShared('mailSender', function() use ($di) {
                     ->setSiteId($di['config']['site']);
 });
 
-$di->set('isWizardEnabled', $di['config']['environment'] == 'development' || in_array(@$_SERVER['HTTP_X_REAL_IP'], array('176.38.120.13')));
+$di->set('isWizardEnabled', true);
 
 $di->setShared('router', function() use($config, $di) {
     $router = new \System\Router();
