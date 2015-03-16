@@ -133,8 +133,6 @@ class Wizard extends BaseController {
 
     public function registerAppAction()
     {
-        $this->view->license = $license = $this->getLicense();
-        
         if(isset($_POST['code'])){
 
             $deviceCode = new DeviceCode($this->di->get('db'));
@@ -156,7 +154,7 @@ class Wizard extends BaseController {
         }
         $this->view->title = $this->di->getTranslator()->_('Enter Activation Code');
         $this->view->platform = $this->getPlatform();
-        $this->view->code = $code = $this->getNewDeviceCode($license);
+        $this->view->code = $code = $this->getNewDeviceCode($this->getLicense(false));
         
         $this->setView('wizard/register.app.htm');
     }
