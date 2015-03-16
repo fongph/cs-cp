@@ -190,7 +190,7 @@ class Locations extends BaseModuleController
 
     public function indexAction()
     {
-        if ($this->di['isTestUser']($this->auth['id'])) {
+        if (true) {
             return $this->privateRouter();
         }
 
