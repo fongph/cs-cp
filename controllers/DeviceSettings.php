@@ -101,6 +101,7 @@ class DeviceSettings extends BaseModuleController
             $this->redirect($this->di['router']->getRouteUrl('profile'));
         }
 
+        $this->view->currentDevice = $this->di->get('currentDevice');
         $this->view->data = $settingsModel->getSettings($this->di['devId']);
 
         $this->setView('cp/settings.htm');
