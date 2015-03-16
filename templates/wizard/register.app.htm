@@ -1,10 +1,7 @@
 <div>
     {insert "wizard/inc.steps.breadcrumb.htm"}
-    <h1 class="text-center">{$title}</h1>
+    <h1 class="text-center">{$di.t->_('Activation Instructions')}</h1>
     {insert "inc.flashMessages.htm"}
-    {insert "wizard/register.app.add.code.htm"}
-
-    <h3 class="text-center">Activation Instructions</h3>
     <div class="wizard-container">
         <div id="instruction">
             {if $platform == 'android'}

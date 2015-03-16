@@ -12,7 +12,7 @@
     
     {insert "inc.flashMessages.htm"}
     <div class="wizard-container">
-        <p class="text-center">{$di.t->_('Please select the Platform (Operating System) of the target device.')}</p>
+        <p class="text-center">{$di.t->_('Please select the Platform (Operating System) of the target device.')}<span class="blue-asterisk">*</span></p>
         <div class="button-holder">
             <div class="row">
                 <a href="{$di.router->getRouteUrl('wizardSetup', [
@@ -27,11 +27,14 @@
             <div class="row">
                 <a href="{$di.router->getRouteUrl('wizardSetup', [
                 'platform' => 'icloud',
-                ])}" class="btn btn-primary{if !$iCloudAvailable} disabled{/if}">iCloud <sup style="color: #c84d4d">*</sup></a>
+                ])}" class="btn btn-primary{if !$iCloudAvailable} disabled{/if}">iCloud</a>
             </div>
         </div>
         <div class="row">
-            <sup style="color: #c84d4d">*</sup> - {$di.t->_('iCloud is available for Premium Subscription only. It allows you to monitor iPhones, iPads and iPods Touch without jailbreak.')}
+            <p class="text-info">
+                <span class="blue-asterisk">*</span>
+                iCloud is available for Premium Subscription only. It allows you to monitor iPhones, iPads and iPods Touch without jailbreak.
+            </p>
         </div>
     </div>
 </div>

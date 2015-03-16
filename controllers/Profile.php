@@ -118,7 +118,7 @@ class Profile extends BaseController
                         ));
                         
                     } catch (AuthorizationException $e) {
-                        $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_("Oops, iCloud password didn't work. Please try again. {$this->getRequest()->post('newPassword')}"));
+                        $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_("Oops, iCloud password didn't work. Please try again."));
                         $this->ajaxResponse(false, array(
                             'location' => $this->di->getRouter()->getRouteUri('profileICloudPasswordReset')."?iCloudId={$this->getRequest()->get('iCloudId')}"
                         ));

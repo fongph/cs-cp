@@ -19,11 +19,11 @@
                         <span class="hidden-xs">{$di.t->_('Platform (Operating System)')}</span>
                         <span class="visible-xs">{$di.t->_('OS')}</span>
                     </th>
-                    <th>
+                    {*<th>
                         <span class="hidden-xs">{$di.t->_('Subscription Plan')}</span>
                         <span class="visible-xs">{$di.t->_('Subscription')}</span>
                     </th>
-                    <th>{$di.t->_('Subscription Expiration Date')}</th>
+                    <th>{$di.t->_('Subscription Expiration Date')}</th>*}
                     <th>{$di.t->_('Action')}</th>
                 </tr>
                 </thead>
@@ -41,14 +41,16 @@
                             {else}
                                 {$di.t->_('Unknown')}
                             {/if}
+                            
                             {if $device.os != 'unknown' && $device.os_version}{$device.os_version}{/if}
+                            
                             {if $device.os == 'android'}
-                                {if $device.rooted}{$di.t->_('rooted')}{else}{$di.t->_('not rooted')}{/if}
+                                {if $device.rooted}<div class="label label-success" style="background-color: #468847">rooted</div>{/if}
                             {elseif $device.os == 'icloud'}
                                 {$di.t->_('without Jailbreak')}
                             {/if}
                         </td>
-                        <td>
+                        {*<td>
                             {if $device.active}
                                 {$device.package_name}
                             {else}
@@ -59,7 +61,7 @@
                             {if $device.expiration_date}
                                 <span class="timestamp-value" data-timestamp-value="{$device.expiration_date}"></span>
                             {else}-{/if}
-                        </td>
+                        </td>*}
                         <td>
                             {if $device.active}
                                 <button class="btn btn-primary btn-xs" disabled>
@@ -79,14 +81,6 @@
                         </td>
                     </tr>
                 {/foreach}
-                <script type="text/javascript">
-                    $.each($('[data-timestamp-value]'), function(i, timeTag){
-                        var $tag = $(timeTag);
-                        console.log($tag.data('timestamp-value') * 1000);
-                        var date = new Date($tag.data('timestamp-value') * 1000);
-                        $tag.html(date.toLocaleFormat('%d %b %Y'));
-                    });
-                </script>
                 </tbody>
             </table>
         </div>
