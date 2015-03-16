@@ -132,6 +132,7 @@
                         bAutoWidth: false,
                         bSortMulti: false,
                         iDisplayLength: {$authData.records_per_page},
+                        aaSorting: [[0, 'desc']],
                         oLanguage: {
                             sUrl: '{$di.config.staticDomain}/js/datatables/language/{$di.t->getLocale()}.txt'
                         },
