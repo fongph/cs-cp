@@ -55,7 +55,7 @@ class Applications extends BaseModuleController
      */
     public function indexAction()
     {
-        if (1 && $this->di['isTestUser']($this->auth['id'])) {
+        if (true) {
             return $this->privateRouter();
         }
 

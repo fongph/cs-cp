@@ -24,13 +24,6 @@ abstract class BaseModuleController extends BaseController
             $this->di['flashMessages']->add(FlashMessages::INFO, $this->di['t']->_('No devices have been added to your Control Panel!'));
             $this->redirect($this->di['router']->getRouteUrl('profile'));
         }
-
-        //temporary add instagram module for test users
-        if ($this->di['isTestUser']($this->auth['id'])) {
-            $config = $this->di['config'];
-            $config['modules'][Modules::INSTAGRAM] = 'Instagram Tracking';
-            $this->di->set('config', $config);
-        }
         
         if (!isset($this->di['config']['modules'][$this->module])) {
             throw new \Exception("Module not found!");
