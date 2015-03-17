@@ -167,9 +167,12 @@
                                         {/if}
                                     {/if}
                                 </td>
-                                <td class="timestamp-value">
-                                    {$device.last_sync}
-                                </td>
+                                {if $device.last_sync}
+                                    <td class="timestamp-value" data-timestamp-value="{$device.last_sync}" data-time-format="lll"></td> 
+                                {else}
+                                    <td>-</td>
+                                {/if}
+                                
                             </tr>
                         {/foreach}
                         </tbody>
@@ -249,3 +252,13 @@
         </div>
     </div>
 </div>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        moment.lang('{$di.t->getLocale()}');
+        $.each($('[data-timestamp-value]'), function(i, timeTag){
+            var $tag = $(timeTag);
+            $tag.html(moment($tag.data('timestamp-value') * 1000).format($tag.data('time-format')));
+        });
+    });
+</script>
