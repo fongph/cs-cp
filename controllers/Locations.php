@@ -18,27 +18,6 @@ class Locations extends BaseModuleController
         $this->initCP();
     }
 
-    private function privateRouter()
-    {
-        switch ($this->getDI()->getRouter()->getRouteName()) {
-            case 'locationsZones':
-                $this->zones();
-                break;
-
-            case 'locationsZonesAdd':
-                $this->zoneAdd();
-                break;
-
-            case 'locationsZonesEdit':
-                $this->zoneEdit();
-                break;
-
-            default:
-                $this->locations();
-                break;
-        }
-    }
-
     public function indexAction()
     {
         $locations = new \Models\Cp\Locations($this->di);
