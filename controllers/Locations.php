@@ -39,7 +39,7 @@ class Locations extends BaseModuleController
         }
     }
 
-    private function locations()
+    public function indexAction()
     {
         $locations = new \Models\Cp\Locations($this->di);
 
@@ -50,10 +50,10 @@ class Locations extends BaseModuleController
         $this->view->startTime = $locations->getLastPointTimestamp($this->di['devId']);
         $this->view->hasZones = $locations->hasZones($this->di['devId']);
 
-        $this->setView('cp/locationsData.htm');
+        $this->setView('cp/locations.htm');
     }
 
-    private function zones()
+    public function zonesAction()
     {
         $zonesModel = new Zones($this->di);
 
@@ -77,7 +77,7 @@ class Locations extends BaseModuleController
         $this->setView('cp/zoneList.htm');
     }
 
-    private function zoneAdd()
+    public function zoneAddAction()
     {
         $zonesModel = new Zones($this->di);
 
@@ -130,7 +130,7 @@ class Locations extends BaseModuleController
         $this->setView('cp/zone.htm');
     }
 
-    private function zoneEdit()
+    public function zoneEditAction()
     {
         $zonesModel = new Zones($this->di);
 
@@ -188,43 +188,14 @@ class Locations extends BaseModuleController
         $this->setView('cp/zone.htm');
     }
 
-    public function indexAction()
-    {
-        if (true) {
-            return $this->privateRouter();
-        }
-
-        if ($this->getRequest()->isAjax()) {
-            if (!$this->getRequest()->hasPost('date')) {
-                return $this->makeJSONResponse(array('success' => 0));
-            }
-
-            $locationsModel = new \Models\Cp\Locations($this->di);
-            if (($data = $locationsModel->getPoints($this->di['devId'], $this->getRequest()->post('date'))) !== false) {
-                return $this->makeJSONResponse(array(
-                            'success' => 1,
-                            'result' => $data
-                ));
-            } else {
-                return $this->makeJSONResponse(array('success' => 0));
-            }
-
-            $dataTableRequest = new \System\DataTableRequest();
-            $this->makeJSONResponse($locationsModel->getDataTableData($this->di['devId'], $dataTableRequest->getRequest($this->getRequest()->get())));
-        }
-
-        $locationsModel = new \Models\Cp\Locations($this->di);
-        $this->view->startTime = $locationsModel->getLastPointTime($this->di['devId']);
-
-        $this->setView('cp/locations.htm');
-    }
-
     protected function postAction()
     {
         parent::postAction();
         $this->buildCpMenu();
 
-        
+        /**
+         * @deprecated until there are no applications with old version
+         */
         if ($this->di['isTestUser']($this->auth['id'])) {
             if (($this->di['currentDevice']['os'] === 'android' && $this->di['currentDevice']['app_version'] < 5) ||
                     ($this->di['currentDevice']['os'] === 'ios' && $this->di['currentDevice']['app_version'] < 3)) {
