@@ -126,7 +126,11 @@
                                     {/if}
                                     {if $device.os != 'unknown' && $device.os_version}{$device.os_version}{/if}
                                     {if $device.os == 'android'}
-                                        {if $device.rooted}{$di.t->_('rooted')}{else}{$di.t->_('not rooted')}{/if}
+                                        {if $device.rooted}
+                                            <div class="label label-success">{$di.t->_('rooted')}</div>
+                                        {else}
+                                            <div class="label label-warning">{$di.t->_('not rooted')}</div>
+                                        {/if}
                                     {elseif $device.os == 'icloud'}
                                         {$di.t->_('without Jailbreak')}
                                     {/if}
@@ -146,14 +150,14 @@
                                         {if $device.processing}
                                             {$di.t->_('Awaiting for data loading from backup')}
                                         {elseif $device.last_error == 1}
-                                            {$di.t->_('Error authorizing')} iCloud.
-                                            <a href="{$di->getRouter()->getRouteUri('profileICloudPasswordReset')}?iCloudId={$device.icloud_id}">
-                                                {$di.t->_('Change password')}
-                                            </a>
+                                            {$di.t->_('iCloud Authorization Error. Please %schange the password%s.', [
+                                                '<a href="' ~ $di->getRouter()->getRouteUri("profileICloudPasswordReset") ~ '?iCloudId=' ~ $device.icloud_id ~ '">',
+                                                '</a>'
+                                            ])}
                                         {elseif $device.last_error}
-                                            {$di.t->_('Error loading backup. Please contact %ssupport%s.', ['<a href="mailto:support@pumpic.com">', '</a>'])}
+                                            {$di.t->_('New Data Upload Error. Please contact Customer %sSupport%s.', ['<a href="mailto:support@pumpic.com">', '</a>'])}
                                         {else}
-                                            {$di.t->_('Awaiting for iCloud Backup')}
+                                            {$di.t->_('Awaiting iCloud Backup.')}
                                         {/if}
                                     {else}
                                         {if $device.online}
