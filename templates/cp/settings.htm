@@ -64,17 +64,13 @@
                                 <div class="icloud-status">
                                     <strong>{$di.t->_('Device status')}:</strong>
                                     {if $iCloudRecord->getProcessing()}
-                                        {$di.t->_('Awaiting for data loading from backup')}
+                                        {$di.t->_('Awaiting New Data Upload')}
                                     {elseif $iCloudRecord->getLastError() == 1}
-                                        {$di.t->_('iCloud Authorization Error. Please %schange the password%s.', [
-                                            '<a href="' ~ $di->getRouter()->getRouteUri("profileICloudPasswordReset") ~ '?iCloudId=' ~ $iCloudRecord->getId() ~ '">', 
-                                            '</a>'
-                                        ])} 
-                                        
+                                        {$di.t->_('iCloud Authorization Error. Please %schange the password%s', ['<a href="' ~ $di->getRouter()->getRouteUri("profileICloudPasswordReset") ~ '?iCloudId=' ~ $iCloudRecord->getId() ~ '">', '</a>'])} 
                                     {elseif $iCloudRecord->getLastError()}
-                                        {$di.t->_('New Data Upload Error. Please contact Customer %sSupport%s.', ['<a href="mailto:support@pumpic.com">', '</a>'])}
+                                        {$di.t->_('New Data Upload Error. Please contact Customer %sSupport%s', ['<a href="mailto:support@pumpic.com">', '</a>'])}
                                     {else}
-                                        {$di.t->_('Awaiting for iCloud Backup')}
+                                        {$di.t->_('Awaiting iCloud Backup')}
                                     {/if}
                                 </div>
                             </div>

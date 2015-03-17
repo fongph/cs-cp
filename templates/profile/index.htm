@@ -148,23 +148,18 @@
                                 <td>
                                     {if $device.os == 'icloud'}
                                         {if $device.processing}
-                                            {$di.t->_('Awaiting for data loading from backup')}
+                                            {$di.t->_('Awaiting New Data Upload')}
                                         {elseif $device.last_error == 1}
-                                            {$di.t->_('iCloud Authorization Error. Please %schange the password%s.', [
-                                                '<a href="' ~ $di->getRouter()->getRouteUri("profileICloudPasswordReset") ~ '?iCloudId=' ~ $device.icloud_id ~ '">',
-                                                '</a>'
-                                            ])}
+                                            {$di.t->_('iCloud Authorization Error. Please %schange the password%s', ['<a href="' ~ $di->getRouter()->getRouteUri("profileICloudPasswordReset") ~ '?iCloudId=' ~ $device.icloud_id ~ '">', '</a>'])}
                                         {elseif $device.last_error}
-                                            {$di.t->_('New Data Upload Error. Please contact Customer %sSupport%s.', ['<a href="mailto:support@pumpic.com">', '</a>'])}
+                                            {$di.t->_('New Data Upload Error. Please contact Customer %sSupport%s', ['<a href="mailto:support@pumpic.com">', '</a>'])}
                                         {else}
-                                            {$di.t->_('Awaiting iCloud Backup.')}
+                                            {$di.t->_('Awaiting iCloud Backup')}
                                         {/if}
                                     {else}
-                                        {if $device.online}
-                                            {if $device.network == 'wifi'}WiFi{else}Mobile{/if}
-                                        {else}
-                                            Offline
-                                        {/if}
+                                        <div class="device-status">
+                                            <div class="value {if $device.online}{if $device.network=='wifi'}wifi{else}mobile{/if}{else}offline{/if}"></div>    
+                                        </div>
                                     {/if}
                                 </td>
                                 {if $device.last_sync}
@@ -172,7 +167,6 @@
                                 {else}
                                     <td>-</td>
                                 {/if}
-                                
                             </tr>
                         {/foreach}
                         </tbody>
