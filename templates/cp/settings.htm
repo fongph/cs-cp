@@ -8,7 +8,7 @@
             </div>
             
             <div class="col-lg-6 col-md-6">
-                {if $currentDevice.os != 'icloud'}
+                {if $data.isBlackListAvailable}
                     <div class="panel panel-default">
                         <div class="panel-heading">{if $data.blockSMSActive}{$di.t->_('Calls & SMS blocking')}{else}{$di.t->_('Blacklist Phone numbers')}{/if}<span class="blue-asterisk">*</span></div>
                         <div class="panel-body text-center">
@@ -44,7 +44,7 @@
                                 <textarea name="blackWords" class="form-control" placeholder="{$di.t->_('Enter the words (separated by comma), by which incoming SMS will be blocked')}">{$data.settings.bl_words}</textarea>
                             </div>
                             {/if}
-                            {if $currentDevice.os != 'icloud'}
+                            {if $data.isSimNotificationAvailable}
                                 <div class="checkbox">
                                     <label>
                                         <input type="checkbox" name="simNotificactions"{if $data.settings.sim_notification} checked{/if} /> {$di.t->_('Receive SIM change notifications')}<span class="blue-asterisk">*</span>
@@ -57,7 +57,7 @@
                 </div>
             </div>
             <div class="col-lg-6 col-md-6">
-                {if $currentDevice.os != 'icloud'}
+                {if $data.isDeviceOnlineStatusAvailable}
                     <div class="panel panel-default">
                         <div class="panel-body">
                             <div class="device-status">
@@ -121,7 +121,7 @@
             </div>
         </div>
     </div>
-    {if $currentDevice.os != 'icloud'}
+    {if $data.isDeviceCommandsAvailable}
         <p class="text-info"><span class="blue-asterisk">*</span>{$di.t->_('Command activation will take up to 20 min. In case the target phone has additional software to track calls or SMS, blocking may not work properly.')}</p>    
     {/if}
 </div>
