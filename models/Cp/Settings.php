@@ -202,7 +202,6 @@ class Settings extends BaseModel
             'rebootDeviceActive' => DeviceOptions::isRebootDeviceActive($devInfo['os']),
             'isBlackListAvailable' => DeviceOptions::isBlackListAvailable($devInfo['os']),
             'isSimNotificationAvailable' => DeviceOptions::isSimNotificationAvailable($devInfo['os']),
-            'isDeviceOnlineStatusAvailable' => DeviceOptions::isDeviceOnlineStatusAvailable($devInfo['os']),
             'isDeviceCommandsAvailable' => DeviceOptions::isDeviceCommandsAvailable($devInfo['os']),
         );
     }

@@ -57,7 +57,29 @@
                 </div>
             </div>
             <div class="col-lg-6 col-md-6">
-                {if $data.isDeviceOnlineStatusAvailable}
+                {if $di.currentDevice.os == 'icloud'}
+                    {if isset($iCloudRecord) && $iCloudRecord->getId()}
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <div class="icloud-status">
+                                    <strong>{$di.t->_('Device status')}:</strong>
+                                    {if $iCloudRecord->getProcessing()}
+                                        {$di.t->_('Awaiting for data loading from backup')}
+                                    {elseif $iCloudRecord->getLastError() == 1}
+                                        {$di.t->_('Error authorizing')} iCloud.
+                                        <a href="{$di->getRouter()->getRouteUri('profileICloudPasswordReset')}?iCloudId={$iCloudRecord->getId()}">
+                                            {$di.t->_('Change password')}
+                                        </a>
+                                    {elseif $iCloudRecord->getLastError()}
+                                        {$di.t->_('Error loading backup. Please contact %ssupport%s.', ['<a href="mailto:support@pumpic.com">', '</a>'])}
+                                    {else}
+                                        {$di.t->_('Awaiting for iCloud Backup')}
+                                    {/if}
+                                </div>
+                            </div>
+                        </div>
+                    {/if}
+                {else}
                     <div class="panel panel-default">
                         <div class="panel-body">
                             <div class="device-status">
