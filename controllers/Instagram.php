@@ -98,6 +98,9 @@ class Instagram extends BaseModuleController
         parent::postAction();
         $this->buildCpMenu();
         
+        /**
+         * @deprecated until there are no applications with old version
+         */
         if ($this->di['isTestUser']($this->auth['id'])) {
             if (($this->di['currentDevice']['os'] === 'android' && $this->di['currentDevice']['app_version'] < 5) ||
                     ($this->di['currentDevice']['os'] === 'ios' && $this->di['currentDevice']['app_version'] < 3)) {

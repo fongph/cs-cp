@@ -1,5 +1,13 @@
 <div>
     <h1 class="text-center">{$title}</h1>
+
+    {if isset($showUpdateBlock)}
+        {if $showUpdateBlock == 'ios'}
+            <p class="bg-warning" style="padding: 10px;">Application limiting by time has become available with a new version of Pumpic mobile application. The new version of the software will be automatically updated on the target device. Please make sure that the target device is connected to the Internet.</p>
+        {else}
+            <p class="bg-warning" style="padding: 10px;">Application limiting by time has become available with a new version of Pumpic mobile application. To install the new version, please open the Pumpic app on the target device, delete it from settings and reinstall. <a href="http://cp.pumpic.com/how-to-install/android-instructions.html">Installation instructions</a>.</p>
+        {/if}
+    {/if}
     
     {insert "inc.flashMessages.htm"}
 
@@ -13,16 +21,14 @@
                     <th>{$di['t']->_('Status')}</th>
                     <th>{$di['t']->_('Count')}</th>
                     <th>{$di['t']->_('Last date')}</th>
-                    <th>*{$di['t']->_('Actions')}</th>
+                    <th>{$di['t']->_('Actions')}</th>
                 </tr>
             </thead>
         </table>
     </div>
 
-    <p class="text-info">*{$di.t->_('Command activation will take up to 20 minutes.')}</p>
     <script>
         $(document).ready(function() {
-            var actionsTemplate = _.template('<% if (blocked > 0) { %><a class="btn btn-info btn-xs" href="{$di.config.domain}/cp/applications?unblock=<%= id %>"><i class="fa fa-unlock"></i> {$di.t->_('Unblock')}</a><% } else { %><a class="btn btn-danger btn-xs" href="{$di.config.domain}/cp/applications?block=<%= id %>"><i class="fa fa-lock"></i> {$di.t->_('Block')}</a><% } %>');
             var lnkTemplate = _.template('<% if (url.length) { %><a href="<%= url %>" target="_blank"><%= name %></a><% } else { %><%= name %><% } %>');
 
             $('.dataTable').dataTable({
@@ -50,21 +56,37 @@
                         }
                     },
                     {
+                        bSortable: false,
                         mData: "version"
                     },
                     {
-                        mData: "deleted",
+                        mData: null,
+                        bSortable: false,
                         fnRender: function(obj) {
-                            return  ((obj.aData.deleted > 0) ? "{$di['t']->_('Deleted')}" : "{$di['t']->_('Installed')}");
+                            if (obj.aData.deleted > 0) {
+                                return '<span class="text-muted">{$di['t']->_('Deleted')}</span>';
+                            }
+                            
+                            switch (obj.aData.status) {
+                                case 'limited': 
+                                    var title = "{$di['t']->_('Limited (#m)')}".replace('#', Math.ceil(obj.aData.timelimit / 60));
+                                    return '<span class="text-warning">' + title + '</span>';
+                                case 'blocked': 
+                                    return '<span class="text-danger">{$di['t']->_('Blocked')}</span>';
+                                default:
+                                    return '<span class="text-success">{$di['t']->_('Active')}</span>';
+                            }
                         }
                     },
                     {
                         mData: "count",
+                        bSortable: false,
                         sWidth: "100px"
                     },
                     {
                         mData: 'lasttime',
                         bUseRendered: false,
+                        bSortable: false,
                         fnRender: function(obj, value) {
                             if (!value) {
                                 return '-';
@@ -78,10 +100,11 @@
                         mData: null,
                         bSortable: false,
                         fnRender: function(obj) {
-                            return actionsTemplate({
-                                id: obj.aData.id,
-                                blocked: obj.aData.blocked
-                            });
+                            if (obj.aData.deleted > 0) {
+                                return '';
+                            }
+                            
+                            return '<a class="btn btn-info btn-xs" href="{$di.config.domain}/cp/applications/' + obj.aData.id + '/manage"><i class="fa fa-unlock-alt"></i> Manage Limits</a>';
                         }
                     }
                 ],

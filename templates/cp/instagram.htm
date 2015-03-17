@@ -63,8 +63,12 @@
     {if !$paid}
         {insert "cp/updatePackage.html"}
     {elseif !isset($accounts)}
-        <h3>{$di.t->_('Waiting for data... Why can the data be unavailable?')}</h3>
-        {include "content/{$di.t->getLocale()}/noData.html"}
+        {if $di.currentDevice.os=='android' && !$di.currentDevice.rooted}
+            {include "content/{$di.t->getLocale()}/rootPhone.html"}
+        {else}
+            <h3>{$di.t->_('Waiting for data... Why can the data be unavailable?')}</h3>
+            {include "content/{$di.t->getLocale()}/noData.html"}
+        {/if}
     {else}
         <div class="row form-inline">
             <div class="col-lg-6 col-md-6 col-sm-6">
