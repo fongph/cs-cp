@@ -67,9 +67,9 @@
                         return this.url + '?deleted=0&';
                     }
                 },
-                reloadTable: function() {
+                reloadTable: function(url) {
                     if (this.table) {
-                        this.table.fnReloadAjax(this.setRange());
+                        this.table.fnReloadAjax(url);
                     }
                 },
                 setTab: function(tab) {
@@ -84,6 +84,10 @@
                 },
                 setRange: function(start, end) {
                     if (start && end && start.isValid() && end.isValid()) {
+
+                        this.startDate = moment(start);
+                        this.endDate = moment(end);
+                        
                         $('#reportrange span').html(start.format('LL') + ' - ' + end.format('LL'));
 
                         _.find(this.selectRanges, function(period, name) {
