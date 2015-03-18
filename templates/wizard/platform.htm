@@ -5,6 +5,15 @@
     .button-holder .btn {
         min-width: 100%;
     }
+    .icloud-button {
+        position: relative;
+    }
+    .icloud-asterisk {
+        position: absolute;
+        top: 0;
+        right: -18px;
+        
+    }
 </style>
 <div>
     {insert "wizard/inc.steps.breadcrumb.htm"}
@@ -12,7 +21,7 @@
     
     {insert "inc.flashMessages.htm"}
     <div class="wizard-container">
-        <p class="text-center">{$di.t->_('Please select the Platform (Operating System) of the target device.')}<span class="blue-asterisk">*</span></p>
+        <p class="text-center">{$di.t->_('Please select the Platform (Operating System) of the target device.')}</p>
         <div class="button-holder">
             <div class="row">
                 <a href="{$di.router->getRouteUrl('wizardSetup', [
@@ -27,7 +36,7 @@
             <div class="row">
                 <a href="{$di.router->getRouteUrl('wizardSetup', [
                 'platform' => 'icloud',
-                ])}" class="btn btn-primary{if !$iCloudAvailable} disabled{/if}">iCloud</a>
+                ])}" class="btn icloud-button btn-primary{if !$iCloudAvailable} disabled{/if}">iCloud<span class="blue-asterisk icloud-asterisk">*</span></a>
             </div>
         </div>
         <div class="row">

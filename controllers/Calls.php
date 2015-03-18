@@ -32,6 +32,10 @@ class Calls extends BaseModuleController
 
         $this->view->hasRecords = $callsModel->hasRecords($this->di['devId']);
         $this->view->blackList = $callsModel->getBlackList($this->di['devId']);
+        
+        if($this->di['currentDevice']['os'] != 'icloud'){
+            $this->view->customUtcOffset = 0;
+        }
 
         $this->setView('cp/calls.htm');
     }

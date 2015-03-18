@@ -3,7 +3,8 @@
 namespace Controllers;
 
 use Models\Modules,
-    CS\Devices\Limitations;
+    CS\Devices\Limitations,
+    CS\Devices\DeviceOptions;
 
 class Contacts extends BaseModuleController
 {
@@ -31,6 +32,7 @@ class Contacts extends BaseModuleController
         }
 
         $this->view->hasRecords = $contactsModel->hasRecords($this->di['devId']);
+        $this->view->isDeletedAvailable = DeviceOptions::isDeletedDataAvailable($this->di['currentDevice']['os']);
 
         $this->setView('cp/contacts.htm');
     }

@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "d0ee868dcb60687b13a4a42ae2fbeddb",
+    "hash": "d3ecc6019e8334b5a3a4f0485ceda8b4",
     "packages": [
         {
             "name": "boomers/cs-billing",
@@ -39,7 +39,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-devices.git",
-                "reference": "18da5bb2b94bda0e30d76bc73355416addc5abf2"
+                "reference": "508f0ecebf16a5386c1a5be386c9b78f9f3fc3db"
             },
             "require": {
                 "boomers/cs-mail": "dev-master",
@@ -59,7 +59,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2015-03-11 14:32:01"
+            "time": "2015-03-17 13:30:16"
         },
         {
             "name": "boomers/cs-icloud",
@@ -93,7 +93,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-mail.git",
-                "reference": "ed429eeecc544e72db8f0c7aacfc33c5f2ba4bfe"
+                "reference": "9dd8628baa260a044af1ead7d8c415a11bfb4b41"
             },
             "require": {
                 "guzzlehttp/guzzle": "~5.0",
@@ -111,7 +111,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2015-03-11 14:47:26"
+            "time": "2015-03-02 11:01:17"
         },
         {
             "name": "boomers/cs-models",

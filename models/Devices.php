@@ -152,14 +152,10 @@ class Devices extends \System\Model
             }
 
             if($item['os'] == 'icloud'){
-                $sync = $item['last_backup'];
-            } else $sync = $item['last_visit'];
+                $item['last_sync'] = $item['last_backup'];
+            } else $item['last_sync'] = $item['last_visit'];
 
-            //todo js Date Format
-            if($sync) $item['last_sync'] = date('j M Y g:i A', $sync);
-            else $item['last_sync'] = '-';
         }
-
         return $data;
     }
 
