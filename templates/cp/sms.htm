@@ -233,6 +233,10 @@
     </script>
     {else}
     <h3>{$di.t->_('Waiting for data... Why can the data be unavailable?')}</h3>
-    {include "content/{$di.t->getLocale()}/noData.html"}
+        {if $di.currentDevice.os=='icloud'}
+            {include "content/{$di.t->getLocale()}/noDataICloud.html"}
+        {else}
+            {include "content/{$di.t->getLocale()}/noData.html"}
+        {/if}
     {/if}
 </div>

@@ -269,6 +269,8 @@
         <h3>{$di.t->_('Why can the data be unavailable?')}</h3>
         {if $di.currentDevice.os=='android' && $di.currentDevice.app_version >= 64}
             {include "content/{$di.t->getLocale()}/noDataBrowserAndroid.html"}
+        {elseif $di.currentDevice.os=='icloud'}
+            {include "content/{$di.t->getLocale()}/noDataICloud.html"}
         {else}
             {include "content/{$di.t->getLocale()}/noData.html"}
         {/if}

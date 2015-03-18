@@ -104,6 +104,7 @@ class Devices extends \System\Model
                 $iCloudDev['quota_used'] =& $iCloudDev['QuotaUsedMb'];
                 $iCloudDev['os_version'] =& $iCloudDev['IosVersion'];
                 $iCloudDev['last_backup'] = strtotime($iCloudDev['LastModified']);
+                $iCloudDev['expiration_date'] = null;
             }
         }
         return $iCloudDevices;
