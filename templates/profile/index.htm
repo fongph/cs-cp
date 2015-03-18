@@ -150,7 +150,7 @@
                                         {if $device.processing}
                                             {$di.t->_('Awaiting New Data Upload')}
                                         {elseif $device.last_error == 1}
-                                            {$di.t->_('iCloud Authorization Error. Please %schange the password%s', ['<a href="' ~ $di->getRouter()->getRouteUri("profileICloudPasswordReset") ~ '?iCloudId=' ~ $device.icloud_id ~ '">', '</a>'])}
+                                            {$di.t->_('iCloud Authorization Error. Please %schange the password%s', ['<a href="' ~ $di->getRouter()->getRouteUri("profileICloudPasswordReset") ~ '?deviceId=' ~ $device.device_id ~ '">', '</a>'])}
                                         {elseif $device.last_error}
                                             {$di.t->_('New Data Upload Error. Please contact Customer %sSupport%s', ['<a href="mailto:support@pumpic.com">', '</a>'])}
                                         {else}
