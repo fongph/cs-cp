@@ -147,7 +147,7 @@
         <div class="col-lg-5">
             <div class="panel panel-default">
                 <div class="panel-heading author">
-                    <img class="avatar" src="{$post.author_avatar}" alt="" />
+                    <img class="avatar" src="{if $post.author_avatar === 'none'}{$di.config.staticDomain}/img/instagram-anonymous-user.jpg{else}{$post.author_avatar}{/if}" alt="" />
                     <div class="content-data">
                         <a href="http://instagram.com/{$post.author_nickname}" target="_blank">{$post.author_nickname}</a>
                         <div class="date" data-time="{$post.timestamp}"></div>
@@ -164,7 +164,7 @@
                         </div>
                     </div>
                     {foreachelse}
-                        No data
+                        {$di.t->_('No comments')}
                     {/foreach}
                 </div>
             </div>

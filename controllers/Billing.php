@@ -13,6 +13,11 @@ use CS\ICloud\Backup as ICloudBackup,
 class Billing extends BaseController
 {
 
+    public function preAction()
+    {
+        $this->checkDemo($this->di['router']->getRouteUrl('cp'));
+    }
+    
     public function indexAction()
     {
         $billingModel = new \Models\Billing($this->di);

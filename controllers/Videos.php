@@ -24,11 +24,13 @@ class Videos extends BaseModuleController
 
         if ($this->getRequest()->isPost()) {
             if ($this->getRequest()->hasPost('network')) {
+                $this->checkDemo($this->di['router']->getRouteUrl('videos'));
+                
                 $settingsModel = new \Models\Cp\Settings($this->di);
                 $settingsModel->setNetwork($this->di['devId'], 'videos', $this->getRequest()->post('network'));
                 $this->di['flashMessages']->add(FlashMessages::SUCCESS, $this->di['t']->_('The changes have been successfully updated!'));
+                $this->redirect($this->di['router']->getRouteUrl('videos'));
             }
-            $this->redirect($this->di['router']->getRouteUrl('videos'));
         } else {
             if ($this->getRequest()->hasGet('getThumb')) {
                 $url = $videosModel->getCDNAuthorizedUrl($this->di['devId'] . '/video/' . $this->getRequest()->get('getThumb'));
@@ -84,6 +86,8 @@ class Videos extends BaseModuleController
     protected function processVideoRequests($videosModel, $redirectUrl)
     {
         if ($this->getRequest()->hasGet('requestVideo')) {
+            $this->checkDemo($redirectUrl);
+            
             try {
                 if ($videosModel->setVideoRequested($this->di['devId'], $this->getRequest()->get('requestVideo'))) {
                     $this->di['flashMessages']->add(FlashMessages::SUCCESS, $this->di['t']->_('The video has been successfully requested!'));
@@ -102,6 +106,8 @@ class Videos extends BaseModuleController
 
             $this->redirect($redirectUrl);
         } else if ($this->getRequest()->hasGet('cancelRequest')) {
+            $this->checkDemo($redirectUrl);
+            
             try {
                 if ($videosModel->cancelVideoRequest($this->di['devId'], $this->getRequest()->get('cancelRequest'))) {
                     $this->di['flashMessages']->add(FlashMessages::SUCCESS, $this->di['t']->_('The video request has been successfully canceled!'));

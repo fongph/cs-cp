@@ -137,9 +137,12 @@ $di->setShared('router', function() use($config, $di) {
 });
 
 $di->setShared('session', function () use ($di) {
+    
 
     System\Session::setConfig($di['config']['session']);
-    if ($di['config']['environment'] == 'production') {
+    if ($di['config']['demo']) {
+        System\Session::setSessionHandler(new System\Session\Handler\CookieSessionHandler($di['request']));
+    } else if ($di['config']['environment'] == 'production') {
         $redisConfig = CS\Settings\GlobalSettings::getRedisConfig('sessions', $di['config']['site']);
         $redisClient = new Predis\Client($redisConfig);
         System\Session::setSessionHandler(new System\Session\Handler\RedisSessionHandler($redisClient));
@@ -153,7 +156,13 @@ $di->setShared('flashMessages', function () use ($di) {
 });
 
 $di->setShared('auth', function () use ($di) {
-    return new \System\Auth($di);
+    $auth = new \System\Auth($di);
+    
+    if ($di['config']['demo'] && !$auth->hasIdentity()) {    
+        $auth->setIdentity(require ROOT_PATH . 'demoUserData.php');
+    }
+    
+    return $auth;
 });
 
 $di->setShared('view', function() use ($di) {

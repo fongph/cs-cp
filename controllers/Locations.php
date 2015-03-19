@@ -41,6 +41,8 @@ class Locations extends BaseModuleController
         }
 
         if ($this->getRequest()->hasGet('delete')) {
+            $this->checkDemo($this->di['router']->getRouteUrl('locationsZones'));
+            
             $id = $this->getRequest()->get('delete');
             if ($zonesModel->canDeleteZone($this->di['devId'], $id) === false) {
                 $this->getDI()->getFlashMessages()->add(FlashMessages::ERROR, $this->di['t']->_('Geo-fence was not found.'));
@@ -76,6 +78,8 @@ class Locations extends BaseModuleController
         $enable = $this->getRequest()->post('enable', 1);
 
         if ($this->getRequest()->hasPost('zoneData', 'name', 'trigger', 'enable')) {
+            $this->checkDemo($this->di['router']->getRouteUrl('locationsZonesAdd'));
+            
             if (!Zones::validateName($name)) {
                 $this->getDI()->getFlashMessages()->add(FlashMessages::ERROR, $this->di['t']->_('The name for the Geo-fence is required and should be no longer than 17 symbols.'));
             } else if (!strlen($zoneData)) {
@@ -135,6 +139,8 @@ class Locations extends BaseModuleController
         }
 
         if ($this->getRequest()->hasPost('zoneData', 'name', 'trigger', 'enable')) {
+            $this->checkDemo($this->di['router']->getRouteUrl('locationsZonesEdit', array('id' => $this->params['id'])));
+            
             if (!Zones::validateName($name)) {
                 $this->getDI()->getFlashMessages()->add(FlashMessages::ERROR, $this->di['t']->_('The name for the Geo-fence is required and should be no longer than 17 symbols.'));
             } else if (!strlen($zoneData)) {

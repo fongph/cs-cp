@@ -93,7 +93,11 @@
                             }
                             
                             // show time in browser tz
-                            return moment(value * 1000).format('lll');
+                            {if $di.config.demo}
+                            return moment(value * 1000).zone(0).format('lll');
+                            {else}
+                            return moment.utc(value * 1000).format('lll');
+                            {/if}
                         }
                     },
                     {

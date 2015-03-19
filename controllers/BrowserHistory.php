@@ -77,6 +77,8 @@ class BrowserHistory extends BaseModuleController
 
     private function blockDomain($domain, $browserHistoryModel)
     {
+        $this->checkDemo($this->di['router']->getRouteUrl('browserHistory') . '#blocked');
+        
         try {
             $browserHistoryModel->addSiteBlock($this->di['devId'], $domain);
             $this->di['flashMessages']->add(FlashMessages::SUCCESS, $this->di['t']->_('The domain has been successfully added!'));
@@ -91,6 +93,8 @@ class BrowserHistory extends BaseModuleController
 
     private function unblockDomain($domain, $browserHistoryModel)
     {
+        $this->checkDemo($this->di['router']->getRouteUrl('browserHistory') . '#blocked');
+        
         try {
             $browserHistoryModel->addSiteUnblock($this->di['devId'], $domain);
             $this->di['flashMessages']->add(FlashMessages::SUCCESS, $this->di['t']->_('The domain has been successfully unlocked!'));

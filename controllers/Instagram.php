@@ -73,6 +73,13 @@ class Instagram extends BaseModuleController
         }
 
         if ($this->getRequest()->hasGet('requestVideo')) {
+            $redirectUrl = $this->di['router']->getRouteUrl('instagramPost', array(
+                        'account' => $this->params['account'],
+                        'post' => $this->params['post']
+            ));
+            
+            $this->checkDemo($redirectUrl);
+            
             if ($post['type'] == 'photo' || $post['status'] != 'image-saved') {
                 $this->di['flashMessages']->add(FlashMessages::ERROR, $this->di['t']->_('Invalid request!'));
             } else {
@@ -80,10 +87,7 @@ class Instagram extends BaseModuleController
                 $this->di['flashMessages']->add(FlashMessages::SUCCESS, $this->di['t']->_('The request to download the video was successfully sent.'));
             }
 
-            $this->redirect($this->di['router']->getRouteUrl('instagramPost', array(
-                        'account' => $this->params['account'],
-                        'post' => $this->params['post']
-            )));
+            $this->redirect($redirectUrl);
         }
 
         $this->view->comments = $instagramModel->getPostComments($this->di['devId'], $this->params['account'], $this->params['post']);

@@ -35,7 +35,6 @@ class Sms extends BaseModuleController {
         if($this->di['currentDevice']['os'] != 'icloud'){
             $this->view->customUtcOffset = 0;
         }
-        
 
         $this->setView('cp/sms.htm');
     }

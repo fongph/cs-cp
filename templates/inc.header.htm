@@ -30,13 +30,13 @@
                     <ul class="nav navbar-nav">
                         {if $di.auth->hasIdentity()}
                         <li><a href="{$di.router->getRouteUrl('cp')}">{$di.t->_('Control Panel')}</a></li>
-                        <li><a href="{$di.router->getRouteUrl('profile')}" class="active">{$di.t->_('Profile')}</a></li>
+                        {if !$di.config.demo}<li><a href="{$di.router->getRouteUrl('profile')}" class="active">{$di.t->_('Profile')}</a></li>{/if}
                         <li><a target="_blank" href="{$di.config.registration}">{$di.t->_('Store')}</a></li>
-                            {if $di->get('isWizardEnabled')}
-                                <li><a href="{$di.router->getRouteUrl('billing')}">{$di.t->_('Subscriptions')}</a></li>
-                            {else}
-                                <li><a href="{$di.router->getRouteUrl('billing')}">{$di.t->_('Payments & Devices')}</a></li>
-                            {/if}
+                        {if $di->get('isWizardEnabled')}
+                            <li><a href="{$di.router->getRouteUrl('billing')}">{$di.t->_('Subscriptions')}</a></li>
+                        {else}
+                            <li><a href="{$di.router->getRouteUrl('billing')}">{$di.t->_('Payments & Devices')}</a></li>
+                        {/if}
                         <li><a href="{$di.router->getRouteUrl('support')}">{$di.t->_('Support')}</a></li>
                         <li><a href="{$di.router->getRouteUrl('logout')}">{$di.t->_('Log out')}</a></li>
                         {else}
