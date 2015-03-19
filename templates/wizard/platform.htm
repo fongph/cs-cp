@@ -1,27 +1,49 @@
+<style type="text/css">
+    .button-holder {
+        display: inline-block;
+    }
+    .button-holder .btn {
+        min-width: 100%;
+    }
+    .icloud-button {
+        position: relative;
+    }
+    .icloud-asterisk {
+        position: absolute;
+        top: 0;
+        right: -18px;
+        
+    }
+</style>
 <div>
-    <h1 class="text-center">{$title}</h1>
-    {insert "inc.flashMessages.htm"}
-    {var $step='platform'}
     {insert "wizard/inc.steps.breadcrumb.htm"}
+    <h1 class="text-center">{$title}</h1>
+    
+    {insert "inc.flashMessages.htm"}
     <div class="wizard-container">
-        <div class="row">
-            <a href="{$di.router->getRouteUrl('wizardSetup', [
+        <p class="text-center">{$di.t->_('Please select the Platform (Operating System) of the target device.')}</p>
+        <div class="button-holder">
+            <div class="row">
+                <a href="{$di.router->getRouteUrl('wizardSetup', [
                 'platform' => 'android',
-            ])}" class="btn btn-primary">Android</a>
-        </div>
-        <div class="row">
-            <a href="{$di.router->getRouteUrl('wizardSetup', [
+                ])}" class="btn btn-primary">Android</a>
+            </div>
+            <div class="row">
+                <a href="{$di.router->getRouteUrl('wizardSetup', [
                 'platform' => 'ios',
-            ])}" class="btn btn-primary">iOS</a>
-        </div>
-        <div class="row">
-            <a href="{$di.router->getRouteUrl('wizardSetup', [
+                ])}" class="btn btn-primary">iOS</a>
+            </div>
+            <div class="row">
+                <a href="{$di.router->getRouteUrl('wizardSetup', [
                 'platform' => 'icloud',
-            ])}" class="btn btn-primary{if !$iCloudAvailable} disabled{/if}">iCloud <sup style="color: #c84d4d">*</sup></a>
+                ])}" class="btn icloud-button btn-primary{if !$iCloudAvailable} disabled{/if}">iCloud<span class="blue-asterisk icloud-asterisk">*</span></a>
+            </div>
         </div>
         <div class="row">
-            <sup style="color: #c84d4d">*</sup> - {$di->getTranslator()->_('iCloud Available for Premium Licenses')}
+            <p class="text-info">
+                <span class="blue-asterisk">*</span>
+                iCloud is available for Premium Subscription only. It allows you to monitor iPhones, iPads and iPods Touch without jailbreak.
+            </p>
         </div>
     </div>
-    <div class="wizard-container">Instructions</div>
 </div>

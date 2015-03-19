@@ -29,7 +29,8 @@ class Sms extends BaseModel {
 
         $timeFrom = $this->getDb()->quote($params['timeFrom']);
         $timeTo = $this->getDb()->quote($params['timeTo']);
-        $fromWhere = "FROM `sms_log` WHERE `dev_id` = {$devId} AND `timestamp` >= {$timeFrom} AND `timestamp` <= {$timeTo}";
+        $deleted = $this->getDb()->quote($params['deleted']);
+        $fromWhere = "FROM `sms_log` WHERE `dev_id` = {$devId} AND `timestamp` >= {$timeFrom} AND `timestamp` <= {$timeTo} AND `deleted` = {$deleted}";
 
         $query = "{$select} {$fromWhere}"
                 . ($search ? " AND ({$search})" : '')
@@ -70,7 +71,8 @@ class Sms extends BaseModel {
                                         `phone_number` phone,
                                         `content`,
                                         `timestamp`,
-                                        `blocked`
+                                        `blocked`,
+                                        `deleted`
                                     FROM `sms_log` WHERE 
                                         `dev_id` = {$devId} AND 
                                         `phone_number` = {$phoneNumber}

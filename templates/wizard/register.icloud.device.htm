@@ -1,20 +1,100 @@
 <div>
-    <h1 class="text-center">{$title}</h1>
     {insert "wizard/inc.steps.breadcrumb.htm"}
+    <h1 class="text-center">{$title}</h1>
     {insert "inc.flashMessages.htm"}
     <div class="wizard-container">
-        <div class="row">
-            <form method="post">
-                <input type="hidden" name="email" value="{$appleID}">
-                <input type="hidden" name="password" value="{$applePassword}">
-                {foreach $devices as $device}
-                    <div class="add-device-button-wrapper">
-                        <button type="submit" class="btn btn-success" name="devHash" value="{$device.SerialNumber}"{if $device.added} disabled{/if}>
-                            <b>{$device.DeviceName}</b> {$device.QuotaUsedMb} {$device.LastModified}
-                        </button>
-                    </div>
-                {/foreach}
-            </form>
-        </div>
+        <p>Please select the target device you want to monitor.</p>
+        <p><b>Note</b>: Select the target device carefully. You can monitor only one device with this subscription.</p>
+        {if count($devices)}
+            <div class="table-container panel-default table-profile-devices">
+                <div class="panel-heading text-left">Devices List</div>
+                <table>
+                    <thead>
+                    <tr>
+                        <th>
+                            <span class="hidden-xs">{$di.t->_('Device Name')}</span>
+                            <span class="visible-xs">{$di.t->_('Name')}</span>
+                        </th>
+                        <th>
+                            <span class="hidden-xs">{$di.t->_('Device Model')}</span>
+                            <span class="visible-xs">{$di.t->_('Model')}</span>
+                        <th>
+                            <span class="hidden-xs">{$di.t->_('Platform (Operating System)')}</span>
+                            <span class="visible-xs">{$di.t->_('OS')}</span>
+                        </th>
+                        <th>
+                            <span class="hidden-xs">{$di.t->_('Last Backup')}</span>
+                            <span class="visible-xs">{$di.t->_('Backup')}</span>
+                        </th>
+                        <th>
+                            <span class="hidden-xs">{$di.t->_('Backup Size')}</span>
+                            <span class="visible-xs">{$di.t->_('Size')}</span>
+                        </th>
+                        <th>
+                            <span class="hidden-xs">{$di.t->_('License Assigned')}</span>
+                            <span class="visible-xs">{$di.t->_('License')}</span>
+                        </th>
+                        <th>
+                            <span class="hidden-xs">{$di.t->_('Expiration Date')}</span>
+                            <span class="visible-xs">{$di.t->_('Expire')}</span>
+                        </th>
+                        <th style="width: 160px">{$di.t->_('Action')}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {var $o = 0}
+                    {foreach $devices as $device}
+                        <tr class="{if ++$o%2}odd{else}even{/if}">
+                            <td>{$device.device_name}</td>
+                            <td>{$device.model}</td>
+                            <td>Apple iOS {$device.os_version}</td>
+                            <td>{if $device.last_backup}
+                                    <span class="timestamp-value" data-time-format="lll" data-timestamp-value="{$device.last_backup}"></span>
+                                {else}-{/if}
+                            </td>
+                            <td>{if $device.quota_used}{$device.quota_used} Mb{else}-{/if}</td>
+                            <td>{if $device.active}{$device.package_name}{/if}</td>
+                            <td>
+                                {if $device.expiration_date}
+                                    <span class="timestamp-value" data-time-format="ll" data-timestamp-value="{$device.expiration_date}"></span>
+                                {/if}
+                            </td>
+                            <td>
+                                {if !$device.active}
+                                    <form method="post">
+                                        <input type="hidden" name="email" value="{$appleID}">
+                                        <input type="hidden" name="password" value="{$applePassword}">
+                                        <button class="btn btn-success btn-xs" type="submit" name="devHash" value="{$device.unique_id}">
+                                            <i class="fa fa-plug"></i>
+                                            {if $device.added}
+                                                {$di.t->_('Assign Subscription')}
+                                            {else}
+                                                {$di.t->_('Add Device')}
+                                            {/if}
+                                        </button>
+                                    </form>
+                                {/if}
+                            </td>
+                        </tr>
+                    {/foreach}
+                    <script type="text/javascript">
+                        $(document).ready(function() {
+                            moment.lang('{$di.t->getLocale()}');
+                            $.each($('[data-timestamp-value]'), function(i, timeTag){
+                                var $tag = $(timeTag);
+                                $tag.html(moment($tag.data('timestamp-value') * 1000).format($tag.data('time-format')));
+                            });
+                        });
+                    </script>
+                    </tbody>
+                </table>
+            </div>
+        {else}
+            <div class="panel-body">
+                <a href="{$di->getRouter()->getRouteUri('profile')}" class="btn btn-primary">
+                    {$di.t->_('Add Device')}
+                </a>
+            </div>
+        {/if}
     </div>
 </div>

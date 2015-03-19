@@ -78,11 +78,21 @@ $di['router']->execute($requestUri, function($route) use ($di) {
             class_exists('Controllers\\' . $route->target['controller'])) {
 
         $controllerName = 'Controllers\\' . $route->target['controller'];
+        /** @var $controller System\Controller */
         $controller = new $controllerName($di);
         
-        if (!(isset($route->target['public']) || $di->get('auth')->hasIdentity())) {
+        if (!(isset($route->target['public']) || $di->getAuth()->hasIdentity())) {
+            
             $di->getFlashMessages()->add(System\FlashMessages::ERROR, "Access denied!");
-            $controller->redirect($di->get('router')->getRouteUrl('main'));
+
+            if($di->get('isWizardEnabled')){
+                
+                if($di->getRequest()->isGet()){
+                    $controller->redirect($di->getRouter()->getRouteUrl('main').'?redirect='.rawurlencode($di->getRequest()->uri()));
+
+                } else $controller->redirect($di->getRouter()->getRouteUrl('main'));
+                
+            } else $controller->redirect($di->getRouter()->getRouteUrl('main'));
         }
 
         if (isset($route->params)) {

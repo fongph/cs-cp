@@ -1,6 +1,14 @@
 <div>
-    <h1 class="text-center">{$title}</h1>
-    {insert "inc.flashMessages.htm"}
     {insert "wizard/inc.steps.breadcrumb.htm"}
-    {insert "wizard/inc.add.code.htm"}
+    <h1 class="text-center">{$di.t->_('Activation Instructions')}</h1>
+    {insert "inc.flashMessages.htm"}
+    <div class="wizard-container">
+        <div id="instruction">
+            {if $platform == 'android'}
+                {insert "wizard/register.app.instruction.android.htm"}
+            {elseif $platform == 'ios'}
+                {insert "wizard/register.app.instruction.ios.htm"}
+            {/if}
+        </div>
+    </div>
 </div>

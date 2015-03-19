@@ -18,20 +18,7 @@ class Applications extends BaseModuleController
         $this->initCP();
     }
 
-    private function privateRouter()
-    {
-        switch ($this->getDI()->getRouter()->getRouteName()) {
-            case 'applicationsManage':
-                $this->manage();
-                break;
-
-            default:
-                $this->index();
-                break;
-        }
-    }
-
-    private function index()
+    public function indexAction()
     {
         $applicationsModel = new \Models\Cp\Applications($this->di);
         if ($this->getRequest()->isAjax()) {
@@ -45,58 +32,10 @@ class Applications extends BaseModuleController
         }
         
         $this->view->hasRecords = $applicationsModel->hasRecords($this->di['devId']);
-        $this->setView('cp/applicationsNew.htm');
-    }
-
-    /**
-     * 
-     * @TODO remove old functional on new version
-     * @return type
-     */
-    public function indexAction()
-    {
-        if ($this->di['isTestUser']($this->auth['id'])) {
-            return $this->privateRouter();
-        }
-
-        $applicationsModel = new \Models\Cp\Applications($this->di);
-        if ($this->getRequest()->isAjax()) {
-            $dataTableRequest = new \System\DataTableRequest($this->di);
-
-            $data = $applicationsModel->getDataTableData(
-                    $this->di['devId'], $dataTableRequest->buildResult()
-            );
-            $this->checkDisplayLength($dataTableRequest->getDisplayLength());
-            $this->makeJSONResponse($data);
-        } else if ($this->getRequest()->get('block') !== null) {
-            try {
-                $applicationsModel->setBlock($this->di['devId'], $this->getRequest()->get('block'));
-                $this->di['flashMessages']->add(FlashMessages::SUCCESS, $this->di['t']->_('The application has been successfully blocked!'));
-            } catch (\Models\Cp\ApplicationsAlreadyBlockedException $e) {
-                $this->di['flashMessages']->add(FlashMessages::INFO, $this->di['t']->_('The application has already been blocked!'));
-            } catch (\Models\Cp\ApplicationsNotFoundException $e) {
-                $this->di['flashMessages']->add(FlashMessages::INFO, $this->di['t']->_('The application has not been found!'));
-            }
-
-            $this->redirect($this->di['router']->getRouteUrl('applications'));
-        } else if ($this->getRequest()->get('unblock') !== null) {
-            try {
-                $applicationsModel->setUnblock($this->di['devId'], $this->getRequest()->get('unblock'));
-                $this->di['flashMessages']->add(FlashMessages::SUCCESS, $this->di['t']->_('The application has been successfully unblocked!'));
-            } catch (\Models\Cp\ApplicationsAlreadyUnblockedException $e) {
-                $this->di['flashMessages']->add(FlashMessages::INFO, $this->di['t']->_('The application has already been unblocked!'));
-            } catch (\Models\Cp\ApplicationsNotFoundException $e) {
-                $this->di['flashMessages']->add(FlashMessages::INFO, $this->di['t']->_('The application has not been found!'));
-            }
-
-            $this->redirect($this->di['router']->getRouteUrl('applications'));
-        }
-
-        $this->view->hasRecords = $applicationsModel->hasRecords($this->di['devId']);
         $this->setView('cp/applications.htm');
     }
 
-    private function manage()
+    public function manageAction()
     {
         $applicationsModel = new \Models\Cp\Applications($this->di);
 
@@ -132,6 +71,9 @@ class Applications extends BaseModuleController
         parent::postAction();
         $this->buildCpMenu();
 
+        /**
+         * @deprecated until there are no applications with old version
+         */
         if ($this->di['isTestUser']($this->auth['id'])) {
             if (($this->di['currentDevice']['os'] === 'android' && $this->di['currentDevice']['app_version'] < 5) ||
                     ($this->di['currentDevice']['os'] === 'ios' && $this->di['currentDevice']['app_version'] < 3)) {

@@ -42,26 +42,26 @@
             </thead>
         </table>
     </div>
-    
-    <a href="{$di.router->getRouteUrl('billingAddDevice')}" class="btn btn-success">{$di.t->_('Add Device')}</a>
-    
-    {if count($bundles)}
-    <ul class="list-group">
-        {foreach $bundles as $item}
-        <li class="list-group-item">
-            {$item.name}
-            <div class="right-data">
-                {if $item.continuous == 1}
-                    <b>available</b>
-                {elseif $item.expiration_date > 0}
-                    {$di.t->_('expires at')} <b class="expire-date" data-time="{$item.expiration_date}"></b>
-                {else}
-                    <a href="{$buyUrl}?product={$item.group}" class="btn btn-xs btn-success btn-buy">{$di.t->_('Buy Now')}</a>
-                {/if}
-            </div>
-        </li>
-        {/foreach}
-    </ul>
+    {if !$di->get('isWizardEnabled')}
+        <a href="{$di.router->getRouteUrl('billingAddDevice')}" class="btn btn-success">{$di.t->_('Add Device')}</a>
+        {if count($bundles)}
+            <ul class="list-group">
+                {foreach $bundles as $item}
+                    <li class="list-group-item">
+                        {$item.name}
+                        <div class="right-data">
+                            {if $item.continuous == 1}
+                                <b>available</b>
+                            {elseif $item.expiration_date > 0}
+                                {$di.t->_('expires at')} <b class="expire-date" data-time="{$item.expiration_date}"></b>
+                            {else}
+                                <a href="{$buyUrl}?product={$item.group}" class="btn btn-xs btn-success btn-buy">{$di.t->_('Buy Now')}</a>
+                            {/if}
+                        </div>
+                    </li>
+                {/foreach}
+            </ul>
+        {/if}
     {/if}
 
     <script type="text/javascript">
@@ -74,12 +74,20 @@
             moment.lang('{$di.t->getLocale()}');
 
             var billing = {
-                url: '{$di.config.domain}/billing',
+                {if $di->get('isWizardEnabled')}
+                    url: '{$di->getRouter()->getRouteUrl('billing')}',
+                {else}
+                    url: '{$di.config.domain}/billing',
+                {/if}
                 tab: null,
                 table: null,
                 unlimitValue: '{$unlimitedValue}',
                 limitsTmpl: _.template('Calls: <b><%= call %></b><hr/> SMS: <b><%= sms %></b>'),
-                deviceTmpl: _.template('<a class="btn btn-success btn-xs" href="{$di.router->getRouteUrl('billingAssignDevice')}?license=<%= id %>"><i class="fa fa-plug"></i> {$di.t->_('Assign Device')}</a>'),
+                {if $di->get('isWizardEnabled')}
+                    deviceTmpl: _.template('<a class="btn btn-success btn-xs" href="{$di.router->getRouteUrl('wizardPlatform')}?licenseId=<%= id %>"><i class="fa fa-plug"></i> {$di.t->_('Assign Device')}</a>'),
+                {else}
+                    deviceTmpl: _.template('<a class="btn btn-success btn-xs" href="{$di.router->getRouteUrl('billingAssignDevice')}?license=<%= id %>"><i class="fa fa-plug"></i> {$di.t->_('Assign Device')}</a>'),
+                {/if}
                 getSourceUrl: function () {
                     if (window.location.hash === '#active') {
                         return this.url + '?active=1';

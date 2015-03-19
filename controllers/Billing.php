@@ -32,7 +32,11 @@ class Billing extends BaseController
             $this->makeJSONResponse($data);
         }
 
-        $this->view->title = $this->di->getTranslator()->_('Payments & Devices');
+        if($this->di->get('isWizardEnabled')) {
+            $this->view->title = $this->di->getTranslator()->_('Subscriptions');
+            
+        } else $this->view->title = $this->di->getTranslator()->_('Payments & Devices');
+        
         $this->view->unlimitedValue = \CS\Models\Limitation\LimitationRecord::UNLIMITED_VALUE;
         $this->view->buyUrl = GlobalSettings::getMainURL($this->di['config']['site']) . '/buy.html';
         $this->view->bundles = $billingModel->getBundlesList($this->auth['id']);

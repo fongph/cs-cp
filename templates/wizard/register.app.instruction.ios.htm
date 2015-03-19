@@ -1,0 +1,42 @@
+<style>
+    .add-code-block {
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        margin: 10px 0;
+        padding: 10px 30px;
+        text-align: center;
+        display: inline-block;
+        width: 316px;
+    }
+    .wizard-container img{
+        width: 316px;
+    }
+</style>
+<p class="text-left">1) Go back to the app and enter the generated PIN Code. Note that the PIN Code is valid within 15 minutes only. If the time has expired, please generate a new PIN Code again. Note that the PIN Code shown below is an example only. Use your own PIN Code.</p>
+<div class="add-code-block">
+    {if $code}
+        <h3>{$di.t->_('Your code is:')} {$code}</h3>
+        <p class="text-danger">{$di.t->_('valid for 15 min')}</p>
+    {else}
+        <h3 style="color: #a94442">{$di.t->_("Error during generate code! Pleace try again later!")}</h3>
+    {/if}
+</div>
+<p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/how-to-install/ios-instructions/ios8/13.png" alt="" /></p>
+<p class="text-left">2) Enter and repeat a &quot;<strong>Secret Key</strong>&quot;. Tap &quot;<strong>Next</strong>&quot; to proceed.</p>
+<p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/how-to-install/ios-instructions/ios7/16.png" alt="" /></p>
+<p class="text-left">3) Now, as you can see, the monittoring is <strong>enabled</strong>.</p>
+<p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/how-to-install/ios-instructions/ios7/17.png" alt="" /></p>
+<p class="text-left">You can always find <strong>Pumpic icon</strong> on the desktop of the target device.</p>
+<p class="text-left">Run the app anytime you want to <strong>enable/disable monitoring</strong> on the target device.</p>
+<p class="text-left">The following step is optional. However, if &quot;<strong>Location Access</strong>&quot; is disabled, you will not be able to  keep track of GPS location and route history of the target device.</p>
+<p class="text-left">Enter &quot;<strong>Settings</strong>&quot; menu, choose &quot;<strong>Privacy</strong>&quot; and proceed to &quot;<strong>Location Services</strong>&quot;.</p>
+<p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/how-to-install/ios-instructions/ios7/19.png" alt="" />&nbsp;<img class="img-thumbnail" src="{$di.config.staticDomain}/images/how-to-install/ios-instructions/ios7/20.png" alt="" /></p>
+<p class="text-left">Select <strong>Pumpic</strong> in &quot;<strong>Location Services</strong>&quot; menu and check &quot;<strong>Always</strong>&quot;.</p>
+<p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/how-to-install/ios-instructions/ios7/21.png" alt="" /></p>
+<p>The installation was completed correctly. Pumpic is already monitoring the target device. The data from the target device will soon be sent to your Control Panel.</p>
+
+<form method="post">
+    <button type="submit" name="code" value="{$code}" class="btn btn-primary{if !$code} disabled{/if}"{if !$code} disabled{/if}>
+        {$di.t->_('Start Monitoring')}
+    </button>
+</form>

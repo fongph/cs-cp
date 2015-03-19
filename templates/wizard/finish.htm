@@ -1,16 +1,24 @@
 <div>
+    {insert "wizard/inc.steps.breadcrumb.htm"}
     <h1 class="text-center">{$title}</h1>
     {insert "inc.flashMessages.htm"}
-    {insert "wizard/inc.steps.breadcrumb.htm"}
     <div class="wizard-container">
-        <h3>{$di->getTranslator()->_('Success!')}</h3>
+        <p class="text-left">
+            Congratulations! You have assigned the target device to your Subscription Plan. 
+            The first data will appear in your Control Panel in a few minutes. 
+            You can also set display name for the target device right now.
+        </p>
         <div class="row">
             <div class="col-lg-4 col-md-4 col-sm-6 col-lg-offset-4 col-md-offset-4 col-sm-offset-3">
                 <form role="form" method="post" autocomplete="off">
-                    <div class="form-group">
-                        <input type="text" name="deviceName" class="form-control" id="deviceName" value="{if $di.request->post('deviceName')}{$di.request->post('deviceName')}{else}{$device->getName()}{/if}" placeholder="{$di.t->_('Device Name')}">
+                    <div class="form-group text-left">
+                        <label for="deviceName">{$di.t->_('Device Name')}</label>
+                        <div class="row">
+                            <input style="width: 65%" type="text" name="deviceName" class="form-control pull-left" id="deviceName" value="{if $di.request->post('deviceName')}{$di.request->post('deviceName')}{else}{$device->getName()}{/if}" placeholder="{$di.t->_('Device Name')}">
+                            <button style="width: 30%" type="submit" class="btn btn-primary pull-right">{$di.t->_('Update')}</button>
+                        </div>
                     </div>
-                    <button type="submit" class="btn btn-primary pull-right">{$di.t->_('Save')}</button>
+                    <a href="{$di->getRouter()->getRouteUrl('setDevice', ['devId'=>$device->getId()])}" class="btn btn-success">{$di.t->_('Go to Control Panel')}</a>
                 </form>
             </div>
         </div>

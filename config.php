@@ -53,6 +53,7 @@ $default = array(
         Modules::WHATSAPP => 'Whatsapp Tracking',
         Modules::FACEBOOK => 'Facebook Messages',
         Modules::VK => 'VK Messages',
+        Modules::INSTAGRAM => 'Instagram Tracking',
         Modules::EMAILS => 'View Emails',
         Modules::APPLICATIONS => 'View Applications',
         Modules::SMS_COMMANDS => 'Sms Commands',

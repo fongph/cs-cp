@@ -2,6 +2,7 @@
 
 namespace Controllers;
 
+use CS\Models\Device\DeviceICloudRecord;
 use CS\Models\Device\DeviceRecord;
 use System\FlashMessages,
     Models\Modules;
@@ -113,7 +114,13 @@ class DeviceSettings extends BaseModuleController
             $this->redirect($this->di['router']->getRouteUrl('profile'));
         }
 
+        $this->view->currentDevice = $this->di->get('currentDevice');
         $this->view->data = $settingsModel->getSettings($this->di['devId']);
+        
+        try{$this->view->iCloudRecord = new DeviceICloudRecord($this->di->get('db'));
+            if($this->view->currentDevice['os'] == 'icloud')
+                $this->view->iCloudRecord->loadByDevId($this->di->get('devId')); 
+        }catch(\Exception $e){};
 
         $this->setView('cp/settings.htm');
     }

@@ -34,6 +34,7 @@ class Modules
     const INSTAGRAM = 'instagram';
 
     private static $moduleCheckMethods = array(
+        self::LOCATIONS => 'isLocationsActive',
         self::BROWSER_BOOKMARKS => 'isBrowserBookmarksActive',
         self::BROWSER_HISTORY => 'isBrowserHistoryActive',
         self::CALENDAR => 'isCalendarActive',
@@ -48,7 +49,8 @@ class Modules
         self::VK => 'isVkActive',
         self::EMAILS => 'isEmailsActive',
         self::APPLICATIONS => 'isApplicationsActive',
-        self::SMS_COMMANDS => 'isSmsCommandsActive'
+        self::SMS_COMMANDS => 'isSmsCommandsActive',
+        self::INSTAGRAM => 'isInstagramActive',
     );
     
     protected $di;

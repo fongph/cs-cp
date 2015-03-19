@@ -4,7 +4,8 @@ namespace Controllers;
 
 use System\FlashMessages,
     Models\Modules,
-    CS\Devices\Limitations;
+    CS\Devices\Limitations,
+    CS\Devices\DeviceOptions;
 
 class Sms extends BaseModuleController {
 
@@ -23,13 +24,17 @@ class Sms extends BaseModuleController {
 
             $data = $smsModel->getDataTableData(
                     $this->di['devId'], 
-                    $dataTableRequest->buildResult(array('timeFrom', 'timeTo'))
+                    $dataTableRequest->buildResult(array('timeFrom', 'timeTo', 'deleted'))
             );
             $this->checkDisplayLength($dataTableRequest->getDisplayLength());
             $this->makeJSONResponse($data);
         }
 
         $this->view->hasRecords = $smsModel->hasRecords($this->di['devId']);
+        $this->view->isDeletedAvailable = DeviceOptions::isDeletedDataAvailable($this->di['currentDevice']['os']);
+        if($this->di['currentDevice']['os'] != 'icloud'){
+            $this->view->customUtcOffset = 0;
+        }
 
         $this->setView('cp/sms.htm');
     }

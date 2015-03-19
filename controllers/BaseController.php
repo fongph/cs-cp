@@ -20,6 +20,7 @@ class BaseController extends Controller
         if ($this->di['config']['demo']) {
             $this->demo = true;
         }
+
     }
 
     public function error404()

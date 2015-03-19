@@ -199,7 +199,10 @@ class Settings extends BaseModel
             'lockActive' => DeviceOptions::isLockActive($devInfo['os'], $devInfo['os_version']),
             'blockSMSActive' => DeviceOptions::isBlockSMSActive($devInfo['os'], $devInfo['os_version']),
             'rebootApplicationActive' => DeviceOptions::isRebootApplicationActive($devInfo['os']),
-            'rebootDeviceActive' => DeviceOptions::isRebootDeviceActive($devInfo['os'])
+            'rebootDeviceActive' => DeviceOptions::isRebootDeviceActive($devInfo['os']),
+            'isBlackListAvailable' => DeviceOptions::isBlackListAvailable($devInfo['os']),
+            'isSimNotificationAvailable' => DeviceOptions::isSimNotificationAvailable($devInfo['os']),
+            'isDeviceCommandsAvailable' => DeviceOptions::isDeviceCommandsAvailable($devInfo['os']),
         );
     }
 

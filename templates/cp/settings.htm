@@ -8,27 +8,29 @@
             </div>
             
             <div class="col-lg-6 col-md-6">
-                <div class="panel panel-default">
-                    <div class="panel-heading">{if $data.blockSMSActive}{$di.t->_('Calls & SMS blocking')}{else}{$di.t->_('Blacklist Phone numbers')}{/if}<span class="blue-asterisk">*</span></div>
-                    <div class="panel-body text-center">
-                        {if count($data.blackListPhones)}
-                        <ul class="list-group">
-                            {foreach $data.blackListPhones as $phone}
-                            <li class="list-group-item">{$phone} <a href="{$di.router->getRouteUrl('settings')}?removePhonesBlackList={$phone|escape:'url'}" class="close" aria-hidden="true">&times;</a></li>
-                            {/foreach}
-                        </ul>
-                        {/if}
-                        <form role="form" action="" class="form-inline" method="post">
-                            <div class="form-group">
-                                <label>{$di.t->_('Phone Number')}</label>
-                                <input type="text" name="phone" value="" class="form-control" placeholder="+12345676789" />
-                            </div>
-                            <div class="form-group">
-                                <button type="submit" class="btn btn-danger" name="phonesBlackList">{$di.t->_('Add')}</button>
-                            </div>
-                        </form>
+                {if $data.isBlackListAvailable}
+                    <div class="panel panel-default">
+                        <div class="panel-heading">{if $data.blockSMSActive}{$di.t->_('Calls & SMS blocking')}{else}{$di.t->_('Blacklist Phone numbers')}{/if}<span class="blue-asterisk">*</span></div>
+                        <div class="panel-body text-center">
+                            {if count($data.blackListPhones)}
+                                <ul class="list-group">
+                                    {foreach $data.blackListPhones as $phone}
+                                        <li class="list-group-item">{$phone} <a href="{$di.router->getRouteUrl('settings')}?removePhonesBlackList={$phone|escape:'url'}" class="close" aria-hidden="true">&times;</a></li>
+                                    {/foreach}
+                                </ul>
+                            {/if}
+                            <form role="form" action="" class="form-inline" method="post">
+                                <div class="form-group">
+                                    <label>{$di.t->_('Phone Number')}</label>
+                                    <input type="text" name="phone" value="" class="form-control" placeholder="+12345676789" />
+                                </div>
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-danger" name="phonesBlackList">{$di.t->_('Add')}</button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
-                </div>
+                {/if}
                 <div class="panel panel-default">
                     <div class="panel-body">
                         <form role="form" action="" method="post">
@@ -42,25 +44,52 @@
                                 <textarea name="blackWords" class="form-control" placeholder="{$di.t->_('Enter the words (separated by comma), by which incoming SMS will be blocked')}">{$data.settings.bl_words}</textarea>
                             </div>
                             {/if}
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox" name="simNotificactions"{if $data.settings.sim_notification} checked{/if} /> {$di.t->_('Receive SIM change notifications')}<span class="blue-asterisk">*</span>
-                                </label>
-                            </div>
+                            {if $data.isSimNotificationAvailable}
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" name="simNotificactions"{if $data.settings.sim_notification} checked{/if} /> {$di.t->_('Receive SIM change notifications')}<span class="blue-asterisk">*</span>
+                                    </label>
+                                </div>
+                            {/if}
                             <button type="submit" name="deviceSettings" class="btn btn-primary">{$di.t->_('Update')}</button>
                         </form>
                     </div>
                 </div>
             </div>
             <div class="col-lg-6 col-md-6">
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                        <div class="device-status">
-                            <div class="name">{$di.t->_('Device status')}:</div>
-                            <div class="value{if $di.currentDevice.online} {if $di.currentDevice.network=='wifi'}wifi{else}mobile{/if}{else} offline{/if}"></div>
+                {if $di.currentDevice.os == 'icloud'}
+                    {if isset($iCloudRecord) && $iCloudRecord->getId()}
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <div class="icloud-status">
+                                    <strong>{$di.t->_('Device status')}:</strong>
+                                    {if $iCloudRecord->getProcessing()}
+                                        {$di.t->_('Awaiting for data loading from backup')}
+                                    {elseif $iCloudRecord->getLastError() == 1}
+                                        {$di.t->_('iCloud Authorization Error. Please %schange the password%s.', [
+                                            '<a href="' ~ $di->getRouter()->getRouteUri("profileICloudPasswordReset") ~ '?iCloudId=' ~ $iCloudRecord->getId() ~ '">', 
+                                            '</a>'
+                                        ])} 
+                                        
+                                    {elseif $iCloudRecord->getLastError()}
+                                        {$di.t->_('New Data Upload Error. Please contact Customer %sSupport%s.', ['<a href="mailto:support@pumpic.com">', '</a>'])}
+                                    {else}
+                                        {$di.t->_('Awaiting for iCloud Backup')}
+                                    {/if}
+                                </div>
+                            </div>
+                        </div>
+                    {/if}
+                {else}
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="device-status">
+                                <div class="name">{$di.t->_('Device status')}:</div>
+                                <div class="value{if $di.currentDevice.online} {if $di.currentDevice.network=='wifi'}wifi{else}mobile{/if}{else} offline{/if}"></div>
+                            </div>
                         </div>
                     </div>
-                </div>
+                {/if}
                 {*
                 <div class="panel panel-default">
                     <div class="panel-body text-center">
@@ -115,7 +144,9 @@
             </div>
         </div>
     </div>
-    <p class="text-info"><span class="blue-asterisk">*</span>{$di.t->_('Command activation will take up to 20 min. In case the target phone has additional software to track calls or SMS, blocking may not work properly.')}</p>
+    {if $data.isDeviceCommandsAvailable}
+        <p class="text-info"><span class="blue-asterisk">*</span>{$di.t->_('Command activation will take up to 20 min. In case the target phone has additional software to track calls or SMS, blocking may not work properly.')}</p>    
+    {/if}
 </div>
 <script>
     $(document).ready(function() {

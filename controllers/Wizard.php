@@ -4,11 +4,11 @@ use Components\WizardRouter;
 use CS\Devices\DeviceCode;
 use CS\Devices\DeviceCodeGenerationException;
 use CS\Devices\DeviceObserver;
-use CS\Devices\Manager as DeviceManager,
-    CS\Models\License\LicenseRecord,
-    CS\Models\License\LicenseNotFoundException,
-    Models\Billing as BillingModel,
-    System\FlashMessages;
+use CS\Devices\Manager as DeviceManager;
+use CS\Models\License\LicenseRecord;
+use CS\Models\License\LicenseNotFoundException;
+use Models\Billing as BillingModel;
+use System\FlashMessages;
 use CS\ICloud\AuthorizationException;
 use CS\ICloud\Backup as iCloudBackup;
 use CS\Models\Device\DeviceICloudRecord;
@@ -48,6 +48,7 @@ class Wizard extends BaseController {
     {
         $billingModel = new BillingModel($this->di);
         $this->view->packages = $billingModel->getAvailablePackages($this->auth['id']);
+        $this->view->title = $this->di->getTranslator()->_('Select a Subscription Plan');
         $this->setView('wizard/package.htm');
     }
     
@@ -55,19 +56,32 @@ class Wizard extends BaseController {
     {
         $this->view->license = $license = $this->getLicense();
         $this->view->product = $product = $license->getOrderProduct()->getProduct();
-        $this->view->iCloudAvailable = $product->getGroup() == 'premium';
+        $this->view->iCloudAvailable = ($product->getGroup() == 'premium');
+        $this->view->title = $this->di->getTranslator()->_('Select a Platform');
         $this->setView('wizard/platform.htm');
     }
 
     public function setupAction()
     {
-        $deviceManager = new DeviceManager($this->di->get('db'));
-        $devices = $deviceManager->getUserActiveDevices($this->auth['id'], $this->getPlatform());
-        $license = $this->getLicense();
-        
+        if($this->getPlatform() !== 'icloud')
+            $license = $this->getLicense();
+        else $license = $this->getICloudLicense();
+
+        $deviceModel = new Devices($this->di);
+        $devices = $deviceModel->getUserDevices($this->auth['id'], $this->getPlatform(), false);
+
         if(isset($_POST['device_id'])){
-            if(isset($devices[$_POST['device_id']]) && $devices[$_POST['device_id']]['active']){
-                $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('Device Already Has License'));
+            $isDeviceFound = false;
+            foreach($devices as $device)
+                if($device['device_id'] == $_POST['device_id']){
+                    $isDeviceFound = true;
+                    if($device['active']){
+                        $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('Device Already Has License'));
+                        $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_SETUP));
+                    }
+                }
+            if(!$isDeviceFound){
+                $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('Device not found'));
                 $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_SETUP));
             }
 
@@ -77,7 +91,6 @@ class Wizard extends BaseController {
                     ->setDevice($this->getDevice($_POST['device_id']))
                     ->setLicense($license)
                     ->setAfterSave(function() use ($deviceObserver) {
-                        $this->di->getFlashMessages()->add(FlashMessages::SUCCESS, $this->di->getTranslator()->_('Device successfully assigned to your license!'));
                         $userNotes = new UsersNotes($this->di->get('db'));
                         $userNotes->addSystemNote($this->auth['id'], UsersNotes::TYPE_SYSTEM, null, null, "Assign {$deviceObserver->getLicense()->getOrderProduct()->getProduct()->getName()} to device {$deviceObserver->getDevice()->getName()} " . json_encode(array(
                                 'device_id' => $deviceObserver->getDevice()->getId(),
@@ -108,16 +121,23 @@ class Wizard extends BaseController {
                 $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_SETUP));
             }
         }
-        $this->view->devices = $devices;
+        $this->view->title = $this->di->getTranslator()->_('Select a Device');
+        if($this->getPlatform() == 'icloud'){
+            $this->view->instructionTitle = $this->di->getTranslator()->_('Prepare iOS Device without Jailbreak');
+            
+        } else $this->view->instructionTitle = $this->di->getTranslator()->_('Assign New Device');
         $this->view->license = $license;
         $this->view->platform = $this->getPlatform();
+
+        if($this->getPlatform() !== 'icloud')
+            $this->view->availabledevices = $devices;
+        else $this->view->availabledevices = array();
+        
         $this->setView('wizard/setup.htm');
     }
 
     public function registerAppAction()
     {
-        $this->view->license = $license = $this->getLicense();
-        
         if(isset($_POST['code'])){
 
             $deviceCode = new DeviceCode($this->di->get('db'));
@@ -128,39 +148,40 @@ class Wizard extends BaseController {
                 $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_REGISTER));
                 
             } elseif ($info['assigned']) {
-                $this->di->getFlashMessages()->add(FlashMessages::SUCCESS, "Your device successfully added!");
                 $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_FINISH, array('deviceId'=>$info['assigned_device_id'])));
                 
             } elseif ($info['expired']) {
-                $this->di->getFlashMessages()->add(FlashMessages::INFO, "Code was expired. We've generated new code for you. Please enter it on mobile phone.");
+                $this->di->getFlashMessages()->add(FlashMessages::ERROR, "Code was expired. We've generated new code for you. Please enter it on mobile phone.");
                 
-            } else $this->di->getFlashMessages()->add(FlashMessages::INFO, "It looks you haven't entered code on mobile yet. Please do it now.");
+            } else $this->di->getFlashMessages()->add(FlashMessages::ERROR, "It looks you haven't entered code on mobile yet. Please do it now. If you are hesitating where to enter the generated PIN code, you have probably forgotten to download and set up Pumpic application.");
             
             $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_REGISTER));
         }
-        
-        $this->view->code = $code = $this->getNewDeviceCode($license);
+        $this->view->title = $this->di->getTranslator()->_('Enter Activation Code');
+        $this->view->platform = $this->getPlatform();
+        $this->view->code = $code = $this->getNewDeviceCode($this->getLicense(false));
         
         $this->setView('wizard/register.app.htm');
     }
     
     public function registerICloudAction()
     {
-        $licenseRecord = $this->getLicense();
-        if ($licenseRecord->getOrderProduct()->getProduct()->getGroup() != 'premium'){
-            $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('iCloud is Available for Premium Packages Only'));
-            $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_PACKAGE));
-        }
+        $licenseRecord = $this->getICloudLicense();
 
         try {
             if ($_POST) {
+                if(empty($_POST['email']))
+                    throw new EmptyICloudId;
+                elseif(empty($_POST['password']))
+                    throw new EmptyICloudPassword;
+                
                 $iCloud = new iCloudBackup($_POST['email'], $_POST['password']);
                 $devices = $iCloud->getDevices();
 
                 $devModel = new Devices($this->di);
                 
                 if (empty($devices)) {
-                    $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('Account has no devices. Please try another'));
+                    $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('There are no uploaded backups for this iCloud account'));
                     $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_REGISTER));
                     
                 } else $devices = $devModel->iCloudMergeWithLocalInfo($this->auth['id'], $devices);
@@ -168,81 +189,131 @@ class Wizard extends BaseController {
                 if (isset($_POST['devHash']) && !empty($_POST['devHash'])) {
 
                     foreach ($devices as &$device) {
-                        if ($device['SerialNumber'] === $_POST['devHash'] && !$device['added']) {
+                        if ($device['SerialNumber'] === $_POST['devHash']) {
+                            
+                            if($device['added']) {
+                                if(!$device['active']){
+                                    try {
+                                        $deviceObserver = new DeviceObserver($this->di->get('logger'));
+                                        $deviceObserver->setMainDb($this->di->get('db'))
+                                            ->setDevice($this->getDevice($device['device_id']))
+                                            ->setLicense($licenseRecord)
+                                            ->setAfterSave(function() use ($deviceObserver) {
+                                                $userNotes = new UsersNotes($this->di->get('db'));
+                                                $userNotes->addSystemNote($this->auth['id'], UsersNotes::TYPE_SYSTEM, null, null, "Assign {$deviceObserver->getLicense()->getOrderProduct()->getProduct()->getName()} to device {$deviceObserver->getDevice()->getName()} " . json_encode(array(
+                                                        'device_id' => $deviceObserver->getDevice()->getId(),
+                                                        'license_id' => $deviceObserver->getLicense()->getId()
+                                                    )));
+                                                
+                                                $queueManager = new \CS\Queue\Manager($this->di['queueClient']);
+                                                $iCloudDevice = new DeviceICloudRecord($this->di->get('db'));
 
-                            $deviceRecord = new DeviceRecord($this->di->get('db'));
-                            $deviceRecord->setUserId($this->auth['id'])
-                                ->setUniqueId($device['SerialNumber'])
-                                ->setName($device['DeviceName'])
-                                ->setModel($device['MarketingName'])
-                                ->setOS(DeviceRecord::OS_ICLOUD)
-                                ->setOSVersion($device['ProductVersion']);
-                            
-                            $iCloudRecord = new DeviceICloudRecord($this->di->get('db'));
-                            $iCloudRecord
-                                ->setAppleId($_POST['email'])
-                                ->setApplePassword($_POST['password'])
-                                ->setDeviceHash($device['backupUDID'])
-                                ->setLastBackup($device['LastModified'])
-                                ->setQuotaUsed($device['QuotaUsedMb']);
-                            
-                            $deviceObserver = new DeviceObserver($this->di->get('logger'));
-                            $deviceObserver
-                                ->setMainDb($this->di->get('db'))
-                                ->setDataDbHandler(array($this, 'getDataDb'))
-                                ->setDevice($deviceRecord)
-                                ->setICloudDevice($iCloudRecord)
-                                ->setLicense($licenseRecord)
-                                ->setAfterSave(function() use ($deviceObserver) {
-                                    $this->di->getFlashMessages()->add(FlashMessages::SUCCESS, $this->di->getTranslator()->_('New Device Added'));
-                                    /** @var $mailSender \CS\Mail\MailSender */
-                                    $mailSender = $this->di->get('mailSender');
-                                    $mailSender->sendNewDeviceAdded($this->auth['login'], $deviceObserver->getDevice()->getName());
+                                                $iCloudDevice->loadByDevId($deviceObserver->getDevice()->getId());
+
+                                                if ($queueManager->addDownloadTask($iCloudDevice)) {
+                                                    $iCloudDevice->setProcessing(1);
+
+                                                } else $iCloudDevice->setLastError($queueManager->getError());
+                                                $iCloudDevice->save();
+                                            });
+
+                                        if($deviceObserver->assignLicenseToDevice()) {
+                                            $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_FINISH, array('deviceId'=>$deviceObserver->getDevice()->getId())));
+
+                                        } else throw new \Exception("Can't assign Device {$deviceObserver->getDevice()->getId()} to License {$deviceObserver->getLicense()->getId()}");
+
+                                    } catch (\Exception $e) {
+                                        $this->logger->addCritical($e);
+                                        $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('Internal Error! Please try latter'));
+                                        $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_SETUP));
+                                    }
                                     
-                                    $userNotes = new UsersNotes($this->di['db']);
-                                    $userNotes->addSystemNote($this->auth['id'], UsersNotes::TYPE_SYSTEM, null, null, "New device added {$deviceObserver->getDevice()->getName()} " . json_encode(array(
-                                            'dev_id' => $deviceObserver->getDevice()->getUniqueId()
-                                        )));
-                                    $userNotes->addSystemNote($this->auth['id'], UsersNotes::TYPE_SYSTEM, null, null, "Assign {$deviceObserver->getLicense()->getOrderProduct()->getProduct()->getName()} to device {$deviceObserver->getDevice()->getName()} " . json_encode(array(
-                                            'device_id' => $deviceObserver->getDevice()->getId(),
-                                            'license_id' => $deviceObserver->getLicense()->getId()
-                                        ))
-                                    );
-
-                                    $queueManager = new \CS\Queue\Manager($this->di['queueClient']);
-                                    if ($queueManager->addDownloadTask($deviceObserver->getICloudDevice())) {
-                                        $deviceObserver->getICloudDevice()->setProcessing(1);
-                                        
-                                    } else $deviceObserver->getICloudDevice()->setLastError($queueManager->getError());
-                                    $deviceObserver->getICloudDevice()->save();
-                                });
-                            
-                            try {
-                                if($deviceObserver->addICloudDevice()){
-                                    $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_FINISH, array(
-                                        'deviceId' => $deviceObserver->getDevice()->getId()
-                                    )));
-                                } else throw new \Exception("USER {$this->auth['id']} Can't add ICloudDevice {$deviceObserver->getDevice()->getId()} to License {$this->getLicense()->getId()}");
+                                } else {
+                                    $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('Device Already Has License'));
+                                    $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_REGISTER));
+                                }
                                 
-                            } catch (\Exception $e) {
-                                $this->logger->addCritical($e);
-                                $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('Something Was Wrong. Please Contact Us!'));
-                                $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_REGISTER));
+                            } else {
+                                $deviceRecord = new DeviceRecord($this->di->get('db'));
+                                $deviceRecord->setUserId($this->auth['id'])
+                                    ->setUniqueId($device['SerialNumber'])
+                                    ->setName($device['DeviceName'])
+                                    ->setModel($device['MarketingName'])
+                                    ->setOS(DeviceRecord::OS_ICLOUD)
+                                    ->setOSVersion($device['ProductVersion']);
+
+                                $iCloudRecord = new DeviceICloudRecord($this->di->get('db'));
+                                $iCloudRecord
+                                    ->setAppleId($_POST['email'])
+                                    ->setApplePassword($_POST['password'])
+                                    ->setDeviceHash($device['backupUDID'])
+                                    ->setLastBackup($device['LastModified'])
+                                    ->setQuotaUsed($device['QuotaUsedMb']);
+
+                                $deviceObserver = new DeviceObserver($this->di->get('logger'));
+                                $deviceObserver
+                                    ->setMainDb($this->di->get('db'))
+                                    ->setDataDbHandler(array($this, 'getDataDb'))
+                                    ->setDevice($deviceRecord)
+                                    ->setICloudDevice($iCloudRecord)
+                                    ->setLicense($licenseRecord)
+                                    ->setAfterSave(function() use ($deviceObserver) {
+                                        /** @var $mailSender \CS\Mail\MailSender */
+                                        $mailSender = $this->di->get('mailSender');
+                                        $mailSender->sendNewDeviceAdded($this->auth['login'], $deviceObserver->getDevice()->getName());
+
+                                        $userNotes = new UsersNotes($this->di['db']);
+                                        $userNotes->addSystemNote($this->auth['id'], UsersNotes::TYPE_SYSTEM, null, null, "New device added {$deviceObserver->getDevice()->getName()} " . json_encode(array(
+                                                'dev_id' => $deviceObserver->getDevice()->getUniqueId()
+                                            )));
+                                        $userNotes->addSystemNote($this->auth['id'], UsersNotes::TYPE_SYSTEM, null, null, "Assign {$deviceObserver->getLicense()->getOrderProduct()->getProduct()->getName()} to device {$deviceObserver->getDevice()->getName()} " . json_encode(array(
+                                                'device_id' => $deviceObserver->getDevice()->getId(),
+                                                'license_id' => $deviceObserver->getLicense()->getId()
+                                            ))
+                                        );
+
+                                        $queueManager = new \CS\Queue\Manager($this->di['queueClient']);
+                                        if ($queueManager->addDownloadTask($deviceObserver->getICloudDevice())) {
+                                            $deviceObserver->getICloudDevice()->setProcessing(1);
+
+                                        } else $deviceObserver->getICloudDevice()->setLastError($queueManager->getError());
+                                        $deviceObserver->getICloudDevice()->save();
+                                    });
+
+                                try {
+                                    if($deviceObserver->addICloudDevice()){
+                                        $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_FINISH, array(
+                                            'deviceId' => $deviceObserver->getDevice()->getId()
+                                        )));
+                                    } else throw new \Exception("USER {$this->auth['id']} Can't add ICloudDevice {$deviceObserver->getDevice()->getId()} to License {$this->getLicense()->getId()}");
+
+                                } catch (\Exception $e) {
+                                    $this->logger->addCritical($e);
+                                    $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('Something Was Wrong. Please Contact Us!'));
+                                    $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_REGISTER));
+                                }
                             }
                         }
                     }
                     $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('Invalid Device!'));
                 }
 
-                //$this->view->title = $this->di->getTranslator()->_('Choose iCloud Device');
+                $this->view->title = $this->di->getTranslator()->_('Select Available Device');
                 $this->view->appleID = $_POST['email'];
                 $this->view->applePassword = $_POST['password'];
                 $this->view->devices = $devices;
                 $this->setView('wizard/register.icloud.device.htm');
                 return;
             }
+            
+        } catch (EmptyICloudId $e) {
+            $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('The filed iCloud Email is empty. Please enter the email.'));
+            $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_REGISTER));
+        } catch (EmptyICloudPassword $e) {
+            $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('The filed iCloud Password is empty. Please enter the password.'));
+            $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_REGISTER));
         } catch (AuthorizationException $e) {
-            $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('Invalid Apple ID or password'));
+            $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('Invalid Email or Password.'));
             $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_REGISTER));
         } catch (\Exception $e) {
             $this->logger->addCritical($e);
@@ -250,7 +321,7 @@ class Wizard extends BaseController {
             $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_REGISTER));
         }
 
-        //$this->view->title = $this->di->getTranslator()->_('iCloud Account');
+        $this->view->title = $this->di->getTranslator()->_('Connect to iCloud Account ');
         $this->setView('wizard/register.icloud.account.htm');
     }
     
@@ -259,17 +330,18 @@ class Wizard extends BaseController {
         $device = $this->getDevice(@$_GET['deviceId']);
         
         if($_POST){
-            if(isset($_POST['deviceName']) && strlen($_POST['deviceName']) > 2){
-                $device->setName($_POST['deviceName']);
-                $device->save();
-                $this->redirect($this->di->getRouter()->getRouteUrl('setDevice', array('devId'=>$device->getId())));
-            } else {
-                $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('Invalid Device Name'));
-                $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_FINISH, array('deviceId'=>$device->getId())));
-            }
+            
+            if(isset($_POST['deviceName']) && strlen($_POST['deviceName'])){
+                $device->setName($_POST['deviceName'])->save();
+                $this->di->getFlashMessages()->add(FlashMessages::SUCCESS, $this->di->getTranslator()->_("Device name was successfully updated"));
+                
+            } else $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_("Device name shouldn't be empty"));
+            
+            $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_FINISH, array('deviceId'=>$device->getId())));
         }
 
         $this->view->device = $device;
+        $this->view->title = $this->di->getTranslator()->_('The Device is Connected');
         $this->setView('wizard/finish.htm');
     }
 
@@ -341,11 +413,26 @@ class Wizard extends BaseController {
             if(!in_array($platform, array('android', 'ios', 'icloud'))){
                 $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('Invalid Platform'));
                 $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_PLATFORM, array(
-                    'licenseId' => $this->getParam('licenseId')
+                    'platform' => false
                 )));
             }
         }
         return $platform;
+    }
+
+    protected function getICloudLicense($mastBeAvailable = true)
+    {
+        $license = $this->getLicense($mastBeAvailable);
+        
+        try {
+            if($license->getOrderProduct()->getProduct()->getGroup() !== 'premium')
+                throw new \Exception;
+            
+        } catch (\Exception $e) {
+            $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('iCloud is available for Premium Subscription only. It allows you to monitor iPhones, iPads and iPods Touch without jailbreak.'));
+            $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_PACKAGE));
+        }
+        return $license;
     }
 
     protected function getLicense($mastBeAvailable = true)
@@ -382,4 +469,8 @@ class Wizard extends BaseController {
         else return null;
     }
     
-} 
+}
+
+class EmptyICloudId extends \Exception {}
+
+class EmptyICloudPassword extends \Exception {}

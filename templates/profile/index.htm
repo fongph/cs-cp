@@ -1,4 +1,8 @@
 <style>
+    .visible-xs {
+        display: none;
+    }
+    
     @media (max-width: 767px) {
         .mobile-applications .row {
             text-align: center;
@@ -10,6 +14,14 @@
 
         .mobile-applications .pull-left, .mobile-applications .pull-right {
             float: none !important;
+        }
+        
+        .hidden-xs {
+            display: none;
+        }
+
+        .visible-xs {
+            display: inline-block;
         }
     }
 
@@ -67,71 +79,129 @@
         {insert "inc.flashMessages.htm"}
     </div>
 </div>
-
 <div class="row">
     <div class="col-lg-12 col-md-12">
-        {if $availabledevices}
-            <div class="panel panel-default devices-list">
-                <div class="panel-heading">{$di.t->_('Device List')}</div>
-                <div class="panel-body">
-                    {if count($availabledevices)}
-                        <div class="row head hidden-xs head">
-                            <div class="col-sm-6 head">{$di.t->_('Name')}</div>
-                            <div class="col-sm-2 head">{$di.t->_('OS')}</div>
-                            <div class="col-sm-3 head">{$di.t->_('License')}</div>
-                            <div class="col-sm-1 head">{$di.t->_('Status')}</div>
-                        </div>
+        {if $di->get('isWizardEnabled')}
+            <div class="table-container panel-default table-profile-devices">
+                <div class="panel-heading">Devices List</div>
+                {if count($availabledevices)}
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>
+                                <span class="hidden-xs">{$di.t->_('Device Name')}</span>
+                                <span class="visible-xs">{$di.t->_('Name')}</span>
+                            </th>
+                            <th>
+                                <span class="hidden-xs">{$di.t->_('Device Model')}</span>
+                                <span class="visible-xs">{$di.t->_('Model')}</span>
+                            <th>
+                                <span class="hidden-xs">{$di.t->_('Platform (Operating System)')}</span>
+                                <span class="visible-xs">{$di.t->_('OS')}</span>
+                            </th>
+                            <th>
+                                <span class="hidden-xs">{$di.t->_('Subscription Plan')}</span>
+                                <span class="visible-xs">{$di.t->_('Subscription')}</span>
+                            </th>
+                            <th>{$di.t->_('Status')}</th>
+                            <th style="width: 165px;">
+                                <span class="hidden-xs"><nobr>{$di.t->_('Last Synchronization')}</nobr></span>
+                                <span class="visible-xs">{$di.t->_('Last Sync')}</span>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {var $o = 0}
                         {foreach $availabledevices as $id => $device}
-                            <div class="row">
-                                <div class="col-sm-6">{$device.name}</div>
-                                <div class="col-sm-2">
+                            <tr class="{if ++$o%2}odd{else}even{/if}">
+                                <td>{$device.device_name}</td>
+                                <td>{$device.model}</td>
+                                <td>
                                     {if $device.os == 'icloud' || $device.os == 'ios'}
-                                        iOS
+                                        Apple iOS
                                     {elseif $device.os == 'android'}
                                         Android
                                     {else}
-                                        {$device.os}
+                                        {$di.t->_('Unknown')}
                                     {/if}
-                                    {if $device.os_version}{$device.os_version}{/if}
-                                </div>
-                                <div class="col-sm-3">
+                                    {if $device.os != 'unknown' && $device.os_version}{$device.os_version}{/if}
+                                    {if $device.os == 'android'}
+                                        {if $device.rooted}
+                                            <div class="label label-success">{$di.t->_('rooted')}</div>
+                                        {else}
+                                            <div class="label label-warning">{$di.t->_('not rooted')}</div>
+                                        {/if}
+                                    {elseif $device.os == 'icloud'}
+                                        {$di.t->_('without Jailbreak')}
+                                    {/if}
+                                </td>
+                                <td>
                                     {if $device.active}
                                         {$device.package_name}
                                     {else}
-                                        Inactive
+                                        <a href="/wizard?platform={$device.os}" class="btn btn-success btn-xs">
+                                            <i class="fa fa-plug"></i>
+                                            {$di.t->_('Assign Subscription')}
+                                        </a>
                                     {/if}
-                                </div>
-                                <div class="col-sm-1">
-                                    {if $device.online}Online{else}Offline{/if}
-                                </div>
-                            </div>
+                                </td>
+                                <td>
+                                    {if $device.os == 'icloud'}
+                                        {if $device.processing}
+                                            {$di.t->_('Awaiting for data loading from backup')}
+                                        {elseif $device.last_error == 1}
+                                            {$di.t->_('iCloud Authorization Error. Please %schange the password%s.', [
+                                                '<a href="' ~ $di->getRouter()->getRouteUri("profileICloudPasswordReset") ~ '?iCloudId=' ~ $device.icloud_id ~ '">',
+                                                '</a>'
+                                            ])}
+                                        {elseif $device.last_error}
+                                            {$di.t->_('New Data Upload Error. Please contact Customer %sSupport%s.', ['<a href="mailto:support@pumpic.com">', '</a>'])}
+                                        {else}
+                                            {$di.t->_('Awaiting iCloud Backup.')}
+                                        {/if}
+                                    {else}
+                                        {if $device.online}
+                                            {if $device.network == 'wifi'}WiFi{else}Mobile{/if}
+                                        {else}
+                                            Offline
+                                        {/if}
+                                    {/if}
+                                </td>
+                                {if $device.last_sync}
+                                    <td class="timestamp-value" data-timestamp-value="{$device.last_sync}" data-time-format="lll"></td> 
+                                {else}
+                                    <td>-</td>
+                                {/if}
+                                
+                            </tr>
                         {/foreach}
-                    {/if}
-                    <div class="row add-device-row">
-                        <div class="col-sm-12">
-                            <a href="/wizard" class="btn btn-primary pull-right-md">
-                                {$di.t->_('Add Device')}
-                            </a>
-                        </div>
-                    </div>
+                        </tbody>
+                    </table>
+                {else}
+                    <div class="panel-body">
+                        <a href="{$di->getRouter()->getRouteUri('profile')}" class="btn btn-primary">
+                            {$di.t->_('Add Device')}
+                        </a>
+                    </div> 
+                {/if}
+            </div>
+        {else}
+            <div class="panel panel-default add-device">
+                <div class="panel-heading">{$di.t->_('Add new phone')}</div>
+                <div class="panel-body">
+                    <ul class="add-buttons">
+                        <li>
+                            <span class="hidden-xxs">{$di.t->_('Do you want to monitor on iPhone?')}</span>
+                            <a href="{$di.router->getRouteUrl('main')}how-to-install/ios-instructions.html" class="btn btn-success pull-right">{$di.t->_('How to Install on iOS')}</a>
+                        </li>
+                        <li class="last">
+                            <span class="hidden-xxs">{$di.t->_('Do you want to monitor on Android?')}</span>
+                            <a href="{$di.router->getRouteUrl('main')}how-to-install/android-instructions.html" class="btn btn-success pull-right">{$di.t->_('How to Install on Android')}</a>
+                        </li>
+                    </ul>
                 </div>
             </div>
         {/if}
-        <div class="panel panel-default add-device">
-            <div class="panel-heading">{$di.t->_('Add new phone')}</div>
-            <div class="panel-body">
-                <ul class="add-buttons">
-                    <li>
-                        <span class="hidden-xxs">{$di.t->_('Do you want to monitor on iPhone?')}</span>
-                        <a href="{$di.router->getRouteUrl('main')}how-to-install/ios-instructions.html" class="btn btn-success pull-right">{$di.t->_('How to Install on iOS')}</a>
-                    </li>
-                    <li class="last">
-                        <span class="hidden-xxs">{$di.t->_('Do you want to monitor on Android?')}</span>
-                        <a href="{$di.router->getRouteUrl('main')}how-to-install/android-instructions.html" class="btn btn-success pull-right">{$di.t->_('How to Install on Android')}</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
     </div>
 </div>
 
@@ -182,3 +252,13 @@
         </div>
     </div>
 </div>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        moment.lang('{$di.t->getLocale()}');
+        $.each($('[data-timestamp-value]'), function(i, timeTag){
+            var $tag = $(timeTag);
+            $tag.html(moment($tag.data('timestamp-value') * 1000).format($tag.data('time-format')));
+        });
+    });
+</script>
