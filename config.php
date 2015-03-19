@@ -73,11 +73,8 @@ if ($build['environment'] == 'production') {
     $default['redis'] = GlobalSettings::getRedisConfig();
 
     if ($build['demo']) {
-        //$default['domain'] = GlobalSettings::getDemoControlPanelURL($build['site']);
-        //$default['staticDomain'] = GlobalSettings::getDemoControlPanelStaticURL($build['site']);
-        $default['domain'] = 'http://demo-new.pumpic.com';
-        $default['staticDomain'] = 'http://demo-new.pumpic.com/static';
-        
+        $default['domain'] = GlobalSettings::getDemoControlPanelURL($build['site']);
+        $default['staticDomain'] = GlobalSettings::getDemoControlPanelStaticURL($build['site']);
     } else {
         $default['domain'] = GlobalSettings::getControlPanelURL($build['site']);
         $default['staticDomain'] = GlobalSettings::getControlPanelStaticURL($build['site']);
