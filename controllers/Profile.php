@@ -2,6 +2,12 @@
 
 namespace Controllers;
 
+use CS\Devices\DeviceObserver;
+use CS\Devices\Manager as DeviceManeger;
+use CS\Models\Device\DeviceRecord;
+use CS\Models\License\LicenseNotFoundException;
+use CS\Models\License\LicenseRecord;
+use Models\Billing;
 use Models\Devices,
     System\FlashMessages,
     CS\Users\UsersManager,
@@ -13,6 +19,7 @@ use Models\Devices,
     CS\Models\Device\DeviceICloudRecord,
     CS\Models\Device\DeviceNotFoundException,
     CS\ICloud\Backup as ICloudBackup;
+use Monolog\Logger;
 
 class Profile extends BaseController
 {
@@ -43,6 +50,86 @@ class Profile extends BaseController
         $this->view->recordsPerPage = $this->auth['records_per_page'];
         $this->view->recordsPerPageList = $usersModel->getRecordsPerPageList();
         $this->setView('profile/index.htm');
+    }
+    
+    public function assignSubscriptionAction()
+    {
+        try {
+            if ($this->getRequest()->hasGet('deviceId')) {
+                $deviceRecord = new DeviceRecord($this->di->get('db'));
+                $deviceRecord->load($this->getRequest()->get('deviceId'));
+                if ($deviceRecord->getUserId() !== $this->auth['id'])
+                    throw new DeviceNotFoundException;  
+            } else throw new DeviceNotFoundException;
+            $this->view->deviceRecord = $deviceRecord;
+
+            if ($this->getRequest()->hasGet('licenseId')) {
+                $licenseRecord = new LicenseRecord($this->di->get('db'));
+                $licenseRecord->load($this->getRequest()->get('licenseId'));
+                if ($licenseRecord->getStatus() !== $licenseRecord::STATUS_AVAILABLE || $licenseRecord->getUserId() !== $this->auth['id'])
+                    throw new LicenseNotFoundException;
+            } else {
+                $billingModel = new Billing($this->di);
+                $this->view->packages = $billingModel->getAvailablePackages($this->auth['id']);
+                $this->setView('profile/assignSubscription.htm');
+                return null;
+            };
+            
+            if ($deviceRecord->getOS() == $deviceRecord::OS_ICLOUD && ($licenseRecord->getProduct()->getGroup() != 'premium' || $licenseRecord->getProduct()->getGroup() != 'trial')) {
+                $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('iCloud is available for Premium Subscription only'));
+                $this->redirect($this->di->getRouter()->getRouteUri('profile'));
+            }
+            
+            $deviceObserver = new DeviceObserver($this->di->get('logger'));
+            
+            if ($this->getRequest()->hasGet('assignedLicenseId')) {
+                $assignedLicenseRecord = new LicenseRecord($this->di->get('db'));
+                $assignedLicenseRecord->load($this->getRequest()->get('assignedLicenseId'));
+                if ($assignedLicenseRecord->getUserId() !== $this->auth['id'] || $assignedLicenseRecord->getDeviceId() != $deviceRecord->getId())
+                    throw new LicenseNotFoundException;
+                //upgrade license
+                if ($this->getRequest()->isPost()) {
+                    $deviceObserver->setMainDb($this->di->get('db'))
+                        ->setDevice($deviceRecord)
+                        ->setLicense($licenseRecord)
+                        ->setBeforeSave(function() use($assignedLicenseRecord){
+                            $assignedLicenseRecord->setStatus($assignedLicenseRecord::STATUS_INACTIVE)
+                                ->save();
+                            return true;
+                        })
+                        ->assignLicenseToDevice();
+                    $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('License has been upgraded'));
+                    $this->redirect($this->di->getRouter()->getRouteUri('profile'));
+                }
+                $this->view->isUpgrade = true;
+                $this->view->assignedLicenseRecord = $assignedLicenseRecord;
+            } else {
+                //assign license
+                if($this->getRequest()->isPost()){
+                    $deviceObserver->setMainDb($this->di->get('db'))
+                        ->setDevice($deviceRecord)
+                        ->setLicense($licenseRecord)
+                        ->assignLicenseToDevice();
+                    
+                    $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('License has been assigned to your device'));
+                    $this->redirect($this->di->getRouter()->getRouteUri('profile'));
+                }
+                $this->view->isUpgrade = $this->view->assignedLicenseRecord = false;
+            }
+            
+        } catch (DeviceNotFoundException $e) {
+            $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('Device Not Found'));
+            $this->redirect($this->di->getRouter()->getRouteUri('profile'));
+        } catch (LicenseNotFoundException $e) {
+            $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('Subscription Not Found'));
+            $this->redirect($this->di->getRouter()->getRouteUri('profile'));
+        } catch (\Exception $e) {
+            $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('Internal Server Error. Please try later'));
+            /** @var $logger Logger */
+            $logger = $this->di->get('logger');
+            if ($logger) $logger->addCritical($e);
+            $this->redirect($this->di->getRouter()->getRouteUri('profile'));
+        }
     }
 
     private function processSettings()

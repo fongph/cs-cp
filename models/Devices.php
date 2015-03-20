@@ -128,6 +128,9 @@ class Devices extends \System\Model
                         if(COUNT(l.id), 1, 0) as active,
                         d.id device_id,
                         d.name device_name,
+                        l.id license_id,
+                        p.group package_group,
+                        
                         p.name package_name,
                         di.id icloud_id,
                         UNIX_TIMESTAMP(di.last_backup) last_backup

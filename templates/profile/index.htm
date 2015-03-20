@@ -167,6 +167,16 @@
                                 {else}
                                     <td>-</td>
                                 {/if}
+                                <td>
+                                    <a href="{$di.router->getRouteUrl('profileAssignSubscription')}?deviceId={$device.device_id}" class="btn btn-{if $device.active}primary{else}success{/if} btn-xs">
+                                        <i class="fa fa-plug"></i>
+                                        {if $device.active}
+                                            {$di.t->_('Upgrade Subscription')}
+                                        {else}
+                                            {$di.t->_('Assign Subscription')}
+                                        {/if}
+                                    </a>
+                                </td>
                             </tr>
                         {/foreach}
                         </tbody>
