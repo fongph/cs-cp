@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "d0ee868dcb60687b13a4a42ae2fbeddb",
+    "hash": "d3ecc6019e8334b5a3a4f0485ceda8b4",
     "packages": [
         {
             "name": "boomers/cs-billing",
@@ -119,7 +119,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-models.git",
-                "reference": "6961ba3799d79f4f1361c412bbc066b7427b1321"
+                "reference": "b58bf3f06fa3a93549d1d8bdd3cf4689825fa35e"
             },
             "require": {
                 "php": ">=5.4.0"
@@ -133,7 +133,7 @@
                     "CS\\Models\\": "src/"
                 }
             },
-            "time": "2015-03-16 17:18:28"
+            "time": "2015-03-20 13:06:30"
         },
         {
             "name": "boomers/cs-queue",
