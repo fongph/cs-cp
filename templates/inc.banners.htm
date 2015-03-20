@@ -24,12 +24,33 @@
         position: relative;
         display: inline-block;
         vertical-align: middle;
-        line-height: 79px;
-        margin-right: 20px;
         color: #fff;
+        margin-right: 20px;
+        height: 79px;
+    }
+
+    .demo-banner .banner-text span {
+        display: block;
+        line-height: 26px;
         font-family: 'Open Sans', Helvetica, Arial, sans-serif;
         font-weight: 300;
-        font-size: 33px;
+        font-size: 26px;
+        margin: 14px 0 5px 0;
+    }
+
+    .demo-banner .banner-text ul {
+        display: inline-block;
+        list-style: none;
+        margin: 0px;
+        padding: 0px;
+        text-align: center;
+    }
+    
+    .demo-banner .banner-text ul li {
+        display: inline-block;
+        margin-right: 10px;
+        font-size: 11px;
+        line-height: 11px;
     }
 
     .demo-banner .banner-arrow {
@@ -52,7 +73,7 @@
         padding: 8px 16px;
         display: inline-block;
     }
-    
+
     .demo-banner .banner-btn:hover, 
     .demo-banner .banner-btn:focus, 
     .demo-banner .banner-btn:active {
@@ -60,7 +81,7 @@
         background-color: #d45b69;
         text-decoration: none;
     }
-    
+
     .demo-banner .button-holder {
         display: inline-block;
     }
@@ -70,43 +91,46 @@
             display: inline-block;
         }
     }
-    
+
     @media (min-width: 800px) {
         .demo-banner .banner-arrow {
             display: inline-block;
         }
     }
-    
+
     @media (max-width: 640px) {
         .demo-banner {
             height: 150px;
             background: url({$di.config.staticDomain}/img/demo-banner/bg-xs.png) 0 0 no-repeat #398fa7;
         }
-        
+
         .demo-banner .button-holder {
             margin-top: 10px;
             display: block;
         }
-        
+
         .demo-banner .banner-text {
             margin: 0;
         }
     }
-    
+
     @media (max-width: 480px) {
-        .demo-banner .banner-text {
-            font-size: 22px;
+        .demo-banner .banner-text span {
+            font-size: 20px;
         }
     }
 </style>
 
 <div class="demo-banner">
     <div class="banner-phone"></div>
-    
-    <div class="banner-text">Parental Control App</div>
-    
+    <div class="banner-text">
+        <span>Smartphone Monitoring App</span>
+        <ul>
+            <li><i class="fa fa-android"></i> (2.2 - 5.1)</li>
+            <li><i class="fa fa-apple"></i> (6.0 - 8.2)</li>
+        </ul>
+    </div>
     <div class="banner-arrow"></div>
-    
     <div class="button-holder">
         <a href="{$di.config.registration}" class="btn banner-btn">Buy Now</a>
     </div>
@@ -154,14 +178,14 @@
         margin-left: 2px;
         background: url({$di.config.staticDomain}/img/trial-banner/digit-bg.png) 0 50% no-repeat;
     }
-    
+
     .internal-trial-banner .banner-expire b {
         font-family: 'Open Sans', Helvetica, Arial, sans-serif;
         font-weight: 600;
         font-size: 40px;
         text-transform: uppercase;
     }
-    
+
     .internal-trial-banner .banner-expire .digit {
         height: 41px;
         width: 37px;
@@ -229,7 +253,7 @@
         padding: 8px 16px;
         display: inline-block;
     }
-    
+
     .internal-trial-banner .banner-btn:hover, 
     .internal-trial-banner .banner-btn:focus, 
     .internal-trial-banner .banner-btn:active {
@@ -237,7 +261,7 @@
         background-color: #d45b69;
         text-decoration: none;
     }
-    
+
     .internal-trial-banner .button-holder {
         display: inline-block;
     }
@@ -247,29 +271,29 @@
             display: inline-block;
         }
     }
-    
+
     @media (min-width: 992px) {
         .internal-trial-banner .banner-arrow {
             display: inline-block;
         }
     }
-    
+
     @media (max-width: 640px) {
         .internal-trial-banner {
             height: 150px;
             background: url({$di.config.staticDomain}/img/trial-banner/bg-xs.png) 0 0 no-repeat #398fa7;
-        }
-        
-        .internal-trial-banner .button-holder {
-            margin-top: 10px;
-            display: block;
-        }
-        
-        .internal-trial-banner .banner-expire {
-            margin: 0;
-        }
     }
-    
+
+    .internal-trial-banner .button-holder {
+        margin-top: 10px;
+        display: block;
+    }
+
+    .internal-trial-banner .banner-expire {
+        margin: 0;
+    }
+    }
+
     @media (max-width: 480px) {
         .internal-trial-banner .banner-expire {
             font-size: 22px;
@@ -278,9 +302,9 @@
 </style>
 
 <div class="internal-trial-banner">
-    
+
     <div class="banner-phone"></div>
-    
+
     {if $internalTrialLicenseDaysLeft > 1}
     <div class="banner-expire">
         Trial Expires in <span class="banner-digit">0</span><span class="banner-digit">{$internalTrialLicenseDaysLeft}</span> Days
@@ -290,17 +314,17 @@
         <a href="{$di.config.registration}" class="btn banner-btn">Upgrade</a>
     </div>
     {elseif $internalTrialLicenseDaysLeft == 1}
-        <div class="banner-expire">Trial Expires <b>Today</b></div>
-        <div class="banner-arrow"></div>
-        <div class="button-holder">
-            <a href="{$di.config.registration}" class="btn banner-btn">Upgrade</a>
-        </div>
+    <div class="banner-expire">Trial Expires <b>Today</b></div>
+    <div class="banner-arrow"></div>
+    <div class="button-holder">
+        <a href="{$di.config.registration}" class="btn banner-btn">Upgrade</a>
+    </div>
     {else}
-        <div class="banner-expire">Trial has <b>EXPIRED</b></div>
-        <div class="banner-arrow"></div>
-        <div class="button-holder">
-            <a href="{$di.config.registration}" class="btn banner-btn">Buy Pumpic</a>
-        </div>
+    <div class="banner-expire">Trial has <b>EXPIRED</b></div>
+    <div class="banner-arrow"></div>
+    <div class="button-holder">
+        <a href="{$di.config.registration}" class="btn banner-btn">Buy Pumpic</a>
+    </div>
     {/if}
 </div>
 {/if}
