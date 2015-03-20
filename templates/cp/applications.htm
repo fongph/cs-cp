@@ -29,7 +29,7 @@
 
     <script>
         $(document).ready(function() {
-            var lnkTemplate = _.template('<% if (url.length) { %><a href="<%= url %>" target="_blank"><%= name %></a><% } else { %><%= name %><% } %>');
+            var lnkTemplate = _.template('<% if (url.length) { %><a href="<%= url %>" target="_blank" class="disable-on-demo"><%= name %></a><% } else { %><%= name %><% } %>');
 
             $('.dataTable').dataTable({
                 bProcessing: true,

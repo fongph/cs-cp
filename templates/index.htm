@@ -36,11 +36,9 @@
         {if $di.config.demo}
             <script type="text/javascript">
                 $(document).ready(function(){
-                    $('body').on('click', 'a', function(e){
-                        if ($(this).attr('href').indexOf('{$di.config.domain}') !== 0 && $(this).attr('href') !== '{$di.config.registration}') {
-                            alert("{$di.t->_('Not available in demo.')}");
-                            e.preventDefault();
-                        }
+                    $('body').on('click', 'a.disable-on-demo', function(e){
+                        alert("{$di.t->_('Not available in demo.')}");
+                        e.preventDefault();
                     });
                 });
             </script>
