@@ -39,7 +39,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-devices.git",
-                "reference": "508f0ecebf16a5386c1a5be386c9b78f9f3fc3db"
+                "reference": "e6dc79b4f47d41d874e008a92c501a8b3f2d84dd"
             },
             "require": {
                 "boomers/cs-mail": "dev-master",
@@ -59,7 +59,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2015-03-17 13:30:16"
+            "time": "2015-03-20 16:39:31"
         },
         {
             "name": "boomers/cs-icloud",
