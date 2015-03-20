@@ -132,9 +132,16 @@
     </div>
     <div class="banner-arrow"></div>
     <div class="button-holder">
-        <a href="{$di.config.registration}" class="btn banner-btn">Buy Now</a>
+        <a href="{$di.config.registration}" class="btn banner-btn" id="demo-banner-button">Buy Now</a>
     </div>
 </div>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('#demo-banner-button').on('click', function() {
+            ga('send', 'event', 'buy now', 'click', 'banner');
+        });
+    });
+</script>
 {elseif isset($internalTrialLicenseDaysLeft)}
 <link href='http://fonts.googleapis.com/css?family=Open+Sans:300,600' rel='stylesheet' type='text/css'>
 <style type="text/css">
