@@ -1,0 +1,58 @@
+<div>
+    <ol class="breadcrumb">
+        <li><a href="{$di.router->getRouteUrl('profile')}">{$di.t->_('Profile')}</a></li>
+        <li class="active">{$title}</li>
+    </ol>
+    {insert "inc.flashMessages.htm"}
+    <div class="bordered-container">
+        {if count($packages)}
+            {foreach $packages as $package}
+                <div class="row">
+                    {if $deviceRecord->getOs() === 'icloud' && $package.product_group !== 'premium' && $package.product_group !== 'trial'}
+                        <button class="btn btn-primary button-relative" disabled>
+                            {$package.name}<span class="license-lifetime" data-time-format="ll" data-timestamp-value="{$package.expiration_date}"></span>
+                            <span class="blue-asterisk button-asterisk">*</span>
+                        </button>
+                    {elseif $oldLicenseRecord} {*upgrade*}
+                        <a class="btn btn-primary" href="{$di.router->getRouteUrl('profileUpgradeConfirm')}?deviceId={$deviceRecord->getId()}&oldLicenseId={$oldLicenseRecord->getId()}&licenseId={$package.license_id}">
+                            {$package.name}<span class="license-lifetime" data-time-format="ll" data-timestamp-value="{$package.expiration_date}"></span>
+                        </a>
+                    {else} {*assign*}
+                        <form method="post" action="{$di.router->getRouteUrl('profileAssignProcess')}?deviceId={$deviceRecord->getId()}&licenseId={$package.license_id}">
+                            <button class="btn btn-primary" type="submit">
+                                {$package.name}<span class="license-lifetime" data-time-format="ll" data-timestamp-value="{$package.expiration_date}"></span>
+                            </button>
+                        </form>
+                    {/if}
+                </div>
+            {/foreach}
+            <div class="row">
+                <p class="text-info">
+                    <span class="blue-asterisk">*</span>
+                    iCloud is available for Premium Subscription only. It allows you to monitor iPhones, iPads and iPods Touch without jailbreak.
+                </p>
+            </div>
+            <script type="text/javascript">
+                $(document).ready(function() {
+                    moment.lang('{$di.t->getLocale()}');
+                    $.each($('.license-lifetime'), function(i, timeTag){
+                        var $tag = $(timeTag);
+                        if($tag.data('timestamp-value'))
+                            $tag.html(', expired ' + moment($tag.data('timestamp-value') * 1000).format($tag.data('time-format')));
+                    });
+                });
+            </script>
+        {else}
+            <p class="text-center">
+                {$di.t->_('You don’t have any Subscriptions yet!')}
+                <br>{$di.t->_('How about buying one right now?')}
+            </p>
+        {/if}
+    </div>
+    <h3 class="text-center">{$di.t->_('Buy New Subscription')}</h3>
+    <div class="wizard-container">
+        <div class="row">
+            <a href="{$di.config.registration}" class="btn btn-danger">{$di.t->_('Visit Store')}</a>
+        </div>
+    </div>
+</div>

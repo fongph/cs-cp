@@ -52,6 +52,9 @@ $di->setShared('router', function() use($config, $di) {
     $router->add('support', new \System\Router\Route('/support', array('controller' => 'Index', 'action' => 'support')));
     $router->add('profile', new \System\Router\Route('/profile', array('controller' => 'Profile', 'action' => 'index')));
     $router->add('profileICloudPasswordReset', new \System\Router\Route('/profile/iCloudPassword', array('controller' => 'Profile', 'action' => 'changeICloudPassword')));
+    $router->add('profileAssignChoice', new \System\Router\Route('/profile/assign/subscriptions', array('controller' => 'Profile', 'action' => 'assignChoice')));
+    $router->add('profileUpgradeConfirm', new \System\Router\Route('/profile/assign/confirm', array('controller' => 'Profile', 'action' => 'upgradeConfirm')));
+    $router->add('profileAssignProcess', new \System\Router\Route('/profile/assign/process', array('controller' => 'Profile', 'action' => 'assignProcess')));
 
     $router->add('cp', new \System\Router\Route('/cp', array('controller' => 'CP', 'action' => 'main')));
     $router->add(Modules::CALLS, new \System\Router\Route('/cp/calls', array('controller' => 'Calls', 'action' => 'index')));

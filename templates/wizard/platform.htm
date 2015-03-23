@@ -5,15 +5,6 @@
     .button-holder .btn {
         min-width: 100%;
     }
-    .icloud-button {
-        position: relative;
-    }
-    .icloud-asterisk {
-        position: absolute;
-        top: 0;
-        right: -18px;
-        
-    }
 </style>
 <div>
     {insert "wizard/inc.steps.breadcrumb.htm"}
@@ -35,8 +26,11 @@
             </div>
             <div class="row">
                 <a href="{$di.router->getRouteUrl('wizardSetup', [
-                'platform' => 'icloud',
-                ])}" class="btn icloud-button btn-primary{if !$iCloudAvailable} disabled{/if}">iCloud<span class="blue-asterisk icloud-asterisk">*</span></a>
+                    'platform' => 'icloud',
+                    ])}" class="btn icloud-button btn-primary button-relative {if !$iCloudAvailable}disabled{/if}">
+                        iCloud
+                        <span class="blue-asterisk button-asterisk">*</span>
+                </a>
             </div>
         </div>
         <div class="row">

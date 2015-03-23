@@ -108,6 +108,7 @@
                                 <span class="hidden-xs"><nobr>{$di.t->_('Last Synchronization')}</nobr></span>
                                 <span class="visible-xs">{$di.t->_('Last Sync')}</span>
                             </th>
+                            <th></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -139,10 +140,7 @@
                                     {if $device.active}
                                         {$device.package_name}
                                     {else}
-                                        <a href="/wizard?platform={$device.os}" class="btn btn-success btn-xs">
-                                            <i class="fa fa-plug"></i>
-                                            {$di.t->_('Assign Subscription')}
-                                        </a>
+                                        -
                                     {/if}
                                 </td>
                                 <td>
@@ -167,15 +165,18 @@
                                 {else}
                                     <td>-</td>
                                 {/if}
-                                <td>
-                                    <a href="{$di.router->getRouteUrl('profileAssignSubscription')}?deviceId={$device.device_id}" class="btn btn-{if $device.active}primary{else}success{/if} btn-xs">
-                                        <i class="fa fa-plug"></i>
-                                        {if $device.active}
+                                <td class="text-center">
+                                    {if $device.active}
+                                        <a href="{$di.router->getRouteUrl('profileAssignChoice')}?deviceId={$device.device_id}&oldLicenseId={$device.license_id}" class="btn btn-{if $device.active}primary{else}success{/if} btn-xs">
+                                            <i class="fa fa-plug"></i>
                                             {$di.t->_('Upgrade Subscription')}
-                                        {else}
+                                        </a>
+                                    {else}
+                                        <a href="{$di.router->getRouteUrl('profileAssignChoice')}?deviceId={$device.device_id}" class="btn btn-{if $device.active}primary{else}success{/if} btn-xs">
+                                            <i class="fa fa-plug"></i>
                                             {$di.t->_('Assign Subscription')}
-                                        {/if}
-                                    </a>
+                                        </a>
+                                    {/if}
                                 </td>
                             </tr>
                         {/foreach}

@@ -1145,18 +1145,18 @@ body > .cp-menu {
     margin-bottom: 7px;
 }
 
-.wizard-container {
+.wizard-container, .bordered-container {
     border: 1px solid #ccc;
     border-radius: 5px;
     text-align: center;
     padding: 20px 30px;
     margin-top: 15px;
 }
-.wizard-container .row {
+.wizard-container .row, .bordered-container .row {
     margin: 10px 0;
 }
 
-.wizard-container p:last-child {
+.wizard-container p:last-child, .bordered-container p:last-child {
     margin-bottom: 0;
 }
 
@@ -1166,4 +1166,13 @@ body > .cp-menu {
     font-weight: bold;
     line-height: 50px;
     text-transform: uppercase;
+}
+.button-relative {
+    position: relative;
+}
+.button-asterisk {
+    position: absolute;
+    top: 0;
+    right: -18px;
+
 }
