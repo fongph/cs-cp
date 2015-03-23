@@ -6,9 +6,6 @@
     {if !$paid}
         {insert "cp/updatePackage.html"}
     {elseif $hasRecords}
-        {if $di.currentDevice.os=='android' && !$di.currentDevice.rooted && $di.currentDevice.app_version < 64}
-            {include "content/{$di.t->getLocale()}/rootPhoneBrowser.html"}
-        {/if}
     {if $isDeviceBlockSiteAvailable}
         <form class="form-inline" action="" method="get" style="margin-bottom: 20px;">
             <label for="add-block" class="control-label">{$di.t->_('Add to blocked list')}:</label>
@@ -152,7 +149,7 @@
                                 mData: 'url',
                                 bUseRendered: false,
                                 fnRender: function(obj, value) {
-                                    return  '<a href="' + value + '" target="_blank">' + value + '</a>';
+                                    return  '<a href="' + value + '" class="disable-on-demo" target="_blank">' + value + '</a>';
                                 }
                             }
                             {if $isDeviceBlockSiteAvailable}

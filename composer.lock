@@ -141,7 +141,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-queue.git",
-                "reference": "fe4aea3f11102c593ba44bbdeea7456928af672b"
+                "reference": "1a7e1067315435141e837fc0ec7bca5743f2569f"
             },
             "require": {
                 "boomers/cs-models": "dev-master",
@@ -156,7 +156,7 @@
                     "CS\\Queue\\": "src/"
                 }
             },
-            "time": "2015-03-17 09:34:55"
+            "time": "2015-03-19 11:00:32"
         },
         {
             "name": "boomers/cs-settings",
@@ -164,7 +164,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-settings.git",
-                "reference": "b5312582f4c504790addf83b63dca8a0349a6f79"
+                "reference": "e3590737ec02823df926278004f82b3c26845ee2"
             },
             "require": {
                 "php": ">=5.4.0"
@@ -175,7 +175,7 @@
                     "CS\\Settings\\": "src/"
                 }
             },
-            "time": "2015-03-19 07:52:49"
+            "time": "2015-03-19 09:26:52"
         },
         {
             "name": "boomers/cs-users",

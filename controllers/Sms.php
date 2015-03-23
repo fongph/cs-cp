@@ -31,7 +31,7 @@ class Sms extends BaseModuleController {
         }
 
         $this->view->hasRecords = $smsModel->hasRecords($this->di['devId']);
-        $this->view->isDeletedAvailable = DeviceOptions::isDeletedDataAvailable($this->di['currentDevice']['os']);
+        $this->view->isDeletedAvailable = false; //DeviceOptions::isDeletedDataAvailable($this->di['currentDevice']['os']);
         if($this->di['currentDevice']['os'] != 'icloud'){
             $this->view->customUtcOffset = 0;
         }

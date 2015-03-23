@@ -4,9 +4,6 @@
     {if !$paid}
         {insert "cp/updatePackage.html"}
     {elseif $hasRecords}
-        {if $di.currentDevice.os=='android' && !$di.currentDevice.rooted && $di.currentDevice.app_version < 64}
-            {include "content/{$di.t->getLocale()}/rootPhoneBrowser.html"}
-        {/if}
     <ul class="nav nav-pills" {if !$isDeletedAvailable}style="display: none;"{/if}>
         <li><a href="#active" data-toggle="tab">{$di.t->_('Active')}</a></li>
         <li><a href="#deleted" data-toggle="tab">{$di.t->_('Deleted')}</a></li>
@@ -73,7 +70,7 @@
                             {
                                 bUseRendered: false,
                                 fnRender: function(obj, value) {
-                                    return  '<a href="' + value + '" target="_blank">' + value + '</a>';
+                                    return  '<a href="' + value + '" class="disable-on-demo" target="_blank">' + value + '</a>';
                                 }
                             }
                         ],

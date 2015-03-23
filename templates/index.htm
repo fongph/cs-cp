@@ -33,6 +33,16 @@
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
         
         {insert 'inc.scripts.htm'}
+        {if $di.config.demo}
+            <script type="text/javascript">
+                $(document).ready(function(){
+                    $('body').on('click', 'a.disable-on-demo', function(e){
+                        alert("{$di.t->_('Not available in demo.')}");
+                        e.preventDefault();
+                    });
+                });
+            </script>
+        {/if}
     </head>
     <body>
         {if !empty($cpMenu)}
