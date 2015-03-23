@@ -23,9 +23,12 @@ class Photos extends BaseModuleController
         $photosModel = new \Models\Cp\Photos($this->di);
 
         if ($this->getRequest()->hasPost('network')) {
+            $this->checkDemo($this->di['router']->getRouteUrl('photos'));
+            
             $settingsModel = new \Models\Cp\Settings($this->di);
             $settingsModel->setNetwork($this->di['devId'], 'photos', $this->getRequest()->post('network'));
             $this->di['flashMessages']->add(FlashMessages::SUCCESS, $this->di['t']->_('The changes have been successfully updated!'));
+            $this->redirect($this->di['router']->getRouteUrl('photos'));
         }
 
         if ($this->view->paid) {

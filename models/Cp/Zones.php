@@ -35,7 +35,7 @@ class Zones extends BaseModel
         if (count($parts) !== 3) {
             return false;
         }
-
+        
         return is_numeric($parts[0]) && is_numeric($parts[1]) && is_numeric($parts[2]) &&
                 abs($parts[0]) <= 90 && abs($parts[1]) <= 180 && $parts[2] > 0;
     }

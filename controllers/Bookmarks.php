@@ -3,7 +3,8 @@
 namespace Controllers;
 
 use Models\Modules,
-    CS\Devices\Limitations;
+    CS\Devices\Limitations,
+    CS\Devices\DeviceOptions;
 
 class Bookmarks extends BaseModuleController {
 
@@ -31,6 +32,7 @@ class Bookmarks extends BaseModuleController {
         if ($this->view->paid) {
             $this->view->hasRecords = $bookmarksModel->hasRecords($this->di['devId']);
         }
+        $this->view->isDeletedAvailable = DeviceOptions::isDeletedDataAvailable($this->di['currentDevice']['os']);
         
         $this->setView('cp/bookmarks.htm');
     }

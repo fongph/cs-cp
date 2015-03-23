@@ -4,8 +4,7 @@
     {insert "inc.flashMessages.htm"}
     <div class="wizard-container">
         <p>Please select the target device you want to monitor.</p>
-        <p><b>Note</b>: Select the target device carefully. You can monitor only one device with one subscription.</p>
-        
+        <p><b>Note</b>: Select the target device carefully. You can monitor only one device with this subscription.</p>
         {if count($devices)}
             <div class="table-container panel-default table-profile-devices">
                 <div class="panel-heading text-left">Devices List</div>
@@ -28,14 +27,17 @@
                             <span class="visible-xs">{$di.t->_('Backup')}</span>
                         </th>
                         <th>
-                            <span class="hidden-xs">{$di.t->_('Quota Used')}</span>
-                            <span class="visible-xs">{$di.t->_('Quota')}</span>
+                            <span class="hidden-xs">{$di.t->_('Backup Size')}</span>
+                            <span class="visible-xs">{$di.t->_('Size')}</span>
                         </th>
                         <th>
-                            <span class="hidden-xs">{$di.t->_('Subscription Plan')}</span>
-                            <span class="visible-xs">{$di.t->_('Subscription')}</span>
+                            <span class="hidden-xs">{$di.t->_('License Assigned')}</span>
+                            <span class="visible-xs">{$di.t->_('License')}</span>
                         </th>
-                        <th>{$di.t->_('Subscription Expiration Date')}</th>
+                        <th>
+                            <span class="hidden-xs">{$di.t->_('Expiration Date')}</span>
+                            <span class="visible-xs">{$di.t->_('Expire')}</span>
+                        </th>
                         <th style="width: 160px">{$di.t->_('Action')}</th>
                     </tr>
                     </thead>
@@ -47,40 +49,28 @@
                             <td>{$device.model}</td>
                             <td>Apple iOS {$device.os_version}</td>
                             <td>{if $device.last_backup}
-                                    <span class="timestamp-value" data-time-format="%d %b %Y" data-timestamp-value="{$device.last_backup}"></span>
+                                    <span class="timestamp-value" data-time-format="lll" data-timestamp-value="{$device.last_backup}"></span>
                                 {else}-{/if}
                             </td>
                             <td>{if $device.quota_used}{$device.quota_used} Mb{else}-{/if}</td>
+                            <td>{if $device.active}{$device.package_name}{/if}</td>
                             <td>
-                                {if $device.active}
-                                    {$device.package_name}
-                                {else}
-                                    {$di.t->_('No plan')}
+                                {if $device.expiration_date}
+                                    <span class="timestamp-value" data-time-format="ll" data-timestamp-value="{$device.expiration_date}"></span>
                                 {/if}
                             </td>
                             <td>
-                                {if $device.added && $device.expiration_date}
-                                    <span class="timestamp-value" data-time-format="%d %b %Y" data-timestamp-value="{$device.expiration_date}"></span>
-                                {else}-{/if}
-                            </td>
-                            <td>
-                                {if $device.active}
-                                    <button class="btn btn-primary btn-xs" disabled>
-                                        <i class="fa fa-plug"></i>
-                                        {$di.t->_('Change Subscription')}
-                                    </button>
-                                {elseif $device.added}
-                                    <button class="btn btn-success btn-xs" disabled>
-                                        <i class="fa fa-plug"></i>
-                                        {$di.t->_('Assign Subscription')}
-                                    </button>
-                                {else}
+                                {if !$device.active}
                                     <form method="post">
                                         <input type="hidden" name="email" value="{$appleID}">
                                         <input type="hidden" name="password" value="{$applePassword}">
                                         <button class="btn btn-success btn-xs" type="submit" name="devHash" value="{$device.unique_id}">
                                             <i class="fa fa-plug"></i>
-                                            {$di.t->_('Assign Subscription')}
+                                            {if $device.added}
+                                                {$di.t->_('Assign Subscription')}
+                                            {else}
+                                                {$di.t->_('Add Device')}
+                                            {/if}
                                         </button>
                                     </form>
                                 {/if}
@@ -88,11 +78,12 @@
                         </tr>
                     {/foreach}
                     <script type="text/javascript">
-                        $.each($('[data-timestamp-value]'), function(i, timeTag){
-                            var $tag = $(timeTag);
-                            console.log($tag.data('timestamp-value') * 1000);
-                            var date = new Date($tag.data('timestamp-value') * 1000);
-                            $tag.html(date.toLocaleFormat($tag.data('time-format')));
+                        $(document).ready(function() {
+                            moment.lang('{$di.t->getLocale()}');
+                            $.each($('[data-timestamp-value]'), function(i, timeTag){
+                                var $tag = $(timeTag);
+                                $tag.html(moment($tag.data('timestamp-value') * 1000).format($tag.data('time-format')));
+                            });
                         });
                     </script>
                     </tbody>

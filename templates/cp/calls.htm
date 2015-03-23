@@ -1,6 +1,8 @@
 <div>
     <h1 class="text-center">{$title}</h1>
     
+    {insert "inc.flashMessages.htm"}
+    
     {if $hasRecords}
     <div class="daterangepickerWrapper">
         <div id="reportrange" class="btn btn-default pull-right">
@@ -87,7 +89,7 @@
                                 bUseRendered: false,
                                 sWidth: '180px',
                                 fnRender: function(obj, value) {
-                                    return moment(value * 1000).zone(0).format('lll');
+                                    return moment(value * 1000){if isset($customUtcOffset)}.zone({$customUtcOffset}){/if}.format('lll');
                                 }
                             },
                             {
@@ -167,7 +169,11 @@
         });
     </script>
     {else}
-    <h3>{$di.t->_('Waiting for data... Why can the data be unavailable?')}</h3>
-    {include "content/{$di.t->getLocale()}/noData.html"}
+        <h3>{$di.t->_('Waiting for data... Why can the data be unavailable?')}</h3>
+        {if $di.currentDevice.os=='icloud'}
+            {include "content/{$di.t->getLocale()}/noDataICloud.html"}
+        {else}
+            {include "content/{$di.t->getLocale()}/noData.html"}
+        {/if}
     {/if}
 </div>

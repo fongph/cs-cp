@@ -126,7 +126,11 @@
                                     {/if}
                                     {if $device.os != 'unknown' && $device.os_version}{$device.os_version}{/if}
                                     {if $device.os == 'android'}
-                                        {if $device.rooted}{$di.t->_('rooted')}{else}{$di.t->_('not rooted')}{/if}
+                                        {if $device.rooted}
+                                            <div class="label label-success">{$di.t->_('rooted')}</div>
+                                        {else}
+                                            <div class="label label-warning">{$di.t->_('not rooted')}</div>
+                                        {/if}
                                     {elseif $device.os == 'icloud'}
                                         {$di.t->_('without Jailbreak')}
                                     {/if}
@@ -144,28 +148,25 @@
                                 <td>
                                     {if $device.os == 'icloud'}
                                         {if $device.processing}
-                                            {$di.t->_('Awaiting for data loading from backup')}
+                                            {$di.t->_('Awaiting New Data Upload')}
                                         {elseif $device.last_error == 1}
-                                            {$di.t->_('Error authorizing')} iCloud.
-                                            <a href="{$di->getRouter()->getRouteUri('profileICloudPasswordReset')}?iCloudId={$device.icloud_id}">
-                                                {$di.t->_('Change password')}
-                                            </a>
+                                            {$di.t->_('iCloud Authorization Error. Please %schange the password%s', ['<a href="' ~ $di->getRouter()->getRouteUri("profileICloudPasswordReset") ~ '?deviceId=' ~ $device.device_id ~ '">', '</a>'])}
                                         {elseif $device.last_error}
-                                            {$di.t->_('Error loading backup. Please contact %ssupport%s.', ['<a href="mailto:support@pumpic.com">', '</a>'])}
+                                            {$di.t->_('New Data Upload Error. Please contact Customer %sSupport%s', ['<a href="mailto:support@pumpic.com">', '</a>'])}
                                         {else}
-                                            {$di.t->_('Awaiting for iCloud Backup')}
+                                            {$di.t->_('Awaiting iCloud Backup')}
                                         {/if}
                                     {else}
-                                        {if $device.online}
-                                            {if $device.network == 'wifi'}WiFi{else}Mobile{/if}
-                                        {else}
-                                            Offline
-                                        {/if}
+                                        <div class="device-status">
+                                            <div class="value {if $device.online}{if $device.network=='wifi'}wifi{else}mobile{/if}{else}offline{/if}"></div>    
+                                        </div>
                                     {/if}
                                 </td>
-                                <td class="timestamp-value">
-                                    {$device.last_sync}
-                                </td>
+                                {if $device.last_sync}
+                                    <td class="timestamp-value" data-timestamp-value="{$device.last_sync}" data-time-format="lll"></td> 
+                                {else}
+                                    <td>-</td>
+                                {/if}
                             </tr>
                         {/foreach}
                         </tbody>
@@ -245,3 +246,13 @@
         </div>
     </div>
 </div>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        moment.lang('{$di.t->getLocale()}');
+        $.each($('[data-timestamp-value]'), function(i, timeTag){
+            var $tag = $(timeTag);
+            $tag.html(moment($tag.data('timestamp-value') * 1000).format($tag.data('time-format')));
+        });
+    });
+</script>

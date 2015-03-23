@@ -17,10 +17,13 @@ use Models\Devices,
 class Profile extends BaseController
 {
 
+    public function preAction()
+    {
+        $this->checkDemo($this->di['router']->getRouteUrl('cp'));
+    }
+
     public function indexAction()
     {
-        $this->view->title = $this->di->getTranslator()->_('Your Profile');
-
         if ($this->getRequest()->isPost()) {
             if ($this->getRequest()->post('settings') !== null) {
                 $this->processSettings();
@@ -30,11 +33,12 @@ class Profile extends BaseController
         }
 
         $usersModel = new \Models\Users($this->di);
-        if($this->di->get('isWizardEnabled')){
+
+        if ($this->di->get('isWizardEnabled')) {
             $deviceManager = new Devices($this->di);
             $this->view->availabledevices = $deviceManager->getUserDevices($this->auth['id']);
-            
-        } else $this->view->availabledevices = false;
+        } else
+            $this->view->availabledevices = false;
 
         $this->view->recordsPerPage = $this->auth['records_per_page'];
         $this->view->recordsPerPageList = $usersModel->getRecordsPerPageList();
@@ -69,10 +73,7 @@ class Profile extends BaseController
 
             try {
                 $usersManager->updatePassword(
-                        $this->auth['id'],
-                        $this->getRequest()->post('oldPassword'),
-                        $this->getRequest()->post('newPassword'),
-                        $this->getRequest()->post('newPassword2')
+                        $this->auth['id'], $this->getRequest()->post('oldPassword'), $this->getRequest()->post('newPassword'), $this->getRequest()->post('newPassword2')
                 );
 
                 $this->di['flashMessages']->add(FlashMessages::SUCCESS, $this->di['t']->_('Your password has been successfully changed!'));
@@ -85,45 +86,41 @@ class Profile extends BaseController
             }
         }
     }
-    
+
+    public function postAction()
+    {
+        parent::postAction();
+
+        $this->view->title = $this->di->getTranslator()->_('Your Profile');
+    }
+
     public function changeICloudPasswordAction()
     {
         try {
-            if($this->getRequest()->hasGet('iCloudId')){
+            if($this->getRequest()->hasGet('deviceId')){
 
                 $iCloudRecord = new DeviceICloudRecord($this->di->get('db'));
-                $iCloudRecord->load($this->getRequest()->get('iCloudId'));
+                $iCloudRecord->loadByDevId($this->getRequest()->get('deviceId'));
                 
                 $deviceRecord = $iCloudRecord->getDeviceRecord();
                 if($deviceRecord->getUserId() !== $this->auth['id'] || $deviceRecord->getDeleted())
                     throw new DeviceNotFoundException;
-
                 
                 if ($this->getRequest()->isAjax() && $this->getRequest()->hasPost('newPassword')) {
 
                     //todo check auth count
-                    try {
+                    $iCloud = new ICloudBackup($iCloudRecord->getAppleId(), $this->getRequest()->post('newPassword'));
+                    $iCloud->authenticate(); //or throw exception
 
-                        $iCloud = new ICloudBackup($iCloudRecord->getAppleId(), $this->getRequest()->post('newPassword'));
-                        $iCloud->authenticate(); //or throw exception
+                    $iCloudRecord->setApplePassword($this->getRequest()->post('newPassword'));
+                    if($iCloudRecord->getLastError() == BackupQueueUnit::ERROR_AUTHENTICATION)
+                        $iCloudRecord->setLastError(BackupQueueUnit::ERROR_NONE);
+                    $iCloudRecord->save();
 
-                        $iCloudRecord->setApplePassword($this->getRequest()->post('newPassword'));
-                        if($iCloudRecord->getLastError() == BackupQueueUnit::ERROR_AUTHENTICATION)
-                            $iCloudRecord->setLastError(BackupQueueUnit::ERROR_NONE);
-                        $iCloudRecord->save();
-
-                        $this->di->getFlashMessages()->add(FlashMessages::SUCCESS, $this->di->getTranslator()->_('You have successfully updated iCloud password. New iCloud backup will be loaded shortly.'));
-                        $this->ajaxResponse(true, array(
-                            'location' => $this->di->getRouter()->getRouteUri('profile')
-                        ));
-                        
-                    } catch (AuthorizationException $e) {
-                        $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_("Oops, iCloud password didn't work. Please try again. {$this->getRequest()->post('newPassword')}"));
-                        $this->ajaxResponse(false, array(
-                            'location' => $this->di->getRouter()->getRouteUri('profileICloudPasswordReset')."?iCloudId={$this->getRequest()->get('iCloudId')}"
-                        ));
-                    }
-                    
+                    $this->di->getFlashMessages()->add(FlashMessages::SUCCESS, $this->di->getTranslator()->_('You have successfully updated iCloud password. New iCloud backup will be loaded shortly.'));
+                    $this->ajaxResponse(true, array(
+                        'location' => $this->di->getRouter()->getRouteUri('profile')
+                    ));
                 }
                 $this->view->title = $this->di->getTranslator()->_('Change iCloud Password');
                 $this->view->iCloud = $iCloudRecord;
@@ -134,13 +131,19 @@ class Profile extends BaseController
         } catch (DeviceNotFoundException $e){
             $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('Device Not Found'));
             $this->redirect($this->di->getRouter()->getRouteUri('profile'));
+            
+        } catch (AuthorizationException $e) {
+            $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_("Oops, iCloud password didn't work. Please try again."));
+            $this->ajaxResponse(false, array(
+                'location' => $this->di->getRouter()->getRouteUri('profileICloudPasswordReset')."?deviceId={$this->getRequest()->get('deviceId')}"
+            ));
         }
     }
-    
+
     public function ajaxResponse($status, $data = null)
     {
         $this->makeJSONResponse(array(
-            'status' => (bool)$status,
+            'status' => (bool) $status,
             'data' => $data,
         ));
     }

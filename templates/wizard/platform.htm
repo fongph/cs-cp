@@ -5,6 +5,15 @@
     .button-holder .btn {
         min-width: 100%;
     }
+    .icloud-button {
+        position: relative;
+    }
+    .icloud-asterisk {
+        position: absolute;
+        top: 0;
+        right: -18px;
+        
+    }
 </style>
 <div>
     {insert "wizard/inc.steps.breadcrumb.htm"}
@@ -27,11 +36,14 @@
             <div class="row">
                 <a href="{$di.router->getRouteUrl('wizardSetup', [
                 'platform' => 'icloud',
-                ])}" class="btn btn-primary{if !$iCloudAvailable} disabled{/if}">iCloud <sup style="color: #c84d4d">*</sup></a>
+                ])}" class="btn icloud-button btn-primary{if !$iCloudAvailable} disabled{/if}">iCloud<span class="blue-asterisk icloud-asterisk">*</span></a>
             </div>
         </div>
         <div class="row">
-            <sup style="color: #c84d4d">*</sup> - {$di.t->_('iCloud is available for Premium Subscription only. It allows you to monitor iPhones, iPads and iPods Touch without jailbreak.')}
+            <p class="text-info">
+                <span class="blue-asterisk">*</span>
+                iCloud is available for Premium Subscription only. It allows you to monitor iPhones, iPads and iPods Touch without jailbreak.
+            </p>
         </div>
     </div>
 </div>

@@ -19,7 +19,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-6 col-md-6 col-sm-6 pull-left">
+            <div class="col-lg-6 col-md-6 col-sm-6 pull-left" {if !$isDeletedAvailable}style="display: none;"{/if}>
                 <ul class="nav nav-pills">
                     <li><a href="#active" data-toggle="tab">{$di.t->_('Active')}</a></li>
                     <li><a href="#deleted" data-toggle="tab">{$di.t->_('Deleted')}</a></li>
@@ -67,9 +67,9 @@
                         return this.url + '?deleted=0&';
                     }
                 },
-                reloadTable: function() {
+                reloadTable: function(url) {
                     if (this.table) {
-                        this.table.fnReloadAjax(this.setRange());
+                        this.table.fnReloadAjax(url);
                     }
                 },
                 setTab: function(tab) {
@@ -84,6 +84,10 @@
                 },
                 setRange: function(start, end) {
                     if (start && end && start.isValid() && end.isValid()) {
+
+                        this.startDate = moment(start);
+                        this.endDate = moment(end);
+                        
                         $('#reportrange span').html(start.format('LL') + ' - ' + end.format('LL'));
 
                         _.find(this.selectRanges, function(period, name) {
@@ -125,7 +129,7 @@
                                 mData: 'timestamp',
                                 mRender: function(value, type, data) {
                                     return sms.messageLinkTemplate({
-                                        date: moment(data.timestamp * 1000).zone(0).format('lll'),
+                                        date: moment(data.timestamp * 1000){if isset($customUtcOffset)}.zone({$customUtcOffset}){/if}.format('lll'),
                                         phone: encodeURIComponent(data.number),
                                         message: encodeURIComponent(data.timestamp)
                                     });
@@ -229,6 +233,10 @@
     </script>
     {else}
     <h3>{$di.t->_('Waiting for data... Why can the data be unavailable?')}</h3>
-    {include "content/{$di.t->getLocale()}/noData.html"}
+        {if $di.currentDevice.os=='icloud'}
+            {include "content/{$di.t->getLocale()}/noDataICloud.html"}
+        {else}
+            {include "content/{$di.t->getLocale()}/noData.html"}
+        {/if}
     {/if}
 </div>

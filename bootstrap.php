@@ -39,7 +39,7 @@ $di->setShared('mailSender', function() use ($di) {
                     ->setSiteId($di['config']['site']);
 });
 
-$di->set('isWizardEnabled', $di['config']['environment'] == 'development' || in_array(@$_SERVER['HTTP_X_REAL_IP'], array('176.38.120.13')));
+$di->set('isWizardEnabled', true);
 
 $di->setShared('router', function() use($config, $di) {
     $router = new \System\Router();
@@ -78,8 +78,8 @@ $di->setShared('router', function() use($config, $di) {
     $router->add('browserBlocked', new \System\Router\Route('/cp/browserBlocked', array('controller' => 'BrowserHistory', 'action' => 'browserBlocked')));
     $router->add('videosCamera', new \System\Router\Route('/cp/videos/camera', array('controller' => 'Videos', 'action' => 'camera')));
     $router->add('videosNoCamera', new \System\Router\Route('/cp/videos/other', array('controller' => 'Videos', 'action' => 'noCamera')));
-    $router->add('locationsZones', new \System\Router\Route('/cp/locations/zones', array('controller' => 'Locations', 'action' => 'index')));
-    $router->add('locationsZonesAdd', new \System\Router\Route('/cp/locations/zones/add', array('controller' => 'Locations', 'action' => 'index')));
+    $router->add('locationsZones', new \System\Router\Route('/cp/locations/zones', array('controller' => 'Locations', 'action' => 'zones')));
+    $router->add('locationsZonesAdd', new \System\Router\Route('/cp/locations/zones/add', array('controller' => 'Locations', 'action' => 'zoneAdd')));
 
     if($di->get('isWizardEnabled')){
         $router->add('billing', new \System\Router\Route('/subscriptions', array('controller' => 'Billing', 'action' => 'index')));
@@ -108,7 +108,7 @@ $di->setShared('router', function() use($config, $di) {
         $router->add(WizardRouter::STEP_FINISH, new WizardRouter('/wizard/finish', WizardRouter::STEP_FINISH, $_GET, array('.*' => 'finish'))); 
     }
     
-    $router->add('applicationsManage', new \System\Router\Regex('/cp/applications/:id/manage', array('controller' => 'Applications', 'action' => 'index'), array('id' => '[^/]+')));
+    $router->add('applicationsManage', new \System\Router\Regex('/cp/applications/:id/manage', array('controller' => 'Applications', 'action' => 'manage'), array('id' => '[^/]+')));
     $router->add('content', new \System\Router\Regex('/:uri', array('controller' => 'Index', 'action' => 'content', 'public' => true), array('uri' => '.+\.html')));
     $router->add('locale', new \System\Router\Regex('/locale/:value', array('controller' => 'Index', 'action' => 'locale', 'public' => true), array('value' => '.+')));
     $router->add('setDevice', new \System\Router\Regex('/setDevice/:devId', array('controller' => 'CP', 'action' => 'setDevice'), array('devId' => '.+')));
@@ -127,7 +127,7 @@ $di->setShared('router', function() use($config, $di) {
     $router->add('facebookList', new \System\Router\Regex('/cp/facebook/:account/:tab/:id', array('controller' => 'Facebook', 'action' => 'list'), array('account' => '[^/]+', 'tab' => 'private|group', 'id' => '[a-zA-Z0-9\:]+')));
     $router->add('emailsSelected', new \System\Router\Regex('/cp/emails/:account', array('controller' => 'Emails', 'action' => 'index'), array('account' => '[^/]+'))); //[-._@a-zA-Z0-9]{6,60}
     $router->add('emailsView', new \System\Router\Regex('/cp/emails/:account/:timestamp', array('controller' => 'Emails', 'action' => 'view'), array('account' => '[^/]+', 'timestamp' => '[\d]{1,10}')));
-    $router->add('locationsZonesEdit', new \System\Router\Regex('/cp/locations/zones/edit/:id', array('controller' => 'Locations', 'action' => 'index'), array('id' => '[0-9]+')));
+    $router->add('locationsZonesEdit', new \System\Router\Regex('/cp/locations/zones/edit/:id', array('controller' => 'Locations', 'action' => 'zoneEdit'), array('id' => '[0-9]+')));
     $router->add('instagramTab', new \System\Router\Regex('/cp/instagram/:account/:tab', array('controller' => 'Instagram', 'action' => 'tab'), array('account' => '[0-9]+', 'tab' => 'own|friends|commented')));
     $router->add('instagramPost', new \System\Router\Regex('/cp/instagram/:account/post/:post', array('controller' => 'Instagram', 'action' => 'view'), array('account' => '[0-9]+', 'post' => '[0-9]+')));
 
@@ -137,9 +137,12 @@ $di->setShared('router', function() use($config, $di) {
 });
 
 $di->setShared('session', function () use ($di) {
+    
 
     System\Session::setConfig($di['config']['session']);
-    if ($di['config']['environment'] == 'production') {
+    if ($di['config']['demo']) {
+        System\Session::setSessionHandler(new System\Session\Handler\CookieSessionHandler($di['request']));
+    } else if ($di['config']['environment'] == 'production') {
         $redisConfig = CS\Settings\GlobalSettings::getRedisConfig('sessions', $di['config']['site']);
         $redisClient = new Predis\Client($redisConfig);
         System\Session::setSessionHandler(new System\Session\Handler\RedisSessionHandler($redisClient));
@@ -153,7 +156,13 @@ $di->setShared('flashMessages', function () use ($di) {
 });
 
 $di->setShared('auth', function () use ($di) {
-    return new \System\Auth($di);
+    $auth = new \System\Auth($di);
+    
+    if ($di['config']['demo'] && !$auth->hasIdentity()) {    
+        $auth->setIdentity(require ROOT_PATH . 'demoUserData.php');
+    }
+    
+    return $auth;
 });
 
 $di->setShared('view', function() use ($di) {

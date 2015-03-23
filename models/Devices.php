@@ -83,12 +83,9 @@ class Devices extends \System\Model
 
     public function iCloudMergeWithLocalInfo($userId, array $iCloudDevices)
     {
-        if(empty($iCloudDevices)) return $iCloudDevices;
-
         $localDevices = array();
-        $deviceModel = new Devices($this->di);
         
-        foreach($deviceModel->getUserDevices($userId, 'icloud') as $dbDevice)
+        foreach($this->getUserDevices($userId, 'icloud') as $dbDevice)
             $localDevices[$dbDevice['unique_id']] = $dbDevice;
         
         foreach($iCloudDevices as &$iCloudDev){
@@ -107,16 +104,22 @@ class Devices extends \System\Model
                 $iCloudDev['quota_used'] =& $iCloudDev['QuotaUsedMb'];
                 $iCloudDev['os_version'] =& $iCloudDev['IosVersion'];
                 $iCloudDev['last_backup'] = strtotime($iCloudDev['LastModified']);
+                $iCloudDev['expiration_date'] = null;
             }
         }
         return $iCloudDevices;
     }
 
-    public function getUserDevices($userId, $platform = null)
+    public function getUserDevices($userId, $platform = null, $isSubscribed = null)
     {
         if($platform) $platformCondition = "AND d.os = {$this->getDb()->quote($platform)}";
         else $platformCondition = '';
 
+        if(!is_null($isSubscribed)) {
+            if($isSubscribed) $subscriptionHaving = 'HAVING COUNT(l.id) > 0';
+            else $subscriptionHaving = 'HAVING COUNT(l.id) = 0';
+        } else $subscriptionHaving = '';
+        
         $minOnlineTime = time() - Manager::ONLINE_PERIOD;
         $data = $this->getDb()->query("
                     SELECT
@@ -139,7 +142,8 @@ class Devices extends \System\Model
                         d.`user_id` = {$this->getDb()->quote($userId)} AND
                         d.`deleted` = 0
                         {$platformCondition}
-                    GROUp BY d.`id`
+                    GROUP BY d.`id`
+                    {$subscriptionHaving}
                 ")->fetchAll(\PDO::FETCH_ASSOC);
         foreach($data as &$item) {
 
@@ -149,14 +153,10 @@ class Devices extends \System\Model
             }
 
             if($item['os'] == 'icloud'){
-                $sync = $item['last_backup'];
-            } else $sync = $item['last_visit'];
+                $item['last_sync'] = $item['last_backup'];
+            } else $item['last_sync'] = $item['last_visit'];
 
-            //todo js Date Format
-            if($sync) $item['last_sync'] = date('j M Y g:i A', $sync);
-            else $item['last_sync'] = '-';
         }
-
         return $data;
     }
 

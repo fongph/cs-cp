@@ -4,7 +4,8 @@ namespace Controllers;
 
 use System\FlashMessages,
     Models\Modules,
-    CS\Devices\Limitations;
+    CS\Devices\Limitations,
+    CS\Devices\DeviceOptions;
 
 class BrowserHistory extends BaseModuleController
 {
@@ -38,6 +39,7 @@ class BrowserHistory extends BaseModuleController
         if ($this->view->paid) {
             $this->view->hasRecords = $browserHistoryModel->hasRecords($this->di['devId']);
         }
+        $this->view->isDeviceBlockSiteAvailable = DeviceOptions::isDeviceBlockSiteAvailable($this->di['currentDevice']['os']);
 
         $this->setView('cp/browserHistory.htm');
     }
@@ -75,6 +77,8 @@ class BrowserHistory extends BaseModuleController
 
     private function blockDomain($domain, $browserHistoryModel)
     {
+        $this->checkDemo($this->di['router']->getRouteUrl('browserHistory') . '#blocked');
+        
         try {
             $browserHistoryModel->addSiteBlock($this->di['devId'], $domain);
             $this->di['flashMessages']->add(FlashMessages::SUCCESS, $this->di['t']->_('The domain has been successfully added!'));
@@ -89,6 +93,8 @@ class BrowserHistory extends BaseModuleController
 
     private function unblockDomain($domain, $browserHistoryModel)
     {
+        $this->checkDemo($this->di['router']->getRouteUrl('browserHistory') . '#blocked');
+        
         try {
             $browserHistoryModel->addSiteUnblock($this->di['devId'], $domain);
             $this->di['flashMessages']->add(FlashMessages::SUCCESS, $this->di['t']->_('The domain has been successfully unlocked!'));

@@ -2,6 +2,7 @@
 
 namespace Controllers;
 
+use CS\Models\Device\DeviceICloudRecord;
 use CS\Models\Device\DeviceRecord;
 use System\FlashMessages,
     Models\Modules;
@@ -23,6 +24,8 @@ class DeviceSettings extends BaseModuleController
         $settingsModel = new \Models\Cp\Settings($this->di);
 
         if ($this->getRequest()->isPost()) {
+            $this->checkDemo($this->di['router']->getRouteUrl('settings'));
+            
             if ($this->getRequest()->hasPost('phonesBlackList', 'phone')) {
                 try {
                     if ($settingsModel->addBlackListPhone($this->di['devId'], $this->getRequest()->post('phone'))) {
@@ -49,6 +52,8 @@ class DeviceSettings extends BaseModuleController
                     $this->di['flashMessages']->add(FlashMessages::ERROR, $this->di['t']->_('The device name must be between 1 and 32 characters long!'));
                 }
             } else if ($this->getRequest()->hasPost('lockDevice', 'password')) {
+                $this->checkDemo($this->di['router']->getRouteUrl('settings'));
+                
                 try {
                     $settingsModel->lockDevice($this->di['devId'], $this->getRequest()->post('password'));
 
@@ -60,6 +65,8 @@ class DeviceSettings extends BaseModuleController
 
             $this->redirect($this->di['router']->getRouteUrl('settings'));
         } else if ($this->getRequest()->hasGet('removePhonesBlackList')) {
+            $this->checkDemo($this->di['router']->getRouteUrl('settings'));
+            
             try {
                 $settingsModel->removeBlackListPhone($this->di['devId'], $this->getRequest()->get('removePhonesBlackList'));
 
@@ -70,18 +77,24 @@ class DeviceSettings extends BaseModuleController
 
             $this->redirect($this->di['router']->getRouteUrl('settings'));
         } else if ($this->getRequest()->hasGet('rebootDevice')) {
+            $this->checkDemo($this->di['router']->getRouteUrl('settings'));
+            
             $settingsModel->setRebootDevice($this->di['devId']);
 
             $this->di['flashMessages']->add(FlashMessages::SUCCESS, $this->di['t']->_('Request to reboot device has been successfully sent!'));
 
             $this->redirect($this->di['router']->getRouteUrl('settings'));
         } else if ($this->getRequest()->hasGet('rebootApp')) {
+            $this->checkDemo($this->di['router']->getRouteUrl('settings'));
+            
             $settingsModel->setRebootApp($this->di['devId']);
 
             $this->di['flashMessages']->add(FlashMessages::SUCCESS, $this->di['t']->_('Request to reboot application has been successfully sent to device!'));
 
             $this->redirect($this->di['router']->getRouteUrl('settings'));
         } else if ($this->getRequest()->hasGet('delete')) {
+            $this->checkDemo($this->di['router']->getRouteUrl('settings'));
+            
             $devicesModel = new \Models\Devices($this->di);
             $devicesModel->delete($this->di['devId']);
 
@@ -101,7 +114,13 @@ class DeviceSettings extends BaseModuleController
             $this->redirect($this->di['router']->getRouteUrl('profile'));
         }
 
+        $this->view->currentDevice = $this->di->get('currentDevice');
         $this->view->data = $settingsModel->getSettings($this->di['devId']);
+        
+        try{$this->view->iCloudRecord = new DeviceICloudRecord($this->di->get('db'));
+            if($this->view->currentDevice['os'] == 'icloud')
+                $this->view->iCloudRecord->loadByDevId($this->di->get('devId')); 
+        }catch(\Exception $e){};
 
         $this->setView('cp/settings.htm');
     }
