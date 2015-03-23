@@ -5,14 +5,11 @@ namespace Models\Cp;
 class Kik extends BaseModel {
 
     public function getDataTableData($devId, $params = array()) {
-        if (!$devId)
-            return null;
-
         $devId = $this->getDb()->quote($devId);
 
         $sort = '`timestamp` ASC';
         if (count($params['sortColumns'])) {
-            $columns = ['f.`user_name`', 'f.`text`', 'f.`timestamp`'];
+            $columns = ['`name`', 'k.`text`', 'k.`timestamp`'];
 
             $sort = '';
             foreach ($params['sortColumns'] as $column => $direction) {
@@ -22,77 +19,27 @@ class Kik extends BaseModel {
             }
         }
 
-        $select = "SELECT f.`id`, f.`name`, f.`text`, f.`timestamp`, f.`group`, f.`members`";
+        $timeFrom = $this->getDb()->quote($params['timeFrom']);
+        $timeTo = $this->getDb()->quote($params['timeTo']);
+        $account = $this->getDb()->quote($params['account']);
+        
+        $select = "SELECT k.`id`, k.`text`, k.`timestamp`, k.`is_group`, k.`group_id`, IF(k.`is_group`, 'group', (SELECT `nickname` FROM `kik_users` WHERE `dev_id` = {$devId} AND `account_id` = {$account} AND `user_id` = k.`sender_id` LIMIT 1)) name";
 
-        if (isset($params['timeFrom'], $params['timeTo'], $params['account'])) {
-            $timeFrom = $this->getDb()->quote($params['timeFrom']);
-            $timeTo = $this->getDb()->quote($params['timeTo']);
-            $account = $this->getDb()->quote($params['account']);
-            $fromWhere = "FROM
-                        ((SELECT 
-                                    fm.`user_id` id, 
-                                    fm.`user_name` name, 
-                                    LEFT(fm.`text`, 201) `text`,
-                                    fm.`timestamp`,
-                                    fm.`group_id` `group`,
-                                    1 members 
-                        FROM `facebook_messages` fm
-                        INNER JOIN (SELECT 
-                                MAX(`timestamp`) maxTimestamp,
-                                        `user_id`
-                                FROM `facebook_messages` 
-                                WHERE 
-                                    `dev_id` = {$devId} AND 
-                                    `account` = {$account} AND
-                                    `group_id` IS NULL AND
-                                    `timestamp` >= {$timeFrom} AND
-                                    `timestamp` <= {$timeTo}
-                                GROUP BY `user_name`) fm2 ON fm.`user_id` = fm2.`user_id` AND fm.`timestamp` = fm2.`maxTimestamp`
+        $fromWhere = "FROM (SELECT
+                            `group_id`,
+                            MAX(`timestamp`) as max_time
+                        FROM kik_messages
                         WHERE
-                                fm.`dev_id` = {$devId} AND
-                                fm.`account` = {$account} AND
-                                fm.`group_id` IS NULL AND
-                                fm.`timestamp` >= {$timeFrom} AND
-                                fm.`timestamp` <= {$timeTo}
-                        GROUP BY 
-                                fm.`user_name` 
-                        ORDER BY  
-                                fm.`timestamp`) UNION 
-                        (SELECT 
-                                fm.`user_id`,
-                                fm.`user_name` name,
-                                LEFT(fm.`text`, 201) text,
-                                fm.`timestamp`,
-                                fm.`group_id` `group`, 
-                                (SELECT COUNT(DISTINCT `user_id`) FROM `facebook_messages` WHERE `dev_id` = {$devId} AND `account` = {$account} AND `group_id`=fm.`group_id` AND `timestamp` >= {$timeFrom} AND `timestamp` <= {$timeTo}) 
-                        FROM `facebook_messages` fm
-                        INNER JOIN (
-                                SELECT 
-                                        MAX(`timestamp`) maxTimestamp,
-                                        `group_id`
-                                FROM `facebook_messages` 
-                                WHERE 
-                                        `dev_id` = {$devId} AND 
-                                        `account` = {$account} AND
-                                        `group_id` IS NOT NULL AND
-                                        `timestamp` >= {$timeFrom} AND
-                                        `timestamp` <= {$timeTo}
-                                GROUP BY `group_id`) fm2 ON fm.`group_id` = fm2.`group_id` AND fm.`timestamp` = fm2.`maxTimestamp`
-                        WHERE 
-                                fm.`dev_id` = {$devId} AND
-                                fm.`account` = {$account} AND
-                                fm.`group_id` IS NOT NULL AND
-                                fm.`timestamp` >= {$timeFrom} AND
-                                fm.`timestamp` <= {$timeTo}
-                        GROUP BY 
-                                fm.`group_id` 
-                        ORDER BY  
-                                fm.`timestamp` DESC)) f";
-        }
+                            `dev_id` = {$devId} AND
+                            `account_id` = {$account} AND
+                            `timestamp` >= {$timeFrom} AND
+                            `timestamp` <= {$timeTo}
+                        GROUP BY `group_id`) last
+                        INNER JOIN `kik_messages` k ON k.`dev_id` = {$devId} AND k.`account_id` = {$account} AND k.`group_id` = last.`group_id` AND last.`max_time` = k.`timestamp`";
 
         $query = "{$select} {$fromWhere}"
                 . " ORDER BY {$sort} LIMIT {$params['start']}, {$params['length']}";
-
+                
         $result = array(
             'aaData' => $this->getDb()->query($query)->fetchAll(\PDO::FETCH_ASSOC)
         );
@@ -101,7 +48,7 @@ class Kik extends BaseModel {
             $result['iTotalRecords'] = 0;
             $result['iTotalDisplayRecords'] = 0;
         } else {
-            $result['iTotalRecords'] = $this->getDb()->query("SELECT COUNT(*) FROM (SELECT f.`id` {$fromWhere}) a")->fetchColumn();
+            $result['iTotalRecords'] = $this->getDb()->query("SELECT COUNT(*) FROM (SELECT k.`id` {$fromWhere}) a")->fetchColumn();
             $result['iTotalDisplayRecords'] = $result['iTotalRecords'];
         }
 
@@ -111,35 +58,34 @@ class Kik extends BaseModel {
     public function getAccountsList($devId) {
         $devId = $this->getDb()->quote($devId);
 
-        return $this->getDb()->query("SELECT DISTINCT `account_id` FROM `kik_messages` WHERE `dev_id` = {$devId}")->fetchAll(\PDO::FETCH_COLUMN);
+        return $this->getDb()->query("SELECT `account_id`, `nickname` FROM `kik_users` WHERE `dev_id` = {$devId} AND `account_id` = `user_id`")->fetchAll(\PDO::FETCH_KEY_PAIR);
     }
 
-    public function getPrivateList($devId, $account, $userId) {
+    public function getMessagesList($devId, $account, $group) {
+        $devId = $this->getDb()->quote($devId);
+        $account = $this->getDb()->quote($account);
+        $group = $this->getDb()->quote($group);
+
+        return $this->getDb()->query("SELECT
+                                            km.`sender_id` id,
+                                            ku.`nickname` name,
+                                            km.`text`,
+                                            km.`timestamp`
+                                        FROM `kik_messages` km
+                                        INNER JOIN `kik_users` ku ON ku.`dev_id` = {$devId} AND ku.`account_id` = {$account} AND ku.`user_id` = km.`sender_id`
+                                        WHERE 
+                                            km.`dev_id` = {$devId} AND
+                                            km.`account_id` = {$account} AND
+                                            km.`group_id` = {$group}
+                                        ORDER BY `timestamp` DESC")->fetchAll();
+    }
+
+    public function getUserName($devId, $account, $userId) {
         $devId = $this->getDb()->quote($devId);
         $account = $this->getDb()->quote($account);
         $userId = $this->getDb()->quote($userId);
 
-        return $this->getDb()->query("SELECT
-                                            `user_id` id,
-                                            `type`,
-                                            `user_name` name,
-                                            `text`,
-                                            `timestamp`
-                                        FROM `facebook_messages` WHERE `dev_id` = {$devId} AND `group_id` IS NULL AND `account` = {$account} AND `user_id` = {$userId} ORDER BY `timestamp` DESC")->fetchAll();
-    }
-
-    public function getGroupList($devId, $account, $groupId) {
-        $devId = $this->getDb()->quote($devId);
-        $account = $this->getDb()->quote($account);
-        $groupId = $this->getDb()->quote($groupId);
-
-        return $this->getDb()->query("SELECT
-                                            `user_id` id,
-                                            `type` type,
-                                            `user_name` name,
-                                            `text`,
-                                            `timestamp`
-                                        FROM `facebook_messages` WHERE `dev_id` = {$devId} AND `account` = {$account} AND `group_id` = {$groupId} GROUP BY `timestamp` ORDER BY `timestamp` DESC")->fetchAll();
+        return $this->getDb()->query("SELECT `nickname` FROM `kik_users` WHERE `dev_id` = {$devId} AND `account_id` = {$account} AND `user_id` = {$userId} LIMIT 1")->fetchColumn();
     }
 
     public function getGroupUsers($devId, $account, $groupId) {
@@ -147,7 +93,15 @@ class Kik extends BaseModel {
         $account = $this->getDb()->quote($account);
         $groupId = $this->getDb()->quote($groupId);
 
-        return $this->getDb()->query("SELECT DISTINCT `user_id`, `user_name` FROM `facebook_messages` WHERE `dev_id` = {$devId} AND `account` = {$account} AND `group_id` = {$groupId} ORDER BY `user_name`")->fetchAll(\PDO::FETCH_KEY_PAIR);
+        return $this->getDb()->query("SELECT 
+                kgm.`user_id`,
+                ku.`nickname`
+            FROM `kik_group_members` kgm
+            INNER JOIN `kik_users` ku ON ku.`dev_id` = {$devId} AND ku.`account_id` = {$account} AND ku.`user_id` = kgm.`user_id`
+            WHERE 
+                kgm.`dev_id` = {$devId} AND
+                kgm.`account_id` = {$account} AND
+                kgm.`group_id` = {$groupId}")->fetchAll(\PDO::FETCH_KEY_PAIR);
     }
 
 }

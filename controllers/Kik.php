@@ -20,12 +20,12 @@ class Kik extends BaseModuleController
 
     public function indexAction()
     {
-        $facebookModel = new \Models\Cp\Facebook($this->di);
+        $kikModel = new \Models\Cp\Kik($this->di);
 
         if ($this->getRequest()->isAjax()) {
             $dataTableRequest = new \System\DataTableRequest($this->di);
 
-            $data = $facebookModel->getDataTableData(
+            $data = $kikModel->getDataTableData(
                     $this->di['devId'], $dataTableRequest->buildResult(array('account', 'timeFrom', 'timeTo'))
             );
             $this->checkDisplayLength($dataTableRequest->getDisplayLength());
@@ -33,35 +33,33 @@ class Kik extends BaseModuleController
         }
 
         if ($this->view->paid) {
-            $this->view->accounts = $facebookModel->getAccountsList($this->di['devId']);
+            $this->view->accounts = $kikModel->getAccountsList($this->di['devId']);
         }
 
-        $this->setView('cp/facebook.htm');
+        $this->setView('cp/kik/index.htm');
     }
 
     public function listAction()
     {
-        $facebookModel = new \Models\Cp\Facebook($this->di);
+        $kikModel = new \Models\Cp\Kik($this->di);
 
-        switch ($this->params['tab']) {
-            case 'group':
-                $this->view->list = $facebookModel->getGroupList($this->di['devId'], $this->params['account'], $this->params['id']);
-                $this->view->users = $facebookModel->getGroupUsers($this->di['devId'], $this->params['account'], $this->params['id']);
-                break;
-
-            case 'private':
-                $this->view->list = $facebookModel->getPrivateList($this->di['devId'], $this->params['account'], $this->params['id']);
-                break;
-        }
-
+        $this->view->list = $kikModel->getMessagesList($this->di['devId'], $this->params['account'], $this->params['id']);
+        
         if (!count($this->view->list)) {
             $this->di['flashMessages']->add(FlashMessages::ERROR, $this->di['t']->_('The dialogue has not been found!'));
-            $this->redirect($this->di['router']->getRouteUrl('facebook'));
+            $this->redirect($this->di['router']->getRouteUrl('kik'));
+        }
+        
+        if ($this->params['tab'] == 'group') {
+            $this->view->users = $kikModel->getGroupUsers($this->di['devId'], $this->params['account'], $this->params['id']);
+        } else {
+            $this->view->user = $kikModel->getUserName($this->di['devId'], $this->params['account'], $this->params['id']);
         }
 
         $this->view->tab = $this->params['tab'];
+        $this->view->account = $this->params['account'];
 
-        $this->setView('cp/facebookList.htm');
+        $this->setView('cp/kik/list.htm');
     }
 
     protected function postAction()
