@@ -25,11 +25,18 @@ class CP extends BaseController {
 
     protected function redirectToLastUsedModule() {
         
-        if ($this->getRequest()->hasServer('HTTP_REFERER') || $this->getRequest()->get('redirect_url')) {
-            $prevRequestUri = ($this->getRequest()->get('redirect_url')) 
-                    ? $this->getRequest()->get('redirect_url') 
-                    : parse_url($this->getRequest()->server('HTTP_REFERER'), PHP_URL_PATH);
-                    
+        // redirect
+        if($this->getRequest()->get('redirect_url')) {
+            $redirect = explode('/', $this->getRequest()->get('redirect_url'));
+            foreach ($this->di['config']['modules'] as $key => $value) {
+                if(in_array($key, $redirect)) {
+                    $this->redirect( $this->di['router']->getRouteUrl( array_pop( $redirect ) ) );
+                }
+            }          
+        }
+        
+        if ($this->getRequest()->hasServer('HTTP_REFERER')) {
+            $prevRequestUri = parse_url($this->getRequest()->server('HTTP_REFERER'), PHP_URL_PATH);
 
             $this->di['router']->execute($prevRequestUri, function($route, $routeName) {
                 foreach ($this->di['config']['modules'] as $key => $value) {
