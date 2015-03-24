@@ -1187,3 +1187,11 @@ body > .cp-menu {
 .table-normal.table-container table th, .table-normal.table-container table td {
     padding: 8px 10px;
 }
+
+.device-status-s.icloud {
+    background-position: -16px -48px;
+}
+
+.device-status-s.icloud.online {
+    background-position: 0 -48px;
+}
