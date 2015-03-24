@@ -56,7 +56,7 @@ class Wizard extends BaseController {
     {
         $this->view->license = $license = $this->getLicense();
         $this->view->product = $product = $license->getProduct();
-        $this->view->iCloudAvailable = ($product->getGroup() == 'premium');
+        $this->view->iCloudAvailable = ($product->getGroup() == 'premium' || $product->getGroup() == 'trial');
         $this->view->title = $this->di->getTranslator()->_('Select a Platform');
         $this->setView('wizard/platform.htm');
     }
@@ -428,7 +428,7 @@ class Wizard extends BaseController {
         $license = $this->getLicense($mastBeAvailable);
         
         try {
-            if($license->getProduct()->getGroup() !== 'premium' || $license->getProduct()->getGroup() !== 'trial')
+            if($license->getProduct()->getGroup() !== 'premium' && $license->getProduct()->getGroup() !== 'trial')
                 throw new \Exception;
             
         } catch (\Exception $e) {
