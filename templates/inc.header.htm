@@ -62,7 +62,7 @@
                     <ul class="nav navbar-nav navbar-right">
                         <li class="dropdown devices-dropdown">
                             <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                                <i class="device-status-s {$di.devicesList[$di.devId].os}{if $di.devicesList[$di.devId].online} online{/if}"></i>{$di.devicesList[$di.devId].name}
+                                <i class="device-status-s {$di.devicesList[$di.devId].os}{if $di.devicesList[$di.devId].online || $di.devicesList[$di.devId].sync} online{/if}"></i>{$di.devicesList[$di.devId].name}
                                 <b class="caret"></b>
                             </a>
                             <ul class="dropdown-menu">
