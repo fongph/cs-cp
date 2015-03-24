@@ -10,6 +10,20 @@
 
         <title>{$title}</title>
 
+        {if $di.environment == 'development'}
+            {if $di.auth->hasIdentity()}
+                <link href="{$di.config.staticDomain}/stylesheets/backend.css?b{$di.config.build}" rel="stylesheet" />
+            {else}
+                <link href="{$di.config.staticDomain}/stylesheets/frontend.css?b{$di.config.build}" rel="stylesheet" />
+            {/if}
+        {else}
+            {if $di.auth->hasIdentity()}
+                <link href="{$di.config.staticDomain}/stylesheets/backend.min.css?b{$di.config.build}" rel="stylesheet" />
+            {else}
+                <link href="{$di.config.staticDomain}/stylesheets/frontend.min.css?b{$di.config.build}" rel="stylesheet" />
+            {/if}
+        {/if}
+        <!--
         <link href="{$di.config.staticDomain}/css/bootstrap.css?b{$di.config.build}" rel="stylesheet" />
         <link href="{$di.config.staticDomain}/css/main.css?b{$di.config.build}" rel="stylesheet" />
         <link href='http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz:400,300,700,200' rel='stylesheet' type='text/css' />
@@ -24,6 +38,7 @@
         <link href="{$di.config.staticDomain}/css/colorbox.css?b{$di.config.build}" rel="stylesheet" />
         <link href="{$di.config.staticDomain}/css/datatables.css?b{$di.config.build}" rel="stylesheet" />
         <link href="{$di.config.staticDomain}/pumpic/css/style.css?b{$di.config.build}" rel="stylesheet" />
+        -->
 
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>

@@ -1,0 +1,1169 @@
+html, body, .wrapper {
+    position: relative;
+    height: 100%;
+    top: 0;
+    left: 0;
+}
+
+html, body {
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+body > .cp-menu {
+    display: none;
+}
+
+#header {
+    background: transparent;
+}
+
+#header .logo-holder {
+    display: block;
+    float: left;
+    height: 65px;
+    padding-top: 8px;
+}
+
+#header .logo {
+    display: block;
+    width: 172px;
+    height: 44px;
+    background: url(../img/logo.png) no-repeat;
+}
+
+#header .toggle-left, #header .toggle-right {
+    display: none;
+}
+
+#header .menu {
+    border-top: solid 1px #cccccc;
+    border-bottom: solid 1px #cccccc;
+    background: #f7f7f7;
+    position: relative;
+}
+
+#footer {
+    position: relative;
+    height: 60px;
+    margin-top: -60px;
+    width: 100%;
+    background: #fcfcfc;
+    border-top: solid 1px #ddd;
+}
+
+#footer .container {
+    padding-top: 20px;
+    text-align: center;
+}
+
+.row-clear {
+    clear: both;
+}
+
+.wrapper-container {
+    padding-bottom: 60px;
+    min-height: 100%;
+}
+
+.wrapper-container > .container {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.wrapper-container .login-form {
+    margin-bottom: 20px;
+}
+
+.navbar-collapse.center .nav, .navbar-collapse.center .nav > li {
+    float: none !important;
+    display: inline-block;
+    vertical-align: top;
+}
+
+.center .navbar-inner {
+    text-align: center;
+}
+
+.wrapper-container .login-form .action-links {
+    list-style: none;
+    margin-top: 20px;
+    padding: 0px;
+}
+
+.wrapper-container .login-form .action-links li {
+    margin: 10px 0;
+}
+
+.wrapper-container .login-form .action-links i {
+    display: block;
+    float: left;
+    width: 12px;
+    height: 12px;
+    margin-right: 10px;
+    margin-left: -20px;
+    margin-top: 3px;
+}
+
+.add-buttons {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.add-buttons span {
+    float: left;
+    padding-top: 7px;
+}
+
+.add-buttons li {
+    padding: 10px;
+    overflow: hidden;
+    border-bottom: 1px solid #aaa;
+}
+
+.add-buttons li.last {
+    border-bottom: none !important;
+}
+
+.dropdown-menu li a {
+    font-size: 16px !important;
+}
+
+.tab-content .container {
+    padding-top: 15px;
+}
+
+.cp-menu a {
+    color: #0090d3;
+    font-size: 17px;
+    padding: 5px 5px 0 0px !important;
+}
+
+.cp-menu a:hover {
+    text-decoration: underline !important;
+    background-color: #f8f8f8 !important;
+}
+
+.cp-menu li i {
+    display: block;
+    float: left;
+    height: 24px;
+    width: 24px;
+    background-image: url(../img/menu-left-icons.png);
+    vertical-align: bottom;
+    margin: 0 5px 0 0;
+}
+
+.menu-wrapper .banner-holder {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.cp-menu i.menu-calls {
+    background-position: 0px 0px;
+}
+
+.cp-menu li:hover i.menu-calls, .cp-menu .active i.menu-calls {
+    background-position: -24px 0px;
+}
+
+.cp-menu i.menu-sms {
+    background-position: 0px -24px;
+}
+
+.cp-menu li:hover i.menu-sms, .cp-menu .active i.menu-sms {
+    background-position: -24px -24px;
+}
+
+.cp-menu i.menu-locations {
+    background-position: 0px -48px;
+}
+
+.cp-menu li:hover i.menu-locations, .cp-menu .active i.menu-locations {
+    background-position: -24px -48px;
+}
+
+.cp-menu i.menu-browserBookmarks {
+    background-position: 0px -72px;
+}
+
+.cp-menu li:hover i.menu-browserBookmarks, .cp-menu .active i.menu-browserBookmarks {
+    background-position: -24px -72px;
+}
+
+.cp-menu i.menu-browserHistory {
+    background-position: 0px -96px;
+}
+
+.cp-menu li:hover i.menu-browserHistory, .cp-menu .active i.menu-browserHistory {
+    background-position: -24px -96px;
+}
+
+.cp-menu i.menu-calendar {
+    background-position: 0px -120px;
+}
+
+.cp-menu li:hover i.menu-calendar, .cp-menu .active i.menu-calendar {
+    background-position: -24px -120px;
+}
+
+.cp-menu i.menu-contacts {
+    background-position: 0px -144px;
+}
+
+.cp-menu li:hover i.menu-contacts, .cp-menu .active i.menu-contacts {
+    background-position: -24px -144px;
+}
+
+.cp-menu i.menu-keylogger {
+    background-position: 0px -168px;
+}
+
+.cp-menu li:hover i.menu-keylogger, .cp-menu .active i.menu-keylogger {
+    background-position: -24px -168px;
+}
+
+.cp-menu i.menu-photos {
+    background-position: 0px -240px;
+}
+
+.cp-menu li:hover i.menu-photos, .cp-menu .active i.menu-photos {
+    background-position: -24px -240px;
+}
+
+.cp-menu i.menu-videos {
+    background-position: 0px -264px;
+}
+
+.cp-menu li:hover i.menu-videos, .cp-menu .active i.menu-videos {
+    background-position: -24px -264px;
+}
+
+.cp-menu i.menu-viber {
+    background-position: 0px -288px;
+}
+
+.cp-menu li:hover i.menu-viber, .cp-menu .active i.menu-viber {
+    background-position: -24px -288px;
+}
+
+.cp-menu i.menu-skype {
+    background-position: 0px -312px;
+}
+
+.cp-menu li:hover i.menu-skype, .cp-menu .active i.menu-skype {
+    background-position: -24px -312px;
+}
+
+.cp-menu i.menu-whatsapp {
+    background-position: 0px -336px;
+}
+
+.cp-menu li:hover i.menu-whatsapp, .cp-menu .active i.menu-whatsapp {
+    background-position: -24px -336px;
+}
+
+.cp-menu i.menu-facebook {
+    background-position: 0px -360px;
+}
+
+.cp-menu li:hover i.menu-facebook, .cp-menu .active i.menu-facebook {
+    background-position: -24px -360px;
+}
+
+.cp-menu i.menu-vk {
+    background-position: 0px -384px;
+}
+
+.cp-menu li:hover i.menu-vk, .cp-menu .active i.menu-vk {
+    background-position: -24px -384px;
+}
+
+.cp-menu i.menu-emails {
+    background-position: 0px -432px;
+}
+
+.cp-menu li:hover i.menu-emails, .cp-menu .active i.menu-emails {
+    background-position: -24px -432px;
+}
+
+.cp-menu i.menu-applications {
+    background-position: 0px -456px;
+}
+
+.cp-menu li:hover i.menu-applications, .cp-menu .active i.menu-applications {
+    background-position: -24px -456px;
+}
+
+.cp-menu i.menu-smsCommands {
+    background-position: 0px -480px;
+}
+
+.cp-menu li:hover i.menu-smsCommands, .cp-menu .active i.menu-smsCommands {
+    background-position: -24px -480px;
+}
+
+.cp-menu i.menu-settings {
+    background-position: 0px -504px;
+}
+
+.cp-menu li:hover i.menu-settings, .cp-menu .active i.menu-settings {
+    background-position: -24px -504px;
+}
+
+.cp-menu i.menu-instagram {
+    background-position: 0px -408px;
+}
+
+.cp-menu li:hover i.menu-instagram, .cp-menu .active i.menu-instagram {
+    background-position: -24px -408px;
+}
+
+.cp-menu .active a {
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+@media (min-width: 767px) {
+    #header .menu ul {
+        float: left;
+    }
+
+    #header .menu ul.right {
+        float: right;
+    }
+
+    #header .menu ul.nav > li {
+        float: left;
+    }
+
+    #header .menu ul.nav > li > a {
+        border-top: solid 5px transparent;
+        padding: 2px 18px 10px 18px;
+        font-size: 18px;
+        color: #000;
+    }
+
+    #header .menu ul.nav > li > a:hover, #header .menu ul.nav > li.active > a, #header .menu ul.nav > li.open > a {
+        border-top: solid 5px #0090d3;
+        background: transparent;
+        color: #0090d3; 
+    }
+
+    .wrapper-container .cp-menu {
+        float: left;
+        width: 220px;
+        padding-bottom: 20px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .menu-wrapper {
+        float: left;
+        padding: 0 15px 0 0;
+        width: 22%;
+    }
+
+    .content-wrapper {
+        float: left;
+        padding: 0 10px 10px 0;
+        width: 78%;
+    }
+
+    .wrapper-container .content {
+        float: left;
+        width: 950px;
+    }
+}
+
+@media (max-width: 1199px) {
+    .container {
+        width: 100%;
+        margin-right: auto;
+        margin-left: auto;
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+}
+
+@media (min-width: 992px) and (max-width: 1199px) {
+    .menu-wrapper {
+        float: left;
+        padding: 0 15px 0 0;
+        width: 23%;
+    }
+
+    .content-wrapper {
+        float: left;
+        padding: 0 10px 10px 0;
+        width: 77%;
+    }
+
+    .cp-menu li i {
+        margin: 0 10px;
+    }
+
+    .wrapper-container .content {
+        float: left;
+        width: 750px;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+    .menu-wrapper {
+        float: left;
+        padding: 0 15px 0 0;
+        width: 10%;
+        margin-bottom: 20px;
+    }
+
+    .content-wrapper {
+        float: left;
+        padding: 0 10px 10px 0;
+        width: 90%;
+    }
+
+    .wrapper-container .content {
+        float: left;
+        width: 530px;
+    }
+
+    .cp-menu li span{
+        display: none;
+    }
+
+    .cp-menu li i {
+        margin: 0 10px;
+        float: none;
+    }
+
+    .cp-menu {
+        width: 50px !important;
+        margin-right: 10px;
+        border: 1px solid #aaa;
+        border-left: none;
+    }
+}
+
+@media (max-width: 767px) {
+    body {
+        overflow-x: hidden;
+    }
+
+    .content-wrapper {
+        padding: 5px;
+    }
+
+    .wrapper {
+        min-width: 320px;
+    }
+
+    body.menu-active .wrapper {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 250px;
+    }
+
+    body.menu-active .cp-menu {
+        display: block;
+        overflow-y: scroll;
+        border-right: 2px solid #cccccc;
+        position: fixed;
+        height: 100%;
+        width: 250px;
+        padding: 10px;
+    }
+
+    #header .toggle-left, #header .toggle-right {
+        display: block;
+        float: left;
+        width: 44px;
+        padding-top: 12px;
+    }
+    
+    #header .toggle-left {
+        margin-left: -100%;
+        text-align: left;
+    }
+    
+    #header .toggle-right {
+        margin-left: -44px;
+        text-align: right;
+    }
+    
+    #header .navbar-toggle {
+        margin: 0;
+    }
+
+    #header .logo-holder {
+        float: left;
+        width: 100%;
+        overflow: hidden;
+        padding-left: 50px;
+        padding-right: 50px;
+        text-align: center
+    }
+    
+    #header .logo {
+        margin: 0 auto;
+    }
+
+    .cp-menu li i {
+        margin: 0 10px;
+    }
+
+    .navbar {
+        background: transparent;
+        border: 0px;
+        border-top: 1px solid #e7e7e7;
+    }
+}
+
+/* jplayer */
+
+.jp-audio {
+    position: fixed;
+    z-index: 2000;
+    bottom: 0;
+    width: 50%;
+    left: 50%;
+    margin: 0 0 0 -25%;
+    display: none;
+}
+
+.jp-audio .jp-controls {
+    position: absolute;
+    top: 0px;
+    left: -36px;
+    height: 36px;
+    width: 36px;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+.jp-audio .jp-close {
+    position: absolute;
+    top: 0px;
+    right: -36px;
+    height: 36px;
+    width: 36px;
+    text-align: center;
+    line-height: 36px;
+    background: #ddd;
+    cursor: pointer;
+}
+
+.jp-audio .jp-play, .jp-audio .jp-pause {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 36px;
+    height: 36px;
+    background: #00aef6;
+    color: #000;
+    text-align: center;
+    line-height: 36px;
+}
+
+.jp-audio .no-volume .jp-volume-controls {
+    display: none;
+}
+
+.jp-audio .jp-volume-controls {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    height: 36px;
+    width: 100px;
+}
+
+.jp-audio .jp-volume-controls .jp-mute {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 36px;
+    text-align: center;
+    line-height: 36px;
+    background: #ddd;
+    cursor: pointer;
+}
+
+.jp-audio .jp-volume-controls .jp-unmute {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 36px;
+    text-align: center;
+    line-height: 36px;
+    background: #ddd;
+    cursor: pointer;
+}
+
+.jp-audio .jp-volume-controls .jp-volume-bar {
+    position: relative;
+    margin-left: 36px;
+    height: 36px;
+    width: 64px;
+    overflow: hidden;
+    background: #232323;
+    cursor: pointer;
+}
+
+.jp-audio .jp-volume-controls .jp-volume-bar .jp-volume-bar-value {
+    background: #0082B2;
+    width: 0px;
+    height: 100%;
+}
+
+.jp-audio .jp-progress {
+    position: relative;
+    top: 0px;
+    left: 0px;
+    height: 36px;
+    width: 100%;
+    overflow: hidden;
+    background: #232323;
+    padding-right: 100px;
+}
+
+.jp-audio .no-volume .jp-progress {
+    padding-right: 0;
+}
+
+.jp-audio .jp-seek-bar {
+    position: relative;
+    width: 0px;
+    height: 100%;
+    cursor: pointer;
+}
+
+.jp-audio .jp-play-bar {
+    background: #0082B2;
+    width: 0px;
+    height: 100%;
+}
+
+.jp-audio .jp-duration {
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    height: 36px;
+    padding: 0 10px;
+    line-height: 36px;
+    color: #fff;
+    font-size: 12px;
+}
+
+.jp-audio .jp-current-time {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    height: 36px;
+    padding: 0 10px;
+    line-height: 36px;
+    color: #fff;
+    font-size: 12px;
+    z-index: 10;
+}
+
+.jp-audio .jp-no-solution {
+    background: #f5f5f5;
+    font-size: 14px;
+    line-height: 16px;
+    text-align: center;
+    padding: 5px;
+    margin: 0 -36px;
+    border-left: 1px solid #dadada;
+    border-right: 1px solid #dadada;
+}
+
+.jp-no-solution span {
+    display: block;
+    font-weight: bold;
+}
+
+.jp-video {
+    position: relative;
+    background: #000;
+    width: 100%;
+}
+
+.jp-video .jp-no-solution {
+    background: #f5f5f5;
+    font-size: 14px;
+    line-height: 16px;
+    text-align: center;
+    padding: 5px;
+}
+
+.jp-video .jp-type-single {
+    position: relative;
+    padding-bottom: 36px;
+}
+
+.jp-video .jp-jplayer {
+    margin: 0 auto;
+    min-height: 200px;
+}
+
+.jp-video-full div div {
+    z-index: 1000;
+}
+
+.jp-video .jp-gui table {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.jp-video .jp-gui table td {
+    vertical-align: middle;
+}
+
+.jp-video.jp-video-270p .jp-gui table {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 270px;
+}
+
+.jp-video.jp-video-360p .jp-gui table {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 360px;
+}
+
+.jp-video-play {
+    width: 69px;
+    height: 80px;
+    font-size: 80px;
+    line-height: 80px;
+    cursor: pointer;
+    margin: 0 auto;
+}
+
+.jp-video-play:hover {
+    color: #777;
+}
+
+.jp-video .jp-interface {
+    width: 100%;
+}
+
+.jp-video .jp-controls-holder {
+    position: relative;
+    padding: 0 136px 0 73px;
+    width: 100%;
+    overflow: hidden;
+}
+
+.jp-video .no-volume .jp-controls-holder {
+    padding-right: 36px;
+}
+
+.jp-video .no-full-screen .jp-controls-holder {
+    padding-right: 100px;
+}
+
+.jp-video .no-volume.no-full-screen .jp-controls-holder {
+    padding-right: 0px;
+}
+
+.jp-video .jp-controls, .jp-video .jp-toggles {
+    position: absolute;
+    top: 0px;
+    height: 36px;
+    width: 74px;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    float: left;
+}
+
+.jp-video .jp-controls {
+    left: 0px;
+    background: #232323;
+}
+
+.jp-video .jp-toggles {
+    right: 0px;
+    width: 36px;
+}
+
+.jp-video .jp-play, .jp-video .jp-pause, .jp-video .jp-stop, .jp-video .jp-full-screen, .jp-video .jp-restore-screen {
+    width: 36px;
+    height: 36px;
+    float: left;
+    background: #00aef6;
+    color: #000;
+    text-align: center;
+    line-height: 36px;
+    margin-right: 1px;
+}
+
+.jp-video .jp-play, .jp-video .jp-pause {
+    margin-right: 1px;
+}
+
+.jp-video .no-volume .jp-volume-controls {
+    display: none;
+}
+
+.jp-video .jp-volume-controls {
+    position: absolute;
+    top: 0px;
+    right: 36px;
+    height: 36px;
+    width: 100px;
+}
+
+.jp-video .jp-volume-controls .jp-mute {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 36px;
+    text-align: center;
+    line-height: 36px;
+    background: #ddd;
+    cursor: pointer;
+}
+
+.jp-video .jp-volume-controls .jp-unmute {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 36px;
+    text-align: center;
+    line-height: 36px;
+    background: #ddd;
+    cursor: pointer;
+}
+
+.jp-video .jp-volume-controls .jp-volume-bar {
+    position: relative;
+    margin-left: 36px;
+    height: 36px;
+    width: 64px;
+    overflow: hidden;
+    background: #232323;
+    cursor: pointer;
+}
+
+.jp-video .jp-volume-controls .jp-volume-bar .jp-volume-bar-value {
+    background: #0082B2;
+    width: 0px;
+    height: 100%;
+}
+
+.jp-video .jp-progress {
+    position: relative;
+    float: left;
+    height: 36px;
+    width: 100%;
+    overflow: hidden;
+    background: #232323;
+}
+
+.jp-video .jp-seek-bar {
+    width: 0px;
+    height: 100%;
+    cursor: pointer;
+}
+
+.jp-video .jp-play-bar {
+    background: #0082B2;
+    width: 0px;
+    height: 100%;
+}
+
+.jp-video .jp-time-holder {
+    position: absolute;
+    right: 0px;
+    top: 0px;
+}
+
+.jp-video .jp-duration {
+    position: relative;
+    height: 36px;
+    padding: 0 10px;
+    line-height: 36px;
+    color: #fff;
+    font-size: 12px;
+}
+
+
+.jp-video.jp-video-full .jp-jplayer {
+    top: 0;
+    left: 0;
+    position: fixed !important;
+    overflow: hidden;
+}
+
+.jp-video .jp-gui {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+}
+
+.jp-video .jp-interface {
+    position: absolute;
+    width: 100%;
+    left: 0px;
+    bottom: 0px;
+}
+
+.jp-video.jp-video-full .jp-gui {
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1001;
+}
+
+.jp-video.jp-video-full div.jp-interface {
+    position: absolute !important;
+    bottom: 0;
+    left: 0;
+}
+
+.jp-video.jp-video-full table {
+    height: 100%;
+}
+
+.jp-video .jp-duration {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    height: 36px;
+    padding: 0 10px;
+    line-height: 36px;
+    color: #fff;
+    font-size: 12px;
+    z-index: 10;
+}
+
+.jp-video .jp-current-time {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    height: 36px;
+    padding: 0 10px;
+    line-height: 36px;
+    color: #fff;
+    font-size: 12px;
+    z-index: 10;
+}
+
+.jp-video img {
+    vertical-align: top;
+}
+
+.jp-seek-bar {
+    width: 100% !important;
+}
+
+.jp-seeking-bg {
+    background: #00aef6 url(../img/animated-overlay.gif);
+    opacity: 0.6;
+}
+
+@media (min-width: 767px) {
+    .jp-video.flexible .jp-jplayer {
+        height: 480px !important;
+    }
+
+    .jp-video.flexible video {
+        height: 480px !important;
+    }
+}
+
+@media (min-width: 480px) and (max-width: 766px) {
+    .jp-video.flexible .jp-jplayer {
+        height: 360px !important;
+    }
+
+    .jp-video.flexible video {
+        height: 360px !important;
+    }
+}
+
+@media (max-width: 479px) {
+    .jp-video.flexible .jp-jplayer {
+        height: 200px !important;
+    }
+
+    .jp-video.flexible video {
+        height: 200px !important;
+    }
+}
+
+.device-status {
+    position: relative;
+    height: 45px;
+    overflow: hidden;
+}
+
+.device-status .name {
+    display: block;
+    float: left;
+    font-size: 24px;
+    line-height: 45px;
+    margin-right: 15px;
+}
+
+.device-status .value {
+    display: block;
+    float: left;
+    width: 134px;
+    height: 45px;
+    background: url('../img/device-statuses.png') no-repeat 0 45px;
+}
+
+.device-status .value.wifi {
+    background-position: 0 0;
+}
+
+.device-status .value.mobile {
+    background-position: 0 -45px;
+}
+
+.device-status .value.offline {
+    background-position: 0 -90px;
+}
+
+.device-status-s {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background: url('../img/device-types-statuses.png') no-repeat -16px 16px;
+}
+.device-status-s.ios {
+    background-position: -16px 0;
+}
+
+.device-status-s.android {
+    background-position: -16px -16px;
+}
+
+.device-status-s.blackberry {
+    background-position: -16px -32px;
+}
+
+.device-status-s.ios.online {
+    background-position: 0 0;
+}
+
+.device-status-s.android.online {
+    background-position: 0 -16px;
+}
+
+.device-status-s.blackberry.online {
+    background-position: 0 -32px;
+}
+
+.dropdown.devices-dropdown li {
+    position: relative;
+}
+
+.dropdown.devices-dropdown .device-status-s {
+    position: relative;
+    top: 3px;
+    margin-right: 3px;
+}
+
+.dropdown.devices-dropdown span {
+    font-weight: bold;
+}
+
+.popover-title.in {
+    background: #fcf8e3 !important;
+}
+
+.popover-title.out {
+    background: #dff0d8 !important;
+}
+
+#calendar #cal-day-box .cal-row-head {
+    height: 30px;
+}
+
+.calendar-form > * {
+    margin-bottom: 10px;
+}
+
+.dropdown-menu a {
+    cursor: pointer;
+}
+
+.alert i {
+    margin-right: 10px; 
+}
+
+.container .row .alert {
+    overflow: hidden;
+}
+
+.form-inline > *, .form-group .input-group  {
+    margin: 5px 0;
+}
+
+.popover-content {
+    word-break: break-all;
+}
+
+.blue-asterisk {
+    font-size: 36px;
+    line-height: 20px;
+    color: #0090d3;
+    vertical-align: bottom;
+}
+
+.no-margin {
+    margin: 0 !important;
+}
+
+.add-device-block {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    text-align: center;
+}
+
+.add-device-button-wrapper {
+    margin-bottom: 7px;
+}
+
+.wizard-container {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    text-align: center;
+    padding: 20px 30px;
+    margin-top: 15px;
+}
+.wizard-container .row {
+    margin: 10px 0;
+}
+
+.wizard-container p:last-child {
+    margin-bottom: 0;
+}
+
+.block-or {
+    color: red; 
+    font-size: 20px; 
+    font-weight: bold;
+    line-height: 50px;
+    text-transform: uppercase;
+}
