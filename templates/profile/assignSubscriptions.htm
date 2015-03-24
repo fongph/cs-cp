@@ -6,26 +6,28 @@
     {insert "inc.flashMessages.htm"}
     <div class="bordered-container">
         {if count($packages)}
-            {foreach $packages as $package}
-                <div class="row">
-                    {if $deviceRecord->getOs() === 'icloud' && $package.product_group !== 'premium' && $package.product_group !== 'trial'}
-                        <button class="btn btn-primary button-relative" disabled>
-                            {$package.name}<span class="license-lifetime" data-time-format="ll" data-timestamp-value="{$package.expiration_date}"></span>
-                            <span class="blue-asterisk button-asterisk">*</span>
-                        </button>
-                    {elseif $oldLicenseRecord} {*upgrade*}
-                        <a class="btn btn-primary" href="{$di.router->getRouteUrl('profileUpgradeConfirm')}?deviceId={$deviceRecord->getId()}&oldLicenseId={$oldLicenseRecord->getId()}&licenseId={$package.license_id}">
-                            {$package.name}<span class="license-lifetime" data-time-format="ll" data-timestamp-value="{$package.expiration_date}"></span>
-                        </a>
-                    {else} {*assign*}
-                        <form method="post" action="{$di.router->getRouteUrl('profileAssignProcess')}?deviceId={$deviceRecord->getId()}&licenseId={$package.license_id}">
-                            <button class="btn btn-primary" type="submit">
+            <div class="button-holder">
+                {foreach $packages as $package}
+                    <div class="row">
+                        {if $deviceRecord->getOs() === 'icloud' && $package.product_group !== 'premium' && $package.product_group !== 'trial'}
+                            <button class="btn btn-primary button-relative" disabled>
                                 {$package.name}<span class="license-lifetime" data-time-format="ll" data-timestamp-value="{$package.expiration_date}"></span>
+                                <span class="blue-asterisk button-asterisk">*</span>
                             </button>
-                        </form>
-                    {/if}
-                </div>
-            {/foreach}
+                        {elseif $oldLicenseRecord} {*upgrade*}
+                            <a class="btn btn-primary" href="{$di.router->getRouteUrl('profileUpgradeConfirm')}?deviceId={$deviceRecord->getId()}&oldLicenseId={$oldLicenseRecord->getId()}&licenseId={$package.license_id}">
+                                {$package.name}<span class="license-lifetime" data-time-format="ll" data-timestamp-value="{$package.expiration_date}"></span>
+                            </a>
+                        {else} {*assign*}
+                            <form method="post" action="{$di.router->getRouteUrl('profileAssignProcess')}?deviceId={$deviceRecord->getId()}&licenseId={$package.license_id}">
+                                <button class="btn btn-primary" type="submit">
+                                    {$package.name}<span class="license-lifetime" data-time-format="ll" data-timestamp-value="{$package.expiration_date}"></span>
+                                </button>
+                            </form>
+                        {/if}
+                    </div>
+                {/foreach}
+            </div>
             <div class="row">
                 <p class="text-info">
                     <span class="blue-asterisk">*</span>

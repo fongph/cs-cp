@@ -1176,3 +1176,14 @@ body > .cp-menu {
     right: -18px;
 
 }
+
+.button-holder {
+    display: inline-block;
+}
+.button-holder .btn {
+    min-width: 100%;
+}
+
+.table-normal.table-container table th, .table-normal.table-container table td {
+    padding: 8px 10px;
+}
