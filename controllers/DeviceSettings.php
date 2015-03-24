@@ -40,12 +40,14 @@ class DeviceSettings extends BaseModuleController
                 }
             } else if ($this->getRequest()->hasPost('deviceSettings', 'name')) {
                 $simNotifications = $this->getRequest()->hasPost('simNotificactions');
+                $outgoingSmsLimitation = $this->getRequest()->hasPost('outgoingSmsLimitation');
+                $outgoingSmsLimitationCount = $this->getRequest()->post('outgoingSmsLimitationCount', 1);
                 $blackWords = $this->getRequest()->post('blackWords', '');
 
                 $devicesModel = new \Models\Devices($this->di);
                 try {
                     $devicesModel->setDeviceName($this->di['devId'], $this->getRequest()->post('name'));
-                    $settingsModel->setDeviceSettings($this->di['devId'], $simNotifications, $blackWords);
+                    $settingsModel->setDeviceSettings($this->di['devId'], $simNotifications, $blackWords, $outgoingSmsLimitation, $outgoingSmsLimitationCount);
 
                     $this->di['flashMessages']->add(FlashMessages::SUCCESS, $this->di['t']->_('The settings have been successfully updated!'));
                 } catch (\Models\Devices\InvalidDeviceNameException $e) {

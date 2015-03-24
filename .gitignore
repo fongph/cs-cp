@@ -4,6 +4,8 @@
 /logs/*
 /utils/result/*
 /.idea
+/bower_components
+/node_modules
 composer.phar
 development.config.php
 build.php

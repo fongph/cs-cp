@@ -86,17 +86,21 @@ class Settings extends BaseModel
         return $this->setPhonesBlackListString($devId, $value);
     }
 
-    public function setDeviceSettings($devId, $simNotifications, $blackWords)
+    public function setDeviceSettings($devId, $simNotifications, $blackWords, $outgoingSmsLimitation, $outgoingSmsLimitationCount)
     {
         $escapedDevId = $this->getDB()->quote($devId);
         $blackWordsString = $this->getDB()->quote($this->rebuildBlackWordsList($blackWords));
         $escapedSimNotifications = $this->getDB()->quote($simNotifications);
+        $outgoingSmsLimitation = $this->getDB()->quote($outgoingSmsLimitation);
+        $outgoingSmsLimitationCount = $this->getDB()->quote($outgoingSmsLimitationCount);
 
         return $this->getDb()->exec("UPDATE 
                                             `dev_settings`
                                         SET 
                                             `bl_words` = {$blackWordsString},
-                                            `sim_notification` = {$escapedSimNotifications}
+                                            `sim_notification` = {$escapedSimNotifications},
+                                            `outgoing_sms_limitation` = {$outgoingSmsLimitation},
+                                            `outgoing_sms_limitation_count` = {$outgoingSmsLimitationCount}
                                         WHERE
                                             `dev_id` = {$escapedDevId}");
     }
