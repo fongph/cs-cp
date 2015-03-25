@@ -26,7 +26,7 @@ class Wizard extends BaseController {
     
     public function preAction()
     {
-        $this->checkDemo($this->di['router']->getRouteUrl('cp'));
+        $this->checkDemo($this->di->getRouter()->getRouteUrl('cp'));
     }
     
     protected function redirectAction()
@@ -55,8 +55,8 @@ class Wizard extends BaseController {
     public function platformAction()
     {
         $this->view->license = $license = $this->getLicense();
-        $this->view->product = $product = $license->getOrderProduct()->getProduct();
-        $this->view->iCloudAvailable = ($product->getGroup() == 'premium');
+        $this->view->product = $product = $license->getProduct();
+        $this->view->iCloudAvailable = ($product->getGroup() == 'premium' || $product->getGroup() == 'trial');
         $this->view->title = $this->di->getTranslator()->_('Select a Platform');
         $this->setView('wizard/platform.htm');
     }
@@ -70,10 +70,10 @@ class Wizard extends BaseController {
         $deviceModel = new Devices($this->di);
         $devices = $deviceModel->getUserDevices($this->auth['id'], $this->getPlatform(), false);
 
-        if(isset($_POST['device_id'])){
+        if($this->getRequest()->hasPost('device_id')){
             $isDeviceFound = false;
             foreach($devices as $device)
-                if($device['device_id'] == $_POST['device_id']){
+                if($device['device_id'] == $this->getRequest()->post('device_id')){
                     $isDeviceFound = true;
                     if($device['active']){
                         $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('Device Already Has License'));
@@ -88,11 +88,11 @@ class Wizard extends BaseController {
             try {
                 $deviceObserver = new DeviceObserver($this->di->get('logger'));
                 $deviceObserver->setMainDb($this->di->get('db'))
-                    ->setDevice($this->getDevice($_POST['device_id']))
+                    ->setDevice($this->getDevice($this->getRequest()->post('device_id')))
                     ->setLicense($license)
                     ->setAfterSave(function() use ($deviceObserver) {
                         $userNotes = new UsersNotes($this->di->get('db'));
-                        $userNotes->addSystemNote($this->auth['id'], UsersNotes::TYPE_SYSTEM, null, null, "Assign {$deviceObserver->getLicense()->getOrderProduct()->getProduct()->getName()} to device {$deviceObserver->getDevice()->getName()} " . json_encode(array(
+                        $userNotes->addSystemNote($this->auth['id'], UsersNotes::TYPE_SYSTEM, null, null, "Assign {$deviceObserver->getLicense()->getProduct()->getName()} to device {$deviceObserver->getDevice()->getName()} " . json_encode(array(
                                 'device_id' => $deviceObserver->getDevice()->getId(),
                                 'license_id' => $deviceObserver->getLicense()->getId()
                             )));
@@ -200,7 +200,7 @@ class Wizard extends BaseController {
                                             ->setLicense($licenseRecord)
                                             ->setAfterSave(function() use ($deviceObserver) {
                                                 $userNotes = new UsersNotes($this->di->get('db'));
-                                                $userNotes->addSystemNote($this->auth['id'], UsersNotes::TYPE_SYSTEM, null, null, "Assign {$deviceObserver->getLicense()->getOrderProduct()->getProduct()->getName()} to device {$deviceObserver->getDevice()->getName()} " . json_encode(array(
+                                                $userNotes->addSystemNote($this->auth['id'], UsersNotes::TYPE_SYSTEM, null, null, "Assign {$deviceObserver->getLicense()->getProduct()->getName()} to device {$deviceObserver->getDevice()->getName()} " . json_encode(array(
                                                         'device_id' => $deviceObserver->getDevice()->getId(),
                                                         'license_id' => $deviceObserver->getLicense()->getId()
                                                     )));
@@ -266,7 +266,7 @@ class Wizard extends BaseController {
                                         $userNotes->addSystemNote($this->auth['id'], UsersNotes::TYPE_SYSTEM, null, null, "New device added {$deviceObserver->getDevice()->getName()} " . json_encode(array(
                                                 'dev_id' => $deviceObserver->getDevice()->getUniqueId()
                                             )));
-                                        $userNotes->addSystemNote($this->auth['id'], UsersNotes::TYPE_SYSTEM, null, null, "Assign {$deviceObserver->getLicense()->getOrderProduct()->getProduct()->getName()} to device {$deviceObserver->getDevice()->getName()} " . json_encode(array(
+                                        $userNotes->addSystemNote($this->auth['id'], UsersNotes::TYPE_SYSTEM, null, null, "Assign {$deviceObserver->getLicense()->getProduct()->getName()} to device {$deviceObserver->getDevice()->getName()} " . json_encode(array(
                                                 'device_id' => $deviceObserver->getDevice()->getId(),
                                                 'license_id' => $deviceObserver->getLicense()->getId()
                                             ))
@@ -374,16 +374,19 @@ class Wizard extends BaseController {
         static $device;
         if(is_null($device))
             try {
-                $device = new DeviceRecord($this->di->get('db'));
-                $device->load($devId);
-                if($device->getUserId() != $this->auth['id'] || $device->getDeleted())
+                $deviceRecord = new DeviceRecord($this->di->get('db'));
+                $deviceRecord->load($devId);
+                if($deviceRecord->getUserId() != $this->auth['id'] || $deviceRecord->getDeleted())
                     throw new DeviceNotFoundException;
+                $device = $deviceRecord;
 
             } catch (DeviceNotFoundException $e) {
                 $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('Device not found'));
-                if($this->di->getRouter()->getFindRoute()->isCurrentStep(WizardRouter::STEP_FINISH))
+                /** @var $currentRouter WizardRouter */
+                $currentRouter = $this->di->getRouter()->getFindRoute();
+                if($currentRouter->isCurrentStep(WizardRouter::STEP_FINISH))
                     $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_PACKAGE));
-                elseif($this->di->getRouter()->getFindRoute()->isCurrentStep(WizardRouter::STEP_SETUP))
+                elseif($currentRouter->isCurrentStep(WizardRouter::STEP_SETUP))
                     $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_SETUP));
             }
         return $device;
@@ -425,7 +428,7 @@ class Wizard extends BaseController {
         $license = $this->getLicense($mastBeAvailable);
         
         try {
-            if($license->getOrderProduct()->getProduct()->getGroup() !== 'premium')
+            if($license->getProduct()->getGroup() !== 'premium' && $license->getProduct()->getGroup() !== 'trial')
                 throw new \Exception;
             
         } catch (\Exception $e) {

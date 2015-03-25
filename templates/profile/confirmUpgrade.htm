@@ -1,0 +1,23 @@
+<ol class="breadcrumb">
+    <li><a href="{$di.router->getRouteUrl('profile')}">{$di.t->_('Profile')}</a></li>
+    <li class="active">{$title}</li>
+</ol>
+{insert "inc.flashMessages.htm"}
+<div class="bordered-container">
+    <div class="row">
+        <div class="col-lg-12">
+            <p class="text-danger">
+                {$di.t->_('Please note that the current %s plan for this device will be deactivated permanently, and the new plan – %s – activated.', [
+                    '<b>' ~ $oldLicenseRecord->getProduct()->getName() ~ '</b>',
+                    '<b>' ~ $licenseRecord->getProduct()->getName() ~ '</b>'
+                ])}
+            </p>
+            <form method="post" action="{$di.router->getRouteUrl('profileAssignProcess')}?deviceId={$deviceRecord->getId()}&licenseId={$licenseRecord->getId()}&oldLicenseId={$oldLicenseRecord->getId()}" style="display: inline-block">
+                <button type="submit" class="btn btn-success">
+                    {$di.t->_('Confirm')}
+                </button>
+            </form>
+            <a href="{$di.router->getRouteUrl('profileAssignUpgrade')}?deviceId={$deviceRecord->getId()}&licenseId={$licenseRecord->getId()}&oldLicenseId={$oldLicenseRecord->getId()}" class="btn btn-default">{$di.t->_('Back')}</a>
+        </div>
+    </div>
+</div>

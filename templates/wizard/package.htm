@@ -4,16 +4,23 @@
     {insert "inc.flashMessages.htm"}
     <div class="wizard-container">
         {if count($packages)}
-            {foreach $packages as $package}
-                <div class="row">
-                    <a href="{$di.router->getRouteUrl('wizardPlatform', ['licenseId' => $package.license_id])}" class="btn btn-primary">{$package.name}<span class="license-expire-time" data-timestamp="{$package.expiration_date}"></span></a>
-                </div>
-            {/foreach}
+            <div class="button-holder">
+                {foreach $packages as $package}
+                    <div class="row">
+                        <a href="{$di.router->getRouteUrl('wizardPlatform', ['licenseId' => $package.license_id])}" class="btn btn-primary">
+                            {$package.name}<span data-timestamp-value="{$package.expiration_date}" data-time-format="ll"></span>
+                        </a>
+                    </div>
+                {/foreach}
+            </div>
             <script type="text/javascript">
-                $.each($('.license-expire-time'), function(i, timeTag){
-                    var $tag = $(timeTag);
-                    var date = new Date($tag.data('timestamp') * 1000);
-                    $tag.html(', expired ' + date.toLocaleFormat('%d %b %Y'));
+                $(document).ready(function() {
+                    moment.lang('{$di.t->getLocale()}');
+                    $.each($('[data-timestamp-value]'), function(i, timeTag){
+                        var $tag = $(timeTag);
+                        if($tag.data('timestamp-value') && $tag.data('time-format'))
+                            $tag.html(', expired ' + moment($tag.data('timestamp-value') * 1000).format($tag.data('time-format')));
+                    });
                 });
             </script>
         {else}

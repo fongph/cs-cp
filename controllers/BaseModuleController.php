@@ -25,6 +25,16 @@ abstract class BaseModuleController extends BaseController
             $this->redirect($this->di['router']->getRouteUrl('profile'));
         }
         
+        /**
+         * @deprecated
+         */
+        if ($this->di['isTestUser']($this->auth['id'])) {
+            $config = $this->di['config'];
+            $config['modules'][Modules::KIK] = 'Kik Messages';
+            
+            $this->di['config'] = $config;
+        }
+        
         if (!isset($this->di['config']['modules'][$this->module])) {
             throw new \Exception("Module not found!");
         }
