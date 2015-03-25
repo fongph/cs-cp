@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "d3ecc6019e8334b5a3a4f0485ceda8b4",
+    "hash": "d0ee868dcb60687b13a4a42ae2fbeddb",
     "packages": [
         {
             "name": "boomers/cs-billing",
