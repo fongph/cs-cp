@@ -3,6 +3,8 @@
 /tmp/*
 /logs/*
 /utils/result/*
+/bower_components
+/node_modules
 /.idea
 composer.phar
 development.config.php
