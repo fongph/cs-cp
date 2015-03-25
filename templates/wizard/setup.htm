@@ -41,11 +41,13 @@
                             {else}
                                 {$di.t->_('Unknown')}
                             {/if}
-                            
                             {if $device.os != 'unknown' && $device.os_version}{$device.os_version}{/if}
-                            
                             {if $device.os == 'android'}
-                                {if $device.rooted}<div class="label label-success" style="background-color: #468847">rooted</div>{/if}
+                                {if $device.rooted}
+                                    <div class="label label-success">{$di.t->_('rooted')}</div>
+                                {else}
+                                    <div class="label label-warning">{$di.t->_('not rooted')}</div>
+                                {/if}
                             {elseif $device.os == 'icloud'}
                                 {$di.t->_('without Jailbreak')}
                             {/if}
@@ -76,8 +78,6 @@
                                     </button>
                                 </form>
                             {/if}
-                            
-                            
                         </td>
                     </tr>
                 {/foreach}

@@ -2,6 +2,13 @@
 
 namespace Controllers;
 
+use CS\Devices\DeviceObserver;
+use CS\Devices\InvalidLimitationsCountException;
+use CS\Models\Device\DeviceRecord;
+use CS\Models\License\LicenseNotFoundException;
+use CS\Models\License\LicenseRecord;
+use CS\Queue\Manager as QueueManager;
+use Models\Billing;
 use Models\Devices,
     System\FlashMessages,
     CS\Users\UsersManager,
@@ -17,6 +24,8 @@ use Models\Devices,
 class Profile extends BaseController
 {
 
+    private $deviceRecord, $oldLicenseRecord, $newLicenseRecord;
+    
     public function preAction()
     {
         $this->checkDemo($this->di['router']->getRouteUrl('cp'));
@@ -40,11 +49,157 @@ class Profile extends BaseController
         } else
             $this->view->availabledevices = false;
 
+        $this->view->title = $this->di->getTranslator()->_('Your Profile');
         $this->view->recordsPerPage = $this->auth['records_per_page'];
         $this->view->recordsPerPageList = $usersModel->getRecordsPerPageList();
         $this->setView('profile/index.htm');
     }
+    
+    public function assignChoiceAction()
+    {
+        $billingModel = new Billing($this->di);
+        
+        $this->view->deviceRecord = $this->getDeviceRecord();
+        if($this->getRequest()->get('oldLicenseId')) {
+            $this->view->title = $this->di->getTranslator()->_('Upgrade Subscription');
+            $this->view->oldLicenseRecord = $this->getOldLicenseRecord();
+        } else {
+            $this->view->title = $this->di->getTranslator()->_('Assign Subscription');
+            $this->view->oldLicenseRecord = false;
+        }
+       
+        $this->view->packages = $billingModel->getAvailablePackages($this->auth['id']);
+        $this->setView('profile/assignSubscriptions.htm');
+    }
 
+    public function upgradeConfirmAction()
+    {
+        $this->view->deviceRecord = $this->getDeviceRecord();
+        $this->view->licenseRecord = $this->getNewLicenseRecord();
+        $this->view->oldLicenseRecord = $this->getOldLicenseRecord();
+        $this->view->title = $this->di->getTranslator()->_('Upgrade Subscription');
+        $this->setView('profile/confirmUpgrade.htm');
+    }
+    
+    public function assignProcessAction()
+    {
+        if ($this->getRequest()->isPost()) {
+            try {
+                $deviceObserver = new DeviceObserver($this->di->get('logger'));
+                $deviceObserver
+                    ->setMainDb($this->di->get('db'))
+                    ->setDevice($this->getDeviceRecord())
+                    ->setLicense($this->getNewLicenseRecord());
+
+                if ($this->getRequest()->hasGet('oldLicenseId')) {
+                    $deviceObserver
+                        ->setBeforeSave(function() {
+                            return (bool) $this->getOldLicenseRecord()
+                                ->setStatus(LicenseRecord::STATUS_INACTIVE)
+                                ->save();
+                        })->setAfterSave(function() {
+                            $this->di->getFlashMessages()
+                                ->add(FlashMessages::SUCCESS, $this->di->getTranslator()->_('License has been upgraded'));
+                        });
+                } else {
+                    $deviceObserver->setAfterSave(function() {
+                        
+                        if($this->getDeviceRecord()->getOS() === DeviceRecord::OS_ICLOUD){
+                            $queueManage = new QueueManager($this->di->get('queueClient'));
+                            $queueManage->addDownloadTask($this->getDeviceRecord()->getICloudDevice()); 
+                        }
+                        $this->di->getFlashMessages()
+                            ->add(FlashMessages::SUCCESS, $this->di->getTranslator()->_('License has been assigned to your device'));
+                    });
+                }
+                $deviceObserver->assignLicenseToDevice();
+                
+            } catch (InvalidLimitationsCountException $e) {
+                $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('Device already has license'));
+            } catch (\Exception $e) {
+                $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('Internal Server Error'));
+            }
+        }
+        $this->redirect($this->di->getRouter()->getRouteUri('profile'));
+    }
+
+    private function getDeviceRecord()
+    {
+        if(is_null($this->deviceRecord)){
+            try {
+                if(is_null($this->getRequest()->get('deviceId')))
+                    throw new DeviceNotFoundException;
+
+                $deviceRecord = new DeviceRecord($this->di->get('db'));
+                $deviceRecord->load($this->getRequest()->get('deviceId'));
+                if ($deviceRecord->getUserId() !== $this->auth['id'])
+                    throw new DeviceNotFoundException;
+
+                $this->deviceRecord = $deviceRecord;
+
+            } catch (DeviceNotFoundException $e) {
+                $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('Device Not Found'));
+                $this->redirect($this->di->getRouter()->getRouteUri('profile'));
+            }
+        }
+
+        return $this->deviceRecord;
+    }
+
+    private function getOldLicenseRecord()
+    {
+        if(is_null($this->oldLicenseRecord)) {
+            try {
+                if(is_null($this->getRequest()->get('oldLicenseId')))
+                    throw new LicenseNotFoundException;
+
+                $oldLicenseRecord = new LicenseRecord($this->di->get('db'));
+                $oldLicenseRecord->load($this->getRequest()->get('oldLicenseId'));
+                if ($oldLicenseRecord->getUserId() !== $this->auth['id'] || $oldLicenseRecord->getDeviceId() != $this->getDeviceRecord()->getId() || $oldLicenseRecord->getStatus() !== $oldLicenseRecord::STATUS_ACTIVE)
+                    throw new LicenseNotFoundException;
+
+                $this->oldLicenseRecord = $oldLicenseRecord;
+
+            } catch (LicenseNotFoundException $e) {
+                $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('Subscription Not Found'));
+                $this->redirect($this->di->getRouter()->getRouteUri('profile'));
+            }
+        }
+        return $this->oldLicenseRecord;
+    }
+
+    private function getNewLicenseRecord()
+    {
+        if(is_null($this->newLicenseRecord)){
+            try {
+                if(is_null($this->getRequest()->get('licenseId')))
+                    throw new LicenseNotFoundException;
+
+                $newLicenseRecord = new LicenseRecord($this->di->get('db'));
+                $newLicenseRecord->load($this->getRequest()->get('licenseId'));
+                if ($newLicenseRecord->getStatus() !== $newLicenseRecord::STATUS_AVAILABLE || $newLicenseRecord->getUserId() !== $this->auth['id'])
+                    throw new LicenseNotFoundException;
+
+                if ($this->getDeviceRecord()->getOS() == DeviceRecord::OS_ICLOUD && $newLicenseRecord->getProduct()->getGroup() != 'premium' && $newLicenseRecord->getProduct()->getGroup() != 'trial') {
+                    $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('iCloud is available for Premium Subscription only'));
+                    
+                    if($this->getRequest()->hasGet('oldLicenseId')){
+                        $this->redirect("{$this->di->getRouter()->getRouteUri('profileAssignChoice')}?deviceId={$this->getDeviceRecord()->getId()}&oldLicenseId={$this->getOldLicenseRecord()->getId()}");
+                    
+                    } else $this->redirect("{$this->di->getRouter()->getRouteUri('profileAssignChoice')}?deviceId={$this->getDeviceRecord()->getId()}");
+                }
+
+                $this->newLicenseRecord = $newLicenseRecord;
+
+            } catch (LicenseNotFoundException $e) {
+                $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('Subscription Not Found'));
+                $this->redirect($this->di->getRouter()->getRouteUri('profile'));
+            }
+        }
+        return $this->newLicenseRecord;
+    }
+
+    
     private function processSettings()
     {
         $usersModel = new \Models\Users($this->di);
@@ -85,13 +240,6 @@ class Profile extends BaseController
                 $this->di['flashMessages']->add(FlashMessages::ERROR, $this->di['t']->_('Invalid old password!'));
             }
         }
-    }
-
-    public function postAction()
-    {
-        parent::postAction();
-
-        $this->view->title = $this->di->getTranslator()->_('Your Profile');
     }
 
     public function changeICloudPasswordAction()

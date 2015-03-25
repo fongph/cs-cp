@@ -16,6 +16,7 @@ class Billing extends \System\Model
             SELECT
                 lic.`id` license_id,
                 p.`name`,
+                p.`group` product_group,
                 lic.`expiration_date`
             FROM `licenses` lic
             INNER JOIN `products` p ON lic.`product_id` = p.`id`
