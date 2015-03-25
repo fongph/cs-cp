@@ -1,0 +1,257 @@
+body > .cp-menu {
+    display: none;
+}
+
+.cp-menu a {
+    color: @link-color;
+    font-size: 17px;
+    padding: 5px 5px 0 0px !important;
+}
+
+.cp-menu a:hover, .cp-menu a:focus {
+    background-color: transparent !important;
+    text-decoration: underline !important;
+}
+
+.cp-menu li i {
+    display: block;
+    float: left;
+    height: 24px;
+    width: 24px;
+    background-image: url(../img/menu-left-icons.png);
+    vertical-align: bottom;
+    margin: 0 5px 0 0;
+}
+
+.cp-menu i.menu-calls {
+    background-position: 0px 0px;
+}
+
+.cp-menu li:hover i.menu-calls, .cp-menu .active i.menu-calls {
+    background-position: -24px 0px;
+}
+
+.cp-menu i.menu-sms {
+    background-position: 0px -24px;
+}
+
+.cp-menu li:hover i.menu-sms, .cp-menu .active i.menu-sms {
+    background-position: -24px -24px;
+}
+
+.cp-menu i.menu-locations {
+    background-position: 0px -48px;
+}
+
+.cp-menu li:hover i.menu-locations, .cp-menu .active i.menu-locations {
+    background-position: -24px -48px;
+}
+
+.cp-menu i.menu-browserBookmarks {
+    background-position: 0px -72px;
+}
+
+.cp-menu li:hover i.menu-browserBookmarks, .cp-menu .active i.menu-browserBookmarks {
+    background-position: -24px -72px;
+}
+
+.cp-menu i.menu-browserHistory {
+    background-position: 0px -96px;
+}
+
+.cp-menu li:hover i.menu-browserHistory, .cp-menu .active i.menu-browserHistory {
+    background-position: -24px -96px;
+}
+
+.cp-menu i.menu-calendar {
+    background-position: 0px -120px;
+}
+
+.cp-menu li:hover i.menu-calendar, .cp-menu .active i.menu-calendar {
+    background-position: -24px -120px;
+}
+
+.cp-menu i.menu-contacts {
+    background-position: 0px -144px;
+}
+
+.cp-menu li:hover i.menu-contacts, .cp-menu .active i.menu-contacts {
+    background-position: -24px -144px;
+}
+
+.cp-menu i.menu-keylogger {
+    background-position: 0px -168px;
+}
+
+.cp-menu li:hover i.menu-keylogger, .cp-menu .active i.menu-keylogger {
+    background-position: -24px -168px;
+}
+
+.cp-menu i.menu-photos {
+    background-position: 0px -240px;
+}
+
+.cp-menu li:hover i.menu-photos, .cp-menu .active i.menu-photos {
+    background-position: -24px -240px;
+}
+
+.cp-menu i.menu-videos {
+    background-position: 0px -264px;
+}
+
+.cp-menu li:hover i.menu-videos, .cp-menu .active i.menu-videos {
+    background-position: -24px -264px;
+}
+
+.cp-menu i.menu-viber {
+    background-position: 0px -288px;
+}
+
+.cp-menu li:hover i.menu-viber, .cp-menu .active i.menu-viber {
+    background-position: -24px -288px;
+}
+
+.cp-menu i.menu-skype {
+    background-position: 0px -312px;
+}
+
+.cp-menu li:hover i.menu-skype, .cp-menu .active i.menu-skype {
+    background-position: -24px -312px;
+}
+
+.cp-menu i.menu-whatsapp {
+    background-position: 0px -336px;
+}
+
+.cp-menu li:hover i.menu-whatsapp, .cp-menu .active i.menu-whatsapp {
+    background-position: -24px -336px;
+}
+
+.cp-menu i.menu-facebook {
+    background-position: 0px -360px;
+}
+
+.cp-menu li:hover i.menu-facebook, .cp-menu .active i.menu-facebook {
+    background-position: -24px -360px;
+}
+
+.cp-menu i.menu-vk {
+    background-position: 0px -384px;
+}
+
+.cp-menu li:hover i.menu-vk, .cp-menu .active i.menu-vk {
+    background-position: -24px -384px;
+}
+
+.cp-menu i.menu-emails {
+    background-position: 0px -432px;
+}
+
+.cp-menu li:hover i.menu-emails, .cp-menu .active i.menu-emails {
+    background-position: -24px -432px;
+}
+
+.cp-menu i.menu-applications {
+    background-position: 0px -456px;
+}
+
+.cp-menu li:hover i.menu-applications, .cp-menu .active i.menu-applications {
+    background-position: -24px -456px;
+}
+
+.cp-menu i.menu-smsCommands {
+    background-position: 0px -480px;
+}
+
+.cp-menu li:hover i.menu-smsCommands, .cp-menu .active i.menu-smsCommands {
+    background-position: -24px -480px;
+}
+
+.cp-menu i.menu-settings {
+    background-position: 0px -504px;
+}
+
+.cp-menu li:hover i.menu-settings, .cp-menu .active i.menu-settings {
+    background-position: -24px -504px;
+}
+
+.cp-menu i.menu-instagram {
+    background-position: 0px -408px;
+}
+
+.cp-menu li:hover i.menu-instagram, .cp-menu .active i.menu-instagram {
+    background-position: -24px -408px;
+}
+
+.cp-menu .active a {
+    font-weight: 700;
+    text-decoration: underline;
+}
+
+@media (min-width: @screen-lg-min) {
+    .menu-wrapper {
+        float: left;
+        padding: 0 15px 0 0;
+        width: 22%;
+    }
+
+    .wrapper-container .cp-menu {
+        float: left;
+        width: 220px;
+        padding-bottom: 20px;
+    }
+}
+
+@media (min-width: @screen-md-min) and (max-width: @screen-md-max) {
+    .menu-wrapper {
+        float: left;
+        padding: 0 15px 0 0;
+        width: 23%;
+    }
+
+    .cp-menu li i {
+        margin: 0 10px;
+    }
+}
+
+@media (min-width: @screen-sm-min) and (max-width: @screen-sm-max) {
+    .menu-wrapper {
+        float: left;
+        padding: 0 15px 0 0;
+        width: 10%;
+        margin-bottom: 20px;
+    }
+
+    .cp-menu li span {
+        display: none;
+    }
+
+    .cp-menu li i {
+        margin: 0 10px;
+        float: none;
+    }
+
+    .cp-menu {
+        width: 50px !important;
+        margin-right: 10px;
+        border: 1px solid #aaa; /* default border color */
+        border-left: none;
+        padding-bottom: 4px;
+    }
+}
+
+@media (max-width: @screen-xs-max) {
+    body.menu-active .cp-menu {
+        display: block;
+        overflow-y: scroll;
+        border-right: 2px solid #cccccc; /* defaulr border color for footer and header */
+        position: fixed;
+        height: 100%;
+        width: 250px;
+        padding: 10px;
+    }
+
+    .cp-menu li i {
+        margin: 0 10px 0 0;
+    }
+}

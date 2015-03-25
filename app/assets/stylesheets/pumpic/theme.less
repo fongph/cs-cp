@@ -1,6 +1,6 @@
 // Pumpic theme
 
-@import url("//fonts.googleapis.com/css?family=Lato:400,700,400italic");
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,700,300,600);
 
 // Navbar =====================================================================
 
@@ -50,39 +50,14 @@
 
 // Typography =================================================================
 
-.text-primary,
-.text-primary:hover {
-  color: lighten(@brand-primary, 10%);
-}
-
-.text-success,
-.text-success:hover {
-  color: @brand-success;
-}
-
-.text-danger,
-.text-danger:hover {
-  color: @brand-danger;
-}
-
-.text-warning,
-.text-warning:hover {
-  color: @brand-warning;
-}
-
-.text-info,
-.text-info:hover {
-  color: @brand-info;
+.text-primary {
+  .text-emphasis-variant(darken(@brand-primary, 10%));
 }
 
 // Tables =====================================================================
 
 table,
 .table {
-
-  a:not(.btn) {
-    text-decoration: underline;
-  }
 
   .dropdown-menu a {
     text-decoration: none;
@@ -122,15 +97,9 @@ table,
 
 // Forms ======================================================================
 
-input,
-textarea {
-  color: @input-color;
-}
-
 .form-control,
 input,
 textarea {
-  border: none;
   .box-shadow(none);
 
   &:focus {

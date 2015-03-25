@@ -2,18 +2,27 @@ module.exports = function (grunt) {
 
     grunt.initConfig({
         concat: {
+            //boower-bad-library: daterangepicker
             frontend: {
                 src: [
-                    './bower_components/jquery/jquery.js',
-                    './bower_components/dist/js/bootstrap.js',
+                    './bower_components/jquery/dist/jquery.js',
+                    './bower_components/bootstrap/dist/js/bootstrap.js', // @TODO: replace for include files from "js" directory
+                    './app/assets/javascript/main.js',
                     './app/assets/javascript/frontend.js'
                 ],
                 dest: './public/static/javascript/frontend.js'
             },
             backend: {
                 src: [
-                    './bower_components/jquery/jquery.js',
-                    './bower_components/dist/js/bootstrap.js',
+                    './bower_components/jquery/dist/jquery.js',
+                    './bower_components/bootstrap/dist/js/bootstrap.js', // @TODO: replace for include files from "js" directory
+                    './bower_components/moment/moment.js',
+                    './bower_components/underscore/underscore.js',
+                    './bower_components/jquery.maskedinput/src/jquery.maskedinput.js',
+                    './app/assets/javascript/deprecated/jquery.dataTables.js',
+                    './app/assets/javascript/deprecated/daterangepicker.js',
+                    //'./bower_components/bootstrap-daterangepicker/daterangepicker.js',
+                    './app/assets/javascript/main.js',
                     './app/assets/javascript/backend.js'
                 ],
                 dest: './public/static/javascript/backend.js'
@@ -70,6 +79,7 @@ module.exports = function (grunt) {
                 }
             }
         }
+        // @TODO: add awesome fonts copy task
     });
 
     grunt.loadNpmTasks('grunt-contrib-concat');
