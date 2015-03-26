@@ -129,9 +129,9 @@
                 toLabel: 'To',
                 weekLabel: 'W',
                 customRangeLabel: 'Custom Range',
-                daysOfWeek: moment.langData()._weekdaysMin.slice(),
-                monthNames: moment.langData()._monthsShort.slice(),
-                firstDay: moment.langData()._week.dow
+                daysOfWeek: moment.localeData()._weekdaysMin.slice(),
+                monthNames: moment.localeData()._monthsShort.slice(),
+                firstDay: moment.localeData()._week.dow
             };
 
             this.cb = function () { };

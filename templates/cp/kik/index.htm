@@ -46,8 +46,6 @@
     </div>
     <script type="text/javascript">
         $(document).ready(function() {
-            moment.lang('{$di.t->getLocale()}');
-
             var selectRanges = {
                 "{$di.t->_('Today')}": [moment().startOf('day'), moment().endOf('day')],
                 "{$di.t->_('Yesterday')}": [moment().subtract('days', 1).startOf('day'), moment().subtract('days', 1).endOf('day')],

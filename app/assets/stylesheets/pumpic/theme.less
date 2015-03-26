@@ -63,19 +63,6 @@ table,
     text-decoration: none;
   }
 
-  .success,
-  .warning,
-  .danger,
-  .info {
-    color: #fff;
-
-    > th > a,
-    > td > a,
-    > a {
-      color: #fff;
-    }
-  }
-
   > thead > tr > th,
   > tbody > tr > th,
   > tfoot > tr > th,
@@ -184,11 +171,6 @@ textarea {
   }
 }
 
-.nav-tabs > li > a,
-.nav-pills > li > a {
-  color: #fff;
-}
-
 .pager {
   a,
   a:hover {
@@ -219,13 +201,6 @@ textarea {
   &:hover,
   &:focus {
     opacity: 1;
-  }
-}
-
-.alert {
-  .alert-link {
-    color: #fff;
-    text-decoration: underline;
   }
 }
 
@@ -292,6 +267,6 @@ a.list-group-item {
   color: @text-color;
 }
 
-.panel-default > .panel-heading {
-  background-color: @panel-footer-bg;
+.panel-footer {
+  color: #fff;
 }

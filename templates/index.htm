@@ -13,32 +13,20 @@
         {if $di.config.environment == 'development'}
             {if $di.auth->hasIdentity()}
                 <link href="{$di.config.staticDomain}/stylesheets/backend.css?b{$di.config.build}" rel="stylesheet" />
+                <script type="text/javascript" src="{$di.config.staticDomain}/javascript/backend.js?b{$di.config.build}"></script>
             {else}
                 <link href="{$di.config.staticDomain}/stylesheets/frontend.css?b{$di.config.build}" rel="stylesheet" />
+                <script type="text/javascript" src="{$di.config.staticDomain}/javascript/frontend.js?b{$di.config.build}"></script>
             {/if}
         {else}
             {if $di.auth->hasIdentity()}
                 <link href="{$di.config.staticDomain}/stylesheets/backend.min.css?b{$di.config.build}" rel="stylesheet" />
+                <script type="text/javascript" src="{$di.config.staticDomain}/javascript/backend.min.js?b{$di.config.build}"></script>
             {else}
                 <link href="{$di.config.staticDomain}/stylesheets/frontend.min.css?b{$di.config.build}" rel="stylesheet" />
+                <script type="text/javascript" src="{$di.config.staticDomain}/javascript/frontend.min.js?b{$di.config.build}"></script>
             {/if}
         {/if}
-        <!--
-        <link href="{$di.config.staticDomain}/css/bootstrap.css?b{$di.config.build}" rel="stylesheet" />
-        <link href="{$di.config.staticDomain}/css/main.css?b{$di.config.build}" rel="stylesheet" />
-        <link href='http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz:400,300,700,200' rel='stylesheet' type='text/css' />
-        <link href="{$di.config.staticDomain}/css/font-default.css?b{$di.config.build}" rel="stylesheet" />
-        <link href="{$di.config.staticDomain}/css/calendar.css?b{$di.config.build}" rel="stylesheet" />
-        <link href="{$di.config.staticDomain}/css/daterangepicker.css?b{$di.config.build}" rel="stylesheet" />
-        <link href="{$di.config.staticDomain}/css/font-awesome.css?b{$di.config.build}" rel="stylesheet" />
-        <link href="{$di.config.staticDomain}/css/bootstrap-datetimepicker.css?b{$di.config.build}" rel="stylesheet" />
-        <link href="{$di.config.staticDomain}/css/bootstrap-datepicker.css?b{$di.config.build}" rel="stylesheet" />
-        <link href="{$di.config.staticDomain}/css/bootstrap-datepaginator.css?b{$di.config.build}" rel="stylesheet" />
-        <link href="{$di.config.staticDomain}/css/bootstrap-slider.css?b{$di.config.build}" rel="stylesheet" />
-        <link href="{$di.config.staticDomain}/css/colorbox.css?b{$di.config.build}" rel="stylesheet" />
-        <link href="{$di.config.staticDomain}/css/datatables.css?b{$di.config.build}" rel="stylesheet" />
-        <link href="{$di.config.staticDomain}/pumpic/css/style.css?b{$di.config.build}" rel="stylesheet" />
-        -->
 
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
@@ -46,31 +34,19 @@
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
         <![endif]-->
         
-        {if $di.config.environment == 'development'}
-            {if $di.auth->hasIdentity()}
-                <script type="text/javascript" src="{$di.config.staticDomain}/javascript/backend.js?b{$di.config.build}"></script>
-            {else}
-                <script type="text/javascript" src="{$di.config.staticDomain}/javascript/frontend.js?b{$di.config.build}"></script>
-            {/if}
-        {else}
-            {if $di.auth->hasIdentity()}
-                <script type="text/javascript" src="{$di.config.staticDomain}/javascript/backend.min.js?b{$di.config.build}"></script>
-            {else}
-                <script type="text/javascript" src="{$di.config.staticDomain}/javascript/frontend.min.js?b{$di.config.build}"></script>
-            {/if}
-        {/if}
-        
         {insert 'inc.scripts.htm'}
-        {if $di.config.demo}
-            <script type="text/javascript">
-                $(document).ready(function(){
-                    $('body').on('click', 'a.disable-on-demo', function(e){
-                        alert("{$di.t->_('Not available in demo.')}");
-                        e.preventDefault();
-                    });
+        <script type="text/javascript">
+            moment.locale('{$di.t->getLocale()}');
+            
+            {if $di.config.demo}
+            $(document).ready(function(){
+                $('body').on('click', 'a.disable-on-demo', function(e){
+                    alert("{$di.t->_('Not available in demo.')}");
+                    e.preventDefault();
                 });
-            </script>
-        {/if}
+            });
+            {/if}
+        </script>
     </head>
     <body>
         {if !empty($cpMenu)}
@@ -102,33 +78,5 @@
             </div>
             {insert 'inc.footer.htm'}
         </div>
-        {*<script type="text/javascript" src="{$di.config.staticDomain}/js/bootstrap.min.js?b{$di.config.build}"></script>
-        <script type="text/javascript" src="{$di.config.staticDomain}/js/datatables/jquery.dataTables.js?b{$di.config.build}"></script>
-        <script type="text/javascript" src="{$di.config.staticDomain}/js/jquery.cookie.js?b{$di.config.build}"></script>*}
-        
-        {*<script type="text/javascript" src="{$di.config.staticDomain}/js/main.js?b{$di.config.build}"></script>*}
-
-        {*
-        <script type="text/javascript" src="{$di.config.staticDomain}/js/underscore.min.js?b{$di.config.build}"></script>
-        <script type="text/javascript" src="{$di.config.staticDomain}/js/moment.min.js?b{$di.config.build}"></script>
-        <script type="text/javascript" src="{$di.config.staticDomain}/js/daterangepicker.js?b{$di.config.build}"></script>
-        <script type="text/javascript" src="{$di.config.staticDomain}/js/datepicker/bootstrap-datepicker.js?b{$di.config.build}"></script>
-        <script type="text/javascript" src="{$di.config.staticDomain}/js/bootstrap-datepaginator.js?b{$di.config.build}"></script>
-        <script type="text/javascript" src="{$di.config.staticDomain}/js/bootstrap-slider.js?b{$di.config.build}"></script>
-        <script type="text/javascript" src="{$di.config.staticDomain}/js/bootstrap-touchspin.js?b{$di.config.build}"></script>
-
-        <script type="text/javascript" src="{$di.config.staticDomain}/js/bootstrap-datetimepicker.js?b{$di.config.build}"></script>
-
-        <script type="text/javascript" src="{$di.config.staticDomain}/js/calendar/calendar.js?b{$di.config.build}"></script>
-        <script type="text/javascript" src="{$di.config.staticDomain}/js/calendar/language/{$di.t->getLocale()}.js?b{$di.config.build}"></script>
-
-        <script type="text/javascript" src="{$di.config.staticDomain}/js/jquery.maskedinput.min.js?b{$di.config.build}"></script>
-
-        <script type="text/javascript" src="{$di.config.staticDomain}/js/jquery.colorbox.js?b{$di.config.build}"></script>
-
-        <script type="text/javascript" src="{$di.config.staticDomain}/js/main.js?b{$di.config.build}"></script>
-
-        <script type="text/javascript" src="{$di.config.staticDomain}/js/jquery.jplayer.js?b{$di.config.build}"></script>
-        *}
     </body>
 </html>

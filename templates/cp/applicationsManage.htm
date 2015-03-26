@@ -56,7 +56,7 @@
                 <input id="spinbox" type="text" value="{if $application.timelimit > 0}{($application.timelimit / 60)|ceil}{else}120{/if}" name="minutes">
             </div>
         </div>
-        <p class="text-info">*{$di.t->_('Command activation will take up to 20 minutes.')}</p>
+        <p class="text-info">* {$di.t->_('Command activation will take up to 20 minutes.')}</p>
         <button class="btn btn-primary">{$di.t->_('Update')}</button>
     </form>
     <script>

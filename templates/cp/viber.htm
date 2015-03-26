@@ -83,7 +83,6 @@
     </div>
     <script type="text/javascript">
         $(document).ready(function() {
-            moment.lang('{$di.t->getLocale()}');
             var typeTmpl = _.template('<i class="call-<%= type %> hidden-xs" title="<%= title %>"></i><span class="visible-xs"><%= title %></span>');
 
             var startDate = moment().subtract('days', 29).startOf('day');

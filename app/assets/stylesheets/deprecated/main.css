@@ -233,17 +233,17 @@ html, body {
         width: 44px;
         padding-top: 12px;
     }
-    
+
     #header .toggle-left {
         margin-left: -100%;
         text-align: left;
     }
-    
+
     #header .toggle-right {
         margin-left: -44px;
         text-align: right;
     }
-    
+
     #header .navbar-toggle {
         margin: 0;
     }
@@ -256,7 +256,7 @@ html, body {
         padding-right: 50px;
         text-align: center
     }
-    
+
     #header .logo {
         margin: 0 auto;
     }
@@ -819,6 +819,14 @@ html, body {
     background-position: 0 -32px;
 }
 
+.device-status-s.icloud {
+    background-position: -16px -48px;
+}
+
+.device-status-s.icloud.online {
+    background-position: 0 -48px;
+}
+
 .dropdown.devices-dropdown li {
     position: relative;
 }
@@ -869,13 +877,6 @@ html, body {
     word-break: break-all;
 }
 
-.blue-asterisk {
-    font-size: 36px;
-    line-height: 20px;
-    color: #0090d3;
-    vertical-align: bottom;
-}
-
 .no-margin {
     margin: 0 !important;
 }
@@ -916,4 +917,43 @@ html, body {
 
 .daterangepickerWrapper {
     overflow: hidden;
+}
+
+.button-holder {
+    display: inline-block;
+}
+
+.button-holder .btn {
+    min-width: 100%;
+}
+
+.table-normal.table-container table th, .table-normal.table-container table td {
+    padding: 8px 10px;
+}
+
+.wizard-container, .bordered-container {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    text-align: center;
+    padding: 20px 30px;
+    margin-top: 15px;
+}
+
+.wizard-container .row, .bordered-container .row {
+    margin: 10px 0;
+}
+
+.wizard-container p:last-child, .bordered-container p:last-child {
+    margin-bottom: 0;
+}
+
+.button-relative {
+    position: relative;
+}
+
+.button-asterisk {
+    position: absolute;
+    top: 0;
+    right: -18px;
+
 }

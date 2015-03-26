@@ -2,7 +2,6 @@ module.exports = function (grunt) {
 
     grunt.initConfig({
         concat: {
-            //boower-bad-library: daterangepicker
             frontend: {
                 src: [
                     './bower_components/jquery/dist/jquery.js',
@@ -17,11 +16,21 @@ module.exports = function (grunt) {
                     './bower_components/jquery/dist/jquery.js',
                     './bower_components/bootstrap/dist/js/bootstrap.js', // @TODO: replace for include files from "js" directory
                     './bower_components/moment/moment.js',
+                    './bower_components/moment/min/locales.js',
                     './bower_components/underscore/underscore.js',
                     './bower_components/jquery.maskedinput/src/jquery.maskedinput.js',
+                    './bower_components/bootstrap-touchspin/src/jquery.bootstrap-touchspin.js',
+                    './bower_components/bootstrap-datepicker/js/bootstrap-datepicker.js',
+                    './bower_components/jquery-colorbox/jquery.colorbox.js',
+                    './app/assets/javascript/deprecated/bootstrap-datepaginator.js',
                     './app/assets/javascript/deprecated/jquery.dataTables.js',
                     './app/assets/javascript/deprecated/daterangepicker.js',
-                    //'./bower_components/bootstrap-daterangepicker/daterangepicker.js',
+                    './app/assets/javascript/deprecated/calendar.js',
+                    './app/assets/javascript/deprecated/calendar-languages/en-GB.js',
+                    './app/assets/javascript/deprecated/bootstrap-slider.js',
+                    './app/assets/javascript/deprecated/jquery.jplayer.js',
+                    './app/assets/javascript/zone-selector.js',
+                    './app/assets/javascript/scheduler.js',
                     './app/assets/javascript/main.js',
                     './app/assets/javascript/backend.js'
                 ],
@@ -72,7 +81,7 @@ module.exports = function (grunt) {
                 }
             },
             less: {
-                files: ['./app/assets/stylesheets/*.less', './app/assets/stylesheets/*/*.less'],
+                files: ['./app/assets/stylesheets/*.less', './app/assets/stylesheets/*/*.less', './app/assets/stylesheets/*/*.css'],
                 tasks: ['less:development'],
                 options: {
                     livereload: true

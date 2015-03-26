@@ -58,8 +58,6 @@
     </div>
     <script>
         $(document).ready(function() {
-            moment.lang('{$di.t->getLocale()}');
-
             var url = document.location.toString();
             if (url.match('#')) {
                 $('.nav-pills a[href=#' + url.split('#')[1] + ']').tab('show');

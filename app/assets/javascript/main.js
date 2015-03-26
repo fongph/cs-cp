@@ -55,3 +55,5 @@ var languages = {
 localAsUtc = function (m) {
     return moment.unix(m.unix() + m.utcOffset() * 60).utcOffset(0);
 };
+
+moment.locale('en-US');

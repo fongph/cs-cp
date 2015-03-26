@@ -11,14 +11,14 @@
         "jquery-colorbox": "1.6.0",
         "jquery.maskedinput": "1.4.1",
         "jplayer": "2.9.2",
-        "moment": "2.4.0",
+        "moment": "2.9.0",
         "underscore": "1.8.2",
         "jquery": "1.11.0",
         "font-awesome": "4.3"
     },
     "resolutions": {
         "bootstrap": "3.3.4",
-        "moment": "2.4.0",
+        "moment": "2.9.0",
         "underscore": "1.8.2",
         "jquery": "1.11.0"
     }

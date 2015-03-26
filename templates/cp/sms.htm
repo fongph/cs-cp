@@ -43,8 +43,6 @@
     
     <script type="text/javascript">
         $(document).ready(function() {
-            moment.lang('{$di.t->getLocale()}');
-
             var sms = {
                 url: '{$di.router->getRouteUrl("sms")}',
                 startDate: moment().subtract('days', 29).startOf('day'),

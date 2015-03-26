@@ -70,8 +70,6 @@
 </div>
 <script type="text/javascript">
     $(document).ready(function() {
-        moment.lang('{$di.t->getLocale()}');
-
         $('#timestamp').html(moment.unix($('#timestamp').attr('data-time')).zone(0).format("LLL"));
 
         $("#email-view iframe")
