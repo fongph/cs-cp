@@ -28,7 +28,7 @@ $default = array(
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
     ),
     'fenom' => array(
-        'templatesDir' => ROOT_PATH . 'templates/',
+        'templatesDir' => ROOT_PATH . 'app/templates/',
         'compileDir' => ROOT_PATH . 'tmp/',
         'options' => array(
             'force_include' => true
