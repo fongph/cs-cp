@@ -1,19 +1,19 @@
 #header {
     background: @pumpic-panel-bg;
-}
 
-#header .menu {
-    border: 0;
-    background: #fff;
-}
+    .menu {
+        border: 0;
+        background: #fff;
 
-#header .menu a {
-    font-family: 'Open Sans', sans-serif;
-    font-weight: 300;
-}
+        a {
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 300;
+        }
+    }
 
-#header .logo {
-    background: url(../img/pumpic/logo.png) no-repeat;
+    .logo {
+        background: url(../img/pumpic/logo.png) no-repeat;
+    }
 }
 
 @media (min-width: @screen-sm-min) {
@@ -29,6 +29,6 @@
     #header .menu ul.nav > li.open > a {
         border: 0;
         background: transparent;
-        color: #16a89e; 
+        color: @brand-primary; 
     }
 }

@@ -1,17 +1,9 @@
-<style type="text/css">
-    .setup-wizard-breadcrumb.breadcrumb .active a {
-        color: #39753e;
-    }
-    .setup-wizard-breadcrumb.breadcrumb > li + li:before {
-        content: '> ';
-    }
-</style>
 <ol class="breadcrumb setup-wizard-breadcrumb">
 
     {var $stepName = $di.t->_('Subscription Selection')}
     {if $di->getRouter()->getFindRoute()->isAvailableStep('wizardPackage')}
         <li{if $di->getRouter()->getFindRoute()->isCurrentStep('wizardPackage')} class="active"{/if}>
-            1. <a href="{$di->getRouter()->getRouteUrl('wizardPackage')}">{$stepName}</a>
+            <a href="{$di->getRouter()->getRouteUrl('wizardPackage')}">1. {$stepName}</a>
         </li>
     {else}<li>1. {$stepName}</li>{/if}
 
@@ -19,7 +11,7 @@
     {var $stepName = $di.t->_('Platform Selection')}
     {if $di->getRouter()->getFindRoute()->isAvailableStep('wizardPlatform')}
         <li{if $di->getRouter()->getFindRoute()->isCurrentStep('wizardPlatform')} class="active"{/if}>
-            2. <a href="{$di->getRouter()->getRouteUrl('wizardPlatform')}">{$stepName}</a>
+            <a href="{$di->getRouter()->getRouteUrl('wizardPlatform')}">2. {$stepName}</a>
         </li>
     {else}<li>2. {$stepName}</li>{/if}
 
@@ -27,7 +19,7 @@
     {var $stepName = $di.t->_('Device Setup')}
     {if $di->getRouter()->getFindRoute()->isAvailableStep('wizardSetup')}
         <li{if $di->getRouter()->getFindRoute()->isCurrentStep('wizardSetup')} class="active"{/if}>
-            3. <a href="{$di->getRouter()->getRouteUrl('wizardSetup')}">{$stepName}</a>
+            <a href="{$di->getRouter()->getRouteUrl('wizardSetup')}">3. {$stepName}</a>
         </li>
     {else}<li>3. {$stepName}</li>{/if}
     
@@ -35,14 +27,14 @@
     {var $stepName = $di.t->_('Device Activation')}
     {if $di->getRouter()->getFindRoute()->isAvailableStep('wizardRegister')}
         <li{if $di->getRouter()->getFindRoute()->isCurrentStep('wizardRegister')} class="active"{/if}>
-            4. <a href="{$di->getRouter()->getRouteUrl('wizardRegister')}">{$stepName}</a>
+            <a href="{$di->getRouter()->getRouteUrl('wizardRegister')}">4. {$stepName}</a>
         </li>
     {else}<li>4. {$stepName}</li>{/if}
     
     {var $stepName = $di.t->_('Complete Installation')}
     {if $di->getRouter()->getFindRoute()->isAvailableStep('wizardFinish')}
         <li{if $di->getRouter()->getFindRoute()->isCurrentStep('wizardFinish')} class="active"{/if}>
-            5. <a href="{$di->getRouter()->getRouteUrl('wizardFinish')}">{$stepName}</a>
+            <a href="{$di->getRouter()->getRouteUrl('wizardFinish')}">5. {$stepName}</a>
         </li>
     {else}<li>5. {$stepName}</li>{/if}
     

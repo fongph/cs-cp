@@ -39,7 +39,7 @@
 
         this.updateRange(options.defaultPeriod[0], options.defaultPeriod[1]);
 
-        for (var i = moment.localeData()._week.dow; i <= moment.localeData()._week.doy; i++) {
+        for (var i = moment.localeData()._week.dow; i < moment.localeData()._week.dow + 7; i++) {
             var name = moment().isoWeekday(i).format('ddd');
             var value = moment().locale('en').isoWeekday(i).format('dd').toUpperCase();
             self.getWeekDaysBlock().find("tr:nth-child(1)").append('<td><label for="' + id + value + '">' + name + '</label></td>');

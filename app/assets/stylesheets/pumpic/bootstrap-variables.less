@@ -231,14 +231,14 @@
 //** Dropdown link text color.
 @dropdown-link-color:            @brand-primary;
 //** Hover color for dropdown links.
-@dropdown-link-hover-color:      #fff;
+@dropdown-link-hover-color:      @brand-primary;
 //** Hover background for dropdown links.
-@dropdown-link-hover-bg:         @component-active-bg;
+@dropdown-link-hover-bg:         @gray-lighter;
 
 //** Active dropdown menu item text color.
-@dropdown-link-active-color:     #fff;
+@dropdown-link-active-color:     @brand-primary;
 //** Active dropdown menu item background color.
-@dropdown-link-active-bg:        @component-active-bg;
+@dropdown-link-active-bg:        @gray-lighter;
 
 //** Disabled dropdown menu item background color.
 @dropdown-link-disabled-color:   @gray-light;
@@ -353,15 +353,15 @@
 @navbar-collapse-max-height:       340px;
 
 @navbar-default-color:             #777;
-@navbar-default-bg:                @brand-primary;
+@navbar-default-bg:                #fff;
 @navbar-default-border:            transparent;
 
 // Navbar links
-@navbar-default-link-color:                #fff;
-@navbar-default-link-hover-color:          @brand-success;
-@navbar-default-link-hover-bg:             transparent;
-@navbar-default-link-active-color:         #fff;
-@navbar-default-link-active-bg:            darken(@navbar-default-bg, 10%);
+@navbar-default-link-color:                @brand-primary;
+@navbar-default-link-hover-color:          @brand-primary;
+@navbar-default-link-hover-bg:             @gray-lighter;
+@navbar-default-link-active-color:         @brand-primary;
+@navbar-default-link-active-bg:            @gray-lighter;
 @navbar-default-link-disabled-color:       #ccc;
 @navbar-default-link-disabled-bg:          transparent;
 
@@ -484,20 +484,20 @@
 //## Define colors for form feedback states and, by default, alerts.
 
 @state-success-text:             @brand-success;
-@state-success-bg:               lighten(@brand-success, 25%);
-@state-success-border:           @brand-success;
+@state-success-bg:               #b1e5d7;
+@state-success-border:           @state-success-bg;
 
 @state-info-text:                @brand-info;
-@state-info-bg:                  lighten(@brand-info, 25%);
-@state-info-border:              @brand-info;
+@state-info-bg:                  #94d0e4;
+@state-info-border:              @state-info-bg;
 
 @state-warning-text:             @brand-warning;
-@state-warning-bg:               lighten(@brand-warning, 25%);
-@state-warning-border:           @brand-warning;
+@state-warning-bg:               #ffd271;
+@state-warning-border:           @state-warning-bg;
 
 @state-danger-text:              @brand-danger;
-@state-danger-bg:                lighten(@brand-danger, 25%);
-@state-danger-border:            @brand-danger;
+@state-danger-bg:                #ffb8b8;
+@state-danger-border:            @state-danger-bg;
 
 
 //== Tooltips
@@ -612,20 +612,20 @@
 @alert-link-font-weight:      bold;
 
 @alert-success-bg:            @state-success-bg;
-@alert-success-text:          @state-success-text;
+@alert-success-text:          #fff;
 @alert-success-border:        @state-success-border;
 
 @alert-info-bg:               @state-info-bg;
-@alert-info-text:             @state-info-text;
+@alert-info-text:             #fff;
 @alert-info-border:           @state-info-border;
 
 @alert-warning-bg:            @state-warning-bg;
-@alert-warning-text:          @state-warning-text;
+@alert-warning-text:          #fff;
 @alert-warning-border:        @state-warning-border;
 
-@alert-danger-bg:             @state-danger-bg;
-@alert-danger-text:           @state-danger-text;
-@alert-danger-border:         @state-danger-border;
+@alert-danger-bg:             #f2e7e7;
+@alert-danger-text:           #d66f79;
+@alert-danger-border:         #d98c8c;
 
 
 //== Progress bars

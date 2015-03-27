@@ -1,23 +1,33 @@
+@pumpic-table-input-background: #777985;
+@pumpic-table-input-focus-background: lighten(@pumpic-table-input-background, 10%);
+
 .table-container {
     .row {
         background: @pumpic-panel-bg;
         color: @gray-lighter;
 
         select {
-            background: #636572;
+            background: @pumpic-table-input-background;
             color: @gray-lighter;
             border: 0;
         }
     }
 
-    .dataTables_filter .form-control {
-        background: #636572;
-        color: #fff;
-        border: 0;
-    }
+    .dataTables_filter { 
+        .form-control {
+            background: @pumpic-table-input-background;
+            color: #fff;
+            border: 0;
 
-    .dataTables_filter .btn-default {
-        background: #636572;
-        border: 1px solid #636572;
+            &:focus {
+                background: @pumpic-table-input-focus-background;
+            }
+        }
+
+        .btn-default {
+            background: @pumpic-table-input-background;
+            border: 1px solid @pumpic-table-input-background;
+            z-index: auto;
+        }
     }
 }

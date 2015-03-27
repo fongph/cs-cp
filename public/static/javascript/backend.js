@@ -28506,7 +28506,7 @@ $.fn.extend({
 			var viewWidth = (this.options.width - ((this.options.selectedItemWidth - this.options.itemWidth) + (this.options.navItemWidth * 2))),
 				units = Math.floor(viewWidth / this.options.itemWidth),
 				unitsPerSide = parseInt(units / 2),
-				adjustedItemWidth = Math.floor(viewWidth / units),
+				adjustedItemWidth = viewWidth / units,
 				adjustedSelectedItemWidth = Math.floor(this.options.selectedItemWidth + (viewWidth - (units * adjustedItemWidth))),
 				today = moment().startOf('day'),
 				start = this.options.selectedDate.clone().subtract('days', unitsPerSide),
@@ -46862,7 +46862,7 @@ zoneSelector.prototype.deserializeCircle = function (string) {
 
         this.updateRange(options.defaultPeriod[0], options.defaultPeriod[1]);
 
-        for (var i = moment.localeData()._week.dow; i <= moment.localeData()._week.doy; i++) {
+        for (var i = moment.localeData()._week.dow; i < moment.localeData()._week.dow + 7; i++) {
             var name = moment().isoWeekday(i).format('ddd');
             var value = moment().locale('en').isoWeekday(i).format('dd').toUpperCase();
             self.getWeekDaysBlock().find("tr:nth-child(1)").append('<td><label for="' + id + value + '">' + name + '</label></td>');
@@ -47129,5 +47129,3 @@ var languages = {
 localAsUtc = function (m) {
     return moment.unix(m.unix() + m.utcOffset() * 60).utcOffset(0);
 };
-
-moment.locale('en-US');

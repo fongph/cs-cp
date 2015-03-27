@@ -1,191 +1,215 @@
+/*
+* Left menu inside cp
+*/
+
+.futures-menu-icon(@number: 0) {
+    background-position:  0px -(@futures-menu-icon-size * @number);
+}
+
+.futures-menu-icon-hover(@number: 0) {
+    background-position: -@futures-menu-icon-size -(@futures-menu-icon-size * @number);
+}
+
 body > .cp-menu {
     display: none;
 }
 
-.cp-menu a {
-    color: @link-color;
-    font-size: 17px;
-    padding: 5px 5px 0 0px !important;
-}
+.cp-menu {
+    a {
+        color: @link-color;
+        font-size: 17px;
+        padding: 5px 5px 0 0px !important;
 
-.cp-menu a:hover, .cp-menu a:focus {
-    background-color: transparent !important;
-    text-decoration: underline !important;
-}
+        &:hover, &:focus {
+            background-color: transparent !important;
+            text-decoration: underline !important;
+        }
+    }
 
-.cp-menu li i {
-    display: block;
-    float: left;
-    height: 24px;
-    width: 24px;
-    background-image: url(../img/menu-left-icons.png);
-    vertical-align: bottom;
-    margin: 0 5px 0 0;
-}
+    .active a {
+        font-weight: 700;
+        text-decoration: underline;
+    }
 
-.cp-menu i.menu-calls {
-    background-position: 0px 0px;
-}
+    li {
+        i {
+            display: block;
+            float: left;
+            height: 24px;
+            width: 24px;
+            background-image: url(../img/menu-left-icons.png);
+            vertical-align: bottom;
+            margin: 0 5px 0 0;
+        }
 
-.cp-menu li:hover i.menu-calls, .cp-menu .active i.menu-calls {
-    background-position: -24px 0px;
-}
+        i.menu-calls {
+            .futures-menu-icon;
+        }
 
-.cp-menu i.menu-sms {
-    background-position: 0px -24px;
-}
+        &:hover i.menu-calls, &.active i.menu-calls {
+            .futures-menu-icon-hover;
+        }
 
-.cp-menu li:hover i.menu-sms, .cp-menu .active i.menu-sms {
-    background-position: -24px -24px;
-}
+        i.menu-sms {
+            .futures-menu-icon(1);
+        }
 
-.cp-menu i.menu-locations {
-    background-position: 0px -48px;
-}
+        &:hover i.menu-sms, &.active i.menu-sms {
+            .futures-menu-icon-hover(1);
+        }
 
-.cp-menu li:hover i.menu-locations, .cp-menu .active i.menu-locations {
-    background-position: -24px -48px;
-}
+        i.menu-locations {
+            .futures-menu-icon(2);
+        }
 
-.cp-menu i.menu-browserBookmarks {
-    background-position: 0px -72px;
-}
+        &:hover i.menu-locations, &.active i.menu-locations {
+            .futures-menu-icon-hover(2);
+        }
 
-.cp-menu li:hover i.menu-browserBookmarks, .cp-menu .active i.menu-browserBookmarks {
-    background-position: -24px -72px;
-}
+        i.menu-browserBookmarks {
+            .futures-menu-icon(3);
+        }
 
-.cp-menu i.menu-browserHistory {
-    background-position: 0px -96px;
-}
+        &:hover i.menu-browserBookmarks, &.active i.menu-browserBookmarks {
+            .futures-menu-icon-hover(3);
+        }
 
-.cp-menu li:hover i.menu-browserHistory, .cp-menu .active i.menu-browserHistory {
-    background-position: -24px -96px;
-}
+        i.menu-browserHistory {
+            .futures-menu-icon(4);
+        }
 
-.cp-menu i.menu-calendar {
-    background-position: 0px -120px;
-}
+        &:hover i.menu-browserHistory, &.active i.menu-browserHistory {
+            .futures-menu-icon-hover(4);
+        }
 
-.cp-menu li:hover i.menu-calendar, .cp-menu .active i.menu-calendar {
-    background-position: -24px -120px;
-}
+        i.menu-calendar {
+            .futures-menu-icon(5);
+        }
 
-.cp-menu i.menu-contacts {
-    background-position: 0px -144px;
-}
+        &:hover i.menu-calendar, &.active i.menu-calendar {
+            .futures-menu-icon-hover(5);
+        }
 
-.cp-menu li:hover i.menu-contacts, .cp-menu .active i.menu-contacts {
-    background-position: -24px -144px;
-}
+        i.menu-contacts {
+            .futures-menu-icon(6);
+        }
 
-.cp-menu i.menu-keylogger {
-    background-position: 0px -168px;
-}
+        &:hover i.menu-contacts, &.active i.menu-contacts {
+            .futures-menu-icon-hover(6);
+        }
 
-.cp-menu li:hover i.menu-keylogger, .cp-menu .active i.menu-keylogger {
-    background-position: -24px -168px;
-}
+        i.menu-keylogger {
+            .futures-menu-icon(7);
+        }
 
-.cp-menu i.menu-photos {
-    background-position: 0px -240px;
-}
+        &:hover i.menu-keylogger, &.active i.menu-keylogger {
+            .futures-menu-icon-hover(7);
+        }
 
-.cp-menu li:hover i.menu-photos, .cp-menu .active i.menu-photos {
-    background-position: -24px -240px;
-}
+        i.menu-photos {
+            .futures-menu-icon(10);
+        }
 
-.cp-menu i.menu-videos {
-    background-position: 0px -264px;
-}
+        &:hover i.menu-photos, &.active i.menu-photos {
+            .futures-menu-icon-hover(10);
+        }
 
-.cp-menu li:hover i.menu-videos, .cp-menu .active i.menu-videos {
-    background-position: -24px -264px;
-}
+        i.menu-videos {
+            .futures-menu-icon(11);
+        }
 
-.cp-menu i.menu-viber {
-    background-position: 0px -288px;
-}
+        &:hover i.menu-videos, &.active i.menu-videos {
+            .futures-menu-icon-hover(11);
+        }
 
-.cp-menu li:hover i.menu-viber, .cp-menu .active i.menu-viber {
-    background-position: -24px -288px;
-}
+        i.menu-viber {
+            .futures-menu-icon(12);
+        }
 
-.cp-menu i.menu-skype {
-    background-position: 0px -312px;
-}
+        &:hover i.menu-viber, &.active i.menu-viber {
+            .futures-menu-icon-hover(12);
+        }
 
-.cp-menu li:hover i.menu-skype, .cp-menu .active i.menu-skype {
-    background-position: -24px -312px;
-}
+        i.menu-skype {
+            .futures-menu-icon(13);
+        }
 
-.cp-menu i.menu-whatsapp {
-    background-position: 0px -336px;
-}
+        &:hover i.menu-skype, &.active i.menu-skype {
+            .futures-menu-icon-hover(13);
+        }
 
-.cp-menu li:hover i.menu-whatsapp, .cp-menu .active i.menu-whatsapp {
-    background-position: -24px -336px;
-}
+        i.menu-whatsapp {
+            .futures-menu-icon(14);
+        }
 
-.cp-menu i.menu-facebook {
-    background-position: 0px -360px;
-}
+        &:hover i.menu-whatsapp, &.active i.menu-whatsapp {
+            .futures-menu-icon-hover(14);
+        }
 
-.cp-menu li:hover i.menu-facebook, .cp-menu .active i.menu-facebook {
-    background-position: -24px -360px;
-}
+        i.menu-facebook {
+            .futures-menu-icon(15);
+        }
 
-.cp-menu i.menu-vk {
-    background-position: 0px -384px;
-}
+        &:hover i.menu-facebook, &.active i.menu-facebook {
+            .futures-menu-icon-hover(15);
+        }
 
-.cp-menu li:hover i.menu-vk, .cp-menu .active i.menu-vk {
-    background-position: -24px -384px;
-}
+        i.menu-kik {
+            .futures-menu-icon(16);
+        }
 
-.cp-menu i.menu-emails {
-    background-position: 0px -432px;
-}
+        &:hover i.menu-kik, &.active i.menu-kik {
+            .futures-menu-icon-hover(16);
+        }
 
-.cp-menu li:hover i.menu-emails, .cp-menu .active i.menu-emails {
-    background-position: -24px -432px;
-}
+        i.menu-vk {
+            .futures-menu-icon(17);
+        }
 
-.cp-menu i.menu-applications {
-    background-position: 0px -456px;
-}
+        &:hover i.menu-vk, &.active i.menu-vk {
+            .futures-menu-icon-hover(17);
+        }
 
-.cp-menu li:hover i.menu-applications, .cp-menu .active i.menu-applications {
-    background-position: -24px -456px;
-}
+        i.menu-instagram {
+            .futures-menu-icon(18);
+        }
 
-.cp-menu i.menu-smsCommands {
-    background-position: 0px -480px;
-}
+        &:hover i.menu-instagram, &.active i.menu-instagram {
+            .futures-menu-icon-hover(18);
+        }
 
-.cp-menu li:hover i.menu-smsCommands, .cp-menu .active i.menu-smsCommands {
-    background-position: -24px -480px;
-}
+        i.menu-emails {
+            .futures-menu-icon(19);
+        }
 
-.cp-menu i.menu-settings {
-    background-position: 0px -504px;
-}
+        &:hover i.menu-emails, &.active i.menu-emails {
+            .futures-menu-icon-hover(19);
+        }
 
-.cp-menu li:hover i.menu-settings, .cp-menu .active i.menu-settings {
-    background-position: -24px -504px;
-}
+        i.menu-applications {
+            .futures-menu-icon(20);
+        }
 
-.cp-menu i.menu-instagram {
-    background-position: 0px -408px;
-}
+        &:hover i.menu-applications, &.active i.menu-applications {
+            .futures-menu-icon-hover(20);
+        }
 
-.cp-menu li:hover i.menu-instagram, .cp-menu .active i.menu-instagram {
-    background-position: -24px -408px;
-}
+        i.menu-smsCommands {
+            .futures-menu-icon(21);
+        }
 
-.cp-menu .active a {
-    font-weight: 700;
-    text-decoration: underline;
+        &:hover i.menu-smsCommands, &.active i.menu-smsCommands {
+            .futures-menu-icon-hover(21);
+        }
+
+        i.menu-settings {
+            .futures-menu-icon(22);
+        }
+
+        &:hover i.menu-settings, &.active i.menu-settings {
+            .futures-menu-icon-hover(22);
+        }
+    }
 }
 
 @media (min-width: @screen-lg-min) {
@@ -222,21 +246,21 @@ body > .cp-menu {
         margin-bottom: 20px;
     }
 
-    .cp-menu li span {
-        display: none;
-    }
-
-    .cp-menu li i {
-        margin: 0 10px;
-        float: none;
-    }
-
     .cp-menu {
         width: 50px !important;
         margin-right: 10px;
         border: 1px solid #aaa; /* default border color */
         border-left: none;
         padding-bottom: 4px;
+
+        li span {
+            display: none;
+        }
+
+        li i {
+            margin: 0 10px;
+            float: none;
+        }
     }
 }
 
@@ -249,9 +273,9 @@ body > .cp-menu {
         height: 100%;
         width: 250px;
         padding: 10px;
-    }
 
-    .cp-menu li i {
-        margin: 0 10px 0 0;
+        li i {
+            margin: 0 10px 0 0;
+        }
     }
 }

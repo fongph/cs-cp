@@ -349,7 +349,7 @@
 			var viewWidth = (this.options.width - ((this.options.selectedItemWidth - this.options.itemWidth) + (this.options.navItemWidth * 2))),
 				units = Math.floor(viewWidth / this.options.itemWidth),
 				unitsPerSide = parseInt(units / 2),
-				adjustedItemWidth = Math.floor(viewWidth / units),
+				adjustedItemWidth = viewWidth / units,
 				adjustedSelectedItemWidth = Math.floor(this.options.selectedItemWidth + (viewWidth - (units * adjustedItemWidth))),
 				today = moment().startOf('day'),
 				start = this.options.selectedDate.clone().subtract('days', unitsPerSide),
