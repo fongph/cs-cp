@@ -133,7 +133,7 @@ class Devices extends \System\Model
                         
                         p.name package_name,
                         di.id icloud_id,
-                        UNIX_TIMESTAMP(di.last_backup) last_backup
+                        di.last_backup last_backup
                     FROM `devices` d
                     LEFT JOIN `devices_icloud` di ON di.dev_id = d.id
                     LEFT JOIN `licenses` l ON 
