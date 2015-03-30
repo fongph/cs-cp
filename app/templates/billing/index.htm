@@ -1,0 +1,255 @@
+<style>
+    hr {
+        margin: 5px 0;
+    }
+    
+    .list-group {
+        margin-top: 20px;
+    }
+    
+    .list-group .right-data {
+        float: right;
+    }
+    
+    .option-expire {
+        font-size: 10px;
+        font-weight: normal;
+        font-style: italic;
+    }
+</style>
+<div>
+    <h1 class="text-center">{$title}</h1>
+
+    {insert "inc.flashMessages.htm"}
+
+    <ul class="nav nav-pills">
+        <li><a href="#all" data-toggle="tab">{$di.t->_('All')}</a></li>
+        <li><a href="#active" data-toggle="tab">{$di.t->_('Active')}</a></li>
+    </ul>
+
+    <div class="table-container">
+        <table class="dataTable" id="datatable" aria-describedby="datatables_info">
+            <thead>
+                <tr role="row">
+                    <th>{$di.t->_('Plan')}</th>
+                    <th>{$di.t->_('Price')}</th>
+                    <th>{$di.t->_('Date of purchase')}</th>
+                    <th>{$di.t->_('Expiration date')}</th>
+                    <th>{$di.t->_('Status')}</th>
+                    <th>{$di.t->_('Device name')}</th>
+                    <th>{$di.t->_('Limits')}</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+    {if !$di->get('isWizardEnabled')}
+        <a href="{$di.router->getRouteUrl('billingAddDevice')}" class="btn btn-success">{$di.t->_('Add Device')}</a>
+        {if count($bundles)}
+            <ul class="list-group">
+                {foreach $bundles as $item}
+                    <li class="list-group-item">
+                        {$item.name}
+                        <div class="right-data">
+                            {if $item.continuous == 1}
+                                <b>available</b>
+                            {elseif $item.expiration_date > 0}
+                                {$di.t->_('expires at')} <b class="expire-date" data-time="{$item.expiration_date}"></b>
+                            {else}
+                                <a href="{$buyUrl}?product={$item.group}" class="btn btn-xs btn-success btn-buy">{$di.t->_('Buy Now')}</a>
+                            {/if}
+                        </div>
+                    </li>
+                {/foreach}
+            </ul>
+        {/if}
+    {/if}
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.expire-date').each(function(){
+                var timestamp = parseInt($(this).attr('data-time'), 10);
+                $(this).html(moment(timestamp * 1000).zone(0).format('ll'));
+            });
+            
+            moment.lang('{$di.t->getLocale()}');
+
+            var billing = {
+                {if $di->get('isWizardEnabled')}
+                    url: '{$di->getRouter()->getRouteUrl('billing')}',
+                {else}
+                    url: '{$di.config.domain}/billing',
+                {/if}
+                tab: null,
+                table: null,
+                unlimitValue: '{$unlimitedValue}',
+                limitsTmpl: _.template('Calls: <b><%= call %></b><hr/> SMS: <b><%= sms %></b>'),
+                {if $di->get('isWizardEnabled')}
+                    deviceTmpl: _.template('<a class="btn btn-success btn-xs" href="{$di.router->getRouteUrl('wizardPlatform')}?licenseId=<%= id %>"><i class="fa fa-plug"></i> {$di.t->_('Assign Device')}</a>'),
+                {else}
+                    deviceTmpl: _.template('<a class="btn btn-success btn-xs" href="{$di.router->getRouteUrl('billingAssignDevice')}?license=<%= id %>"><i class="fa fa-plug"></i> {$di.t->_('Assign Device')}</a>'),
+                {/if}
+                getSourceUrl: function () {
+                    if (window.location.hash === '#active') {
+                        return this.url + '?active=1';
+                    } else {
+                        return this.url + '?active=0';
+                    }
+                },
+                getSmsValue: function (value, deviceId, expireDate) {
+                    if (value == this.unlimitValue) {
+                        if (expireDate) {
+                            return '{$di.t->_('unlimited')}<br/> <span class="option-expire">expires at ' + moment(expireDate * 1000).zone(0).format('ll') + '</span>';
+                        }
+                        return '{$di.t->_('unlimited')}';
+                    }
+                    
+                    if (deviceId) {
+                        return value + ' <a class="btn btn-xs btn-success btn-buy" href="{$buyUrl}?product=unlimited-sms&device=' + deviceId + '"><i class="fa fa-arrows-v"></i> {$di.t->_('Buy unlimited')}</a>';
+                    }
+                    
+                    return value;
+                },
+                getCallsValue: function (value, deviceId, expireDate) {
+                    if (value == this.unlimitValue) {
+                        if (expireDate) {
+                            return '{$di.t->_('unlimited')}<br/> <span class="option-expire">expires at ' + moment(expireDate * 1000).zone(0).format('ll') + '</span>';
+                        }
+                        return "{$di.t->_('unlimited')}";
+                    }
+                    
+                    if (deviceId) {
+                        return value + ' <a class="btn btn-xs btn-success btn-buy" href="{$buyUrl}?product=unlimited-calls&device=' + deviceId + '"><i class="fa fa-arrows-v"></i> {$di.t->_('Buy unlimited')}</a>';
+                    }
+                    
+                    return value;
+                },
+                reloadTable: function () {
+                    if (this.table) {
+                        this.table.fnReloadAjax(this.getSourceUrl(window.location.hash));
+                    }
+                },
+                setTab: function (tab) {
+                    if (this.table) {
+                        if (this.tab !== tab) {
+                            this.reloadTable();
+                        }
+                    } else {
+                        this.initTable();
+                    }
+
+                    this.tab = tab;
+                },
+                init: function () {
+                    $('.nav-pills a').on('shown.bs.tab', function (e) {
+                        window.location.hash = e.target.hash;
+                        billing.setTab(e.target.hash);
+                        window.scrollTo(0, 0);
+                    });
+
+                    var url = document.location.toString();
+                    if (url.match('#')) {
+                        $('.nav-pills a[href=#' + url.split('#')[1] + ']').tab('show');
+                    } else {
+                        $('.nav-pills a[href=#all]').tab('show');
+                    }
+                },
+                initTable: function () {
+                    table = $('#datatable').dataTable({
+                        bProcessing: true,
+                        bServerSide: true,
+                        sAjaxSource: this.getSourceUrl(),
+                        bPaginate: true,
+                        bSort: false,
+                        bFilter: false,
+                        bAutoWidth: false,
+                        iDisplayLength: {$authData.records_per_page},
+                        oLanguage: {
+                            sUrl: "{$di.config.staticDomain}/datatables/language/{$di.t->getLocale()}.txt"
+                        },
+                        aoColumns: [
+                            {
+                                mData: 'name',
+                                mRender: function() {
+                                    var data = arguments[2];
+                                    var lnk = '{$di.router->getRouteUrl('billingLicense')}'.replace(':id', data.id);
+                                    
+                                    return data.name + '<br/>' + '<a href="' + lnk + '" class="btn btn-info btn-xs">{$di.t->_('Details')}</a>';
+                                }
+                            },
+                            {
+                                mData: 'amount',
+                                mRender: function() {
+                                    var data = arguments[2];
+                                    return data.amount + ' ' + data.currency;
+                                }
+                            },
+                            {
+                                mData: 'activation_date',
+                                mRender: function(value) {
+                                    if (value == 0) {
+                                        return '-';
+                                    }
+                                    
+                                    return moment(value * 1000).zone(0).format('ll');
+                                }
+                            },
+                            {
+                                mData: 'expiration_date',
+                                mRender: function(value) {
+                                    if (value == 0) {
+                                        return '-';
+                                    }
+                                    
+                                    return moment(value * 1000).zone(0).format('ll');
+                                }
+                            },
+                            {
+                                mData: 'status'
+                            },
+                            {
+                                mData: 'device',
+                                mRender: function() {
+                                    var data = arguments[2];
+                                    if (data.device == null) {
+                                        if (data.status == 'available') {
+                                            return billing.deviceTmpl({
+                                                id: data.id
+                                            });
+                                        } else {
+                                            return '-';
+                                        }
+                                    }
+                                    
+                                    return data.device;
+                                }
+                            },
+                            {
+                                mData: null,
+                                mRender: function() {
+                                    var data = arguments[2];
+                                    
+                                    return billing.limitsTmpl({
+                                        call: billing.getCallsValue(data.call, data.deviceId, data.calls_expire_date),
+                                        sms: billing.getSmsValue(data.sms, data.deviceId, data.sms_expire_date)
+                                    });
+                                }
+                            }
+                        ],
+                        fnDrawCallback: function () {
+                            billing.table = table;
+                            $(this).find('tbody').tableScroll();
+                        }
+                    });
+                }
+            };
+            
+            $('body').on('click', '.btn-buy', function(e){
+                if (typeof ga !== 'undefined') {
+                    ga('linker:decorate', this);
+                }
+            })
+            
+            billing.init();
+        });
+    </script>
+</div>

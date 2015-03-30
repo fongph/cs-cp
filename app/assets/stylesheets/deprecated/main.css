@@ -1,0 +1,467 @@
+html, body, .wrapper {
+    position: relative;
+    height: 100%;
+    top: 0;
+    left: 0;
+}
+
+html, body {
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+#header {
+    background: transparent;
+}
+
+#header .logo-holder {
+    display: block;
+    float: left;
+    height: 65px;
+    padding-top: 8px;
+}
+
+#header .logo {
+    display: block;
+    width: 172px;
+    height: 44px;
+    background: url(../img/logo.png) no-repeat;
+}
+
+#header .toggle-left, #header .toggle-right {
+    display: none;
+}
+
+#header .menu {
+    border-top: solid 1px #cccccc;
+    border-bottom: solid 1px #cccccc;
+    background: #f7f7f7;
+    position: relative;
+}
+
+#footer {
+    position: relative;
+    height: 60px;
+    margin-top: -60px;
+    width: 100%;
+    background: #fcfcfc;
+    border-top: solid 1px #ddd;
+}
+
+#footer .container {
+    padding-top: 20px;
+    text-align: center;
+}
+
+.row-clear {
+    clear: both;
+}
+
+.wrapper-container {
+    padding-bottom: 60px;
+    min-height: 100%;
+}
+
+.wrapper-container > .container {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.wrapper-container .login-form {
+    margin-bottom: 20px;
+}
+
+.navbar-collapse.center .nav, .navbar-collapse.center .nav > li {
+    float: none !important;
+    display: inline-block;
+    vertical-align: top;
+}
+
+.center .navbar-inner {
+    text-align: center;
+}
+
+.wrapper-container .login-form .action-links {
+    list-style: none;
+    margin-top: 20px;
+    padding: 0px;
+}
+
+.wrapper-container .login-form .action-links li {
+    margin: 10px 0;
+}
+
+.wrapper-container .login-form .action-links i {
+    display: block;
+    float: left;
+    width: 12px;
+    height: 12px;
+    margin-right: 10px;
+    margin-left: -20px;
+    margin-top: 3px;
+}
+
+.add-buttons {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.add-buttons span {
+    float: left;
+    padding-top: 7px;
+}
+
+.add-buttons li {
+    padding: 10px;
+    overflow: hidden;
+    border-bottom: 1px solid #aaa;
+}
+
+.add-buttons li.last {
+    border-bottom: none !important;
+}
+
+.dropdown-menu li a {
+    font-size: 16px !important;
+}
+
+.tab-content .container {
+    padding-top: 15px;
+}
+
+@media (min-width: 767px) {
+    #header .menu ul {
+        float: left;
+    }
+
+    #header .menu ul.right {
+        float: right;
+    }
+
+    #header .menu ul.nav > li {
+        float: left;
+    }
+
+    #header .menu ul.nav > li > a {
+        border-top: solid 5px transparent;
+        padding: 2px 18px 10px 18px;
+        font-size: 18px;
+        color: #000;
+    }
+
+    #header .menu ul.nav > li > a:hover, #header .menu ul.nav > li.active > a, #header .menu ul.nav > li.open > a {
+        border-top: solid 5px #0090d3;
+        background: transparent;
+        color: #0090d3; 
+    }
+}
+
+@media (min-width: 1200px) {
+    .content-wrapper {
+        float: left;
+        padding: 0 10px 10px 0;
+        width: 78%;
+    }
+
+    .wrapper-container .content {
+        float: left;
+        width: 950px;
+    }
+}
+
+@media (max-width: 1199px) {
+    .container {
+        width: 100%;
+        margin-right: auto;
+        margin-left: auto;
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+}
+
+@media (min-width: 992px) and (max-width: 1199px) {
+    .content-wrapper {
+        float: left;
+        padding: 0 10px 10px 0;
+        width: 77%;
+    }
+
+    .wrapper-container .content {
+        float: left;
+        width: 750px;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+    .content-wrapper {
+        float: left;
+        padding: 0 10px 10px 0;
+        width: 90%;
+    }
+
+    .wrapper-container .content {
+        float: left;
+        width: 530px;
+    }
+}
+
+@media (max-width: 767px) {
+    body {
+        overflow-x: hidden;
+    }
+
+    .content-wrapper {
+        padding: 5px;
+    }
+
+    .wrapper {
+        min-width: 320px;
+    }
+
+    body.menu-active .wrapper {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 250px;
+    }
+
+    #header .toggle-left, #header .toggle-right {
+        display: block;
+        float: left;
+        width: 44px;
+        padding-top: 12px;
+    }
+
+    #header .toggle-left {
+        margin-left: -100%;
+        text-align: left;
+    }
+
+    #header .toggle-right {
+        margin-left: -44px;
+        text-align: right;
+    }
+
+    #header .navbar-toggle {
+        margin: 0;
+    }
+
+    #header .logo-holder {
+        float: left;
+        width: 100%;
+        overflow: hidden;
+        padding-left: 50px;
+        padding-right: 50px;
+        text-align: center
+    }
+
+    #header .logo {
+        margin: 0 auto;
+    }
+
+    .navbar {
+        background: transparent;
+        border: 0px;
+        border-top: 1px solid #e7e7e7;
+    }
+}
+
+.device-status {
+    position: relative;
+    height: 45px;
+    overflow: hidden;
+}
+
+.device-status .name {
+    display: block;
+    float: left;
+    font-size: 24px;
+    line-height: 45px;
+    margin-right: 15px;
+}
+
+.device-status .value {
+    display: block;
+    float: left;
+    width: 134px;
+    height: 45px;
+    background: url('../img/device-statuses.png') no-repeat 0 45px;
+}
+
+.device-status .value.wifi {
+    background-position: 0 0;
+}
+
+.device-status .value.mobile {
+    background-position: 0 -45px;
+}
+
+.device-status .value.offline {
+    background-position: 0 -90px;
+}
+
+.device-status-s {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background: url('../img/device-types-statuses.png') no-repeat -16px 16px;
+}
+.device-status-s.ios {
+    background-position: -16px 0;
+}
+
+.device-status-s.android {
+    background-position: -16px -16px;
+}
+
+.device-status-s.blackberry {
+    background-position: -16px -32px;
+}
+
+.device-status-s.ios.online {
+    background-position: 0 0;
+}
+
+.device-status-s.android.online {
+    background-position: 0 -16px;
+}
+
+.device-status-s.blackberry.online {
+    background-position: 0 -32px;
+}
+
+.device-status-s.icloud {
+    background-position: -16px -48px;
+}
+
+.device-status-s.icloud.online {
+    background-position: 0 -48px;
+}
+
+.dropdown.devices-dropdown li {
+    position: relative;
+}
+
+.dropdown.devices-dropdown .device-status-s {
+    position: relative;
+    top: 3px;
+    margin-right: 3px;
+}
+
+.dropdown.devices-dropdown span {
+    font-weight: bold;
+}
+
+#calendar #cal-day-box .cal-row-head {
+    height: 30px;
+}
+
+.calendar-form > * {
+    margin-bottom: 10px;
+}
+
+.dropdown-menu a {
+    cursor: pointer;
+}
+
+.alert i {
+    margin-right: 10px; 
+}
+
+.container .row .alert {
+    overflow: hidden;
+}
+
+.form-inline > *, .form-group .input-group  {
+    margin: 5px 0;
+}
+
+.no-margin {
+    margin: 0 !important;
+}
+
+.add-device-block {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    text-align: center;
+}
+
+.add-device-button-wrapper {
+    margin-bottom: 7px;
+}
+
+.wizard-container {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    text-align: center;
+    padding: 20px 30px;
+    margin-top: 15px;
+}
+.wizard-container .row {
+    margin: 10px 0;
+}
+
+.wizard-container p:last-child {
+    margin-bottom: 0;
+}
+
+.block-or {
+    color: red; 
+    font-size: 20px; 
+    font-weight: bold;
+    line-height: 50px;
+    text-transform: uppercase;
+}
+
+.daterangepickerWrapper {
+    overflow: hidden;
+}
+
+.button-holder {
+    display: inline-block;
+}
+
+.button-holder .btn {
+    min-width: 100%;
+}
+
+.table-normal.table-container table th, .table-normal.table-container table td {
+    padding: 8px 10px;
+}
+
+.wizard-container, .bordered-container {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    text-align: center;
+    padding: 20px 30px;
+    margin-top: 15px;
+}
+
+.wizard-container .row, .bordered-container .row {
+    margin: 10px 0;
+}
+
+.wizard-container p:last-child, .bordered-container p:last-child {
+    margin-bottom: 0;
+}
+
+.button-relative {
+    position: relative;
+}
+
+.button-asterisk {
+    position: absolute;
+    top: 0;
+    right: -18px;
+
+}
+
+.setup-wizard-breadcrumb.breadcrumb .active a {
+    color: #39753e;
+}
+.setup-wizard-breadcrumb.breadcrumb > li + li:before {
+    content: '> ';
+}

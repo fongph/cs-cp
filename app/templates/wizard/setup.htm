@@ -1,0 +1,120 @@
+<div>
+    {insert "wizard/inc.steps.breadcrumb.htm"}
+    {if count($availabledevices)}
+        <h1 class="text-center">{$title}</h1>
+        {insert "inc.flashMessages.htm"}
+        <div class="table-container panel-default table-profile-devices">
+            <div class="panel-heading">Devices List</div>
+            <table>
+                <thead>
+                <tr>
+                    <th>
+                        <span class="hidden-xs">{$di.t->_('Device Name')}</span>
+                        <span class="visible-xs">{$di.t->_('Name')}</span>
+                    </th>
+                    <th>
+                        <span class="hidden-xs">{$di.t->_('Device Model')}</span>
+                        <span class="visible-xs">{$di.t->_('Model')}</span>
+                    <th>
+                        <span class="hidden-xs">{$di.t->_('Platform (Operating System)')}</span>
+                        <span class="visible-xs">{$di.t->_('OS')}</span>
+                    </th>
+                    {*<th>
+                        <span class="hidden-xs">{$di.t->_('Subscription Plan')}</span>
+                        <span class="visible-xs">{$di.t->_('Subscription')}</span>
+                    </th>
+                    <th>{$di.t->_('Subscription Expiration Date')}</th>*}
+                    <th>{$di.t->_('Action')}</th>
+                </tr>
+                </thead>
+                <tbody>
+                {var $o = 0}
+                {foreach $availabledevices as $id => $device}
+                    <tr class="{if ++$o%2}odd{else}even{/if}">
+                        <td>{$device.device_name}</td>
+                        <td>{$device.model}</td>
+                        <td>
+                            {if $device.os == 'icloud' || $device.os == 'ios'}
+                                Apple iOS
+                            {elseif $device.os == 'android'}
+                                Android
+                            {else}
+                                {$di.t->_('Unknown')}
+                            {/if}
+                            {if $device.os != 'unknown' && $device.os_version}{$device.os_version}{/if}
+                            {if $device.os == 'android'}
+                                {if $device.rooted}
+                                    <div class="label label-success">{$di.t->_('rooted')}</div>
+                                {else}
+                                    <div class="label label-warning">{$di.t->_('not rooted')}</div>
+                                {/if}
+                            {elseif $device.os == 'icloud'}
+                                {$di.t->_('without Jailbreak')}
+                            {/if}
+                        </td>
+                        {*<td>
+                            {if $device.active}
+                                {$device.package_name}
+                            {else}
+                                {$di.t->_('No plan')}
+                            {/if}
+                        </td>
+                        <td>
+                            {if $device.expiration_date}
+                                <span class="timestamp-value" data-timestamp-value="{$device.expiration_date}"></span>
+                            {else}-{/if}
+                        </td>*}
+                        <td>
+                            {if $device.active}
+                                <button class="btn btn-primary btn-xs" disabled>
+                                    <i class="fa fa-plug"></i>
+                                    {$di.t->_('Change Subscription')}
+                                </button>
+                            {else}
+                                <form method="post">
+                                    <button class="btn btn-success btn-xs" type="submit" name="device_id" value="{$device.device_id}">
+                                        <i class="fa fa-plug"></i>
+                                        {$di.t->_('Assign Subscription')}
+                                    </button>
+                                </form>
+                            {/if}
+                        </td>
+                    </tr>
+                {/foreach}
+                </tbody>
+            </table>
+        </div>
+        <div class="row text-center block-or">{$di.t->_('or')}</div>
+        <h2 class="text-center">{$instructionTitle}</h2>
+        
+    {else}
+        <h1 class="text-center">{$instructionTitle}</h1>
+        {insert "inc.flashMessages.htm"}
+    {/if}
+
+
+    <div class="wizard-container">
+        {*<div id="show-instruction" class="row">
+            <button class="btn btn-primary">
+                {$di.t->_('Assign')}
+            </button>
+        </div>*}
+        <div id="instruction">
+            {if $platform == 'android'}
+                {insert "wizard/setup.instruction.android.htm"}
+            {elseif $platform == 'ios'}
+                {insert "wizard/setup.instruction.ios.htm"}
+            {elseif $platform == 'icloud'}
+                {insert "wizard/setup.instruction.icloud.htm"}
+            {/if}
+        </div>
+        {*<script type="text/javascript">
+            var $instruction = $('#instruction');
+            $('#show-instruction').click(function(){
+                if($instruction.is(':visible')){
+                    $instruction.hide();
+                } else $instruction.show();
+            });
+        </script>*}
+    </div>
+</div>

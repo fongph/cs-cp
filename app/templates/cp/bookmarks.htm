@@ -1,0 +1,110 @@
+<div>
+    <h1 class="text-center">{$title}</h1>
+
+    {if !$paid}
+        {insert "cp/updatePackage.html"}
+    {elseif $hasRecords}
+    <ul class="nav nav-pills" {if !$isDeletedAvailable}style="display: none;"{/if}>
+        <li><a href="#active" data-toggle="tab">{$di.t->_('Active')}</a></li>
+        <li><a href="#deleted" data-toggle="tab">{$di.t->_('Deleted')}</a></li>
+    </ul>
+        
+    <div class="table-container">
+        <table class="dataTable" id="datatable" aria-describedby="datatables_info">
+            <thead>
+                <tr role="row">
+                    <th>{$di.t->_('Browser')}</th>
+                    <th>{$di.t->_('Title')}</th>
+                    <th>{$di.t->_('Url')}</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            var bookmarks = {
+                url: '{$di.router->getRouteUrl('bookmarks')}',
+                tab: null,
+                table: null,
+                getSourceUrl: function() {
+                    if (window.location.hash === '#deleted') {
+                        return this.url + '?deleted=1';
+                    } else {
+                        return this.url + '?deleted=0';
+                    }
+                },
+                reloadTable: function() {
+                    if (this.table) {
+                        this.table.fnReloadAjax(this.getSourceUrl(window.location.hash));
+                    }
+                },
+                setTab: function(tab) {
+                    if (this.table) {
+                        if (this.tab !== tab) {
+                            this.reloadTable();
+                        }
+                    } else {
+                        this.init();
+                    }
+
+                    this.tab = tab;
+                },
+                init: function() {
+                    var table = $('.dataTable').dataTable({
+                        bProcessing: true,
+                        bServerSide: true,
+                        sAjaxSource: this.getSourceUrl(),
+                        bPaginate: true,
+                        bFilter: true,
+                        bSort: true,
+                        bInfo: true,
+                        bAutoWidth: false,
+                        bSortMulti: false,
+                        iDisplayLength: {$authData.records_per_page},
+                        oLanguage: {
+                            sUrl: "{$di.config.staticDomain}/datatables/language/{$di.t->getLocale()}.txt"
+                        },
+                        aoColumns: [
+                            null,
+                            null,
+                            {
+                                bUseRendered: false,
+                                fnRender: function(obj, value) {
+                                    return  '<a href="' + value + '" class="disable-on-demo" target="_blank">' + value + '</a>';
+                                }
+                            }
+                        ],
+                        fnDrawCallback: function() {
+                            bookmarks.table = table;
+                            $(this).find('tbody').tableScroll();
+                        }
+                    });
+                }
+            };
+
+            $('.nav-pills a').on('shown.bs.tab', function(e) {
+                window.location.hash = e.target.hash;
+                bookmarks.setTab(e.target.hash);
+                window.scrollTo(0, 0);
+            });
+
+            var url = document.location.toString();
+            if (url.match('#')) {
+                $('.nav-pills a[href=#' + url.split('#')[1] + ']').tab('show');
+            } else {
+                $('.nav-pills a[href=#active]').tab('show');
+            }
+        });
+    </script>
+    {else}
+        <h3>{$di.t->_('Waiting for browser information...')}</h3>
+        <h3>{$di.t->_('Why can the data be unavailable?')}</h3>
+        {if $di.currentDevice.os=='android' && $di.currentDevice.app_version >= 64}
+            {include "content/{$di.t->getLocale()}/noDataBrowserAndroid.html"}
+        {elseif $di.currentDevice.os=='icloud'}
+            {include "content/{$di.t->getLocale()}/noDataICloud.html"}
+        {else}
+            {include "content/{$di.t->getLocale()}/noData.html"}
+        {/if}
+    {/if}
+</div>

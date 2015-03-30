@@ -1,0 +1,57 @@
+<div>
+    <h1 class="text-center">{$title}</h1>
+
+    {insert "inc.flashMessages.htm"}
+
+    {if $tab=='private'}
+    <div class="dialog-panel-top">
+        <p class="text-info">{$di.t->_('Messages with')} <b>{if strlen($list[0].name)}{$list[0].name}{else}{$list[0].phone}{/if}</b></p>
+        <a class="btn btn-default" href="{$di.config.domain}/cp/viber#private">{$di.t->_('Back to Viber log')}</a>
+    </div>
+    {elseif $tab=='group'}
+    <div class="dialog-panel-top">
+        <p class="text-info">{$di.t->_('Messages with')} 
+            {foreach $users as $phone => $name last=$last}
+            <b>{if strlen($name)}{$name}{else}{$phone}{/if}</b>{if !$last}, {/if}
+            {/foreach}
+        </p>
+        <a class="btn btn-default" href="{$di.config.domain}/cp/viber#group">{$di.t->_('Back to Viber log')}</a>
+    </div>
+    {/if}
+
+    <div class="dialog-messages-list">
+        {foreach $list as $item}
+        <div id="{$item.timestamp}">
+            <div class="popover {if $item.type == 'in'}right{else}left{/if}">
+                <div class="arrow"></div>
+                {if $item.type == 'in'}
+                <h3 class="popover-title"><b>{if strlen($item.name)}{$item.name}{else}{$item.phone}{/if}</b> <span></span></h3>
+                {else}
+                <h3 class="popover-title"><span></span></h3>
+                {/if}
+                <div class="popover-content">
+                    <p>{$item.text}</p>
+                </div>
+            </div>
+        </div>
+        {/foreach}
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function() {
+        var last = 0;
+        $('.dialog-messages-list > div').each(function() {
+            var timestamp = $(this).attr('id');
+
+            var date = moment.unix(timestamp).zone(0).format("LL");
+            if (date !== last) {
+                $(this).before('<div class="date-title">' + date + '</div>');
+            }
+
+            var date = moment.unix(timestamp).zone(0).format("LLL");
+            $(this).find('.popover-title span').html(date);
+
+            last = moment.unix(timestamp).zone(0).format("LL");
+        });
+    });
+</script>

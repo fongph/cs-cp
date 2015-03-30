@@ -1,0 +1,59 @@
+<div>
+    <h1 class="text-center">{$title}</h1>
+
+    {insert "inc.flashMessages.htm"}
+
+    {if $tab=='private'}
+    <div class="dialog-panel-top">
+        <p class="text-info">{$di.t->_('Messages with')} <b>{$list[0].name}</b></p>
+        <a class="btn btn-default" href="{$di.config.domain}/cp/skype">{$di.t->_('Back to Skype log')}</a>
+    </div>
+    {elseif $tab=='group'}
+    <div class="dialog-panel-top">
+        <p class="text-info">{$di.t->_('Messages with')} 
+            {foreach $users as $userId => $name last=$last}
+                {if strlen($name)}
+                <b>{$name}</b>{if !$last}, {/if}
+                {/if}
+            {/foreach}
+        </p>
+        <a class="btn btn-default" href="{$di.config.domain}/cp/skype">{$di.t->_('Back to Skype log')}</a>
+    </div>
+    {/if}
+
+    <div class="dialog-messages-list">
+        {foreach $list as $item}
+        <div id="{$item.timestamp}">
+            <div class="popover {if $item.type == 'in'}right{else}left{/if}">
+                <div class="arrow"></div>
+                {if $item.type == 'in'}
+                <h3 class="popover-title"><b>{$item.name}</b> <span></span></h3>
+                {else}
+                <h3 class="popover-title"><span></span></h3>
+                {/if}
+                <div class="popover-content">
+                    <p>{$item.text}</p>
+                </div>
+            </div>
+        </div>
+        {/foreach}
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function() {
+        var last = 0;
+        $('.dialog-messages-list > div').each(function() {
+            var timestamp = $(this).attr('id');
+
+            var date = moment.unix(timestamp).zone(0).format("LL");
+            if (date !== last) {
+                $(this).before('<div class="date-title">' + date + '</div>');
+            }
+
+            var date = moment.unix(timestamp).zone(0).format("LLL");
+            $(this).find('.popover-title span').html(date);
+
+            last = moment.unix(timestamp).zone(0).format("LL");
+        });
+    });
+</script>

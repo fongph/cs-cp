@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "d0ee868dcb60687b13a4a42ae2fbeddb",
+    "hash": "cf6baa989f7abeda5b51f42287e4c833",
     "packages": [
         {
             "name": "boomers/cs-billing",
@@ -39,7 +39,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-devices.git",
-                "reference": "e4a3a0ef6ebb9ecb0fbc45b6c9e6c081119b0362"
+                "reference": "c04eb44f37a43d7c22bbaec88c1acdb4932ddde9"
             },
             "require": {
                 "boomers/cs-mail": "dev-master",
@@ -59,7 +59,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2015-03-19 13:13:27"
+            "time": "2015-03-30 12:55:57"
         },
         {
             "name": "boomers/cs-icloud",
@@ -93,7 +93,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-mail.git",
-                "reference": "f0a5b1d3f21246bdcac09e4e57b3b59da61d54d4"
+                "reference": "de20b5b746ef389767f662b82d316d3ccaa7b862"
             },
             "require": {
                 "guzzlehttp/guzzle": "~5.0",
@@ -111,7 +111,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2015-03-16 17:45:42"
+            "time": "2015-03-27 09:30:10"
         },
         {
             "name": "boomers/cs-models",
@@ -119,7 +119,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-models.git",
-                "reference": "a9e34f91a1afb401f3bd68edbce36a098b612163"
+                "reference": "860e377259ca678dd68638739a46b37d516afc4d"
             },
             "require": {
                 "php": ">=5.4.0"
@@ -133,7 +133,7 @@
                     "CS\\Models\\": "src/"
                 }
             },
-            "time": "2015-03-19 13:02:52"
+            "time": "2015-03-27 12:09:53"
         },
         {
             "name": "boomers/cs-queue",
@@ -141,7 +141,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-queue.git",
-                "reference": "1a7e1067315435141e837fc0ec7bca5743f2569f"
+                "reference": "dfdfb69c420fc8652db7bd218ee4da6347bab20f"
             },
             "require": {
                 "boomers/cs-models": "dev-master",
@@ -156,7 +156,7 @@
                     "CS\\Queue\\": "src/"
                 }
             },
-            "time": "2015-03-19 11:00:32"
+            "time": "2015-03-27 13:40:05"
         },
         {
             "name": "boomers/cs-settings",
@@ -419,16 +419,16 @@
         },
         {
             "name": "guzzlehttp/ringphp",
-            "version": "1.0.6",
+            "version": "1.0.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/RingPHP.git",
-                "reference": "f43ab34aad69ca0ba04172cf2c3cd5c12fc0e5a4"
+                "reference": "52d868f13570a9a56e5fce6614e0ec75d0f13ac2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/RingPHP/zipball/f43ab34aad69ca0ba04172cf2c3cd5c12fc0e5a4",
-                "reference": "f43ab34aad69ca0ba04172cf2c3cd5c12fc0e5a4",
+                "url": "https://api.github.com/repos/guzzle/RingPHP/zipball/52d868f13570a9a56e5fce6614e0ec75d0f13ac2",
+                "reference": "52d868f13570a9a56e5fce6614e0ec75d0f13ac2",
                 "shasum": ""
             },
             "require": {
@@ -466,7 +466,7 @@
                 }
             ],
             "description": "Provides a simple API and specification that abstracts away the details of HTTP into a single PHP function.",
-            "time": "2015-02-26 20:43:09"
+            "time": "2015-03-30 01:43:20"
         },
         {
             "name": "guzzlehttp/streams",

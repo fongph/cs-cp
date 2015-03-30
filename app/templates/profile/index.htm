@@ -1,0 +1,291 @@
+<style>
+    .visible-xs {
+        display: none;
+    }
+    
+    @media (max-width: 767px) {
+        .mobile-applications .row {
+            text-align: center;
+        }
+
+        .mobile-applications .row > div {
+            margin-bottom: 8px;
+        }
+
+        .mobile-applications .pull-left, .mobile-applications .pull-right {
+            float: none !important;
+        }
+        
+        .hidden-xs {
+            display: none;
+        }
+
+        .visible-xs {
+            display: inline-block;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .hidden-xxs {
+            display: none;
+        }
+
+        .add-device .pull-left, .add-device .pull-right {
+            float: none !important;
+        }
+
+        .add-device {
+            text-align: center;
+        }
+    }
+
+    .add-buttons .btn {
+        width: 195px;
+    }
+
+    .panel.devices-list .row.head{
+        font-weight: bold;
+    }
+    .panel.devices-list .row:not(:last-child){
+        border-bottom: 1px solid #aaa;
+    }
+    .panel.devices-list .panel-body{
+        padding: 10px 30px;
+    }
+    .panel.devices-list .row div {
+        min-height: 50px;
+        padding-top: 15px;
+    }
+    .add-device-row {
+        text-align: center;
+    }
+    .cel-btn {
+        text-align: center !important;
+    }
+    .cel-btn .btn {
+        width: 100%;
+        max-width: 150px;
+    }
+    .cel-icon {
+        padding: 0;
+    }
+    
+    
+    @media (max-width: 1200px) and (min-width: 768px) {
+        .cel-btn .btn {
+            max-width: 85px;
+        }
+        .hidden-1199 {
+            display: none;
+        }
+    }
+    .device-status {
+        height: auto;
+        width: auto;
+    }
+    @media (max-width: 950px) {
+        .cel-icon .device-status .value {
+            background-image: url("{$di.config.staticDomain}/img/device-statuses-74x89.png");
+            height: 24px;
+            width: 72px;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        .cel-icon .device-status .value.wifi {
+            background-position: 0 -6px;
+        }
+        .cel-icon .device-status .value.mobile {
+            background-position: 0 -33px;
+        }
+        .cel-icon .device-status .value.offline {
+            background-position: 0 -62px;
+        }
+    }
+    @media (max-width: 767px) {
+        .panel.devices-list .row div {
+            min-height: 35px;
+            padding-top: 7px;
+        }
+    }
+    @media (min-width: 768px) {
+        .pull-right-md {
+            float: right;
+        }
+    }
+</style>
+
+<h1 class="text-center">{$title}</h1>
+
+<div class="row">
+    <div class="col-lg-12">
+        {insert "inc.flashMessages.htm"}
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-12 col-md-12">
+        {if count($availabledevices)}
+            <div class="table-container table-normal panel-default table-profile-devices">
+                <div class="panel-heading">Devices List</div>
+                <table>
+                    <thead>
+                    <tr>
+                        <th>
+                            <span class="hidden-xs">{$di.t->_('Device Name')}</span>
+                            <span class="visible-xs">{$di.t->_('Name')}</span>
+                        </th>
+                        <th>
+                            <span class="hidden-xs">{$di.t->_('Device Model')}</span>
+                            <span class="visible-xs">{$di.t->_('Model')}</span>
+                        <th>
+                            <span class="hidden-xs">{$di.t->_('Platform (Operating System)')}</span>
+                            <span class="visible-xs">{$di.t->_('OS')}</span>
+                        </th>
+                        <th>
+                            <span class="hidden-xs">{$di.t->_('Subscription Plan')}</span>
+                            <span class="visible-xs">{$di.t->_('Subscription')}</span>
+                        </th>
+                        <th>{$di.t->_('Status')}</th>
+                        <th style="width: 165px;">
+                            <span class="hidden-xs"><nobr>{$di.t->_('Last Synchronization')}</nobr></span>
+                            <span class="visible-xs">{$di.t->_('Last Sync')}</span>
+                        </th>
+                        <th>&nbsp;</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {var $o = 0}
+                    {foreach $availabledevices as $id => $device}
+                        <tr class="{if ++$o%2}odd{else}even{/if}">
+                            <td>{$device.device_name}</td>
+                            <td>{if $device.model}{$device.model}{else}-{/if}</td>
+                            <td>
+                                {if $device.os == 'icloud' || $device.os == 'ios'}
+                                    Apple iOS
+                                {elseif $device.os == 'android'}
+                                    Android
+                                {else}
+                                    {$di.t->_('Unknown')}
+                                {/if}
+                                {if $device.os != 'unknown' && $device.os_version}{$device.os_version}{/if}
+                                {if $device.os == 'android'}
+                                    {if $device.rooted}
+                                        <div class="label label-success">{$di.t->_('rooted')}</div>
+                                    {else}
+                                        <div class="label label-warning">{$di.t->_('not rooted')}</div>
+                                    {/if}
+                                {elseif $device.os == 'icloud'}
+                                    {$di.t->_('without Jailbreak')}
+                                {/if}
+                            </td>
+                            <td>
+                                {if $device.active}
+                                    {$device.package_name}
+                                {else}
+                                    -
+                                {/if}
+                            </td>
+
+                            {if $device.os == 'icloud'}
+                                <td>
+                                    {if $device.processing}
+                                        {$di.t->_('Awaiting New Data Upload')}
+                                    {elseif $device.last_error == 1}
+                                        {$di.t->_('iCloud Authorization Error. Please %schange the password%s', ['<a href="' ~ $di->getRouter()->getRouteUri("profileICloudPasswordReset") ~ '?deviceId=' ~ $device.device_id ~ '">', '</a>'])}
+                                    {elseif $device.last_error}
+                                        {$di.t->_('New Data Upload Error. Please contact Customer %sSupport%s', ['<a href="mailto:support@pumpic.com">', '</a>'])}
+                                    {else}
+                                        {$di.t->_('Awaiting iCloud Backup')}
+                                    {/if}
+                                </td>
+                            {else}
+                                <td class="cel-icon">
+                                    <div class="device-status">
+                                        <div class="value {if $device.online}{if $device.network=='wifi'}wifi{else}mobile{/if}{else}offline{/if}"></div>
+                                    </div>
+                                </td>
+                            {/if}
+
+                            {if $device.last_sync}
+                                <td class="timestamp-value" data-timestamp-value="{$device.last_sync}" data-time-format="lll"></td>
+                            {else}
+                                <td>-</td>
+                            {/if}
+                            <td class="text-center cel-btn">
+                                {if $device.active}
+                                    <a title="{$di.t->_('Upgrade Subscription')}" href="{$di.router->getRouteUrl('profileAssignChoice')}?deviceId={$device.device_id}&oldLicenseId={$device.license_id}" class="btn btn-{if $device.active}primary{else}success{/if} btn-xs">
+                                        <i class="fa fa-plug"></i>
+                                        {$di.t->_('Upgrade %sSubscription%s', ['<span class="hidden-1199">', '</span>'])}
+                                    </a>
+                                {else}
+                                    <a title="{$di.t->_('Assign Subscription')}" href="{$di.router->getRouteUrl('profileAssignChoice')}?deviceId={$device.device_id}" class="btn btn-{if $device.active}primary{else}success{/if} btn-xs">
+                                        <i class="fa fa-plug"></i>
+                                        {$di.t->_('Assign %sSubscription%s', ['<span class="hidden-1199">', '</span>'])}
+                                    </a>
+                                {/if}
+                            </td>
+                        </tr>
+                    {/foreach}
+                    </tbody>
+                </table>
+            </div>
+        {/if}
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-6 col-md-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">{$di.t->_('Account Settings')}</div>
+            <div class="panel-body">
+                <form role="form" action="" method="post">
+                    <div class="form-group">
+                        <label>{$di.t->_('Email')}</label>
+                        <input type="text" value="{$authData.login}" class="form-control" disabled />
+                    </div>
+                    <div class="form-group">
+                        <label for="localeList">{$di.t->_('Language')}</label>
+                        {include "scripts/select.htm" class="form-control" name="locale" id="localeList" options=$di.config.locales selected=$di.locale}
+                    </div>
+                    <div class="form-group">
+                        <label for="recordsList">{$di.t->_('Records per page on table')}</label>
+                        {include "scripts/select.htm" name="recordsPerPage" id="recordsList" class="form-control" keys=$recordsPerPageList values=$recordsPerPageList selected=$recordsPerPage}
+                    </div>
+                    <button type="submit" name="settings" class="btn btn-primary">{$di.t->_('Update')}</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-6 col-md-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">{$di.t->_('Change Password')}</div>
+            <div class="panel-body">
+                <form role="form" action="" method="post">
+                    <div class="form-group">
+                        <label for="oldPassword">{$di.t->_('Old Password')}</label>
+                        <input type="password" name="oldPassword" id="oldPassword" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label for="newPassword">{$di.t->_('New password')}</label>
+                        <input type="password" name="newPassword" id="newPassword" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label for="newPassword2">{$di.t->_('New password again')}</label>
+                        <input type="password" name="newPassword2" id="newPassword2" class="form-control" />
+                    </div>
+                    <button type="submit" name="changePassword" class="btn btn-primary">{$di.t->_('Update')}</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        moment.lang('{$di.t->getLocale()}');
+        $.each($('[data-timestamp-value]'), function(i, timeTag){
+            var $tag = $(timeTag);
+            $tag.html(moment($tag.data('timestamp-value') * 1000).format($tag.data('time-format')));
+        });
+    });
+</script>

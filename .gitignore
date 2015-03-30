@@ -3,9 +3,9 @@
 /tmp/*
 /logs/*
 /utils/result/*
-/.idea
 /bower_components
 /node_modules
+/.idea
 composer.phar
 development.config.php
 build.php

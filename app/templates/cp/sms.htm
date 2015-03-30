@@ -1,0 +1,203 @@
+<style>
+    .text-danger a {
+        color: #a94442 !important;
+    }
+</style>
+<div>
+    <h1 class="text-center">{$title}</h1>
+
+    {insert "inc.flashMessages.htm"}
+
+    {if $hasRecords}
+    <div class="daterangepickerWrapper">
+        <div id="reportrange" class="btn btn-default pull-right">
+            <i class="fa fa-calendar fa-lg"></i>
+            <span></span>
+            <b class="caret"></b>
+        </div>
+    </div>
+
+    <div class="table-container">
+        <table class="dataTable" id="datatable" aria-describedby="datatables_info">
+            <thead>
+                <tr role="row">
+                    <th>{$di.t->_('Date')}</th>
+                    <th>{$di.t->_('Type')}</th>
+                    <th>{$di.t->_('Number')}</th>
+                    <th>{$di.t->_('Name')}</th>
+                    <th>{$di.t->_('Message')}</th>
+                    <th>{$di.t->_('Status')}</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            moment.lang('{$di.t->getLocale()}');
+
+            var sms = {
+                startDate: moment().subtract('days', 29).startOf('day'),
+                endDate: moment().endOf('day'),
+                table: null,
+                typeTmpl: _.template('<i class="sms-<%= type %> hidden-xs" title="<%= title %>"></i><span class="visible-xs"><%= title %></span>'),
+                messageLinkTemplate: _.template('<a href="{$di.router->getRouteUrl("sms")}/<%= phone %>#<%= message %>"><%= date %></a>'),
+                selectRanges: {
+                    "{$di.t->_('Today')}": [moment().startOf('day'), moment().endOf('day')],
+                    "{$di.t->_('Yesterday')}": [moment().subtract('days', 1).startOf('day'), moment().subtract('days', 1).endOf('day')],
+                    "{$di.t->_('Last 7 Days')}": [moment().subtract('days', 6).startOf('day'), moment().endOf('day')],
+                    "{$di.t->_('Last 30 Days')}": [moment().subtract('days', 29).startOf('day'), moment().endOf('day')],
+                    "{$di.t->_('This Month')}": [moment().startOf('month'), moment().endOf('month')],
+                    "{$di.t->_('Last Month')}": [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
+                },
+                setRange: function(start, end) {
+                    if (start.isValid() && start.isValid()) {
+                        $('#reportrange span').html(start.format('LL') + ' - ' + end.format('LL'));
+
+                        _.find(this.selectRanges, function(period, name) {
+                            if ((moment(period[0]).format('l') === start.format('l')) && (moment(period[0]).format('l') === start.format('l'))) {
+                                $('#reportrange span').html(name);
+                                return true;
+                            }
+                            return false;
+                        });
+
+                        return '{$di.router->getRouteUrl("sms")}?' + $.param({
+                            timeFrom: moment(start).unix(),
+                            timeTo: moment(end).unix()
+                        });
+                    } else {
+                        return this.setRange(this.startDate, this.endDate);
+                    }
+                },
+                reloadTable: function(url) {
+                    this.table.fnReloadAjax(url);
+                },
+                init: function() {
+                    var table = $('#datatable').dataTable({
+                        bProcessing: true,
+                        bServerSide: true,
+                        sAjaxSource: this.setRange(this.startDate, this.endDate),
+                        bPaginate: true,
+                        bFilter: true,
+                        bSort: true,
+                        bInfo: true,
+                        bAutoWidth: false,
+                        bSortMulti: false,
+                        iDisplayLength: {$authData.records_per_page},
+                        aaSorting: [[0, 'desc']],
+                        oLanguage: {
+                            sUrl: '{$di.config.staticDomain}/datatables/language/{$di.t->getLocale()}.txt'
+                        },
+                        aoColumns: [
+                            {
+                                bUseRendered: false,
+                                sWidth: '180px',
+                                mData: 'timestamp',
+                                mRender: function(value, type, data) {
+                                    return sms.messageLinkTemplate({
+                                        date: moment(value * 1000){if isset($customUtcOffset)}.zone({$customUtcOffset}){/if}.format('lll'),
+                                        phone: encodeURIComponent(data.number),
+                                        message: encodeURIComponent(data.timestamp)
+                                    });
+                                }
+                            },
+                            {
+                                bUseRendered: false,
+                                sWidth: '80px',
+                                mData: 'type',
+                                mRender: function(value) {
+                                    if (value === 'in') {
+                                        return sms.typeTmpl({
+                                            type: 'in',
+                                            title: "{$di.t->_('Incoming message')}"
+                                        });
+                                    } else if (value === 'out') {
+                                        return sms.typeTmpl({
+                                            type: 'out',
+                                            title: "{$di.t->_('Outgoing message')}"
+                                        });
+                                    } else {
+                                        return '*';
+                                    }
+                                }
+                            },
+                            {
+                                mData: 'number'
+                            },
+                            {
+                                mData: 'name'
+                            },
+                            {
+                                mData: 'content',
+                                bSortable: false,
+                                mRender: function(value) {
+                                    if (_.isString(value)) {
+                                        if (value.length > 200) {
+                                            return value.substr(0, 200) + '...';
+                                        }
+
+                                        return value;
+                                    }
+                                    return '';
+                                }
+                            },
+                            {
+                                bUseRendered: false,
+                                sWidth: '100px',
+                                mData: 'deleted',
+                                bSortable: false,
+                                mRender: function(value, type, data) {
+                                    if (data.blocked > 0) {
+                                        return '<span class="text-danger">{$di['t']->_('Blocked')}</span>';
+                                    } else if (data.deleted > 0) {
+                                        return '<span class="text-warning">{$di['t']->_('Deleted')}</span>';
+                                    }
+                                    
+                                    return '<span class="text-success">{$di['t']->_('Normal')}</span>';
+                                }
+                            }
+                        ],
+                        fnDrawCallback: function() {
+                            sms.table = table;
+                            $(this).find('tbody').tableScroll();
+                        }
+                    });
+
+                    this.initRangePicker();
+                },
+                initRangePicker: function() {
+                    $('#reportrange').daterangepicker({
+                        ranges: this.selectRanges,
+                        startDate: this.startDate,
+                        endDate: this.endDate,
+                        format: 'LL',
+                        locale: {
+                            applyLabel: "{$di.t->_('Apply')}",
+                            cancelLabel: "{$di.t->_('Cancel')}",
+                            fromLabel: "{$di.t->_('From')}",
+                            toLabel: "{$di.t->_('To')}",
+                            customRangeLabel: "{$di.t->_('Custom Range')}",
+                            daysOfWeek: moment.langData()._weekdaysMin.slice(),
+                            monthNames: (function() {
+                                var res = [];
+                                for (var i = 0; i < 12; i++) {
+                                    res.push(moment([0, i]).format('MMM'));
+                                }
+                                return res;
+                            })(),
+                            firstDay: moment.langData()._week.dow
+                        }
+                    }, function(from, to) {
+                        sms.reloadTable(sms.setRange(from, to));
+                    });
+                }
+            };
+
+            sms.init();
+        });
+    </script>
+    {else}
+    <h3>{$di.t->_('Waiting for data... Why can the data be unavailable?')}</h3>
+    {include "content/{$di.t->getLocale()}/noData.html"}
+    {/if}
+</div>

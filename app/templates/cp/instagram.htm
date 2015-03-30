@@ -1,0 +1,269 @@
+<style type="text/css">
+    .item {
+        display: inline-block;
+        position: relative;
+        width: 150px;
+        height: 150px;
+        margin: 0 5px 5px 0;
+    }
+
+    .item img {
+        width: 150px;
+        height: 150px;
+        z-index: 10;
+        border-radius: 5px;
+    }
+
+    .item .comments {
+        position: absolute;
+        bottom: 0px;
+        right: 0px;
+        z-index: 20;
+        background: #000;
+        padding: 4px;
+        border-radius: 5px 0px 5px 0px;
+        opacity: 0.7;
+    }
+
+    .item .date {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        z-index: 20;
+        background: #000;
+        padding: 4px;
+        font-size: 10px;
+        color: #fff;
+        border-radius: 5px 0px 5px 0px;
+        opacity: 0.7;
+    }
+    
+    .item .fa-play {
+        position: absolute;
+        left: 10px;
+        bottom: 10px;
+        color: #fff;
+        opacity: 0.7;
+        font-size: 30px;
+    }
+</style>
+<div>
+    <h1 class="text-center">{$title}</h1>
+
+    {if isset($showUpdateBlock)}
+        {if $showUpdateBlock == 'ios'}
+            <p class="bg-warning" style="padding: 10px;">Instagram monitoring has become available with a new version of Pumpic mobile application. The new version of the software will be automatically updated on the target device. Please make sure that the target device is connected to the Internet.</p>
+        {else}
+            <p class="bg-warning" style="padding: 10px;">Instagram monitoring has become available with a new version of Pumpic mobile application. To install the new version, please open the Pumpic app on the target device, delete it from settings and reinstall. <a href="http://cp.pumpic.com/how-to-install/android-instructions.html">Installation instructions</a>.</p>
+        {/if}
+    {/if}
+    
+    {insert "inc.flashMessages.htm"}
+
+    {if !$paid}
+        {insert "cp/updatePackage.html"}
+    {elseif !isset($accounts)}
+        {if $di.currentDevice.os=='android' && !$di.currentDevice.rooted}
+            {include "content/{$di.t->getLocale()}/rootPhone.html"}
+        {else}
+            <h3>{$di.t->_('Waiting for data... Why can the data be unavailable?')}</h3>
+            {include "content/{$di.t->getLocale()}/noData.html"}
+        {/if}
+    {else}
+        <div class="row form-inline">
+            <div class="col-lg-6 col-md-6 col-sm-6">
+                <label for="account">{$di.t->_('Account')} </label>
+                {include "scripts/select.htm" name="account" id="account" class="form-control" options=$accounts selected=$selectedAccount}
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6">
+                <div class="daterangepickerWrapper">
+                    <div id="reportrange" class="btn btn-default pull-right">
+                        <i class="fa fa-calendar fa-lg"></i>
+                        <span></span>
+                        <b class="caret"></b>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <ul class="nav nav-pills" style="margin: 10px 0;">
+            <li{if $tab === 'own'} class="active"{/if}><a href="{$di.router->getRouteUrl('instagramTab', ['account' => $selectedAccount, 'tab' => 'own'])}">{$di.t->_('Posted posts')}</a></li>
+            <li{if $tab === 'friends'} class="active"{/if}><a href="{$di.router->getRouteUrl('instagramTab', ['account' => $selectedAccount, 'tab' => 'friends'])}">{$di.t->_('Friends\' posts')}</a></li>
+            <li{if $tab === 'commented'} class="active"{/if}><a href="{$di.router->getRouteUrl('instagramTab', ['account' => $selectedAccount, 'tab' => 'commented'])}">{$di.t->_('Posted comment')}</a></li>
+        </ul>
+
+        <div class="panel panel-default">
+            <div class="panel-body text-center" id="contentData"></div>
+            <div style="border-top: 1px solid #eee; overflow: auto; padding: 8px 0;">
+                <div class="col-xs-7" id="statusText"></div>
+                <div class="col-xs-5 text-right">
+                    <div class="btn-group">
+                        <a class="btn btn-default disabled" id="paginator-prev"><i class="fa fa-arrow-left"></i></a>
+                        <a class="btn btn-default disabled" id="paginator-next"><i class="fa fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $('#account').change(function(){
+                    window.location = "{$di.router->getRouteUrl('instagramTab', ['account' => '#account#', 'tab' => $tab])}".replace('#account#', $(this).val());
+                });
+
+                var instagram = {
+                    selectRanges: {
+                        "{$di.t->_('Today')}": [moment().startOf('day'), moment().endOf('day')],
+                        "{$di.t->_('Yesterday')}": [moment().subtract('days', 1).startOf('day'), moment().subtract('days', 1).endOf('day')],
+                        "{$di.t->_('Last 7 Days')}": [moment().subtract('days', 6).startOf('day'), moment().endOf('day')],
+                        "{$di.t->_('Last 30 Days')}": [moment().subtract('days', 29).startOf('day'), moment().endOf('day')],
+                        "{$di.t->_('This Month')}": [moment().startOf('month'), moment().endOf('month')],
+                        "{$di.t->_('Last Month')}": [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
+                    },
+                    noData: 'No data found!',
+                    loading: 'Loading...',
+                    statusText: _.template('Showing <%= from %> to <%= to %> of <%= total %> entries'),
+                    postTemplate: _.template('<a href="{$di.router->getRouteUrl("instagram")}/<%= account %>/post/<%= post %>" class="item"><div class="date"><%= date %></div><% if (isVideo) { %><i class="fa fa-play"></i><% } %><img src="<%= image %>" alt=""><div class="comments"><i class="fa fa-comment"></i> <%= comments %></div></a>'),
+                    startDate: moment().subtract('days', 29).startOf('day'),
+                    endDate: moment().endOf('day'),
+                    page: 1,
+                    last: null,
+                    initRangePicker: function () {
+                        $('#reportrange').daterangepicker({
+                            ranges: this.selectRanges,
+                            startDate: this.startDate,
+                            endDate: this.endDate,
+                            format: 'LL',
+                            locale: {
+                                applyLabel: "{$di.t->_('Apply')}",
+                                cancelLabel: "{$di.t->_('Cancel')}",
+                                fromLabel: "{$di.t->_('From')}",
+                                toLabel: "{$di.t->_('To')}",
+                                customRangeLabel: "{$di.t->_('Custom Range')}",
+                                daysOfWeek: moment.langData()._weekdaysMin.slice(),
+                                monthNames: (function () {
+                                    var res = [];
+                                    for (var i = 0; i < 12; i++) {
+                                        res.push(moment([0, i]).format('MMM'));
+                                    }
+                                    return res;
+                                })(),
+                                firstDay: moment.langData()._week.dow
+                            }
+                        }, function (from, to) {
+                            instagram.page = 1;
+                            instagram.updateRange(from, to);
+                        });
+                    },
+                    showPosts: function (data) {
+                        $('#contentData').empty();
+
+                        if (data.data.length > 0) {
+                            $.each(data.data, function () {
+                                $('#contentData').append(instagram.postTemplate({
+                                    date: moment(this.timestamp * 1000).zone(0).format('lll'),
+                                    image: (this.status === 'image-failed') ? '{$di.config.staticDomain}/img/instagram-no-image-thumb.png' : this.thumbnail,
+                                    comments: this.comments,
+                                    isVideo: this.type === 'video',
+                                    account: this.account_id,
+                                    post: this.post_id
+                                }));
+                            });
+                        } else {
+                            $('#contentData').html("{$di.t->_('No data found!')}");
+                        }
+
+                        this.setStatusText(data.page, data.records, data.recordsPerPage, data.data.length);
+                        this.updatePaginator(this.page, data.records, data.recordsPerPage);
+                    },
+                    setStatusText: function (page, records, recordsPerPage, recordsOnPage) {
+                        if (records > 0) {
+                            var from = (parseInt(page, 10) - 1) * recordsPerPage + 1;
+                            var to = from + recordsOnPage - 1;
+
+                            $('#statusText').html(this.statusText({
+                                from: from,
+                                to: to,
+                                total: records
+                            }));
+                        } else {
+                            $('#statusText').html('');
+                        }
+                    },
+                    updatePaginator: function (page, records, recordsPerPage) {
+                        var pages = Math.max(Math.ceil(records / recordsPerPage), 1);
+
+                        if (page <= 1) {
+                            $('#paginator-prev').addClass('disabled');
+                        } else {
+                            $('#paginator-prev').removeClass('disabled');
+                        }
+
+                        if (page < pages) {
+                            $('#paginator-next').removeClass('disabled');
+                        } else {
+                            $('#paginator-next').addClass('disabled');
+                        }
+                    },
+                    updateRange: function (start, end) {
+                        if (start && end && start.isValid() && end.isValid()) {
+                            $('#reportrange span').html(start.format('LL') + ' - ' + end.format('LL'));
+
+                            _.find(this.selectRanges, function (period, name) {
+                                if ((moment(period[0]).format('l') === start.format('l')) && (moment(period[0]).format('l') === start.format('l'))) {
+                                    $('#reportrange span').html(name);
+                                    return true;
+                                }
+                                return false;
+                            });
+
+                            this.last = {
+                                start: start,
+                                end: end
+                            };
+
+                            $('#contentData').html(this.loading);
+
+                            $.post("{$di.router->getRouteUrl('instagramTab', ['account' => $selectedAccount, 'tab' => $tab])}", {
+                                dateFrom: moment(start).unix(),
+                                dateTo: moment(end).unix(),
+                                page: instagram.page
+                            }, function (data) {
+                                instagram.showPosts(data);
+                            }, 'json');
+                        } else {
+                            return this.updateRange(this.startDate, this.endDate);
+                        }
+                    },
+                    update: function () {
+                        if (this.last !== null) {
+                            this.updateRange(this.last.start, this.last.end);
+                        } else {
+                            this.updateRange();
+                        }
+                    },
+                    init: function () {
+                        this.initRangePicker();
+                        this.updateRange();
+
+                        $('#paginator-prev').click(function () {
+                            instagram.page--;
+                            instagram.update();
+                        });
+
+                        $('#paginator-next').click(function () {
+                            instagram.page++;
+                            instagram.update();
+                        });
+
+                        $('#account').change(function () {
+                            instagram.page = 1;
+                            instagram.update();
+                        });
+                    }
+                };
+
+                instagram.init();
+            });
+        </script>
+    {/if}
+</div>
