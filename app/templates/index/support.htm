@@ -10,10 +10,10 @@
             <label for="name">{$di.t->_('Name')}</label>
             <input type="text" name="name" class="form-control" id="name" placeholder="{$di.t->_('Name')}">
         </div>
-        <div class="form-group">
+        {*<div class="form-group">
             <label for="email">{$di.t->_('Email address')}</label>
             <input type="text" name="email" class="form-control" id="email" placeholder="{$di.t->_('Email address')}">
-        </div>
+        </div> *}
         <div class="form-group">
             <label for="types">{$di.t->_('Question type')}</label>
             {include "scripts/select.htm" id="types" name="type" class="form-control" options=$types}
@@ -22,10 +22,10 @@
             <label for="message">{$di.t->_('Message')}</label>
             <textarea id="message" name="message" class="form-control" placeholder="{$di.t->_('Text of message...')}"></textarea>
         </div>
-        <div class="form-group">
+        {*<div class="form-group">
             {set $lnk}<a href="{$refundPolicyUrl}" target="_blank">{/set}
             <p>{$di.t->_('To submit a refund request please fill in our online %1$sRefund Request Form%2$s', [$lnk, '</a>'])}</p>
-        </div>
+        </div>*}
         <div class="form-group">
             <button type="submit" class="btn btn-primary">{$di.t->_('Submit Ticket')}</button>
         </div>

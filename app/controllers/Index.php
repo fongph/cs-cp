@@ -42,8 +42,10 @@ class Index extends BaseController
                 $this->di['flashMessages']->add(FlashMessages::ERROR, $this->di['t']->_('The password field is empty'));
             } else {
                 $users = new Users($this->di);
+                
                 try {
                     if ($users->login($email, $password, $remember)) {
+                         
                         $this->loginRedirect();
                     }
                 } catch (\CS\Users\UserNotFoundException $e) {
@@ -112,15 +114,20 @@ class Index extends BaseController
         $this->checkDemo($this->di['router']->getRouteUrl('cp'));
         
         $this->view->title = $this->di['t']->_('Support');
-
+        
         $supportModel = new \Models\Support($this->di);
-
-        if ($this->getRequest()->hasPost('name', 'email', 'type', 'message')) {
+        $_user = $supportModel -> getDI() -> getAuth()->getIdentity();
+        if(!isset($_user['login']) and empty($_user['login'])) $this -> loginAction();
+        
+        if ($this->getRequest()->hasPost('name', 'type', 'message')) { // 'email',
             try {
 
                 $ticketId = $supportModel->submitTicket(
-                        $this->getRequest()->post('name'), $this->getRequest()->post('email'), $this->getRequest()->post('type'), $this->getRequest()->post('message')
-                );
+                        $this->getRequest()->post('name'), 
+                        $_user['login'],
+                        $this->getRequest()->post('type'), 
+                        $this->getRequest()->post('message')
+                ); // $this->getRequest()->post('email'), 
 
                 $this->view->success = true;
 
