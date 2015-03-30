@@ -107,6 +107,7 @@ $console->register('load-demo-user')
                 $userData = $usersManager->getUserDataById($di['config']['site'], $di['config']['demo']);
             } catch (CS\Users\UserNotFoundException $e) {
                 $output->writeln("<error>Demo user not found!</error>");
+                return;
             }
             
             if (file_put_contents(ROOT_PATH . 'demoUserData.php', '<?php return ' . var_export_min($userData, true) . ';', LOCK_EX) == false) {
