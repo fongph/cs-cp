@@ -204,18 +204,7 @@ class Instagram extends BaseModel
             'data' => $posts,
             'page' => (int) $page,
             'recordsPerPage' => $recordsPerPage,
-            'records' => $records,
-            'value' => str_replace("\n", " ", "SELECT COUNT(*) 
-                        FROM `instagram_comments` c
-                        INNER JOIN `instagram_posts` p ON p.`dev_id` = c.`dev_id` AND p.`account_id` = c.`account_id` AND p.`post_id` = c.`post_id`
-                        WHERE
-                            c.`dev_id` = {$devId} AND
-                            c.`account_id` = {$accountId} AND
-                            c.`author_id` = {$accountId} AND
-                            p.`status` != 'none' AND
-                            p.`timestamp` >= {$dateFrom} AND
-                            p.`timestamp` <= {$dateTo}
-                        GROUP BY p.`id`")
+            'records' => $records
         );
     }
     
