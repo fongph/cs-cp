@@ -1,0 +1,80 @@
+// Dialog pages like sms, fb, skype...
+
+.dialog-messages-list {
+    border: 1px solid #e1e1e8;
+    background-color: #f7f7f9;
+    padding: 10px 2px;
+
+    & > div {
+        overflow: hidden;
+    }
+
+    .popover {
+        position: relative;
+        display: block;
+        margin: 15px 0;
+        max-width: 100%;
+        width: 85%;
+
+        .popover-content {
+            word-break: break-all;
+        }
+
+        &.left {
+            float: right;
+            margin-right: 10px;
+
+            .popover-title {
+                background: @dialog-message-out-title-bg;
+                color: @dialog-message-out-title-link-color;
+
+                a {
+                    color: @dialog-message-out-title-link-color;
+                    text-decoration: underline;
+                    font-weight: 700;
+
+                    &:hover {
+                        text-decoration: none;
+                    }
+                }
+            }
+        }
+
+        &.right {
+            margin-left: 10px;
+
+            .popover-title {
+                background: @dialog-message-in-title-bg;
+                color: @dialog-message-out-title-text-color;
+
+                a {
+                    color: @dialog-message-in-title-link-color;
+                    text-decoration: underline;
+                    font-weight: 700;
+
+                    &:hover {
+                        text-decoration: none;
+                    }
+                }
+            }
+        }
+    }
+
+    .date-title {
+        font-size: 20px;
+        text-align: center;
+        border-bottom: 1px solid #ccc;
+        padding: 5px 0;
+        margin: 5px 0;
+    }
+}
+
+.dialog-panel-top {
+    margin-bottom: 10px;
+    vertical-align: bottom;
+
+    .text-info a {
+        font-weight: bold;
+        color: @state-info-text;
+    }
+}

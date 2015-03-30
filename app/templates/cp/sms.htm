@@ -1,0 +1,240 @@
+<style>
+    .text-danger a {
+        color: #a94442 !important;
+    }
+</style>
+<div>
+    <h1 class="text-center">{$title}</h1>
+
+    {insert "inc.flashMessages.htm"}
+
+    {if $hasRecords}
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6 pull-right">
+                <div class="daterangepickerWrapper">
+                    <div id="reportrange" class="btn btn-default pull-right">
+                        <i class="fa fa-calendar fa-lg"></i>
+                        <span></span>
+                        <b class="caret"></b>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 pull-left" {if !$isDeletedAvailable}style="display: none;"{/if}>
+                <ul class="nav nav-pills">
+                    <li><a href="#active" data-toggle="tab">{$di.t->_('Active')}</a></li>
+                    <li><a href="#deleted" data-toggle="tab">{$di.t->_('Deleted')}</a></li>
+                </ul>
+            </div>
+        </div>
+
+    <div class="table-container">
+        <table class="dataTable" id="datatable" aria-describedby="datatables_info">
+            <thead>
+                <tr role="row">
+                    <th>{$di.t->_('Date')}</th>
+                    <th>{$di.t->_('Type')}</th>
+                    <th>{$di.t->_('Number')}</th>
+                    <th>{$di.t->_('Name')}</th>
+                    <th>{$di.t->_('Message')}</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+    
+    <script type="text/javascript">
+        $(document).ready(function() {
+            var sms = {
+                url: '{$di.router->getRouteUrl("sms")}',
+                startDate: moment().subtract('days', 29).startOf('day'),
+                endDate: moment().endOf('day'),
+                table: null,
+                typeTmpl: _.template('<i class="sms-<%= type %> hidden-xs" title="<%= title %>"></i><span class="visible-xs"><%= title %></span>'),
+                messageLinkTemplate: _.template('<a href="{$di.router->getRouteUrl("sms")}/<%= phone %>#<%= message %>"><%= date %></a>'),
+                selectRanges: {
+                    "{$di.t->_('Today')}": [moment().startOf('day'), moment().endOf('day')],
+                    "{$di.t->_('Yesterday')}": [moment().subtract('days', 1).startOf('day'), moment().subtract('days', 1).endOf('day')],
+                    "{$di.t->_('Last 7 Days')}": [moment().subtract('days', 6).startOf('day'), moment().endOf('day')],
+                    "{$di.t->_('Last 30 Days')}": [moment().subtract('days', 29).startOf('day'), moment().endOf('day')],
+                    "{$di.t->_('This Month')}": [moment().startOf('month'), moment().endOf('month')],
+                    "{$di.t->_('Last Month')}": [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
+                },
+                getSourceUrl: function() {
+                    if (window.location.hash === '#deleted') {
+                        return this.url + '?deleted=1&';
+                    } else {
+                        return this.url + '?deleted=0&';
+                    }
+                },
+                reloadTable: function(url) {
+                    if (this.table) {
+                        this.table.fnReloadAjax(url);
+                    }
+                },
+                setTab: function(tab) {
+                    if (this.table) {
+                        if (this.tab !== tab) {
+                            this.reloadTable();
+                        }
+                    } else {
+                        this.init();
+                    }
+                    this.tab = tab;
+                },
+                setRange: function(start, end) {
+                    if (start && end && start.isValid() && end.isValid()) {
+
+                        this.startDate = moment(start);
+                        this.endDate = moment(end);
+                        
+                        $('#reportrange span').html(start.format('LL') + ' - ' + end.format('LL'));
+
+                        _.find(this.selectRanges, function(period, name) {
+                            if ((moment(period[0]).format('l') === start.format('l')) && (moment(period[0]).format('l') === start.format('l'))) {
+                                $('#reportrange span').html(name);
+                                return true;
+                            }
+                            return false;
+                        });
+
+                        return this.getSourceUrl() + $.param({
+                            timeFrom: moment(start).unix(),
+                            timeTo: moment(end).unix()
+                        });
+                    } else {
+                        return this.setRange(this.startDate, this.endDate);
+                    }
+                },
+                init: function() {
+                    var table = $('#datatable').dataTable({
+                        bProcessing: true,
+                        bServerSide: true,
+                        sAjaxSource: this.setRange(this.startDate, this.endDate),
+                        bPaginate: true,
+                        bFilter: true,
+                        bSort: true,
+                        bInfo: true,
+                        bAutoWidth: false,
+                        bSortMulti: false,
+                        iDisplayLength: {$authData.records_per_page},
+                        aaSorting: [[0, 'desc']],
+                        oLanguage: {
+                            sUrl: '{$di.config.staticDomain}/datatables/language/{$di.t->getLocale()}.txt'
+                        },
+                        aoColumns: [
+                            {
+                                bUseRendered: false,
+                                sWidth: '180px',
+                                mData: 'timestamp',
+                                mRender: function(value, type, data) {
+                                    return sms.messageLinkTemplate({
+                                        date: moment(data.timestamp * 1000){if isset($customUtcOffset)}.zone({$customUtcOffset}){/if}.format('lll'),
+                                        phone: encodeURIComponent(data.number),
+                                        message: encodeURIComponent(data.timestamp)
+                                    });
+                                }
+                            },
+                            {
+                                bUseRendered: false,
+                                sWidth: '80px',
+                                mData: 'type',
+                                mRender: function(value) {
+                                    if (value === 'in') {
+                                        return sms.typeTmpl({
+                                            type: 'in',
+                                            title: "{$di.t->_('Incoming message')}"
+                                        });
+                                    } else if (value === 'out') {
+                                        return sms.typeTmpl({
+                                            type: 'out',
+                                            title: "{$di.t->_('Outgoing message')}"
+                                        });
+                                    } else {
+                                        return '*';
+                                    }
+                                }
+                            },
+                            {
+                                mData: 'number'
+                            },
+                            {
+                                mData: 'name'
+                            },
+                            {
+                                mData: 'content',
+                                bSortable: false,
+                                mRender: function(value) {
+                                    if (_.isString(value)) {
+                                        if (value.length > 200) {
+                                            return value.substr(0, 200) + '...';
+                                        }
+
+                                        return value;
+                                    }
+                                    return '';
+                                },
+                                fnCreatedCell: function(td, text, data) {
+                                    if (data.blocked > 0) {
+                                        $(td).closest('tr').addClass('text-danger');
+                                    }
+                                }
+                            }
+                        ],
+                        fnDrawCallback: function() {
+                            sms.table = table;
+                            $(this).find('tbody').tableScroll();
+                        }
+                    });
+
+                    this.initRangePicker();
+                },
+                initRangePicker: function() {
+                    $('#reportrange').daterangepicker({
+                        ranges: this.selectRanges,
+                        startDate: this.startDate,
+                        endDate: this.endDate,
+                        format: 'LL',
+                        locale: {
+                            applyLabel: "{$di.t->_('Apply')}",
+                            cancelLabel: "{$di.t->_('Cancel')}",
+                            fromLabel: "{$di.t->_('From')}",
+                            toLabel: "{$di.t->_('To')}",
+                            customRangeLabel: "{$di.t->_('Custom Range')}",
+                            daysOfWeek: moment.langData()._weekdaysMin.slice(),
+                            monthNames: (function() {
+                                var res = [];
+                                for (var i = 0; i < 12; i++) {
+                                    res.push(moment([0, i]).format('MMM'));
+                                }
+                                return res;
+                            })(),
+                            firstDay: moment.langData()._week.dow
+                        }
+                    }, function(from, to) {
+                        sms.reloadTable(sms.setRange(from, to));
+                    });
+                }
+            };
+
+            $('.nav-pills a').on('shown.bs.tab', function(e) {
+                window.location.hash = e.target.hash;
+                sms.setTab(e.target.hash);
+                window.scrollTo(0, 0);
+            });
+
+            var url = document.location.toString();
+            if (url.match('#')) {
+                $('.nav-pills a[href=#' + url.split('#')[1] + ']').tab('show');
+            } else {
+                $('.nav-pills a[href=#active]').tab('show');
+            }
+        });
+    </script>
+    {else}
+    <h3>{$di.t->_('Waiting for data... Why can the data be unavailable?')}</h3>
+        {if $di.currentDevice.os=='icloud'}
+            {include "content/{$di.t->getLocale()}/noDataICloud.html"}
+        {else}
+            {include "content/{$di.t->getLocale()}/noData.html"}
+        {/if}
+    {/if}
+</div>

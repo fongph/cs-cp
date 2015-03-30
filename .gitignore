@@ -6,6 +6,8 @@
 /bower_components
 /node_modules
 /.idea
+/node_modules
+/bower_components
 composer.phar
 development.config.php
 build.php

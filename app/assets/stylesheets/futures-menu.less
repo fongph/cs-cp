@@ -1,0 +1,281 @@
+/*
+* Left menu inside cp
+*/
+
+.futures-menu-icon(@number: 0) {
+    background-position:  0px -(@futures-menu-icon-size * @number);
+}
+
+.futures-menu-icon-hover(@number: 0) {
+    background-position: -@futures-menu-icon-size -(@futures-menu-icon-size * @number);
+}
+
+body > .cp-menu {
+    display: none;
+}
+
+.cp-menu {
+    a {
+        color: @link-color;
+        font-size: 17px;
+        padding: 5px 5px 0 0px !important;
+
+        &:hover, &:focus {
+            background-color: transparent !important;
+            text-decoration: underline !important;
+        }
+    }
+
+    .active a {
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    li {
+        i {
+            display: block;
+            float: left;
+            height: 24px;
+            width: 24px;
+            background-image: url(../img/menu-left-icons.png);
+            vertical-align: bottom;
+            margin: 0 5px 0 0;
+        }
+
+        i.menu-calls {
+            .futures-menu-icon;
+        }
+
+        &:hover i.menu-calls, &.active i.menu-calls {
+            .futures-menu-icon-hover;
+        }
+
+        i.menu-sms {
+            .futures-menu-icon(1);
+        }
+
+        &:hover i.menu-sms, &.active i.menu-sms {
+            .futures-menu-icon-hover(1);
+        }
+
+        i.menu-locations {
+            .futures-menu-icon(2);
+        }
+
+        &:hover i.menu-locations, &.active i.menu-locations {
+            .futures-menu-icon-hover(2);
+        }
+
+        i.menu-browserBookmarks {
+            .futures-menu-icon(3);
+        }
+
+        &:hover i.menu-browserBookmarks, &.active i.menu-browserBookmarks {
+            .futures-menu-icon-hover(3);
+        }
+
+        i.menu-browserHistory {
+            .futures-menu-icon(4);
+        }
+
+        &:hover i.menu-browserHistory, &.active i.menu-browserHistory {
+            .futures-menu-icon-hover(4);
+        }
+
+        i.menu-calendar {
+            .futures-menu-icon(5);
+        }
+
+        &:hover i.menu-calendar, &.active i.menu-calendar {
+            .futures-menu-icon-hover(5);
+        }
+
+        i.menu-contacts {
+            .futures-menu-icon(6);
+        }
+
+        &:hover i.menu-contacts, &.active i.menu-contacts {
+            .futures-menu-icon-hover(6);
+        }
+
+        i.menu-keylogger {
+            .futures-menu-icon(7);
+        }
+
+        &:hover i.menu-keylogger, &.active i.menu-keylogger {
+            .futures-menu-icon-hover(7);
+        }
+
+        i.menu-photos {
+            .futures-menu-icon(10);
+        }
+
+        &:hover i.menu-photos, &.active i.menu-photos {
+            .futures-menu-icon-hover(10);
+        }
+
+        i.menu-videos {
+            .futures-menu-icon(11);
+        }
+
+        &:hover i.menu-videos, &.active i.menu-videos {
+            .futures-menu-icon-hover(11);
+        }
+
+        i.menu-viber {
+            .futures-menu-icon(12);
+        }
+
+        &:hover i.menu-viber, &.active i.menu-viber {
+            .futures-menu-icon-hover(12);
+        }
+
+        i.menu-skype {
+            .futures-menu-icon(13);
+        }
+
+        &:hover i.menu-skype, &.active i.menu-skype {
+            .futures-menu-icon-hover(13);
+        }
+
+        i.menu-whatsapp {
+            .futures-menu-icon(14);
+        }
+
+        &:hover i.menu-whatsapp, &.active i.menu-whatsapp {
+            .futures-menu-icon-hover(14);
+        }
+
+        i.menu-facebook {
+            .futures-menu-icon(15);
+        }
+
+        &:hover i.menu-facebook, &.active i.menu-facebook {
+            .futures-menu-icon-hover(15);
+        }
+
+        i.menu-kik {
+            .futures-menu-icon(16);
+        }
+
+        &:hover i.menu-kik, &.active i.menu-kik {
+            .futures-menu-icon-hover(16);
+        }
+
+        i.menu-vk {
+            .futures-menu-icon(17);
+        }
+
+        &:hover i.menu-vk, &.active i.menu-vk {
+            .futures-menu-icon-hover(17);
+        }
+
+        i.menu-instagram {
+            .futures-menu-icon(18);
+        }
+
+        &:hover i.menu-instagram, &.active i.menu-instagram {
+            .futures-menu-icon-hover(18);
+        }
+
+        i.menu-emails {
+            .futures-menu-icon(19);
+        }
+
+        &:hover i.menu-emails, &.active i.menu-emails {
+            .futures-menu-icon-hover(19);
+        }
+
+        i.menu-applications {
+            .futures-menu-icon(20);
+        }
+
+        &:hover i.menu-applications, &.active i.menu-applications {
+            .futures-menu-icon-hover(20);
+        }
+
+        i.menu-smsCommands {
+            .futures-menu-icon(21);
+        }
+
+        &:hover i.menu-smsCommands, &.active i.menu-smsCommands {
+            .futures-menu-icon-hover(21);
+        }
+
+        i.menu-settings {
+            .futures-menu-icon(22);
+        }
+
+        &:hover i.menu-settings, &.active i.menu-settings {
+            .futures-menu-icon-hover(22);
+        }
+    }
+}
+
+@media (min-width: @screen-lg-min) {
+    .menu-wrapper {
+        float: left;
+        padding: 0 15px 0 0;
+        width: 22%;
+    }
+
+    .wrapper-container .cp-menu {
+        float: left;
+        width: 220px;
+        padding-bottom: 20px;
+    }
+}
+
+@media (min-width: @screen-md-min) and (max-width: @screen-md-max) {
+    .menu-wrapper {
+        float: left;
+        padding: 0 15px 0 0;
+        width: 23%;
+    }
+
+    .cp-menu li i {
+        margin: 0 10px;
+    }
+}
+
+@media (min-width: @screen-sm-min) and (max-width: @screen-sm-max) {
+    .menu-wrapper {
+        float: left;
+        padding: 0 15px 0 0;
+        width: 10%;
+        margin-bottom: 20px;
+    }
+
+    .cp-menu {
+        width: 50px !important;
+        margin-right: 10px;
+        border: 1px solid #aaa; /* default border color */
+        border-left: none;
+        padding-bottom: 4px;
+
+        li span {
+            display: none;
+        }
+
+        li i {
+            margin: 0 10px;
+            float: none;
+        }
+    }
+}
+
+@media (max-width: @screen-xs-max) {
+    body.menu-active .cp-menu {
+        display: block;
+        overflow-y: scroll;
+        border-right: 2px solid #cccccc; /* defaulr border color for footer and header */
+        position: fixed;
+        height: 100%;
+        width: 250px;
+        padding: 10px;
+
+        li i {
+            margin: 0 10px 0 0;
+        }
+    }
+}
