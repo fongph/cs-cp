@@ -238,5 +238,5 @@ $di->set('isTestUser', function($id) use($config) {
         ));
     }
 
-    return true;
+    return false;
 });
