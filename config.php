@@ -35,7 +35,7 @@ $default = array(
         )
     ),
     'locales' => array(
-        'en-GB' => 'English'
+        'en-US' => 'English'
     ),
     'modules' => array(
         Modules::CALLS => 'View Calls',
