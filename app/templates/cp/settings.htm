@@ -15,7 +15,7 @@
             <div class="col-lg-6 col-md-6">
                 {if $data.isBlackListAvailable}
                 <div class="panel panel-default">
-                    <div class="panel-heading">{if $data.blockSMSActive}{$di.t->_('Calls & SMS blocking')}{else}{$di.t->_('Blacklist Phone numbers')}{/if}<span class="blue-asterisk">*</span></div>
+                    <div class="panel-heading">{if $data.blockSMSActive}{$di.t->_('Calls & SMS blocking by number')}{else}{$di.t->_('Calls blocking by number')}{/if}<span class="blue-asterisk">*</span></div>
                     <div class="panel-body text-center">
                         {if count($data.blackListPhones)}
                         <ul class="list-group">
@@ -56,7 +56,7 @@
                 </div>
                 {if $data.blockSMSActive || $data.isOutgoingSmsLimitationsAvailable}
                 <div class="panel panel-default">
-                    <div class="panel-heading">{$di.t->_('SMS Limit Setup')}<span class="blue-asterisk">*</span></div>
+                    <div class="panel-heading">{$di.t->_('SMS Limiting')}<span class="blue-asterisk">*</span></div>
                     <div class="panel-body">
                         <form action="" method="post">
                         {if $data.blockSMSActive}
@@ -73,24 +73,25 @@
                             {else}
                                 <div class="checkbox">
                                     <label for="outgoingSmsLimitation">
-                                        <input type="checkbox" name="outgoingSmsLimitation"{if $data.settings.outgoing_sms_limitation} checked{/if} id="outgoingSmsLimitation" /> {$di.t->_('Set Outgoing SMS Limit')}
+                                        <input type="checkbox" name="outgoingSmsLimitation"{if $data.settings.outgoing_sms_limitation} checked{/if} id="outgoingSmsLimitation" /> <b>{$di.t->_('Set daily outgoing SMS Limit')}</b>
                                     </label>
                                 </div>
                                 <div class="form-group{if !$data.settings.outgoing_sms_limitation} hidden{/if}" id="smsCountLimitationValueBlock">
-                                    <label>{$di.t->_('Count per day')}</label>
-                                    <input id="spinbox" type="text" value="{$data.settings.outgoing_sms_limitation_count}" name="outgoingSmsLimitationCount" />
+                                    <div style="width: 120px;">
+                                        <input id="spinbox" type="text" value="{$data.settings.outgoing_sms_limitation_count}" name="outgoingSmsLimitationCount" />
+                                    </div>
                                     <div class="checkbox">
                                         <label for="outgoingSmsLimitationAlert">
                                             <input type="checkbox" name="outgoingSmsLimitationAlert"{if $data.settings.outgoing_sms_limitation_alert} checked{/if} id="outgoingSmsLimitationAlert" /> {$di.t->_('Show an alert to a user when the limit is reached.')}
                                         </label>
                                     </div>
                                     <div{if !$data.settings.outgoing_sms_limitation_alert} class="hidden"{/if} id="smsCountLimitationMessageBlock">
-                                        <input type="text" name="outgoingSmsLimitationMessage" value="{$data.settings.outgoing_sms_limitation_message}" class="form-control">
+                                        <textarea name="outgoingSmsLimitationMessage" class="form-control">{$data.settings.outgoing_sms_limitation_message}</textarea>
                                     </div>
                                 </div>
                             {/if}
                         {/if}
-                        {if $data.blockSMSActive || ($data.isOutgoingSmsLimitationsAvailable && $data.settings.keylogger_enabled)}
+                        {if $data.blockSMSActive || $data.isOutgoingSmsLimitationsActive}
                             <button type="submit" name="smsSettings" class="btn btn-primary">{$di.t->_('Update')}</button>
                         {/if}
                         </form>
