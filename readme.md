@@ -2,6 +2,7 @@
  - composer
  - bower
  - grunt
+ - php intl 
 
 ## Установка development версии
  - создать файл ***development.config.php*** по принципу ***development.config.php.sample***
