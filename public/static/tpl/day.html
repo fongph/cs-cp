@@ -5,8 +5,8 @@
     </div>
     <% if(all_day.length) {%>
     <div class="row-fluid clearfix cal-day-hour">
-        <div class="span1 col-xs-1"><b><%= cal.locale.all_day %></b></div>
-        <div class="span11 col-xs-11">
+        <div class="span1 col-xs-2"><b><%= cal.locale.all_day %></b></div>
+        <div class="span11 col-xs-10">
             <% _.each(all_day, function(event){ %>
             <div class="day-highlight dh-<%= event.class %>">
                 <%= event.title %>
@@ -41,8 +41,8 @@
             <div class="cal-day-hour">
                 <% for(l = 0; l < in_hour; l++){ %>
                 <div class="row-fluid cal-day-hour-part">
-                    <div class="span1 col-xs-1"><b><%= cal._hour(i, l) %></b></div>
-                    <div class="span11 col-xs-11"></div>
+                    <div class="span1 col-xs-2"><b><%= cal._hour(i, l) %></b></div>
+                    <div class="span11 col-xs-10"></div>
                 </div>
                 <% }; %>
             </div>

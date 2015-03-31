@@ -486,7 +486,7 @@ if(!String.prototype.formatNum) {
 		var hour = "" + (parseInt(time_start[0]) + hour);
 		var minute = "" + (this.options.time_split * part);
 
-		return hour.formatNum(2) + ":" + minute.formatNum(2);
+		return moment().hours(hour).minutes(minute).format("LT");
 	}
 
 	Calendar.prototype._week = function(event) {

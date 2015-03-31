@@ -27,7 +27,7 @@
             <div class="popover {if $item.type == 'in'}right{else}left{/if}">
                 <div class="arrow"></div>
                 {if $item.type == 'in'}
-                <h3 class="popover-title"><a href="http://facebook.com/{$item.id}" target="_blank">{$item.name}</a> <span></span></h3>
+                <h3 class="popover-title"><a href="http://facebook.com/{$item.id}" class="disable-on-demo" target="_blank">{$item.name}</a> <span></span></h3>
                 {else}
                 <h3 class="popover-title"><span></span></h3>
                 {/if}
