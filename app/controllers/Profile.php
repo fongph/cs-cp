@@ -25,15 +25,12 @@ class Profile extends BaseController
 {
 
     private $deviceRecord, $oldLicenseRecord, $newLicenseRecord;
-    
-    public function preAction()
-    {
-        $this->checkDemo($this->di['router']->getRouteUrl('cp'));
-    }
 
     public function indexAction()
     {
         if ($this->getRequest()->isPost()) {
+            $this->checkDemo($this->di['router']->getRouteUrl('profile'));
+            
             if ($this->getRequest()->post('settings') !== null) {
                 $this->processSettings();
             } else if ($this->getRequest()->post('changePassword') !== null) {
@@ -57,6 +54,8 @@ class Profile extends BaseController
     
     public function assignChoiceAction()
     {
+        $this->checkDemo($this->di['router']->getRouteUrl('profile'));
+        
         $billingModel = new Billing($this->di);
         
         $this->view->deviceRecord = $this->getDeviceRecord();
@@ -74,6 +73,8 @@ class Profile extends BaseController
 
     public function upgradeConfirmAction()
     {
+        $this->checkDemo($this->di['router']->getRouteUrl('profile'));
+        
         $this->view->deviceRecord = $this->getDeviceRecord();
         $this->view->licenseRecord = $this->getNewLicenseRecord();
         $this->view->oldLicenseRecord = $this->getOldLicenseRecord();
@@ -83,6 +84,8 @@ class Profile extends BaseController
     
     public function assignProcessAction()
     {
+        $this->checkDemo($this->di['router']->getRouteUrl('profile'));
+        
         if ($this->getRequest()->isPost()) {
             try {
                 $deviceObserver = new DeviceObserver($this->di->get('logger'));
@@ -244,6 +247,8 @@ class Profile extends BaseController
 
     public function changeICloudPasswordAction()
     {
+        $this->checkDemo($this->di['router']->getRouteUrl('profile'));
+        
         try {
             if($this->getRequest()->hasGet('deviceId')){
 

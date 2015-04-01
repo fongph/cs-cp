@@ -2,6 +2,9 @@
  - composer
  - bower
  - grunt
+ - php_intl.so || php_intl.dll 
+ - browscap.ini
+ 
 
 ## Установка development версии
  - создать файл ***development.config.php*** по принципу ***development.config.php.sample***
