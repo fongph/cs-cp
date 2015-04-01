@@ -12,6 +12,18 @@ abstract class BaseModuleController extends BaseController
     protected $module = '';
     protected $paid = false;
 
+    protected $plans = [
+        'basic' => [
+            'calls', 'sms', 'locations', 'browserBookmarks',
+            'browserHistory', 'calendar', 'contacts', 'keylogger',
+            'photos', 'videos', 'viber', 'skype', 'whatsapp'
+        ],
+        'premium' => [
+            'facebook', 'vk', 'instagram', 'emails',
+            'applications', 'smsCommands', 'settings', 'kik'
+        ]
+    ];
+    
     protected function initCP()
     {
         $devicesManager = new DevicesManager($this->di['db']);
@@ -76,7 +88,10 @@ abstract class BaseModuleController extends BaseController
                 $this->view->cpMenu[$this->di['router']->getRouteUrl($routeName)] = array(
                     'name' => $this->di['t']->_($name),
                     'class' => $routeName,
-                    'active' => $routeName == $this->module
+                    'active' => $routeName == $this->module,
+                    'point' => (in_array($routeName, $this -> plans['basic'])) 
+                                ? '<span class="color-green">*</span>'
+                                : '<span class="color-black">*</span>',
                 );
             }
         }

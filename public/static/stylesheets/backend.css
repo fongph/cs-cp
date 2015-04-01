@@ -8755,6 +8755,33 @@ body {
   color: #32a2c6;
   padding-left: 3px;
 }
+.box-plans {
+  display: inline-block;
+  width: 100%;
+  margin-top: 10px;
+}
+@media (min-width: 1200px) {
+  .box-plans #premiumPlan,
+  .box-plans #basicPlan {
+    display: inline !important;
+    width: 100%;
+  }
+}
+@media (min-width: 992px) and (max-width: 1199px) {
+  .box-plans #premiumPlan,
+  .box-plans #basicPlan {
+    padding-left: 10px;
+    display: block !important;
+    width: 100%;
+  }
+}
+.box-plans #basicPlan {
+  margin-right: 5px;
+}
+.box-plans #premiumPlan,
+.box-plans #basicPlan {
+  display: inline;
+}
 /* Components */
 /*
 * Left menu inside cp
@@ -8762,7 +8789,17 @@ body {
 body > .cp-menu {
   display: none;
 }
+.cp-menu a > #block-icon {
+  display: inline-block;
+  height: 100%;
+}
+.cp-menu a.menu-demo-link:hover,
+.cp-menu a.menu-demo-link:focus {
+  background-color: transparent !important;
+  text-decoration: none !important;
+}
 .cp-menu a {
+  display: inline-flex !important;
   color: #16a89e;
   font-size: 17px;
   padding: 5px 5px 0 0px !important;
@@ -8772,9 +8809,22 @@ body > .cp-menu {
   background-color: transparent !important;
   text-decoration: underline !important;
 }
+.cp-menu span.color-green,
+.cp-menu .color-green {
+  color: #16a89e;
+}
+.cp-menu span.color-black,
+.cp-menu .color-black {
+  color: #525359;
+}
 .cp-menu .active a {
   font-weight: 700;
   text-decoration: underline;
+  /* underline */
+}
+.cp-menu .active a.menu-demo-link {
+  text-decoration: none;
+  /* underline */
 }
 .cp-menu li i {
   display: block;

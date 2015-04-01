@@ -13,22 +13,49 @@
 body > .cp-menu {
     display: none;
 }
-
+ 
 .cp-menu {
+    a > #block-icon {
+        display: inline-block;
+        height: 100%;
+    } 
+    
+    a.menu-demo-link {
+        display: inline-flex !important;
+        &:hover, &:focus {
+            background-color: transparent !important;
+            text-decoration: none !important;
+        }
+    }
+    
     a {
         color: @link-color;
         font-size: 17px;
         padding: 5px 5px 0 0px !important;
-
+        
         &:hover, &:focus {
             background-color: transparent !important;
             text-decoration: underline !important;
         }
     }
+    
+    
+    
+    span.color-green, .color-green {
+        color: @link-color;
+    }
 
+    span.color-black, .color-black {
+        color: #525359;
+    }
+    
     .active a {
         font-weight: 700;
-        text-decoration: underline;
+        text-decoration: underline; /* underline */
+    }
+    
+    .active a.menu-demo-link {
+        text-decoration: none; /* underline */
     }
 
     li {

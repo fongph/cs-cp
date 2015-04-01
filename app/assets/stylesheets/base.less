@@ -16,3 +16,44 @@
     color: @brand-info;
     padding-left: 3px;
 }
+
+.box-plans { 
+    display: inline-block;
+    width: 100%;
+    margin-top: 10px;
+}
+
+@media (min-width: @screen-lg-min) { 
+    .box-plans {
+        #premiumPlan, #basicPlan {
+            display: inline !important;
+            width: 100%;
+        }
+    }
+}
+@media (min-width: @screen-md-min) and (max-width: @screen-md-max) {
+   .box-plans {
+        #premiumPlan, #basicPlan {
+            padding-left: 10px;
+            display: block !important;
+            width: 100%;
+        }
+    }
+}
+@media (min-width: @screen-sm-min) and (max-width: @screen-sm-max) { 
+
+}
+@media (max-width: @screen-xs-max) { 
+
+}
+
+.box-plans {
+    #basicPlan {
+        margin-right: 5px;
+    }
+    
+    #premiumPlan, #basicPlan {
+        display: inline;
+    }
+}
+

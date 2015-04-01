@@ -8755,6 +8755,33 @@ body {
   color: #32a2c6;
   padding-left: 3px;
 }
+.box-plans {
+  display: inline-block;
+  width: 100%;
+  margin-top: 10px;
+}
+@media (min-width: 1200px) {
+  .box-plans #premiumPlan,
+  .box-plans #basicPlan {
+    display: inline !important;
+    width: 100%;
+  }
+}
+@media (min-width: 992px) and (max-width: 1199px) {
+  .box-plans #premiumPlan,
+  .box-plans #basicPlan {
+    padding-left: 10px;
+    display: block !important;
+    width: 100%;
+  }
+}
+.box-plans #basicPlan {
+  margin-right: 5px;
+}
+.box-plans #premiumPlan,
+.box-plans #basicPlan {
+  display: inline;
+}
 /* Theme */
 /*
 .navbar {
