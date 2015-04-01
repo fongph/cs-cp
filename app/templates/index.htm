@@ -7,6 +7,9 @@
         <meta name="description" content="">
         <meta name="author" content="">
         <link rel="shortcut icon" href="{$di.config.staticDomain}/ico/favicon.ico">
+        {if isset($norobots)}
+            <meta name="robots" content="noindex,nofollow" />
+        {/if}
 
         <title>{$title}</title>
 
