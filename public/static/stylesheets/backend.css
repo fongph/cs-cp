@@ -8793,13 +8793,15 @@ body > .cp-menu {
   display: inline-block;
   height: 100%;
 }
+.cp-menu a.menu-demo-link {
+  display: inline-flex !important;
+}
 .cp-menu a.menu-demo-link:hover,
 .cp-menu a.menu-demo-link:focus {
   background-color: transparent !important;
   text-decoration: none !important;
 }
 .cp-menu a {
-  display: inline-flex !important;
   color: #16a89e;
   font-size: 17px;
   padding: 5px 5px 0 0px !important;
