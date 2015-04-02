@@ -20,6 +20,8 @@ class Index extends BaseController
             $path = $contentModel->getTemplatePath($this->params['uri']);
             $this->setView($path);
             $this->view->title = $this->di['t']->_($this->di['config']['contents'][$this->params['uri']]);
+            $this->view->norobots = (isset($this->di['config']['norobots'][$this->params['uri']]) 
+                                        and $this->di['config']['norobots'][$this->params['uri']]) ? true: false; 
         } else {
             $this->error404();
         }

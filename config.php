@@ -65,6 +65,10 @@ $default = array(
         'how-to-install/ios-instructions.html' => 'iPhone Installation Guide',
         'how-to-install/root-instructions.html' => 'Root Instructions'
     ),
+    'norobots' => array(
+        'how-to-install/ios-instructions.html' => true,
+        'how-to-install/android-instructions.html' => true,
+    ),
     'bundlesNamespace' => 'first'
 );
 

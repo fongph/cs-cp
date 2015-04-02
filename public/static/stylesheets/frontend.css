@@ -8755,6 +8755,133 @@ body {
   color: #32a2c6;
   padding-left: 3px;
 }
+.box-plans {
+  display: inline-block;
+  width: 100%;
+  margin-top: 10px;
+}
+@media (min-width: 1200px) {
+  .box-plans #premiumPlan,
+  .box-plans #basicPlan {
+    display: inline !important;
+    width: 100%;
+  }
+}
+@media (min-width: 992px) and (max-width: 1199px) {
+  .box-plans #premiumPlan,
+  .box-plans #basicPlan {
+    padding-left: 10px;
+    display: block !important;
+    width: 100%;
+  }
+}
+.box-plans #basicPlan {
+  margin-right: 5px;
+}
+.box-plans #premiumPlan,
+.box-plans #basicPlan {
+  display: inline;
+}
+/* ----- \\ this demo title ------ */
+.only-mobile {
+  display: none;
+}
+#header-info {
+  background: #f3f3f3;
+}
+#header-info div.box-info > label {
+  color: #16a89e;
+}
+#header-info div.box-info {
+  text-align: center;
+  padding: 10px 0px;
+}
+#header-info div.box-info label {
+  font-size: 14px;
+  line-height: 1.2em;
+  font-weight: lighter;
+  position: relative;
+}
+.box-header-info {
+  padding: 26px 0px 18px 0px;
+  margin: 0px;
+  float: right;
+  display: inline-block;
+}
+.box-header-info li {
+  display: inline-block;
+  list-style: none;
+  float: left;
+}
+.box-header-info li:first-child {
+  margin-right: 40px;
+}
+.box-header-info a {
+  text-decoration: underline !important;
+}
+.box-header-info label,
+.box-header-info a {
+  font-size: 14px;
+  line-height: 14px;
+  font-weight: lighter;
+  position: relative;
+}
+.box-header-info h2 {
+  top: -6px;
+  position: relative;
+  display: inline;
+  font-size: 26px;
+  line-height: 26px;
+  margin: 0 0 0 10px;
+  padding: 0;
+  text-transform: uppercase;
+}
+.box-header-info .color-gold {
+  color: #f5ac43;
+}
+.box-header-info .color-gray {
+  color: #9ea1b1;
+}
+@media (min-width: 1200px) {
+  .box-header-info {
+    display: inline-block;
+  }
+}
+@media (min-width: 992px) and (max-width: 1199px) {
+  .box-header-info {
+    display: inline-block;
+  }
+  .box-header-info li:first-child {
+    margin-right: 40px;
+  }
+  .box-header-info .color-gray {
+    display: block;
+    font-size: 14px;
+  }
+}
+@media (min-width: 768px) and (max-width: 991px) {
+  .box-header-info {
+    display: inline-block;
+  }
+  .box-header-info li:first-child {
+    margin-right: 10px;
+  }
+  .box-header-info .color-gray {
+    display: none;
+    font-size: 14px;
+  }
+  .only-mobile {
+    display: none;
+  }
+}
+@media (max-width: 767px) {
+  .box-header-info {
+    display: none;
+  }
+  .only-mobile {
+    display: block;
+  }
+}
 /* Theme */
 /*
 .navbar {

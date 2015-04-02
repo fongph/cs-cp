@@ -1,3 +1,19 @@
+{if $di.config.demo}
+<div id="header-info" class="only-mobile">
+    <div class="container">
+        <div class="box-info">
+            {if !empty($di.devicesList)}
+                {if $di.devicesList[$di.devId].os == 'android'}
+                    <label>This is <b>Android</b> and <b>iPhone (with jailbreak)</b> DEMO mode</label>
+                {else}
+                    <label>This is <b>iPhone (without jailbreak)</b> DEMO mode</label>
+                {/if}
+            {/if}    
+            
+        </div>
+    </div>
+</div>
+{/if}
 <div id="header" class="navbar-default">
     <div class="container">
         <div class="logo-holder">
@@ -13,6 +29,21 @@
             </button>
         </div>
         {/if}
+        
+        {if $di.config.demo}
+        <ul class="box-header-info">
+            {if !empty($di.devicesList)}
+                {if $di.devicesList[$di.devId].os == 'android'}
+                    <li><label class="color-gold">This is <b>Android</b> and <b>iPhone (with jailbreak)</b> DEMO mode</label></li>
+                    <li><a href="{$di.router->getRouteUrl('setDevice', ['devId'=>126])}" class="color-gray">Switch to <b>iPhone (without jailbreak)</b></a></li>
+                {else}
+                    <li><label class="color-gold">This is <b>iPhone (without jailbreak)</b> DEMO mode</label></li>
+                    <li><a href="{$di.router->getRouteUrl('setDevice', ['devId'=>125])}" class="color-gray">Switch to <b>Android</b> and <b>iPhone (with jailbreak)</b></a></li>
+                {/if}
+            {/if}
+        </ul>
+        {/if}
+        
         <div class="toggle-right">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                 <span class="sr-only">{$di.t->_('Toggle navigation')}</span>

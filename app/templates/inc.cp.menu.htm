@@ -1,5 +1,23 @@
 <ul data-role="panelbar" class="nav">
     {foreach $cpMenu as $url => $menu}
-        <li{if $menu.active} class="active"{/if}><a href="{$url}"><i class="menu-{$menu.class}"></i><span>{$menu.name}</span></a></li>
+    <li{if $menu.active} class="active"{/if}>
+        <a {if $di.config.demo}class="menu-demo-link"{/if} href="{$url}">
+            {if $di.config.demo}
+            <div id="block-icon"><i class="menu-{$menu.class}"></i></div><span>{$menu.name}&nbsp;{$menu.point}</span>
+            {else}
+                <i class="menu-{$menu.class}"></i><span>{$menu.name}&nbsp;{$menu.point}</span>
+            {/if}
+        </a>    
+    </li>
     {/foreach}
+    {if $di.config.demo}
+    <li>
+        <span>
+            <div class="box-plans">
+                <div id="basicPlan"><span class="color-green">*</span> - Basic plan</div>
+                <div id="premiumPlan"><span class="color-black">*</span> - Premium plan</div>
+            </div>
+        </span>
+    </li>
+    {/if}
 </ul>
