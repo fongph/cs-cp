@@ -80,17 +80,17 @@ abstract class BaseModuleController extends BaseController
     protected abstract function isModulePaid();
 
     protected function isDetectedPlan( $_route ) {
-        $_point = '';
+        $_point = false;
         if(isset($this -> di['config']['demo']) 
                 and $this -> di['config']['demo']) {
             if (!empty($this -> di['devicesList'])) :
                 if($this -> di['devicesList'][ $this -> di['devId'] ]['os'] == 'android' and !empty($_route)) {
                     
                     if(in_array($_route, $this -> plans['basic'])) {
-                        $_point = '<span class="color-green">*</span>';
+                        $_point = 'color-green';
                     }
                     else if(in_array($_route, $this -> plans['premium'])) {
-                        $_point = '<span class="color-black">*</span>';
+                        $_point = 'color-black';
                     }   
                     
                 }

@@ -3,7 +3,7 @@
     <li{if $menu.active} class="active"{/if}>
         <a {if $di.config.demo}class="menu-demo-link"{/if} href="{$url}">
             {if $di.config.demo}
-            <div id="block-icon"><i class="menu-{$menu.class}"></i></div><span>{$menu.name}&nbsp;{$menu.point}</span>
+            <div id="block-icon"><i class="menu-{$menu.class}"></i></div><span>{$menu.name}&nbsp;{if !empty($menu.point)}<span class="{$menu.point}">*</span>{/if}</span>
             {else}
                 <i class="menu-{$menu.class}"></i><span>{$menu.name}</span>
             {/if}
