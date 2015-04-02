@@ -425,8 +425,8 @@ if(!String.prototype.formatNum) {
 			var s = new Date(parseInt(e.start));
 			var f = new Date(parseInt(e.end));
 
-			e.start_hour = s.getHours().toString().formatNum(2) + ':' + s.getMinutes().toString().formatNum(2);
-			e.end_hour = f.getHours().toString().formatNum(2) + ':' + f.getMinutes().toString().formatNum(2);
+			e.start_hour = moment(s).format("LT");
+			e.end_hour = moment(f).format("LT");
 
 			if(e.start < start.getTime()) {
 				warn(1);
