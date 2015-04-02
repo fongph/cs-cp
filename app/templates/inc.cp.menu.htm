@@ -5,19 +5,23 @@
             {if $di.config.demo}
             <div id="block-icon"><i class="menu-{$menu.class}"></i></div><span>{$menu.name}&nbsp;{$menu.point}</span>
             {else}
-                <i class="menu-{$menu.class}"></i><span>{$menu.name}&nbsp;{$menu.point}</span>
+                <i class="menu-{$menu.class}"></i><span>{$menu.name}</span>
             {/if}
         </a>    
     </li>
     {/foreach}
     {if $di.config.demo}
-    <li>
-        <span>
-            <div class="box-plans">
-                <div id="basicPlan"><span class="color-green">*</span> - Basic plan</div>
-                <div id="premiumPlan"><span class="color-black">*</span> - Premium plan</div>
-            </div>
-        </span>
-    </li>
+        {if !empty($di.devicesList)}
+            {if $di.devicesList[$di.devId].os == 'android'}
+                <li>
+                    <span>
+                        <div class="box-plans">
+                            <div id="basicPlan"><span class="color-green">*</span> - Basic plan</div>
+                            <div id="premiumPlan"><span class="color-black">*</span> - Premium plan</div>
+                        </div>
+                    </span>
+                </li>
+            {/if}
+        {/if}        
     {/if}
 </ul>

@@ -15,13 +15,14 @@ abstract class BaseModuleController extends BaseController
     protected $plans = [
         'basic' => [
             'calls', 'sms', 'locations', 'browserBookmarks',
-            'browserHistory', 'calendar', 'contacts', 'keylogger',
-            'photos', 'videos', 'viber', 'skype', 'whatsapp'
+            'browserHistory', 'applications', 'emails',
+            'calendar', 'contacts', 'photos',
         ],
         'premium' => [
-            'facebook', 'vk', 'instagram', 'emails',
-            'applications', 'smsCommands', 'settings', 'kik'
-        ]
+            'facebook', 'keylogger', 'videos', 
+            'viber', 'skype', 'whatsapp',
+            'instagram', 'smsCommands', 'kik',
+        ] // 'settings',
     ];
     
     protected function initCP()
@@ -78,6 +79,27 @@ abstract class BaseModuleController extends BaseController
 
     protected abstract function isModulePaid();
 
+    protected function isDetectedPlan( $_route ) {
+        $_point = '';
+        if(isset($this -> di['config']['demo']) 
+                and $this -> di['config']['demo']) {
+            if (!empty($this -> di['devicesList'])) :
+                if($this -> di['devicesList'][ $this -> di['devId'] ]['os'] == 'android' and !empty($_route)) {
+                    
+                    if(in_array($_route, $this -> plans['basic'])) {
+                        $_point = '<span class="color-green">*</span>';
+                    }
+                    else if(in_array($_route, $this -> plans['premium'])) {
+                        $_point = '<span class="color-black">*</span>';
+                    }   
+                    
+                }
+            endif;
+        }
+        
+        return $_point;
+    }
+    
     protected function buildCpMenu()
     {
         $modulesModel = new Modules($this->di);
@@ -89,9 +111,7 @@ abstract class BaseModuleController extends BaseController
                     'name' => $this->di['t']->_($name),
                     'class' => $routeName,
                     'active' => $routeName == $this->module,
-                    'point' => (in_array($routeName, $this -> plans['basic'])) 
-                                ? '<span class="color-green">*</span>'
-                                : '<span class="color-black">*</span>',
+                    'point' => $this ->isDetectedPlan($routeName),
                 );
             }
         }
