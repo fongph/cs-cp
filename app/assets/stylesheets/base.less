@@ -57,3 +57,113 @@
     }
 }
 
+/* ----- \\ this demo title ------ */
+@color-gold:    #f5ac43;
+@color-gray:    #9ea1b1;
+
+.only-mobile { display: none; }
+
+#header-info {
+    background: #f3f3f3;
+}
+
+#header-info  div.box-info > label {
+    color: #16a89e;
+}
+
+#header-info div.box-info {
+    text-align: center;
+    padding: 10px 0px;
+    
+    label {
+        font-size: 14px;
+        line-height: 1.2em;
+        font-weight: lighter;
+        position: relative; 
+    }
+}
+
+.box-header-info {
+    padding: 26px 0px 18px 0px;
+    margin: 0px;
+    float: right;
+    display: inline-block;
+    
+    li {
+        display: inline-block;
+        list-style: none;
+        float: left;
+    }
+   
+    li:first-child {
+        margin-right: 40px;
+    }
+    a { text-decoration: underline !important; }
+    label, a {
+            font-size: 14px;
+            line-height: 14px;
+            font-weight: lighter;
+            position: relative;
+        }
+        
+    h2 {
+        top: -6px;
+        position: relative;
+        display: inline;
+        font-size: 26px;
+        line-height: 26px;
+        margin: 0 0 0 10px;
+        padding: 0;
+        text-transform: uppercase;
+    }
+    
+    
+    .color-gold {
+        color: @color-gold;
+    }
+    
+    .color-gray {
+        color: @color-gray;
+    }
+    
+}
+
+@media (min-width: @screen-lg-min) { 
+    .box-header-info { display: inline-block; }
+}
+@media (min-width: @screen-md-min) and (max-width: @screen-md-max) {
+    .box-header-info { 
+        display: inline-block; 
+        li:first-child {
+            margin-right: 40px;
+        }
+        
+        .color-gray { 
+            display: block;
+            font-size: 14px;
+        }
+        
+    }
+}
+@media (min-width: @screen-sm-min) and (max-width: @screen-sm-max) { 
+    .box-header-info { 
+        display: inline-block; 
+        
+        li:first-child {
+            margin-right: 10px;
+        }
+        
+        .color-gray { 
+            display: none;
+            font-size: 14px;
+        }
+        
+    }
+    .only-mobile { display: none; }
+}
+@media (max-width: @screen-xs-max) { 
+    .box-header-info { 
+        display: none; 
+    }
+    .only-mobile { display: block; }
+}
