@@ -10285,12 +10285,12 @@ div.dataTables_processing {
 }
 #cal-day-box #cal-day-panel {
   position: relative;
-  padding-left: 60px;
+  padding-left: 80px;
 }
 #cal-day-box #cal-day-panel-hour {
   position: absolute;
   width: 100%;
-  margin-left: -60px;
+  margin-left: -80px;
   z-index: -1;
 }
 #cal-day-box .day-event {
