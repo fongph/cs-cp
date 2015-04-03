@@ -47,6 +47,7 @@ class Modules
         self::SKYPE => 'isSkypeActive',
         self::WHATSAPP => 'isWhatsappActive',
         self::FACEBOOK => 'isFacebookActive',
+        self::KIK => 'isKikActive',
         self::VK => 'isVkActive',
         self::EMAILS => 'isEmailsActive',
         self::APPLICATIONS => 'isApplicationsActive',

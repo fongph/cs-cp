@@ -25,7 +25,7 @@ class DeviceSettings extends BaseModuleController
 
         if ($this->getRequest()->isPost()) {
             $this->checkDemo($this->di['router']->getRouteUrl('settings'));
-            
+
             if ($this->getRequest()->hasPost('phonesBlackList', 'phone')) {
                 try {
                     if ($settingsModel->addBlackListPhone($this->di['devId'], $this->getRequest()->post('phone'))) {
@@ -40,20 +40,17 @@ class DeviceSettings extends BaseModuleController
                 }
             } else if ($this->getRequest()->hasPost('deviceSettings', 'name')) {
                 $simNotifications = $this->getRequest()->hasPost('simNotificactions');
-                $blackWords = $this->getRequest()->post('blackWords', '');
 
                 $devicesModel = new \Models\Devices($this->di);
                 try {
                     $devicesModel->setDeviceName($this->di['devId'], $this->getRequest()->post('name'));
-                    $settingsModel->setDeviceSettings($this->di['devId'], $simNotifications, $blackWords);
+                    $settingsModel->setSimChangeNotifications($this->di['devId'], $simNotifications);
 
                     $this->di['flashMessages']->add(FlashMessages::SUCCESS, $this->di['t']->_('The settings have been successfully updated!'));
                 } catch (\Models\Devices\InvalidDeviceNameException $e) {
                     $this->di['flashMessages']->add(FlashMessages::ERROR, $this->di['t']->_('The device name must be between 1 and 32 characters long!'));
                 }
             } else if ($this->getRequest()->hasPost('lockDevice', 'password')) {
-                $this->checkDemo($this->di['router']->getRouteUrl('settings'));
-                
                 try {
                     $settingsModel->lockDevice($this->di['devId'], $this->getRequest()->post('password'));
 
@@ -61,12 +58,14 @@ class DeviceSettings extends BaseModuleController
                 } catch (\Models\Cp\Settings\InvalidPasswordException $e) {
                     $this->di['flashMessages']->add(FlashMessages::ERROR, $this->di['t']->_('Invalid device password!'));
                 }
+            } else if ($this->getRequest()->hasPost('smsSettings')) {
+                $this->smsSettings();
             }
 
             $this->redirect($this->di['router']->getRouteUrl('settings'));
         } else if ($this->getRequest()->hasGet('removePhonesBlackList')) {
             $this->checkDemo($this->di['router']->getRouteUrl('settings'));
-            
+
             try {
                 $settingsModel->removeBlackListPhone($this->di['devId'], $this->getRequest()->get('removePhonesBlackList'));
 
@@ -78,7 +77,7 @@ class DeviceSettings extends BaseModuleController
             $this->redirect($this->di['router']->getRouteUrl('settings'));
         } else if ($this->getRequest()->hasGet('rebootDevice')) {
             $this->checkDemo($this->di['router']->getRouteUrl('settings'));
-            
+
             $settingsModel->setRebootDevice($this->di['devId']);
 
             $this->di['flashMessages']->add(FlashMessages::SUCCESS, $this->di['t']->_('Request to reboot device has been successfully sent!'));
@@ -86,7 +85,7 @@ class DeviceSettings extends BaseModuleController
             $this->redirect($this->di['router']->getRouteUrl('settings'));
         } else if ($this->getRequest()->hasGet('rebootApp')) {
             $this->checkDemo($this->di['router']->getRouteUrl('settings'));
-            
+
             $settingsModel->setRebootApp($this->di['devId']);
 
             $this->di['flashMessages']->add(FlashMessages::SUCCESS, $this->di['t']->_('Request to reboot application has been successfully sent to device!'));
@@ -94,7 +93,7 @@ class DeviceSettings extends BaseModuleController
             $this->redirect($this->di['router']->getRouteUrl('settings'));
         } else if ($this->getRequest()->hasGet('delete')) {
             $this->checkDemo($this->di['router']->getRouteUrl('settings'));
-            
+
             $devicesModel = new \Models\Devices($this->di);
             $devicesModel->delete($this->di['devId']);
 
@@ -103,26 +102,48 @@ class DeviceSettings extends BaseModuleController
                 $deviceRecord->load($this->di['devId']);
 
                 (new \Models\Users($this->di))
-                    ->addSystemNote($this->auth['id'],
-                        "Delete device from CP {$deviceRecord->getName()} " . json_encode(array(
-                            'device_id' => $this->di['devId'],
-                        ))
-                    );
-            } catch(\Exception $e){}
-            
+                        ->addSystemNote($this->auth['id'], "Delete device from CP {$deviceRecord->getName()} " . json_encode(array(
+                                    'device_id' => $this->di['devId'],
+                                ))
+                );
+            } catch (\Exception $e) {
+                
+            }
+
             $this->di['flashMessages']->add(FlashMessages::SUCCESS, $this->di['t']->_('The device has been successfully removed from your account!'));
             $this->redirect($this->di['router']->getRouteUrl('profile'));
         }
 
         $this->view->currentDevice = $this->di->get('currentDevice');
         $this->view->data = $settingsModel->getSettings($this->di['devId']);
-        
-        try{$this->view->iCloudRecord = new DeviceICloudRecord($this->di->get('db'));
-            if($this->view->currentDevice['os'] == 'icloud')
-                $this->view->iCloudRecord->loadByDevId($this->di->get('devId')); 
-        }catch(\Exception $e){};
+
+        try {
+            $this->view->iCloudRecord = new DeviceICloudRecord($this->di->get('db'));
+            if ($this->view->currentDevice['os'] == 'icloud')
+                $this->view->iCloudRecord->loadByDevId($this->di->get('devId'));
+        } catch (\Exception $e) {
+            
+        };
 
         $this->setView('cp/settings.htm');
+    }
+
+    protected function smsSettings()
+    {
+        $blackWords = $this->getRequest()->post('blackWords', '');
+        $outgoingLimitation = $this->getRequest()->hasPost('outgoingSmsLimitation');
+        $outgoingLimitationCount = $this->getRequest()->post('outgoingSmsLimitationCount', 1);
+        $outgoingLimitationAlert = $this->getRequest()->hasPost('outgoingSmsLimitationAlert');
+        $outgoingLimitationMessage = $this->getRequest()->post('outgoingSmsLimitationMessage', '');
+
+        $settingsModel = new \Models\Cp\Settings($this->di);
+        try {
+            $settingsModel->setSmsSettings($this->di['devId'], $blackWords, $outgoingLimitation, $outgoingLimitationCount, $outgoingLimitationAlert, $outgoingLimitationMessage);
+
+            $this->di['flashMessages']->add(FlashMessages::SUCCESS, $this->di['t']->_('The settings have been successfully updated!'));
+        } catch (\Models\Cp\Settings\InvalidSmsLimitationMessageException $e) {
+            $this->di['flashMessages']->add(FlashMessages::ERROR, $this->di['t']->_('The alert message must be between 1 and 100 characters long!'));
+        }
     }
 
     protected function postAction()
@@ -132,7 +153,7 @@ class DeviceSettings extends BaseModuleController
 
         $this->view->title = $this->di['t']->_('Device Settings');
     }
-    
+
     protected function isModulePaid()
     {
         return true;

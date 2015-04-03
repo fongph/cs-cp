@@ -1,3 +1,8 @@
+<style type='text/css'>
+    #smsCountLimitationValueBlock, #smsCountLimitationMessageBlock {
+        padding-left: 20px;
+    }
+</style>
 <div>
     <h1 class="text-center">{$title}</h1>
 
@@ -6,30 +11,30 @@
             <div class="col-lg-12">
                 {insert "inc.flashMessages.htm"}
             </div>
-            
+
             <div class="col-lg-6 col-md-6">
                 {if $data.isBlackListAvailable}
-                    <div class="panel panel-default">
-                        <div class="panel-heading">{if $data.blockSMSActive}{$di.t->_('Calls & SMS blocking')}{else}{$di.t->_('Blacklist Phone numbers')}{/if}<span class="blue-asterisk">*</span></div>
-                        <div class="panel-body text-center">
-                            {if count($data.blackListPhones)}
-                                <ul class="list-group">
-                                    {foreach $data.blackListPhones as $phone}
-                                        <li class="list-group-item">{$phone} <a href="{$di.router->getRouteUrl('settings')}?removePhonesBlackList={$phone|escape:'url'}" class="close" aria-hidden="true">&times;</a></li>
-                                    {/foreach}
-                                </ul>
-                            {/if}
-                            <form role="form" action="" class="form-inline" method="post">
-                                <div class="form-group">
-                                    <label>{$di.t->_('Phone Number')}</label>
-                                    <input type="text" name="phone" value="" class="form-control" placeholder="+12345676789" />
-                                </div>
-                                <div class="form-group">
-                                    <button type="submit" class="btn btn-danger" name="phonesBlackList">{$di.t->_('Add')}</button>
-                                </div>
-                            </form>
-                        </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">{if $data.blockSMSActive}{$di.t->_('Calls & SMS blocking by number')}{else}{$di.t->_('Calls blocking by number')}{/if}<span class="blue-asterisk">*</span></div>
+                    <div class="panel-body text-center">
+                        {if count($data.blackListPhones)}
+                        <ul class="list-group">
+                            {foreach $data.blackListPhones as $phone}
+                            <li class="list-group-item">{$phone} <a href="{$di.router->getRouteUrl('settings')}?removePhonesBlackList={$phone|escape:'url'}" class="close" aria-hidden="true">&times;</a></li>
+                            {/foreach}
+                        </ul>
+                        {/if}
+                        <form role="form" action="" class="form-inline" method="post">
+                            <div class="form-group">
+                                <label>{$di.t->_('Phone Number')}</label>
+                                <input type="text" name="phone" value="" class="form-control" placeholder="+12345676789" />
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-danger" name="phonesBlackList">{$di.t->_('Add')}</button>
+                            </div>
+                        </form>
                     </div>
+                </div>
                 {/if}
                 <div class="panel panel-default">
                     <div class="panel-body">
@@ -38,53 +43,91 @@
                                 <label>{$di.t->_('Device Name')}</label>
                                 <input type="text" name="name" value="{$di.currentDevice.name}" class="form-control">
                             </div>
-                            {if $data.blockSMSActive}
-                            <div class="form-group">
-                                <label>{$di.t->_('Blacklist words for SMS')}<span class="blue-asterisk">*</span></label>
-                                <textarea name="blackWords" class="form-control" placeholder="{$di.t->_('Enter the words (separated by comma), by which incoming SMS will be blocked')}">{$data.settings.bl_words}</textarea>
-                            </div>
-                            {/if}
                             {if $data.isSimNotificationAvailable}
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox" name="simNotificactions"{if $data.settings.sim_notification} checked{/if} /> {$di.t->_('Receive SIM change notifications')}<span class="blue-asterisk">*</span>
-                                    </label>
-                                </div>
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" name="simNotificactions"{if $data.settings.sim_notification} checked{/if} /> {$di.t->_('Receive SIM change notifications')}<span class="blue-asterisk">*</span>
+                                </label>
+                            </div>
                             {/if}
                             <button type="submit" name="deviceSettings" class="btn btn-primary">{$di.t->_('Update')}</button>
                         </form>
                     </div>
                 </div>
+                {if $data.blockSMSActive || $data.isOutgoingSmsLimitationsAvailable}
+                <div class="panel panel-default">
+                    <div class="panel-heading">{$di.t->_('SMS Limiting')}<span class="blue-asterisk">*</span></div>
+                    <div class="panel-body">
+                        <form action="" method="post">
+                        {if $data.blockSMSActive}
+                        <div class="form-group">
+                            <label>{$di.t->_('Blacklist words for SMS')}</label>
+                            <textarea name="blackWords" class="form-control" placeholder="{$di.t->_('Enter the words (separated by comma), by which incoming SMS will be blocked')}">{$data.settings.bl_words}</textarea>
+                        </div>
+                        {/if}
+                        {if $data.isOutgoingSmsLimitationsAvailable}
+                            {if !$data.isOutgoingSmsLimitationsActive}
+                                <p class="help-block">
+                                    <b>{$di.t->_('Outgoing SMS limiting requires activated Keylogger. You may activate it now %skeylogger%s.', ['<a href="' ~ $di->getRouter()->getRouteUri('keylogger') ~ '">', '</a>'])}</b>
+                                </p>
+                            {else}
+                                <div class="checkbox">
+                                    <label for="outgoingSmsLimitation">
+                                        <input type="checkbox" name="outgoingSmsLimitation"{if $data.settings.outgoing_sms_limitation} checked{/if} id="outgoingSmsLimitation" /> <b>{$di.t->_('Set daily outgoing SMS Limit')}</b>
+                                    </label>
+                                </div>
+                                <div class="form-group{if !$data.settings.outgoing_sms_limitation} hidden{/if}" id="smsCountLimitationValueBlock">
+                                    <div style="width: 120px;">
+                                        <input id="spinbox" type="text" value="{$data.settings.outgoing_sms_limitation_count}" name="outgoingSmsLimitationCount" />
+                                    </div>
+                                    <div class="checkbox">
+                                        <label for="outgoingSmsLimitationAlert">
+                                            <input type="checkbox" name="outgoingSmsLimitationAlert"{if $data.settings.outgoing_sms_limitation_alert} checked{/if} id="outgoingSmsLimitationAlert" /> {$di.t->_('Show an alert to a user when the limit is reached.')}
+                                        </label>
+                                    </div>
+                                    <div{if !$data.settings.outgoing_sms_limitation_alert} class="hidden"{/if} id="smsCountLimitationMessageBlock">
+                                        <textarea name="outgoingSmsLimitationMessage" class="form-control">{$data.settings.outgoing_sms_limitation_message}</textarea>
+                                    </div>
+                                </div>
+                            {/if}
+                        {/if}
+                        {if $data.blockSMSActive || $data.isOutgoingSmsLimitationsActive}
+                            <button type="submit" name="smsSettings" class="btn btn-primary">{$di.t->_('Update')}</button>
+                        {/if}
+                        </form>
+                    </div>
+                </div>
+                {/if}
             </div>
             <div class="col-lg-6 col-md-6">
                 {if $di.currentDevice.os == 'icloud'}
-                    {if isset($iCloudRecord) && $iCloudRecord->getId()}
-                        <div class="panel panel-default">
-                            <div class="panel-body">
-                                <div class="icloud-status">
-                                    <strong>{$di.t->_('Device status')}:</strong>
-                                    {if $iCloudRecord->getProcessing()}
-                                        {$di.t->_('Awaiting New Data Upload')}
-                                    {elseif $iCloudRecord->getLastError() == 1}
-                                        {$di.t->_('iCloud Authorization Error. Please %schange the password%s', ['<a href="' ~ $di->getRouter()->getRouteUri("profileICloudPasswordReset") ~ '?iCloudId=' ~ $iCloudRecord->getId() ~ '">', '</a>'])} 
-                                    {elseif $iCloudRecord->getLastError()}
-                                        {$di.t->_('New Data Upload Error. Please contact Customer %sSupport%s', ['<a href="mailto:support@pumpic.com">', '</a>'])}
-                                    {else}
-                                        {$di.t->_('Awaiting iCloud Backup')}
-                                    {/if}
-                                </div>
-                            </div>
-                        </div>
-                    {/if}
-                {else}
-                    <div class="panel panel-default">
-                        <div class="panel-body">
-                            <div class="device-status">
-                                <div class="name">{$di.t->_('Device status')}:</div>
-                                <div class="value{if $di.currentDevice.online} {if $di.currentDevice.network=='wifi'}wifi{else}mobile{/if}{else} offline{/if}"></div>
-                            </div>
+                {if isset($iCloudRecord) && $iCloudRecord->getId()}
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="icloud-status">
+                            <strong>{$di.t->_('Device status')}:</strong>
+                            {if $iCloudRecord->getProcessing()}
+                            {$di.t->_('Awaiting New Data Upload')}
+                            {elseif $iCloudRecord->getLastError() == 1}
+                            {$di.t->_('iCloud Authorization Error. Please %schange the password%s', ['<a href="' ~ $di->getRouter()->getRouteUri("profileICloudPasswordReset") ~ '?iCloudId=' ~ $iCloudRecord->getId() ~ '">', '</a>'])} 
+                            {elseif $iCloudRecord->getLastError()}
+                            {$di.t->_('New Data Upload Error. Please contact Customer %sSupport%s', ['<a href="mailto:support@pumpic.com">', '</a>'])}
+                            {else}
+                            {$di.t->_('Awaiting iCloud Backup')}
+                            {/if}
                         </div>
                     </div>
+                </div>
+                {/if}
+                {else}
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="device-status">
+                            <div class="name">{$di.t->_('Device status')}:</div>
+                            <div class="value{if $di.currentDevice.online} {if $di.currentDevice.network=='wifi'}wifi{else}mobile{/if}{else} offline{/if}"></div>
+                        </div>
+                    </div>
+                </div>
                 {/if}
                 {*
                 <div class="panel panel-default">
@@ -141,30 +184,46 @@
         </div>
     </div>
     {if $data.isDeviceCommandsAvailable}
-        <p class="text-info"><span class="blue-asterisk">*</span> {$di.t->_('Command activation will take up to 20 min. In case the target phone has additional software to track calls or SMS, blocking may not work properly.')}</p>    
+        <p class="text-info"><span class="blue-asterisk">*</span> {$di.t->_('Command activation will take up to 20 min. In case the target phone has additional software to track calls or SMS, blocking may not work properly.')}</p>
     {/if}
 </div>
 <script>
-    $(document).ready(function() {
-        $('#deleteDevice').click(function() {
+    $(document).ready(function () {
+        $('#deleteDevice').click(function () {
             if (confirm("{$di.t->_('This action cannot be undone! All the data will be deleted from the account permanently!\nDelete Device?')}")) {
                 window.location = "{$di.router->getRouteUrl('settings')}?delete";
             }
         });
 
-        $('#rebootDevice').click(function() {
+        $('#rebootDevice').click(function () {
             if (confirm("{$di.t->_('Reboot Device?')}")) {
                 window.location = "{$di.router->getRouteUrl('settings')}?rebootDevice";
             }
         });
-        
-        $('#rebootApp').click(function() {
+
+        $('#rebootApp').click(function () {
             if (confirm("{$di.t->_('Reboot Application?')}")) {
                 window.location = "{$di.router->getRouteUrl('settings')}?rebootApp";
             }
         });
 
         $("#password").mask("9999");
+        
+        $("#spinbox").TouchSpin({
+            min: 1,
+            max: 100,
+            step: 1,
+            boostat: 2,
+            maxboostedstep: 5
+        });
+
+        $('#outgoingSmsLimitation').change(function(){
+            $("#smsCountLimitationValueBlock").toggleClass('hidden');
+        });
+        
+        $('#outgoingSmsLimitationAlert').change(function(){
+            $("#smsCountLimitationMessageBlock").toggleClass('hidden');
+        });
 
         /*      
          $('#update_button').click(function() {

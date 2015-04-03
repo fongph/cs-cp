@@ -24,14 +24,13 @@ class Sms extends BaseModuleController {
 
             $data = $smsModel->getDataTableData(
                     $this->di['devId'], 
-                    $dataTableRequest->buildResult(array('timeFrom', 'timeTo', 'deleted'))
+                    $dataTableRequest->buildResult(array('timeFrom', 'timeTo'))
             );
             $this->checkDisplayLength($dataTableRequest->getDisplayLength());
             $this->makeJSONResponse($data);
         }
 
         $this->view->hasRecords = $smsModel->hasRecords($this->di['devId']);
-        $this->view->isDeletedAvailable = false; //DeviceOptions::isDeletedDataAvailable($this->di['currentDevice']['os']);
         if($this->di['currentDevice']['os'] != 'icloud'){
             $this->view->customUtcOffset = 0;
         }
