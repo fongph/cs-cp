@@ -35,7 +35,11 @@ class Sms extends BaseModuleController {
             $this->view->customUtcOffset = 0;
         }
 
-        $this->setView('cp/sms.htm');
+        if (DeviceOptions::isDeletedDataAvailable($this->di['currentDevice']['os'])) {
+            $this->setView('cp/sms/indexWithStatuses.htm');
+        } else {
+            $this->setView('cp/sms/index.htm');
+        }
     }
 
     public function listAction() {
@@ -51,7 +55,7 @@ class Sms extends BaseModuleController {
             $this->redirect($this->di['router']->getRouteUrl('sms'));
         }
 
-        $this->setView('cp/smsList.htm');
+        $this->setView('cp/sms/list.htm');
     }
 
     protected function postAction() {
