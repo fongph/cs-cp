@@ -52,6 +52,7 @@ $default = array(
         Modules::SKYPE => 'Skype Tracking',
         Modules::WHATSAPP => 'Whatsapp Tracking',
         Modules::FACEBOOK => 'Facebook Messages',
+        Modules::KIK => 'Kik Messages',
         Modules::VK => 'VK Messages',
         Modules::INSTAGRAM => 'Instagram Tracking',
         Modules::EMAILS => 'View Emails',
