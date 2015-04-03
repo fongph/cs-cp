@@ -68,7 +68,7 @@ class Index extends BaseController
         }
 
         $this->setView('index/login.htm');
-        $this->view->title = $this->di['t']->_('Login');
+        $this->view->title = $this->di['t']->_('LoginTitle');
     }
 
     public function loginRedirect()
