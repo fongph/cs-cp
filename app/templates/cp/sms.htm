@@ -9,23 +9,13 @@
     {insert "inc.flashMessages.htm"}
 
     {if $hasRecords}
-        <div class="row">
-            <div class="col-lg-6 col-md-6 col-sm-6 pull-right">
-                <div class="daterangepickerWrapper">
-                    <div id="reportrange" class="btn btn-default pull-right">
-                        <i class="fa fa-calendar fa-lg"></i>
-                        <span></span>
-                        <b class="caret"></b>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-6 col-md-6 col-sm-6 pull-left" {if !$isDeletedAvailable}style="display: none;"{/if}>
-                <ul class="nav nav-pills">
-                    <li><a href="#active" data-toggle="tab">{$di.t->_('Active')}</a></li>
-                    <li><a href="#deleted" data-toggle="tab">{$di.t->_('Deleted')}</a></li>
-                </ul>
-            </div>
+    <div class="daterangepickerWrapper">
+        <div id="reportrange" class="btn btn-default pull-right">
+            <i class="fa fa-calendar fa-lg"></i>
+            <span></span>
+            <b class="caret"></b>
         </div>
+    </div>
 
     <div class="table-container">
         <table class="dataTable" id="datatable" aria-describedby="datatables_info">
@@ -36,15 +26,16 @@
                     <th>{$di.t->_('Number')}</th>
                     <th>{$di.t->_('Name')}</th>
                     <th>{$di.t->_('Message')}</th>
+                    <th>{$di.t->_('Status')}</th>
                 </tr>
             </thead>
         </table>
     </div>
-    
     <script type="text/javascript">
         $(document).ready(function() {
+            moment.lang('{$di.t->getLocale()}');
+
             var sms = {
-                url: '{$di.router->getRouteUrl("sms")}',
                 startDate: moment().subtract('days', 29).startOf('day'),
                 endDate: moment().endOf('day'),
                 table: null,
@@ -58,34 +49,8 @@
                     "{$di.t->_('This Month')}": [moment().startOf('month'), moment().endOf('month')],
                     "{$di.t->_('Last Month')}": [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
                 },
-                getSourceUrl: function() {
-                    if (window.location.hash === '#deleted') {
-                        return this.url + '?deleted=1&';
-                    } else {
-                        return this.url + '?deleted=0&';
-                    }
-                },
-                reloadTable: function(url) {
-                    if (this.table) {
-                        this.table.fnReloadAjax(url);
-                    }
-                },
-                setTab: function(tab) {
-                    if (this.table) {
-                        if (this.tab !== tab) {
-                            this.reloadTable();
-                        }
-                    } else {
-                        this.init();
-                    }
-                    this.tab = tab;
-                },
                 setRange: function(start, end) {
-                    if (start && end && start.isValid() && end.isValid()) {
-
-                        this.startDate = moment(start);
-                        this.endDate = moment(end);
-                        
+                    if (start.isValid() && start.isValid()) {
                         $('#reportrange span').html(start.format('LL') + ' - ' + end.format('LL'));
 
                         _.find(this.selectRanges, function(period, name) {
@@ -96,13 +61,16 @@
                             return false;
                         });
 
-                        return this.getSourceUrl() + $.param({
+                        return '{$di.router->getRouteUrl("sms")}?' + $.param({
                             timeFrom: moment(start).unix(),
                             timeTo: moment(end).unix()
                         });
                     } else {
                         return this.setRange(this.startDate, this.endDate);
                     }
+                },
+                reloadTable: function(url) {
+                    this.table.fnReloadAjax(url);
                 },
                 init: function() {
                     var table = $('#datatable').dataTable({
@@ -127,7 +95,7 @@
                                 mData: 'timestamp',
                                 mRender: function(value, type, data) {
                                     return sms.messageLinkTemplate({
-                                        date: moment(data.timestamp * 1000){if isset($customUtcOffset)}.zone({$customUtcOffset}){/if}.format('lll'),
+                                        date: moment(value * 1000){if isset($customUtcOffset)}.zone({$customUtcOffset}){/if}.format('lll'),
                                         phone: encodeURIComponent(data.number),
                                         message: encodeURIComponent(data.timestamp)
                                     });
@@ -171,11 +139,21 @@
                                         return value;
                                     }
                                     return '';
-                                },
-                                fnCreatedCell: function(td, text, data) {
+                                }
+                            },
+                            {
+                                bUseRendered: false,
+                                sWidth: '100px',
+                                mData: 'deleted',
+                                bSortable: false,
+                                mRender: function(value, type, data) {
                                     if (data.blocked > 0) {
-                                        $(td).closest('tr').addClass('text-danger');
+                                        return '<span class="text-danger">{$di['t']->_('Blocked')}</span>';
+                                    } else if (data.deleted > 0) {
+                                        return '<span class="text-warning">{$di['t']->_('Deleted')}</span>';
                                     }
+                                    
+                                    return '<span class="text-success">{$di['t']->_('Normal')}</span>';
                                 }
                             }
                         ],
@@ -215,26 +193,11 @@
                 }
             };
 
-            $('.nav-pills a').on('shown.bs.tab', function(e) {
-                window.location.hash = e.target.hash;
-                sms.setTab(e.target.hash);
-                window.scrollTo(0, 0);
-            });
-
-            var url = document.location.toString();
-            if (url.match('#')) {
-                $('.nav-pills a[href=#' + url.split('#')[1] + ']').tab('show');
-            } else {
-                $('.nav-pills a[href=#active]').tab('show');
-            }
+            sms.init();
         });
     </script>
     {else}
     <h3>{$di.t->_('Waiting for data... Why can the data be unavailable?')}</h3>
-        {if $di.currentDevice.os=='icloud'}
-            {include "content/{$di.t->getLocale()}/noDataICloud.html"}
-        {else}
-            {include "content/{$di.t->getLocale()}/noData.html"}
-        {/if}
+    {include "content/{$di.t->getLocale()}/noData.html"}
     {/if}
 </div>
