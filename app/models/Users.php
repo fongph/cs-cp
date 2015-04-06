@@ -162,7 +162,7 @@ class Users extends Model
                 content = {$message}");
     }
     
-    public static function setAuthCookie() {
+    public function setAuthCookie() {
         setcookie('s', 1, time() + 3600 * 6, '/', $this->di['config']['cookieDomain']);
     }
     

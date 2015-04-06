@@ -47,7 +47,7 @@ class Index extends BaseController
 
                 try {
                     if ($users->login($email, $password, $remember)) {
-                        \Models\Users::setAuthCookie();
+                        $users->setAuthCookie();
                         $this->loginRedirect();
                     }
                 } catch (\CS\Users\UserNotFoundException $e) {

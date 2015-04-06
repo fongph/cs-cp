@@ -18,7 +18,9 @@ class BaseController extends Controller
 
             if (!$this->di['config']['demo'] && !$this->getRequest()->hasCookie('s') && !isset($this->auth['admin_id'])) {
                 $this->di['usersManager']->logAuth($this->auth['id']);
-                \Models\Users::setAuthCookie();
+                
+                $usersModel = new \Models\Users($this->di);
+                $usersModel->setAuthCookie();
             }
         }
 
