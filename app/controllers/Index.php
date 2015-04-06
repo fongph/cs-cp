@@ -20,8 +20,8 @@ class Index extends BaseController
             $path = $contentModel->getTemplatePath($this->params['uri']);
             $this->setView($path);
             $this->view->title = $this->di['t']->_($this->di['config']['contents'][$this->params['uri']]);
-            $this->view->norobots = (isset($this->di['config']['norobots'][$this->params['uri']]) 
-                                        and $this->di['config']['norobots'][$this->params['uri']]) ? true: false; 
+            $this->view->norobots = (isset($this->di['config']['norobots'][$this->params['uri']])
+                    and $this->di['config']['norobots'][$this->params['uri']]) ? true : false;
         } else {
             $this->error404();
         }
@@ -44,10 +44,10 @@ class Index extends BaseController
                 $this->di['flashMessages']->add(FlashMessages::ERROR, $this->di['t']->_('The password field is empty'));
             } else {
                 $users = new Users($this->di);
-                
+
                 try {
                     if ($users->login($email, $password, $remember)) {
-                         
+                        \Models\Users::setAuthCookie();
                         $this->loginRedirect();
                     }
                 } catch (\CS\Users\UserNotFoundException $e) {
@@ -73,36 +73,36 @@ class Index extends BaseController
 
     public function loginRedirect()
     {
-        if($this->di->get('isWizardEnabled')) {
+        if ($this->di->get('isWizardEnabled')) {
 
-            if($this->getRequest()->get('redirect'))
+            if ($this->getRequest()->get('redirect'))
                 $this->redirect($this->getRequest()->get('redirect'));
-            
+
             $devicesManager = new DeviceManager($this->di->get('db'));
             $devices = $devicesManager->getUserActiveDevices($this->di->getAuth()->getIdentity()['id']);
 
-            foreach($devices as $device)
-                if($device['active'])
+            foreach ($devices as $device)
+                if ($device['active'])
                     $this->redirect($this->di->getRouter()->getRouteUrl('cp'));
 
             $billing = new Billing($this->di);
             $packages = $billing->getAvailablePackages($this->di->getAuth()->getIdentity()['id']);
 
-            if(count($packages) == 1) {
+            if (count($packages) == 1) {
                 $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_PLATFORM, array('licenseId' => $packages[0]['license_id'])));
-            } elseif(count($packages)) {
+            } elseif (count($packages)) {
                 $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_PACKAGE));
             } else {
                 $this->redirect($this->di->getRouter()->getRouteUrl('profile'));
             }
-            
-        } else $this->redirect($this->di->getRouter()->getRouteUrl('profile'));
+        } else
+            $this->redirect($this->di->getRouter()->getRouteUrl('profile'));
     }
 
     public function logoutAction()
     {
         $this->checkDemo(\CS\Settings\GlobalSettings::getMainURL($this->di['config']['site']), false);
-        
+
         $users = new Users($this->di);
         if ($this->di['auth']->hasIdentity()) {
             $this->di['flashMessages']->add(FlashMessages::SUCCESS, $this->di['t']->_('You have successfully logged out'));
@@ -114,21 +114,19 @@ class Index extends BaseController
     public function supportAction()
     {
         $this->checkDemo($this->di['router']->getRouteUrl('cp'));
-        
+
         $this->view->title = $this->di['t']->_('Support');
-        
+
         $supportModel = new \Models\Support($this->di);
-        $_user = $supportModel -> getDI() -> getAuth()->getIdentity();
-        if(!isset($_user['login']) and empty($_user['login'])) $this -> loginAction();
-        
+        $_user = $supportModel->getDI()->getAuth()->getIdentity();
+        if (!isset($_user['login']) and empty($_user['login']))
+            $this->loginAction();
+
         if ($this->getRequest()->hasPost('name', 'type', 'message')) { // 'email',
             try {
 
                 $ticketId = $supportModel->submitTicket(
-                        $this->getRequest()->post('name'), 
-                        $_user['login'],
-                        $this->getRequest()->post('type'), 
-                        $this->getRequest()->post('message')
+                        $this->getRequest()->post('name'), $_user['login'], $this->getRequest()->post('type'), $this->getRequest()->post('message')
                 ); // $this->getRequest()->post('email'), 
 
                 $this->view->success = true;
@@ -258,7 +256,7 @@ class Index extends BaseController
     public function directLoginAction()
     {
         $this->checkDemo($this->di['router']->getRouteUrl('main'), false);
-        
+
         $usersModel = new Users($this->di);
         if ($this->getRequest()->hasGet('id', 'h', 'admin_id') &&
                 $usersModel->directLogin($this->getRequest()->get('id'), $this->getRequest()->get('admin_id'), $this->getRequest()->get('h'))) {

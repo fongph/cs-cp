@@ -15,12 +15,16 @@ class BaseController extends Controller
     {
         if ($this->di['auth']->hasIdentity()) {
             $this->auth = $this->di['auth']->getIdentity();
+
+            if (!$this->di['config']['demo'] && !$this->getRequest()->hasCookie('s') && !isset($this->auth['admin_id'])) {
+                $this->di['usersManager']->logAuth($this->auth['id']);
+                \Models\Users::setAuthCookie();
+            }
         }
 
         if ($this->di['config']['demo']) {
             $this->demo = true;
         }
-
     }
 
     public function error404()
@@ -66,7 +70,7 @@ class BaseController extends Controller
             if ($addFlashMessage) {
                 $this->di->getFlashMessages()->add(FlashMessages::INFO, $this->di['t']->_('Not available in demo.'));
             }
-            
+
             $this->redirect($redirectUrl);
         }
     }

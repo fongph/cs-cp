@@ -225,6 +225,33 @@ $di->setShared('queueClient', function () use ($config) {
     }
 });
 
+$di->setShared('usersNotesProcessor', function() use ($di) {
+    $auth = $di['auth'];
+
+    if (!$auth->hasIdentity()) {
+        return new CS\Users\UsersNotes($di['db']);
+    }
+
+    $authData = $auth->getIdentity();
+
+    //@todo Pass adminId to UsersNotes if user has logged as administrator
+
+    return new CS\Users\UsersNotes($di['db'], $authData['id']);
+});
+
+$di->setShared('usersManager', function() use ($di) {
+    $usersManager = new CS\Users\UsersManager($di['db']);
+
+    return $usersManager->setUsersNotesProcessor($di['usersNotesProcessor']);
+});
+
+// 
+//$di->setShared('devicesManager', function() use ($di) {
+//    $devicesManager = new CS\Devices\Manager($di['db']);
+//
+//    return $devicesManager->setUsersNotesProcessor($di['usersNotesProcessor']);
+//});
+
 $di->set('isTestUser', function($id) use($config) {
 
     if ($config['environment'] == 'production') {
