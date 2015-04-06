@@ -3,13 +3,13 @@
 
     {insert "inc.flashMessages.htm"}
     
-    {if !isset($success)}
+    {* if !isset($success) *}
     <p class="text-center">{$di.t->_('Contact us with any question you may have!')}</p>
     <form role="form" method="post">
-        <div class="form-group">
+        {*<div class="form-group">
             <label for="name">{$di.t->_('Name')}</label>
             <input type="text" name="name" class="form-control" id="name" placeholder="{$di.t->_('Name')}">
-        </div>
+        </div>*}
         {*<div class="form-group">
             <label for="email">{$di.t->_('Email address')}</label>
             <input type="text" name="email" class="form-control" id="email" placeholder="{$di.t->_('Email address')}">
@@ -30,5 +30,5 @@
             <button type="submit" class="btn btn-primary">{$di.t->_('Submit Ticket')}</button>
         </div>
     </form>
-    {/if}
+    {* /if *}
 </div>

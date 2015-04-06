@@ -119,17 +119,25 @@ class Index extends BaseController
         
         $supportModel = new \Models\Support($this->di);
         $_user = $supportModel -> getDI() -> getAuth()->getIdentity();
-        if(!isset($_user['login']) and empty($_user['login'])) $this -> loginAction();
+        if(!isset($_user['id']) 
+                || 
+          (!isset($_user['login']) and empty($_user['login']))) 
+                $this -> loginAction();
         
-        if ($this->getRequest()->hasPost('name', 'type', 'message')) { // 'email',
+        $um = new UsersManager( $this -> di -> get('db') );
+        $info_user = $um -> getUser( (int)$_user['id'] );
+        
+        $userName = (!empty($info_user -> getName())) ? $info_user -> getName() : ' '; 
+        
+        if ($this->getRequest()->hasPost('type', 'message')) { // 'email', 'name',
             try {
 
-                $ticketId = $supportModel->submitTicket(
-                        $this->getRequest()->post('name'), 
+               $ticketId = $supportModel->submitTicket(
+                        $userName,
                         $_user['login'],
                         $this->getRequest()->post('type'), 
                         $this->getRequest()->post('message')
-                ); // $this->getRequest()->post('email'), 
+                ); // $this->getRequest()->post('email'),  $this->getRequest()->post('name'), 
 
                 $this->view->success = true;
 
