@@ -87,13 +87,13 @@ class Users extends Model
         return $userRecord->save();
     }
 
-    public function directLogin($id, $hash)
+    public function directLogin($userId, $adminId, $hash)
     {
         $usersManager = $this->getUsersManager();
 
         try {
             $data = $usersManager->getDirectLoginUserData(
-                    $this->di['config']['site'], $id, $hash, GlobalSettings::getDirectLoginSalt($this->di['config']['site'])
+                    $this->di['config']['site'], $userId, $adminId, $hash, GlobalSettings::getDirectLoginSalt($this->di['config']['site'])
             );
         } catch (\CS\Users\DirectLoginException $e) {
             $this->di['logger']->addAlert("Direct Login Error: " . $e->getMessage());

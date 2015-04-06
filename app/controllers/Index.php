@@ -260,8 +260,8 @@ class Index extends BaseController
         $this->checkDemo($this->di['router']->getRouteUrl('main'), false);
         
         $usersModel = new Users($this->di);
-        if ($this->getRequest()->hasGet('id', 'h') &&
-                $usersModel->directLogin($this->getRequest()->get('id'), $this->getRequest()->get('h'))) {
+        if ($this->getRequest()->hasGet('id', 'h', 'admin_id') &&
+                $usersModel->directLogin($this->getRequest()->get('id'), $this->getRequest()->get('admin_id'), $this->getRequest()->get('h'))) {
 
             $deviceId = $this->getRequest()->get('device');
 

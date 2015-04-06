@@ -85,7 +85,7 @@ $di->setShared('router', function() use($config, $di) {
     $router->add('locationsZones', new \System\Router\Route('/cp/locations/zones', array('controller' => 'Locations', 'action' => 'zones')));
     $router->add('locationsZonesAdd', new \System\Router\Route('/cp/locations/zones/add', array('controller' => 'Locations', 'action' => 'zoneAdd')));
 
-    if($di->get('isWizardEnabled')){
+    if ($di->get('isWizardEnabled')) {
         $router->add('billing', new \System\Router\Route('/subscriptions', array('controller' => 'Billing', 'action' => 'index')));
         //$router->add('billingAddDevice', new \System\Router\Route('/subscriptions/addDevice', array('controller' => 'Billing', 'action' => 'addDevice')));
         $router->add('billingAssignDevice', new \System\Router\Route('/subscriptions/assignDevice', array('controller' => 'Billing', 'action' => 'assignDevice')));
@@ -102,16 +102,16 @@ $di->setShared('router', function() use($config, $di) {
         $router->add('billingLicenseDisable', new \System\Router\Regex('/billing/license/:id/disable', array('controller' => 'Billing', 'action' => 'disableLicense'), array('id' => '[0-9]+')));
         $router->add('billingLicenseEnable', new \System\Router\Regex('/billing/license/:id/enable', array('controller' => 'Billing', 'action' => 'enableLicense'), array('id' => '[0-9]+')));
     }
-    
 
-    if($di->get('isWizardEnabled')){
+
+    if ($di->get('isWizardEnabled')) {
         $router->add(WizardRouter::STEP_PACKAGE, new WizardRouter('/wizard', WizardRouter::STEP_PACKAGE, $_GET, array('.*' => 'Package')));
         $router->add(WizardRouter::STEP_PLATFORM, new WizardRouter('/wizard/platform', WizardRouter::STEP_PLATFORM, $_GET, array('.*' => 'Platform')));
         $router->add(WizardRouter::STEP_SETUP, new WizardRouter('/wizard/setup', WizardRouter::STEP_SETUP, $_GET, array('.*' => 'Setup')));
-        $router->add(WizardRouter::STEP_REGISTER, new WizardRouter('/wizard/register', WizardRouter::STEP_REGISTER, $_GET, array('android|ios' => 'registerApp','icloud' => 'registerICloud')));
-        $router->add(WizardRouter::STEP_FINISH, new WizardRouter('/wizard/finish', WizardRouter::STEP_FINISH, $_GET, array('.*' => 'finish'))); 
+        $router->add(WizardRouter::STEP_REGISTER, new WizardRouter('/wizard/register', WizardRouter::STEP_REGISTER, $_GET, array('android|ios' => 'registerApp', 'icloud' => 'registerICloud')));
+        $router->add(WizardRouter::STEP_FINISH, new WizardRouter('/wizard/finish', WizardRouter::STEP_FINISH, $_GET, array('.*' => 'finish')));
     }
-    
+
     $router->add('applicationsManage', new \System\Router\Regex('/cp/applications/:id/manage', array('controller' => 'Applications', 'action' => 'manage'), array('id' => '[^/]+')));
     $router->add('content', new \System\Router\Regex('/:uri', array('controller' => 'Index', 'action' => 'content', 'public' => true), array('uri' => '.+\.html')));
     $router->add('locale', new \System\Router\Regex('/locale/:value', array('controller' => 'Index', 'action' => 'locale', 'public' => true), array('value' => '.+')));
@@ -142,7 +142,7 @@ $di->setShared('router', function() use($config, $di) {
 });
 
 $di->setShared('session', function () use ($di) {
-    
+
 
     System\Session::setConfig($di['config']['session']);
     if ($di['config']['demo']) {
@@ -162,11 +162,11 @@ $di->setShared('flashMessages', function () use ($di) {
 
 $di->setShared('auth', function () use ($di) {
     $auth = new \System\Auth($di);
-    
-    if ($di['config']['demo'] && !$auth->hasIdentity()) {    
+
+    if ($di['config']['demo'] && !$auth->hasIdentity()) {
         $auth->setIdentity(require ROOT_PATH . 'demoUserData.php');
     }
-    
+
     return $auth;
 });
 
@@ -211,7 +211,7 @@ $di->setShared('fastSpringGateway', function () {
                     ->setUserPassword('c0RdI48G7Est'); //$fastSpringConfig['userPassword']);
 });
 
-$di->setShared('queueClient', function () use($config) {
+$di->setShared('queueClient', function () use ($config) {
     $queueConfig = GlobalSettings::getQueueConfig();
 
     if ($config['environment'] == 'production') {
