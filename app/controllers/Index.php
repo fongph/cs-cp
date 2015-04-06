@@ -128,7 +128,7 @@ class Index extends BaseController
         $um = new UsersManager( $this -> di -> get('db') );
         $info_user = $um -> getUser( (int)$_user['id'] );
         
-        $userName = (!empty($info_user -> getName())) ? $info_user -> getName() : ' '; 
+        $userName = (strlen($info_user -> getName())) ? $info_user -> getName() : ' '; 
         
         if ($this->getRequest()->hasPost('type', 'message')) { // 'email', 'name',
             try {
