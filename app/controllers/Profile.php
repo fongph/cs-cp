@@ -102,7 +102,7 @@ class Profile extends BaseController
                                 ->save();
                         })->setAfterSave(function() {
                             $this->di->getFlashMessages()
-                                ->add(FlashMessages::SUCCESS, $this->di->getTranslator()->_('License has been upgraded'));
+                                ->add(FlashMessages::SUCCESS, $this->di->getTranslator()->_('Subscription has been upgraded'));
                         });
                 } else {
                     $deviceObserver->setAfterSave(function() {
@@ -112,7 +112,7 @@ class Profile extends BaseController
                             $queueManage->addDownloadTask($this->getDeviceRecord()->getICloudDevice()); 
                         }
                         $this->di->getFlashMessages()
-                            ->add(FlashMessages::SUCCESS, $this->di->getTranslator()->_('License has been assigned to your device'));
+                            ->add(FlashMessages::SUCCESS, $this->di->getTranslator()->_('Subscription has been assigned to your device'));
                     });
                 }
                 $deviceObserver->assignLicenseToDevice();
@@ -270,7 +270,7 @@ class Profile extends BaseController
                         $iCloudRecord->setLastError(BackupQueueUnit::ERROR_NONE);
                     $iCloudRecord->save();
 
-                    $this->di->getFlashMessages()->add(FlashMessages::SUCCESS, $this->di->getTranslator()->_('You have successfully updated iCloud password. New iCloud backup will be loaded shortly.'));
+                    $this->di->getFlashMessages()->add(FlashMessages::SUCCESS, $this->di->getTranslator()->_('You have successfully updated iCloud password. New iCloud backup will be loaded shortly'));
                     $this->ajaxResponse(true, array(
                         'location' => $this->di->getRouter()->getRouteUri('profile')
                     ));
@@ -286,7 +286,7 @@ class Profile extends BaseController
             $this->redirect($this->di->getRouter()->getRouteUri('profile'));
             
         } catch (AuthorizationException $e) {
-            $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_("Oops, iCloud password didn't work. Please try again."));
+            $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_("Oops, iCloud password didn't work. Please try again"));
             $this->ajaxResponse(false, array(
                 'location' => $this->di->getRouter()->getRouteUri('profileICloudPasswordReset')."?deviceId={$this->getRequest()->get('deviceId')}"
             ));
