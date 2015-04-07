@@ -26,6 +26,8 @@ class BaseController extends Controller
 
         if ($this->di['config']['demo']) {
             $this->demo = true;
+            $refereDemo = new \Models\Referer($this->di);
+            $refereDemo ->setReferer();
         }
     }
 
