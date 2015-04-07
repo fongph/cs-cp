@@ -91,11 +91,8 @@ class Wizard extends BaseController {
                     ->setDevice($this->getDevice($this->getRequest()->post('device_id')))
                     ->setLicense($license)
                     ->setAfterSave(function() use ($deviceObserver) {
-                        $userNotes = new UsersNotes($this->di->get('db'));
-                        $userNotes->addSystemNote($this->auth['id'], UsersNotes::TYPE_SYSTEM, null, null, "Assign {$deviceObserver->getLicense()->getProduct()->getName()} to device {$deviceObserver->getDevice()->getName()} " . json_encode(array(
-                                'device_id' => $deviceObserver->getDevice()->getId(),
-                                'license_id' => $deviceObserver->getLicense()->getId()
-                            )));
+                        $this->di['usersNotesProcessor']->licenseAssigned($deviceObserver->getLicense()->getId(), $deviceObserver->getDevice()->getId());
+                        
                         if($deviceObserver->getDevice()->getOS() == 'icloud'){
                             $queueManager = new \CS\Queue\Manager($this->di['queueClient']);
                             $iCloudDevice = new DeviceICloudRecord($this->di->get('db'));
@@ -199,11 +196,7 @@ class Wizard extends BaseController {
                                             ->setDevice($this->getDevice($device['device_id']))
                                             ->setLicense($licenseRecord)
                                             ->setAfterSave(function() use ($deviceObserver) {
-                                                $userNotes = new UsersNotes($this->di->get('db'));
-                                                $userNotes->addSystemNote($this->auth['id'], UsersNotes::TYPE_SYSTEM, null, null, "Assign {$deviceObserver->getLicense()->getProduct()->getName()} to device {$deviceObserver->getDevice()->getName()} " . json_encode(array(
-                                                        'device_id' => $deviceObserver->getDevice()->getId(),
-                                                        'license_id' => $deviceObserver->getLicense()->getId()
-                                                    )));
+                                                $this->di['usersNotesProcessor']->licenseAssigned($deviceObserver->getLicense()->getId(), $deviceObserver->getDevice()->getId());
                                                 
                                                 $queueManager = new \CS\Queue\Manager($this->di['queueClient']);
                                                 $iCloudDevice = new DeviceICloudRecord($this->di->get('db'));
@@ -262,15 +255,8 @@ class Wizard extends BaseController {
                                         $mailSender = $this->di->get('mailSender');
                                         $mailSender->sendNewDeviceAdded($this->auth['login'], $deviceObserver->getDevice()->getName());
 
-                                        $userNotes = new UsersNotes($this->di['db']);
-                                        $userNotes->addSystemNote($this->auth['id'], UsersNotes::TYPE_SYSTEM, null, null, "New device added {$deviceObserver->getDevice()->getName()} " . json_encode(array(
-                                                'dev_id' => $deviceObserver->getDevice()->getUniqueId()
-                                            )));
-                                        $userNotes->addSystemNote($this->auth['id'], UsersNotes::TYPE_SYSTEM, null, null, "Assign {$deviceObserver->getLicense()->getProduct()->getName()} to device {$deviceObserver->getDevice()->getName()} " . json_encode(array(
-                                                'device_id' => $deviceObserver->getDevice()->getId(),
-                                                'license_id' => $deviceObserver->getLicense()->getId()
-                                            ))
-                                        );
+                                        $this->di['usersNotesProcessor']->deviceAdded($deviceObserver->getDevice()->getId());
+                                        $this->di['usersNotesProcessor']->licenseAssigned($deviceObserver->getLicense()->getId(), $deviceObserver->getDevice()->getId());
 
                                         $queueManager = new \CS\Queue\Manager($this->di['queueClient']);
                                         if ($queueManager->addDownloadTask($deviceObserver->getICloudDevice())) {

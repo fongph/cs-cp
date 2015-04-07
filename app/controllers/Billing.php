@@ -95,15 +95,8 @@ class Billing extends BaseController
                                                         'New device added'
                                         ));
 
-                                        $userNotes = new UsersNotes($this->di['db']);
-                                        $userNotes->addSystemNote($this->auth['id'], UsersNotes::TYPE_SYSTEM, null, null, "New device added {$devicesManager->getProcessedDevice()->getName()} " . json_encode(array(
-                                                    'dev_id' => $devicesManager->getProcessedDevice()->getUniqueId()
-                                        )));
-                                        $userNotes->addSystemNote($this->auth['id'], UsersNotes::TYPE_SYSTEM, null, null, "Assign {$devicesManager->getLicense()->getOrderProduct()->getProduct()->getName()} to device {$devicesManager->getProcessedDevice()->getName()} " . json_encode(array(
-                                                    'device_id' => $devicesManager->getProcessedDevice()->getId(),
-                                                    'license_id' => $devicesManager->getLicense()->getId()
-                                                ))
-                                        );
+                                        $this->di['usersNotesProcessor']->deviceAdded($devicesManager->getProcessedDevice()->getId());
+                                        $this->di['usersNotesProcessor']->licenseAssigned($devicesManager->getLicense()->getId(), $devicesManager->getProcessedDevice()->getId());
 
                                         $queueManager = new \CS\Queue\Manager($this->di['queueClient']);
 
@@ -186,19 +179,10 @@ class Billing extends BaseController
                 $devicesManager->removeDeviceLicenses($device);
                 
                 $devicesManager->assignLicenseToDevice($license, $device);
-                $this->di['flashMessages']->add(FlashMessages::SUCCESS, $this->di['t']->_('Device successfully assigned to your license!'));
-
-                $licInfo = (new \Models\Billing($this->di))
-                        ->getLicenseDeviceInfo($license);
-
-                if ($licInfo !== false) {
-                    (new \Models\Users($this->di))
-                            ->addSystemNote($this->auth['id'], "Assign {$licInfo['product_name']} to device {$licInfo['device_name']} " . json_encode(array(
-                                        'device_id' => $licInfo['dev_id'],
-                                        'license_id' => $licInfo['license_id']
-                                    ))
-                    );
-                }
+                
+                $this->di['usersNotesProcessor']->licenseAssigned($license, $device);
+                
+                $this->di->getFlashMessages()->add(FlashMessages::SUCCESS, $this->di['t']->_('Device successfully assigned to your license!'));
 
                 $this->redirect($this->di['router']->getRouteUrl('billing'));
             }

@@ -93,22 +93,11 @@ class DeviceSettings extends BaseModuleController
             $this->redirect($this->di['router']->getRouteUrl('settings'));
         } else if ($this->getRequest()->hasGet('delete')) {
             $this->checkDemo($this->di['router']->getRouteUrl('settings'));
-
+            
             $devicesModel = new \Models\Devices($this->di);
             $devicesModel->delete($this->di['devId']);
 
-            try {
-                $deviceRecord = new DeviceRecord($this->di['db']);
-                $deviceRecord->load($this->di['devId']);
-
-                (new \Models\Users($this->di))
-                        ->addSystemNote($this->auth['id'], "Delete device from CP {$deviceRecord->getName()} " . json_encode(array(
-                                    'device_id' => $this->di['devId'],
-                                ))
-                );
-            } catch (\Exception $e) {
-                
-            }
+            $this->di['usersNotesProcessor']->deviceDeleted($this->di['devId']);
 
             $this->di['flashMessages']->add(FlashMessages::SUCCESS, $this->di['t']->_('The device has been successfully removed from your account!'));
             $this->redirect($this->di['router']->getRouteUrl('profile'));
