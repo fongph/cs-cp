@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "cf6baa989f7abeda5b51f42287e4c833",
+    "hash": "7f58bc2e8516a86d259d3e064786c6e3",
     "packages": [
         {
             "name": "boomers/cs-billing",
@@ -186,7 +186,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-users.git",
-                "reference": "559024e14df11be290983460c3de829b46a8572c"
+                "reference": "5c8946db42e690a23e88b777185d41b12380201d"
             },
             "require": {
                 "boomers/cs-mail": "dev-master",
@@ -206,7 +206,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2015-04-07 05:46:02"
+            "time": "2015-04-08 07:17:23"
         },
         {
             "name": "boomers/ip",
