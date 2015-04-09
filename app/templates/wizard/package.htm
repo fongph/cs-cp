@@ -19,7 +19,7 @@
                     $.each($('[data-timestamp-value]'), function(i, timeTag){
                         var $tag = $(timeTag);
                         if($tag.data('timestamp-value') && $tag.data('time-format'))
-                            $tag.html(', expired ' + moment($tag.data('timestamp-value') * 1000).format($tag.data('time-format')));
+                            $tag.html(', expires ' + moment($tag.data('timestamp-value') * 1000).format($tag.data('time-format')));
                     });
                 });
             </script>

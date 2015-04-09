@@ -7,7 +7,7 @@
     <div class="row">
         <div class="col-lg-12">
             <p class="text-danger">
-                {$di.t->_('Please note that the current %s plan for this device will be deactivated permanently, and the new plan – %s – activated.', [
+                {$di.t->_('Please note that the current %s plan for this device will be deactivated permanently, and the new plan %s – activated.', [
                     '<b>' ~ $oldLicenseRecord->getProduct()->getName() ~ '</b>',
                     '<b>' ~ $licenseRecord->getProduct()->getName() ~ '</b>'
                 ])}
