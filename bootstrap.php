@@ -200,16 +200,16 @@ $di->setShared('S3', function () use ($di) {
     return $s3;
 });
 
-$di->setShared('fastSpringGateway', function () {
-    $fastSpringConfig = GlobalSettings::getFastSpringConfig();
-
-    $gateway = new \Seller\FastSpring\Gateway();
-
-    return $gateway->setStoreId($fastSpringConfig['storeId'])
-                    ->setPrivateKey($fastSpringConfig['privateKey'])
-                    ->setUserName('api@dizboard.com')//$fastSpringConfig['userName'])
-                    ->setUserPassword('c0RdI48G7Est'); //$fastSpringConfig['userPassword']);
-});
+//$di->setShared('fastSpringGateway', function () {
+//    $fastSpringConfig = GlobalSettings::getFastSpringConfig();
+//
+//    $gateway = new \Seller\FastSpring\Gateway();
+//
+//    return $gateway->setStoreId($fastSpringConfig['storeId'])
+//                    ->setPrivateKey($fastSpringConfig['privateKey'])
+//                    ->setUserName('api@dizboard.com')//$fastSpringConfig['userName'])
+//                    ->setUserPassword('c0RdI48G7Est'); //$fastSpringConfig['userPassword']);
+//});
 
 $di->setShared('queueClient', function () use ($config) {
     $queueConfig = GlobalSettings::getQueueConfig();
@@ -251,6 +251,21 @@ $di->setShared('usersManager', function() use ($di) {
 //
 //    return $devicesManager->setUsersNotesProcessor($di['usersNotesProcessor']);
 //});
+
+$di->setShared('gatewaysContainer', function () {
+    $fastSpringConfig = GlobalSettings::getFastSpringConfig();
+
+    return new \Seller\GatewaysContainer(array(
+        'fastspring' => $fastSpringConfig
+    ));
+});
+
+$di->setShared('billingManager', function () use ($di) {
+    $billingManager = new \CS\Billing\Manager($di['db']);
+    $billingManager->setGatewaysContainer($di['gatewaysContainer']);
+    
+    return $billingManager;
+});
 
 $di->set('isTestUser', function($id) use($config) {
 

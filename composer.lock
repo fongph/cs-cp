@@ -12,7 +12,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-billing.git",
-                "reference": "6675fd49d4892a7cf957c2fdd2fa1990868c6e3c"
+                "reference": "43382e40b3e4e8c0944b5af19b7365a8585a7db5"
             },
             "require": {
                 "boomers/cs-models": "dev-master",
@@ -31,7 +31,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2015-02-16 08:49:21"
+            "time": "2015-04-09 09:05:56"
         },
         {
             "name": "boomers/cs-devices",
@@ -122,7 +122,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-models.git",
-                "reference": "b17bdbb35850507538972df9caf4cbf3bedf6ccb"
+                "reference": "721d6d5a267c187d012bb39fc22ea1b4562d2617"
             },
             "require": {
                 "php": ">=5.4.0"
@@ -136,7 +136,7 @@
                     "CS\\Models\\": "src/"
                 }
             },
-            "time": "2015-04-03 07:45:56"
+            "time": "2015-04-09 07:35:50"
         },
         {
             "name": "boomers/cs-queue",
@@ -186,7 +186,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-users.git",
-                "reference": "559024e14df11be290983460c3de829b46a8572c"
+                "reference": "9ec1f78596a1b0257c54df3a2485c636356a7f85"
             },
             "require": {
                 "boomers/cs-mail": "dev-master",
@@ -206,7 +206,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2015-04-07 05:46:02"
+            "time": "2015-04-08 07:40:34"
         },
         {
             "name": "boomers/ip",
@@ -233,7 +233,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/seller.git",
-                "reference": "58a7a9dd57bde092e77fdc340546857b47d276c6"
+                "reference": "36dbf462975288e4d18894da3495d5ef63b9d4b7"
             },
             "require": {
                 "guzzlehttp/guzzle": "~5.0",
@@ -251,7 +251,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2015-01-14 08:22:02"
+            "time": "2015-04-08 09:41:16"
         },
         {
             "name": "fenom/fenom",

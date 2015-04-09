@@ -15,9 +15,16 @@ $whoops = new Whoops\Run;
 $logger = new Monolog\Logger('logger');
 $logger->pushProcessor(new Monolog\Processor\WebProcessor());
 
+$formatter = new \Monolog\Formatter\LineFormatter();
+$formatter->includeStacktraces();
+
 if ($config['environment'] == 'development') {
     error_reporting(E_ALL);
-    $logger->pushHandler(new Monolog\Handler\StreamHandler($config['logger']['stream']['filename'], Monolog\Logger::DEBUG));
+
+    $handler = new Monolog\Handler\StreamHandler($config['logger']['stream']['filename'], Monolog\Logger::DEBUG);
+    $handler->setFormatter($formatter);
+    
+    $logger->pushHandler($handler);
 
     if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) &&
             strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
@@ -32,7 +39,11 @@ if ($config['environment'] == 'development') {
         ));
     }));
 } else {
-    $logger->pushHandler(new Monolog\Handler\StreamHandler($config['logger']['stream']['filename'], Monolog\Logger::INFO));
+    $handler = new Monolog\Handler\StreamHandler($config['logger']['stream']['filename'], Monolog\Logger::INFO);
+    $handler->setFormatter($formatter);
+    
+    $logger->pushHandler($handler);
+    
     $logger->pushHandler(new Monolog\Handler\NativeMailerHandler($config['logger']['mail']['from'], $config['logger']['mail']['subject'], $config['logger']['mail']['to']));
 
     $whoops->pushHandler(new \Whoops\Handler\CallbackHandler(function($exception, $inspector, $run) use ($logger) {
@@ -80,19 +91,19 @@ $di['router']->execute($requestUri, function($route) use ($di) {
         $controllerName = 'Controllers\\' . $route->target['controller'];
         /** @var $controller System\Controller */
         $controller = new $controllerName($di);
-        
+
         if (!(isset($route->target['public']) || $di->getAuth()->hasIdentity())) {
-            
+
             $di->getFlashMessages()->add(System\FlashMessages::ERROR, "Access denied!");
 
-            if($di->get('isWizardEnabled')){
-                
-                if($di->getRequest()->isGet()){
-                    $controller->redirect($di->getRouter()->getRouteUrl('main').'?redirect='.rawurlencode($di->getRequest()->uri()));
+            if ($di->get('isWizardEnabled')) {
 
-                } else $controller->redirect($di->getRouter()->getRouteUrl('main'));
-                
-            } else $controller->redirect($di->getRouter()->getRouteUrl('main'));
+                if ($di->getRequest()->isGet()) {
+                    $controller->redirect($di->getRouter()->getRouteUrl('main') . '?redirect=' . rawurlencode($di->getRequest()->uri()));
+                } else
+                    $controller->redirect($di->getRouter()->getRouteUrl('main'));
+            } else
+                $controller->redirect($di->getRouter()->getRouteUrl('main'));
         }
 
         if (isset($route->params)) {
@@ -103,8 +114,8 @@ $di['router']->execute($requestUri, function($route) use ($di) {
             return;
         }
     }
-    
-    
+
+
 
     $cnt = new Controllers\BaseController($di);
     $cnt->error404();

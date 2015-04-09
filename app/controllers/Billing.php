@@ -278,10 +278,23 @@ class Billing extends BaseController
 
         if ($license == false) {
             $this->di->getFlashMessages()->add(FlashMessages::ERROR, "Plan was not found!");
-            $this->redirect($this->di['router']->getRouteUrl('billing'));
+            $this->redirect($this->di->getRouter()->getRouteUrl('billing'));
         }
-
-        $billingModel->disableSubscription($license['payment_method'], $license['reference_number']);
+        
+        try {
+            $this->di['billingManager']->cancelLicenseSubscription($this->params['id']);
+            $this->getDI()->getFlashMessages()->add(FlashMessages::SUCCESS, "Subscription auto-renew successfully disabled!");
+        } catch (\CS\Billing\Exceptions\RecordNotFoundException $e) {
+            $this->getDI()->get('logger')->addInfo('Subscription not found!', array('exception' => $e));
+            $this->getDI()->getFlashMessages()->add(FlashMessages::ERROR, "Subscription auto-renew can't be disabled!");
+        } catch (\CS\Billing\Exceptions\GatewayException $e) {
+            $this->getDI()->getFlashMessages()->add(FlashMessages::ERROR, "Error during operation!");
+            $this->getDI()->get('logger')->addWarning('Gateway request was not successfuly completed!', array('exception' => $e, 'gatewayResponse' => $e->getResponse()->getMessage()));
+        } catch (\Seller\Exception\SellerException $e) {
+            $this->getDI()->getFlashMessages()->add(FlashMessages::ERROR, "Error during operation!");
+            $this->getDI()->get('logger')->addError('Gateway exception!', array('exception' => $e));
+        }
+        
         $this->redirect($this->di->getRouter()->getRouteUrl('billingLicense', array('id' => $license['id'])));
     }
 
@@ -294,8 +307,21 @@ class Billing extends BaseController
             $this->di->getFlashMessages()->add(FlashMessages::ERROR, "Plan was not found!");
             $this->redirect($this->di->getRouter()->getRouteUrl('billing'));
         }
-
-        $billingModel->enableSubscription($license['payment_method'], $license['reference_number']);
+        
+        try {
+            $this->di['billingManager']->unCancelLicenseSubscription($this->params['id']);
+            $this->getDI()->getFlashMessages()->add(FlashMessages::SUCCESS, "Subscription auto-renew successfully disabled!");
+        } catch (\CS\Billing\Exceptions\RecordNotFoundException $e) {
+            $this->getDI()->get('logger')->addInfo('Subscription not found!', array('exception' => $e));
+            $this->getDI()->getFlashMessages()->add(FlashMessages::ERROR, "Subscription auto-renew can't be disabled!");
+        } catch (\CS\Billing\Exceptions\GatewayException $e) {
+            $this->getDI()->getFlashMessages()->add(FlashMessages::ERROR, "Error during operation!");
+            $this->getDI()->get('logger')->addWarning('Gateway request was not successfuly completed!', array('exception' => $e, 'gatewayResponse' => $e->getResponse()->getMessage()));
+        } catch (\Seller\Exception\SellerException $e) {
+            $this->getDI()->getFlashMessages()->add(FlashMessages::ERROR, "Error during operation!");
+            $this->getDI()->get('logger')->addError('Gateway exception!', array('exception' => $e));
+        }
+        
         $this->redirect($this->di->getRouter()->getRouteUrl('billingLicense', array('id' => $license['id'])));
     }
 

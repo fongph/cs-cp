@@ -19,7 +19,7 @@
         <dd data-time="{$license.expiration_date}">-</dd>
         <dt>{$di.t->_('Status')}</dt>
         <dd>{$license.status}</dd>
-        {if $license.payment_method == 'fastspring'}
+        {if isset($license.details.payment_method) && $license.details.payment_method == 'fastspring'}
             {if isset($license.details.cancelable)}
             <dt>{$di.t->_('Subscription auto-renew')}</dt>
             <dd>
@@ -32,7 +32,7 @@
             {/if}
         {/if}
     </dl>
-    {if $license.payment_method == 'fastspring'}
+    {if isset($license.details.payment_method) && $license.details.payment_method == 'fastspring'}
         <a href="{$license.details.customerUrl}" target="_blank">{$di.t->_('Subscription details at FastSpring')}</a>
     {/if}
 
