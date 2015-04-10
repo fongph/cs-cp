@@ -92,15 +92,7 @@ class DeviceSettings extends BaseModuleController
 
             $this->redirect($this->di['router']->getRouteUrl('settings'));
         } else if ($this->getRequest()->hasGet('delete')) {
-            $this->checkDemo($this->di['router']->getRouteUrl('settings'));
-            
-            $devicesModel = new \Models\Devices($this->di);
-            $devicesModel->delete($this->di['devId']);
-
-            $this->di['usersNotesProcessor']->deviceDeleted($this->di['devId']);
-
-            $this->di['flashMessages']->add(FlashMessages::SUCCESS, $this->di['t']->_('The device has been successfully removed from your account!'));
-            $this->redirect($this->di['router']->getRouteUrl('profile'));
+            $this->deleteDevice();
         }
 
         $this->view->currentDevice = $this->di->get('currentDevice');
@@ -141,6 +133,21 @@ class DeviceSettings extends BaseModuleController
         $this->buildCpMenu();
 
         $this->view->title = $this->di['t']->_('Device Settings');
+    }
+
+    private function deleteDevice()
+    {
+        $this->checkDemo($this->di['router']->getRouteUrl('settings'));
+
+        try {
+            $this->di['devicesManager']->deleteDevice($this->di['devId']);
+            
+            $this->di->getFlashMessages()->add(FlashMessages::SUCCESS, $this->di['t']->_('The device has been successfully removed from your account!'));
+            $this->redirect($this->di['router']->getRouteUrl('profile'));
+        } catch (\Exception $e) {
+            $this->getDI()->getFlashMessages()->add(FlashMessages::ERROR, "Error during operation!");
+            $this->getDI()->get('logger')->addError('Error during deleting device!', array('exception' => $e));
+        }
     }
 
     protected function isModulePaid()

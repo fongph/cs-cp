@@ -14,12 +14,6 @@ class Devices extends \System\Model
     
     private $limitation;
 
-    public function delete($devId)
-    {
-        $devicesManager = new DevicesManager($this->getDb());
-        $devicesManager->deleteDevice($devId);
-    }
-
     public function setDeviceName($devId, $name)
     {
         if (strlen($name) < 1 || strlen($name) > 32) {

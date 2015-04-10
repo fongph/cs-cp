@@ -244,13 +244,12 @@ $di->setShared('usersManager', function() use ($di) {
 
     return $usersManager->setUsersNotesProcessor($di['usersNotesProcessor']);
 });
+ 
+$di->setShared('devicesManager', function() use ($di) {
+    $devicesManager = new CS\Devices\Manager($di['db']);
 
-// 
-//$di->setShared('devicesManager', function() use ($di) {
-//    $devicesManager = new CS\Devices\Manager($di['db']);
-//
-//    return $devicesManager->setUsersNotesProcessor($di['usersNotesProcessor']);
-//});
+    return $devicesManager->setUsersNotesProcessor($di['usersNotesProcessor']);
+});
 
 $di->setShared('gatewaysContainer', function () {
     $fastSpringConfig = GlobalSettings::getFastSpringConfig();

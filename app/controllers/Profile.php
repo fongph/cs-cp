@@ -98,13 +98,14 @@ class Profile extends BaseController
                     ->setLicense($this->getNewLicenseRecord());
 
                 if ($this->getRequest()->hasGet('oldLicenseId')) {
+                    $oldLicenseId = $this->getOldLicenseRecord()->getId();
+                    
                     $deviceObserver
                         ->setBeforeSave(function() {
-                            return (bool) $this->getOldLicenseRecord()
-                                ->setStatus(LicenseRecord::STATUS_INACTIVE)
-                                ->save();
-                        })->setAfterSave(function() use ($deviceObserver, $userNotes) {
-                            $userNotes->licenseUpgraded($deviceObserver->getDevice()->getId(), $this->getOldLicenseRecord()->getId(), $deviceObserver->getLicense()->getId());
+                            $this->di['devicesManager']->closeDeviceLicenses($this->getDeviceRecord()->getId(), false);
+                            return true;
+                        })->setAfterSave(function() use ($deviceObserver, $userNotes, $oldLicenseId) {
+                            $userNotes->licenseUpgraded($deviceObserver->getDevice()->getId(), $oldLicenseId, $deviceObserver->getLicense()->getId());
                             $this->di->getFlashMessages()->add(FlashMessages::SUCCESS, $this->di->getTranslator()->_('Subscription has been upgraded'));
                         });
                 } else {
