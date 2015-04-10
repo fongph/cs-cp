@@ -178,9 +178,9 @@ class Wizard extends BaseController {
                 $devModel = new Devices($this->di);
                 
                 if (empty($devices)) {
-                    $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('There are no uploaded backups for this iCloud account'));
-                    $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_REGISTER));
-                    
+                    $this->view->title = $this->di->getTranslator()->_('Connect to iCloud Account');
+                    $this->setView('wizard/register.icloud.backup.not.found.htm');
+                    return;
                 } else $devices = $devModel->iCloudMergeWithLocalInfo($this->auth['id'], $devices);
 
                 if (isset($_POST['devHash']) && !empty($_POST['devHash'])) {
@@ -269,7 +269,8 @@ class Wizard extends BaseController {
                                 try {
                                     if($deviceObserver->addICloudDevice()){
                                         $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_FINISH, array(
-                                            'deviceId' => $deviceObserver->getDevice()->getId()
+                                            'deviceId' => $deviceObserver->getDevice()->getId(),
+                                            'awaitingUpload' => ($device['SnapshotID'] == 1 && !$device['Committed'] ? 1 : 0)
                                         )));
                                     } else throw new \Exception("USER {$this->auth['id']} Can't add ICloudDevice {$deviceObserver->getDevice()->getId()} to License {$this->getLicense()->getId()}");
 
@@ -307,7 +308,7 @@ class Wizard extends BaseController {
             $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_REGISTER));
         }
 
-        $this->view->title = $this->di->getTranslator()->_('Connect to iCloud Account ');
+        $this->view->title = $this->di->getTranslator()->_('Connect to iCloud Account');
         $this->setView('wizard/register.icloud.account.htm');
     }
     
@@ -327,6 +328,7 @@ class Wizard extends BaseController {
         }
 
         $this->view->device = $device;
+        $this->view->awaitingUpload = ($device->getOS() == DeviceRecord::OS_ICLOUD && isset($_GET['awaitingUpload']) && $_GET['awaitingUpload']);
         $this->view->title = $this->di->getTranslator()->_('The Device is Connected');
         $this->setView('wizard/finish.htm');
     }

@@ -5,9 +5,22 @@
     <div class="wizard-container">
         <p class="text-left">
             Congratulations! You have assigned the target device to your Subscription Plan. 
-            The first data will appear in your Control Panel in a few minutes. 
-            You can also set display name for the target device right now.
         </p>
+        {if $awaitingUpload}
+            <div class="text-left">
+                <p>This account has unfinished backup. In order to finish it the device has to meet the following requirements:</p>
+                <ol>
+                    <li>Connected to the Wi-Fi</li>
+                    <li>Connected to a power source</li>
+                    <li>Screen is locked</li>
+                </ol>
+                <p>
+                    You can also force backup.
+                    <br>Go to Settings -> iCloud -> Storage & Backup -> Back Up Now.
+                </p>
+            </div>
+        {/if}
+        <p class="row text-left">Additionally you can set display name for the target device right now.</p>
         <div class="row">
             <div class="col-lg-4 col-md-4 col-sm-6 col-lg-offset-4 col-md-offset-4 col-sm-offset-3">
                 <form role="form" method="post" autocomplete="off">
