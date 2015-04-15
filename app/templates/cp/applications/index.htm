@@ -1,0 +1,176 @@
+<div>
+    <h1 class="text-center">{$title}</h1>
+
+    {if isset($showUpdateBlock)}
+        {if $showUpdateBlock == 'ios'}
+            <p class="bg-warning" style="padding: 10px;">Application limiting by time has become available with a new version of Pumpic mobile application. The new version of the software will be automatically updated on the target device. Please make sure that the target device is connected to the Internet.</p>
+        {else}
+            <p class="bg-warning" style="padding: 10px;">Application limiting by time has become available with a new version of Pumpic mobile application. To install the new version, please open the Pumpic app on the target device, delete it from settings and reinstall. <a href="http://cp.pumpic.com/how-to-install/android-instructions.html">Installation instructions</a>.</p>
+        {/if}
+    {/if}
+    
+    {insert "inc.flashMessages.htm"}
+
+    {if $hasRecords}
+    <ul class="nav nav-pills">
+        <li><a href="#downloaded" data-toggle="tab">{$di.t->_('Downloaded')}</a></li>
+        <li><a href="#preinstalled" data-toggle="tab">{$di.t->_('Preinstalled')}</a></li>
+    </ul>
+    
+    <div class="table-container">
+        <table class="dataTable" id="datatables" aria-describedby="datatables_info">
+            <thead>
+                <tr role="row">
+                    <th>{$di['t']->_('Name')}</th>
+                    <th>{$di['t']->_('Version')}</th>
+                    <th>{$di['t']->_('Status')}</th>
+                    <th>{$di['t']->_('Count')}</th>
+                    <th>{$di['t']->_('Last date')}</th>
+                    <th>{$di['t']->_('Actions')}</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            var lnkTemplate = _.template('<% if (url.length) { %><a href="<%= url %>" target="_blank" class="disable-on-demo"><%= name %></a><% } else { %><%= name %><% } %>');
+
+            var applications = {
+                url: '{$di.config.domain}/cp/applications',
+                tab: null,
+                table: null,
+                getSourceUrl: function() {
+                    if (window.location.hash === '#downloaded') {
+                        return this.url + '?standard=0';
+                    } else {
+                        return this.url + '?standard=1';
+                    }
+                },
+                reloadTable: function() {
+                    if (this.table) {
+                        this.table.fnReloadAjax(this.getSourceUrl(window.location.hash));
+                    }
+                },
+                setTab: function(tab) {
+                    if (this.table) {
+                        if (this.tab !== tab) {
+                            this.reloadTable();
+                        }
+                    } else {
+                        this.init();
+                    }
+
+                    this.tab = tab;
+                },
+                init: function() {
+                    var table = $('.dataTable').dataTable({
+                        bProcessing: true,
+                        bServerSide: true,
+                        sAjaxSource: this.getSourceUrl(),
+                        bPaginate: true,
+                        bFilter: true,
+                        bSort: true,
+                        bInfo: true,
+                        bAutoWidth: false,
+                        bSortMulti: false,
+                        iDisplayLength: {$authData.records_per_page},
+                        oLanguage: {
+                            sUrl: '{$di.config.staticDomain}/datatables/language/{$di.t->getLocale()}.txt'
+                        },
+                        aoColumns: [
+                            {
+                                mData: null,
+                                fnRender: function(obj) {
+                                    return lnkTemplate({
+                                        url: obj.aData.url,
+                                        name: obj.aData.name
+                                    });
+                                }
+                            },
+                            {
+                                bSortable: false,
+                                mData: "version"
+                            },
+                            {
+                                mData: null,
+                                bSortable: false,
+                                fnRender: function(obj) {
+                                    if (obj.aData.deleted > 0) {
+                                        return '<span class="text-muted">{$di['t']->_('Deleted')}</span>';
+                                    }
+
+                                    switch (obj.aData.status) {
+                                        case 'limited': 
+                                            var title = "{$di['t']->_('Limited (#m)')}".replace('#', Math.ceil(obj.aData.timelimit / 60));
+                                            return '<span class="text-warning">' + title + '</span>';
+                                        case 'blocked': 
+                                            return '<span class="text-danger">{$di['t']->_('Blocked')}</span>';
+                                        default:
+                                            return '<span class="text-success">{$di['t']->_('Active')}</span>';
+                                    }
+                                }
+                            },
+                            {
+                                mData: "count",
+                                bSortable: false,
+                                sWidth: "80px"
+                            },
+                            {
+                                mData: 'lasttime',
+                                bUseRendered: false,
+                                bSortable: false,
+                                sWidth: "180px",
+                                fnRender: function(obj, value) {
+                                    if (!value) {
+                                        return '-';
+                                    }
+
+                                    // show time in browser tz
+                                    {if $di.config.demo}
+                                    return moment(value * 1000).zone(0).format('lll');
+                                    {else}
+                                    return moment.utc(value * 1000).format('lll');
+                                    {/if}
+                                }
+                            },
+                            {
+                                mData: null,
+                                bSortable: false,
+                                sWidth: "140px",
+                                fnRender: function(obj) {
+                                    if (obj.aData.deleted > 0) {
+                                        return '';
+                                    }
+
+                                    return '<a class="btn btn-info btn-xs" href="{$di.config.domain}/cp/applications/' + obj.aData.id + '/manage"><i class="fa fa-unlock-alt"></i> Manage Limits</a>';
+                                }
+                            }
+                        ],
+                        fnDrawCallback: function() {
+                            applications.table = table;
+                            $(this).find('tbody').tableScroll();
+                        }
+                    });
+                }
+            };
+            
+            $('.nav-pills a').on('shown.bs.tab', function(e) {
+                window.location.hash = e.target.hash;
+                applications.setTab(e.target.hash);
+                window.scrollTo(0, 0);
+            });
+
+            var url = document.location.toString();
+            if (url.match('#')) {
+                $('.nav-pills a[href=#' + url.split('#')[1] + ']').tab('show');
+            } else {
+                $('.nav-pills a[href=#downloaded]').tab('show');
+            }
+        });
+    </script>
+    {else}
+    <h3>{$di.t->_('Waiting for applications installed on the device... Why can the data be unavailable?')}</h3>
+    {include "content/{$di.t->getLocale()}/noData.html"}
+    {/if}
+</div>
