@@ -9178,6 +9178,9 @@ body > .cp-menu {
 .dialog-messages-list .popover.left .popover-title a:hover {
   text-decoration: none;
 }
+.dialog-messages-list .popover.left .popover-title .label {
+  margin-right: 5px;
+}
 .dialog-messages-list .popover.right {
   margin-left: 10px;
 }
@@ -9192,6 +9195,9 @@ body > .cp-menu {
 }
 .dialog-messages-list .popover.right .popover-title a:hover {
   text-decoration: none;
+}
+.dialog-messages-list .popover.right .popover-title .label {
+  margin-right: 5px;
 }
 .dialog-messages-list .date-title {
   font-size: 20px;
