@@ -25,7 +25,7 @@ class Sms extends BaseModel {
             }
         }
 
-        $select = "SELECT `timestamp`, `sms_type` type, `phone_number` number, `number_name` name, LEFT(`content`, 201) `content`, `blocked`, `deleted`";
+        $select = "SELECT `timestamp`, `sms_type` type, `phone_number` number, `number_name` name, LEFT(`content`, 201) `content`, `multimedia`, `blocked`, `deleted`";
 
         $timeFrom = $this->getDb()->quote($params['timeFrom']);
         $timeTo = $this->getDb()->quote($params['timeTo']);
@@ -70,6 +70,7 @@ class Sms extends BaseModel {
                                         `phone_number` phone,
                                         `content`,
                                         `timestamp`,
+                                        `multimedia`,
                                         `blocked`,
                                         `deleted`
                                     FROM `sms_log` WHERE 

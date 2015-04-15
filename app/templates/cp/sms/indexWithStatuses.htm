@@ -130,15 +130,21 @@
                             {
                                 mData: 'content',
                                 bSortable: false,
-                                mRender: function(value) {
+                                mRender: function(value, type, data) {
+                                    var content = '';
                                     if (_.isString(value)) {
                                         if (value.length > 200) {
-                                            return value.substr(0, 200) + '...';
+                                            content = value.substr(0, 200) + '...';
+                                        } else {
+                                            content = value;
                                         }
-
-                                        return value;
                                     }
-                                    return '';
+                                    
+                                    if (data.multimedia != 'none') {
+                                        return '<p class="attachment ' + data.multimedia + '">' + content + '<p>';
+                                    } else {
+                                        return content;
+                                    }
                                 }
                             },
                             {

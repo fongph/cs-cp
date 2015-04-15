@@ -9208,6 +9208,24 @@ body > .cp-menu {
   font-weight: bold;
   color: #32a2c6;
 }
+p.attachment {
+  min-height: 20px;
+  padding-left: 25px;
+  background-repeat: no-repeat;
+  background-position: 0 2px;
+}
+p.attachment.text {
+  background-image: url(../img/attachment-text.png);
+}
+p.attachment.image {
+  background-image: url(../img/attachment-image.png);
+}
+p.attachment.audio {
+  background-image: url(../img/attachment-audio.png);
+}
+p.attachment.video {
+  background-image: url(../img/attachment-video.png);
+}
 /* video player */
 .jp-no-solution span {
   display: block;
