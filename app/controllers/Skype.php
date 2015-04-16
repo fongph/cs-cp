@@ -97,6 +97,10 @@ class Skype extends BaseModuleController
         $this->buildCpMenu();
 
         $this->view->title = $this->di['t']->_('Skype Tracking');
+        
+        if($this->di['currentDevice']['os'] != 'icloud'){
+            $this->view->customTimezoneOffset = 0;
+        }
     }
     
     protected function isModulePaid()
