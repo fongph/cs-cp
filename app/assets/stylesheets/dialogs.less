@@ -37,6 +37,10 @@
                         text-decoration: none;
                     }
                 }
+                
+                .label {
+                    margin-right: 5px;
+                }
             }
         }
 
@@ -55,6 +59,10 @@
                     &:hover {
                         text-decoration: none;
                     }
+                }
+                
+                .label {
+                    margin-right: 5px;
                 }
             }
         }
@@ -76,5 +84,28 @@
     .text-info a {
         font-weight: bold;
         color: @state-info-text;
+    }
+}
+
+p.attachment {
+    min-height: 20px;
+    padding-left: 25px;
+    background-repeat: no-repeat;
+    background-position: 0 2px;
+    
+    &.text {
+        background-image: url(../img/attachment-text.png);
+    }
+    
+    &.image {
+        background-image: url(../img/attachment-image.png);
+    }
+    
+    &.audio {
+        background-image: url(../img/attachment-audio.png);
+    }
+    
+    &.video {
+        background-image: url(../img/attachment-video.png);
     }
 }

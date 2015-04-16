@@ -9178,6 +9178,9 @@ body > .cp-menu {
 .dialog-messages-list .popover.left .popover-title a:hover {
   text-decoration: none;
 }
+.dialog-messages-list .popover.left .popover-title .label {
+  margin-right: 5px;
+}
 .dialog-messages-list .popover.right {
   margin-left: 10px;
 }
@@ -9193,6 +9196,9 @@ body > .cp-menu {
 .dialog-messages-list .popover.right .popover-title a:hover {
   text-decoration: none;
 }
+.dialog-messages-list .popover.right .popover-title .label {
+  margin-right: 5px;
+}
 .dialog-messages-list .date-title {
   font-size: 20px;
   text-align: center;
@@ -9207,6 +9213,24 @@ body > .cp-menu {
 .dialog-panel-top .text-info a {
   font-weight: bold;
   color: #32a2c6;
+}
+p.attachment {
+  min-height: 20px;
+  padding-left: 25px;
+  background-repeat: no-repeat;
+  background-position: 0 2px;
+}
+p.attachment.text {
+  background-image: url(../img/attachment-text.png);
+}
+p.attachment.image {
+  background-image: url(../img/attachment-image.png);
+}
+p.attachment.audio {
+  background-image: url(../img/attachment-audio.png);
+}
+p.attachment.video {
+  background-image: url(../img/attachment-video.png);
 }
 /* video player */
 .jp-no-solution span {

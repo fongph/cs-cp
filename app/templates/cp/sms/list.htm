@@ -21,6 +21,10 @@
                     <span class="date"></span>
                     {/if}
                     
+                    {if $item.multimedia !== 'none'}
+                        <span class="label label-warning" style="float: right;">{$di['t']->_('MMS')}</span>
+                    {/if}
+                    
                     {if $item.blocked}
                         <span class="label label-danger" style="float: right;">{$di['t']->_('Blocked')}</span>
                     {elseif $item.deleted}
@@ -29,7 +33,7 @@
                 </h3>
                 
                 <div class="popover-content">
-                    <p>{$item.content}</p>
+                    <p{if $item.multimedia !== 'none'} class="attachment {$item.multimedia}"{/if}>{$item.content}</p>
                 </div>
             </div>
         </div>
