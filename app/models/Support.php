@@ -48,7 +48,8 @@ class Support extends \System\Model
         $number = $this->getCurrentTicketNumber();
         $info = $this->getUserAgentInfo();
 
-        $this->di['mailSender']->sendSystemSupportTicket($this->di['config']['supportEmail'], $number, $name, $email, $type, $message, $info['browser'], $info['os']);
+        $this->di['mailSender']->sendSystemSupportTicket($this->di['config']['supportEmail'], $number, $name, $email, $type, $message, $info['browser'], $info['os'], $info);
+        $this->di['mailSender']->sendSupportTicketUser($this->di['config']['supportEmail'], $number, $name, $email, $type, $message, $info['browser'], $info['os']);
 
         return $number;
     }

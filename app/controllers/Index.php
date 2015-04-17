@@ -142,7 +142,8 @@ class Index extends BaseController
 
                 $this->view->success = true;
 
-                $this->di['flashMessages']->add(FlashMessages::SUCCESS, $this->di['t']->_('Your ticket #%1$s has been successfully sent!<br/> Our Support Team will contact you within 1 business day.', array('ticketId' => $ticketId)));
+                // Your ticket #%1$s has been successfully sent!<br/> Our Support Team will contact you within 1 business day.
+                $this->di['flashMessages']->add(FlashMessages::SUCCESS, $this->di['t']->_('Ticket #%1$s has been successfully sent.<br/> Our support representative will contact you as soon as possible.', array('ticketId' => $ticketId)));
             } catch (\Models\Support\SupportEmptyFieldException $e) {
                 $this->di['flashMessages']->add(FlashMessages::ERROR, $this->di['t']->_('Please, fill all the data carefully.'));
             } catch (\Models\Support\SupportInvalidEmailException $e) {
