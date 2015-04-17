@@ -17,8 +17,12 @@
 
     {insert "inc.flashMessages.htm"}
 
+    {if $application.standard}
+    <p class="bg-warning" style="padding: 10px;">{$di.t->_('Be careful with changing settings for the applications below. This list might contain system apps, blocking of which may result in difficulties with using the target device.')}</p>
+    {/if}
+    
     <a class="btn btn-default" href="{$di.config.domain}/cp/applications">{$di.t->_('Back to Applications list')}</a>
-
+    
     <form method="POST" action="" id="applications-form">
         <p class="text-info">Manage limits of <b>{$application.app_name}</b></p>
         <div class="form-group">
