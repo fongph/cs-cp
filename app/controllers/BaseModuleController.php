@@ -29,8 +29,9 @@ abstract class BaseModuleController extends BaseController
     {
         $devicesManager = new DevicesManager($this->di['db']);
         $devicesModel = new \Models\Devices($this->di);
-
-        $devices = $devicesManager->getUserActiveDevices($this->auth['id'], true);
+        
+        $showDeletedDevices = $this->supportMode;
+        $devices = $devicesManager->getUserActiveDevices($this->auth['id'], $showDeletedDevices);
         $this->di->set('devicesList', $devices);
 
         if (($devId = $devicesModel->getCurrentDevId()) === null) {
@@ -50,7 +51,7 @@ abstract class BaseModuleController extends BaseController
 
     protected function moduleCheck()
     {
-        if ($this->di['currentDevice']['package_name'] == null) {
+        if (!$this->supportMode && $this->di['currentDevice']['package_name'] == null) {
             $this->postAction();
             $this->setView('cp/noPackage.htm');
             $this->view->title = $this->di['t']->_('No Plan');
@@ -64,7 +65,7 @@ abstract class BaseModuleController extends BaseController
             $this->redirect($this->di['router']->getRouteUrl(Modules::CALLS));
         }
         
-        $this->view->paid = $this->isModulePaid();
+        $this->view->paid = $this->supportMode || $this->isModulePaid();
     }
 
     protected abstract function isModulePaid();

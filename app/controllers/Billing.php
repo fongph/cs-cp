@@ -16,6 +16,7 @@ class Billing extends BaseController
     public function preAction()
     {
         $this->checkDemo($this->di['router']->getRouteUrl('cp'));
+        $this->checkSupportMode();
     }
     
     public function indexAction()

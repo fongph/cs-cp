@@ -114,6 +114,7 @@ class Index extends BaseController
     public function supportAction()
     {
         $this->checkDemo($this->di['router']->getRouteUrl('cp'));
+        $this->checkSupportMode();
 
         $this->view->title = $this->di['t']->_('Support');
 
@@ -268,10 +269,10 @@ class Index extends BaseController
     public function directLoginAction()
     {
         $this->checkDemo($this->di['router']->getRouteUrl('main'), false);
-
+        
         $usersModel = new Users($this->di);
         if ($this->getRequest()->hasGet('id', 'h', 'admin_id') &&
-                $usersModel->directLogin($this->getRequest()->get('id'), $this->getRequest()->get('admin_id'), $this->getRequest()->get('h'))) {
+                $usersModel->directLogin($this->getRequest()->get('id'), $this->getRequest()->get('admin_id'), $this->getRequest()->get('h'), $this->getRequest()->hasGet('supportMode'))) {
 
             $deviceId = $this->getRequest()->get('device');
 

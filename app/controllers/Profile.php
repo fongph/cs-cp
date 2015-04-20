@@ -28,8 +28,15 @@ class Profile extends BaseController
 
     private $deviceRecord, $oldLicenseRecord, $newLicenseRecord;
 
+    public function preAction()
+    {
+        parent::preAction();
+        $this->checkSupportMode();
+    }
+    
     public function indexAction()
     {
+        
         if ($this->getRequest()->isPost()) {
             $this->checkDemo($this->di['router']->getRouteUrl('profile'));
             

@@ -99,7 +99,11 @@
                             <ul class="dropdown-menu">
                                 {foreach $di.devicesList as $id => $device}
                                 <li>
+                                    {if $supportMode}
+                                    <a href="{$di.router->getRouteUrl('setDevice', ['devId'=>$id])}"><i class="device-status-s {$device.os}{if $device.online || $device.sync} online{/if}"></i> {if $device.deleted > 0}<i style="color: #f00; font-style: normal; text-decoration: line-through;">{$device.name}</i>{else}{$device.name}{/if} {if $device.package_name == null}<span class="text-muted">no-plan</span>{else}<span class="text-info">{$device.package_name}</span>{/if}</a>
+                                    {else}
                                     <a href="{$di.router->getRouteUrl('setDevice', ['devId'=>$id])}"><i class="device-status-s {$device.os}{if $device.online || $device.sync} online{/if}"></i> {$device.name} {if $device.package_name == null}<span class="text-muted">no-plan</span>{else}<span class="text-info">{$device.package_name}</span>{/if}</a>
+                                    {/if}
                                 </li>
                                 {/foreach}
                             </ul>

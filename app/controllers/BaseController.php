@@ -10,12 +10,17 @@ class BaseController extends Controller
 
     protected $auth = null;
     protected $demo = false;
+    protected $supportMode = false;
 
     protected function init()
     {
         if ($this->di['auth']->hasIdentity()) {
             $this->auth = $this->di['auth']->getIdentity();
-
+            
+            if (isset($this->auth['support_mode'])) {
+                $this->supportMode = true;
+            }
+            
             if (!$this->di['config']['demo'] && !$this->getRequest()->hasCookie('s') && !isset($this->auth['admin_id'])) {
                 $this->di['logger']->addInfo("Logging not admin authentiacation", array('cookie' => $_COOKIE, 'auth' => $this->auth));
                 
@@ -46,6 +51,7 @@ class BaseController extends Controller
     {
         if ($this->auth) {
             $this->view->authData = $this->auth;
+            $this->view->supportMode = $this->supportMode;
         }
 
         if (isset($this->auth['options']['internal-trial-license'])) {
@@ -78,6 +84,16 @@ class BaseController extends Controller
             }
 
             $this->redirect($redirectUrl);
+        }
+    }
+    
+    protected function checkSupportMode($addFlashMessage = true) {
+        if ($this->supportMode) {
+            if ($addFlashMessage) {
+                $this->di->getFlashMessages()->add(FlashMessages::INFO, $this->di['t']->_('Not available in support mode.'));
+            }
+
+            $this->redirect($this->di->getRouter()->getRouteUrl('cp'));
         }
     }
 
