@@ -96,7 +96,7 @@ class Users extends Model
                     $this->di['config']['site'], $userId, $adminId, $hash, GlobalSettings::getDirectLoginSalt($this->di['config']['site'])
             );
         } catch (\CS\Users\DirectLoginException $e) {
-            $this->di['logger']->addAlert("Direct Login Error: " . $e->getMessage());
+            $this->di['logger']->addAlert("Direct Login Error", array('exception' => $e->getMessage()));
             return false;
         }
 
