@@ -9,6 +9,7 @@ use CS\Models\License\LicenseNotFoundException;
 use CS\Models\License\LicenseRecord;
 use CS\Queue\Manager as QueueManager;
 use CS\Users\UsersNotes;
+use Monolog\Logger;
 use Models\Billing;
 use Models\Devices,
     System\FlashMessages,
@@ -122,8 +123,11 @@ class Profile extends BaseController
                 $deviceObserver->assignLicenseToDevice();
                 
             } catch (InvalidLimitationsCountException $e) {
-                $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('Device already has license'));
+                $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('Device already has subscription'));
             } catch (\Exception $e) {
+                /** @var Logger $logger */
+                $logger = $this->di->get('logger');
+                $logger->addCritical($e);
                 $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('Internal Server Error'));
             }
         }
@@ -188,7 +192,7 @@ class Profile extends BaseController
                     throw new LicenseNotFoundException;
 
                 if ($this->getDeviceRecord()->getOS() == DeviceRecord::OS_ICLOUD && $newLicenseRecord->getProduct()->getGroup() != 'premium' && $newLicenseRecord->getProduct()->getGroup() != 'trial') {
-                    $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('iCloud is available for Premium Subscription only'));
+                    $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('iCloud solution is available for Premium Subscription only'));
                     
                     if($this->getRequest()->hasGet('oldLicenseId')){
                         $this->redirect("{$this->di->getRouter()->getRouteUri('profileAssignChoice')}?deviceId={$this->getDeviceRecord()->getId()}&oldLicenseId={$this->getOldLicenseRecord()->getId()}");
@@ -274,7 +278,7 @@ class Profile extends BaseController
                         $iCloudRecord->setLastError(BackupQueueUnit::ERROR_NONE);
                     $iCloudRecord->save();
 
-                    $this->di->getFlashMessages()->add(FlashMessages::SUCCESS, $this->di->getTranslator()->_('You have successfully updated iCloud password. New iCloud backup will be loaded shortly'));
+                    $this->di->getFlashMessages()->add(FlashMessages::SUCCESS, $this->di->getTranslator()->_('You have successfully updated the iCloud password. A new iCloud backup will be uploaded shortly'));
                     $this->ajaxResponse(true, array(
                         'location' => $this->di->getRouter()->getRouteUri('profile')
                     ));
@@ -290,7 +294,7 @@ class Profile extends BaseController
             $this->redirect($this->di->getRouter()->getRouteUri('profile'));
             
         } catch (AuthorizationException $e) {
-            $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_("Oops, iCloud password didn't work. Please try again"));
+            $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_("Oops, the iCloud password didn't work. Please try again"));
             $this->ajaxResponse(false, array(
                 'location' => $this->di->getRouter()->getRouteUri('profileICloudPasswordReset')."?deviceId={$this->getRequest()->get('deviceId')}"
             ));
