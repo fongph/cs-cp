@@ -76,7 +76,7 @@ class Wizard extends BaseController {
                 if($device['device_id'] == $this->getRequest()->post('device_id')){
                     $isDeviceFound = true;
                     if($device['active']){
-                        $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('Device Already Has License'));
+                        $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('Device Already Has Subscription'));
                         $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_SETUP));
                     }
                 }
@@ -110,7 +110,7 @@ class Wizard extends BaseController {
                 if($deviceObserver->assignLicenseToDevice()) {
                     $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_FINISH, array('deviceId'=>$deviceObserver->getDevice()->getId())));
                     
-                } else throw new \Exception("Can't assign Device {$deviceObserver->getDevice()->getId()} to License {$deviceObserver->getLicense()->getId()}");
+                } else throw new \Exception("Can't assign Device {$deviceObserver->getDevice()->getId()} to Subscription {$deviceObserver->getLicense()->getId()}");
                     
             } catch (\Exception $e) {
                 $this->logger->addCritical($e);
@@ -148,9 +148,9 @@ class Wizard extends BaseController {
                 $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_FINISH, array('deviceId'=>$info['assigned_device_id'])));
                 
             } elseif ($info['expired']) {
-                $this->di->getFlashMessages()->add(FlashMessages::ERROR, "Code was expired. We've generated new code for you. Please enter it on mobile phone.");
+                $this->di->getFlashMessages()->add(FlashMessages::ERROR, "he code has expired. We've generated a new code for you. Please enter it on the target device");
                 
-            } else $this->di->getFlashMessages()->add(FlashMessages::ERROR, "It looks you haven't entered code on mobile yet. Please do it now. If you are hesitating where to enter the generated PIN code, you have probably forgotten to download and set up Pumpic application.");
+            } else $this->di->getFlashMessages()->add(FlashMessages::ERROR, "It looks like you haven't entered the code on the target device yet. Please do it now. If you are hesitating where to enter the generated PIN code, you have probably forgotten to download and set up Pumpic application");
             
             $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_REGISTER));
         }
@@ -213,7 +213,7 @@ class Wizard extends BaseController {
                                         if($deviceObserver->assignLicenseToDevice()) {
                                             $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_FINISH, array('deviceId'=>$deviceObserver->getDevice()->getId())));
 
-                                        } else throw new \Exception("Can't assign Device {$deviceObserver->getDevice()->getId()} to License {$deviceObserver->getLicense()->getId()}");
+                                        } else throw new \Exception("Can't assign Device {$deviceObserver->getDevice()->getId()} to Subscription {$deviceObserver->getLicense()->getId()}");
 
                                     } catch (\Exception $e) {
                                         $this->logger->addCritical($e);
@@ -222,7 +222,7 @@ class Wizard extends BaseController {
                                     }
                                     
                                 } else {
-                                    $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('Device Already Has License'));
+                                    $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('Device Already Has Subscription'));
                                     $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_REGISTER));
                                 }
                                 
@@ -272,11 +272,11 @@ class Wizard extends BaseController {
                                             'deviceId' => $deviceObserver->getDevice()->getId(),
                                             'awaitingUpload' => ($device['SnapshotID'] == 1 && !$device['Committed'] ? 1 : 0)
                                         )));
-                                    } else throw new \Exception("USER {$this->auth['id']} Can't add ICloudDevice {$deviceObserver->getDevice()->getId()} to License {$this->getLicense()->getId()}");
+                                    } else throw new \Exception("USER {$this->auth['id']} Can't add ICloudDevice {$deviceObserver->getDevice()->getId()} to Subscription {$this->getLicense()->getId()}");
 
                                 } catch (\Exception $e) {
                                     $this->logger->addCritical($e);
-                                    $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('Something Was Wrong. Please Contact Us!'));
+                                    $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('Something is wrong. Please contact us!'));
                                     $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_REGISTER));
                                 }
                             }
@@ -322,7 +322,7 @@ class Wizard extends BaseController {
                 $device->setName($_POST['deviceName'])->save();
                 $this->di->getFlashMessages()->add(FlashMessages::SUCCESS, $this->di->getTranslator()->_("Device name was successfully updated"));
                 
-            } else $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_("Device name shouldn't be empty"));
+            } else $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_("Device name is missing. Please enter a device name"));
             
             $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_FINISH, array('deviceId'=>$device->getId())));
         }
@@ -420,7 +420,7 @@ class Wizard extends BaseController {
                 throw new \Exception;
             
         } catch (\Exception $e) {
-            $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('iCloud is available for Premium Subscription only. It allows you to monitor iPhones, iPads and iPods Touch without jailbreak.'));
+            $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('iCloud solution is available for Premium Subscription only. It allows you to monitor iPhones, iPads and iPods Touch without jailbreak.'));
             $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_PACKAGE));
         }
         return $license;
@@ -437,14 +437,14 @@ class Wizard extends BaseController {
                     throw new LicenseNotFoundException;
                     
                 } elseif($mastBeAvailable && $license->getStatus() != LicenseRecord::STATUS_AVAILABLE){
-                    $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('License is not available'));
+                    $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('Subscription is not available'));
                     $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_PACKAGE, array(
                         'licenseId' => false
                     )));
                 }
 
             } catch (LicenseNotFoundException $e) {
-                $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('Invalid License'));
+                $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('Invalid Subscription'));
                 $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_PACKAGE, array(
                     'licenseId' => false
                 )));
