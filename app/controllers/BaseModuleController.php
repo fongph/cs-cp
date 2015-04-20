@@ -30,7 +30,7 @@ abstract class BaseModuleController extends BaseController
         $devicesManager = new DevicesManager($this->di['db']);
         $devicesModel = new \Models\Devices($this->di);
 
-        $devices = $devicesManager->getUserActiveDevices($this->auth['id']);
+        $devices = $devicesManager->getUserActiveDevices($this->auth['id'], true);
         $this->di->set('devicesList', $devices);
 
         if (($devId = $devicesModel->getCurrentDevId()) === null) {

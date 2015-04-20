@@ -234,7 +234,9 @@ $di->setShared('usersNotesProcessor', function() use ($di) {
 
     $authData = $auth->getIdentity();
 
-    //@todo Pass adminId to UsersNotes if user has logged as administrator
+    if (isset($authData['admin_id'])) {
+        return new CS\Users\UsersNotes($di['db'], $authData['id'], $authData['admin_id']);
+    }
 
     return new CS\Users\UsersNotes($di['db'], $authData['id']);
 });
