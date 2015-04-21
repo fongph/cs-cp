@@ -97,12 +97,8 @@ class Users extends Model
         
         try {
             $data = $usersManager->getDirectLoginUserData(
-                    $this->di['config']['site'], $userId, $adminId, $hash, GlobalSettings::getDirectLoginSalt($this->di['config']['site'])
+                    $this->di['config']['site'], $userId, $adminId, $supportMode, $hash, GlobalSettings::getDirectLoginSalt($this->di['config']['site'])
             );
-            
-            if ($supportMode) {
-                $data['support_mode'] = true;
-            }
         } catch (\CS\Users\DirectLoginException $e) {
             $this->di['logger']->addAlert("Direct Login Error", array('exception' => $e));
             return false;
@@ -116,10 +112,6 @@ class Users extends Model
 
     public function loginById($id, $mergeData = array())
     {
-        if ($this->di['auth']->hasIdentity()) {
-            
-        }
-        
         $usersManager = $this->getUsersManager();
 
         $data = $usersManager->getUserDataById($this->di['config']['site'], $id);

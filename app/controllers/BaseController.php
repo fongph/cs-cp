@@ -52,6 +52,7 @@ class BaseController extends Controller
         if ($this->auth) {
             $this->view->authData = $this->auth;
             $this->view->supportMode = $this->supportMode;
+            $this->view->demoMode = $this->demo;
         }
 
         if (isset($this->auth['options']['internal-trial-license'])) {

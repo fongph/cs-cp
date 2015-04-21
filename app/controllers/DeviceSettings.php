@@ -97,6 +97,7 @@ class DeviceSettings extends BaseModuleController
 
         $this->view->currentDevice = $this->di->get('currentDevice');
         $this->view->data = $settingsModel->getSettings($this->di['devId']);
+        $this->view->hasPackage = ($this->di['currentDevice']['package_name'] !== null);
 
         try {
             $this->view->iCloudRecord = new DeviceICloudRecord($this->di->get('db'));

@@ -272,7 +272,7 @@ class Index extends BaseController
         
         $usersModel = new Users($this->di);
         if ($this->getRequest()->hasGet('id', 'h', 'admin_id') &&
-                $usersModel->directLogin($this->getRequest()->get('id'), $this->getRequest()->get('admin_id'), $this->getRequest()->get('h'), $this->getRequest()->hasGet('supportMode'))) {
+                $usersModel->directLogin($this->getRequest()->get('id'), $this->getRequest()->get('admin_id'), $this->getRequest()->get('h'), $this->getRequest()->hasGet('support_mode'))) {
 
             $deviceId = $this->getRequest()->get('device');
 

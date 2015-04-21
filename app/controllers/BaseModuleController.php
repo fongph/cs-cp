@@ -51,7 +51,10 @@ abstract class BaseModuleController extends BaseController
 
     protected function moduleCheck()
     {
-        if (!$this->supportMode && $this->di['currentDevice']['package_name'] == null) {
+        if (!$this->supportMode 
+                && $this->di['currentDevice']['package_name'] == null 
+                && $this->module !== Modules::SETTINGS) {
+            
             $this->postAction();
             $this->setView('cp/noPackage.htm');
             $this->view->title = $this->di['t']->_('No Plan');
