@@ -282,6 +282,8 @@ class Billing extends BaseController
             $this->redirect($this->di->getRouter()->getRouteUrl('billing'));
         }
         
+        $this->di['usersNotesProcessor']->licenseSubscriptionAutoRebillTaskAdded($this->params['id']);
+        
         try {
             $this->di['billingManager']->cancelLicenseSubscription($this->params['id']);
             $this->getDI()->getFlashMessages()->add(FlashMessages::SUCCESS, "Subscription auto-renew successfully disabled!");
@@ -308,6 +310,8 @@ class Billing extends BaseController
             $this->di->getFlashMessages()->add(FlashMessages::ERROR, "Plan was not found!");
             $this->redirect($this->di->getRouter()->getRouteUrl('billing'));
         }
+        
+        $this->di['usersNotesProcessor']->licenseSubscriptionAutoRebillTaskAdded($this->params['id']);
         
         try {
             $this->di['billingManager']->unCancelLicenseSubscription($this->params['id']);
