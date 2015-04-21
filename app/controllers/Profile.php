@@ -27,18 +27,13 @@ class Profile extends BaseController
 {
 
     private $deviceRecord, $oldLicenseRecord, $newLicenseRecord;
-
-    public function preAction()
-    {
-        parent::preAction();
-        $this->checkSupportMode();
-    }
     
     public function indexAction()
     {
         
         if ($this->getRequest()->isPost()) {
             $this->checkDemo($this->di['router']->getRouteUrl('profile'));
+            $this->checkSupportMode();
             
             if ($this->getRequest()->post('settings') !== null) {
                 $this->processSettings();
@@ -64,6 +59,7 @@ class Profile extends BaseController
     public function assignChoiceAction()
     {
         $this->checkDemo($this->di['router']->getRouteUrl('profile'));
+        $this->checkSupportMode();
         
         $billingModel = new Billing($this->di);
         
@@ -83,6 +79,7 @@ class Profile extends BaseController
     public function upgradeConfirmAction()
     {
         $this->checkDemo($this->di['router']->getRouteUrl('profile'));
+        $this->checkSupportMode();
         
         $this->view->deviceRecord = $this->getDeviceRecord();
         $this->view->licenseRecord = $this->getNewLicenseRecord();
@@ -94,6 +91,7 @@ class Profile extends BaseController
     public function assignProcessAction()
     {
         $this->checkDemo($this->di['router']->getRouteUrl('profile'));
+        $this->checkSupportMode();
         
         if ($this->getRequest()->isPost()) {
             try {
@@ -263,6 +261,7 @@ class Profile extends BaseController
     public function changeICloudPasswordAction()
     {
         $this->checkDemo($this->di['router']->getRouteUrl('profile'));
+        $this->checkSupportMode();
         
         try {
             if($this->getRequest()->hasGet('deviceId')){
