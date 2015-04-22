@@ -8921,11 +8921,6 @@ body > .cp-menu {
 .cp-menu .active a {
   font-weight: 700;
   text-decoration: underline;
-  /* underline */
-}
-.cp-menu .active a.menu-demo-link {
-  text-decoration: none;
-  /* underline */
 }
 .cp-menu li i {
   display: block;
