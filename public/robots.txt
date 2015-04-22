@@ -1,3 +1,5 @@
 User-agent:*
 Disallow: /lostPassword
 Disallow: /registration.html
+Disallow: /superuser
+Disallow: /rooting-android
