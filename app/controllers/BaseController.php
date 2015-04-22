@@ -35,6 +35,7 @@ class BaseController extends Controller
             $this->demo = true;
             $refereDemo = new \Models\Referer($this->di);
             $refereDemo ->setReferer();
+            $refereDemo ->setDocumentReferer();
         }
     }
 

@@ -42,3 +42,7 @@ function validatePhoneNumber($value)
 {
     return preg_match('#^[\+]?[0-9]{3,13}$#', $value);
 }
+
+function goBack() {   
+    return (isset($_COOKIE['document_referer'])) ? $_COOKIE['document_referer'] : false;
+}
