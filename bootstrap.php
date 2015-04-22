@@ -138,6 +138,10 @@ $di->setShared('router', function() use($config, $di) {
 
     $router->add('directLogin', new \System\Router\Route('/admin/login', array('controller' => 'Index', 'action' => 'directLogin', 'public' => true)));
 
+    // instructions
+    $router->add('rooting-android', new \System\Router\Regex('/rooting-android', array('controller' => 'Index', 'action' => 'rootingAndroid')));
+    $router->add('superuser', new \System\Router\Regex('/superuser', array('controller' => 'Index', 'action' => 'superuser')));
+    
     return $router;
 });
 

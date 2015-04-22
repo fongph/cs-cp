@@ -17,7 +17,11 @@
 <div id="header" class="navbar-default">
     <div class="container">
         <div class="logo-holder">
+            {if $di.config.demo}
+                <a href="{if !goBack()}{$di.config.domain}{else}{goBack()}{/if}" class="logo"></a>
+            {else}
             <a href="{$di.config.domain}" class="logo"></a>
+            {/if}
         </div>
         {if !empty($cpMenu)}
         <div class="toggle-left">

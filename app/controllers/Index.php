@@ -288,4 +288,26 @@ class Index extends BaseController
         $this->error404();
     }
 
+    /**
+     * Instructions
+     */
+    public function rootingAndroidAction() {
+        $this->setView('instructions/root-android-instructions.html');
+        $this->view->title = $this->di['t']->_('Rooting Android');
+        $this->view->previos = $this -> pagePrev();
+    }
+    
+    public function superuserAction() {
+        $this->setView('instructions/superuser.html');
+        $this->view->title = $this->di['t']->_('Granting Superuser Rights');
+        $this->view->previos = $this -> pagePrev();
+    }
+    
+    public function pagePrev() {
+        $previous = "javascript:history.go(-1)";
+        if(isset($_SERVER['HTTP_REFERER'])) {
+            $previous = $_SERVER['HTTP_REFERER'];
+        }
+        return $previous;
+    }
 }
