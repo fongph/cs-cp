@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "7f58bc2e8516a86d259d3e064786c6e3",
+    "hash": "3aa1fb282c6457f1297042cb17b9a425",
     "packages": [
         {
             "name": "boomers/cs-billing",
@@ -167,7 +167,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-settings.git",
-                "reference": "e5c68af64f06ec7fb846cd4ebf7e11172e86e3f3"
+                "reference": "33137ee78e6ba3fbc318eb9de9f3040d2ab32e4b"
             },
             "require": {
                 "php": ">=5.4.0"
@@ -178,7 +178,7 @@
                     "CS\\Settings\\": "src/"
                 }
             },
-            "time": "2015-04-15 11:14:28"
+            "time": "2015-04-22 07:19:21"
         },
         {
             "name": "boomers/cs-users",
@@ -186,7 +186,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-users.git",
-                "reference": "89709566534ed4acb97c95dede7d5820a1c0e4cc"
+                "reference": "885dfd1ad387a9e099c94b1d4d054982d61c0a31"
             },
             "require": {
                 "boomers/cs-mail": "dev-master",
@@ -206,7 +206,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2015-04-21 11:07:12"
+            "time": "2015-04-22 11:01:20"
         },
         {
             "name": "boomers/ip",
