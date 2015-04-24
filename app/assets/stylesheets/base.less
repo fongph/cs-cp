@@ -12,10 +12,24 @@
     margin: 0;
 }
 
-.blue-asterisk {
-    color: @brand-info;
+.asterisk {
+    display: inline;
     padding-left: 3px;
 }
+
+.asterisk-info {
+    color: @brand-info;
+}
+
+.asterisk-default {
+    color: @gray-dark;
+}
+
+.asterisk-primary {
+    color: @brand-primary;
+}
+
+/* remove this code from here */
 
 .box-plans { 
     display: inline-block;
@@ -159,11 +173,15 @@
         }
         
     }
-    .only-mobile { display: none; }
+    .only-mobile {
+        display: none;
+    }
 }
 @media (max-width: @screen-xs-max) { 
     .box-header-info { 
         display: none; 
     }
-    .only-mobile { display: block; }
+    .only-mobile {
+        display: block;
+    }
 }
