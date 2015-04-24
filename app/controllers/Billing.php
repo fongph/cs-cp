@@ -40,7 +40,8 @@ class Billing extends BaseController
         
         $this->view->unlimitedValue = \CS\Models\Limitation\LimitationRecord::UNLIMITED_VALUE;
         $this->view->buyUrl = GlobalSettings::getMainURL($this->di['config']['site']) . '/buy.html';
-        $this->view->bundles = $billingModel->getBundlesList($this->auth['id']);
+        $this->view->hasActivePackages = $billingModel->hasActivePackages($this->auth['id']);
+        //$this->view->bundles = $billingModel->getBundlesList($this->auth['id']);
 
         $this->setView('billing/index.htm');
     }

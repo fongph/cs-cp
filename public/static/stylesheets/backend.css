@@ -8929,6 +8929,7 @@ body > .cp-menu {
 }
 .cp-menu li {
   display: table;
+  width: 100%;
 }
 .cp-menu li .name-wrapper {
   display: table-cell;
