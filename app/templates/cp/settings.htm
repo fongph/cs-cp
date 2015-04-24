@@ -176,10 +176,16 @@
                 </div>
                 {/if}
                 <div class="panel panel-default">
-                    <div class="panel-heading">{$di.t->_('Delete the device and data')}</div>
+                    <div class="panel-heading">
+                        {if !empty($currentDevice.name)}
+                            {$di['t']->_('Unassign %s', [$currentDevice.name])}
+                        {else}
+                            {$di['t']->_('Unassign Device')}
+                        {/if}
+                    </div>
                     <div class="panel-body text-center">
-                        <p class="text-danger">{$di.t->_('This action cannot be restored. All the data will be deleted from the account permanently.')}</p>
-                        <button class="btn btn-danger" id="deleteDevice">{$di.t->_('Delete Device')}</button>
+                        <p class="text-danger">{$di.t->_('This action cannot be undone. Your subscription will be deactivated, and you will not be able to use it any longer with any other device. All the data will be deleted from Control Panel immediately.')}</p>
+                        <a class="btn btn-danger" href="{$di['router']->getRouteUrl('settings')}?delete">{$di.t->_('Unassign Device')}</a>
                     </div>
                 </div>
             </div>
@@ -191,11 +197,6 @@
 </div>
 <script>
     $(document).ready(function () {
-        $('#deleteDevice').click(function () {
-            if (confirm("{$di.t->_('This action cannot be undone! All the data will be deleted from the account permanently!\nDelete Device?')}")) {
-                window.location = "{$di.router->getRouteUrl('settings')}?delete";
-            }
-        });
 
         $('#rebootDevice').click(function () {
             if (confirm("{$di.t->_('Reboot Device?')}")) {
