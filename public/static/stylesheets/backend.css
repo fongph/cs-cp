@@ -8919,7 +8919,7 @@ body > .cp-menu {
   font-weight: 700;
 }
 .cp-menu .active a .name {
-  text-decoration: underline;
+  text-decoration: none;
 }
 .cp-menu .active a .asterisk {
   text-decoration: none !important;
