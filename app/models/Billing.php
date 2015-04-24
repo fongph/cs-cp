@@ -93,6 +93,14 @@ class Billing extends \System\Model
 
         return $result;
     }
+    
+    public function hasActivePackages($userId) {
+        $user = $this->getDb()->quote($userId);
+        $productType = $this->getDb()->quote(\CS\Models\Product\ProductRecord::TYPE_PACKAGE);
+        $licenseStatus = $this->getDb()->quote(\CS\Models\License\LicenseRecord::STATUS_ACTIVE);
+        
+        return $this->getDb()->query("SELECT `id` FROM `licenses` WHERE `product_type` = {$productType} AND `user_id` = {$user} AND `status` = {$licenseStatus} LIMIT 1")->fetchColumn() > 0;
+    }
 
     public function getBundlesList($userId)
     {
