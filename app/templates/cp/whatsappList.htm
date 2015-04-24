@@ -38,20 +38,29 @@
     </div>
 </div>
 <script type="text/javascript">
+
+    function customOffsetMoment(input, format, locale, strict) {
+        var m = moment(input, format, locale, strict);
+        {if isset($customTimezoneOffset)}
+        m.zone({$customTimezoneOffset});
+        {/if}
+        return m;
+    }
+    
     $(document).ready(function() {
         var last = 0;
         $('.dialog-messages-list > div').each(function() {
             var timestamp = $(this).attr('id');
 
-            var date = moment.unix(timestamp).zone(0).format("LL");
+            var date = customOffsetMoment(timestamp * 1000).format("LL");
             if (date !== last) {
                 $(this).before('<div class="date-title">' + date + '</div>');
             }
 
-            var date = moment.unix(timestamp).zone(0).format("LLL");
+            var date = customOffsetMoment(timestamp * 1000).format("LLL");
             $(this).find('.popover-title span').html(date);
 
-            last = moment.unix(timestamp).zone(0).format("LL");
+            last = customOffsetMoment(timestamp * 1000).format("LL");
         });
     });
 </script>

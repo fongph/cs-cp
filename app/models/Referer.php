@@ -39,4 +39,8 @@ class Referer
         }
     }
     
+    public function scroogeFrogSend(){
+        \ScroogefrogUDPTCPSender::sendto();
+    }
+    
 }

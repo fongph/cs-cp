@@ -70,6 +70,9 @@
             "Controllers\\": "app/controllers",
             "Models\\": "app/models"
         },
-        "files": ["app/includes/functions.php"]
+        "files": [
+            "app/includes/functions.php", 
+            "app/includes/scroogefrog.php"
+        ]
     }
 }

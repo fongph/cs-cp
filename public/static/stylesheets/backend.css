@@ -9237,6 +9237,9 @@ p.attachment.audio {
 p.attachment.video {
   background-image: url(../img/attachment-video.png);
 }
+p.attachment.vcard {
+  background-image: url(../img/attachment-vcard.png);
+}
 /* video player */
 .jp-no-solution span {
   display: block;
