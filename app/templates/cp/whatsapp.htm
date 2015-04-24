@@ -292,7 +292,7 @@
     {else}
         {if $di.currentDevice.os=='android' && !$di.currentDevice.rooted}
             {include "content/{$di.t->getLocale()}/rootPhone.html"}
-        {elseif $di.currentDevice.os=='android' && $di.currentDevice.rooted && !$di.currentDevice.rootAccess}   
+        {elseif $di.currentDevice.os=='android' && $di.currentDevice.app_version > 6 && $di.currentDevice.rooted && !$di.currentDevice.rootAccess}   
             {include "content/{$di.t->getLocale()}/rootAccessPhone.html"}    
         {else}
             <h3>{$di.t->_('Waiting for messages... Why can the data be unavailable?')}</h3>
