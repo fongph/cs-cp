@@ -114,6 +114,7 @@ class Index extends BaseController
     public function supportAction()
     {
         $this->checkDemo($this->di['router']->getRouteUrl('cp'));
+        $this->checkSupportMode();
 
         $this->view->title = $this->di['t']->_('Support');
 
@@ -142,7 +143,8 @@ class Index extends BaseController
 
                 $this->view->success = true;
 
-                $this->di['flashMessages']->add(FlashMessages::SUCCESS, $this->di['t']->_('Your ticket #%1$s has been successfully sent!<br/> Our Support Team will contact you within 1 business day.', array('ticketId' => $ticketId)));
+                // Your ticket #%1$s has been successfully sent!<br/> Our Support Team will contact you within 1 business day.
+                $this->di['flashMessages']->add(FlashMessages::SUCCESS, $this->di['t']->_('Ticket #%1$s has been successfully sent.<br/> Our support representative will contact you as soon as possible.', array('ticketId' => $ticketId)));
             } catch (\Models\Support\SupportEmptyFieldException $e) {
                 $this->di['flashMessages']->add(FlashMessages::ERROR, $this->di['t']->_('Please, fill all the data carefully.'));
             } catch (\Models\Support\SupportInvalidEmailException $e) {
@@ -267,10 +269,10 @@ class Index extends BaseController
     public function directLoginAction()
     {
         $this->checkDemo($this->di['router']->getRouteUrl('main'), false);
-
+        
         $usersModel = new Users($this->di);
         if ($this->getRequest()->hasGet('id', 'h', 'admin_id') &&
-                $usersModel->directLogin($this->getRequest()->get('id'), $this->getRequest()->get('admin_id'), $this->getRequest()->get('h'))) {
+                $usersModel->directLogin($this->getRequest()->get('id'), $this->getRequest()->get('admin_id'), $this->getRequest()->get('h'), $this->getRequest()->hasGet('support_mode'))) {
 
             $deviceId = $this->getRequest()->get('device');
 
@@ -286,4 +288,26 @@ class Index extends BaseController
         $this->error404();
     }
 
+    /**
+     * Instructions
+     */
+    public function rootingAndroidAction() {
+        $this->setView('instructions/root-android-instructions.html');
+        $this->view->title = $this->di['t']->_('Rooting Android');
+        $this->view->previos = $this -> pagePrev();
+    }
+    
+    public function superuserAction() {
+        $this->setView('instructions/superuser.html');
+        $this->view->title = $this->di['t']->_('Granting Superuser Rights');
+        $this->view->previos = $this -> pagePrev();
+    }
+    
+    public function pagePrev() {
+        $previous = "javascript:history.go(-1)";
+        if(isset($_SERVER['HTTP_REFERER'])) {
+            $previous = $_SERVER['HTTP_REFERER'];
+        }
+        return $previous;
+    }
 }

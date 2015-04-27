@@ -23,9 +23,13 @@ class Users extends Model
         return new UserRecord($this->getDb());
     }
 
+    /**
+     * 
+     * @return UsersManager
+     */
     public function getUsersManager()
     {
-        return new UsersManager($this->getDb());
+        return $this->di['usersManager'];
     }
 
     public function login($email, $password, $remember = false)
@@ -87,16 +91,16 @@ class Users extends Model
         return $userRecord->save();
     }
 
-    public function directLogin($userId, $adminId, $hash)
+    public function directLogin($userId, $adminId, $hash, $supportMode = false)
     {
         $usersManager = $this->getUsersManager();
-
+        
         try {
             $data = $usersManager->getDirectLoginUserData(
-                    $this->di['config']['site'], $userId, $adminId, $hash, GlobalSettings::getDirectLoginSalt($this->di['config']['site'])
+                    $this->di['config']['site'], $userId, $adminId, $supportMode, $hash, GlobalSettings::getDirectLoginSalt($this->di['config']['site'])
             );
         } catch (\CS\Users\DirectLoginException $e) {
-            $this->di['logger']->addAlert("Direct Login Error: " . $e->getMessage());
+            $this->di['logger']->addAlert("Direct Login Error", array('exception' => $e));
             return false;
         }
 
@@ -106,13 +110,13 @@ class Users extends Model
         return true;
     }
 
-    public function loginById($id)
+    public function loginById($id, $mergeData = array())
     {
         $usersManager = $this->getUsersManager();
 
         $data = $usersManager->getUserDataById($this->di['config']['site'], $id);
 
-        $this->di['auth']->setIdentity($data);
+        $this->di['auth']->setIdentity(array_merge($data, $mergeData));
 
         $this->setLocale($data['locale'], false);
 
@@ -122,7 +126,18 @@ class Users extends Model
     public function reLogin()
     {
         $data = $this->di['auth']->getIdentity();
-        return $this->loginById($data['id']);
+        
+        $mergeData = array();
+        
+        if (isset($data['admin_id'])) {
+            $mergeData['admin_id'] = $data['admin_id'];
+        }
+        
+        if (isset($data['support_mode'])) {
+            $mergeData['support_mode'] = $data['support_mode'];
+        }
+        
+        return $this->loginById($data['id'], $mergeData);
     }
 
     public function logout()

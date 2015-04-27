@@ -71,6 +71,15 @@
         </div>
     </div>
     <script type="text/javascript">
+    
+        function customOffsetMoment(input, format, locale, strict) {
+            var m = moment(input, format, locale, strict);
+            {if isset($customTimezoneOffset)}
+                m.zone({$customTimezoneOffset});
+            {/if}
+            return m;
+        }
+
         $(document).ready(function() {
             var typeTmpl = _.template('<i class="call-<%= type %> hidden-xs" title="<%= title %>"></i><span class="visible-xs"><%= title %></span>');
 
@@ -171,7 +180,7 @@
                                             account: encodeURIComponent($('#account').val()),
                                             tab: 'group',
                                             id: encodeURIComponent(obj.aData.group),
-                                            date: moment(obj.aData.timestamp * 1000).zone(0).format('lll')
+                                            date: customOffsetMoment(obj.aData.timestamp * 1000).format('lll')
                                         });
                                     }
 
@@ -179,7 +188,7 @@
                                         account: encodeURIComponent($('#account').val()),
                                         tab: 'private',
                                         id: encodeURIComponent(obj.aData.id),
-                                        date: moment(obj.aData.timestamp * 1000).zone(0).format('lll')
+                                        date: customOffsetMoment(obj.aData.timestamp * 1000).format('lll')
                                     });
                                 }
                             }],
@@ -254,10 +263,10 @@
                                             account: encodeURIComponent($('#account').val()),
                                             tab: 'conference',
                                             id: encodeURIComponent(obj.aData.group),
-                                            date: moment(obj.aData.timestamp * 1000).zone(0).format('lll')
+                                            date: customOffsetMoment(obj.aData.timestamp * 1000).format('lll')
                                         });
                                     }
-                                    return moment(obj.aData.timestamp * 1000).zone(0).format('lll');
+                                    return customOffsetMoment(obj.aData.timestamp * 1000).format('lll');
                                 }
                             }],
                         fnDrawCallback: function() {
@@ -340,7 +349,9 @@
     </script>
     {else}
     {if $di.currentDevice.os=='android' && !$di.currentDevice.rooted}
-    {include "content/{$di.t->getLocale()}/rootPhone.html"}
+        {include "content/{$di.t->getLocale()}/rootPhone.html"}
+    {elseif $di.currentDevice.os=='android' && $di.currentDevice.rooted && !$di.currentDevice.rootAccess}   
+        {include "content/{$di.t->getLocale()}/rootAccessPhone.html"}        
     {else}
     <h3>{$di.t->_('Waiting for messages... Why can the data be unavailable?')}</h3>
     {include "content/{$di.t->getLocale()}/noData.html"}

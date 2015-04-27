@@ -1,27 +1,47 @@
+{if $di.config.demo && $di.devicesList[$di.devId].os == 'android'}
+    {set $moduelesAvailability = [
+        'calls' => 'primary',
+        'sms' => 'primary',
+        'locations' => 'primary',
+        'browserBookmarks' => 'primary',
+        'browserHistory' => 'primary',
+        'calendar' => 'primary',
+        'contacts' => 'primary',
+        'keylogger' => 'default',
+        'photos' => 'primary',
+        'videos' => 'default',
+        'skype' => 'default',
+        'whatsapp' => 'default',
+        'facebook' => 'default',
+        'kik' => 'default',
+        'vk' => 'default',
+        'instagram' => 'default',
+        'emails' => 'primary',
+        'applications' => 'primary',
+        'smsCommands' => 'default'
+    ]}
+{/if}
 <ul data-role="panelbar" class="nav">
     {foreach $cpMenu as $url => $menu}
     <li{if $menu.active} class="active"{/if}>
-        <a {if $di.config.demo}class="menu-demo-link"{/if} href="{$url}">
-            {if $di.config.demo}
-            <div id="block-icon"><i class="menu-{$menu.class}"></i></div><span>{$menu.name}&nbsp;{if !empty($menu.point)}<span class="{$menu.point}">*</span>{/if}</span>
-            {else}
-                <i class="menu-{$menu.class}"></i><span>{$menu.name}</span>
-            {/if}
+        <a href="{$url}">
+            <i class="menu-{$menu.class}" data-module="{$menu.class}"></i>
+            <div class="name-wrapper">
+                {if isset($moduelesAvailability[$menu['class']])}
+                    <span class="name">{$menu.name}</span><span class="asterisk asterisk-{$moduelesAvailability[$menu['class']]}">*</span>
+                {else}
+                    <span class="name">{$menu.name}</span>
+                {/if}
+            </div>
         </a>    
     </li>
     {/foreach}
-    {if $di.config.demo}
-        {if !empty($di.devicesList)}
-            {if $di.devicesList[$di.devId].os == 'android'}
-                <li>
-                    <span>
-                        <div class="box-plans">
-                            <div id="basicPlan"><span class="color-green">*</span> - Basic plan</div>
-                            <div id="premiumPlan"><span class="color-black">*</span> - Premium plan</div>
-                        </div>
-                    </span>
-                </li>
-            {/if}
-        {/if}        
+    {if isset($moduelesAvailability)}
+        <li>
+            <div class="bottom-info">
+                <div><span class="asterisk asterisk-primary">*</span> - Basic plan</div>
+                <div><span class="asterisk asterisk-default">*</span> - Premium plan</div>
+            </div>
+        </li>
     {/if}
 </ul>

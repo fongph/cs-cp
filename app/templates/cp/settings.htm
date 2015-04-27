@@ -13,9 +13,9 @@
             </div>
 
             <div class="col-lg-6 col-md-6">
-                {if $data.isBlackListAvailable}
+                {if $hasPackage && $data.isBlackListAvailable}
                 <div class="panel panel-default">
-                    <div class="panel-heading">{if $data.blockSMSActive}{$di.t->_('Calls & SMS blocking by number')}{else}{$di.t->_('Calls blocking by number')}{/if}<span class="blue-asterisk">*</span></div>
+                    <div class="panel-heading">{if $data.blockSMSActive}{$di.t->_('Calls & SMS blocking by number')}{else}{$di.t->_('Calls blocking by number')}{/if}<span class="asterisk asterisk-info">*</span></div>
                     <div class="panel-body text-center">
                         {if count($data.blackListPhones)}
                         <ul class="list-group">
@@ -43,10 +43,10 @@
                                 <label>{$di.t->_('Device Name')}</label>
                                 <input type="text" name="name" value="{$di.currentDevice.name}" class="form-control">
                             </div>
-                            {if $data.isSimNotificationAvailable}
+                            {if $hasPackage && $data.isSimNotificationAvailable}
                             <div class="checkbox">
                                 <label>
-                                    <input type="checkbox" name="simNotificactions"{if $data.settings.sim_notification} checked{/if} /> {$di.t->_('Receive SIM change notifications')}<span class="blue-asterisk">*</span>
+                                    <input type="checkbox" name="simNotificactions"{if $data.settings.sim_notification} checked{/if} /> {$di.t->_('Receive SIM change notifications')}<span class="asterisk asterisk-info">*</span>
                                 </label>
                             </div>
                             {/if}
@@ -54,9 +54,9 @@
                         </form>
                     </div>
                 </div>
-                {if $data.blockSMSActive || $data.isOutgoingSmsLimitationsAvailable}
+                {if $hasPackage && ($data.blockSMSActive || $data.isOutgoingSmsLimitationsAvailable)}
                 <div class="panel panel-default">
-                    <div class="panel-heading">{$di.t->_('SMS Limiting')}<span class="blue-asterisk">*</span></div>
+                    <div class="panel-heading">{$di.t->_('SMS Limiting')}<span class="asterisk asterisk-info">*</span></div>
                     <div class="panel-body">
                         <form action="" method="post">
                         {if $data.blockSMSActive}
@@ -100,34 +100,36 @@
                 {/if}
             </div>
             <div class="col-lg-6 col-md-6">
-                {if $di.currentDevice.os == 'icloud'}
-                {if isset($iCloudRecord) && $iCloudRecord->getId()}
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                        <div class="icloud-status">
-                            <strong>{$di.t->_('Device status')}:</strong>
-                            {if $iCloudRecord->getProcessing()}
-                            {$di.t->_('Awaiting New Data Upload')}
-                            {elseif $iCloudRecord->getLastError() == 1}
-                            {$di.t->_('iCloud Authorization Error. Please %schange the password%s', ['<a href="' ~ $di->getRouter()->getRouteUri("profileICloudPasswordReset") ~ '?iCloudId=' ~ $iCloudRecord->getId() ~ '">', '</a>'])} 
-                            {elseif $iCloudRecord->getLastError()}
-                            {$di.t->_('New Data Upload Error. Please contact Customer %sSupport%s', ['<a href="mailto:support@pumpic.com">', '</a>'])}
-                            {else}
-                            {$di.t->_('Awaiting iCloud Backup')}
-                            {/if}
+                {if $hasPackage}
+                    {if $di.currentDevice.os == 'icloud'}
+                        {if isset($iCloudRecord) && $iCloudRecord->getId()}
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <div class="icloud-status">
+                                    <strong>{$di.t->_('Device status')}:</strong>
+                                    {if $iCloudRecord->getProcessing()}
+                                    {$di.t->_('Awaiting New Data Upload')}
+                                    {elseif $iCloudRecord->getLastError() == 1}
+                                    {$di.t->_('iCloud Authorization Error. Please %schange the password%s', ['<a href="' ~ $di->getRouter()->getRouteUri("profileICloudPasswordReset") ~ '?iCloudId=' ~ $iCloudRecord->getId() ~ '">', '</a>'])} 
+                                    {elseif $iCloudRecord->getLastError()}
+                                    {$di.t->_('New Data Upload Error. Please contact Customer %sSupport%s', ['<a href="mailto:support@pumpic.com">', '</a>'])}
+                                    {else}
+                                    {$di.t->_('Awaiting iCloud Backup')}
+                                    {/if}
+                                </div>
+                            </div>
+                        </div>
+                        {/if}
+                    {else}
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="device-status">
+                                <div class="name">{$di.t->_('Device status')}:</div>
+                                <div class="value{if $di.currentDevice.online} {if $di.currentDevice.network=='wifi'}wifi{else}mobile{/if}{else} offline{/if}"></div>
+                            </div>
                         </div>
                     </div>
-                </div>
-                {/if}
-                {else}
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                        <div class="device-status">
-                            <div class="name">{$di.t->_('Device status')}:</div>
-                            <div class="value{if $di.currentDevice.online} {if $di.currentDevice.network=='wifi'}wifi{else}mobile{/if}{else} offline{/if}"></div>
-                        </div>
-                    </div>
-                </div>
+                    {/if}
                 {/if}
                 {*
                 <div class="panel panel-default">
@@ -150,7 +152,7 @@
                     </div>
                 </div>
                 *}
-                {if $data.rebootApplicationActive || $data.rebootDeviceActive}
+                {if $hasPackage && ($data.rebootApplicationActive || $data.rebootDeviceActive)}
                 <div class="panel panel-default">
                     <div class="panel-body">
                         {if $data.rebootDeviceActive}<button type="submit" id="rebootDevice" class="btn btn-danger">{$di.t->_('Reboot Device')}</button>{/if}
@@ -158,12 +160,12 @@
                     </div>
                 </div>
                 {/if}
-                {if $data.lockActive}
+                {if $hasPackage && $data.lockActive}
                 <div class="panel panel-default">
                     <div class="panel-body">
                         <form role="form" action="" method="post">
                             <div class="form-group">
-                                <label for="password">{$di.t->_('Lock device with password')}<span class="blue-asterisk">*</span></label>
+                                <label for="password">{$di.t->_('Lock device with password')}<span class="asterisk asterisk-info">*</span></label>
                                 <input type="text" name="password" id="password" value="" class="form-control">
                                 <p class="help-block">{$di.t->_('Only 4 digits!')}</p>
                                 {if $di.currentDevice.os == 'ios'}<p class="text-info">{$di.t->_('This is a one-time password used for additional authentication. If you already have a password set on the phone, the new one-time password will be written over it. To unblock the phone, enter the new password (the "wrong password" alert will pop up) and then enter the original password.')}</p>{/if}
@@ -183,8 +185,8 @@
             </div>
         </div>
     </div>
-    {if $data.isDeviceCommandsAvailable}
-        <p class="text-info"><span class="blue-asterisk">*</span> {$di.t->_('Command activation will take up to 20 min. In case the target phone has additional software to track calls or SMS, blocking may not work properly.')}</p>
+    {if $hasPackage && $data.isDeviceCommandsAvailable}
+        <p class="text-info"><span class="asterisk asterisk-info">*</span> {$di.t->_('Command activation will take up to 20 min. In case the target phone has additional software to track calls or SMS, blocking may not work properly.')}</p>
     {/if}
 </div>
 <script>

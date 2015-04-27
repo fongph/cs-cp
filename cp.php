@@ -118,8 +118,8 @@ $console->register('load-demo-user')
             $output->writeln('User data successfully exported to file!');
         });
 
-$console->register('update-demo-user')
-        ->setDescription('Update demo user data time')
+$console->register('update-demo-user-data')
+        ->setDescription('Update demo user data time of devices')
         ->setDefinition(array(
             new InputArgument('days', InputArgument::REQUIRED, 'The number of days to increase')
         ))
@@ -187,13 +187,76 @@ $console->register('update-demo-user')
                                 'Exception during updatting demo user data - %s: "%s" at %s line %s', get_class($exception), $exception->getMessage(), $exception->getFile(), $exception->getLine()
                 ));
                 $pdo->rollBack();
-                $output->writeln("<error>Exception during updatting demo user data</error>");
+                $output->writeln("<error>Exception during updating demo user data</error>");
                 return;
             }
             
             $pdo->commit();
 
             $message = "User data successfully updated by $days days!";
+
+            $logger->addInfo($message);
+            $output->writeln($message);
+        });
+        
+$console->register('update-demo-user-devices-status')
+        ->setDescription('Update demo user devices last update time')
+        ->setCode(function (InputInterface $input, OutputInterface $output) {
+            if (!is_file(ROOT_PATH . 'build.php')) {
+                $output->writeln("<error>build.php file file not found!</error>");
+                return;
+            }
+
+            $config = include ROOT_PATH . 'build.php';
+
+            if ($config['demo'] == 0) {
+                $output->writeln("<error>Demo user id not defined for this build!</error>");
+                return;
+            }
+            
+            $demoUserId = $config['demo'];
+
+            $di = new System\DI();
+            $di->set('config', $config);
+
+            require ROOT_PATH . 'bootstrap.php';
+
+            $logger = new Monolog\Logger('logger');
+            $logger->pushHandler(new Monolog\Handler\StreamHandler(ROOT_PATH . 'logs/demo.log', Monolog\Logger::INFO));
+            
+            /**
+             * @todo Update to use multiple data databases
+             */
+            
+            $pdo = $di['dataDb'];
+            
+            try {
+                $pdo->beginTransaction();
+                
+                $userDevices = $di['db']->query("SELECT `id`, `os` FROM `devices` WHERE `user_id` = {$demoUserId}")->fetchAll(\PDO::FETCH_ASSOC);
+                
+                if (count($userDevices)) {
+                    foreach ($userDevices as $device) {
+                        $time = time() - rand(0, 900);
+                        if ($device['os'] != 'icloud') {
+                            $di['db']->exec("UPDATE `devices` SET `last_visit` = {$time} WHERE `id` = {$device['id']}");
+                        } else {
+                            $di['db']->exec("UPDATE `devices_icloud` SET `last_backup` = {$time}, `last_sync` = {$time} WHERE `dev_id` = {$device['id']}");
+                        }
+                    }
+                }
+            } catch (\Exception $exception) {
+                $logger->addError(sprintf(
+                                'Exception during updatting demo user data - %s: "%s" at %s line %s', get_class($exception), $exception->getMessage(), $exception->getFile(), $exception->getLine()
+                ));
+                $pdo->rollBack();
+                $output->writeln("<error>Exception during updating demo user data</error>");
+                return;
+            }
+            
+            $pdo->commit();
+
+            $message = "User devices last update date successfully updated!";
 
             $logger->addInfo($message);
             $output->writeln($message);

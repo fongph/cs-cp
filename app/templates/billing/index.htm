@@ -150,7 +150,7 @@
                     if (url.match('#')) {
                         $('.nav-pills a[href=#' + url.split('#')[1] + ']').tab('show');
                     } else {
-                        $('.nav-pills a[href=#all]').tab('show');
+                        {if $hasActivePackages}$('.nav-pills a[href=#active]').tab('show');{else}$('.nav-pills a[href=#all]').tab('show');{/if}
                     }
                 },
                 initTable: function () {

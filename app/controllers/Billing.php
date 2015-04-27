@@ -16,6 +16,7 @@ class Billing extends BaseController
     public function preAction()
     {
         $this->checkDemo($this->di['router']->getRouteUrl('cp'));
+        $this->checkSupportMode();
     }
     
     public function indexAction()
@@ -39,7 +40,8 @@ class Billing extends BaseController
         
         $this->view->unlimitedValue = \CS\Models\Limitation\LimitationRecord::UNLIMITED_VALUE;
         $this->view->buyUrl = GlobalSettings::getMainURL($this->di['config']['site']) . '/buy.html';
-        $this->view->bundles = $billingModel->getBundlesList($this->auth['id']);
+        $this->view->hasActivePackages = $billingModel->hasActivePackages($this->auth['id']);
+        //$this->view->bundles = $billingModel->getBundlesList($this->auth['id']);
 
         $this->setView('billing/index.htm');
     }
@@ -281,6 +283,8 @@ class Billing extends BaseController
             $this->redirect($this->di->getRouter()->getRouteUrl('billing'));
         }
         
+        $this->di['usersNotesProcessor']->licenseSubscriptionAutoRebillTaskAdded($this->params['id']);
+        
         try {
             $this->di['billingManager']->cancelLicenseSubscription($this->params['id']);
             $this->getDI()->getFlashMessages()->add(FlashMessages::SUCCESS, "Subscription auto-renew successfully disabled!");
@@ -307,6 +311,8 @@ class Billing extends BaseController
             $this->di->getFlashMessages()->add(FlashMessages::ERROR, "Plan was not found!");
             $this->redirect($this->di->getRouter()->getRouteUrl('billing'));
         }
+        
+        $this->di['usersNotesProcessor']->licenseSubscriptionAutoRebillTaskAdded($this->params['id']);
         
         try {
             $this->di['billingManager']->unCancelLicenseSubscription($this->params['id']);
