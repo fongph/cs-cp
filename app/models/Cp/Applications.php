@@ -50,7 +50,7 @@ class Applications extends BaseModel
         );
 
 
-        $countQueryWhere = "FROM `applications` a WHERE a.`dev_id` = {$devId}";
+        $countQueryWhere = "FROM `applications` a WHERE {$condition}";
 
         if (empty($result['aaData'])) {
             $result['iTotalRecords'] = 0;

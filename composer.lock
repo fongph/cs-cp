@@ -255,16 +255,16 @@
         },
         {
             "name": "fenom/fenom",
-            "version": "2.6.0",
+            "version": "2.6.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fenom-template/fenom.git",
-                "reference": "3a1da1c154e339659d2b97e5c251dbc2aafcd4bf"
+                "reference": "7f05e13725a9e6a73cee89d844cdf2ca08d32413"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fenom-template/fenom/zipball/3a1da1c154e339659d2b97e5c251dbc2aafcd4bf",
-                "reference": "3a1da1c154e339659d2b97e5c251dbc2aafcd4bf",
+                "url": "https://api.github.com/repos/fenom-template/fenom/zipball/7f05e13725a9e6a73cee89d844cdf2ca08d32413",
+                "reference": "7f05e13725a9e6a73cee89d844cdf2ca08d32413",
                 "shasum": ""
             },
             "require": {
@@ -301,7 +301,7 @@
                 "templater",
                 "templating"
             ],
-            "time": "2015-02-22 20:43:33"
+            "time": "2015-04-26 19:32:22"
         },
         {
             "name": "filp/whoops",
