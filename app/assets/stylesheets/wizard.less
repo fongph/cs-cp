@@ -1,0 +1,37 @@
+.bordered-container {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    text-align: center;
+    padding: 20px 30px;
+    margin-top: 15px;
+
+    .row {
+        margin: 10px 0;
+    }
+
+    p:last-child {
+        margin-bottom: 0;
+    }
+}
+
+.wizard-container {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 20px 30px;
+    margin-top: 15px;
+    text-align: left;
+    
+    .row {
+        margin: 10px 0;
+    }
+}
+
+.setup-wizard-breadcrumb.breadcrumb {
+    .active a {
+        color: #39753e;
+    }
+    
+    &> li + li:before {
+        content: '> ';
+    }
+}
