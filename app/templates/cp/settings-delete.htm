@@ -1,0 +1,38 @@
+
+<div>
+    <div class="container-max">
+        <div class="row">
+            <ol class="breadcrumb">
+                <li><a href="{$di.router->getRouteUrl('settings')}">{$title}</a></li>
+                <li class="active">
+                    {if !empty($currentDevice.name)}
+                        {$di['t']->_('Unassign %s', [$currentDevice.name])}
+                    {else}
+                        {$di['t']->_('Unassign Device')}
+                    {/if}
+                </li>
+            </ol>
+            <div class="col-lg-12">
+                {insert "inc.flashMessages.htm"}
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-body text-left">
+                    <p class="text-danger">You're about to unassign this device from your Control Panel. Note that this action cannot be undone.</p>
+                    <p>
+                        Your subscription will be deactivated, and you will not be able to use it any longer with any other device.
+                        The application will immediately stop monitoring the target device,
+                        and you won't be able to access the old data in your Control Panel without re-assigning this device to a new subscription.
+                    </p>
+                    <p>Pumpic app will remain on the target device; however, its functions will be disabled. To remove the application from the target device you should run Pumpic app, enter your secret key, and tap "Delete".</p>
+                    <p>In case of any additional questions, please contact us at <a href="mailto:support@pumpic.com">support@pumpic.com</a>.</p>
+                    <form method="post">
+                        <p class="text-center">
+                            <button class="btn btn-danger" type="submit">{$di.t->_('Unassign')}</button>
+                            <a class="btn btn-default" href="{$di['router']->getRouteUrl('settings')}">{$di.t->_('Cancel')}</a>
+                        </p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

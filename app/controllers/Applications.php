@@ -25,14 +25,14 @@ class Applications extends BaseModuleController
             $dataTableRequest = new \System\DataTableRequest($this->di);
 
             $data = $applicationsModel->getNewDataTableData(
-                    $this->di['devId'], $dataTableRequest->buildResult()
+                    $this->di['devId'], $dataTableRequest->buildResult(array('standard'))
             );
             $this->checkDisplayLength($dataTableRequest->getDisplayLength());
             $this->makeJSONResponse($data);
         }
         
         $this->view->hasRecords = $applicationsModel->hasRecords($this->di['devId']);
-        $this->setView('cp/applications.htm');
+        $this->setView('cp/applications/index.htm');
     }
 
     public function manageAction()
@@ -63,7 +63,7 @@ class Applications extends BaseModuleController
         }
 
         $this->view->application = $application;
-        $this->setView('cp/applicationsManage.htm');
+        $this->setView('cp/applications/manage.htm');
     }
 
     protected function postAction()

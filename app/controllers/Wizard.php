@@ -149,7 +149,7 @@ class Wizard extends BaseController {
                 $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_FINISH, array('deviceId'=>$info['assigned_device_id'])));
                 
             } elseif ($info['expired']) {
-                $this->di->getFlashMessages()->add(FlashMessages::ERROR, "he code has expired. We've generated a new code for you. Please enter it on the target device");
+                $this->di->getFlashMessages()->add(FlashMessages::ERROR, "The code has expired. We've generated a new code for you. Please enter it on the target device");
                 
             } else $this->di->getFlashMessages()->add(FlashMessages::ERROR, "It looks like you haven't entered the code on the target device yet. Please do it now. If you are hesitating where to enter the generated PIN code, you have probably forgotten to download and set up Pumpic application");
             

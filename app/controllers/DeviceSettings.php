@@ -60,6 +60,8 @@ class DeviceSettings extends BaseModuleController
                 }
             } else if ($this->getRequest()->hasPost('smsSettings')) {
                 $this->smsSettings();
+            } else if ($this->getRequest()->hasGet('delete')) {
+                $this->deleteDevice();
             }
 
             $this->redirect($this->di['router']->getRouteUrl('settings'));
@@ -92,7 +94,10 @@ class DeviceSettings extends BaseModuleController
 
             $this->redirect($this->di['router']->getRouteUrl('settings'));
         } else if ($this->getRequest()->hasGet('delete')) {
-            $this->deleteDevice();
+            $this->checkDemo($this->di->getRouter()->getRouteUrl('settings'));
+            $this->view->currentDevice = $this->di->get('currentDevice');
+            $this->setView('cp/settings-delete.htm');
+            return;
         }
 
         $this->view->currentDevice = $this->di->get('currentDevice');
