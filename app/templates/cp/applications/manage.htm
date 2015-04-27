@@ -39,7 +39,14 @@
                 </label>
             </div>    
         </div>
-        <div class="form-group active-hidden">
+        <div class="form-group active-hidden limited-hidden">
+            {if $di.currentDevice.os === 'android'}
+                <p>{$di.t->_('The application will be shut down (even if running) without any notifications as soon as you activate the limit. After the app is closed, a user won’t be able to open it till you unblock the app.')}</p>
+            {else}
+                <p>{$di.t->_('The application will keep running until it is closed. After the app is closed, a user won’t be able to open it till you unblock the app.')}</p>
+            {/if}
+        </div>
+        <div class="form-group active-hidden blocked-hidden">
             <label>{$di.t->_('Block Type')}</label>
             <div class="radio">
                 <label>
