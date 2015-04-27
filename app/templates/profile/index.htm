@@ -168,10 +168,12 @@
                                 {/if}
                                 {if $device.os != 'unknown' && $device.os_version}{$device.os_version}{/if}
                                 {if $device.os == 'android'}
-                                    {if $device.rooted}
-                                        <div class="label label-success">{$di.t->_('rooted')}</div>
+                                    {if $device.root_access}
+                                    <div class="label label-success">{$di.t->_('Rooted with Root Access')}</div>
+                                    {elseif $device.rooted}
+                                        <div class="label label-warning">{$di.t->_('Rooted')}</div>
                                     {else}
-                                        <div class="label label-warning">{$di.t->_('not rooted')}</div>
+                                        <div class="label label-warning">{$di.t->_('Not Rooted')}</div>
                                     {/if}
                                 {elseif $device.os == 'icloud'}
                                     {$di.t->_('without Jailbreak')}

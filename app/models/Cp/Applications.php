@@ -28,12 +28,18 @@ class Applications extends BaseModel
                 }
             }
         }
-
+        
+        if ($params['standard']) {
+            $condition = "a.`dev_id` = {$devId} AND a.`standard` = 1";
+        } else {
+            $condition = "a.`dev_id` = {$devId} AND a.`standard` = 0";
+        }
+        
         $select = "SELECT a.`app_id` id, a.`app_name` name, a.`app_version` version, a.`store_url` url, a.`deleted`, a.`status`, COUNT(t.id) as count, MAX(t.`start`) lasttime, a.`is_blocked` blocked, `timelimit`";
 
         $fromWhere = "FROM `applications` a
             LEFT JOIN `applications_timelines` t ON a.`dev_id` = t.`dev_id` AND a.`app_id` = t.`name`
-            WHERE a.`dev_id` = {$devId}";
+            WHERE {$condition}";
 
         $query = "{$select} {$fromWhere}"
                 . ($search ? " AND ({$search})" : '')
