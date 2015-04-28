@@ -304,7 +304,7 @@ class Index extends BaseController
     }
     
     public function pagePrev() {
-        $previous = "javascript:history.go(-1)";
+        $previous = $this->di['config']['domain'];// "javascript:history.go(-1)";
         if(isset($_SERVER['HTTP_REFERER'])) {
             $previous = $_SERVER['HTTP_REFERER'];
         }
