@@ -46,13 +46,40 @@ class Support extends \System\Model
     public function sendTicket($name, $email, $type, $message)
     {
         $number = $this->getCurrentTicketNumber();
-        $info = $this->getUserAgentInfo();
+        $info = $this->getUserAgentInfoAll();
 
-        $this->di['mailSender']->sendSystemSupportTicket($this->di['config']['supportEmail'], $number, $name, $email, $type, $message, $info['browser'], $info['os'], $info);
-        $this->di['mailSender']->sendSupportTicketUser($this->di['config']['supportEmail'], $number, $name, $email, $type, $message, $info['browser'], $info['os']);
+        $this->di['mailSender']->sendSystemSupportTicket($this->di['config']['supportEmail'], $number, $name, $email, $type, $message, $info['browser'], $info['platform'], $info);
+        $this->di['mailSender']->sendSupportTicketUser($this->di['config']['supportEmail'], $number, $name, $email, $type, $message, $info['browser'], $info['platform']);
 
         return $number;
     }
+
+    public function getUserAgentInfoAll() {
+        $info = get_browser(); $result = array();
+        if (isset($info->browser, $info->version)) {
+            $result['browser'] = $info->browser;
+            $result['browser_version'] = $info->version;
+        }
+        
+        if (isset($info->platform)) {
+            $result['platform'] = $info->platform;
+            if (isset($info->platform_version)) {
+                $result['platform_version'] = $info->platform_version;
+            }
+        }
+
+        if (isset($info->ismobiledevice))
+            $result['ismobiledevice'] = $info->ismobiledevice;
+        
+        if (isset($info->istablet))
+            $result['istablet'] = $info->istablet;
+        
+        if(isset($_COOKIE['_screen']))
+            $result['_screen'] = $_COOKIE['_screen'];
+        
+        return $result;
+    }
+
 
     public function getUserAgentInfo()
     {
