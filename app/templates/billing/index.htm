@@ -43,7 +43,7 @@
         </table>
     </div>
     
-    <p class="text-info"><span class="asterisk asterisk-info">*</span> Promo subscriptions become available only after assigning a paid subscription.</p>
+    <p id="promo-info" class="text-info hidden"><span class="asterisk asterisk-info">*</span> Promo subscriptions become available only after assigning a paid subscription.</p>
     
     {if !$di->get('isWizardEnabled')}
         <a href="{$di.router->getRouteUrl('billingAddDevice')}" class="btn btn-success">{$di.t->_('Add Device')}</a>
@@ -161,6 +161,12 @@
                         bProcessing: true,
                         bServerSide: true,
                         sAjaxSource: this.getSourceUrl(),
+                        fnServerData: function ( sSource, aoData, fnCallback ) {
+                            $("#promo-info").addClass('hidden');
+                            $.getJSON(sSource, aoData, function (json) {
+                                fnCallback(json);
+                            });
+                        },
                         bPaginate: true,
                         bSort: false,
                         bFilter: false,
@@ -208,8 +214,10 @@
                             },
                             {
                                 mData: 'status',
+                                bUseRendered: false,
                                 mRender: function(value) {
                                     if (value === 'promo') {
+                                        $("#promo-info.hidden").removeClass('hidden');
                                         return value + '<span class="asterisk asterisk-info">*</span>';
                                     }
                                     
