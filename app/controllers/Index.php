@@ -138,7 +138,7 @@ class Index extends BaseController
                         $userName,
                         $_user['login'],
                         $this->getRequest()->post('type'), 
-                        $this->getRequest()->post('message')
+                        htmlspecialchars(strip_tags(trim( $this->getRequest()->post('message') )))
                 ); // $this->getRequest()->post('email'),  $this->getRequest()->post('name'), 
 
                 $this->view->success = true;
