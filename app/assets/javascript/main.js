@@ -19,11 +19,19 @@ $.fn.tableScroll = function () {
     });
 };
 
+function getCookie( name ) {
+    if($.cookie(name)) {
+        return $.cookie(name); 
+    } else
+        return false;
+}
+
 $(document).ready(function () {
     $('#toggle').on('click touchend', function (e) {
         e.preventDefault();
         $('body').toggleClass('menu-active');
     });
+    
 });
 
 var languages = {
