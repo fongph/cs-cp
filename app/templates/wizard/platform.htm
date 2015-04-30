@@ -3,8 +3,8 @@
     <h1 class="text-center">{$title}</h1>
     
     {insert "inc.flashMessages.htm"}
-    <div class="wizard-container">
-        <p class="text-center">{$di.t->_('Please select the Platform (Operating System) of the target device.')}</p>
+    <div class="wizard-container text-center">
+        <p>{$di.t->_('Please select the Platform (Operating System) of the target device.')}</p>
         <div class="button-holder">
             <div class="row">
                 <a href="{$di.router->getRouteUrl('wizardSetup', [

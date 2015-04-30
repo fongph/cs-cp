@@ -56,10 +56,9 @@ module.exports = function (grunt) {
             development: {
                 options: {
                     compress: false,
-                    /*sourceMap: true,
-                    sourceMapFilename: './public/static/stylesheets/css.map', // where file is generated and located
-                    sourceMapURL: '/static/stylesheets/css.map' // the complete url and filename put in the compiled css file
-                    */
+                    sourceMap: true,
+                    sourceMapFilename: './public/static/stylesheets/css.map',
+                    sourceMapURL: '/static/stylesheets/css.map'
                 },
                 files: {
                     "./public/static/stylesheets/frontend.css": "./app/assets/stylesheets/frontend.less",

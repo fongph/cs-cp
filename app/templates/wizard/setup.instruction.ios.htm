@@ -1,50 +1,63 @@
 <h4 class="text-center">{$di.t->_('Installation Instructions')}</h4>
-<p class="text-center">
-    <b>
-        Pumpic works on jailbroken iPhones, iPads and iPods Touch.
-        Find out how to jailbreak your iOS device using the following links:
-        <a href="http://www.redmondpie.com/how-to-jailbreak-ios-8.1-using-pangu-for-mac-guide/" target="_blank" rel="nofollow">iOS 8.1</a>,
-        <a href="http://www.redmondpie.com/how-to-jailbreak-ios-8.1.2-using-taig-guide/" target="_blank" rel="nofollow">iOS 8.1.2</a>, 
-        <a href="http://evasi0n.com/" target="_blank" rel="nofollow">iOS 7</a>, 
-        <a href="http://www.redmondpie.com/jailbreak-ios-6.1.3-6.1.4-6.1.5-untethered-on-all-devices-with-p0sixspwn-tutorial/" target="_blank" rel="nofollow">iOS 6</a> 
-    </b>
-</p>
-<p>
-    <b>
-        If the target device is NOT jailbroken, use
-        <a href="{$di->getRouter()->getRouteUrl('wizardSetup', ['platform'=>'icloud'])}">iCloud solution</a>
-        setup instructions.
-    </b>
-</p>
+<p class="text-center"><b>Pumpic works on jailbroken iPhones, iPads and iPods Touch. Find out how to jailbreak your iOS device using the following links: <a href="http://www.redmondpie.com/how-to-jailbreak-ios-8.1-using-pangu-for-mac-guide/" target="_blank" rel="nofollow">iOS 8.1</a>, <a href="http://www.redmondpie.com/how-to-jailbreak-ios-8.1.2-using-taig-guide/" target="_blank" rel="nofollow">iOS 8.1.2</a>, <a href="http://evasi0n.com/" target="_blank" rel="nofollow">iOS 7</a>, <a href="http://www.redmondpie.com/jailbreak-ios-6.1.3-6.1.4-6.1.5-untethered-on-all-devices-with-p0sixspwn-tutorial/" target="_blank" rel="nofollow">iOS 6</a></b></p>
+<p class="text-center"><b>If the target device is NOT jailbroken, use <a href="{$di->getRouter()->getRouteUrl('wizardSetup', ['platform'=>'icloud'])}">iCloud solution</a> setup instructions.</b></p>
 <p class="text-center"><b>GPS must be turned ON before installation</b></p>
-<p class="text-left">1) Take the target device.</p>
-<p class="text-left">2) Find Cydia icon and open it. If you don’t have it, it means the device is not <b>not jailbroken.</b></p>
-<p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/how-to-install/ios-instructions/ios8/1.png" alt="" /></p>
-<p class="text-left">3) Tap &quot;<strong>Sources</strong>&quot; and then &quot;<strong>Edit</strong>&quot;.</p>
-<p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/how-to-install/ios-instructions/ios8/2.png" alt="" /></p>
-<p class="text-left">4) Tap &quot;<strong>Add</strong>&quot;.</p>
-<p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/how-to-install/ios-instructions/ios8/3.png" alt="" /></p>
-<p class="text-left">5) Enter the <strong>URL</strong>: http://ios.loadapps.org</p>
-<p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/how-to-install/ios-instructions/ios8/4.png" alt="" /></p>
-<p class="text-left">6) Wait while Cydia updates sources, and then tap &quot;<strong>Return to Cydia</strong>&quot;.</p>
-<p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/how-to-install/ios-instructions/ios8/5.png" alt="" />&nbsp;<img class="img-thumbnail" src="{$di.config.staticDomain}/images/how-to-install/ios-instructions/ios8/5-1.png" alt="" /></p>
-<p class="text-left">7) Find &quot;<strong>Development API</strong>&quot; and tap on it.</p>
-<p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/how-to-install/ios-instructions/ios8/6-1.png" alt="" /></p>
-<p class="text-left">8) Tap on package &quot;<strong>Core Library</strong>&quot;.</p>
-<p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/how-to-install/ios-instructions/ios8/6.png" alt="" /></p>
-<p class="text-left">9) Tap &quot;<strong>Install</strong>&quot; and then &quot;<strong>Confirm</strong>&quot;.</p>
-<p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/how-to-install/ios-instructions/ios8/7.png" alt="" />&nbsp;<img class="img-thumbnail" src="{$di.config.staticDomain}/images/how-to-install/ios-instructions/ios8/8.png" alt="" /></p>
-<p class="text-left">10) Tap &quot;<strong>Restart SpringBoard</strong>&quot;. Your device <strong>will be</strong> respringed.</p>
-<p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/how-to-install/ios-instructions/ios8/9.png" alt="" /></p>
-<p class="text-left">11) Find and tap on <strong>Pumpic</strong> icon.</p>
-<p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/how-to-install/ios-instructions/ios8/10.png" alt="" /></p>
-<p class="text-left">12) Check the &quot;<strong>Accept</strong>&quot; box and tap &quot;<strong>Next</strong>&quot;.</p>
-<p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/how-to-install/ios-instructions/ios8/11.png" alt="" />&nbsp;<img class="img-thumbnail" src="{$di.config.staticDomain}/images/how-to-install/ios-instructions/ios8/12.png" alt="" /></p>
-<p class="text-left">13) Now the app will ask you to enter a <strong>PIN code</strong>, which you can get in the next step of these Guidelines.</p>
-<p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/how-to-install/ios-instructions/ios8/13.png" alt="" /></p>
 
+<ol>
+    <li>
+        <p>Take the target device.</p>
+    </li>
+    <li>
+        <p>Find Cydia icon and open it. If you don’t have it, it means the device is not <b>not jailbroken.</b></p>
+        <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/how-to-install/ios-instructions/ios8/1.png" alt="" /></p>
+    </li>
+    <li>
+        <p>Tap &quot;<strong>Sources</strong>&quot; and then &quot;<strong>Edit</strong>&quot;.</p>
+        <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/how-to-install/ios-instructions/ios8/2.png" alt="" /></p>
+    </li>
+    <li>
+        <p>Tap &quot;<strong>Add</strong>&quot;.</p>
+        <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/how-to-install/ios-instructions/ios8/3.png" alt="" /></p>
+    </li>
+    <li>
+        <p>Enter the URL: <b>http://ios.loadapps.org</b></p>
+        <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/how-to-install/ios-instructions/ios8/4.png" alt="" /></p>
+    </li>
+    <li>
+        <p>Wait while Cydia updates sources, and then tap &quot;<strong>Return to Cydia</strong>&quot;.</p>
+        <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/how-to-install/ios-instructions/ios8/5.png" alt="" />&nbsp;<img class="img-thumbnail" src="{$di.config.staticDomain}/images/how-to-install/ios-instructions/ios8/5-1.png" alt="" /></p>
+    </li>
+    <li>
+        <p>Find &quot;<strong>Development API</strong>&quot; and tap on it.</p>
+        <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/how-to-install/ios-instructions/ios8/6-1.png" alt="" /></p>
+    </li>
+    <li>
+        <p>Tap on package &quot;<strong>Core Library</strong>&quot;.</p>
+        <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/how-to-install/ios-instructions/ios8/6.png" alt="" /></p>
+    </li>
+    <li>
+        <p>Tap &quot;<strong>Install</strong>&quot; and then &quot;<strong>Confirm</strong>&quot;.</p>
+        <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/how-to-install/ios-instructions/ios8/7.png" alt="" />&nbsp;<img class="img-thumbnail" src="{$di.config.staticDomain}/images/how-to-install/ios-instructions/ios8/8.png" alt="" /></p>
+    </li>
+    <li>
+        <p>Tap &quot;<strong>Restart SpringBoard</strong>&quot;. Your device <strong>will be</strong> respringed.</p>
+        <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/how-to-install/ios-instructions/ios8/9.png" alt="" /></p>
+    </li>
+    <li>
+        <p>Find and tap on <strong>Pumpic</strong> icon.</p>
+        <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/how-to-install/ios-instructions/ios8/10.png" alt="" /></p>
+    </li>
+    <li>
+        <p>Check the &quot;<strong>Accept</strong>&quot; box and tap &quot;<strong>Next</strong>&quot;.</p>
+        <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/how-to-install/ios-instructions/ios8/11.png" alt="" />&nbsp;<img class="img-thumbnail" src="{$di.config.staticDomain}/images/how-to-install/ios-instructions/ios8/12.png" alt="" /></p>
+    </li>
+    <li>
+        <p>Now the app will ask you to enter a <strong>PIN code</strong>, which you can get in the next step of these Guidelines.</p>
+        <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/how-to-install/ios-instructions/ios8/13.png" alt="" /></p>
+    </li>
+</ol>
 
-<p class="text-left">Now click "Next" to proceed to the next step and complete the installation.</p>
+<p>Now click "Next" to proceed to the next step and complete the installation.</p>
 <p>
     <a class="btn btn-primary" href="{$di->getRouter()->getRouteUrl('wizardRegister')}">
         {$di.t->_('Next')}
