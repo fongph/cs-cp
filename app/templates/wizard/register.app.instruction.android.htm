@@ -1,30 +1,3 @@
-<style>
-    .add-code-block {
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        margin: 10px 0;
-        padding: 10px 30px;
-        text-align: center;
-        display: inline-block;
-        width: 269px;
-    }
-    
-    .add-code-block.android {
-        width: 276px;
-    }
-    
-    .add-code-block-phone {
-        position: relative;
-        display: block;
-        margin-bottom: 10px;
-    }
-    
-    .add-code-block-phone .value {
-        position: absolute;
-        top: 304px;
-        left: 29px;
-    }
-</style>
 <ol>
     <li>
         <p>Go back to the app and enter the generated PIN Code. Note that the PIN Code is valid within 15 minutes only. If the time has expired, please generate a new PIN Code again.</p>
@@ -38,7 +11,7 @@
         </div>
         <div class="add-code-block-phone">
             <img class="img-thumbnail" src="{$di.config.staticDomain}/images/how-to-install/android-instructions/code.png" />
-            <div class="value">{$code}</div>
+            <div class="android-value">{$code}</div>
         </div>
     </li>
     <li>

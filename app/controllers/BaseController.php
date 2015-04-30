@@ -5,13 +5,15 @@ namespace Controllers;
 use System\Controller,
     System\FlashMessages;
 
-class BaseController extends Controller {
+class BaseController extends Controller
+{
 
     protected $auth = null;
     protected $demo = false;
     protected $supportMode = false;
 
-    protected function init() {
+    protected function init()
+    {
         if ($this->di['auth']->hasIdentity()) {
             $this->auth = $this->di['auth']->getIdentity();
 
@@ -38,20 +40,24 @@ class BaseController extends Controller {
         }
     }
 
-    public function error404() {
+    public function error404()
+    {
         header($this->getRequest()->server('SERVER_PROTOCOL', 'HTTP/1.1') . ' 404 Not Found', true, 404);
         $this->view->title = $this->di['t']->_('Not Found');
         $this->setView('index/404.htm');
+        $this->postAction();
         $this->response();
         die;
     }
 
-    protected function postAction() {
+    protected function postAction()
+    {
         if ($this->auth) {
             $this->view->authData = $this->auth;
-            $this->view->supportMode = $this->supportMode;
-            $this->view->demoMode = $this->demo;
         }
+
+        $this->view->supportMode = $this->supportMode;
+        $this->view->demoMode = $this->demo;
 
         if (isset($this->auth['options']['internal-trial-license'])) {
             $advertisingModel = new \Models\Advertising($this->di);
@@ -60,7 +66,8 @@ class BaseController extends Controller {
         }
     }
 
-    protected function checkDisplayLength($value = 10) {
+    protected function checkDisplayLength($value = 10)
+    {
         if ($value !== $this->auth['records_per_page']) {
             if ($this->demo) {
                 $data = $this->di['auth']->getIdentity();
@@ -74,7 +81,8 @@ class BaseController extends Controller {
         }
     }
 
-    protected function checkDemo($redirectUrl, $addFlashMessage = true) {
+    protected function checkDemo($redirectUrl, $addFlashMessage = true)
+    {
         if ($this->demo) {
             if ($addFlashMessage) {
                 $this->di->getFlashMessages()->add(FlashMessages::INFO, $this->di['t']->_('Not available in demo.'));
@@ -84,7 +92,8 @@ class BaseController extends Controller {
         }
     }
 
-    protected function checkSupportMode($addFlashMessage = true) {
+    protected function checkSupportMode($addFlashMessage = true)
+    {
         if ($this->supportMode) {
             if ($addFlashMessage) {
                 $this->di->getFlashMessages()->add(FlashMessages::INFO, $this->di['t']->_('Not available in support mode.'));

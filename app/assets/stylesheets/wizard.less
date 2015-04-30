@@ -19,7 +19,7 @@
     border-radius: 5px;
     padding: 20px 30px;
     margin-top: 15px;
-    
+
     .row {
         margin: 10px 0;
     }
@@ -29,8 +29,44 @@
     .active a {
         color: #39753e;
     }
-    
+
     &> li + li:before {
         content: '> ';
+    }
+}
+
+.add-code-block {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin: 10px 0;
+    padding: 10px 30px;
+    text-align: center;
+    display: inline-block;
+    width: 316px;
+
+    &.ios {
+        width: 276px;
+    }
+    
+    &.android {
+        width: 276px;
+    }
+}
+
+.add-code-block-phone {
+    position: relative;
+    display: block;
+    margin-bottom: 10px;
+
+    .ios-value {
+        position: absolute;
+        top: 279px;
+        left: 19px;
+    }
+    
+    .android-value {
+        position: absolute;
+        top: 304px;
+        left: 29px;
     }
 }

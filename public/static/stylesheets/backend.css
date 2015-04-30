@@ -8533,6 +8533,9 @@ button.close {
 .asterisk-primary {
   color: #16a89e;
 }
+.img-thumbnail {
+  margin-bottom: 5px;
+}
 /* remove this code from here */
 .box-plans {
   display: inline-block;
@@ -9518,6 +9521,36 @@ p.attachment.vcard {
 }
 .setup-wizard-breadcrumb.breadcrumb > li + li:before {
   content: '> ';
+}
+.add-code-block {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin: 10px 0;
+  padding: 10px 30px;
+  text-align: center;
+  display: inline-block;
+  width: 316px;
+}
+.add-code-block.ios {
+  width: 276px;
+}
+.add-code-block.android {
+  width: 276px;
+}
+.add-code-block-phone {
+  position: relative;
+  display: block;
+  margin-bottom: 10px;
+}
+.add-code-block-phone .ios-value {
+  position: absolute;
+  top: 279px;
+  left: 19px;
+}
+.add-code-block-phone .android-value {
+  position: absolute;
+  top: 304px;
+  left: 29px;
 }
 /* Plugins */
 .bootstrap-touchspin .input-group-btn-vertical {
