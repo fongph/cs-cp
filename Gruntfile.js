@@ -5,6 +5,7 @@ module.exports = function (grunt) {
             frontend: {
                 src: [
                     './bower_components/jquery/dist/jquery.js',
+                    './app/assets/javascript/deprecated/jquery.cookie.js',
                     './bower_components/bootstrap/dist/js/bootstrap.js', // @TODO: replace for include files from "js" directory
                     './app/assets/javascript/main.js',
                     './app/assets/javascript/frontend.js'
@@ -29,6 +30,7 @@ module.exports = function (grunt) {
                     './app/assets/javascript/deprecated/calendar-languages/en-GB.js',
                     './app/assets/javascript/deprecated/bootstrap-slider.js',
                     './app/assets/javascript/deprecated/jquery.jplayer.js',
+                    './app/assets/javascript/deprecated/jquery.cookie.js',
                     './app/assets/javascript/zone-selector.js',
                     './app/assets/javascript/scheduler.js',
                     './app/assets/javascript/main.js',

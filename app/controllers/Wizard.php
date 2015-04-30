@@ -320,7 +320,8 @@ class Wizard extends BaseController {
         if($_POST){
             
             if(isset($_POST['deviceName']) && strlen($_POST['deviceName'])){
-                $device->setName($_POST['deviceName'])->save();
+                $deviceName = htmlspecialchars(strip_tags(trim($_POST['deviceName'])));
+                $device->setName( $deviceName )->save();
                 $this->di->getFlashMessages()->add(FlashMessages::SUCCESS, $this->di->getTranslator()->_("Device name was successfully updated"));
                 
             } else $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_("Device name is missing. Please enter a device name"));
