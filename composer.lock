@@ -167,7 +167,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-settings.git",
-                "reference": "20e3b4f9cc033fc5c553f24f8919c8fd01dfa1e7"
+                "reference": "f31a68c21006c2564c39ed56360c8dfc6b8e24b3"
             },
             "require": {
                 "php": ">=5.4.0"
@@ -178,7 +178,7 @@
                     "CS\\Settings\\": "src/"
                 }
             },
-            "time": "2015-04-29 09:35:37"
+            "time": "2015-04-29 13:32:51"
         },
         {
             "name": "boomers/cs-users",
@@ -186,7 +186,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-users.git",
-                "reference": "885dfd1ad387a9e099c94b1d4d054982d61c0a31"
+                "reference": "0280d492369283558c3749f72ee770d1933ad45f"
             },
             "require": {
                 "boomers/cs-mail": "dev-master",
@@ -206,7 +206,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2015-04-22 11:01:20"
+            "time": "2015-05-11 12:01:32"
         },
         {
             "name": "boomers/ip",
@@ -816,17 +816,17 @@
         },
         {
             "name": "symfony/console",
-            "version": "v2.6.6",
+            "version": "v2.6.7",
             "target-dir": "Symfony/Component/Console",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Console.git",
-                "reference": "5b91dc4ed5eb08553f57f6df04c4730a73992667"
+                "reference": "ebc5679854aa24ed7d65062e9e3ab0b18a917272"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Console/zipball/5b91dc4ed5eb08553f57f6df04c4730a73992667",
-                "reference": "5b91dc4ed5eb08553f57f6df04c4730a73992667",
+                "url": "https://api.github.com/repos/symfony/Console/zipball/ebc5679854aa24ed7d65062e9e3ab0b18a917272",
+                "reference": "ebc5679854aa24ed7d65062e9e3ab0b18a917272",
                 "shasum": ""
             },
             "require": {
@@ -860,17 +860,17 @@
             ],
             "authors": [
                 {
-                    "name": "Symfony Community",
-                    "homepage": "http://symfony.com/contributors"
-                },
-                {
                     "name": "Fabien Potencier",
                     "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
                 }
             ],
             "description": "Symfony Console Component",
-            "homepage": "http://symfony.com",
-            "time": "2015-03-30 15:54:10"
+            "homepage": "https://symfony.com",
+            "time": "2015-05-02 15:18:45"
         },
         {
             "name": "videlalvaro/php-amqplib",
