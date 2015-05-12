@@ -2,6 +2,10 @@
 
 @import url(http://fonts.googleapis.com/css?family=Open+Sans:400,700,300,600);
 
+a {
+  text-decoration: underline;
+}
+
 // Navbar =====================================================================
 
 /*
@@ -40,6 +44,14 @@
 }*/
 
 // Buttons ====================================================================
+
+a.btn {
+    text-decoration: none;
+    
+    &.btn-lnk {
+        text-decoration: underline;
+    }
+}
 
 .btn:active {
     .box-shadow(none);
@@ -302,4 +314,14 @@ a.list-group-item {
 
 .panel-default > .panel-heading {
     border: none;
+}
+
+.navbar-default, .nav {
+    a {
+        text-decoration: none;
+        
+        &:hover,&:active {
+            text-decoration: none;
+        }
+    }
 }

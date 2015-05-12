@@ -168,8 +168,7 @@ class Billing extends \System\Model
                         lic.`user_id` = {$user}
                     LIMIT 1")->fetch();
 
-
-        if ($returnDetails) {
+        if ($result && $returnDetails) {
             $result['details'] = $this->getLicenseSubscriptionInfo($licenseId);
         }
 

@@ -1094,7 +1094,7 @@ a {
 a:hover,
 a:focus {
   color: #16a89e;
-  text-decoration: underline;
+  text-decoration: none;
 }
 a:focus {
   outline: thin dotted;
@@ -3317,7 +3317,7 @@ fieldset[disabled] .btn-link {
 .btn-link:hover,
 .btn-link:focus {
   color: #16a89e;
-  text-decoration: underline;
+  text-decoration: none;
   background-color: transparent;
 }
 .btn-link[disabled]:hover,
@@ -11801,6 +11801,9 @@ a.cal-event-week {
   margin-bottom: 0;
 }
 /* Theme */
+a {
+  text-decoration: underline;
+}
 /*
 .navbar {
   border-width: 0;
@@ -11835,6 +11838,12 @@ a.cal-event-week {
     }
   }
 }*/
+a.btn {
+  text-decoration: none;
+}
+a.btn.btn-lnk {
+  text-decoration: underline;
+}
 .btn:active {
   -webkit-box-shadow: none;
   box-shadow: none;
@@ -12045,6 +12054,16 @@ a.list-group-item-danger.active:focus {
 .panel-default > .panel-heading {
   border: none;
 }
+.navbar-default a,
+.nav a {
+  text-decoration: none;
+}
+.navbar-default a:hover,
+.nav a:hover,
+.navbar-default a:active,
+.nav a:active {
+  text-decoration: none;
+}
 #header {
   background: #4d4f5b;
 }
@@ -12114,6 +12133,12 @@ a.list-group-item-danger.active:focus {
 }
 .daterangepicker td.in-range {
   background: #eafffc;
+}
+.setup-wizard-breadcrumb.breadcrumb a {
+  text-decoration: none;
+}
+.setup-wizard-breadcrumb.breadcrumb a:hover {
+  text-decoration: underline;
 }
 .setup-wizard-breadcrumb.breadcrumb .active a {
   color: #16a89e;
