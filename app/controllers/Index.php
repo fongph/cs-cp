@@ -186,7 +186,7 @@ class Index extends BaseController
         $email = $this->getRequest()->post('email');
 
         if ($email !== null) {
-            $usersManager = new UsersManager($this->di->get('db'));
+            $usersManager = $this->di['usersManager'];
             $usersManager->setSender($this->di['mailSender']);
 
             try {
