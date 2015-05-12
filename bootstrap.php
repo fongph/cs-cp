@@ -28,13 +28,22 @@ $di->setShared('dataDb', function() use ($di) {
 
 $di->setShared('mailSender', function() use ($di) {
     if ($di['config']['environment'] == 'development') {
-        $mailSender = new CS\Mail\MailSender(new \CS\Mail\Processor\FileProcessor(ROOT_PATH . 'logs/mailSender.log'));
+        $mailSender = new CS\Mail\MailSender(new \CS\Mail\Processor\FileProcessor(ROOT_PATH . 'logs/mailSender.log', $di['db']));
     } else {
         $mailSender = new CS\Mail\MailSender(new \CS\Mail\Processor\RemoteProcessor(
-                GlobalSettings::getMailSenderURL($di['config']['site']), GlobalSettings::getMailSenderSecret($di['config']['site'])
+                GlobalSettings::getMailSenderURL($di['config']['site']), 
+                GlobalSettings::getMailSenderSecret($di['config']['site']),
+                $di['db']
         ));
     }
 
+    $auth = $di['auth'];
+
+    if ($auth->hasIdentity()) {
+        $authData = $auth->getIdentity();
+        $mailSender->setUserId($authData['id']);
+    }
+    
     return $mailSender->setLocale($di['t']->getLocale())
                     ->setSiteId($di['config']['site']);
 });

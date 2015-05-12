@@ -32,10 +32,6 @@ class Support extends \System\Model
             throw new SupportEmptyFieldException("One or more fields is empty");
         }
 
-        if (filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
-            throw new SupportInvalidEmailException("Invalid email value");
-        }
-
         if (!isset(self::$types[$type])) {
             throw new SupportInvalidTypeException("Invalid type of ticket");
         }
