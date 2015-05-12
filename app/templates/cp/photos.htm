@@ -64,19 +64,20 @@
     {if !$paid}
         {insert "cp/updatePackage.html"}
     {elseif count($recentPhotos)}
-    <div class="row networkForm">
-        <div class="col-lg-push-3 col-lg-6">
-            <form method="post" action="" class="form-inline">
-                <div class="form-group">
-                    <label for="network">{$di.t->_('Upload recorded files via')}</label>
-                    {include "scripts/select.htm" name="network" id="network" class="form-control" options=$networksList selected=$network}
+        {if $di.currentDevice.os!='icloud'}
+            <div class="row networkForm">
+                <div class="col-lg-push-3 col-lg-6">
+                    <form method="post" action="" class="form-inline">
+                        <div class="form-group">
+                            <label for="network">{$di.t->_('Upload recorded files via')}</label>
+                            {include "scripts/select.htm" name="network" id="network" class="form-control" options=$networksList selected=$network}
+                        </div>
+                    </form>
                 </div>
-            </form>
-        </div>
-    </div>
-    
-    <p class="text-primary text-center">{$di.t->_('Additional charges may apply for data transfer using mobile operator network.')}</p>
+            </div>
 
+            <p class="text-primary text-center">{$di.t->_('Additional charges may apply for data transfer using mobile operator network.')}</p>
+        {/if}
     <div class="panel panel-default">
         <div class="panel-heading">{$di.t->_('Recent Photos')}</div>
         <div class="panel-body text-center">
@@ -144,6 +145,10 @@
     </script>
     {else}
         <h3>{$di.t->_('Waiting for photos... Why can the data be unavailable?')}</h3>
-        {include "content/{$di.t->getLocale()}/noData.html"}
+        {if $di.currentDevice.os=='icloud'}
+            {include "content/{$di.t->getLocale()}/noDataICloud.html"}
+        {else}
+            {include "content/{$di.t->getLocale()}/noData.html"}
+        {/if}
     {/if}
 </div>
