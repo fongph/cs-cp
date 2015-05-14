@@ -41,6 +41,7 @@
                 table: null,
                 typeTmpl: _.template('<i class="sms-<%= type %> hidden-xs" title="<%= title %>"></i><span class="visible-xs"><%= title %></span>'),
                 messageLinkTemplate: _.template('<a href="{$di.router->getRouteUrl("sms")}/<%= phone %>#<%= message %>"><%= date %></a>'),
+                groupMessageLinkTemplate: _.template('<a href="{$di.router->getRouteUrl("sms")}/group/<%= group %>#<%= message %>"><%= date %></a>'),
                 selectRanges: {
                     "{$di.t->_('Today')}": [moment().startOf('day'), moment().endOf('day')],
                     "{$di.t->_('Yesterday')}": [moment().subtract('days', 1).startOf('day'), moment().subtract('days', 1).endOf('day')],
@@ -94,11 +95,19 @@
                                 sWidth: '180px',
                                 mData: 'timestamp',
                                 mRender: function(value, type, data) {
-                                    return sms.messageLinkTemplate({
-                                        date: moment(value * 1000){if isset($customUtcOffset)}.zone({$customUtcOffset}){/if}.format('lll'),
-                                        phone: encodeURIComponent(data.number),
-                                        message: encodeURIComponent(data.timestamp)
-                                    });
+                                    if (data.group.length) {
+                                        return sms.groupMessageLinkTemplate({
+                                            date: moment(value * 1000){if isset($customUtcOffset)}.zone({$customUtcOffset}){/if}.format('lll'),
+                                            group: encodeURIComponent(data.group),
+                                            message: encodeURIComponent(data.timestamp)
+                                        });
+                                    } else {
+                                        return sms.messageLinkTemplate({
+                                            date: moment(value * 1000){if isset($customUtcOffset)}.zone({$customUtcOffset}){/if}.format('lll'),
+                                            phone: encodeURIComponent(data.number),
+                                            message: encodeURIComponent(data.timestamp)
+                                        });
+                                    }
                                 }
                             },
                             {
@@ -125,7 +134,14 @@
                                 mData: 'number'
                             },
                             {
-                                mData: 'name'
+                                mData: 'name',
+                                mRender: function(value, type, data) {
+                                    if (data.group.length) {
+                                        return '<b>{$di['t']->_('Group')}</b>';
+                                    }
+                                    
+                                    return value;
+                                }
                             },
                             {
                                 mData: 'content',

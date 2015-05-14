@@ -3,10 +3,26 @@
 
     {insert "inc.flashMessages.htm"}
 
+    {if $isGroup}
+    <div class="dialog-panel-top">
+        <p class="text-info">{$di.t->_('Messages with')} 
+            {foreach $members as $item last=$last}
+                {if strlen($item.name)}
+                <b>{$item.name} ({$item.phone})</b>
+                {else}
+                <b>{$item.phone}</b>
+                {/if}
+                {if !$last}, {/if}
+            {/foreach}
+        </p>
+        <a class="btn btn-default" href="{$di.router->getRouteUrl('sms')}">{$di['t']->_('Back to SMS log')}</a>
+    </div>
+    {else}
     <div class="dialog-panel-top">
         <p class="text-info">Messages with <b>{if strlen($userName)}{$userName}{else}{$userPhone}{/if}</b></p>
         <a class="btn btn-default" href="{$di.router->getRouteUrl('sms')}">{$di['t']->_('Back to SMS log')}</a>
     </div>
+    {/if}
 
     <div class="dialog-messages-list">
         {foreach $list as $item}

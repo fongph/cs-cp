@@ -46,10 +46,27 @@ class Sms extends BaseModuleController {
         $smsModel = new \Models\Cp\Sms($this->di);
         $list = $smsModel->getPhoneSmsList($this->di['devId'], $this->params['phoneNumber']);
         $this->view->list = $list;
+        $this->view->isGroup = false;
 
         if (count($list)) {
             $this->view->userName = $list[0]['name'];
             $this->view->userPhone = $this->params['phoneNumber'];
+        } else {
+            $this->di['flashMessages']->add(FlashMessages::ERROR, $this->di['t']->_('The dialogue has not been found!'));
+            $this->redirect($this->di['router']->getRouteUrl('sms'));
+        }
+
+        $this->setView('cp/sms/list.htm');
+    }
+    
+    public function groupListAction() {
+        $smsModel = new \Models\Cp\Sms($this->di);
+        $list = $smsModel->getPhoneGroupSmsList($this->di['devId'], $this->params['group']);
+        $this->view->list = $list;
+        $this->view->isGroup = true;
+
+        if (count($list)) {
+            $this->view->members = $smsModel->getGroupMembers($this->di['devId'], $this->params['group']);
         } else {
             $this->di['flashMessages']->add(FlashMessages::ERROR, $this->di['t']->_('The dialogue has not been found!'));
             $this->redirect($this->di['router']->getRouteUrl('sms'));

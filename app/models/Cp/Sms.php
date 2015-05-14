@@ -2,9 +2,11 @@
 
 namespace Models\Cp;
 
-class Sms extends BaseModel {
+class Sms extends BaseModel
+{
 
-    public function getDataTableData($devId, $params = array()) {
+    public function getDataTableData($devId, $params = array())
+    {
         $devId = $this->getDb()->quote($devId);
 
         $search = '';
@@ -25,7 +27,7 @@ class Sms extends BaseModel {
             }
         }
 
-        $select = "SELECT `timestamp`, `sms_type` type, `phone_number` number, `number_name` name, LEFT(`content`, 201) `content`, `multimedia`, `blocked`, `deleted`";
+        $select = "SELECT `timestamp`, `sms_type` type, `phone_number` number, `number_name` name, LEFT(`content`, 201) `content`, `multimedia`, `group`, `blocked`, `deleted`";
 
         $timeFrom = $this->getDb()->quote($params['timeFrom']);
         $timeTo = $this->getDb()->quote($params['timeTo']);
@@ -38,7 +40,7 @@ class Sms extends BaseModel {
         $result = array(
             'aaData' => $this->getDb()->query($query)->fetchAll(\PDO::FETCH_ASSOC)
         );
-        
+
         if (empty($result['aaData'])) {
             $result['iTotalRecords'] = 0;
             $result['iTotalDisplayRecords'] = 0;
@@ -55,12 +57,14 @@ class Sms extends BaseModel {
         return $result;
     }
 
-    public function hasRecords($devId) {
+    public function hasRecords($devId)
+    {
         $devId = $this->getDb()->quote($devId);
         return $this->getDb()->query("SELECT `dev_id` FROM `sms_log` WHERE `dev_id` = {$devId} LIMIT 1")->fetchColumn() !== false;
     }
-    
-    public function getPhoneSmsList($devId, $phoneNumber) {
+
+    public function getPhoneSmsList($devId, $phoneNumber)
+    {
         $devId = $this->getDb()->quote($devId);
         $phoneNumber = $this->getDb()->quote($phoneNumber);
 
@@ -75,9 +79,40 @@ class Sms extends BaseModel {
                                         `deleted`
                                     FROM `sms_log` WHERE 
                                         `dev_id` = {$devId} AND 
-                                        `phone_number` = {$phoneNumber}
+                                        `phone_number` = {$phoneNumber} AND
+                                        `group` = ''
                                     ORDER BY 
                                         `timestamp` DESC")->fetchAll();
+    }
+
+    public function getPhoneGroupSmsList($devId, $group)
+    {
+        $devId = $this->getDb()->quote($devId);
+        $group = $this->getDb()->quote($group);
+
+        return $this->getDb()->query("SELECT 
+                                        `sms_type` type,
+                                        `number_name` name,
+                                        `phone_number` phone,
+                                        `content`,
+                                        `timestamp`,
+                                        `multimedia`,
+                                        `blocked`,
+                                        `deleted`
+                                    FROM `sms_log` WHERE 
+                                        `dev_id` = {$devId} AND 
+                                        `group` = {$group}
+                                    ORDER BY 
+                                        `timestamp` DESC")->fetchAll();
+    }
+
+    public function getGroupMembers($devId, $group)
+    {
+        $devId = $this->getDb()->quote($devId);
+        $group = $this->getDb()->quote($group);
+        
+        return $this->getDb()->query("SELECT `number_name` name, `phone_number` phone  FROM `sms_group_members` WHERE `dev_id` = {$devId} AND `group` = {$group}")->fetchAll();
+        
     }
 
 }
