@@ -62,15 +62,15 @@
         $('.dialog-messages-list > div').each(function() {
             var timestamp = $(this).attr('id');
 
-            var date = moment.unix(timestamp).zone(0).format("LL");
+            var date = moment.unix(timestamp){if isset($customUtcOffset)}.zone({$customUtcOffset}){/if}.format("LL");
             if (date !== last) {
                 $(this).before('<div class="date-title">' + date + '</div>');
             }
 
-            var date = moment.unix(timestamp).zone(0).format("LLL");
+            var date = moment.unix(timestamp){if isset($customUtcOffset)}.zone({$customUtcOffset}){/if}.format("LLL");
             $(this).find('.popover-title span.date').html(date);
 
-            last = moment.unix(timestamp).zone(0).format("LL");
+            last = moment.unix(timestamp){if isset($customUtcOffset)}.zone({$customUtcOffset}){/if}.format("LL");
         });
     });
 </script>

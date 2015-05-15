@@ -31,9 +31,6 @@ class Sms extends BaseModuleController {
         }
 
         $this->view->hasRecords = $smsModel->hasRecords($this->di['devId']);
-        if($this->di['currentDevice']['os'] != 'icloud'){
-            $this->view->customUtcOffset = 0;
-        }
 
         if (DeviceOptions::isDeletedDataAvailable($this->di['currentDevice']['os'])) {
             $this->setView('cp/sms/indexWithStatuses.htm');
@@ -80,6 +77,10 @@ class Sms extends BaseModuleController {
         $this->buildCpMenu();
 
         $this->view->title = $this->di['t']->_('View SMS');
+
+        if($this->di['currentDevice']['os'] != 'icloud'){
+            $this->view->customUtcOffset = 0;
+        }
     }
     
     protected function isModulePaid()
