@@ -4,7 +4,7 @@ namespace Models\Cp;
 
 class Facebook extends BaseModel {
 
-    public function getDataTableData($devId, $params = array()) {
+    public function getMessagesDataTableData($devId, $params = array()) {
         if (!$devId)
             return null;
 
@@ -102,6 +102,60 @@ class Facebook extends BaseModel {
             $result['iTotalDisplayRecords'] = 0;
         } else {
             $result['iTotalRecords'] = $this->getDb()->query("SELECT COUNT(*) FROM (SELECT f.`id` {$fromWhere}) a")->fetchColumn();
+            $result['iTotalDisplayRecords'] = $result['iTotalRecords'];
+        }
+
+        return $result;
+    }
+    
+    public function getCallsDataTableData($devId, $params = array()) {
+        $devId = $this->getDb()->quote($devId);
+
+        $search = '';
+        if (!empty($params['search'])) {
+            $searched = $this->getDb()->quote('%' . $params['search'] . '%');
+            $search = "`user_name` LIKE {$searched} OR `user_id` LIKE {$searched}";
+        }
+
+        $sort = '`timestamp` ASC';
+        if (count($params['sortColumns'])) {
+            $columns = ['`user_name`', '`type`', '`duration`', '`timestamp`'];
+
+            $sort = '';
+            foreach ($params['sortColumns'] as $column => $direction) {
+                if (isset($columns[$column])) {
+                    $sort .= " {$columns[$column]} {$direction}";
+                }
+            }
+        }
+
+        $select = "SELECT `user_id` id, `user_name` name, `type`, `duration`, `timestamp`";
+
+        if (isset($params['timeFrom'], $params['timeTo'], $params['account'])) {
+            $timeFrom = $this->getDb()->quote($params['timeFrom']);
+            $timeTo = $this->getDb()->quote($params['timeTo']);
+            $account = $this->getDb()->quote($params['account']);
+            $fromWhere = "FROM `facebook_calls` WHERE
+                    `dev_id` = {$devId} AND
+                    `account` = {$account} AND
+                    `timestamp` >= {$timeFrom} AND
+                    `timestamp` <= {$timeTo}";
+        }
+
+
+        $query = "{$select} {$fromWhere}"
+                . ($search ? " AND ({$search})" : '')
+                . " ORDER BY {$sort} LIMIT {$params['start']}, {$params['length']}";
+                
+        $result = array(
+            'aaData' => $this->getDb()->query($query)->fetchAll(\PDO::FETCH_ASSOC)
+        );
+
+        if (empty($result['aaData'])) {
+            $result['iTotalRecords'] = 0;
+            $result['iTotalDisplayRecords'] = 0;
+        } else {
+            $result['iTotalRecords'] = $this->getDb()->query("SELECT COUNT(*) FROM (SELECT `dev_id` {$fromWhere}) a")->fetchColumn();
             $result['iTotalDisplayRecords'] = $result['iTotalRecords'];
         }
 

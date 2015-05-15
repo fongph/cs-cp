@@ -21,7 +21,7 @@ class Whatsapp extends BaseModuleController
     public function indexAction()
     {
         $whatsappModel = new \Models\Cp\Whatsapp($this->di);
-
+        
         if ($this->getRequest()->isAjax()) {
             $dataTableRequest = new \System\DataTableRequest($this->di);
 
@@ -33,16 +33,23 @@ class Whatsapp extends BaseModuleController
                 $data = $whatsappModel->getGroupDataTableData(
                         $this->di['devId'], $dataTableRequest->buildResult(array('timeFrom', 'timeTo'))
                 );
+            } elseif ($this->params['tab'] === 'calls') {
+                $data = $whatsappModel->getCallsDataTableData(
+                        $this->di['devId'], $dataTableRequest->buildResult(array('timeFrom', 'timeTo'))
+                );
             }
             $this->checkDisplayLength($dataTableRequest->getDisplayLength());
             $this->makeJSONResponse($data);
         }
 
+        $this->view->callsTab = ($this->di['currentDevice']['os'] === 'android' && $this->di['currentDevice']['app_version'] >= 9) ||
+                ($this->di['currentDevice']['os'] === 'ios' && $this->di['currentDevice']['app_version'] >= 7);
+        
         if ($this->view->paid) {
             $this->view->hasRecords = $whatsappModel->hasRecords($this->di['devId']);
         }
 
-        $this->setView('cp/whatsapp.htm');
+        $this->setView('cp/whatsapp/index.htm');
     }
 
     public function listAction()
@@ -70,7 +77,7 @@ class Whatsapp extends BaseModuleController
 
         $this->view->tab = $this->params['tab'];
 
-        $this->setView('cp/whatsappList.htm');
+        $this->setView('cp/whatsapp/list.htm');
     }
 
     protected function postAction()
