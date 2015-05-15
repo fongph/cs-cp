@@ -3,3 +3,6 @@ Disallow: /lostPassword
 Disallow: /registration.html
 Disallow: /superuser
 Disallow: /rooting-android
+Disallow: /instructions/wizard-android
+Disallow: /instructions/wizard-ios
+Disallow: /instructions/wizard-icloud

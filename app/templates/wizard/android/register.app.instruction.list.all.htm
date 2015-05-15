@@ -1,0 +1,17 @@
+<li>
+    <p>Go back to the app and enter the generated PIN Code. Note that the PIN Code is valid within 15 minutes only. If the time has expired, please generate a new PIN Code again.</p>
+    <div class="add-code-block android">
+        {if $code}
+            <h3>{$di.t->_('Your code is:')} {$code}</h3>
+            <p class="text-danger">{$di.t->_('valid for 15 min')}</p>
+        {else}
+            <h3 style="color: #a94442">{$di.t->_("Error during generate code! Pleace try again later!")}</h3>
+        {/if}
+    </div>
+    <div class="add-code-block-phone">
+        <img class="img-thumbnail" src="{$di.config.staticDomain}/images/how-to-install/android-instructions/code.png" />
+        <div class="android-value">{$code}</div>
+    </div>
+</li>
+
+{insert "wizard/android/register.app.instruction.list.htm"}

@@ -1,0 +1,16 @@
+<div>
+    <h1 class="text-center">{$title}</h1>
+    <div class="wizard-container">
+        <ol>
+            {insert "wizard/android/setup.instruction.list.htm"}
+            {insert "wizard/android/register.app.instruction.list.htm"}
+        </ol>
+        <p>The installation was completed correctly. Pumpic is already monitoring the target device. The data from the target device will soon be sent to your Control Panel.</p>
+
+        <form method="post" action="cp.pumpic.com/cp">
+            <button type="submit" name="code" class="btn btn-primary">
+                {$di.t->_('Start Monitoring')}
+            </button>
+        </form>
+    </div>
+</div>
