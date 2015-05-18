@@ -87,25 +87,17 @@ class Wizard extends BaseController {
             }
 
             try {
+                $deviceRecord = $this->getDevice($this->getRequest()->post('device_id'));
+
+                if($deviceRecord->getOS() == 'icloud')
+                    throw new \Exception("Can't Assign iCloud Device From Setup Step!");
+                
                 $deviceObserver = new DeviceObserver($this->di->get('logger'));
                 $deviceObserver->setMainDb($this->di->get('db'))
-                    ->setDevice($this->getDevice($this->getRequest()->post('device_id')))
+                    ->setDevice($deviceRecord)
                     ->setLicense($license)
                     ->setAfterSave(function() use ($deviceObserver) {
                         $this->di['usersNotesProcessor']->licenseAssigned($deviceObserver->getLicense()->getId(), $deviceObserver->getDevice()->getId());
-                        
-                        if($deviceObserver->getDevice()->getOS() == 'icloud'){
-                            $queueManager = new \CS\Queue\Manager($this->di['queueClient']);
-                            $iCloudDevice = new DeviceICloudRecord($this->di->get('db'));
-                            
-                            $iCloudDevice->loadByDevId($deviceObserver->getDevice()->getId());
-                            
-                            if ($queueManager->addDownloadTask($iCloudDevice)) {
-                                $iCloudDevice->setProcessing(1);
-
-                            } else $iCloudDevice->setLastError($queueManager->getError());
-                            $iCloudDevice->save();
-                        }
                     });
                 
                 if($deviceObserver->assignLicenseToDevice()) {
@@ -204,7 +196,7 @@ class Wizard extends BaseController {
 
                                                 $iCloudDevice->loadByDevId($deviceObserver->getDevice()->getId());
 
-                                                if ($queueManager->addDownloadTask($iCloudDevice)) {
+                                                if ($queueManager->addTaskDevice('downloadChannel-priority', $iCloudDevice)) {
                                                     $iCloudDevice->setProcessing(1);
 
                                                 } else $iCloudDevice->setLastError($queueManager->getError());
@@ -260,7 +252,7 @@ class Wizard extends BaseController {
                                         $this->di['usersNotesProcessor']->licenseAssigned($deviceObserver->getLicense()->getId(), $deviceObserver->getDevice()->getId());
 
                                         $queueManager = new \CS\Queue\Manager($this->di['queueClient']);
-                                        if ($queueManager->addDownloadTask($deviceObserver->getICloudDevice())) {
+                                        if ($queueManager->addTaskDevice('downloadChannel-priority', $deviceObserver->getICloudDevice())) {
                                             $deviceObserver->getICloudDevice()->setProcessing(1);
 
                                         } else $deviceObserver->getICloudDevice()->setLastError($queueManager->getError());

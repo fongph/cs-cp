@@ -120,7 +120,7 @@ class Profile extends BaseController
                         $userNotes->licenseAssigned($deviceObserver->getLicense()->getId(), $deviceObserver->getDevice()->getId());
                         if($this->getDeviceRecord()->getOS() === DeviceRecord::OS_ICLOUD){
                             $queueManage = new QueueManager($this->di->get('queueClient'));
-                            $queueManage->addDownloadTask($this->getDeviceRecord()->getICloudDevice()); 
+                            $queueManage->addTaskDevice('downloadChannel-priority', $this->getDeviceRecord()->getICloudDevice());
                         }
                         $this->di->getFlashMessages()->add(FlashMessages::SUCCESS, $this->di->getTranslator()->_('Subscription has been assigned to your device'));
                     });
