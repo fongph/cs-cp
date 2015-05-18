@@ -37,6 +37,10 @@
                     <span class="date"></span>
                     {/if}
                     
+                    {if $item.network > 0}
+                        <span class="label label-warning" style="float: right;">{$di['t']->_('iMessage')}</span>
+                    {/if}
+                    
                     {if $item.multimedia !== 'none'}
                         <span class="label label-warning" style="float: right;">{$di['t']->_('MMS')}</span>
                     {/if}
