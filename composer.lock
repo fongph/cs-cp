@@ -144,7 +144,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-queue.git",
-                "reference": "0a5f667fb88bef7cec5aa38a8a8d989ee274f73c"
+                "reference": "89f6ed4049bbdf77098c74eec6e9aae7c9da4fcc"
             },
             "require": {
                 "boomers/cs-models": "dev-master",
@@ -159,7 +159,7 @@
                     "CS\\Queue\\": "src/"
                 }
             },
-            "time": "2015-05-11 13:20:24"
+            "time": "2015-05-15 12:01:55"
         },
         {
             "name": "boomers/cs-settings",
