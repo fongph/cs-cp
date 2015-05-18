@@ -310,4 +310,32 @@ class Index extends BaseController
         }
         return $previous;
     }
+    
+    public function installingAndroidAction() {
+        $this->setView('instructions/installingAndroid.html');
+        $this->view->title = $this->di['t']->_('Android Installation Guide');
+}
+    
+    public function installingIosAction() {
+       $this->setView('instructions/installingIos.html');
+       $this->view->title = $this->di['t']->_('iOS Installation Guide');
+    }
+    
+    public function wizardAndroidAction() {
+        $this->setView('instructions/wizardAndroid.html');
+        $this->view->title = $this->di['t']->_('Android Installation Guide');
+        $this->view->title_page = $this->di['t']->_('Android Installation Guide for Support');
+        $this->view->code = 4544;
+    }
+    public function wizardIosAction() {
+        $this->setView('instructions/wizardIos.html');
+        $this->view->title = $this->di['t']->_('iOS Installation Guide');
+        $this->view->title_page = $this->di['t']->_('iOS Installation Guide for Support');
+        $this->view->code = 2629;
+    }
+    public function wizardIcloudAction() {
+        $this->setView('instructions/wizardIcloud.html');
+        $this->view->title = $this->di['t']->_('iOS iCloud Installation Guide');
+        $this->view->title_page = $this->di['t']->_('iOS iCloud Installation Guide for Support');
+    }
 }

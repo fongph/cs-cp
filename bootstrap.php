@@ -152,6 +152,14 @@ $di->setShared('router', function() use($config, $di) {
     $router->add('rooting-android', new \System\Router\Regex('/rooting-android', array('controller' => 'Index', 'action' => 'rootingAndroid')));
     $router->add('superuser', new \System\Router\Regex('/superuser', array('controller' => 'Index', 'action' => 'superuser')));
     
+    $router->add('installing-android', new \System\Router\Regex('/instructions/installing-android', array('controller' => 'Index', 'action' => 'installingAndroid', 'public' => true)));
+    $router->add('installing-ios', new \System\Router\Regex('/instructions/installing-ios', array('controller' => 'Index', 'action' => 'installingIos', 'public' => true)));
+    
+    $router->add('wizard-android', new \System\Router\Regex('/instructions/wizard-android', array('controller' => 'Index', 'action' => 'wizardAndroid', 'public' => true)));
+    $router->add('wizard-ios', new \System\Router\Regex('/instructions/wizard-ios', array('controller' => 'Index', 'action' => 'wizardIos', 'public' => true)));
+    $router->add('wizard-icloud', new \System\Router\Regex('/instructions/wizard-icloud', array('controller' => 'Index', 'action' => 'wizardIcloud', 'public' => true)));
+    
+    
     return $router;
 });
 

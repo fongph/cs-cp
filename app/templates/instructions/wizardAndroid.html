@@ -1,0 +1,60 @@
+<style>
+    .add-code-block-phone {
+        position: relative;
+    }
+    .add-code-block-phone .android-value {
+        left: 29px;
+        position: absolute;
+        top: 304px;
+    }
+</style>
+<div>
+    <h1 class="text-center">{$title_page}</h1>
+    <div class="wizard-container">
+        <p>
+            New clients receive an email with a link to CP after they make a purchase. 
+            After logging in to CP they navigate right to the installation wizard, where they can set up their 
+            devices and start monitoring.
+        </p>
+        <p class="text-center"><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/wizard/android/1.png" alt="" /></p>
+        
+        <h3>1. Select a Subscription Plan</h3>
+        <p>A client will see this step if only they have more than one subscription. 
+            If they have only one subscription, they proceed to step 2.</p>
+        <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/wizard/android/l1.png" alt="" /></p>
+         
+        <h3>2. Select a Platform</h3>
+        <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/wizard/android/l2.png" alt="" /></p>
+        
+        <h3>3. Assign new device</h3>
+        <p>Clients go through the instruction steps to prepare their devices for Pumpic installation.</p>
+        <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/wizard/android/l3.png" alt="" /></p>
+        <p>Existing clients, who used Pumpic before, will see their previously added devices. For example, they have used Pumpic app and their subscription has expired. By tapping on “Assign Subscription” a client will move right to step 5. In case if they have removed application from the target device, they will have to follow reinstallation instructions.</p>
+        <p>(reinstallation instructions – ссылка на <a href="/instructions/installing-android">http://cp.pumpic.com/instructions/installing-android</a>)</p>
+        <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/wizard/android/l4.png" alt="" /></p>
+        
+        <h4>Installation Instructions</h4>
+        <ol>
+            {insert "wizard/android/setup.instruction.list.all.htm"}
+        </ol>
+        
+        <h3>4. Activate Device</h3>
+        <p>Clients must enter generated PIN code on their devices within 15 minutes.</p>
+        {*<p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/wizard/android/l4.png" alt="" /></p>*}
+        <ol>
+            {insert "wizard/android/register.app.instruction.list.all.htm"}
+        </ol>
+        
+        <h3>5. Complete Installation</h3>
+        <p>Clients have successfully assigned the target devices to their Subscription Plans. Now they can optionally set name to the tracked devices.</p>
+        <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/wizard/android/l5_1.png" alt="" /></p>
+        <p>Additionally all users will receive an email with the confirmation regarding adding of a new device.</p>
+        <p class="text-center"><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/wizard/android/l5_2.png" alt="" /></p>
+        
+        {* <form method="post" action="http://pumpic.com/store.html">
+                <button type="submit" name="code" class="btn btn-primary">
+                    {$di.t->_('Start Monitoring')}
+                </button>
+            </form> *}
+    </div>
+</div>
