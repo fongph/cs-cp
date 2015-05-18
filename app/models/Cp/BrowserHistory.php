@@ -15,7 +15,7 @@ class BrowserHistory extends BaseModel {
 
         $sort = '`timestamp` ASC';
         if (count($params['sortColumns'])) {
-            $columns = ['`timestamp`', '`title`', '`url`'];
+            $columns = ['`timestamp`', '`browser`', '`title`', '`url`'];
 
             $sort = '';
             foreach ($params['sortColumns'] as $column => $direction) {
@@ -25,7 +25,7 @@ class BrowserHistory extends BaseModel {
             }
         }
 
-        $select = "SELECT `timestamp`, `title`, `url`, `url`";
+        $select = "SELECT `timestamp`, `browser`, `title`, `url`, `url`";
 
         $timeFrom = $this->getDb()->quote($params['timeFrom']);
         $timeTo = $this->getDb()->quote($params['timeTo']);

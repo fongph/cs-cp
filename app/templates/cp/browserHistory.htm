@@ -33,6 +33,7 @@
                     <thead>
                         <tr role="row">
                             <th>{$di.t->_('Date')}</th>
+                            <th>{$di.t->_('Browser')}</th>
                             <th>{$di.t->_('Title')}</th>
                             <th>{$di.t->_('Url')}</th>
                             {if $isDeviceBlockSiteAvailable}<th>{$di.t->_('Actions')}</th>{/if}
@@ -139,6 +140,9 @@
                                 fnRender: function(obj, value) {
                                     return moment(value * 1000).zone(0).format('lll');
                                 }
+                            },
+                            {
+                                mData: 'browser'
                             },
                             {
                                 mData: 'title'
