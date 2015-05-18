@@ -76,7 +76,8 @@ class Sms extends BaseModel
                                         `timestamp`,
                                         `multimedia`,
                                         `blocked`,
-                                        `deleted`
+                                        `deleted`,
+                                        `network`
                                     FROM `sms_log` WHERE 
                                         `dev_id` = {$devId} AND 
                                         `phone_number` = {$phoneNumber} AND
@@ -98,7 +99,8 @@ class Sms extends BaseModel
                                         `timestamp`,
                                         `multimedia`,
                                         `blocked`,
-                                        `deleted`
+                                        `deleted`,
+                                        `network`
                                     FROM `sms_log` WHERE 
                                         `dev_id` = {$devId} AND 
                                         `group` = {$group}
