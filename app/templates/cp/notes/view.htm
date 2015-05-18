@@ -1,0 +1,54 @@
+<style>
+    .note-panel {
+        border: 1px solid #e1e1e8;
+        background-color: #f7f7f9;
+        padding: 10px 2px;
+        overflow: hidden;
+    }
+
+    .panel-top {
+        margin-bottom: 10px;
+        vertical-align: bottom;
+    }
+
+    dl {
+        padding-bottom: 5px;
+        border-bottom: 1px solid #aaa;
+    }
+
+    .form-info {
+        padding: 15px;
+        margin: 0 10px;
+        border: 1px solid #ddd;
+        display: none;
+    }
+</style>
+<div>
+    <h1 class="text-center">{$title}</h1>
+
+    {insert "inc.flashMessages.htm"}
+
+    <div class="panel-top">
+        <a class="btn btn-default" href="{$di.router->getRouteUrl('notes')}">{$di.t->_('Back to Notes log')}</a>
+    </div>
+
+    <div class="note-panel">
+        <dl class="dl-horizontal" style="overflow: hidden;">
+            <dt>{$di.t->_('Date:')}</dt>
+            <dd id="timestamp" data-time="{$note.timestamp}"></dd>
+            <dt>{$di.t->_('Title:')}</dt>
+            <dd>{$note.title|escape}</dd>
+        </dl>
+
+        <p class="form-info image-form bg-warning">{$di.t->_('External images are not shown.')} <a href="" id="showImages">{$di.t->_('Show images')}</a></p>
+
+        <div id="note-view" style="padding: 0 10px;">
+            {$note.content|escape}
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#timestamp').html(moment.unix($('#timestamp').attr('data-time')).zone(0).format("LLL"));
+    });
+</script>

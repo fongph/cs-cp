@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "fb9ccda3208287744141f2cd88e56c9b",
+    "hash": "3aa1fb282c6457f1297042cb17b9a425",
     "packages": [
         {
             "name": "boomers/cs-billing",
@@ -39,7 +39,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-devices.git",
-                "reference": "f2c9db03cc61308259ce33beae8dfe37460dec6c"
+                "reference": "300b0fe39ec35d654760aa95d7869fe18c957d23"
             },
             "require": {
                 "boomers/cs-mail": "dev-master",
@@ -62,7 +62,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2015-05-12 10:01:23"
+            "time": "2015-05-18 12:09:39"
         },
         {
             "name": "boomers/cs-icloud",
@@ -122,7 +122,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-models.git",
-                "reference": "95578ae5455123daa584ab51ef2f87b8357fcbb7"
+                "reference": "584372dc374edf6805ccb1bd89008cbe181706e7"
             },
             "require": {
                 "php": ">=5.4.0"
@@ -136,7 +136,7 @@
                     "CS\\Models\\": "src/"
                 }
             },
-            "time": "2015-04-28 13:33:17"
+            "time": "2015-05-18 11:33:04"
         },
         {
             "name": "boomers/cs-queue",
@@ -186,7 +186,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-users.git",
-                "reference": "6492a40ac0d9b1235a70407105f5f1943e93fe9f"
+                "reference": "10f46a31d94038020d059d70a41afdfbd410606a"
             },
             "require": {
                 "boomers/cs-mail": "dev-master",
@@ -206,7 +206,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2015-05-12 08:06:02"
+            "time": "2015-05-14 12:48:26"
         },
         {
             "name": "boomers/ip",

