@@ -109,7 +109,7 @@
                     html: true,
                     content: photoTmpl({
                         name: $(this).attr('data-name'),
-                        time: moment($(this).attr('data-time') * 1000).zone(0).format('llll'),
+                        time: moment($(this).attr('data-time') * 1000){if isset($customUtcOffset)}.zone({$customUtcOffset}){/if}.format('llll'),
                         album: $(this).attr('data-album'),
                         deleted: $(this).attr('data-deleted')
                     }),
