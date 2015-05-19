@@ -40,8 +40,7 @@
             <thead>
                 <tr role="row">
                     <th>{$di.t->_('Date')}</th>
-                    <th>{$di.t->_('From')}</th>
-                    <th>{$di.t->_('Subject')}</th>
+                    <th>{$di.t->_('Title')}</th>
                 </tr>
             </thead>
         </table>
@@ -120,20 +119,6 @@
                             {
                                 fnRender: function(obj) {
                                     return _.escape(obj.aData[1]);
-                                }
-                            },
-                            {
-                                bSortable: false,
-                                mRender: function(value) {
-                                    if (!_.isString(value)) {
-                                        return '';
-                                    }
-                                    
-                                    if (value.length > 200) {
-                                        return value.substr(0, 200) + '...';
-                                    }
-                                    
-                                    return value;
                                 }
                             }
                         ],

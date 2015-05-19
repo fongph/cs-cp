@@ -10,7 +10,7 @@ class Notes extends BaseModel
         $devId = $this->getDb()->quote($devId);
 
         if (count($params['sortColumns'])) {
-            $columns = ['`timestamp`', '`from`', '`subject`'];
+            $columns = ['`timestamp`', '`title`'];
 
             $sort = '';
             foreach ($params['sortColumns'] as $column => $direction) {
@@ -22,16 +22,18 @@ class Notes extends BaseModel
             $sort = '`timestamp` ASC';
         }
 
-        $select = "SELECT `timestamp`, `title`, LEFT(`content`, 201) `content`";
+        $select = "SELECT `timestamp`, `title`";
 
         $timeFrom = $this->getDb()->quote($params['timeFrom']);
         $timeTo = $this->getDb()->quote($params['timeTo']);
+        $account = $this->getDb()->quote($params['account']);
 
         $fromWhere = "FROM `notes`
                       WHERE
                             `dev_id` = {$devId} AND
                             `timestamp` >= {$timeFrom} AND
-                            `timestamp` <= {$timeTo}";
+                            `timestamp` <= {$timeTo} AND
+                            `account` <= {$account}";
 
         $query = "{$select} {$fromWhere}"
                 . " ORDER BY {$sort} LIMIT {$params['start']}, {$params['length']}";
@@ -64,7 +66,15 @@ class Notes extends BaseModel
         $account = $this->getDb()->quote($account);
         $timestamp = $this->getDb()->quote($timestamp);
 
-        return $this->getDb()->query("SELECT `timestamp`, `title`, `content` FROM `notes` WHERE `dev_id` = {$devId} AND `account` = {$account} AND `timestamp` = {$timestamp} LIMIT 1")->fetch();
+        return $this->getDb()->query("SELECT `timestamp`, `title` FROM `notes` WHERE `dev_id` = {$devId} AND `account` = {$account} AND `timestamp` = {$timestamp} LIMIT 1")->fetch();
+    }
+    
+    public function getContent($devId, $account, $timestamp) {
+        $devId = $this->getDb()->quote($devId);
+        $account = $this->getDb()->quote($account);
+        $timestamp = $this->getDb()->quote($timestamp);
+
+        return $this->getDb()->query("SELECT `content` FROM `notes` WHERE `dev_id` = {$devId} AND `account` = {$account} AND `timestamp` = {$timestamp} LIMIT 1")->fetchColumn();
     }
 
 }

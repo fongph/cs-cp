@@ -45,12 +45,21 @@ class Notes extends BaseModuleController
     {
         $notesModels = new \Models\Cp\Notes($this->di);
 
-        if (($emailData = $notesModels->getNote($this->di['devId'], $this->params['account'], $this->params['timestamp'])) == false) {
+        if ($this->getRequest()->get('content') !== null) {
+            if (($value = $notesModels->getContent($this->di['devId'], $this->params['account'], $this->params['timestamp'])) !== false) {
+                echo $value;
+                die;
+            } else {
+                $this->error404();
+            }
+        }
+        
+        if (($noteData = $notesModels->getNote($this->di['devId'], $this->params['account'], $this->params['timestamp'])) == false) {
             $this->di['flashMessages']->add(FlashMessages::ERROR, $this->di['t']->_('Record not found!'));
             $this->redirect($this->di['router']->getRouteUrl('notes'));
         }
 
-        $this->view->note = $emailData;
+        $this->view->note = $noteData;
         $this->view->account = $this->params['account'];
         $this->setView('cp/notes/view.htm');
     }
