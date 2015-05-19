@@ -11844,6 +11844,16 @@ a.btn {
 a.btn.btn-lnk {
   text-decoration: underline;
 }
+a.btn.btn-lnk:hover,
+a.btn.btn-lnk:focus,
+a.btn.btn-lnk:active:focus,
+a.btn.btn-lnk.active:focus,
+a.btn.btn-lnk.focus,
+a.btn.btn-lnk:active.focus,
+a.btn.btn-lnk.active.focus {
+  color: #16a89e;
+  text-decoration: none;
+}
 .btn:active {
   -webkit-box-shadow: none;
   box-shadow: none;
