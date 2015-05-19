@@ -14,12 +14,12 @@ class Applications extends BaseModel
         $search = '';
         if (!empty($params['search'])) {
             $searched = $this->getDb()->quote('%' . $params['search'] . '%');
-            $search = "`app_name` LIKE {$searched}";
+            $search = "`name` LIKE {$searched}";
         }
 
         $sort = '`timestamp` ASC';
         if (count($params['sortColumns'])) {
-            $columns = ['`app_name`'];
+            $columns = ['`name`'];
 
             $sort = '';
             foreach ($params['sortColumns'] as $column => $direction) {
@@ -30,21 +30,32 @@ class Applications extends BaseModel
         }
         
         if ($params['standard']) {
-            $condition = "a.`dev_id` = {$devId} AND a.`standard` = 1";
+            $condition = "`dev_id` = {$devId} AND `standard` = 1";
         } else {
-            $condition = "a.`dev_id` = {$devId} AND a.`standard` = 0";
+            $condition = "`dev_id` = {$devId} AND `standard` = 0";
         }
         
-        $select = "SELECT a.`app_id` id, a.`app_name` name, a.`app_version` version, a.`store_url` url, a.`deleted`, a.`status`, COUNT(t.id) as count, MAX(t.`start`) lasttime, a.`is_blocked` blocked, `timelimit`";
+        $select = "SELECT 
+                        `app_id` id,
+                        `app_name` name,
+                        `app_version` version,
+                        `store_url` url,
+                        `deleted`,
+                        `status`,
+                        (SELECT COUNT(*) FROM `applications_timelines` at WHERE at.`name` = `app_id` AND at.`blocked` = 0) as count,
+                        (SELECT MAX(`start`) FROM `applications_timelines` at WHERE at.`name` = `app_id` AND at.`blocked` = 0) as lasttime,
+                        `is_blocked` blocked,
+                        `timelimit`";
 
-        $fromWhere = "FROM `applications` a
-            LEFT JOIN `applications_timelines` t ON a.`dev_id` = t.`dev_id` AND a.`app_id` = t.`name`
+        $fromWhere = "FROM `applications`
             WHERE {$condition}";
 
         $query = "{$select} {$fromWhere}"
                 . ($search ? " AND ({$search})" : '')
-                . " GROUP BY a.`app_id` ORDER BY {$sort} LIMIT {$params['start']}, {$params['length']}";
+                . " ORDER BY {$sort} LIMIT {$params['start']}, {$params['length']}";
 
+                
+                
         $result = array(
             'aaData' => $this->getDb()->query($query)->fetchAll(\PDO::FETCH_ASSOC)
         );
