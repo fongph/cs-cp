@@ -1,4 +1,7 @@
 <style>
+    html, body, .wrapper {
+        height: auto;
+    }
     .add-code-block-phone {
         position: relative;
     }
@@ -7,10 +10,26 @@
         position: absolute;
         top: 279px;
     }
+    #insctructions-content {
+        position: relative;
+        display: block;
+    }
+    
+    #activate-device {
+        display: inline-block;
+    }
+    .instruction-container {
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        margin-top: 15px;
+        padding: 20px 30px;
+    }
 </style>
-<div>
+<div class="col-lg-12 col-md-12 col-sm-12">
+
+<div id="insctructions-content">
     <h1 class="text-center">{$title_page}</h1>
-    <div class="wizard-container">
+    <div class="instruction-container">
         <p>
             New clients receive an email with a link to CP after they make a purchase. 
             After logging in to CP they navigate right to the installation wizard, where they can set up 
@@ -32,12 +51,29 @@
         <p>Reinstallation instructions – ссылка на <a href="http://cp.pumpic.com/instructions/installing-ios">http://cp.pumpic.com/instructions/installing-ios</a>.</p>
         <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/wizard/ios/3.2.png" alt="" /></p>
         
-        {insert "wizard/setup.instruction.ios.htm"}
+        
+        <h4 class="text-center">{$di.t->_('Installation Instructions')}</h4>
+        <p class="text-center"><b>Pumpic works on jailbroken iPhones, iPads and iPods Touch. Find out how to jailbreak your iOS device using the following links: <a href="http://www.redmondpie.com/how-to-jailbreak-ios-8.1-using-pangu-for-mac-guide/" target="_blank" rel="nofollow">iOS 8.1</a>, <a href="http://www.redmondpie.com/how-to-jailbreak-ios-8.1.2-using-taig-guide/" target="_blank" rel="nofollow">iOS 8.1.2</a>, <a href="http://evasi0n.com/" target="_blank" rel="nofollow">iOS 7</a>, <a href="http://www.redmondpie.com/jailbreak-ios-6.1.3-6.1.4-6.1.5-untethered-on-all-devices-with-p0sixspwn-tutorial/" target="_blank" rel="nofollow">iOS 6</a></b></p>
+        <p class="text-center"><b>If the target device is NOT jailbroken, use <a href="{$di->getRouter()->getRouteUrl('wizardSetup', ['platform'=>'icloud'])}">iCloud solution</a> setup instructions.</b></p>
+        <p class="text-center"><b>GPS must be turned ON before installation</b></p>
+
+        <ol>
+            {insert "wizard/ios/setup.instruction.list.all.htm"}
+        </ol>
+
+        <p>Now click "Next" to proceed to the next step and complete the installation.</p>
+        <p>
+            <span class="btn btn-primary anchor" data-href="#activate-device">
+                {$di.t->_('Next')}
+            </span>
+        </p>    
+        
+        {*insert "wizard/setup.instruction.ios.htm"*}
         {* <ol>
             {insert "wizard/ios/setup.instruction.list.all.htm"}
         </ol> *}
         
-        <h3>4. Activate Device</h3>
+        <h3 id="activate-device">4. Activate Device</h3>
         <p>Clients must enter generated PIN code on their devices within 15 minutes.</p>
         <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/wizard/ios/4.png" alt="" /></p>
         <ol>
@@ -57,3 +93,5 @@
             </form> *}
     </div>
 </div>
+    
+</div>    

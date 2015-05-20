@@ -47215,6 +47215,17 @@ function getCookie( name ) {
 }
 
 $(document).ready(function () {
+    $('.anchor').on("click", function(e){
+
+          var anchor = $(this).attr('data-href').split('#');
+          if(anchor.length > 1) {
+              $('html, body').stop().animate({
+                scrollTop: $('#'+anchor[1]).position('body').top
+              }, 1000);
+          }
+
+       });
+    
     $('#toggle').on('click touchend', function (e) {
         e.preventDefault();
         $('body').toggleClass('menu-active');

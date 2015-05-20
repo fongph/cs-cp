@@ -1,6 +1,17 @@
-<div>
+<style>
+    html, body, .wrapper {
+        height: auto;
+    }
+    .instruction-container {
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        margin-top: 15px;
+        padding: 20px 30px;
+    }
+</style>
+<div class="col-lg-12 col-md-12 col-sm-12">
     <h1 class="text-center">{$title_page}</h1>
-    <div class="wizard-container">
+    <div class="instruction-container">
         <p>
             New clients receive an email with a link to CP after they make a purchase. 
             After logging in to CP they navigate right to the installation wizard, where they can set up 
@@ -19,8 +30,12 @@
         <p>Clients go through the instruction steps to prepare their devices for Pumpic installation.</p>
         <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/wizard/icloud/3.png" alt="" /></p>
         {insert "wizard/icloud/setup.instruction.htm"}
-        
-        <h3>4. Activate Device</h3>
+        <p>
+            <span class="btn btn-primary anchor" data-href="#activate-device">
+                {$di.t->_('Next')}
+            </span>
+        </p>
+        <h3 id="activate-device">4. Activate Device</h3>
         <p>Clients must enter the Apple ID and the password of the target device.</p>
         <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/wizard/icloud/4.1.png" alt="" /></p>
         <p>On the next step they will see list of devices with backups available for monitoring.</p>

@@ -3,6 +3,9 @@ AddDefaultCharset UTF-8
 RewriteEngine on
 RewriteBase /
 
+RewriteRule ^how-to-install/ios-instructions\.html$ http://pumpic\.com/store\.html [L,R=301]
+RewriteRule ^how-to-install/android-instructions\.html$ http://pumpic\.com/store\.html [L,R=301]
+
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule (.*) index.php
