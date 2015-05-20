@@ -33,7 +33,7 @@ class Notes extends BaseModel
                             `dev_id` = {$devId} AND
                             `timestamp` >= {$timeFrom} AND
                             `timestamp` <= {$timeTo} AND
-                            `account` <= {$account}";
+                            `account` = {$account}";
 
         $query = "{$select} {$fromWhere}"
                 . " ORDER BY {$sort} LIMIT {$params['start']}, {$params['length']}";
