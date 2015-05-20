@@ -112,7 +112,7 @@
                                     return notes.linkTemplate({
                                         account: encodeURIComponent($('#account').val()),
                                         time: obj.aData[0],
-                                        date: moment(obj.aData[0] * 1000).zone(0).format('lll')
+                                        date: moment(obj.aData[0] * 1000){if isset($customUtcOffset)}.zone({$customUtcOffset}){/if}.format('lll')
                                     });
                                 }
                             },

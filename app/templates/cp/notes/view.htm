@@ -65,7 +65,7 @@
 </div>
 <script type="text/javascript">
     $(document).ready(function() {
-        $('#timestamp').html(moment.unix($('#timestamp').attr('data-time')).zone(0).format("LLL"));
+        $('#timestamp').html(moment.unix($('#timestamp').attr('data-time')){if isset($customUtcOffset)}.zone({$customUtcOffset}){/if}.format("LLL"));
 
         $("#note-view iframe")
                 .load(function() {
