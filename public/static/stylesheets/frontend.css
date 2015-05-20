@@ -8600,6 +8600,7 @@ button.close {
 }
 .box-header-info label {
   width: auto;
+  max-width: auto;
 }
 .box-header-info a {
   text-decoration: underline !important;
