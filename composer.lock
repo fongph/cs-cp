@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "3aa1fb282c6457f1297042cb17b9a425",
+    "hash": "fb9ccda3208287744141f2cd88e56c9b",
     "packages": [
         {
             "name": "boomers/cs-billing",
@@ -39,7 +39,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-devices.git",
-                "reference": "300b0fe39ec35d654760aa95d7869fe18c957d23"
+                "reference": "bee446ccf3e5fa47cbd1ddfb4cf887e5a8f0954b"
             },
             "require": {
                 "boomers/cs-mail": "dev-master",
@@ -62,7 +62,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2015-05-18 12:09:39"
+            "time": "2015-05-20 14:06:51"
         },
         {
             "name": "boomers/cs-icloud",
