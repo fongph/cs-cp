@@ -8598,6 +8598,9 @@ button.close {
 .box-header-info li:first-child {
   margin-right: 40px;
 }
+.box-header-info label {
+  width: auto;
+}
 .box-header-info a {
   text-decoration: underline !important;
 }
