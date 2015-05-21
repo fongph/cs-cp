@@ -1,0 +1,84 @@
+<style>
+    .note-panel {
+        border: 1px solid #e1e1e8;
+        background-color: #f7f7f9;
+        padding: 10px 2px;
+        overflow: hidden;
+    }
+
+    .panel-top {
+        margin-bottom: 10px;
+        vertical-align: bottom;
+    }
+
+    dl {
+        padding-bottom: 5px;
+        border-bottom: 1px solid #aaa;
+    }
+
+    .form-info {
+        padding: 15px;
+        margin: 0 10px;
+        border: 1px solid #ddd;
+        display: none;
+    }
+
+    #note-view {
+        display: none;
+    }
+    
+    #note-view iframe{
+        border: none;
+        width: 100%;
+        font-family: inherit;
+    }
+
+    #loading {
+        text-align: center;
+        margin: 15px 0;
+    }
+</style>
+<div>
+    <h1 class="text-center">{$title}</h1>
+
+    {insert "inc.flashMessages.htm"}
+
+    <div class="panel-top">
+        <a class="btn btn-default" href="{$di.router->getRouteUrl('notes')}">{$di.t->_('Back to Notes log')}</a>
+    </div>
+
+    <div class="note-panel">
+        <dl class="dl-horizontal" style="overflow: hidden;">
+            <dt>{$di.t->_('Date:')}</dt>
+            <dd id="timestamp" data-time="{$note.timestamp}"></dd>
+            <dt>{$di.t->_('Title:')}</dt>
+            <dd>{$note.title|escape}</dd>
+        </dl>
+
+        <div id="note-view">
+            <iframe>{$di.t->_('No-data')}</iframe>
+        </div>
+        <div id="loading">
+            <img src="{$di.config.staticDomain}/img/loader.gif" alt="" />
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#timestamp').html(moment.unix($('#timestamp').attr('data-time')){if isset($customUtcOffset)}.zone({$customUtcOffset}){/if}.format("LLL"));
+
+        $("#note-view iframe")
+                .load(function() {
+                    $('#loading').hide();
+                    $('#note-view').show();
+                    
+                    if ($(this).contents().height()) {
+                        $(this).css("height", $(this).contents().height() + "px");
+                    }
+                })
+                .attr({
+                    scrolling: "no",
+                    src: window.location + '?content'
+                });
+    });
+</script>

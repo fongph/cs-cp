@@ -33,6 +33,9 @@ class Modules
     const SETTINGS = 'settings';
     const INSTAGRAM = 'instagram';
     const KIK = 'kik';
+    const NOTES = 'notes';
+    const SNAPCHAT = 'snapchat';
+    
 
     private static $moduleCheckMethods = array(
         self::LOCATIONS => 'isLocationsActive',
@@ -53,7 +56,8 @@ class Modules
         self::APPLICATIONS => 'isApplicationsActive',
         self::SMS_COMMANDS => 'isSmsCommandsActive',
         self::INSTAGRAM => 'isInstagramActive',
-        
+        self::NOTES => 'isNotesActive',
+        self::SNAPCHAT => 'isSnapchatActive'
     );
     
     protected $di;
