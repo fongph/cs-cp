@@ -42,8 +42,8 @@ class Applications extends BaseModel
                         `store_url` url,
                         `deleted`,
                         `status`,
-                        (SELECT COUNT(*) FROM `applications_timelines` at WHERE at.`name` = `app_id` AND at.`blocked` = 0) as count,
-                        (SELECT MAX(`start`) FROM `applications_timelines` at WHERE at.`name` = `app_id` AND at.`blocked` = 0) as lasttime,
+                        (SELECT COUNT(*) FROM `applications_timelines` at WHERE at.`dev_id` = {$devId} AND at.`name` = `app_id` AND at.`blocked` = 0) as count,
+                        (SELECT MAX(`start`) FROM `applications_timelines` at WHERE at.`dev_id` = {$devId} AND at.`name` = `app_id` AND at.`blocked` = 0) as lasttime,
                         `is_blocked` blocked,
                         `timelimit`";
 
