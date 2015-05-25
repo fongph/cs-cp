@@ -71,7 +71,7 @@
                 .load(function() {
                     var iframeDocument = this.contentDocument || this.contentWindow.document;
                     var objects = iframeDocument.getElementsByTagName('object');
-                    for (var i=objects.length-1; i>=0; i--) {
+                    for (var i=objects.length-1; i>=0; i--) if (objects[i].type == 'application/x-apple-msg-attachment') {
                         var icon = iframeDocument.createElement("span");
                         icon.setAttribute('class','attachment image');
                         icon.setAttribute('style','display: inline-block; margin: 0; padding: 0; height: 17px; width: 17px; background-image: url("{$di.config.staticDomain}/img/attachment-image.png")');
