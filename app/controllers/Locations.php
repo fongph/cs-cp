@@ -20,16 +20,38 @@ class Locations extends BaseModuleController
 
     public function indexAction()
     {
-        $locations = new \Models\Cp\Locations($this->di);
+        if ($this->di['currentDevice']['os'] == 'icloud') {
+            $this->icloud();
+        } else {
+            $locations = new \Models\Cp\Locations($this->di);
 
+            if ($this->getRequest()->isAjax()) {
+                $this->makeJSONResponse($locations->getDayPoints($this->di['devId'], $this->getRequest()->get('dayStart', 0)));
+            }
+
+            $this->view->startTime = $locations->getLastPointTimestamp($this->di['devId']);
+            $this->view->hasZones = $locations->hasZones($this->di['devId']);
+
+            $this->setView('cp/locations/index.htm');
+        }
+    }
+
+    public function icloud()
+    {
         if ($this->getRequest()->isAjax()) {
-            $this->makeJSONResponse($locations->getDayPoints($this->di['devId'], $this->getRequest()->get('dayStart', 0)));
+            $locations = new \Models\Cp\Locations($this->di);
+            try {
+                $data = $locations->getiCloudPoint($this->di['devId']);
+                $data['success'] = true;
+            } catch (\Exception $e) {
+                $this->getDI()->get('logger')->addInfo('iPhone location fail!', array('exception' => $e));
+                $data = array('success' => false);
+            }
+
+            $this->makeJSONResponse($data);
         }
 
-        $this->view->startTime = $locations->getLastPointTimestamp($this->di['devId']);
-        $this->view->hasZones = $locations->hasZones($this->di['devId']);
-
-        $this->setView('cp/locations.htm');
+        $this->setView('cp/locations/icloudIndex.htm');
     }
 
     public function zonesAction()
@@ -42,7 +64,7 @@ class Locations extends BaseModuleController
 
         if ($this->getRequest()->hasGet('delete')) {
             $this->checkDemo($this->di['router']->getRouteUrl('locationsZones'));
-            
+
             $id = $this->getRequest()->get('delete');
             if ($zonesModel->canDeleteZone($this->di['devId'], $id) === false) {
                 $this->getDI()->getFlashMessages()->add(FlashMessages::ERROR, $this->di['t']->_('Geo-fence was not found.'));
@@ -55,7 +77,7 @@ class Locations extends BaseModuleController
         }
 
         $this->view->zones = $zonesModel->getZonesList($this->di['devId']);
-        $this->setView('cp/zoneList.htm');
+        $this->setView('cp/locations/zoneList.htm');
     }
 
     public function zoneAddAction()
@@ -79,7 +101,7 @@ class Locations extends BaseModuleController
 
         if ($this->getRequest()->hasPost('zoneData', 'name', 'trigger', 'enable')) {
             $this->checkDemo($this->di['router']->getRouteUrl('locationsZonesAdd'));
-            
+
             if (!Zones::validateName($name)) {
                 $this->getDI()->getFlashMessages()->add(FlashMessages::ERROR, $this->di['t']->_('The name for the Geo-fence is required and should be no longer than 17 symbols.'));
             } else if (!strlen($zoneData)) {
@@ -140,7 +162,7 @@ class Locations extends BaseModuleController
 
         if ($this->getRequest()->hasPost('zoneData', 'name', 'trigger', 'enable')) {
             $this->checkDemo($this->di['router']->getRouteUrl('locationsZonesEdit', array('id' => $this->params['id'])));
-            
+
             if (!Zones::validateName($name)) {
                 $this->getDI()->getFlashMessages()->add(FlashMessages::ERROR, $this->di['t']->_('The name for the Geo-fence is required and should be no longer than 17 symbols.'));
             } else if (!strlen($zoneData)) {
@@ -170,7 +192,7 @@ class Locations extends BaseModuleController
         $this->view->enable = $enable;
         $this->view->edit = true;
 
-        $this->setView('cp/zone.htm');
+        $this->setView('cp/locations/zone.htm');
     }
 
     protected function postAction()

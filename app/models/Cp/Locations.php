@@ -41,7 +41,7 @@ class Locations extends BaseModel
         $devId = $this->getDb()->quote($devId);
         $timeFrom = $this->getDb()->quote($dayStart);
         $timeTo = $this->getDb()->quote($dayStart + 24 * 3600);
-        
+
         return $this->getDb()->query("SELECT
                 ge.`timestamp`,
                 ge.`type`,
@@ -79,6 +79,30 @@ class Locations extends BaseModel
         $devId = $this->getDb()->quote($devId);
 
         return $this->getDb()->query("SELECT `latitude`, `longitude`, `radius`, `name` FROM `geo_zones` WHERE `dev_id` = {$devId} AND `deleted` = 0 AND `enable` = 1")->fetchAll();
+    }
+
+    public function getiCloudPoint($devId)
+    {
+        $pdo = $this->di->get('db');
+
+        $devId = $pdo->quote($devId);
+
+        $data = array(
+            'apple_id' => 'willy.dixie007@icloud.com',
+            'apple_password' => 'WillyDixie0075',
+            'device_hash' => 's7uavowVGVNltPTgLUTX5MTxrHXDVB6l3FNa4Hm5xMBLIySXf2HXl+HYVNSUzmWV'
+                //7mWb38RehHPRPPmZDYFtwo/GgzIpQMCHYmBIr+jZ9VSjZM3OWNh8JOHYVNSUzmWV
+                //s7uavowVGVNltPTgLUTX5MTxrHXDVB6l3FNa4Hm5xMBLIySXf2HXl+HYVNSUzmWV
+        );
+
+//        $data = $pdo->query("SELECT `apple_id`, `apple_password`, `device_hash` FROM `devices_icloud` WHERE `dev_id` = {$devId} LIMIT 1")->fetch();
+//        
+//        if ($data === false) {
+//            throw new Exception("Device not found");
+//        }
+
+        $sosumi = new Sosumi($data['apple_id'], $data['apple_password']);
+        return $sosumi->locate($data['device_hash'], 20);
     }
 
 }
