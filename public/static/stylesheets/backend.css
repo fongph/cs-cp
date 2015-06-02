@@ -9062,6 +9062,13 @@ body > .cp-menu {
 .cp-menu li.active i.menu-settings {
   background-position: -24px -528px;
 }
+.cp-menu li i.menu-notes {
+  background-position: 0px -576px;
+}
+.cp-menu li:hover i.menu-notes,
+.cp-menu li.active i.menu-notes {
+  background-position: -24px -576px;
+}
 @media (min-width: 1200px) {
   .menu-wrapper {
     float: left;

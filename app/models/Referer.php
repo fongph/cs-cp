@@ -20,12 +20,23 @@ class Referer
     {
         if (!empty($_SERVER["HTTP_REFERER"])) {
             $_url = parse_url($_SERVER['HTTP_REFERER']);
-            if (!preg_match($this->_regexp, trim($_url['host'])) || !isset($_COOKIE['orders_referer'])) {
+            $_ref = isset($_COOKIE['orders_referer']) ? true : false;
+            if( $this -> validateOrdersReferer($_ref, $_url) ) {
                 setcookie("orders_referer", $_SERVER['HTTP_REFERER'], time() + 3600 * 1, '/', $this->di['config']['cookieDomain']);
             }
         }
         
         return $this;
+    }
+    
+    public function validateOrdersReferer( $ref, $url ) {
+//        if(!$ref) {
+//           return false;
+//        } else 
+        if(!$ref and isset($url['host']) and !preg_match($this->_regexp, trim($url['host'])) ) {
+           return true;
+        }
+        return false;
     }
 
     public function setDocumentReferer()

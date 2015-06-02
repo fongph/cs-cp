@@ -1,4 +1,7 @@
 <style>
+    html, body, .wrapper {
+        height: auto;
+    }
     .add-code-block-phone {
         position: relative;
     }
@@ -36,16 +39,20 @@
         <h3>3. Assign new device</h3>
         <p>Clients go through the instruction steps to prepare their devices for Pumpic installation.</p>
         <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/wizard/android/l3.png" alt="" /></p>
-        <p>Existing clients, who used Pumpic before, will see their previously added devices. For example, they have used Pumpic app and their subscription has expired. By tapping on “Assign Subscription” a client will move right to step 5. In case if they have removed application from the target device, they will have to follow reinstallation instructions.</p>
-        <p>(reinstallation instructions – ссылка на <a href="/instructions/installing-android">http://cp.pumpic.com/instructions/installing-android</a>)</p>
+        <p>Existing clients, who used Pumpic before, will see their previously added devices. For example, they have used Pumpic app and their subscription has expired. By tapping on “Assign Subscription” a client will move right to step 5. In case if they have removed application from the target device, they will have to follow <a href="/instructions/installing-android">reinstallation instructions</a>.</p>
         <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/wizard/android/l4.png" alt="" /></p>
         
         <h4>Installation Instructions</h4>
         <ol>
             {insert "wizard/android/setup.instruction.list.all.htm"}
         </ol>
-        
-        <h3>4. Activate Device</h3>
+        <p>Now click "Next" to proceed to the next step and complete the installation.</p>
+        <p>
+            <span class="btn btn-primary anchor" data-href="#activate-device">
+                {$di.t->_('Next')}
+            </span>
+        </p>
+        <h3 id="activate-device">4. Activate Device</h3>
         <p>Clients must enter generated PIN code on their devices within 15 minutes.</p>
         {*<p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/wizard/android/l4.png" alt="" /></p>*}
         <ol>

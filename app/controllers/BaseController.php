@@ -14,6 +14,10 @@ class BaseController extends Controller
 
     protected function init()
     {
+        $refere = new \Models\Referer($this->di);
+        $refere->setReferer()
+                ->setLanding();
+        
         if ($this->di['auth']->hasIdentity()) {
             $this->auth = $this->di['auth']->getIdentity();
 
@@ -33,10 +37,7 @@ class BaseController extends Controller
 
         if ($this->di['config']['demo']) {
             $this->demo = true;
-            $refereDemo = new \Models\Referer($this->di);
-            $refereDemo->setReferer()
-                    ->setDocumentReferer()
-                    ->setLanding()
+            $refere->setDocumentReferer()
                     ->scroogeFrogSend();
         }
     }
