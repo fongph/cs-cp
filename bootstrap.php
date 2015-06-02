@@ -84,6 +84,7 @@ $di->setShared('router', function() use($config, $di) {
     $router->add(Modules::KIK, new \System\Router\Route('/cp/kik', array('controller' => 'Kik', 'action' => 'index')));
     $router->add(Modules::EMAILS, new \System\Router\Route('/cp/emails', array('controller' => 'Emails', 'action' => 'index')));
     $router->add(Modules::NOTES, new \System\Router\Route('/cp/notes', array('controller' => 'Notes', 'action' => 'index')));
+    $router->add(Modules::SNAPCHAT, new \System\Router\Route('/cp/snapchat', array('controller' => 'Snapchat', 'action' => 'index')));
     $router->add(Modules::APPLICATIONS, new \System\Router\Route('/cp/applications', array('controller' => 'Applications', 'action' => 'index')));
     $router->add(Modules::SETTINGS, new \System\Router\Route('/cp/settings', array('controller' => 'DeviceSettings', 'action' => 'index')));
     $router->add(Modules::SMS_COMMANDS, new \System\Router\Route('/cp/smsCommands', array('controller' => 'SmsCommands', 'action' => 'index')));

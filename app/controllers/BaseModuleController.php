@@ -51,7 +51,7 @@ abstract class BaseModuleController extends BaseController
         
         $modulesModel = new Modules($this->di);
 
-        if ($modulesModel->isModuleActive($this->module) === false) {
+        if ($modulesModel->isModuleActive($this->module) === false && $this->module !== 'snapchat') {
             $this->redirect($this->di['router']->getRouteUrl(Modules::CALLS));
         }
         
@@ -66,7 +66,7 @@ abstract class BaseModuleController extends BaseController
         $this->view->cpMenu = array();
         
         foreach ($this->di['config']['modules'] as $routeName => $name) {
-            if ($modulesModel->isModuleActive($routeName) !== false) {
+            if ($routeName == 'snapchat' || $modulesModel->isModuleActive($routeName) !== false) {
                 $this->view->cpMenu[$this->di['router']->getRouteUrl($routeName)] = array(
                     'name' => $this->di['t']->_($name),
                     'class' => $routeName,
