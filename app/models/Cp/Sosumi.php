@@ -72,6 +72,7 @@ class Sosumi
 
         $response = $this->curlPost("/fmipservice/device/{$this->username}/initClient", $post, array(), true);
         preg_match('/MMe-Host:(.*?)$/msi', $response, $matches);
+        
         if (isset($matches[1]))
             $this->partition = trim($matches[1]);
     }
@@ -100,12 +101,14 @@ class Sosumi
             sleep(5);
             $this->initClient();
         }
+        
         $loc = array(
             "latitude" => $this->devices[$device_id]->latitude,
             "longitude" => $this->devices[$device_id]->longitude,
             "accuracy" => $this->devices[$device_id]->horizontalAccuracy,
             "timestamp" => $this->devices[$device_id]->locationTimestamp,
         );
+        
         return $loc;
     }
 
@@ -152,6 +155,8 @@ class Sosumi
         $this->devices = array();
 
         if (isset($json) && isset($json->content) && (is_array($json->content) || is_object($json->content))) {
+            d($json);
+            
             $this->prsId = $json->serverContext->prsId;
             $this->iflog('Parsing ' . count($json->content) . ' devices...');
             foreach ($json->content as $json_device) {

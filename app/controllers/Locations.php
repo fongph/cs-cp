@@ -50,6 +50,9 @@ class Locations extends BaseModuleController
 
             $this->makeJSONResponse($data);
         }
+        
+        $locations = new \Models\Cp\Locations($this->di);
+        $locations->getiCloudPoint(1);
 
         $this->setView('cp/locations/icloudIndex.htm');
     }
