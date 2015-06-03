@@ -8585,7 +8585,7 @@ button.close {
   position: relative;
 }
 .box-header-info {
-  padding: 26px 0px 18px 0px;
+  padding-top: 21px;
   margin: 0px;
   float: right;
   display: inline-block;
