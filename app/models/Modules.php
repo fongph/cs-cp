@@ -75,7 +75,8 @@ class Modules
                 self::$moduleCheckMethods[$name]
             ), array(
                 $this->di['currentDevice']['os'],
-                $this->di['currentDevice']['os_version']
+                $this->di['currentDevice']['os_version'],
+                $this->di['currentDevice']['app_version']
             ));
         }
 

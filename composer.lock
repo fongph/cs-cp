@@ -12,7 +12,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-billing.git",
-                "reference": "43382e40b3e4e8c0944b5af19b7365a8585a7db5"
+                "reference": "1c11d806c80a878163c71f88810d8ebc981e3d73"
             },
             "require": {
                 "boomers/cs-models": "dev-master",
@@ -31,7 +31,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2015-04-09 09:05:56"
+            "time": "2015-05-27 06:49:56"
         },
         {
             "name": "boomers/cs-devices",
@@ -39,7 +39,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-devices.git",
-                "reference": "bee446ccf3e5fa47cbd1ddfb4cf887e5a8f0954b"
+                "reference": "5ffca321f101fcefd397735253bc299db66b7f08"
             },
             "require": {
                 "boomers/cs-mail": "dev-master",
@@ -62,7 +62,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2015-05-20 14:06:51"
+            "time": "2015-06-03 13:27:48"
         },
         {
             "name": "boomers/cs-icloud",
@@ -122,7 +122,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-models.git",
-                "reference": "88066c0f1f4295c4649e4292e5788e4618afe34b"
+                "reference": "dc673cd2fd4b2bc6f9ace38484bbb0dadf13e955"
             },
             "require": {
                 "php": ">=5.4.0"
@@ -136,7 +136,7 @@
                     "CS\\Models\\": "src/"
                 }
             },
-            "time": "2015-05-25 14:58:07"
+            "time": "2015-06-04 05:39:42"
         },
         {
             "name": "boomers/cs-queue",
@@ -255,16 +255,16 @@
         },
         {
             "name": "fenom/fenom",
-            "version": "2.6.2",
+            "version": "2.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fenom-template/fenom.git",
-                "reference": "0511a435394877505445b0c6e5ae7898bc3efc6b"
+                "reference": "56dfcfc71fcbc149fd23e9da1d14d65161528bac"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fenom-template/fenom/zipball/0511a435394877505445b0c6e5ae7898bc3efc6b",
-                "reference": "0511a435394877505445b0c6e5ae7898bc3efc6b",
+                "url": "https://api.github.com/repos/fenom-template/fenom/zipball/56dfcfc71fcbc149fd23e9da1d14d65161528bac",
+                "reference": "56dfcfc71fcbc149fd23e9da1d14d65161528bac",
                 "shasum": ""
             },
             "require": {
@@ -301,20 +301,20 @@
                 "templater",
                 "templating"
             ],
-            "time": "2015-05-23 20:17:34"
+            "time": "2015-06-03 08:57:35"
         },
         {
             "name": "filp/whoops",
-            "version": "1.1.5",
+            "version": "1.1.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/filp/whoops.git",
-                "reference": "c982fe62c44798c433229cb0425c61b487cc1883"
+                "reference": "37b5e653c99cbb9113108d7dc59a0ddc306acc46"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/filp/whoops/zipball/c982fe62c44798c433229cb0425c61b487cc1883",
-                "reference": "c982fe62c44798c433229cb0425c61b487cc1883",
+                "url": "https://api.github.com/repos/filp/whoops/zipball/37b5e653c99cbb9113108d7dc59a0ddc306acc46",
+                "reference": "37b5e653c99cbb9113108d7dc59a0ddc306acc46",
                 "shasum": ""
             },
             "require": {
@@ -359,7 +359,7 @@
                 "whoops",
                 "zf2"
             ],
-            "time": "2015-03-30 15:26:59"
+            "time": "2015-05-29 15:12:07"
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -816,21 +816,20 @@
         },
         {
             "name": "symfony/console",
-            "version": "v2.6.7",
-            "target-dir": "Symfony/Component/Console",
+            "version": "v2.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Console.git",
-                "reference": "ebc5679854aa24ed7d65062e9e3ab0b18a917272"
+                "reference": "7f0bec04961c61c961df0cb8c2ae88dbfd83f399"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Console/zipball/ebc5679854aa24ed7d65062e9e3ab0b18a917272",
-                "reference": "ebc5679854aa24ed7d65062e9e3ab0b18a917272",
+                "url": "https://api.github.com/repos/symfony/Console/zipball/7f0bec04961c61c961df0cb8c2ae88dbfd83f399",
+                "reference": "7f0bec04961c61c961df0cb8c2ae88dbfd83f399",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.3"
+                "php": ">=5.3.9"
             },
             "require-dev": {
                 "psr/log": "~1.0",
@@ -846,11 +845,11 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.6-dev"
+                    "dev-master": "2.7-dev"
                 }
             },
             "autoload": {
-                "psr-0": {
+                "psr-4": {
                     "Symfony\\Component\\Console\\": ""
                 }
             },
@@ -870,7 +869,7 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "time": "2015-05-02 15:18:45"
+            "time": "2015-05-29 16:22:24"
         },
         {
             "name": "videlalvaro/php-amqplib",

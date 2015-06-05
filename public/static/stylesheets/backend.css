@@ -8585,7 +8585,7 @@ button.close {
   position: relative;
 }
 .box-header-info {
-  padding: 26px 0px 18px 0px;
+  padding-top: 21px;
   margin: 0px;
   float: right;
   display: inline-block;
@@ -9061,6 +9061,13 @@ body > .cp-menu {
 .cp-menu li:hover i.menu-settings,
 .cp-menu li.active i.menu-settings {
   background-position: -24px -528px;
+}
+.cp-menu li i.menu-notes {
+  background-position: 0px -576px;
+}
+.cp-menu li:hover i.menu-notes,
+.cp-menu li.active i.menu-notes {
+  background-position: -24px -576px;
 }
 @media (min-width: 1200px) {
   .menu-wrapper {
@@ -12091,6 +12098,9 @@ a.list-group-item-danger.active:focus {
 }
 #header .logo {
   background: url(../img/pumpic/logo.png) no-repeat;
+}
+#header .logo-holder {
+  padding-top: 10px;
 }
 @media (min-width: 768px) {
   #header .menu ul.nav > li > a {

@@ -193,7 +193,7 @@ $console->register('update-demo-user-data')
             
             $pdo->commit();
 
-            $message = "User data successfully updated by $days days!";
+            $message = date('r') . " - User data successfully updated by $days days!";
 
             $logger->addInfo($message);
             $output->writeln($message);
