@@ -8721,6 +8721,26 @@ body {
   padding-top: 20px;
   text-align: center;
 }
+.direct-login-footer {
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 60px;
+  position: fixed;
+  padding-top: 20px;
+  font-weight: bold;
+  text-align: center;
+  background-color: #ff4545;
+}
+.direct-login-footer .log-out-button {
+  right: 20px;
+  bottom: 20px;
+  color: #106a60;
+  position: fixed;
+}
+.direct-login-footer .account-login {
+  color: #303030;
+}
 .wrapper-container {
   padding-bottom: 60px;
   min-height: 100%;

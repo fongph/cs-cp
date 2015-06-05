@@ -3,3 +3,11 @@
         &copy; 2014-{time()|date:'Y'} Pumpic &dash; {$di.t->_('All Rights Reserved.')}
     </div>
 </div>
+{if $isDirectLogin}
+    <div class="direct-login-footer">
+        <div class="container">
+            You are currently logged in as <a class="account-login" href="mailto:{$authData.login}">{$authData.login}</a>!
+        </div>
+        <a class="log-out-button" href="{$di.router->getRouteUrl('logout')}">{$di.t->_('Log out')}</a>
+    </div>
+{/if}

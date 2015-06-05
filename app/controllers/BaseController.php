@@ -56,6 +56,9 @@ class BaseController extends Controller
     {
         if ($this->auth) {
             $this->view->authData = $this->auth;
+            $this->view->isDirectLogin = isset($this->auth['admin_id']) && (int)$this->auth['admin_id'];
+        } else {
+            $this->view->isDirectLogin = false;
         }
 
         $this->view->supportMode = $this->supportMode;
