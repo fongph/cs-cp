@@ -8585,7 +8585,7 @@ button.close {
   position: relative;
 }
 .box-header-info {
-  padding: 26px 0px 18px 0px;
+  padding-top: 21px;
   margin: 0px;
   float: right;
   display: inline-block;
@@ -12098,6 +12098,9 @@ a.list-group-item-danger.active:focus {
 }
 #header .logo {
   background: url(../img/pumpic/logo.png) no-repeat;
+}
+#header .logo-holder {
+  padding-top: 10px;
 }
 @media (min-width: 768px) {
   #header .menu ul.nav > li > a {
