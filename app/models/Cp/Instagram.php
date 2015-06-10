@@ -7,20 +7,6 @@ class Instagram extends BaseModel
 
     const AVATAR_EMPTY_VALUE = 'none';
 
-    private static $_authLifeTime = 3600;
-
-    public function getAuthorizedUrl($uri)
-    {
-        $s3 = $this->di->get('S3');
-        return $s3->getAuthenticatedURL($this->di['config']['s3']['bucket'] . $uri, self::$_authLifeTime);
-    }
-
-    public function getCDNAuthorizedUrl($uri)
-    {
-        $s3 = $this->di->get('S3');
-        return $s3->getSignedCannedURL($this->di['config']['cloudFront']['domain'] . $uri, self::$_authLifeTime);
-    }
-
     public function getFirstAccount($devId)
     {
         $devId = $this->getDb()->quote($devId);

