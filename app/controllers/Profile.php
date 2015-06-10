@@ -246,6 +246,8 @@ class Profile extends BaseController
                 $usersManager->updatePassword(
                         $this->auth['id'], $this->getRequest()->post('oldPassword'), $this->getRequest()->post('newPassword'), $this->getRequest()->post('newPassword2')
                 );
+                
+                $this->di->get('usersNotesProcessor')->accountCustomPasswordSaved();
 
                 $this->di['flashMessages']->add(FlashMessages::SUCCESS, $this->di['t']->_('Your password has been successfully changed!'));
             } catch (PasswordsNotEqualException $e) {
