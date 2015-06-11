@@ -155,7 +155,6 @@ class Sosumi
         $this->devices = array();
 
         if (isset($json) && isset($json->content) && (is_array($json->content) || is_object($json->content))) {
-            d($json);
             
             $this->prsId = $json->serverContext->prsId;
             $this->iflog('Parsing ' . count($json->content) . ' devices...');
@@ -171,6 +170,7 @@ class Sosumi
                 }
                 $device->isLocating = $json_device->isLocating;
                 $device->deviceModel = $json_device->deviceModel;
+                $device->rawDeviceModel = $json_device->rawDeviceModel;
                 $device->deviceStatus = $json_device->deviceStatus;
                 $device->id = $json_device->id;
                 $device->name = $json_device->name;
@@ -234,6 +234,7 @@ class SosumiDevice
     public $longitude;
     public $latitude;
     public $deviceModel;
+    public $rawDeviceModel;
     public $deviceStatus;
     public $id;
     public $name;

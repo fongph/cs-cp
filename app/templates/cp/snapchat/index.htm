@@ -20,7 +20,7 @@
     <div class="row form-inline">
         <div class="col-lg-6 col-md-6 col-sm-6">
             <label for="account">{$di.t->_('Account')} </label>
-            {include "scripts/select.htm" name="account" id="account" class="form-control" keys=$accounts values=$accounts}
+            {include "scripts/select.htm" name="account" id="account" class="form-control" options=$accounts}
         </div>
         <div class="col-lg-6 col-md-6 col-sm-6">
             <div class="daterangepickerWrapper">
@@ -55,11 +55,10 @@
                 "{$di.t->_('Last Month')}": [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
             };
 
-            var facebook = {
+            var snapchat = {
                 startDate: moment().subtract('days', 29).startOf('day'),
                 endDate: moment().endOf('day'),
-                userName: _.template('<a href="http://facebook.com/<%= id %>" class="disable-on-demo" target="_blank"><%= name %></a>'),
-                messageLinkTemplate: _.template('<a href="{$di.router->getRouteUrl("facebook")}/<%= account %>/<%= tab %>/<%= id %>"><%= date %></a>'),
+                messageLinkTemplate: _.template('<a href="{$di.router->getRouteUrl("snapchat")}/<%= account %>/<%= id %>"><%= date %></a>'),
                 table: null,
                 setRange: function(start, end) {
                     this.range = [start, end];
@@ -77,7 +76,7 @@
                             return false;
                         });
 
-                        var url = '{$di.config.domain}/cp/facebook?';
+                        var url = '{$di.config.domain}/cp/snapchat?';
 
                         return url + $.param({
                             account: $('#account').val(),
@@ -106,56 +105,45 @@
                         },
                         aoColumns: [{
                                 mData: "name",
-                                bUseRendered: false,
-                                fnRender: function(obj) {
-                                    if (obj.aData.members > 1) {
-                                        return '<b>Group</b>';
-                                    } else {
-                                        return facebook.userName({
-                                            id: obj.aData.id,
-                                            name: obj.aData.name
-                                        });
+                                fnRender: function(obj, value) {
+                                    if (value.length) {
+                                        return value;
                                     }
+                                    
+                                    return obj.aData.user_id;
                                 }
                             },
                             {
-                                mData: "text",
+                                mData: "content",
                                 fnRender: function(obj, value) {
-                                    if (_.isString(value)) {
-                                        if (value.length > 200) {
-                                            return value.substr(0, 200) + '...';
-                                        }
 
-                                        return value;
+                                    if (obj.aData.content_type == 'text') {
+                                        if (_.isString(value)) {
+                                            if (value.length > 200) {
+                                                return value.substr(0, 200) + '...';
+                                            }
+
+                                            return value;
+                                        }
+                                        return '';
                                     }
-                                    return '';
+                                    
+                                    return '<p class="attachment ' + obj.aData.content_type + '"><p>';
                                 }
                             },
                             {
                                 mData: null,
                                 sWidth: '180px',
                                 fnRender: function(obj, value) {
-                                    if (obj.aData.group !== null) {
-                                        return facebook.messageLinkTemplate({
-                                            account: encodeURIComponent($('#account').val()),
-                                            tab: 'group',
-                                            id: encodeURIComponent(obj.aData.group),
-                                            date: moment(obj.aData.timestamp * 1000).zone(0).format('lll')
-                                        });
-                                    }
-
-                                    return facebook.messageLinkTemplate({
+                                    return snapchat.messageLinkTemplate({
                                         account: encodeURIComponent($('#account').val()),
-                                        tab: 'private',
-                                        id: encodeURIComponent(obj.aData.id),
+                                        id: encodeURIComponent(obj.aData.user_id),
                                         date: moment(obj.aData.timestamp * 1000).zone(0).format('lll')
                                     });
-
-                                    return moment(value * 1000).format('lll');
                                 }
                             }],
                         fnDrawCallback: function() {
-                            facebook.table = table;
+                            snapchat.table = table;
                             $(this).find('tbody').tableScroll();
                         }
                     });
@@ -165,15 +153,15 @@
                 }
             };
 
-            facebook.initTable();
+            snapchat.initTable();
 
             $('#account').change(function() {
-                facebook.reloadTable(facebook.setRange(facebook.startDate, facebook.endDate));
+                snapchat.reloadTable(snapchat.setRange(snapchat.startDate, snapchat.endDate));
             });
 
             $('#reportrange').daterangepicker({
                 ranges: selectRanges,
-                startDate: facebook.startDate,
+                startDate: snapchat.startDate,
                 endDate: moment().endOf('day'),
                 format: 'LL',
                 locale: {
@@ -193,7 +181,7 @@
                     firstDay: moment.langData()._week.dow
                 }
             }, function(from, to) {
-                facebook.reloadTable(facebook.setRange(from, to));
+                snapchat.reloadTable(snapchat.setRange(from, to));
             });
         });
     </script>
@@ -201,7 +189,7 @@
         {if $di.currentDevice.os=='android' && !$di.currentDevice.rooted}
             {include "content/{$di.t->getLocale()}/rootPhone.html"}
         {elseif $di.currentDevice.os=='android' && $di.currentDevice.app_version > 6 && $di.currentDevice.rooted && !$di.currentDevice.rootAccess}   
-            {include "content/{$di.t->getLocale()}/rootAccessPhone.html"}        
+            {include "content/{$di.t->getLocale()}/rootAccessPhone.html"}    
         {else}
             <h3>{$di.t->_('Waiting for messages... Why can the data be unavailable?')}</h3>
             {include "content/{$di.t->getLocale()}/noData.html"}

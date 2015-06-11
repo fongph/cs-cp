@@ -59,231 +59,248 @@
           margin-top: 10px;
       }
     }
+    
+    .instruction-container {
+        display: inline-block;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        margin-top: 15px;
+        padding: 20px 30px;
+    }
+    
+    .instruction-container ul,
+    .instruction-container ol {
+        margin: 0 10px;
+        padding: 0px 10px;
+    }
 </style>
 
 <div>
     <h1 class="text-center">ROOT Instructions{*$title*}</h1>
-
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-12 col-md-12 col-lg-12">
-                <ul class="nav-buttons nav nav-tabs">
-                    <li class="active"><a href="#android_4x_5x" data-toggle="tab">Android 4.x-5.x</a></li>
-                    <li><a href="#android_2x" data-toggle="tab">Android 2.x</a></li>
-                </ul>
-            </div>
-        </div>
-    </div>    
+    <div class="instruction-container">
     
-    <div class="tab-content">
-        <div class="tab-pane active" id="android_4x_5x">
-            <div class="container">
-                <div class="row">
-                    <div class="col-sm-12 col-md-12 col-lg-12">
-                        <p>To make use of all monitoring features provided by <b>Pumpic for Android, rooting is required</b>. The process is fast and easy. It takes some simple steps to complete.</p>
-                    
-                        <p>We suggest you to try One Click Root software, which is supported by most of Android devices (learn more on <a href="http://www.oneclickroot.com/">http://www.oneclickroot.com/</a>). However, feel free to use the web search and find rooting instructions, which will better fit your particular device model.</p>
-                    
-                        <h3 class="text-center">Set up an Android Device</h3>
-                    
-                        <p><span style="color: #FF2A2A">Important:</span> The target device must have at least 60% of battery life left for rooting purposes.</p>
-                        <p>Please <b>back up your personal information</b> before proceeding with rooting to prevent any data loss.</p>
-                        <h4>Activate Developer Options</h4>
-                        <ol>
-                            <li>
-                                <p>Go to “Settings” menu.</p>
-                                <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/root_android/android_4_5/dev_options/1.png" alt="" /></p>
-                            </li>
-                            <li>
-                                <p>Proceed to “About phone” section.</p>
-                                <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/root_android/android_4_5/dev_options/2.png" alt="" /></p>
-                            </li>
-                            <li>
-                                <p>Tap on “Build number” 5 times.</p>
-                                <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/root_android/android_4_5/dev_options/3.png" alt="" /></p>
-                            </li>
-                            <li>
-                                <p>You will see a notification “You are now a developer!”
-                                <br />It means that “Developer options” are activated.</p>
-                                <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/root_android/android_4_5/dev_options/4.png" alt="" /></p>
-                            </li>
-                        </ol>
-                    
-                        <h4>Enable USB Debugging</h4>
-                        <ol>
-                            <li>
-                                <p>Choose “Developer options” from the “Settings” menu.</p>
-                                <p>
-                                    <img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/root_android/android_4_5/dev_options/1.png" alt="" />
-                                    &nbsp;<img class="img-thumbnail mobile-mt10" src="{$di.config.staticDomain}/images/instructions/root_android/android_4_5/dev_options/5.png" alt="" />
-                                </p>
-                            </li>
-                            <li>
-                                <p>Enable “USB debugging”.</p>
-                                <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/root_android/android_4_5/dev_options/6.png" alt="" /></p>
-                            </li>
-                            <li>
-                                <p>A pop-up “Allow USB debugging?” will appear. <br />Tap “OK”.</p>
-                                <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/root_android/android_4_5/dev_options/7.png" alt="" /></p>
-                            </li>
-                            <li>
-                                <p>“USB debugging” is enabled.</p>
-                                <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/root_android/android_4_5/dev_options/8.png" alt="" /></p>
-                            </li>
-                        </ol>  
-                        
-                        <h4>Enable Unknown Sources</h4>
-                        <ol>
-                            <li>
-                                <p>Choose “Security” from the “Settings” menu.</p>
-                                <p>
-                                    <img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/root_android/android_4_5/unknown_sources/1.png" alt="" />
-                                    &nbsp;<img class="img-thumbnail mobile-mt10" src="{$di.config.staticDomain}/images/instructions/root_android/android_4_5/unknown_sources/2.png" alt="" />
-                                </p>
-                            </li>
-                            <li>
-                                <p>Enable “Unknown sources”.</p>
-                                <p>
-                                    <img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/root_android/android_4_5/unknown_sources/3.png" alt="" />
-                                </p>
-                            </li>
-                            <li>
-                                <p>A pop-up will appear.
-                                    <br />Tap “OK”.</p>
-                                <p>
-                                    <img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/root_android/android_4_5/unknown_sources/4.png" alt="" />
-                                </p>
-                            </li>
-                            <li>
-                                <p>“Unknown sources” option is activated.</p>
-                                <p>
-                                    <img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/root_android/android_4_5/unknown_sources/5.png" alt="" />
-                                </p>
-                            </li>
-                        </ol>    
-                        
-                        <h3 class="text-center">Use One Click Root Software</h3>
-                    
-                        <p><span style="color: #FF2A2A">Important:</span> The rooting procedure includes additional software installation onto your PC.</p>
-                        <ol>
-                            <li>Download the software on your PC and follow the further instructions: <a href="http://www.oneclickroot.com/download/">http://www.oneclickroot.com/download/</a>. </li>
-                            <li>Proceed with the installation. If it is successful, you will see a <b>Superuser</b> icon on a desktop.</li>
-                        </ol>
-                        <p>A pop-up requesting for the Superuser rights will appear shortly. Tap <b><i>“Grant”</i></b>&nbsp; to provide. If it doesn’t appear for a 
-                            few minutes, run Pumpic. The app will ask for the Superuser rights. Tap <b><i>“Grant”</i></b>&nbsp; to provide.</p>
-                    
-                        <p><span style="color: #FF2A2A">Note:</span> One Click Root is not compatible with all Android devices. If your particular device turned out to be incompatible, feel free to use any alternative rooting service. Here are some of them to consider:</p>
-                        <ul>
-                            <li>Towelroot – <a href="https://towelroot.com/">https://towelroot.com/</a>.</li>
-                            <li>Kingo Root – <a href="http://www.kingoapp.com/index.htm">http://www.kingoapp.com/index.htm</a>.</li>
-                        </ul>
-                    
-                        <p>If you face difficulties with the aforementioned services as well, or they will not support the target device you 
-                            are going to monitor, you will have to spend some more time finding out how to root it on Android related forums. 
-                            The best place to start with is XDA Developers Forum – <a href="http://forum.xda-developers.com/">http://forum.xda-developers.com/</a>. Look for a thread on your 
-                            specific device to find a method that has worked for other people.</p>
-                    
-                        <p>Pumpic is worth spending some more time searching. You will not regret it!</p>
-                        
-                        <p class="text-center">Are you done? Please wait for 20 minutes until Pumpic starts collecting the data.</p>
-                        <p class="text-center"><a href="{$previos}" class="btn btn-primary">I'm done!</a></p>
-                    </div>
-                </div>
-            </div>    
-        </div>  <!-- #android-4.x-5.x -->   
-        <div class="tab-pane" id="android_2x">    
-            <div class="container">
-                <div class="row">
-                    <div class="col-sm-12 col-md-12 col-lg-12">
-                        
-                        <p>To make use of all monitoring features provided by <b>Pumpic for Android, rooting is required</b>. The process is fast and easy. It takes some simple steps to complete.</p>
-                    
-                        <p>We suggest you to try One Click Root software, which is supported by most of Android devices (learn more on <a href='http://www.oneclickroot.com/'>http://www.oneclickroot.com/</a>). However, feel free to use the web search and find rooting instructions, which will better fit your particular device model.</p>
-                    
-                        <h3 class="text-center">Set up an Android Device</h3>
-                    
-                        <p><span style="color: #FF2A2A">Important:</span> The target device must have at least 60% of battery life left for rooting purposes.</p>
-                        <p>Please <b>back up your personal information</b> before proceeding with rooting to prevent any data loss.</p>
-                        <h4>Enable USB Debugging</h4>
-                        <ol>
-                            <li>
-                                <p>Go to “Settings” menu.</p>
-                                <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/root_android/android_2/dev_options/1.png" alt="" /></p>
-                            </li>
-                            <li>
-                                <p>Proceed to “Applications”.</p>
-                                <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/root_android/android_2/dev_options/2.png" alt="" /></p>
-                            </li>
-                            <li>
-                                <p>Enter “Development” section.</p>
-                                <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/root_android/android_2/dev_options/3.png" alt="" /></p>
-                            </li>
-                            <li>
-                                <p>Check “USB debugging” box.</p>
-                                <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/root_android/android_2/dev_options/4.png" alt="" /></p>
-                            </li>
-                            <li>
-                                <p>A pop-up “Allow USB debugging?” will appear.<br />Tap “OK”.</p>
-                                <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/root_android/android_2/dev_options/5.png" alt="" /></p>
-                            </li>
-                            <li>
-                                <p>“USB debugging” is enabled.</p>
-                                <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/root_android/android_2/dev_options/6.png" alt="" /></p>
-                            </li>
-                        </ol>
-                        
-                        <h4>Enable Unknown Sources</h4>
-                        <ol>
-                            <li>
-                                <p>Choose “Applications” from the “Settings” menu.</p>
-                                <p>
-                                    <img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/root_android/android_2/unknown_sources/1.png" alt="" />
-                                    &nbsp;<img class="img-thumbnail mobile-mt10" src="{$di.config.staticDomain}/images/instructions/root_android/android_2/unknown_sources/2.png" alt="" />
-                                </p>
-                            </li>
-                            <li>
-                                <p>Check “Unknown sources” box.</p>
-                                <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/root_android/android_2/unknown_sources/3.png" alt="" /></p>
-                            </li>
-                            <li>
-                                <p>A pop-up will appear. <br />Tap “OK”.</p>
-                                <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/root_android/android_2/unknown_sources/4.png" alt="" /></p>
-                            </li>
-                            <li>
-                                <p>“Unknown sources” option is activated.</p>
-                                <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/root_android/android_2/unknown_sources/5.png" alt="" /></p>
-                            </li>
-                        </ol>    
-                    
-                        <h3 class="text-center">Use One Click Root Software</h3>
-                    
-                        <p><span style="color: #FF2A2A">Important:</span> The rooting procedure includes additional software installation onto your PC.</p>
-                        <ol>
-                            <li>Download the software on your PC and follow the further instructions: <a href="http://www.oneclickroot.com/download/">http://www.oneclickroot.com/download/</a>. </li>
-                            <li>Proceed with the installation. If it is successful, you will see a <b>Superuser</b> icon on a desktop.</li>
-                        </ol>
-                        <p>A pop-up requesting for the Superuser rights will appear shortly. Tap <b><i>“Grant”</i></b>&nbsp; to provide. If it doesn’t appear for 
-                            a few minutes, run Pumpic. The app will ask for the Superuser rights. Tap <b><i>“Grant”</i></b>&nbsp; to provide.</p>
-                    
-                        <p><span style="color: #FF2A2A">Note:</span> One Click Root is not compatible with all Android devices. If your particular device turned out to be incompatible, feel free to use any alternative rooting service. Here are some of them to consider:</p>
-                        <ul>
-                            <li>Towelroot – <a href="https://towelroot.com/">https://towelroot.com/</a>.</li>
-                            <li>Kingo Root – <a href="http://www.kingoapp.com/index.htm">http://www.kingoapp.com/index.htm</a>.</li>
-                        </ul>
-                    
-                        <p>If you face difficulties with the aforementioned services as well, or they will not support the target device you 
-                            are going to monitor, you will have to spend some more time finding out how to root it on Android related forums. 
-                            The best place to start with is XDA Developers Forum – <a href='http://forum.xda-developers.com/'>http://forum.xda-developers.com/</a>. Look for a thread on your 
-                            specific device to find a method that has worked for other people.</p>
-                    
-                        <p>Pumpic is worth spending some more time searching. You will not regret it!</p>
-                        
-                        <p class="text-center">Are you done? Please wait for 20 minutes until Pumpic starts collecting the data.</p>
-                        <p class="text-center"><a href="{$previos}" class="btn btn-primary">I'm done!</a></p>
-                    </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12 col-md-12 col-lg-12">
+                    <ul style="margin: 10px 0;padding:0px;" class="nav-buttons nav nav-tabs">
+                        <li class="active"><a href="#android_4x_5x" data-toggle="tab">Android 4.x-5.x</a></li>
+                        <li><a href="#android_2x" data-toggle="tab">Android 2.x</a></li>
+                    </ul>
                 </div>
             </div>
-        </div> <!-- #android-2.x -->
+        </div>    
+
+        <div class="tab-content">
+            <div class="tab-pane active" id="android_4x_5x">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12 col-lg-12">
+                            <p>To make use of all monitoring features provided by <b>Pumpic for Android, rooting is required</b>. The process is fast and easy. It takes some simple steps to complete.</p>
+
+                            <p>We suggest you to try One Click Root software, which is supported by most of Android devices (learn more on <a href="http://www.oneclickroot.com/">http://www.oneclickroot.com/</a>). However, feel free to use the web search and find rooting instructions, which will better fit your particular device model.</p>
+
+                            <h3 class="text-center">Set up an Android Device</h3>
+
+                            <p><span style="color: #FF2A2A">Important:</span> The target device must have at least 60% of battery life left for rooting purposes.</p>
+                            <p>Please <b>back up your personal information</b> before proceeding with rooting to prevent any data loss.</p>
+                            <h4>Activate Developer Options</h4>
+                            <ol>
+                                <li>
+                                    <p>Go to “Settings” menu.</p>
+                                    <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/root_android/android_4_5/dev_options/1.png" alt="" /></p>
+                                </li>
+                                <li>
+                                    <p>Proceed to “About phone” section.</p>
+                                    <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/root_android/android_4_5/dev_options/2.png" alt="" /></p>
+                                </li>
+                                <li>
+                                    <p>Tap on “Build number” 5 times.</p>
+                                    <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/root_android/android_4_5/dev_options/3.png" alt="" /></p>
+                                </li>
+                                <li>
+                                    <p>You will see a notification “You are now a developer!”
+                                    <br />It means that “Developer options” are activated.</p>
+                                    <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/root_android/android_4_5/dev_options/4.png" alt="" /></p>
+                                </li>
+                            </ol>
+
+                            <h4>Enable USB Debugging</h4>
+                            <ol>
+                                <li>
+                                    <p>Choose “Developer options” from the “Settings” menu.</p>
+                                    <p>
+                                        <img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/root_android/android_4_5/dev_options/1.png" alt="" />
+                                        &nbsp;<img class="img-thumbnail mobile-mt10" src="{$di.config.staticDomain}/images/instructions/root_android/android_4_5/dev_options/5.png" alt="" />
+                                    </p>
+                                </li>
+                                <li>
+                                    <p>Enable “USB debugging”.</p>
+                                    <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/root_android/android_4_5/dev_options/6.png" alt="" /></p>
+                                </li>
+                                <li>
+                                    <p>A pop-up “Allow USB debugging?” will appear. <br />Tap “OK”.</p>
+                                    <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/root_android/android_4_5/dev_options/7.png" alt="" /></p>
+                                </li>
+                                <li>
+                                    <p>“USB debugging” is enabled.</p>
+                                    <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/root_android/android_4_5/dev_options/8.png" alt="" /></p>
+                                </li>
+                            </ol>  
+
+                            <h4>Enable Unknown Sources</h4>
+                            <ol>
+                                <li>
+                                    <p>Choose “Security” from the “Settings” menu.</p>
+                                    <p>
+                                        <img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/root_android/android_4_5/unknown_sources/1.png" alt="" />
+                                        &nbsp;<img class="img-thumbnail mobile-mt10" src="{$di.config.staticDomain}/images/instructions/root_android/android_4_5/unknown_sources/2.png" alt="" />
+                                    </p>
+                                </li>
+                                <li>
+                                    <p>Enable “Unknown sources”.</p>
+                                    <p>
+                                        <img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/root_android/android_4_5/unknown_sources/3.png" alt="" />
+                                    </p>
+                                </li>
+                                <li>
+                                    <p>A pop-up will appear.
+                                        <br />Tap “OK”.</p>
+                                    <p>
+                                        <img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/root_android/android_4_5/unknown_sources/4.png" alt="" />
+                                    </p>
+                                </li>
+                                <li>
+                                    <p>“Unknown sources” option is activated.</p>
+                                    <p>
+                                        <img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/root_android/android_4_5/unknown_sources/5.png" alt="" />
+                                    </p>
+                                </li>
+                            </ol>    
+
+                            <h3 class="text-center">Use One Click Root Software</h3>
+
+                            <p><span style="color: #FF2A2A">Important:</span> The rooting procedure includes additional software installation onto your PC.</p>
+                            <ol>
+                                <li>Download the software on your PC and follow the further instructions: <a href="http://www.oneclickroot.com/download/">http://www.oneclickroot.com/download/</a>. </li>
+                                <li>Proceed with the installation. If it is successful, you will see a <b>Superuser</b> icon on a desktop.</li>
+                            </ol>
+                            <p>A pop-up requesting for the Superuser rights will appear shortly. Tap <b><i>“Grant”</i></b>&nbsp; to provide. If it doesn’t appear for a 
+                                few minutes, run Pumpic. The app will ask for the Superuser rights. Tap <b><i>“Grant”</i></b>&nbsp; to provide.</p>
+
+                            <p><span style="color: #FF2A2A">Note:</span> One Click Root is not compatible with all Android devices. If your particular device turned out to be incompatible, feel free to use any alternative rooting service. Here are some of them to consider:</p>
+                            <ul>
+                                <li>Towelroot – <a href="https://towelroot.com/">https://towelroot.com/</a>.</li>
+                                <li>Kingo Root – <a href="http://www.kingoapp.com/index.htm">http://www.kingoapp.com/index.htm</a>.</li>
+                            </ul>
+
+                            <p>If you face difficulties with the aforementioned services as well, or they will not support the target device you 
+                                are going to monitor, you will have to spend some more time finding out how to root it on Android related forums. 
+                                The best place to start with is XDA Developers Forum – <a href="http://forum.xda-developers.com/">http://forum.xda-developers.com/</a>. Look for a thread on your 
+                                specific device to find a method that has worked for other people.</p>
+
+                            <p>Pumpic is worth spending some more time searching. You will not regret it!</p>
+
+                            <p>Are you done? Please wait for 20 minutes until Pumpic starts collecting the data.</p>
+                            <p><a href="{$previos}" class="btn btn-primary">I'm done!</a></p>
+                        </div>
+                    </div>
+                </div>    
+            </div>  <!-- #android-4.x-5.x -->   
+            <div class="tab-pane" id="android_2x">    
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12 col-lg-12">
+
+                            <p>To make use of all monitoring features provided by <b>Pumpic for Android, rooting is required</b>. The process is fast and easy. It takes some simple steps to complete.</p>
+
+                            <p>We suggest you to try One Click Root software, which is supported by most of Android devices (learn more on <a href='http://www.oneclickroot.com/'>http://www.oneclickroot.com/</a>). However, feel free to use the web search and find rooting instructions, which will better fit your particular device model.</p>
+
+                            <h3 class="text-center">Set up an Android Device</h3>
+
+                            <p><span style="color: #FF2A2A">Important:</span> The target device must have at least 60% of battery life left for rooting purposes.</p>
+                            <p>Please <b>back up your personal information</b> before proceeding with rooting to prevent any data loss.</p>
+                            <h4>Enable USB Debugging</h4>
+                            <ol>
+                                <li>
+                                    <p>Go to “Settings” menu.</p>
+                                    <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/root_android/android_2/dev_options/1.png" alt="" /></p>
+                                </li>
+                                <li>
+                                    <p>Proceed to “Applications”.</p>
+                                    <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/root_android/android_2/dev_options/2.png" alt="" /></p>
+                                </li>
+                                <li>
+                                    <p>Enter “Development” section.</p>
+                                    <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/root_android/android_2/dev_options/3.png" alt="" /></p>
+                                </li>
+                                <li>
+                                    <p>Check “USB debugging” box.</p>
+                                    <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/root_android/android_2/dev_options/4.png" alt="" /></p>
+                                </li>
+                                <li>
+                                    <p>A pop-up “Allow USB debugging?” will appear.<br />Tap “OK”.</p>
+                                    <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/root_android/android_2/dev_options/5.png" alt="" /></p>
+                                </li>
+                                <li>
+                                    <p>“USB debugging” is enabled.</p>
+                                    <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/root_android/android_2/dev_options/6.png" alt="" /></p>
+                                </li>
+                            </ol>
+
+                            <h4>Enable Unknown Sources</h4>
+                            <ol>
+                                <li>
+                                    <p>Choose “Applications” from the “Settings” menu.</p>
+                                    <p>
+                                        <img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/root_android/android_2/unknown_sources/1.png" alt="" />
+                                        &nbsp;<img class="img-thumbnail mobile-mt10" src="{$di.config.staticDomain}/images/instructions/root_android/android_2/unknown_sources/2.png" alt="" />
+                                    </p>
+                                </li>
+                                <li>
+                                    <p>Check “Unknown sources” box.</p>
+                                    <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/root_android/android_2/unknown_sources/3.png" alt="" /></p>
+                                </li>
+                                <li>
+                                    <p>A pop-up will appear. <br />Tap “OK”.</p>
+                                    <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/root_android/android_2/unknown_sources/4.png" alt="" /></p>
+                                </li>
+                                <li>
+                                    <p>“Unknown sources” option is activated.</p>
+                                    <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/root_android/android_2/unknown_sources/5.png" alt="" /></p>
+                                </li>
+                            </ol>    
+
+                            <h3 class="text-center">Use One Click Root Software</h3>
+
+                            <p><span style="color: #FF2A2A">Important:</span> The rooting procedure includes additional software installation onto your PC.</p>
+                            <ol>
+                                <li>Download the software on your PC and follow the further instructions: <a href="http://www.oneclickroot.com/download/">http://www.oneclickroot.com/download/</a>. </li>
+                                <li>Proceed with the installation. If it is successful, you will see a <b>Superuser</b> icon on a desktop.</li>
+                            </ol>
+                            <p>A pop-up requesting for the Superuser rights will appear shortly. Tap <b><i>“Grant”</i></b>&nbsp; to provide. If it doesn’t appear for 
+                                a few minutes, run Pumpic. The app will ask for the Superuser rights. Tap <b><i>“Grant”</i></b>&nbsp; to provide.</p>
+
+                            <p><span style="color: #FF2A2A">Note:</span> One Click Root is not compatible with all Android devices. If your particular device turned out to be incompatible, feel free to use any alternative rooting service. Here are some of them to consider:</p>
+                            <ul>
+                                <li>Towelroot – <a href="https://towelroot.com/">https://towelroot.com/</a>.</li>
+                                <li>Kingo Root – <a href="http://www.kingoapp.com/index.htm">http://www.kingoapp.com/index.htm</a>.</li>
+                            </ul>
+
+                            <p>If you face difficulties with the aforementioned services as well, or they will not support the target device you 
+                                are going to monitor, you will have to spend some more time finding out how to root it on Android related forums. 
+                                The best place to start with is XDA Developers Forum – <a href='http://forum.xda-developers.com/'>http://forum.xda-developers.com/</a>. Look for a thread on your 
+                                specific device to find a method that has worked for other people.</p>
+
+                            <p>Pumpic is worth spending some more time searching. You will not regret it!</p>
+
+                            <p>Are you done? Please wait for 20 minutes until Pumpic starts collecting the data.</p>
+                            <p><a href="{$previos}" class="btn btn-primary">I'm done!</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div> <!-- #android-2.x -->
+
+        </div>
         
-    </div>
+    </div>    
 </div>

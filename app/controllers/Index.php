@@ -5,6 +5,7 @@ namespace Controllers;
 use Models\Users,
     Models\Billing,
     Models\Devices,
+    CS\Users\UsersNotes,
     System\FlashMessages,
     CS\Users\UsersManager,
     Components\WizardRouter,
@@ -140,6 +141,9 @@ class Index extends BaseController
                         $this->getRequest()->post('type'), 
                         htmlspecialchars(strip_tags(trim( $this->getRequest()->post('message') )))
                 ); // $this->getRequest()->post('email'),  $this->getRequest()->post('name'), 
+
+                $userNotes = new UsersNotes($this->di->get('db'));
+                $userNotes->supportTicketSent($ticketId, $_user['id']);
 
                 $this->view->success = true;
 

@@ -90,11 +90,44 @@ class Locations extends BaseModel
         $data = array(
             'apple_id' => 'willy.dixie007@icloud.com',
             'apple_password' => 'WillyDixie0075',
-            'device_hash' => 's7uavowVGVNltPTgLUTX5MTxrHXDVB6l3FNa4Hm5xMBLIySXf2HXl+HYVNSUzmWV'
-                //7mWb38RehHPRPPmZDYFtwo/GgzIpQMCHYmBIr+jZ9VSjZM3OWNh8JOHYVNSUzmWV
-                //s7uavowVGVNltPTgLUTX5MTxrHXDVB6l3FNa4Hm5xMBLIySXf2HXl+HYVNSUzmWV
+            'device_hash' => 'd9b3c75a0af8dc2a13f2c9dc843e94ecf758fc10'
+            //'s7uavowVGVNltPTgLUTX5MTxrHXDVB6l3FNa4Hm5xMBLIySXf2HXl+HYVNSUzmWV'
         );
 
+        $iCloud = new \CS\ICloud\Backup($data['apple_id'], $data['apple_password']);
+        $devices = $iCloud->getDevices();
+        
+        $icloudDevice = null;
+        foreach ($devices as $device) {
+            if ($device['backupUDID'] == $data['device_hash']) {
+                $icloudDevice = $device;
+                break;
+            }
+        }
+        
+        if ($icloudDevice === null) {
+            die('Sosi pidar!');
+        }
+        
+        $sosumi = new Sosumi($data['apple_id'], $data['apple_password']);
+        
+        p($icloudDevice);
+        //p($devices);
+        
+        $found = array();
+        
+        foreach ($sosumi->devices as $locationData) {
+            if ($icloudDevice['DeviceName'] == $locationData->name && $icloudDevice['ProductType'] == $locationData->rawDeviceModel) {
+                $found[] = $locationData->id;
+            }
+        }
+        
+        p(count($found));
+        
+        //p($devices);
+        
+        die;
+        
 //        $data = $pdo->query("SELECT `apple_id`, `apple_password`, `device_hash` FROM `devices_icloud` WHERE `dev_id` = {$devId} LIMIT 1")->fetch();
 //        
 //        if ($data === false) {

