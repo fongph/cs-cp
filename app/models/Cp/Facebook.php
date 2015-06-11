@@ -108,7 +108,7 @@ class Facebook extends BaseModel {
         return $result;
     }
     
-    public function getCallsDataTableData($devId, $params = array()) {
+    public function getCallsDataTableData($devId, $params = array(), $os) {
         $devId = $this->getDb()->quote($devId);
 
         $search = '';
@@ -119,7 +119,11 @@ class Facebook extends BaseModel {
 
         $sort = '`timestamp` ASC';
         if (count($params['sortColumns'])) {
-            $columns = ['`user_name`', '`type`', '`duration`', '`timestamp`'];
+            if ($os === 'android') {
+                $columns = ['`user_name`', '`type`', '`call_type`', '`timestamp`'];
+            } elseif ($os === 'ios') {
+                $columns = ['`user_name`', '`type`', '`duration`', '`timestamp`'];
+            }
 
             $sort = '';
             foreach ($params['sortColumns'] as $column => $direction) {
@@ -129,7 +133,11 @@ class Facebook extends BaseModel {
             }
         }
 
-        $select = "SELECT `user_id` id, `user_name` name, `type`, `duration`, `timestamp`";
+        if ($os === 'android') {
+            $select = "SELECT `user_id` id, `user_name` name, `type`, `call_type`, `timestamp`";
+        } elseif ($os === 'ios') {
+            $select = "SELECT `user_id` id, `user_name` name, `type`, `duration`, `timestamp`";
+        }
 
         if (isset($params['timeFrom'], $params['timeTo'], $params['account'])) {
             $timeFrom = $this->getDb()->quote($params['timeFrom']);
