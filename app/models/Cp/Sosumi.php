@@ -17,10 +17,10 @@ class Sosumi
 
     public $devices;
     public $debug;
+    private $prsId;
     private $username;
     private $password;
     private $partition;
-    private $prsId;
     private $clientContext = array(
         'appName' => 'FindMyiPhone',
         'appVersion' => '3.0',
@@ -147,37 +147,19 @@ class Sosumi
 
         $json_str = $this->curlPost("/fmipservice/device/{$this->username}/initClient", $post);
         $this->iflog('initClient Returned: ' . $json_str);
-        $json = json_decode($json_str);
+        $json = json_decode($json_str, true);
         if (is_null($json))
             throw new SosumiException("Error parsing json string");
         if (isset($json->error))
             throw new SosumiException("Error from web service: '$json->error'");
+        
         $this->devices = array();
 
-        if (isset($json) && isset($json->content) && (is_array($json->content) || is_object($json->content))) {
-            
-            $this->prsId = $json->serverContext->prsId;
-            $this->iflog('Parsing ' . count($json->content) . ' devices...');
-            foreach ($json->content as $json_device) {
-                $device = new SosumiDevice();
-                if (isset($json_device->location) && is_object($json_device->location)) {
-                    $device->locationTimestamp = floor($json_device->location->timeStamp / 1000);
-                    $device->locationType = $json_device->location->positionType;
-                    $device->horizontalAccuracy = $json_device->location->horizontalAccuracy;
-                    $device->locationFinished = $json_device->location->locationFinished;
-                    $device->longitude = $json_device->location->longitude;
-                    $device->latitude = $json_device->location->latitude;
-                }
-                $device->isLocating = $json_device->isLocating;
-                $device->deviceModel = $json_device->deviceModel;
-                $device->rawDeviceModel = $json_device->rawDeviceModel;
-                $device->deviceStatus = $json_device->deviceStatus;
-                $device->id = $json_device->id;
-                $device->name = $json_device->name;
-                $device->deviceClass = $json_device->deviceClass;
-                $device->chargingStatus = $json_device->batteryStatus;
-                $device->batteryLevel = $json_device->batteryLevel;
-                $this->devices[$device->id] = $device;
+        if (isset($json) && isset($json['content']) && (is_array($json['content']))) {
+            $this->prsId = $json['serverContext']['prsId'];
+            $this->iflog('Parsing ' . count($json['content']) . ' devices...');
+            foreach ($json['content'] as $device) {
+                $this->devices[$device['id']] = $device;
             }
         }
     }
@@ -220,30 +202,6 @@ class Sosumi
         if ($this->debug === true)
             echo $str . "\n";
     }
-
-}
-
-class SosumiDevice
-{
-
-    public $isLocating;
-    public $locationTimestamp;
-    public $locationType;
-    public $horizontalAccuracy;
-    public $locationFinished;
-    public $longitude;
-    public $latitude;
-    public $deviceModel;
-    public $rawDeviceModel;
-    public $deviceStatus;
-    public $id;
-    public $name;
-    public $deviceClass;
-    // These values only recently appeared in Apple's JSON response.
-    // Their final names will probably change to something other than
-    // 'a' and 'b'.
-    public $chargingStatus; // location->a
-    public $batteryLevel; // location->b
 
 }
 

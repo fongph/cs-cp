@@ -112,7 +112,7 @@ class Locations extends BaseModel
         $sosumi = new Sosumi($data['apple_id'], $data['apple_password']);
         
         p($icloudDevice);
-        //p($devices);
+        d($sosumi->devices);
         
         $found = array();
         

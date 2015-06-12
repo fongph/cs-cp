@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "fb9ccda3208287744141f2cd88e56c9b",
+    "hash": "3aa1fb282c6457f1297042cb17b9a425",
     "packages": [
         {
             "name": "boomers/cs-billing",
@@ -167,7 +167,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-settings.git",
-                "reference": "7019035b8ccf49a04f6529ae772a250992e281ea"
+                "reference": "694320ec90bbe42d5be4ac5c9aeef2f207de720d"
             },
             "require": {
                 "php": ">=5.4.0"
@@ -178,7 +178,7 @@
                     "CS\\Settings\\": "src/"
                 }
             },
-            "time": "2015-05-26 08:35:50"
+            "time": "2015-06-10 08:06:49"
         },
         {
             "name": "boomers/cs-users",
