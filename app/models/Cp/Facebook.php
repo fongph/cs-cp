@@ -173,7 +173,10 @@ class Facebook extends BaseModel {
     public function getAccountsList($devId) {
         $devId = $this->getDb()->quote($devId);
 
-        return $this->getDb()->query("SELECT DISTINCT `account` FROM `facebook_messages` WHERE `dev_id` = {$devId}")->fetchAll(\PDO::FETCH_COLUMN);
+        $accounts =  $this->getDb()->query("SELECT DISTINCT `account` FROM `facebook_messages` WHERE `dev_id` = {$devId}")->fetchAll(\PDO::FETCH_COLUMN);
+        $callsAccounts =  $this->getDb()->query("SELECT DISTINCT `account` FROM `facebook_calls` WHERE `dev_id` = {$devId}")->fetchAll(\PDO::FETCH_COLUMN);
+        
+        return array_unique(array_merge($accounts, $callsAccounts));
     }
 
     public function getPrivateList($devId, $account, $userId) {
