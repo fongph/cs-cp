@@ -36,7 +36,7 @@ $pdo2 = new \PDO("mysql:host={$config2['db']['host']};dbname={$config2['db']['db
 
 $pdo = new \PDO("mysql:host={$config['db']['host']};dbname={$config['db']['dbname']}", $config['db']['username'], $config['db']['password'], $config['db']['options']);
 
-$devices = $pdo->query("SELECT * FROM `devices_icloud` GROUP BY `apple_id`")->fetchAll(PDO::FETCH_ASSOC);
+//$devices = $pdo->query("SELECT * FROM `devices_icloud` GROUP BY `apple_id`")->fetchAll(PDO::FETCH_ASSOC);
 //$devices = $pdo->query("SELECT * FROM `devices_icloud` WHERE `apple_id` = 'brianslassiter@gmail.com'")->fetchAll(PDO::FETCH_ASSOC);
 
 $i = 0;

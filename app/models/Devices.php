@@ -103,7 +103,7 @@ class Devices extends \System\Model
         }
         return $iCloudDevices;
     }
-
+    
     public function getUserDevices($userId, $platform = null, $isSubscribed = null)
     {
         if($platform) $platformCondition = "AND d.os = {$this->getDb()->quote($platform)}";
@@ -154,8 +154,7 @@ class Devices extends \System\Model
 
         }
         return $data;
-    }
-
+    }    
 }
 
 class DevicesInvalidNetworkException extends \Exception

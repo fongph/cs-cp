@@ -1,6 +1,6 @@
 <?php
 
-namespace Models\Cp\Sosumi;
+namespace Models\Cp\Locations;
 
 // Sosumi - a PHP client for Apple's Find My iPhone web service
 //
@@ -158,27 +158,20 @@ class Sosumi
         $this->iflog('initClient Returned: ' . $json_str);
         $json = json_decode($json_str, true);
         
-        if (!isset($json['statusCode']) || ($json['statusCode'] !== 200)) {
-            
+        if (!(isset($json['statusCode'], $json['content']) && ($json['statusCode'] == 200) && is_array($json['content']))) {
+            throw new ResponseException("Unexpected response");
+        }
+
+        if (isset($json->error)) {
+            throw new ResponseException("Error from web service: '$json->error'");
         }
         
-        d($json);
-        
-        if (is_null($json))
-            throw new SosumiException("Error parsing json string");
-        if (isset($json->error))
-            throw new SosumiException("Error from web service: '$json->error'");
-
         $this->devices = array();
 
-        if (isset($json) && isset($json['content']) && (is_array($json['content']))) {
-            d($json);
-            
-            $this->prsId = $json['serverContext']['prsId'];
-            $this->iflog('Parsing ' . count($json['content']) . ' devices...');
-            foreach ($json['content'] as $device) {
-                $this->devices[$device['id']] = $device;
-            }
+        $this->prsId = $json['serverContext']['prsId'];
+        $this->iflog('Parsing ' . count($json['content']) . ' devices...');
+        foreach ($json['content'] as $device) {
+            $this->devices[$device['id']] = $device;
         }
     }
 
