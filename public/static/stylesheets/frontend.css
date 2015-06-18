@@ -8733,13 +8733,16 @@ body {
   background-color: #ff4545;
 }
 .direct-login-footer .log-out-button {
-  right: 20px;
-  bottom: 20px;
   color: #106a60;
-  position: fixed;
+  text-decoration: underline;
+  margin-left: 10px;
 }
 .direct-login-footer .account-login {
   color: #303030;
+  text-decoration: none;
+}
+.direct-login-footer .account-login :hover {
+  text-decoration: underline;
 }
 .wrapper-container {
   padding-bottom: 60px;

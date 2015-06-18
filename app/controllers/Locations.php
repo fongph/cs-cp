@@ -52,8 +52,8 @@ class Locations extends BaseModuleController
             case 'init':
                 return $this->setupInit();
                 
-            case 'deviceSelection':
-                $this->setupDevicesSelection();
+            case 'deviceConnection':
+                $this->setupDevicesConnection();
                 break;
         }
 
@@ -108,7 +108,7 @@ class Locations extends BaseModuleController
         $this->setView('cp/locations/icloudSetup.htm');
     }
 
-    private function setupDevicesSelection()
+    private function setupDevicesConnection()
     {
         $locations = new \Models\Cp\Locations($this->di);
 

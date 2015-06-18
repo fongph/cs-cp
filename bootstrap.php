@@ -148,7 +148,7 @@ $di->setShared('router', function() use($config, $di) {
     $router->add('emailsView', new \System\Router\Regex('/cp/emails/:account/:timestamp', array('controller' => 'Emails', 'action' => 'view'), array('account' => '[^/]+', 'timestamp' => '[\d]{1,10}')));
     $router->add('notesView', new \System\Router\Regex('/cp/notes/:account/:timestamp', array('controller' => 'Notes', 'action' => 'view'), array('account' => '[^/]+', 'timestamp' => '[\d]{1,10}')));
     $router->add('locationsZonesEdit', new \System\Router\Regex('/cp/locations/zones/edit/:id', array('controller' => 'Locations', 'action' => 'zoneEdit'), array('id' => '[0-9]+')));
-    $router->add('locationsSetup', new \System\Router\Regex('/cp/locations/setup/:step', array('controller' => 'Locations', 'action' => 'setup'), array('step' => '[a-zA-Z]+')));
+    $router->add('locationsSetup', new \System\Router\Regex('/cp/locations/setup/:step', array('controller' => 'Locations', 'action' => 'setup'), array('step' => 'init|locationActivation|deviceConnection')));
     $router->add('instagramTab', new \System\Router\Regex('/cp/instagram/:account/:tab', array('controller' => 'Instagram', 'action' => 'tab'), array('account' => '[0-9]+', 'tab' => 'own|friends|commented')));
     $router->add('instagramPost', new \System\Router\Regex('/cp/instagram/:account/post/:post', array('controller' => 'Instagram', 'action' => 'view'), array('account' => '[0-9]+', 'post' => '[0-9]+')));
 
