@@ -22,7 +22,7 @@ class Referer
             $_url = parse_url($_SERVER['HTTP_REFERER']);
             $_ref = isset($_COOKIE['orders_referer']) ? true : false;
             if( $this -> validateOrdersReferer($_ref, $_url) ) {
-                setcookie("orders_referer", $_SERVER['HTTP_REFERER'], time() + 3600 * 1, '/', $this->di['config']['cookieDomain']);
+                setcookie("orders_referer", $_SERVER['HTTP_REFERER'], time() + 3600 * 24, '/', $this->di['config']['cookieDomain']);
             }
         }
         
@@ -57,7 +57,7 @@ class Referer
     {
         if (!isset($_COOKIE['landing']) && isset($_SERVER['HTTP_HOST'], $_SERVER['REQUEST_URI'])) {
             $url = 'http' . (isset($_SERVER['HTTPS']) ? 's' : '') . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-            setcookie("landing", $url, time() + 3600 * 1, '/', $this->di['config']['cookieDomain']);
+            setcookie("landing", $url, time() + 3600 * 24, '/', $this->di['config']['cookieDomain']);
         }
         
         return $this;

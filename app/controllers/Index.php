@@ -134,16 +134,14 @@ class Index extends BaseController
         
         if ($this->getRequest()->hasPost('type', 'message')) { // 'email', 'name',
             try {
-
-               $ticketId = $supportModel->submitTicket(
+                $ticketId = $supportModel->submitTicket(
                         $userName,
                         $_user['login'],
                         $this->getRequest()->post('type'), 
                         htmlspecialchars(strip_tags(trim( $this->getRequest()->post('message') )))
                 ); // $this->getRequest()->post('email'),  $this->getRequest()->post('name'), 
 
-                $userNotes = new UsersNotes($this->di->get('db'));
-                $userNotes->supportTicketSent($ticketId, $_user['id']);
+                $this->di->get('usersNotesProcessor')->supportTicketSent($ticketId);
 
                 $this->view->success = true;
 
