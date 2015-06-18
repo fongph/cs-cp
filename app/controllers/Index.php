@@ -340,4 +340,11 @@ class Index extends BaseController
         $this->view->title = $this->di['t']->_('iOS iCloud Installation Guide');
         $this->view->title_page = $this->di['t']->_('iOS iCloud Installation Guide for Support');
     }
+    
+    public function activateLocationIosAction() {
+        $this->setView('instructions/activateLocationIos.html');
+        $this->view->title = $this->di['t']->_('How to Activate Location');
+        $this->view->title_page = $this->di['t']->_('How to Activate Location');
+        $this->view->previos = $this -> pagePrev();
+    }
 }
