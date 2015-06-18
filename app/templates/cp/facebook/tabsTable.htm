@@ -42,7 +42,7 @@
                     <tr role="row">
                         <th>{$di.t->_('Name')}</th>
                         <th>{$di.t->_('Type')}</th>
-                        <th>{$di.t->_('Duraion')}</th>
+                        <th>{if $di.currentDevice.os === 'android'}{$di.t->_('Call Type')}{elseif $di.currentDevice.os === 'ios'}{$di.t->_('Duraion')}{/if}</th>
                         <th>{$di.t->_('Date')}</th>
                     </tr>
                 </thead>
@@ -229,6 +229,20 @@
                                     }
                                 }
                             },
+                            {if $di.currentDevice.os === 'android'}
+                            {
+                                mData: "call_type",
+                                bUseRendered: false,
+                                sWidth: '110px',
+                                fnRender: function(obj, value) {
+                                    if (value == 'regular') {
+                                        return "{$di.t->_('Regular')}";
+                                    } else if (value == 'video') {
+                                        return "{$di.t->_('Video')}";
+                                    }
+                                }
+                            },
+                            {elseif $di.currentDevice.os === 'ios'}
                             {
                                 mData: "duration",
                                 bUseRendered: false,
@@ -237,6 +251,7 @@
                                     return moment.utc(value * 1000).format("HH:mm:ss");
                                 }
                             },
+                            {/if}
                             {
                                 mData: "timestamp",
                                 bUseRendered: false,

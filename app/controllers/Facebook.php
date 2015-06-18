@@ -27,7 +27,7 @@ class Facebook extends BaseModuleController
 
             if (isset($this->params['tab']) && $this->params['tab'] == 'calls') {
                 $data = $facebookModel->getCallsDataTableData(
-                        $this->di['devId'], $dataTableRequest->buildResult(array('account', 'timeFrom', 'timeTo'))
+                        $this->di['devId'], $dataTableRequest->buildResult(array('account', 'timeFrom', 'timeTo')), $this->di['currentDevice']['os']
                 );
                 $this->checkDisplayLength($dataTableRequest->getDisplayLength());
                 $this->makeJSONResponse($data);

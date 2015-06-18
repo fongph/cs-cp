@@ -16,7 +16,7 @@ abstract class BaseModuleController extends BaseController
     {
         $devicesManager = new DevicesManager($this->di['db']);
         $devicesModel = new \Models\Devices($this->di);
-        
+
         $showDeletedDevices = $this->supportMode;
         $devices = $devicesManager->getUserActiveDevices($this->auth['id'], $showDeletedDevices);
         $this->di->set('devicesList', $devices);
@@ -25,49 +25,46 @@ abstract class BaseModuleController extends BaseController
             $this->di['flashMessages']->add(FlashMessages::INFO, $this->di['t']->_('No devices have been added to your Control Panel!'));
             $this->redirect($this->di['router']->getRouteUrl('profile'));
         }
-        
+
         if (!isset($this->di['config']['modules'][$this->module])) {
             throw new \Exception("Module not found!");
         }
 
         $this->di->set('devId', $devId);
         $this->di->set('currentDevice', $devices[$devId]);
-        
+
         $this->moduleCheck();
     }
 
     protected function moduleCheck()
     {
-        if (!$this->supportMode 
-                && $this->di['currentDevice']['package_name'] == null 
-                && $this->module !== Modules::SETTINGS) {
-            
+        if (!$this->supportMode && $this->di['currentDevice']['package_name'] == null && $this->module !== Modules::SETTINGS) {
+
             $this->postAction();
             $this->setView('cp/noPackage.htm');
             $this->view->title = $this->di['t']->_('No Plan');
             $this->response();
             die;
         }
-        
+
         $modulesModel = new Modules($this->di);
 
-
-        if ($modulesModel->isModuleActive($this->module) === false && $this->module !== 'snapchat' && $this->module !== 'locations') {
+        if ($modulesModel->isModuleActive($this->module) === false && $this->module !== 'locations') {
             $this->redirect($this->di['router']->getRouteUrl(Modules::CALLS));
         }
-        
+
         $this->view->paid = $this->supportMode || $this->isModulePaid();
     }
 
     protected abstract function isModulePaid();
-    
+
     protected function buildCpMenu()
     {
         $modulesModel = new Modules($this->di);
         $this->view->cpMenu = array();
-        
+
         foreach ($this->di['config']['modules'] as $routeName => $name) {
-            if (($routeName === 'locations' || $modulesModel->isModuleActive($routeName) !== false) || ($routeName == 'snapchat' || $modulesModel->isModuleActive($routeName) !== false)) {
+            if (($routeName === 'locations' || $modulesModel->isModuleActive($routeName) !== false)) {
                 $this->view->cpMenu[$this->di['router']->getRouteUrl($routeName)] = array(
                     'name' => $this->di['t']->_($name),
                     'class' => $routeName,
