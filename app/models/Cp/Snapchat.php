@@ -92,8 +92,6 @@ class Snapchat extends BaseModel
                                             sm.`account_id` = {$escapedAccount} AND
                                             sm.`user_id` = {$escapedUser}
                                         ORDER BY `timestamp` DESC")->fetchAll();
-
-        $devId = 290;
                                             
         foreach ($messages as $key => $value) {
             if ($value['content_type'] == 'image') {

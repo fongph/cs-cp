@@ -257,14 +257,6 @@
                                 bUseRendered: false,
                                 sWidth: '180px',
                                 fnRender: function(obj) {
-                                    if (obj.aData.group !== null) {
-                                        return facebook.messageLinkTemplate({
-                                            account: encodeURIComponent($('#account').val()),
-                                            tab: 'conference',
-                                            id: encodeURIComponent(obj.aData.group),
-                                            date: customOffsetMoment(obj.aData.timestamp * 1000).format('lll')
-                                        });
-                                    }
                                     return customOffsetMoment(obj.aData.timestamp * 1000).format('lll');
                                 }
                             }],
