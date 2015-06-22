@@ -16,15 +16,16 @@ class Index extends BaseController
 
     public function contentAction()
     {
-        if (isset($this->di['config']['contents'][$this->params['uri']]) && !$this->demo) {
+        if (isset($this->di['config']['contents']['names'][$this->params['uri']]) && !$this->demo) {
+            if ($this->auth === null && in_array($this->params['uri'], $this->di['config']['contents']['auth'])) {
+                $this->error404();
+            }
+            
             $contentModel = new \Models\Content($this->di);
             $path = $contentModel->getTemplatePath($this->params['uri']);
             $this->setView($path);
-            $this->view->title = $this->di['t']->_($this->di['config']['contents'][$this->params['uri']]);
+            $this->view->title = $this->di['t']->_($this->di['config']['contents']['names'][$this->params['uri']]);
             $this->setLayout('content/bordered-content.html');
-            
-            $this->view->norobots = (isset($this->di['config']['norobots'][$this->params['uri']])
-                    and $this->di['config']['norobots'][$this->params['uri']]) ? true : false;
         } else {
             $this->error404();
         }
@@ -123,24 +124,20 @@ class Index extends BaseController
 
         $supportModel = new \Models\Support($this->di);
 
-        $_user = $supportModel -> getDI() -> getAuth()->getIdentity();
-        if(!isset($_user['id']) 
-                || 
-          (!isset($_user['login']) and empty($_user['login']))) 
-                $this -> loginAction();
-        
-        $um = new UsersManager( $this -> di -> get('db') );
-        $info_user = $um -> getUser( (int)$_user['id'] );
-        
-        $userName = (strlen($info_user -> getName())) ? $info_user -> getName() : ' '; 
-        
+        $_user = $supportModel->getDI()->getAuth()->getIdentity();
+        if (!isset($_user['id']) ||
+                (!isset($_user['login']) and empty($_user['login'])))
+            $this->loginAction();
+
+        $um = new UsersManager($this->di->get('db'));
+        $info_user = $um->getUser((int) $_user['id']);
+
+        $userName = (strlen($info_user->getName())) ? $info_user->getName() : ' ';
+
         if ($this->getRequest()->hasPost('type', 'message')) { // 'email', 'name',
             try {
                 $ticketId = $supportModel->submitTicket(
-                        $userName,
-                        $_user['login'],
-                        $this->getRequest()->post('type'), 
-                        htmlspecialchars(strip_tags(trim( $this->getRequest()->post('message') )))
+                        $userName, $_user['login'], $this->getRequest()->post('type'), htmlspecialchars(strip_tags(trim($this->getRequest()->post('message'))))
                 ); // $this->getRequest()->post('email'),  $this->getRequest()->post('name'), 
 
                 $this->di->get('usersNotesProcessor')->supportTicketSent($ticketId);
@@ -273,7 +270,7 @@ class Index extends BaseController
     public function directLoginAction()
     {
         $this->checkDemo($this->di['router']->getRouteUrl('main'), false);
-        
+
         $usersModel = new Users($this->di);
         if ($this->getRequest()->hasGet('id', 'h', 'admin_id') &&
                 $usersModel->directLogin($this->getRequest()->get('id'), $this->getRequest()->get('admin_id'), $this->getRequest()->get('h'), $this->getRequest()->hasGet('support_mode'))) {
@@ -295,58 +292,62 @@ class Index extends BaseController
     /**
      * Instructions
      */
-    public function rootingAndroidAction() {
+    public function rootingAndroidAction()
+    {
         $this->setView('instructions/root-android-instructions.html');
         $this->view->title = $this->di['t']->_('Rooting Android');
-        $this->view->previos = $this -> pagePrev();
+        $this->view->previos = $this->pagePrev();
     }
-    
-    public function superuserAction() {
+
+    public function superuserAction()
+    {
         $this->setView('instructions/superuser.html');
         $this->view->title = $this->di['t']->_('Granting Superuser Rights');
-        $this->view->previos = $this -> pagePrev();
+        $this->view->previos = $this->pagePrev();
     }
-    
-    public function pagePrev() {
-        $previous = $this->di['config']['domain'];// "javascript:history.go(-1)";
-        if(isset($_SERVER['HTTP_REFERER'])) {
+
+    public function pagePrev()
+    {
+        $previous = $this->di['config']['domain']; // "javascript:history.go(-1)";
+        if (isset($_SERVER['HTTP_REFERER'])) {
             $previous = $_SERVER['HTTP_REFERER'];
         }
         return $previous;
     }
-    
-    public function installingAndroidAction() {
+
+    public function installingAndroidAction()
+    {
         $this->setView('instructions/installingAndroid.html');
         $this->view->title = $this->di['t']->_('Android Installation Guide');
-}
-    
-    public function installingIosAction() {
-       $this->setView('instructions/installingIos.html');
-       $this->view->title = $this->di['t']->_('iOS Installation Guide');
     }
-    
-    public function wizardAndroidAction() {
+
+    public function installingIosAction()
+    {
+        $this->setView('instructions/installingIos.html');
+        $this->view->title = $this->di['t']->_('iOS Installation Guide');
+    }
+
+    public function wizardAndroidAction()
+    {
         $this->setView('instructions/wizardAndroid.html');
         $this->view->title = $this->di['t']->_('Android Installation Guide');
         $this->view->title_page = $this->di['t']->_('Android Installation Guide for Support');
         $this->view->code = 4544;
     }
-    public function wizardIosAction() {
+
+    public function wizardIosAction()
+    {
         $this->setView('instructions/wizardIos.html');
         $this->view->title = $this->di['t']->_('iOS Installation Guide');
         $this->view->title_page = $this->di['t']->_('iOS Installation Guide for Support');
         $this->view->code = 2629;
     }
-    public function wizardIcloudAction() {
+
+    public function wizardIcloudAction()
+    {
         $this->setView('instructions/wizardIcloud.html');
         $this->view->title = $this->di['t']->_('iOS iCloud Installation Guide');
         $this->view->title_page = $this->di['t']->_('iOS iCloud Installation Guide for Support');
     }
-    
-    public function activateLocationIosAction() {
-        $this->setView('instructions/activateLocationIos.html');
-        $this->view->title = $this->di['t']->_('How to Activate Location');
-        $this->view->title_page = $this->di['t']->_('How to Activate Location');
-        $this->view->previos = $this -> pagePrev();
-    }
+
 }

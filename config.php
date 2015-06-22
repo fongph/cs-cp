@@ -63,16 +63,18 @@ $default = array(
         Modules::SETTINGS => 'Device Settings'
     ),
     'contents' => array(
-        'how-to-install/android-instructions.html' => 'Android Installation Guide',
-        'how-to-install/blackberry-instructions.html' => 'BlackBerry Installation Guide',
-        'how-to-install/ios-instructions.html' => 'iPhone Installation Guide',
-        'how-to-install/root-instructions.html' => 'Root Instructions',
-        'instructions/activate-location-ios.html' => 'How to Activate Location',
-        'instructions/activate-findmyiphone.html' => 'Location Tracking Activation Guide'
-    ),
-    'norobots' => array(
-        'how-to-install/ios-instructions.html' => true,
-        'how-to-install/android-instructions.html' => true,
+        'names' => array(
+            'how-to-install/android-instructions.html' => 'Android Installation Guide',
+            'how-to-install/blackberry-instructions.html' => 'BlackBerry Installation Guide',
+            'how-to-install/ios-instructions.html' => 'iPhone Installation Guide',
+            'how-to-install/root-instructions.html' => 'Root Instructions',
+            'instructions/activate-location-ios.html' => 'How to Activate Location',
+            'instructions/activate-findmyiphone.html' => 'Location Tracking Activation Guide'
+        ),
+        'auth' => array(
+            'instructions/activate-location-ios.html',
+            'instructions/activate-findmyiphone.html'
+        )
     ),
     'bundlesNamespace' => 'first'
 );
