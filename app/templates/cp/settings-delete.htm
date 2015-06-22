@@ -6,7 +6,7 @@
                 <li><a href="{$di.router->getRouteUrl('settings')}">{$title}</a></li>
                 <li class="active">
                     {if !empty($currentDevice.name)}
-                        {$di['t']->_('Unassign %s', [$currentDevice.name])}
+                        {$di['t']->_('Unassign %s', [$currentDevice.name|e])}
                     {else}
                         {$di['t']->_('Unassign Device')}
                     {/if}
