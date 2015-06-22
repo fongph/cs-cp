@@ -282,8 +282,8 @@ class Profile extends BaseController
                     $iCloud->authenticate(); //or throw exception
 
                     $iCloudRecord->setApplePassword($this->getRequest()->post('newPassword'));
-                    if($iCloudRecord->getLastError() == BackupQueueUnit::ERROR_AUTHENTICATION)
-                        $iCloudRecord->setLastError(BackupQueueUnit::ERROR_NONE);
+                    if($iCloudRecord->getLastError() == DeviceICloudRecord::ERROR_AUTHENTICATION)
+                        $iCloudRecord->setLastError(DeviceICloudRecord::ERROR_NONE);
                     $iCloudRecord->save();
 
                     $this->di->getFlashMessages()->add(FlashMessages::SUCCESS, $this->di->getTranslator()->_('You have successfully updated the iCloud password. A new iCloud backup will be uploaded shortly'));
