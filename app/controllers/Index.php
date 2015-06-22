@@ -16,11 +16,13 @@ class Index extends BaseController
 
     public function contentAction()
     {
-        if (isset($this->di['config']['contents'][$this->params['uri']])) {
+        if (isset($this->di['config']['contents'][$this->params['uri']]) && !$this->demo) {
             $contentModel = new \Models\Content($this->di);
             $path = $contentModel->getTemplatePath($this->params['uri']);
             $this->setView($path);
             $this->view->title = $this->di['t']->_($this->di['config']['contents'][$this->params['uri']]);
+            $this->setLayout('content/bordered-content.html');
+            
             $this->view->norobots = (isset($this->di['config']['norobots'][$this->params['uri']])
                     and $this->di['config']['norobots'][$this->params['uri']]) ? true : false;
         } else {

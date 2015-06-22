@@ -45,37 +45,7 @@
     <div class="wizard-container">
         <h4 class="text-center">{$di.t->_('Location Tracking Activation Guide')}</h4>
         
-        <p>Follow the steps below to activate Find My iPhone service on the target iOS device.</p>
-        <ol>
-            <li>
-                <p>Go to "Settings" menu.</p>
-                <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/find-my-iphone/1.png" alt="" /></p>
-            </li>
-            <li>
-                <p>Choose "iCloud" section from the list.</p>
-                <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/find-my-iphone/2.png" alt="" /></p>
-            </li>
-            <li>
-                <p>Proceed to "Find My iPhone" section.</p>
-                <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/find-my-iphone/3.png" alt="" /></p>
-            </li>
-            <li>
-                <p>Enable "Find My iPhone" service;</p>
-                <p>A pop-up "Find My iPhone" will appear – tap "Allow" to continue.</p>
-                <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/find-my-iphone/4-1.png" alt="" />&nbsp;<img class="img-thumbnail" src="{$di.config.staticDomain}/images/find-my-iphone/4-2.png" alt="" /></p>
-            </li>
-            <li>
-                <p>Turn on "Send Last Location" option.</p>
-                <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/find-my-iphone/5.png" alt="" /></p>
-            </li>
-            <li>
-                <p>Now "Find My iPhone" service is activated.</p>
-                <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/find-my-iphone/6.png" alt="" /></p>
-            </li>
-        </ol>
-        
-        <p><span class="text-danger">Note:</span> Please pay attention to the highlighted area that you can see on the screenshot below. If Location Services is disabled, please turn it on separately following the steps by the link: <a href="{$di.router->getRouteUrl('content', ['uri' => 'locationActivation/activate-location-ios.html'])}">{$di.router->getRouteUrl('content', ['uri' => 'locationActivation/activate-location-ios.html'])}</a>.</p>
-        <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/find-my-iphone/location-disabled.png" alt="" /></p>
+        {include "content/{$di.t->getLocale()}/instructions/activate-findmyiphone.html"}
         
         <p class="text-center" style="margin-top: 30px;"><a href="{$di.router->getRouteUrl('locationsSetup', ['step' => 'deviceConnection'])}" class="btn btn-primary">{$di.t->_('Next')}</a></p>
     </div>
@@ -156,7 +126,7 @@
             }
         }, 'json').error(function() {
             $loading.hide();
-            $errorValue.html('{$di.t->_('Undefined error! Please contact support!')}');
+            $errorValue.html('{$di.t->_('Undefined error! Please %1$scontact support%2$s!', ['<a href="' ~ $di->getRouter()->getRouteUrl('support') ~ '">', '</a>'])}');
         });
     });
 </script>
@@ -185,13 +155,20 @@
                         
                         $tr.append('<td>' + data.name + '</td>');
                         $tr.append('<td>' + data.model + '</td>');
-                        $tr.append('<td>' + data.batteryLevel + '%</td>');
                         
-                        if (data.сharging) {
-                            $tr.append('<td>{$di.t->_('Yes')}</td>');
+                        if (data.сharging == null) {
+                            $tr.append('<td>-</td>');
+                            $tr.append('<td>{$di.t->_('Unknown')}</td>');
                         } else {
-                            $tr.append('<td>{$di.t->_('No')}</td>');
+                            $tr.append('<td>' + data.batteryLevel + '%</td>');
+                            if (data.сharging) {
+                                $tr.append('<td>{$di.t->_('Yes')}</td>');
+                            } else {
+                                $tr.append('<td>{$di.t->_('No')}</td>');
+                            }
                         }
+                        
+                        
                         
                         if (data.color === false) {
                             $tr.append('<td>{$di.t->_('Undefined')}</td>');
@@ -209,7 +186,7 @@
                     $errorValue.show();
                 }
             }, 'json').error(function() {
-                $errorValue.html('{$di.t->_('Undefined error! Please contact support!')}');
+                $errorValue.html('{$di.t->_('Undefined error! Please %1$scontact support%2$s!', ['<a href="' ~ $di->getRouter()->getRouteUrl('support') ~ '">', '</a>'])}');
                 $errorValue.show();
             }).complete(function() {
                 $loading.hide();
@@ -239,7 +216,7 @@
                     $assignLoading.hide();
                 }
             }, 'json').error(function() {
-                $errorValue.html('{$di.t->_('Undefined error! Please contact support!')}');
+                $errorValue.html('{$di.t->_('Undefined error! Please %1$scontact support%2$s!', ['<a href="' ~ $di->getRouter()->getRouteUrl('support') ~ '">', '</a>'])}');
                 $errorValue.show();
                 $assignLoading.hide();
             })

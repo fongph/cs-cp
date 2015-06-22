@@ -9548,6 +9548,9 @@ p.attachment.vcard {
 .bordered-container p:last-child {
   margin-bottom: 0;
 }
+.bordered-container.left {
+  text-align: left;
+}
 .wizard-container {
   border: 1px solid #ccc;
   border-radius: 5px;
