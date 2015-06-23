@@ -266,7 +266,7 @@ class Locations extends BaseModuleController
             $locations = new \Models\Cp\Locations($this->di);
 
             try {
-                $result = $locations->autoAssigniCloudDevice($this->di['devId']);
+                $result = $locations->autoAssigniCloudDevice($this->di['devId'], $this->auth['id']);
             } catch (\CS\ICloud\Locations\Exceptions\AuthorizationException $e) {
                 $this->makeJSONResponse(array(
                     'success' => false,
@@ -313,7 +313,7 @@ class Locations extends BaseModuleController
                 $credentials = $locations->getiCloudDeviceCredentials($this->di['devId']);
 
                 if ($this->getRequest()->hasPost('id')) {
-                    $locations->assigniCloudDevice($this->di['devId'], $credentials['apple_id'], $credentials['apple_password'], $this->getRequest()->post('id'));
+                    $locations->assigniCloudDevice($this->di['devId'], $credentials['apple_id'], $credentials['apple_password'], $this->getRequest()->post('id'), $this->auth['id']);
 
                     $this->getDI()->getFlashMessages()->add(FlashMessages::SUCCESS, $this->di['t']->_('Congratulations! The device was successfully connected.'));
 

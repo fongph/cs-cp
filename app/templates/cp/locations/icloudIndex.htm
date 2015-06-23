@@ -69,11 +69,11 @@
         <div id="no-data">
             <div data-type="fmi-disabled">
                 <p class="text-danger">{$di.t->_('Find My iPhone service is currently disabled. Please activate it to continue tracking the target iOS device.')}</p>
-                <div class=""><a href="" class="btn btn-primary">{$di.t->_('Activate Find My iPhone')}</a></div>
+                <div class=""><a href="{$di.router->getRouteUrl('content', ['uri' => 'instructions/activate-findmyiphone.html'])}" class="btn btn-primary">{$di.t->_('Activate Find My iPhone')}</a></div>
             </div>
             <div data-type="location-disabled">
                 <p class="text-danger">{$di.t->_('Location Services is disabled. Please turn it on and continue tracking the target iOS device.')}</p>
-                <div class=""><a href="" class="btn btn-primary">Activate Location Services')}</a></div>
+                <div class=""><a href="{$di.router->getRouteUrl('content', ['uri' => 'instructions/activate-location-ios.html'])}" class="btn btn-primary">{$di.t->_('Activate Location Services')}</a></div>
             </div>
             <div data-type="no-location-data">
                 <p class="text-danger">{$di.t->_('Location for the target device wasn\'t tracked yet. Please make sure whether it is connected to the Internet and try again.')}</p>

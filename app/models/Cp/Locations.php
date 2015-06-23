@@ -163,12 +163,15 @@ class Locations extends BaseModel
         return false;
     }
 
-    public function assigniCloudDevice($devId, $account, $password, $id)
+    public function assigniCloudDevice($devId, $account, $password, $id, $userId)
     {
         $sosumi = new \CS\ICloud\Locations\Sosumi($account, $password);
 
-        $sosumi->getDeviceInfo($id);
+        $info = $sosumi->getDeviceInfo($id);
 
+        $usersNotes = $this->di['usersNotesProcessor'];
+        $usersNotes->deviceFindMyIphoneConnected($devId, $info['deviceDisplayName'], $info['name'], $userId);
+        
         $pdo = $this->di->get('db');
         $devId = $pdo->quote($devId);
         $id = $pdo->quote($id);
@@ -176,17 +179,19 @@ class Locations extends BaseModel
         $pdo->exec("UPDATE `devices_icloud` SET `location_device_hash` = {$id} WHERE `dev_id` = {$devId}");
     }
 
-    /* getDeviceLocationId */
-    public function autoAssigniCloudDevice($devId)
+    public function autoAssigniCloudDevice($devId, $userId)
     {
         $credentials = $this->getiCloudDeviceCredentials($devId);
         
-        $locationsDeviceId = \CS\ICloud\Locations::getLocationsDeviceId($credentials['apple_id'], $credentials['apple_password'], $credentials['device_hash']);
+        $info = \CS\ICloud\Locations::getLocationsDeviceInfo($credentials['apple_id'], $credentials['apple_password'], $credentials['device_hash']);
         
-        if ($locationsDeviceId !== false) {
+        if ($info !== false) {
+            $usersNotes = $this->di['usersNotesProcessor'];
+            $usersNotes->deviceFindMyIphoneAutoConnected($devId, $info['deviceDisplayName'], $info['name'], $userId);
+            
             $pdo = $this->di->get('db');
             $devId = $pdo->quote($devId);
-            $locationId = $pdo->quote($locationsDeviceId);
+            $locationId = $pdo->quote($info['id']);
 
             $pdo->exec("UPDATE `devices_icloud` SET `location_device_hash` = {$locationId} WHERE `dev_id` = {$devId}");
             return true;
