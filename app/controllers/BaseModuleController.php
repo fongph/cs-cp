@@ -3,6 +3,7 @@
 namespace Controllers;
 
 use CS\Devices\Manager as DevicesManager,
+    CS\Models\Device\DeviceModulesRecord,
     System\FlashMessages,
     Models\Modules;
 
@@ -74,6 +75,19 @@ abstract class BaseModuleController extends BaseController
                 );
             }
         }
+    }
+    
+    protected function postAction()
+    {
+        parent::postAction();
+
+        $this->di->setShared('deviceModules', function(){
+            $modules = new DeviceModulesRecord($this->di->get('db'));
+            if ($this->di->get('currentDevice')['os'] == 'icloud') {
+                $modules->loadByDevId($this->di->get('devId'));
+            }
+            return $modules;
+        });
     }
 
 }

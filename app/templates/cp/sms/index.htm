@@ -203,7 +203,14 @@
         });
     </script>
     {else}
-    <h3>{$di.t->_('Waiting for data... Why can the data be unavailable?')}</h3>
-    {include "content/{$di.t->getLocale()}/noData.html"}
+        <h3>{$di.t->_('Waiting for data... Why can the data be unavailable?')}</h3>
+        {if $di.currentDevice.os=='icloud'}
+            {include "content/{$di.t->getLocale()}/noDataICloud.html"
+            moduleId = 'sms'
+            moduleName = $di.t->_('SMS')
+            }
+        {else}
+            {include "content/{$di.t->getLocale()}/noData.html"}
+        {/if}
     {/if}
 </div>

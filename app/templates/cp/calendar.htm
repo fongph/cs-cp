@@ -62,10 +62,12 @@
         });
     </script>
     {else}
-        <h3>{$di.t->_('There are no calendar events on the device')}</h3>
         <h3>{$di.t->_('Waiting for data... Why can the data be unavailable?')}</h3>
         {if $di.currentDevice.os=='icloud'}
-            {include "content/{$di.t->getLocale()}/noDataICloud.html"}
+            {include "content/{$di.t->getLocale()}/noDataICloud.html"
+            moduleId = 'calendar'
+            moduleName = $di.t->_('Calendar')
+            }
         {else}
             {include "content/{$di.t->getLocale()}/noData.html"}
         {/if}
