@@ -41,7 +41,7 @@
                         <form role="form" action="" method="post">
                             <div class="form-group">
                                 <label>{$di.t->_('Device Name')}</label>
-                                <input type="text" name="name" value="{$di.currentDevice.name}" class="form-control">
+                                <input type="text" name="name" value="{$di.currentDevice.name|e}" class="form-control">
                             </div>
                             {if $hasPackage && $data.isSimNotificationAvailable}
                             <div class="checkbox">
@@ -62,7 +62,7 @@
                         {if $data.blockSMSActive}
                         <div class="form-group">
                             <label>{$di.t->_('Blacklist words for SMS')}</label>
-                            <textarea name="blackWords" class="form-control" placeholder="{$di.t->_('Enter the words (separated by comma), by which incoming SMS will be blocked')}">{$data.settings.bl_words}</textarea>
+                            <textarea name="blackWords" class="form-control" placeholder="{$di.t->_('Enter the words (separated by comma), by which incoming SMS will be blocked')}">{$data.settings.bl_words|e}</textarea>
                         </div>
                         {/if}
                         {if $data.isOutgoingSmsLimitationsAvailable}
@@ -78,7 +78,7 @@
                                 </div>
                                 <div class="form-group{if !$data.settings.outgoing_sms_limitation} hidden{/if}" id="smsCountLimitationValueBlock">
                                     <div style="width: 120px;">
-                                        <input id="spinbox" type="text" value="{$data.settings.outgoing_sms_limitation_count}" name="outgoingSmsLimitationCount" />
+                                        <input id="spinbox" type="text" value="{$data.settings.outgoing_sms_limitation_count|e}" name="outgoingSmsLimitationCount" />
                                     </div>
                                     <div class="checkbox">
                                         <label for="outgoingSmsLimitationAlert">
@@ -86,7 +86,7 @@
                                         </label>
                                     </div>
                                     <div{if !$data.settings.outgoing_sms_limitation_alert} class="hidden"{/if} id="smsCountLimitationMessageBlock">
-                                        <textarea name="outgoingSmsLimitationMessage" class="form-control">{$data.settings.outgoing_sms_limitation_message}</textarea>
+                                        <textarea name="outgoingSmsLimitationMessage" class="form-control">{$data.settings.outgoing_sms_limitation_message|e}</textarea>
                                     </div>
                                 </div>
                             {/if}
@@ -178,7 +178,7 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         {if !empty($currentDevice.name)}
-                            {$di['t']->_('Unassign %s', [$currentDevice.name])}
+                            {$di['t']->_('Unassign %s', [$currentDevice.name|e])}
                         {else}
                             {$di['t']->_('Unassign Device')}
                         {/if}

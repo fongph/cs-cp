@@ -1,0 +1,169 @@
+<style type="text/css">
+    .item {
+        display: inline-block;
+        position: relative;
+        width: 150px;
+        height: 150px;
+        margin: 0 5px 5px 0;
+    }
+
+    .item img {
+        width: 150px;
+        height: 150px;
+        z-index: 10;
+        border-radius: 5px;
+    }
+    
+    .item .fa-play {
+        position: absolute;
+        left: 10px;
+        bottom: 10px;
+        color: #fff;
+        opacity: 0.7;
+        font-size: 30px;
+        text-shadow: -1px 0 10px black;
+    }
+</style>
+<div>
+    <h1 class="text-center">{$title}</h1>
+
+    {insert "inc.flashMessages.htm"}
+
+    <div class="dialog-panel-top">
+        <p class="text-info">{$di.t->_('Messages with')} <b>{$user}</b></p>
+        <a class="btn btn-default" href="{$di.config.domain}/cp/snapchat">{$di.t->_('Back to Snapchat log')}</a>
+    </div>
+
+    <div class="dialog-messages-list">
+        {foreach $list as $item}
+        <div id="{$item.timestamp}">
+            <div class="popover {if $item.type == 'in'}right{else}left{/if}">
+                <div class="arrow"></div>
+                {if $item.type == 'out'}
+                <h3 class="popover-title"><span></span></h3>
+                {else}
+                <h3 class="popover-title"><b>{if strlen($item.name)}{$item.name}{else}{$item.user_id}{/if}</b> <span></span></h3>
+                {/if}
+                <div class="popover-content">
+                    {if $item.content_type == 'text'}
+                    <p>{$item.content}</p>
+                    {elseif $item.content_type == 'image'}
+                    <a href="{$item.image}" class="item image"><img src="{$item.preview}" alt="" /></a>
+                    {elseif $item.content_type == 'video'}
+                    <a href="{$item.preview}" class="item video" data-video="{$item.video}"><img src="{$item.preview}" alt="" /><i class="fa fa-play"></i></a>
+                    {/if}
+                </div>
+            </div>
+        </div>
+        {/foreach}
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var last = 0;
+        $('.dialog-messages-list > div').each(function () {
+            var timestamp = $(this).attr('id');
+
+            var date = moment.unix(timestamp).zone(0).format("LL");
+            if (date !== last) {
+                $(this).before('<div class="date-title">' + date + '</div>');
+            }
+
+            var date = moment.unix(timestamp).zone(0).format("LLL");
+            $(this).find('.popover-title span').html(date);
+
+            last = moment.unix(timestamp).zone(0).format("LL");
+        });
+
+        $(".image").colorbox({
+            fixed: true,
+            rel: 'a',
+            maxWidth: '90%',
+            maxHeight: '90%'
+        });
+
+        $player = $('#videoPlayer .jp-video').clone().attr('id', 'jpContainer');
+        $player.find('.jp-jplayer').attr('id', 'player');
+        
+        $('#videoPlayer').remove();
+
+        $(".video").colorbox({
+            fixed: true,
+            rel: 'a',
+            html: $player,
+            maxWidth: '90%',
+            maxHeight: '90%',
+            onComplete: function () {
+                var video = $(this).data('video');
+                
+                $("#player").jPlayer({
+                    ready: function () {
+                        $(this).jPlayer("setMedia", {
+                            m4v: video
+                        }).jPlayer("play");
+                        
+                        $.colorbox.resize();
+                    },
+                    cssSelectorAncestor: '#jpContainer',
+                    swfPath: '{$di.config.staticDomain}/jplayer',
+                    supplied: 'm4v',
+                    errorAlerts: false,
+                    warningAlerts: false,
+                    size: {
+                        width: '100%',
+                        cssClass: 'flexible'
+                    }
+                });
+            }
+        });
+    });
+</script>
+<div id="videoPlayer" style="display: none;">
+    <div class="jp-video">
+        <div class="jp-type-single">
+            <div class="jp-jplayer"></div>
+            <div class="jp-gui">
+                <table>
+                    <tr>
+                        <td>
+                            <div class="jp-video-play">
+                                <i class="fa fa-play-circle"></i>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+                <div class="jp-interface">
+                    <div class="jp-controls-holder">
+                        <ul class="jp-controls">
+                            <li><a href="javascript:;" class="jp-play" tabindex="1"><i class="fa fa-play"></i></a></li>
+                            <li><a href="javascript:;" class="jp-pause" tabindex="1"><i class="fa fa-pause"></i></a></li>
+                            <li><a href="javascript:;" class="jp-stop" tabindex="1"><i class="fa fa-stop"></i></a></li>
+                        </ul>
+                        <div class="jp-progress">
+                            <div class="jp-seek-bar">
+                                <div class="jp-play-bar"></div>
+                                <div class="jp-current-time"></div>
+                                <div class="jp-duration"></div>
+                            </div>
+                        </div>
+                        <div class="jp-volume-controls">
+                            <a href="javascript:;" class="jp-mute" tabindex="1" title="mute"><i class="fa fa-volume-off"></i></a>
+                            <a href="javascript:;" class="jp-unmute" tabindex="1" title="unmute"><i class="fa fa-volume-up"></i></a>
+                            <div class="jp-volume-bar">
+                                <div class="jp-volume-bar-value"></div>
+                            </div>
+                        </div>
+                        <ul class="jp-toggles">
+                            <li><a href="javascript:;" class="jp-full-screen" tabindex="1" title="full screen"><i class="fa fa-arrows-alt"></i></a></li>
+                            <li><a href="javascript:;" class="jp-restore-screen" tabindex="1" title="restore screen"><i class="fa fa-compress"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="jp-no-solution">
+            <span>{$di.t->_('Update Required')}</span>
+            {$di.t->_('To play the media you will need to either update your browser to a recent version or update your %1$sFlash plugin%2$s.', ['<a href="http://get.adobe.com/flashplayer/" target="_blank">', '</a>'])}
+        </div>
+    </div>
+</div>

