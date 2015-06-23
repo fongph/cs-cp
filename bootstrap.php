@@ -148,6 +148,7 @@ $di->setShared('router', function() use($config, $di) {
     $router->add('emailsView', new \System\Router\Regex('/cp/emails/:account/:timestamp', array('controller' => 'Emails', 'action' => 'view'), array('account' => '[^/]+', 'timestamp' => '[\d]{1,10}')));
     $router->add('notesView', new \System\Router\Regex('/cp/notes/:account/:timestamp', array('controller' => 'Notes', 'action' => 'view'), array('account' => '[^/]+', 'timestamp' => '[\d]{1,10}')));
     $router->add('locationsZonesEdit', new \System\Router\Regex('/cp/locations/zones/edit/:id', array('controller' => 'Locations', 'action' => 'zoneEdit'), array('id' => '[0-9]+')));
+    $router->add('locationsSetup', new \System\Router\Regex('/cp/locations/setup/:step', array('controller' => 'Locations', 'action' => 'setup'), array('step' => 'init|locationActivation|deviceConnection')));
     $router->add('instagramTab', new \System\Router\Regex('/cp/instagram/:account/:tab', array('controller' => 'Instagram', 'action' => 'tab'), array('account' => '[0-9]+', 'tab' => 'own|friends|commented')));
     $router->add('instagramPost', new \System\Router\Regex('/cp/instagram/:account/post/:post', array('controller' => 'Instagram', 'action' => 'view'), array('account' => '[0-9]+', 'post' => '[0-9]+')));
 
@@ -158,7 +159,6 @@ $di->setShared('router', function() use($config, $di) {
     $router->add('granting-superuser-rights', new \System\Router\Regex('/instructions/granting-superuser-rights', array('controller' => 'Index', 'action' => 'superuser')));
     $router->add('installing-android', new \System\Router\Regex('/instructions/installing-android', array('controller' => 'Index', 'action' => 'installingAndroid', 'public' => true)));
     $router->add('installing-ios', new \System\Router\Regex('/instructions/installing-ios', array('controller' => 'Index', 'action' => 'installingIos', 'public' => true)));
-    $router->add('activate-location-ios', new \System\Router\Regex('/instructions/activate-location-ios', array('controller' => 'Index', 'action' => 'activateLocationIos')));
     $router->add('wizard-android', new \System\Router\Regex('/instructions/wizard-android', array('controller' => 'Index', 'action' => 'wizardAndroid', 'public' => true)));
     $router->add('wizard-ios', new \System\Router\Regex('/instructions/wizard-ios', array('controller' => 'Index', 'action' => 'wizardIos', 'public' => true)));
     $router->add('wizard-icloud', new \System\Router\Regex('/instructions/wizard-icloud', array('controller' => 'Index', 'action' => 'wizardIcloud', 'public' => true)));

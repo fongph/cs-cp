@@ -4,6 +4,7 @@ namespace Controllers;
 
 use Models\Modules,
     CS\Devices\Limitations,
+    CS\ICloud\Locations as LocationsService,
     Models\Cp\Zones,
     System\FlashMessages;
 
@@ -11,6 +12,7 @@ class Locations extends BaseModuleController
 {
 
     protected $module = Modules::LOCATIONS;
+    private $buildMenu = true;
 
     protected function init()
     {
@@ -20,16 +22,101 @@ class Locations extends BaseModuleController
 
     public function indexAction()
     {
-        $locations = new \Models\Cp\Locations($this->di);
+        if ($this->di['currentDevice']['os'] == 'icloud') {
+            $this->icloud();
+        } else {
+            $locations = new \Models\Cp\Locations($this->di);
 
-        if ($this->getRequest()->isAjax()) {
-            $this->makeJSONResponse($locations->getDayPoints($this->di['devId'], $this->getRequest()->get('dayStart', 0)));
+            if ($this->getRequest()->isAjax()) {
+                $this->makeJSONResponse($locations->getDayPoints($this->di['devId'], $this->getRequest()->get('dayStart', 0)));
+            }
+
+            $this->view->startTime = $locations->getLastPointTimestamp($this->di['devId']);
+            $this->view->hasZones = $locations->hasZones($this->di['devId']);
+
+            $this->setView('cp/locations/index.htm');
+        }
+    }
+
+    public function setupAction()
+    {
+        if ($this->di['currentDevice']['os'] !== 'icloud') {
+            $this->redirect($this->di['router']->getRouteUrl('locations'));
         }
 
-        $this->view->startTime = $locations->getLastPointTimestamp($this->di['devId']);
-        $this->view->hasZones = $locations->hasZones($this->di['devId']);
+        $locations = new \Models\Cp\Locations($this->di);
+        if ($locations->getDeviceLocationServiceCredentials($this->di['devId']) !== false) {
+            $this->redirect($this->di['router']->getRouteUrl('locations'));
+        }
 
-        $this->setView('cp/locations.htm');
+        if ($this->params['step'] == 'init') {
+            return $this->setupInit();
+        } elseif ($this->params['step'] == 'deviceConnection') {
+            $this->setupDevicesConnection();
+        }
+
+        $this->view->step = $this->params['step'];
+
+        $this->buildMenu = false;
+        $this->setLayout('index.htm');
+        $this->setView('cp/locations/icloudSetup.htm');
+    }
+
+    public function icloud()
+    {
+        if ($this->di['currentDevice']['os'] !== 'icloud') {
+            $this->redirect($this->di['router']->getRouteUrl('locations'));
+        }
+
+        $locations = new \Models\Cp\Locations($this->di);
+
+        if (($credential = $locations->getDeviceLocationServiceCredentials($this->di['devId'])) === false) {
+            return $this->setupInit();
+        }
+
+        $this->view->lastPoint = $locations->getLastPoint($this->di['devId']);
+
+        if ($this->getRequest()->isAjax()) {
+            try {
+                $data = LocationsService::getDeviceLocationData($credential['apple_id'], $credential['apple_password'], $credential['location_device_hash']);
+                $data['success'] = true;
+
+                $locations->addLocationValue($this->di['devId'], $data['timestamp'], $data['latitude'], $data['longitude'], $data['accuracy']);
+            } catch (LocationsService\Exceptions\AuthorizationException $e) {
+                $data = array(
+                    'success' => false,
+                    'message' => $this->di['t']->_('iCloud Authorization Error. Please %1$schange the password%2$s and try again.', array(
+                        '<a href="/profile/iCloudPassword?deviceId=' . $this->di['devId'] . '">',
+                        '</a>'
+                    ))
+                );
+            } catch (LocationsService\Exceptions\DeviceNotFoundException $e) {
+                $data = array(
+                    'success' => false,
+                    'type' => 'fmi-disabled'
+                );
+            } catch (LocationsService\Exceptions\TrackingException $e) {
+                $data = array(
+                    'success' => false,
+                    'type' => 'location-disabled'
+                );
+            } catch (LocationsService\Exceptions\TrackingWaitingException $e) {
+                $data = array(
+                    'success' => false,
+                    'type' => 'no-location-data'
+                );
+            } catch (LocationsService\Exceptions\LocationsException $e) {
+                $this->getDI()->get('logger')->addError('iCloud location fail!', array('exception' => $e));
+                $data = array(
+                    'success' => false,
+                    'type' => 'undefined'
+                );
+            }
+
+            $this->makeJSONResponse($data);
+        }
+
+        $this->setView('cp/locations/icloudIndex.htm');
     }
 
     public function zonesAction()
@@ -42,7 +129,7 @@ class Locations extends BaseModuleController
 
         if ($this->getRequest()->hasGet('delete')) {
             $this->checkDemo($this->di['router']->getRouteUrl('locationsZones'));
-            
+
             $id = $this->getRequest()->get('delete');
             if ($zonesModel->canDeleteZone($this->di['devId'], $id) === false) {
                 $this->getDI()->getFlashMessages()->add(FlashMessages::ERROR, $this->di['t']->_('Geo-fence was not found.'));
@@ -55,7 +142,7 @@ class Locations extends BaseModuleController
         }
 
         $this->view->zones = $zonesModel->getZonesList($this->di['devId']);
-        $this->setView('cp/zoneList.htm');
+        $this->setView('cp/locations/zoneList.htm');
     }
 
     public function zoneAddAction()
@@ -79,7 +166,7 @@ class Locations extends BaseModuleController
 
         if ($this->getRequest()->hasPost('zoneData', 'name', 'trigger', 'enable')) {
             $this->checkDemo($this->di['router']->getRouteUrl('locationsZonesAdd'));
-            
+
             if (!Zones::validateName($name)) {
                 $this->getDI()->getFlashMessages()->add(FlashMessages::ERROR, $this->di['t']->_('The name for the Geo-fence is required and should be no longer than 17 symbols.'));
             } else if (!strlen($zoneData)) {
@@ -140,7 +227,7 @@ class Locations extends BaseModuleController
 
         if ($this->getRequest()->hasPost('zoneData', 'name', 'trigger', 'enable')) {
             $this->checkDemo($this->di['router']->getRouteUrl('locationsZonesEdit', array('id' => $this->params['id'])));
-            
+
             if (!Zones::validateName($name)) {
                 $this->getDI()->getFlashMessages()->add(FlashMessages::ERROR, $this->di['t']->_('The name for the Geo-fence is required and should be no longer than 17 symbols.'));
             } else if (!strlen($zoneData)) {
@@ -170,13 +257,130 @@ class Locations extends BaseModuleController
         $this->view->enable = $enable;
         $this->view->edit = true;
 
-        $this->setView('cp/zone.htm');
+        $this->setView('cp/locations/zone.htm');
+    }
+    
+    private function setupInit()
+    {
+        if ($this->getRequest()->isAjax()) {
+            $locations = new \Models\Cp\Locations($this->di);
+
+            try {
+                $result = $locations->autoAssigniCloudDevice($this->di['devId'], $this->auth['id']);
+            } catch (\CS\ICloud\Locations\Exceptions\AuthorizationException $e) {
+                $this->makeJSONResponse(array(
+                    'success' => false,
+                    'message' => $this->di['t']->_('iCloud Authorization Error. Please %1$schange the password%2$s and try again.', array(
+                        '<a href="/profile/iCloudPassword?deviceId=' . $this->di['devId'] . '">',
+                        '</a>'
+                    ))
+                ));
+            } catch (\CS\ICloud\Locations\Exceptions\LocationsException $e) {
+                $this->getDI()->get('logger')->addError('iCloud location autoasign fail', array('exception' => $e));
+                $this->makeJSONResponse(array(
+                    'success' => false,
+                    'message' => $this->di['t']->_('Undefined error! Please %1$scontact support%2$s!', array(
+                        '<a href="' . $this->di->getRouter()->getRouteUrl('support') . '">',
+                        '</a>'
+                    ))
+                ));
+            }
+
+            if ($result) {
+                $this->getDI()->getFlashMessages()->add(FlashMessages::SUCCESS, $this->di['t']->_('Congratulations! The device was successfully connected.'));
+
+                $this->makeJSONResponse(array(
+                    'success' => true,
+                    'redirectUrl' => $this->di['router']->getRouteUrl(Modules::LOCATIONS)
+                ));
+            } else {
+                $this->makeJSONResponse(array(
+                    'success' => false
+                ));
+            }
+        }
+
+        $this->view->step = 'init';
+        $this->setView('cp/locations/icloudSetup.htm');
+    }
+
+    private function setupDevicesConnection()
+    {
+        $locations = new \Models\Cp\Locations($this->di);
+
+        if ($this->getRequest()->isAjax()) {
+            try {
+                $credentials = $locations->getiCloudDeviceCredentials($this->di['devId']);
+
+                if ($this->getRequest()->hasPost('id')) {
+                    $locations->assigniCloudDevice($this->di['devId'], $credentials['apple_id'], $credentials['apple_password'], $this->getRequest()->post('id'), $this->auth['id']);
+
+                    $this->getDI()->getFlashMessages()->add(FlashMessages::SUCCESS, $this->di['t']->_('Congratulations! The device was successfully connected.'));
+
+                    $data = array(
+                        'success' => true,
+                        'redirectUrl' => $this->di['router']->getRouteUrl(Modules::LOCATIONS)
+                    );
+                } else {
+                    $devices = LocationsService::getDevicesList($credentials['apple_id'], $credentials['apple_password']);
+
+                    if (count($devices)) {
+                        $data = array(
+                            'success' => true,
+                            'devices' => $devices
+                        );
+                    } else {
+                        $data = array(
+                            'success' => false,
+                            'message' => $this->di['t']->_('The device with activated Find My iPhone service was not found. Please make sure whether the target iOS device is connected to the Internet and follow the %1$sguide steps%2$s once again. If it didn\'t work, feel free to contact %3$sPumpic Customer Support%4$s.', array(
+                                '<a href="' . $this->di->getRouter()->getRouteUrl('locationsSetup', array('step' => 'instructions')) . '">',
+                                '</a>',
+                                '<a href="' . $this->di->getRouter()->getRouteUrl('support') . '">',
+                                '</a>'
+                            ))
+                        );
+                    }
+                }
+            } catch (LocationsService\Exceptions\AuthorizationException $e) {
+                $data = array(
+                    'success' => false,
+                    'message' => $this->di['t']->_('iCloud Authorization Error. Please %1$schange the password%2$s and try again.', array(
+                        '<a href="/profile/iCloudPassword?deviceId=' . $this->di['devId'] . '">',
+                        '</a>'
+                    ))
+                );
+            } catch (LocationsService\Exceptions\DeviceNotAddedException $e) {
+                $data = array(
+                    'success' => false,
+                    'message' => $this->di['t']->_('Error connecting device. Please make sure whether the target iOS device is connected to the Internet and follow the %1$sguide steps%2$s once again. If it didn’t work, feel free to contact %3$sPumpic Customer Support%4$s.', array(
+                        '<a href="' . $this->di->getRouter()->getRouteUrl('locationsSetup', array('step' => 'instructions')) . '">',
+                        '</a>',
+                        '<a href="' . $this->di->getRouter()->getRouteUrl('support') . '">',
+                        '</a>'
+                    ))
+                );
+            } catch (LocationsService\Exceptions\LocationsException $e) {
+                $this->getDI()->get('logger')->addError('iCloud location fail', array('exception' => $e));
+                $data = array(
+                    'success' => false,
+                    'message' => $this->di['t']->_('Undefined error! Please %1$scontact support%2$s!', array(
+                        '<a href="' . $this->di->getRouter()->getRouteUrl('support') . '">',
+                        '</a>'
+                    ))
+                );
+            }
+
+            $this->makeJSONResponse($data);
+        }
     }
 
     protected function postAction()
     {
         parent::postAction();
-        $this->buildCpMenu();
+
+        if ($this->buildMenu) {
+            $this->buildCpMenu();
+        }
 
         /**
          * @deprecated until there are no applications with old version

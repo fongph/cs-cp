@@ -1,0 +1,228 @@
+<div>
+    <h1 class="text-center">{$title}</h1>
+
+    {insert "inc.flashMessages.htm"}
+    
+    {if $step == 'locationActivation' || $step == 'deviceConnection'}
+    <ol class="breadcrumb setup-wizard-breadcrumb">
+        <li{if $step == 'locationActivation'} class="active"{/if}>
+            {if $step == 'locationActivation'}
+                1. {$di.t->_('Location Activation')}
+            {else}
+                <a href="{$di.router->getRouteUrl('locationsSetup', ['step' => 'locationActivation'])}">1. {$di.t->_('Location Activation')}</a>
+            {/if}
+        </li>
+        <li{if $step == 'deviceConnection'} class="active"{/if}>
+            {if $step == 'deviceConnection'}
+                2. {$di.t->_('Device Connection')}
+            {else}
+                <a href="{$di.router->getRouteUrl('locationsSetup', ['step' => 'deviceConnection'])}">2. {$di.t->_('Device Connection')}</a>
+            {/if}
+        </li>
+    </ol>
+    {/if}
+
+    {if $step == 'init'}
+    <div class="container-fluid" id="loading">
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-8 col-lg-offset-3 col-md-offset-3 col-sm-offset-2">
+                <div class=" progress progress-striped active">
+                    <div class="progress-bar" style="width: 100%"></div>
+                </div>
+            </div>
+        </div>
+        <p class="text-center">{$di.t->_('Setup processing. Please wait...')}</p>
+    </div>
+    
+    <div id="error-value" class="text-center text-danger"></div>
+    
+    <div id="locationActivation" class="text-center" style="display: none;">
+        <p>{$di.t->_('To start tracking the target iOS device, please follow a step-by-step guide and activate Find My iPhone service.')}</p>
+        <a href="{$di.router->getRouteUrl('locationsSetup', ['step' => 'locationActivation'])}" class="btn btn-success">{$di.t->_('Activate Find My iPhone')}</a>
+    </div>
+
+    {elseif $step == 'locationActivation'}
+    <div class="wizard-container">
+        <h4 class="text-center">{$di.t->_('Location Tracking Activation Guide')}</h4>
+        
+        {include "content/{$di.t->getLocale()}/instructions/activate-findmyiphone.html"}
+        
+        <p class="text-center" style="margin-top: 30px;"><a href="{$di.router->getRouteUrl('locationsSetup', ['step' => 'deviceConnection'])}" class="btn btn-primary">{$di.t->_('Next')}</a></p>
+    </div>
+    {elseif $step == 'deviceConnection'}
+    <div class="wizard-container">
+        <div class="container-fluid" id="loading">
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-8 col-lg-offset-3 col-md-offset-3 col-sm-offset-2">
+                    <div class=" progress progress-striped active">
+                        <div class="progress-bar" style="width: 100%"></div>
+                    </div>
+                </div>
+            </div>
+            <p class="text-center">{$di.t->_('iCloud devices list loading. Please wait...')}</p>
+        </div>
+        
+        <div class="container-fluid" id="assign-loading" style="display: none;">
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-8 col-lg-offset-3 col-md-offset-3 col-sm-offset-2">
+                    <div class=" progress progress-striped active">
+                        <div class="progress-bar" style="width: 100%"></div>
+                    </div>
+                </div>
+            </div>
+            <p class="text-center">{$di.t->_('Connecting device… Please stand by!')}</p>
+        </div>
+        
+        <p id="error-value" class="text-center text-danger"></p>
+        
+        <div id="devices-table" style="display: none;">
+            <div class="table-container panel-default table-profile-devices text-center">
+                <div class="panel-heading">Devices List</div>
+                <table>
+                    <thead>
+                    <tr>
+                        <th class="text-center">
+                            <span class="hidden-xs">{$di.t->_('Device Name')}</span>
+                            <span class="visible-xs">{$di.t->_('Name')}</span>
+                        </th>
+                        <th class="text-center">
+                            <span class="hidden-xs">{$di.t->_('Device Model')}</span>
+                            <span class="visible-xs">{$di.t->_('Model')}</span>
+                        </th>
+                        <th class="text-center">{$di.t->_('Battery Level')}</th>
+                        <th class="text-center">{$di.t->_('Charging')}</th>
+                        <th class="text-center">{$di.t->_('Color')}</th>
+                        <th class="text-center">{$di.t->_('Action')}</th>
+                    </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <p class="text-center">If you cannot find the required iOS device in the list above, please make sure whether it is connected to the Internet and perform <a href="{$di.router->getRouteUrl('locationsSetup', ['step' => 'locationActivation'])}">Find My iPhone activation correctly</a>. If it didn't work, feel free to contact <a href="{$di.router->getRouteUrl('support')}">Pumpic Customer Support</a>.</p>
+        </div>
+        
+        <p class="text-center"><button class="btn btn-primary" id="refresh-button">{$di.t->_('Refresh')}</button></p>
+    </div>
+    {/if}
+</div>
+
+{if $step == 'init'}
+<script type="text/javascript">
+    $(document).ready(function () {
+        var $loading = $('#loading'),
+            $errorValue = $('#error-value'),
+            $locationActivation = $('#locationActivation');
+        
+        $.post('{$di.router->getRouteUrl('locationsSetup', ['step' => 'init'])}', function (data) {
+            if (data.success) {
+                window.location = data.redirectUrl;
+            } else {
+                $loading.hide();
+                if (data.message) {
+                    $errorValue.html(data.message);
+                } else {
+                    $locationActivation.show();
+                }
+            }
+        }, 'json').error(function() {
+            $loading.hide();
+            $errorValue.html('{$di.t->_('Undefined error! Please %1$scontact support%2$s!', ['<a href="' ~ $di->getRouter()->getRouteUrl('support') ~ '">', '</a>'])}');
+        });
+    });
+</script>
+{elseif $step == 'deviceConnection'}
+<script type="text/javascript">
+    $(document).ready(function () {
+        var $loading = $('#loading'),
+            $assignLoading = $('#assign-loading'),
+            $devicesTable = $('#devices-table'),
+            $errorValue = $('#error-value'),
+            $refreshButton = $('#refresh-button');
+        
+        var load = function() {
+            $assignLoading.hide();
+            $loading.show();
+            $devicesTable.hide();
+            $errorValue.hide();
+            $refreshButton.attr('disabled', 'disabled').addClass('btn-disabled');
+            $devicesTable.find('tbody').html('<tr><td colspan="6">No data</td></tr>');
+            
+            $.post('{$di.router->getRouteUrl('locationsSetup', ['step' => 'deviceConnection'])}', function (data) {
+                if (data.success) {
+                    $devicesTable.find('tbody').empty();
+                    _.each(data.devices, function(data) {
+                        var $tr = $(document.createElement('tr'));
+                        
+                        $tr.append('<td>' + data.name + '</td>');
+                        $tr.append('<td>' + data.model + '</td>');
+                        
+                        if (data.сharging == null) {
+                            $tr.append('<td>-</td>');
+                            $tr.append('<td>{$di.t->_('Unknown')}</td>');
+                        } else {
+                            $tr.append('<td>' + data.batteryLevel + '%</td>');
+                            if (data.сharging) {
+                                $tr.append('<td>{$di.t->_('Yes')}</td>');
+                            } else {
+                                $tr.append('<td>{$di.t->_('No')}</td>');
+                            }
+                        }
+                        
+                        
+                        
+                        if (data.color === false) {
+                            $tr.append('<td>{$di.t->_('Undefined')}</td>');
+                        } else {
+                            $tr.append('<td>' + data.color + '</td>');
+                        }
+                        
+                        $tr.append('<td>' + '<a href="" class="btn btn-xs btn-success btn-assign" data-id="' + data.id + '">{$di.t->_('Assign')}</a>' + '</td>');
+                        
+                        $devicesTable.find('tbody').append($tr);
+                        $devicesTable.show();
+                    });
+                } else {
+                    $errorValue.html(data.message);
+                    $errorValue.show();
+                }
+            }, 'json').error(function() {
+                $errorValue.html('{$di.t->_('Undefined error! Please %1$scontact support%2$s!', ['<a href="' ~ $di->getRouter()->getRouteUrl('support') ~ '">', '</a>'])}');
+                $errorValue.show();
+            }).complete(function() {
+                $loading.hide();
+                $refreshButton.removeAttr('disabled').removeClass('btn-disabled');
+            });
+        };
+        
+        $refreshButton.click(function() {
+            load();
+        });
+        
+        $('body').on('click', '.btn-assign', function(e) {
+            e.preventDefault();
+            
+            $assignLoading.show();
+            $devicesTable.hide();
+            $refreshButton.hide();
+            
+            $.post('{$di.router->getRouteUrl('locationsSetup', ['step' => 'deviceConnection'])}', {
+                id: $(this).data('id')
+            }, function (data) {
+                if (data.success) {
+                    window.location = data.redirectUrl;
+                } else {
+                    $errorValue.html(data.message);
+                    $errorValue.show();
+                    $assignLoading.hide();
+                }
+            }, 'json').error(function() {
+                $errorValue.html('{$di.t->_('Undefined error! Please %1$scontact support%2$s!', ['<a href="' ~ $di->getRouter()->getRouteUrl('support') ~ '">', '</a>'])}');
+                $errorValue.show();
+                $assignLoading.hide();
+            })
+        });
+        
+        load();
+    });
+</script>
+{/if}

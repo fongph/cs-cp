@@ -1,0 +1,252 @@
+<style>
+    #slider-holder {
+        padding: 15px;
+    }
+    
+    .map-holder {
+        margin-top: 10px;
+    }
+
+    #no-data {
+        text-align: center;
+    }
+    
+    #data-holder, #no-data, #loading {
+        display: none;
+    }
+
+    #geo-fences-holder {
+        text-align: center;
+        padding-top: 10px;
+    }
+
+    #button-holder {
+        text-align: center;
+        margin: 10px 0;
+    }
+    
+    .scrollFix {
+        line-height: 1.35;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+    
+    a[data-zone] {
+        font-weight: 700;
+    }
+    
+    #data-holder .info {
+        background: #fff;
+        padding: 7px 0;
+    }
+    
+    @media (min-width: 767px) {
+        #allDataBlock {
+            text-align: right;
+        }
+
+        #geo-fences-holder {
+            text-align: right;
+            padding: 0;
+        }
+    }
+</style>
+<div>
+    <h1 class="text-center">{$title}</h1>
+
+    <div class="container-max">
+        {insert "inc.flashMessages.htm"}
+        
+        <div id="data-holder">
+            <div id="map">
+                <div class="map-holder">
+                    <div id="map-canvas" style="display: block; width: 100%; height: 400px;"></div>
+                </div>
+            </div>
+            <div class="info text-center"></div>
+        </div>
+        
+        <div id="no-data">
+            <div data-type="fmi-disabled">
+                <p class="text-danger">{$di.t->_('Find My iPhone service is currently disabled. Please activate it to continue tracking the target iOS device.')}</p>
+                <div class=""><a href="{$di.router->getRouteUrl('content', ['uri' => 'instructions/activate-findmyiphone.html'])}" class="btn btn-primary">{$di.t->_('Activate Find My iPhone')}</a></div>
+            </div>
+            <div data-type="location-disabled">
+                <p class="text-danger">{$di.t->_('Location Services is disabled. Please turn it on and continue tracking the target iOS device.')}</p>
+                <div class=""><a href="{$di.router->getRouteUrl('content', ['uri' => 'instructions/activate-location-ios.html'])}" class="btn btn-primary">{$di.t->_('Activate Location Services')}</a></div>
+            </div>
+            <div data-type="no-location-data">
+                <p class="text-danger">{$di.t->_('Location for the target device wasn\'t tracked yet. Please make sure whether it is connected to the Internet and try again.')}</p>
+                <a href="" class="btn btn-primary" id="track-again">{$di.t->_('Try again')}</a>
+            </div>
+            <div data-type="undefined">
+                <p class="text-danger">{$di.t->_('Undefined error! Please %1$scontact support%2$s!', ['<a href="' ~ $di->getRouter()->getRouteUrl('support') ~ '">', '</a>'])}</p>
+            </div>
+            <div class="message text-danger"></div>
+        </div>
+
+        <div class="container-fluid" id="loading" style="display: none;">
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-8 col-lg-offset-3 col-md-offset-3 col-sm-offset-2">
+                    <div class=" progress progress-striped active">
+                        <div class="progress-bar" style="width: 100%"></div>
+                    </div>
+                </div>
+            </div>
+            <p class="text-center">{$di.t->_('Tracking device location... Please stand by!')}</p>
+        </div>
+        
+        <div id="button-holder">
+            <button class="btn btn-primary" id="track">{$di.t->_('Track Location')}</button>
+        </div>
+        
+        <script type="text/javascript">
+            $(document).ready(function () {
+                locations = {
+                    map: null,
+                    marker: null,
+                    circle: null,
+                    polyline: 1,
+                    data: [],
+                    path: [],
+                    infoWindow: null,
+                    updateMapBounds: function(){
+                        google.maps.event.trigger(this.getMap(), "resize");
+                        this.getMap().fitBounds(this.circle.getBounds());
+                    },
+                    getMap: function () {
+                        if (this.map === null) {
+                            this.map = new google.maps.Map(document.getElementById("map-canvas"), {
+                                mapTypeId: google.maps.MapTypeId.ROADMAP,
+                                center: new google.maps.LatLng(0, 0),
+                                zoom: 0
+                            });
+                        } 
+                        
+                        return this.map;
+                    },
+                    clearData: function () {
+                        if (this.marker !== null) {
+                            this.marker.setMap(null);
+                        }
+                        
+                        if (this.circle !== null) {
+                            this.circle.setMap(null);
+                        }
+                    },
+                    updateData: function(data) {
+                        var self = this;
+                        
+                        this.clearData();
+
+                        var latLng = new google.maps.LatLng(parseFloat(data.latitude), parseFloat(data.longitude));
+
+                        this.marker = new google.maps.Marker({
+                            clickable: false,
+                            position: latLng,
+                            map: self.getMap(),
+                            icon: '{$di.config.staticDomain}/img/marker-curr.png',
+                            animation: google.maps.Animation.BOUNCE
+                        });
+                        
+                        this.circle = new google.maps.Circle({
+                            clickable: false,
+                            center: latLng,
+                            map: self.getMap(),
+                            radius: parseInt(data.accuracy, 10),
+                            strokeOpacity: 0.6,
+                            strokeWeight: 2,
+                            fillColor: '#0000ff',
+                            fillOpacity: 0.1
+                        });
+                    },
+                    showData: function (data) {
+                        var latLng = new google.maps.LatLng(parseFloat(data.latitude), parseFloat(data.longitude));
+
+                        $("#data-holder .info").hide();
+
+                        geocoder = new google.maps.Geocoder();
+                        geocoder.geocode({ latLng: latLng }, function(results, status) {
+                            var content = '<b>' + moment(data.timestamp * 1000).format("lll") + '</b>';
+                            
+                            if (status == google.maps.GeocoderStatus.OK) {
+                                if (results[1]) {
+                                    data.address = results[1].formatted_address;
+                                }
+                            }
+                            
+                            if (data.address) {
+                                content = content + ' - ' + data.address;
+                            }
+                            
+                            $("#data-holder .info").html(content).show();
+                        });
+
+                        this.updateData(data);
+                        $("#data-holder").show();
+                        this.updateMapBounds();
+                    },
+                    loadData: function () {
+                        var self = this;
+                        
+                        return $.getJSON("{$di.router->getRouteUrl('locations')}", function (data) {
+                            if (data.success) {
+                                self.showData(data);
+                            } else {
+                                $("#no-data > div").hide();
+                                if (data.type !== undefined) {
+                                    $("#no-data > div[data-type=" + data.type + "]").show();
+                                } else if (data.message !== undefined) {
+                                    $("#no-data > .message").html(data.message).show();
+                                } else {
+                                    $("#no-data > div[data-type=undefined]").show();
+                                }
+                                $("#no-data").show();
+                                $("#button-holder").hide();
+                            }
+                        }).error(function() {
+                            $("#no-data > div").hide();
+                            $("#no-data > div[data-type=undefined]").show();
+                            $("#no-data").show();
+                        });
+                    },
+                    load: function () {
+                        var self = this;
+
+                        $("#loading").show();
+                        $("#data-holder").hide();
+                        $("#no-data").hide();
+                        $("#track").addClass('disable').attr('disabled', 'disabled');
+
+                        var onComplete = function () {
+                            $("#loading").hide();
+                            $("#track").removeClass('disable').removeAttr('disabled');
+                        };
+
+                        var deferred = self.loadData();
+                        deferred.complete(onComplete);
+                    },
+                    init: function () {
+                        var self = this;
+                        $("#track, #track-again").click(function(e){
+                            e.preventDefault();
+                            self.load();
+                        });
+                    }
+                };
+                
+                locations.init();
+                
+                {if $lastPoint !== false}
+                    locations.showData({
+                        timestamp: {$lastPoint.timestamp},
+                        latitude: {$lastPoint.latitude},
+                        longitude: {$lastPoint.longitude}, 
+                        accuracy: {$lastPoint.accuracy}
+                    });
+                {/if}
+            });
+        </script>
+    </div>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.9"></script>
+</div>
