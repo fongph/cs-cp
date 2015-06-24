@@ -30,11 +30,11 @@
         <div class="media">
             <div class="media-left">
                 <a href="{$di.router->getRouteUrl('locationsZonesEdit', ['id' => $zone['id']])}">
-                    <img class="media-object" src="{$zone.icon}" alt="{$zone.name}" />
+                    <img class="media-object" src="{$zone.icon}" alt="{$zone.name|e}" />
                 </a>
             </div>
             <div class="media-body">
-                <a href="{$di.router->getRouteUrl('locationsZonesEdit', ['id' => $zone['id']])}" style="font-weight: 700;">{$zone.name}</a>
+                <a href="{$di.router->getRouteUrl('locationsZonesEdit', ['id' => $zone['id']])}" style="font-weight: 700;">{$zone.name|e}</a>
                 <div><b>{$di.t->_('Trigger on:')}</b> {if $zone.trigger==='enter'}{$di.t->_('Enter')}{elseif $zone.trigger==='leave'}{$di.t->_('Leave')}{else}{$di.t->_('Enter')}, {$di.t->_('Leave')}{/if}</div>
                 <div><b>{$di.t->_('Alert to:')}</b> {if $zone.email_alert}{$di.t->_('Email')}, {/if}{$di.t->_('Control panel')}</div>
                 {if strlen($zone.schedule)}<div><b>{$di.t->_('Scheduled')}</b></div>{/if}

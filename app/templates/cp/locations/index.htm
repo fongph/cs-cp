@@ -211,7 +211,7 @@
                                             var result = '<br/>Latitude: ' + row.aData.latitude + '<br/>Langitude: ' + row.aData.longitude;
 
                                             if (row.aData.zone) {
-                                                return '<a href="" data-zone="' + row.aData.zone_id + '">' + row.aData.zone + '</a>' + result;
+                                                return '<a href="" data-zone="' + row.aData.zone_id + '">' + _.escape(row.aData.zone) + '</a>' + result;
                                             } else if (row.aData.address) {
                                                 return '<b>' + row.aData.address + '</b>' + result;
                                             }
@@ -559,7 +559,7 @@
                     
                     var url = '{$di.router->getRouteUrl('locationsZonesEdit', ['id' => '#'])}'.replace('#', data.id)
                     
-                    $content.find('.zone-name').html(data.name).attr('href', url);
+                    $content.find('.zone-name').html(_.escape(data.name)).attr('href', url);
                     $content.find('.zone-edit').attr('href', url);
                     
                     var alertTo = ['{$di.t->_('Control panel')}'];

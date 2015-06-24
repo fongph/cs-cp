@@ -92,7 +92,7 @@
                             <input id="scheduleData" name="scheduleData" type="hidden" value="{$scheduleData}" />
                             <div class="form-group">
                                 <label>{$di.t->_('Name')}</label>
-                                <input name="name" value="{$name}" class="form-control" />
+                                <input name="name" value="{$name|e}" class="form-control" />
                                 <p class="help-block">{$di.t->_('No more than 17 symbols')}</p>
                             </div>
                             <div class="form-group">

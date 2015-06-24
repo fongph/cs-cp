@@ -197,7 +197,7 @@ class Locations extends BaseModuleController
         $this->view->edit = false;
 
 
-        $this->setView('cp/zone.htm');
+        $this->setView('cp/locations/zone.htm');
     }
 
     public function zoneEditAction()
