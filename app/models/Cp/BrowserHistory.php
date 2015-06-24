@@ -15,7 +15,7 @@ class BrowserHistory extends BaseModel {
 
         $sort = '`timestamp` ASC';
         if (count($params['sortColumns'])) {
-            $columns = ['`timestamp`', '`browser`', '`title`', '`url`'];
+            $columns = ['`timestamp`', '`title`', '`url`',  '`browser`', '`timestamp`'];
 
             $sort = '';
             foreach ($params['sortColumns'] as $column => $direction) {

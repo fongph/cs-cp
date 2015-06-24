@@ -33,9 +33,9 @@
                     <thead>
                         <tr role="row">
                             <th>{$di.t->_('Date')}</th>
-                            <th>{$di.t->_('Browser')}</th>
                             <th>{$di.t->_('Title')}</th>
                             <th>{$di.t->_('Url')}</th>
+                            <th>{$di.t->_('Browser')}</th>
                             {if $isDeviceBlockSiteAvailable}<th>{$di.t->_('Actions')}</th>{/if}
                         </tr>
                     </thead>
@@ -142,9 +142,6 @@
                                 }
                             },
                             {
-                                mData: 'browser'
-                            },
-                            {
                                 mData: 'title'
                             },
                             {
@@ -153,6 +150,9 @@
                                 fnRender: function(obj, value) {
                                     return  '<a href="' + value + '" class="disable-on-demo" target="_blank">' + value + '</a>';
                                 }
+                            },
+                            {
+                                mData: 'browser'
                             }
                             {if $isDeviceBlockSiteAvailable}
                             ,{
