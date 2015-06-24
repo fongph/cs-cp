@@ -228,10 +228,12 @@
                     },
                     init: function () {
                         var self = this;
+                        {if !$di.config.demo}
                         $("#track, #track-again").click(function(e){
                             e.preventDefault();
                             self.load();
                         });
+                        {/if}
                     }
                 };
                 
