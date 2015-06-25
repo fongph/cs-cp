@@ -1,0 +1,14 @@
+<div>
+    <h1 class="text-center">{$title}</h1>
+
+    {insert "inc.flashMessages.htm"}
+    
+    {if !$paid}
+        {insert "cp/updatePackage.html"}
+    {else}
+        <h3 class="text-center">Activate instruction</h3>
+        <p>Bla bla bla</p>
+        <p>Please wait 20 min</p>
+        <a href="?activate" class="btn btn-success">Automatic</a>
+    {/if}
+</div>

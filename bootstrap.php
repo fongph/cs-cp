@@ -302,8 +302,8 @@ $di->set('isTestUser', function($id) use($config) {
             2, //pm@dizboard.com
             10, //p.olya@dizboard.com
             11, //g.zhenya@dizboard.com
-            280 //eugene-msa@yandex.ru
-        ));
+            280 //qa@dizboard.com
+        )) || (\IP::getRealIP() === '176.38.120.13');
     }
 
     return true;

