@@ -21,7 +21,7 @@
     <ul>
         <li>There is no {$moduleName} data. It means there has been no {$moduleName} activity on the target device yet.</li>
     </ul>
-{elseif isset($moduleId) and  isset($moduleName) and ($di.deviceModules->hasModuleError($moduleId) or $di.currentDevice.last_error)}
+{elseif isset($moduleId) and  isset($moduleName) and ($di.deviceModules->hasModuleError($moduleId) or ($di.currentDevice.last_error and !$di.deviceModules->isModuleChecked($moduleId)))}
     <ul>
         <li>Error importing {$moduleName}, please contact support</li>
     </ul>
