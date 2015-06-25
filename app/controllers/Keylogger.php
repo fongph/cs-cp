@@ -19,8 +19,8 @@ class Keylogger extends BaseModuleController
     }
 
     public function indexAction()
-    {
-         if ($this->di['currentDevice']['os'] == 'android' &&  $this->di['isTest']) {
+    {   
+        if ($this->di['currentDevice']['os'] == 'android' &&  $this->di['isTest']) {
             return $this->loh();
         }
 
