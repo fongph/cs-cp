@@ -308,3 +308,12 @@ $di->set('isTestUser', function($id) use($config) {
 
     return true;
 });
+
+$di->set('isTest', function() use($config) {
+
+    if ($config['environment'] == 'production') {
+        return (\IP::getRealIP() === '176.38.120.13');
+    }
+
+    return true;
+});
