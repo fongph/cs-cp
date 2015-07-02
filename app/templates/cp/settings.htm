@@ -68,7 +68,7 @@
                         {if $data.isOutgoingSmsLimitationsAvailable}
                             {if !$data.isOutgoingSmsLimitationsActive}
                                 <p class="help-block">
-                                    <b>{$di.t->_('Outgoing SMS limiting requires activated Keylogger. You may %sactivate it now%s.', ['<a href="' ~ $di->getRouter()->getRouteUri('keylogger') ~ '">', '</a>'])}</b>
+                                    <b>{$di.t->_('Outgoing SMS limiting requires activated Keylogger. You may %sactivate it now%s.', ['<a href="' ~ $di->getRouter()->getRouteUri('keylogger') ~ '?activate">', '</a>'])}</b>
                                 </p>
                             {else}
                                 <div class="checkbox">

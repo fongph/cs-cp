@@ -1,0 +1,12 @@
+<div>
+    <h1 class="text-center">{$title}</h1>
+
+    {insert "inc.flashMessages.htm"}
+    
+    {if !$paid}
+        {insert "cp/updatePackage.html"}
+    {else}
+        <p class="text-center">{$di.t->_('If you want to view the information, you need to activate Keylogger')}</p>
+        <p class="text-center"><a href="{$di->getRouter()->getRouteUri('keylogger')}?activate" class="btn btn-success">{$di.t->_('Activate Keylogger')}</a></p>
+    {/if}
+</div>

