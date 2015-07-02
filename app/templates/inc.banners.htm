@@ -74,12 +74,19 @@
         display: inline-block;
     }
 
+    .demo-banner:hover,
+    .demo-banner:focus,
+    .demo-banner:active {
+        cursor: pointer;
+    }
+    
     .demo-banner .banner-btn:hover, 
     .demo-banner .banner-btn:focus, 
     .demo-banner .banner-btn:active {
-        color: white;
+        cursor: pointer;
+/*        color: white;
         background-color: #d45b69;
-        text-decoration: none;
+        text-decoration: none;*/
     }
 
     .demo-banner .button-holder {
@@ -141,6 +148,10 @@
 </div>
 <script type="text/javascript">
     $(document).ready(function(){
+        $('.demo-banner').on('click', function() {
+           window.location = '{$di.config.registration}';
+           return false;
+        });
         $('#demo-banner-button').on('click', function() {
             ga('send', 'event', 'buy now', 'click', 'banner');
         });

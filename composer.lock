@@ -39,7 +39,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-devices.git",
-                "reference": "5a7c716819fc00363427d4a31548337475c13dcf"
+                "reference": "a25ee5a1d3c39c824b2fe188ccb2437ad2f41862"
             },
             "require": {
                 "boomers/cs-mail": "dev-master",
@@ -62,7 +62,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2015-06-24 09:35:10"
+            "time": "2015-06-24 12:34:18"
         },
         {
             "name": "boomers/cs-icloud",
@@ -96,7 +96,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-mail.git",
-                "reference": "954d8a4d151db8780cf925a90e4be3343d5ea4ac"
+                "reference": "c4107e4578f068eed5787e4d4966144883581dbd"
             },
             "require": {
                 "guzzlehttp/guzzle": "~5.0",
@@ -114,7 +114,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2015-05-26 10:07:26"
+            "time": "2015-06-26 09:43:20"
         },
         {
             "name": "boomers/cs-models",
@@ -122,7 +122,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-models.git",
-                "reference": "5039b81a188312d80768413188918d0330d6a9ea"
+                "reference": "4eccaadb28f2ddb2571aaf3f835f5a2fa9aace1c"
             },
             "require": {
                 "php": ">=5.4.0"
@@ -136,7 +136,7 @@
                     "CS\\Models\\": "src/"
                 }
             },
-            "time": "2015-06-24 07:44:35"
+            "time": "2015-06-25 08:41:55"
         },
         {
             "name": "boomers/cs-queue",
@@ -144,7 +144,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-queue.git",
-                "reference": "39657e972d416628610c3a5f588618c12b6dfd68"
+                "reference": "e9a6c8dbefcf4aa8ad1904ae240fbaefc1dcccd0"
             },
             "require": {
                 "boomers/cs-models": "dev-master",
@@ -159,7 +159,7 @@
                     "CS\\Queue\\": "src/"
                 }
             },
-            "time": "2015-06-19 14:36:52"
+            "time": "2015-06-24 15:30:26"
         },
         {
             "name": "boomers/cs-settings",
