@@ -182,7 +182,7 @@
         <div class="panel-body text-center">
             {foreach $recentVideos as $item}
             <div class="video-holder">
-                <img src="{$item.thumbUrl}"{if $item.is_full} class="play" data-path="{$item.album}/{$item.filename}"{/if} alt="" />
+                <img src="{$item.thumbUrl}"{if $item.is_full} class="{if $supportMode}blur{else}play{/if}" data-path="{$item.album}/{$item.filename}"{else} class="{if $supportMode}blur{/if}" {/if} alt="" />
                      <div class="video-info">
                     <div class="name">{$item.filename}</div>
                     <div class="date" data-time="{$item.timestamp}"></div>
@@ -216,16 +216,30 @@
         <div class="panel-heading">{$di.t->_('Albums')}</div>
         <div class="panel-body text-center">
             {if $cameraVideo}
-            <a href="{$di.router->getRouteUrl('videos')}/camera" class="album">
-                <img src="{$cameraVideo.thumbUrl}" alt="" />
-                <div class="name">{$di.t->_('Camera')}</div>
-            </a>
+            
+                {if $supportMode}
+                    <img src="{$cameraVideo.thumbUrl}" alt="" class="blur" />
+                {else}
+                    <a href="{$di.router->getRouteUrl('videos')}/camera" class="album">
+                        <img src="{$cameraVideo.thumbUrl}" alt="" />
+                        <div class="name">{$di.t->_('Camera')}</div>
+                    </a>
+                {/if}
+            
+            
             {/if}
             {if $noCameraVideo}
-            <a href="{$di.router->getRouteUrl('videos')}/other" class="album">
-                <img src="{$noCameraVideo.thumbUrl}" alt="" />
-                <div class="name">{$di.t->_('Other')}</div>
-            </a>
+            
+                {if $supportMode}
+                    <img src="{$noCameraVideo.thumbUrl}" alt="" class="blur" />
+                {else}
+                    <a href="{$di.router->getRouteUrl('videos')}/other" class="album">
+                        <img src="{$noCameraVideo.thumbUrl}" alt="" />
+                        <div class="name">{$di.t->_('Other')}</div>
+                    </a>
+                {/if}
+            
+            
             {/if}
         </div>
     </div>
