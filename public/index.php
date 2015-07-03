@@ -1,4 +1,6 @@
 <?php
+// Expires
+session_cache_limiter('public');
 
 define('ROOT_PATH', dirname(__FILE__) . '/../');
 date_default_timezone_set('UTC');
