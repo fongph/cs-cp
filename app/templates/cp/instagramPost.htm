@@ -69,15 +69,15 @@
     <div class="row">
         <div class="col-lg-7 text-center">
             {if $post.status === 'image-failed'}
-                <img class="post-image" src="{$di.config.staticDomain}/img/instagram-no-image.png" alt=""/>
+                <img class="post-image {if $supportMode}blur{/if}" src="{$di.config.staticDomain}/img/instagram-no-image.png" alt=""/>
                 <p class="text-danger">{$di.t->_('Image wasn\'t saved')}</p>
             {else}
                 {if $post.type === 'photo'}
-                    <img class="post-image" src="{$post.media}" alt=""/>
+                    <img class="post-image {if $supportMode}blur{/if}" src="{$post.media}" alt=""/>
                 {else}
                     {if $post.status === 'image-saved'}
                         <div class="video-holder">
-                            <img class="post-image" src="{$post.media}" alt=""/>
+                            <img class="post-image {if $supportMode}blur{/if}" src="{$post.media}" alt=""/>
                             <i class="fa fa-play"></i>
                         </div>
                         <div class="panel-top">
@@ -85,12 +85,12 @@
                         </div>
                     {elseif $post.status === 'video-requested'}
                         <div class="video-holder">
-                            <img class="post-image" src="{$post.media}" alt=""/>
+                            <img class="post-image {if $supportMode}blur{/if}" src="{$post.media}" alt=""/>
                             <i class="fa fa-play"></i>
                         </div>
                         <p class="text-info">{$di.t->_('Video requested')}</p>
                     {elseif $post.status === 'video-failed'}
-                        <img class="post-image" src="{$post.media}" alt=""/>
+                        <img class="post-image {if $supportMode}blur{/if}" src="{$post.media}" alt=""/>
                         <p class="text-danger">{$di.t->_('Video wasn\'t saved')}</p>
                     {else}
                         <div id="jpContainer" class="jp-video">
