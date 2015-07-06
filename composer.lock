@@ -39,7 +39,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-devices.git",
-                "reference": "a25ee5a1d3c39c824b2fe188ccb2437ad2f41862"
+                "reference": "2ecf16cdd5331c142c0f1e5fb66542d47fd1c53d"
             },
             "require": {
                 "boomers/cs-mail": "dev-master",
@@ -48,7 +48,8 @@
                 "boomers/cs-users": "dev-master",
                 "boomers/ip": "dev-master",
                 "php": ">=5.4.0",
-                "predis/predis": "1.0.0"
+                "predis/predis": "1.0.0",
+                "rastor/eventmanager": "*"
             },
             "require-dev": {
                 "phpunit/phpunit": "4.*"
@@ -62,7 +63,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2015-06-24 12:34:18"
+            "time": "2015-07-06 08:53:57"
         },
         {
             "name": "boomers/cs-icloud",
@@ -96,11 +97,12 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-mail.git",
-                "reference": "c4107e4578f068eed5787e4d4966144883581dbd"
+                "reference": "b74c3cc35c5b9d716f50c805d6c25ad262303fda"
             },
             "require": {
                 "guzzlehttp/guzzle": "~5.0",
-                "php": ">=5.4.0"
+                "php": ">=5.4.0",
+                "rastor/eventmanager": "1.1"
             },
             "require-dev": {
                 "phpunit/phpunit": "4.*"
@@ -114,7 +116,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2015-06-26 09:43:20"
+            "time": "2015-07-06 08:56:51"
         },
         {
             "name": "boomers/cs-models",
@@ -122,7 +124,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-models.git",
-                "reference": "4eccaadb28f2ddb2571aaf3f835f5a2fa9aace1c"
+                "reference": "b43f78bf0e011a66bdb9b0504b8ff9f515d9b755"
             },
             "require": {
                 "php": ">=5.4.0"
@@ -136,7 +138,7 @@
                     "CS\\Models\\": "src/"
                 }
             },
-            "time": "2015-06-25 08:41:55"
+            "time": "2015-06-26 13:33:08"
         },
         {
             "name": "boomers/cs-queue",
@@ -144,7 +146,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-queue.git",
-                "reference": "e9a6c8dbefcf4aa8ad1904ae240fbaefc1dcccd0"
+                "reference": "b437c1b1eeedff47e8dd181dde9c181ecbb840bd"
             },
             "require": {
                 "boomers/cs-models": "dev-master",
@@ -159,7 +161,7 @@
                     "CS\\Queue\\": "src/"
                 }
             },
-            "time": "2015-06-24 15:30:26"
+            "time": "2015-06-30 08:52:49"
         },
         {
             "name": "boomers/cs-settings",
@@ -167,7 +169,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-settings.git",
-                "reference": "0c20d923e47c983918c18e7cd5f6fc75a68caa7e"
+                "reference": "8cada280c156639726dc6bda3a8ad5e597f7557b"
             },
             "require": {
                 "php": ">=5.4.0"
@@ -178,7 +180,7 @@
                     "CS\\Settings\\": "src/"
                 }
             },
-            "time": "2015-06-18 12:35:18"
+            "time": "2015-07-03 09:17:10"
         },
         {
             "name": "boomers/cs-users",
@@ -186,13 +188,17 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-users.git",
-                "reference": "0cb493db12a2646febc8e693be0ff97ef990a416"
+                "reference": "073dd6e1fb107f9312bd530ebae5043386422ae2"
             },
             "require": {
                 "boomers/cs-mail": "dev-master",
                 "boomers/cs-models": "dev-master",
                 "boomers/ip": "dev-master",
-                "php": ">=5.3.0"
+                "filp/whoops": "~1.0",
+                "monolog/monolog": "1.*",
+                "php": ">=5.3.0",
+                "rastor/eventmanager": "1.1",
+                "rastor/jira-client": "0.3"
             },
             "require-dev": {
                 "phpunit/phpunit": "4.*"
@@ -206,7 +212,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2015-06-23 06:53:28"
+            "time": "2015-07-06 09:01:37"
         },
         {
             "name": "boomers/ip",
@@ -305,16 +311,16 @@
         },
         {
             "name": "filp/whoops",
-            "version": "1.1.6",
+            "version": "1.1.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/filp/whoops.git",
-                "reference": "37b5e653c99cbb9113108d7dc59a0ddc306acc46"
+                "reference": "72538eeb70bbfb11964412a3d098d109efd012f7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/filp/whoops/zipball/37b5e653c99cbb9113108d7dc59a0ddc306acc46",
-                "reference": "37b5e653c99cbb9113108d7dc59a0ddc306acc46",
+                "url": "https://api.github.com/repos/filp/whoops/zipball/72538eeb70bbfb11964412a3d098d109efd012f7",
+                "reference": "72538eeb70bbfb11964412a3d098d109efd012f7",
                 "shasum": ""
             },
             "require": {
@@ -359,7 +365,7 @@
                 "whoops",
                 "zf2"
             ],
-            "time": "2015-05-29 15:12:07"
+            "time": "2015-06-29 05:42:04"
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -731,6 +737,91 @@
             "time": "2014-10-01 14:18:42"
         },
         {
+            "name": "rastor/eventmanager",
+            "version": "v1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/oRastor/php-event-manager.git",
+                "reference": "6b64e1b1b8b0dab8c6293339614729c4c8256c84"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/oRastor/php-event-manager/zipball/6b64e1b1b8b0dab8c6293339614729c4c8256c84",
+                "reference": "6b64e1b1b8b0dab8c6293339614729c4c8256c84",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "EventManager": "."
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Ashwin Surajbali",
+                    "email": "ashwin@redinkdesign.net",
+                    "homepage": "http://www.redinkdesign.co"
+                }
+            ],
+            "description": "PHP Event Manager",
+            "homepage": "https://github.com/ashwinks/php-event-manager.git",
+            "keywords": [
+                "event driven",
+                "event manager",
+                "events"
+            ],
+            "time": "2015-07-06 08:29:29"
+        },
+        {
+            "name": "rastor/jira-client",
+            "version": "0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/oRastor/jira-client.git",
+                "reference": "14c4b873f7f8b5a780d4fbe54d943e0abf59143f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/oRastor/jira-client/zipball/14c4b873f7f8b5a780d4fbe54d943e0abf59143f",
+                "reference": "14c4b873f7f8b5a780d4fbe54d943e0abf59143f",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/guzzle": "~5.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "JiraClient\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Orest Budzhak",
+                    "email": "doom4eg@gmail.com"
+                }
+            ],
+            "description": "A simple PHP JIRA REST client",
+            "keywords": [
+                "api",
+                "client",
+                "jira",
+                "rest"
+            ],
+            "time": "2015-07-02 13:23:04"
+        },
+        {
             "name": "rastor/system",
             "version": "0.5.4.11",
             "source": {
@@ -775,16 +866,16 @@
         },
         {
             "name": "react/promise",
-            "version": "v2.2.0",
+            "version": "v2.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/reactphp/promise.git",
-                "reference": "365fcee430dfa4ace1fbc75737ca60ceea7eeeef"
+                "reference": "3b6fca09c7d56321057fa8867c8dbe1abf648627"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/reactphp/promise/zipball/365fcee430dfa4ace1fbc75737ca60ceea7eeeef",
-                "reference": "365fcee430dfa4ace1fbc75737ca60ceea7eeeef",
+                "url": "https://api.github.com/repos/reactphp/promise/zipball/3b6fca09c7d56321057fa8867c8dbe1abf648627",
+                "reference": "3b6fca09c7d56321057fa8867c8dbe1abf648627",
                 "shasum": ""
             },
             "require": {
@@ -811,11 +902,11 @@
             "authors": [
                 {
                     "name": "Jan Sorgalla",
-                    "email": "jsorgalla@googlemail.com"
+                    "email": "jsorgalla@gmail.com"
                 }
             ],
             "description": "A lightweight implementation of CommonJS Promises/A for PHP",
-            "time": "2014-12-30 13:32:42"
+            "time": "2015-07-03 13:48:55"
         },
         {
             "name": "symfony/console",
