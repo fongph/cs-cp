@@ -7,14 +7,14 @@
     <div class="dialog-panel-top">
         <p class="text-info">{$di.t->_('Messages with')} 
             {foreach $members as $item last=$last}
-                {if strlen($item.name)}<b>{$item.name} ({$item.phone})</b>{else}<b>{$item.phone}</b>{/if}{if !$last}, {/if}
+                {if strlen($item.name)}<b>{$item.name|e} ({$item.phone|e})</b>{else}<b>{$item.phone|e}</b>{/if}{if !$last}, {/if}
             {/foreach}
         </p>
         <a class="btn btn-default" href="{$di.router->getRouteUrl('sms')}">{$di['t']->_('Back to SMS log')}</a>
     </div>
     {else}
     <div class="dialog-panel-top">
-        <p class="text-info">Messages with <b>{if strlen($userName)}{$userName}{else}{$userPhone}{/if}</b></p>
+        <p class="text-info">Messages with <b>{if strlen($userName)}{$userName|e}{else}{$userPhone|e}{/if}</b></p>
         <a class="btn btn-default" href="{$di.router->getRouteUrl('sms')}">{$di['t']->_('Back to SMS log')}</a>
     </div>
     {/if}
@@ -27,7 +27,7 @@
                 
                 <h3 class="popover-title">
                     {if $item.type == 'in'}
-                    <b>{if strlen($item.name)}{$item.name}{else}{$item.phone}{/if}</b> <span class="date"></span>
+                    <b>{if strlen($item.name)}{$item.name|e}{else}{$item.phone|e}{/if}</b> <span class="date"></span>
                     {else}
                     <span class="date"></span>
                     {/if}
@@ -48,7 +48,7 @@
                 </h3>
                 
                 <div class="popover-content">
-                    <p{if $item.multimedia !== 'none'} class="attachment {$item.multimedia}"{/if}>{$item.content}</p>
+                    <p{if $item.multimedia !== 'none'} class="attachment {$item.multimedia}"{/if}>{$item.content|e}</p>
                 </div>
             </div>
         </div>

@@ -70,7 +70,7 @@
             var emails = {
                 startDate: moment().subtract('days', 29).startOf('day'),
                 endDate: moment().endOf('day'),
-                linkTemplate: _.template('<a href="{$di.router->getRouteUrl("emails")}/<%= account %>/<%= id %>"><%= date %></a>'),
+                linkTemplate: _.template('<a href="{$di.router->getRouteUrl("emails")}/<%- account %>/<%- id %>"><%- date %></a>'),
                 table: null,
                 setRange: function(start, end) {
                     this.range = [start, end];
@@ -129,12 +129,15 @@
                                 }
                             },
                             {
-                                fnRender: function(obj) {
-                                    return _.escape(obj.aData[1]);
+                                mRender: function(value) {
+                                    return _.escape(value);
                                 }
                             },
                             {
-                                bSortable: false
+                                bSortable: false,
+                                mRender: function(value) {
+                                    return _.escape(value);
+                                }
                             }
                         ],
                         fnDrawCallback: function() {

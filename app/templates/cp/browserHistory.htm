@@ -75,7 +75,7 @@
                 startDate: moment().subtract('days', 29).startOf('day'),
                 endDate: moment().endOf('day'),
                 historyTable: null,
-                domainNameTmpl: _.template('<% if (active > 0) { %><span class="text-success"><% } %><%= domain %><% if (active > 0) { %></span><% } %>'),
+                domainNameTmpl: _.template('<% if (active > 0) { %><span class="text-success"><% } %><%- domain %><% if (active > 0) { %></span><% } %>'),
                 actionsTmpl: _.template('<a class="btn btn-danger btn-xs" href="{$di.router->getRouteUrl("browserHistory")}?block=<%= url %>"><i class="fa fa-lock"></i> {$di.t->_('Block')}</a>'),
                 blockedActionsTmpl: _.template('<a class="btn btn-success btn-xs" href="{$di.router->getRouteUrl("browserHistory")}?unblock=<%= domain %>"><i class="fa fa-unlock"></i> {$di.t->_('Unblock')}</a>'),
                 blackList: [],
@@ -142,17 +142,23 @@
                                 }
                             },
                             {
-                                mData: 'title'
+                                mData: 'title',
+                                mRender: function(value) {
+                                    return _.escape(value);
+                                }
                             },
                             {
                                 mData: 'url',
                                 bUseRendered: false,
                                 fnRender: function(obj, value) {
-                                    return  '<a href="' + value + '" class="disable-on-demo" target="_blank">' + value + '</a>';
+                                    return  '<a href="' + _.escape(value) + '" class="disable-on-demo" target="_blank">' + _.escape(value) + '</a>';
                                 }
                             },
                             {
-                                mData: 'browser'
+                                mData: 'browser',
+                                mRender: function(value) {
+                                    return _.escape(value);
+                                }
                             }
                             {if $isDeviceBlockSiteAvailable}
                             ,{
@@ -195,7 +201,7 @@
                                 bUseRendered: false,
                                 fnRender: function(obj, value) {
                                     return browserHistory.domainNameTmpl({
-                                        domain: encodeURIComponent(value),
+                                        domain: value,
                                         active: obj.aData.active
                                     });
                                 }

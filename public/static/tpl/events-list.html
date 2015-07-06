@@ -4,7 +4,7 @@
 		<% _.each(events, function(event) { %>
 			<li>
 				<span class="pull-left event <%= event['class'] %>"></span>&nbsp;
-				<span data-event-id="<%= event.id %>" data-event-class="<%= event['class'] %>"><a href="" class="event-item" data-table-custom-navigate="<%= event.start %>"><%= moment(event.start).format('lll') %> - <%= moment(event.end).format('lll') %></a> <%= event.title %></span>
+				<span data-event-id="<%= event.id %>" data-event-class="<%= event['class'] %>"><a href="" class="event-item" data-table-custom-navigate="<%= event.start %>"><%= moment(event.start).format('lll') %> - <%= moment(event.end).format('lll') %></a> <%- event.title %></span>
 			</li>
 		<% }) %>
 	</ul>

@@ -62,7 +62,9 @@
         "boomers/cs-billing": "dev-master",
         "boomers/seller": "dev-master",
         "boomers/cs-icloud": "dev-master",
-        "boomers/cs-queue": "dev-master"
+        "boomers/cs-queue": "dev-master",
+        "ezyang/htmlpurifier": "^4.6",
+        "symfony/dom-crawler": "^2.7"
     },
     "autoload": {
         "psr-4": {

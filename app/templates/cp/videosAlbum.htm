@@ -129,14 +129,14 @@
     
     {if count($videos)}
     <div class="panel panel-default">
-        <div class="panel-heading">{$albumName}</div>
+        <div class="panel-heading">{$albumName|e}</div>
         <div class="panel-body text-center">
             {foreach $videos as $item}
             <div class="video-holder">
-                <img src="{$item.thumbUrl}"{if $item.is_full} class="play" data-path="{$item.album}/{$item.filename}"{/if} alt="" />
+                <img src="{$item.thumbUrl}"{if $item.is_full} class="play" data-path="{$item.album|e}/{$item.filename|e}"{/if} alt="" />
                      <div class="video-info">
-                    <div class="name">{$item.filename}</div>
-                    <div class="date" data-time="{$item.timestamp}"></div>
+                    <div class="name">{$item.filename|e}</div>
+                    <div class="date" data-time="{$item.timestamp|e}"></div>
                     <div class="bottom">
                         <div class="status">
                             {if $item.deleted}
@@ -149,9 +149,9 @@
                         <div class="buttons">
                             {if !$item.deleted}
                             {if !$item.requested && !$item.is_full}
-                            <a href="?requestVideo={$item.filepath}" class="btn btn-xs btn-primary pull-right">{$di.t->_('Request video')}</a>
+                            <a href="?requestVideo={$item.filepath|e}" class="btn btn-xs btn-primary pull-right">{$di.t->_('Request video')}</a>
                             {elseif $item.requested}
-                            <a href="?cancelRequest={$item.filepath}" class="btn btn-xs btn-danger pull-right">{$di.t->_('Cancel')}</a>
+                            <a href="?cancelRequest={$item.filepath|e}" class="btn btn-xs btn-danger pull-right">{$di.t->_('Cancel')}</a>
                             {/if}
                             {/if}
                         </div>

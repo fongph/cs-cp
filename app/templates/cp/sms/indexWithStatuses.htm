@@ -131,7 +131,10 @@
                                 }
                             },
                             {
-                                mData: 'number'
+                                mData: 'number',
+                                mRender: function(value) {
+                                    return _.escape(value);
+                                }
                             },
                             {
                                 mData: 'name',
@@ -140,7 +143,7 @@
                                         return '<b>{$di['t']->_('Group')}</b>';
                                     }
                                     
-                                    return value;
+                                    return _.escape(value);
                                 }
                             },
                             {
@@ -154,6 +157,7 @@
                                         } else {
                                             content = value;
                                         }
+                                        var content = _.escape(content);
                                     }
                                     
                                     if (data.multimedia != 'none') {

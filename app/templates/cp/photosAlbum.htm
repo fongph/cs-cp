@@ -29,10 +29,10 @@
 
     {if count($photos)}
     <div class="panel panel-default">
-        <div class="panel-heading">{$albumName}</div>
+        <div class="panel-heading">{$albumName|e}</div>
         <div class="panel-body text-center">
             {foreach $photos as $item}
-            <a href="{$item.fullUrl}" class="album-item"><img data-name="{$item.filepath|pathinfo:$.const.PATHINFO_BASENAME}" data-time="{$item.timestamp}" data-album="{$item.album}" data-deleted="{$item.deleted}" src="{$item.thumbUrl}" alt="" class="photo img-rounded" /></a>
+            <a href="{$item.fullUrl|e}" class="album-item"><img data-name="{$item.filepath|pathinfo:$.const.PATHINFO_BASENAME|e}" data-time="{$item.timestamp|e}" data-album="{$item.album|e}" data-deleted="{$item.deleted|e}" src="{$item.thumbUrl|e}" alt="" class="photo img-rounded" /></a>
             {/foreach}
         </div>
     </div>
@@ -40,7 +40,7 @@
 </div>
 <script type="text/javascript">
     $(document).ready(function(e) {
-        var photoTmpl = _.template('<div class="photo-info"><strong class="text-info"><%= name %></strong><dl><dt>{$di.t->_('Date')}</dt><dd><%= time %></dd><dt>{$di.t->_('Album')}</dt><dd><%= album %></dd><dt>{$di.t->_('Deleted')}</dt><dd><% if (deleted > 0) { %>{$di.t->_('Yes')}<% } else { %>{$di.t->_('No')}<% } %></dd></dl></div>');
+        var photoTmpl = _.template('<div class="photo-info"><strong class="text-info"><%- name %></strong><dl><dt>{$di.t->_('Date')}</dt><dd><%- time %></dd><dt>{$di.t->_('Album')}</dt><dd><%- album %></dd><dt>{$di.t->_('Deleted')}</dt><dd><% if (deleted > 0) { %>{$di.t->_('Yes')}<% } else { %>{$di.t->_('No')}<% } %></dd></dl></div>');
 
         $('.photo').each(function() {
             $(this).popover({

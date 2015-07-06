@@ -12789,30 +12789,30 @@ $.fn.tableScroll = function () {
     });
 };
 
-function getCookie( name ) {
-    if($.cookie(name)) {
-        return $.cookie(name); 
+function getCookie(name) {
+    if ($.cookie(name)) {
+        return $.cookie(name);
     } else
         return false;
 }
 
 $(document).ready(function () {
-    $('.anchor').on("click", function(e){
+    $('.anchor').on("click", function (e) {
 
-          var anchor = $(this).attr('data-href').split('#');
-          if(anchor.length > 1) {
-              $('html, body').stop().animate({
-                scrollTop: $('#'+anchor[1]).position('body').top
-              }, 1000);
-          }
+        var anchor = $(this).attr('data-href').split('#');
+        if (anchor.length > 1) {
+            $('html, body').stop().animate({
+                scrollTop: $('#' + anchor[1]).position('body').top
+            }, 1000);
+        }
 
-       });
-    
+    });
+
     $('#toggle').on('click touchend', function (e) {
         e.preventDefault();
         $('body').toggleClass('menu-active');
     });
-    
+
 });
 
 var languages = {
@@ -12843,4 +12843,8 @@ var languages = {
 
 localAsUtc = function (m) {
     return moment.unix(m.unix() + m.utcOffset() * 60).utcOffset(0);
+};
+
+String.prototype.stripHTML = function () {
+    return this.replace(/(<([^>]+)>)/ig, "");
 };

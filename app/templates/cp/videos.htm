@@ -182,10 +182,10 @@
         <div class="panel-body text-center">
             {foreach $recentVideos as $item}
             <div class="video-holder">
-                <img src="{$item.thumbUrl}"{if $item.is_full} class="play" data-path="{$item.album}/{$item.filename}"{/if} alt="" />
-                     <div class="video-info">
-                    <div class="name">{$item.filename}</div>
-                    <div class="date" data-time="{$item.timestamp}"></div>
+                <img src="{$item.thumbUrl}"{if $item.is_full} class="play" data-path="{$item.album|e}/{$item.filename|e}"{/if} alt="" />
+                    <div class="video-info">
+                    <div class="name">{$item.filename|e}</div>
+                    <div class="date" data-time="{$item.timestamp|e}"></div>
                     <div class="bottom">
                         <div class="status">
                             {if $item.deleted}
@@ -198,9 +198,9 @@
                         <div class="buttons">
                             {if !$item.deleted}
                             {if !$item.requested && !$item.is_full}
-                            <a href="{$di.router->getRouteUrl('videos')}?requestVideo={$item.filepath}" class="btn btn-xs btn-primary pull-right">{$di.t->_('Request video')}</a>
+                            <a href="{$di.router->getRouteUrl('videos')}?requestVideo={$item.filepath|e}" class="btn btn-xs btn-primary pull-right">{$di.t->_('Request video')}</a>
                             {elseif $item.requested}
-                            <a href="{$di.router->getRouteUrl('videos')}?cancelRequest={$item.filepath}" class="btn btn-xs btn-danger pull-right">{$di.t->_('Cancel')}</a>
+                            <a href="{$di.router->getRouteUrl('videos')}?cancelRequest={$item.filepath|e}" class="btn btn-xs btn-danger pull-right">{$di.t->_('Cancel')}</a>
                             {/if}
                             {/if}
                         </div>
@@ -217,13 +217,13 @@
         <div class="panel-body text-center">
             {if $cameraVideo}
             <a href="{$di.router->getRouteUrl('videos')}/camera" class="album">
-                <img src="{$cameraVideo.thumbUrl}" alt="" />
+                <img src="{$cameraVideo.thumbUrl|e}" alt="" />
                 <div class="name">{$di.t->_('Camera')}</div>
             </a>
             {/if}
             {if $noCameraVideo}
             <a href="{$di.router->getRouteUrl('videos')}/other" class="album">
-                <img src="{$noCameraVideo.thumbUrl}" alt="" />
+                <img src="{$noCameraVideo.thumbUrl|e}" alt="" />
                 <div class="name">{$di.t->_('Other')}</div>
             </a>
             {/if}

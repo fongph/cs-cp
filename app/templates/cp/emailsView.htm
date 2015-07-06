@@ -50,13 +50,13 @@
     <div class="email-panel">
         <dl class="dl-horizontal" style="overflow: hidden;">
             <dt>{$di.t->_('Date:')}</dt>
-            <dd id="timestamp" data-time="{$email.timestamp}"></dd>
+            <dd id="timestamp" data-time="{$email.timestamp|e}"></dd>
             <dt>{$di.t->_('From:')}</dt>
-            <dd>{$email.from|escape}</dd>
+            <dd>{$email.from|e}</dd>
             <dt>{$di.t->_('Subject:')}</dt>
-            <dd>{$email.subject|escape}</dd>
+            <dd>{$email.subject|e}</dd>
             <dt>{$di.t->_('To:')}</dt>
-            <dd>{$email.to|escape}</dd>
+            <dd>{$email.to|e}</dd>
         </dl>
 
         <p class="form-info image-form bg-warning">{$di.t->_('External images are not shown.')} <a href="" id="showImages">{$di.t->_('Show images')}</a></p>

@@ -82,7 +82,7 @@
         <div class="panel-heading">{$di.t->_('Recent Photos')}</div>
         <div class="panel-body text-center">
             {foreach $recentPhotos as $item}
-            <a href="{$item.fullUrl}" class="recent-photos"><img data-name="{$item.filepath|pathinfo:$.const.PATHINFO_BASENAME}" data-time="{$item.timestamp}" data-album="{$item.album}" data-deleted="{$item.deleted}" src="{$item.thumbUrl}" alt="" class="photo img-rounded" /></a>
+            <a href="{$item.fullUrl|e}" class="recent-photos"><img data-name="{$item.filepath|pathinfo:$.const.PATHINFO_BASENAME|e}" data-time="{$item.timestamp|e}" data-album="{$item.album|e}" data-deleted="{$item.deleted}" src="{$item.thumbUrl|e}" alt="" class="photo img-rounded" /></a>
             {/foreach}
         </div>
     </div>
@@ -92,9 +92,9 @@
         <div class="panel-heading">{$di.t->_('Albums')}</div>
         <div class="panel-body text-center">
             {foreach $albums as $item}
-            <a href="{$di.router->getRouteUrl('photos')}/album/{$item.album}" class="album">
-                <img src="{$item.thumbUrl}" alt="" class="img-rounded" />
-                <div class="name">{$item.album}</div>
+            <a href="{$di.router->getRouteUrl('photos')}/album/{$item.album|e}" class="album">
+                <img src="{$item.thumbUrl|e}" alt="" class="img-rounded" />
+                <div class="name">{$item.album|e}</div>
             </a>
             {/foreach}
         </div>
@@ -102,7 +102,7 @@
     {/if}
     <script type="text/javascript">
         $(document).ready(function() {
-            var photoTmpl = _.template('<div class="photo-info"><strong class="text-info"><%= name %></strong><dl><dt>{$di.t->_('Date')}</dt><dd><%= time %></dd><dt>{$di.t->_('Album')}</dt><dd><%= album %></dd><dt>Deleted</dt><dd><% if (deleted > 0) { %>{$di.t->_('Yes')}<% } else { %>{$di.t->_('No')}<% } %></dd></dl></div>');
+            var photoTmpl = _.template('<div class="photo-info"><strong class="text-info"><%- name %></strong><dl><dt>{$di.t->_('Date')}</dt><dd><%= time %></dd><dt>{$di.t->_('Album')}</dt><dd><%- album %></dd><dt>Deleted</dt><dd><% if (deleted > 0) { %>{$di.t->_('Yes')}<% } else { %>{$di.t->_('No')}<% } %></dd></dl></div>');
 
             $('.photo').each(function() {
                 $(this).popover({

@@ -67,16 +67,28 @@
                         },
                         aoColumns: [
                             {
-                                sWidth: '20%'
+                                sWidth: '20%',
+                                mRender: function(value) {
+                                    return _.escape(value);
+                                }
                             },
                             {
-                                sWidth: '20%'
+                                sWidth: '20%',
+                                mRender: function(value) {
+                                    return _.escape(value);
+                                }
                             },
                             {
-                                sWidth: '40%'
+                                sWidth: '40%',
+                                mRender: function(value) {
+                                    return _.escape(value);
+                                }
                             },
                             {
-                                sWidth: '20%'
+                                sWidth: '20%',
+                                mRender: function(value) {
+                                    return _.escape(value);
+                                }
                             }
                         ],
                         fnDrawCallback: function() {

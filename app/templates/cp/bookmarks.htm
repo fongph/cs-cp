@@ -65,12 +65,20 @@
                             sUrl: "{$di.config.staticDomain}/datatables/language/{$di.t->getLocale()}.txt"
                         },
                         aoColumns: [
-                            null,
-                            null,
+                            {
+                                mRender: function(value) {
+                                    return _.escape(value);
+                                }
+                            },
+                            {
+                                mRender: function(value) {
+                                    return _.escape(value);
+                                }
+                            },
                             {
                                 bUseRendered: false,
                                 fnRender: function(obj, value) {
-                                    return  '<a href="' + value + '" class="disable-on-demo" target="_blank">' + value + '</a>';
+                                    return  '<a href="' + _.escape(value) + '" class="disable-on-demo" target="_blank">' + _.escape(value) + '</a>';
                                 }
                             }
                         ],

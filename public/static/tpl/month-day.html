@@ -5,7 +5,7 @@
 			<% _.each(events, function(event) { %>
 				<span data-event-id="<%= event.id %>" data-event-class="<%= event['class'] %>"
 					class="pull-left event <%= event['class'] %>" data-toggle="tooltip"
-					title="<%= event.title %>"></span>
+					title="<%- event.title %>"></span>
 			<% }); %>
 		</div>
 	<% } %>
