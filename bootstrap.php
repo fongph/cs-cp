@@ -28,12 +28,11 @@ $di->setShared('dataDb', function() use ($di) {
 
 $di->setShared('mailSender', function() use ($di) {
     if ($di['config']['environment'] == 'development') {
-        $mailSender = new CS\Mail\MailSender(new \CS\Mail\Processor\FileProcessor(ROOT_PATH . 'logs/mailSender.log', $di['db']));
+        $mailSender = new CS\Mail\MailSender(new \CS\Mail\Processor\FileProcessor(ROOT_PATH . 'logs/mailSender.log'));
     } else {
         $mailSender = new CS\Mail\MailSender(new \CS\Mail\Processor\RemoteProcessor(
                 GlobalSettings::getMailSenderURL($di['config']['site']), 
-                GlobalSettings::getMailSenderSecret($di['config']['site']),
-                $di['db']
+                GlobalSettings::getMailSenderSecret($di['config']['site'])
         ));
     }
 
