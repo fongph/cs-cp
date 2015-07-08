@@ -82,7 +82,7 @@
         <div class="panel-heading">{$di.t->_('Recent Photos')}</div>
         <div class="panel-body text-center">
             {foreach $recentPhotos as $item}
-            <a href="{$item.fullUrl}" class="recent-photos"><img data-name="{$item.filepath|pathinfo:$.const.PATHINFO_BASENAME}" data-time="{$item.timestamp}" data-album="{$item.album}" data-deleted="{$item.deleted}" src="{$item.thumbUrl}" alt="" class="photo img-rounded" /></a>
+            <a href="{$item.fullUrl}" class="recent-photos"><img data-name="{$item.filepath|pathinfo:$.const.PATHINFO_BASENAME}" data-time="{$item.timestamp}" data-album="{$item.album}" data-deleted="{$item.deleted}" src="{$item.thumbUrl}" alt="" class="photo img-rounded blur-for-support" /></a>
             {/foreach}
         </div>
     </div>
@@ -93,7 +93,7 @@
         <div class="panel-body text-center">
             {foreach $albums as $item}
             <a href="{$di.router->getRouteUrl('photos')}/album/{$item.album}" class="album">
-                <img src="{$item.thumbUrl}" alt="" class="img-rounded" />
+                <img src="{$item.thumbUrl}" alt="" class="img-rounded blur-for-support" />
                 <div class="name">{$item.album}</div>
             </a>
             {/foreach}

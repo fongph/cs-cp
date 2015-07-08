@@ -48,9 +48,9 @@
                     {if $item.content_type == 'text'}
                     <p>{$item.content}</p>
                     {elseif $item.content_type == 'image'}
-                    <a href="{$item.image}" class="item image"><img src="{$item.preview}" alt="" /></a>
+                    <a href="{$item.image}" class="item image"><img src="{$item.preview}" class="blur-for-support" alt="" /></a>
                     {elseif $item.content_type == 'video'}
-                    <a href="{$item.preview}" class="item video" data-video="{$item.video}"><img src="{$item.preview}" alt="" /><i class="fa fa-play"></i></a>
+                    <a href="{$item.preview}" class="item video" data-video="{$item.video}"><img src="{$item.preview}" class="blur-for-support" alt="" /><i class="fa fa-play"></i></a>
                     {/if}
                 </div>
             </div>
