@@ -99,6 +99,12 @@ class Billing extends BaseController
 
                                         $this->di['usersNotesProcessor']->deviceAdded($devicesManager->getProcessedDevice()->getId());
                                         $this->di['usersNotesProcessor']->licenseAssigned($devicesManager->getLicense()->getId(), $devicesManager->getProcessedDevice()->getId());
+                                        
+                                        $eventManager = \EventManager\EventManager::getInstance();
+                                        $eventManager->emit('device-added', array(
+                                            'userId' => $deviceObserver->getDevice()->getUserId(),
+                                            'deviceId' => $deviceObserver->getDevice()->getId()
+                                        ));
 
                                         $queueManager = new \CS\Queue\Manager($this->di['queueClient']);
 
