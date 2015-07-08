@@ -133,7 +133,7 @@
         <div class="panel-body text-center">
             {foreach $videos as $item}
             <div class="video-holder">
-                <img src="{$item.thumbUrl}"{if $item.is_full} class="play" data-path="{$item.album}/{$item.filename}"{/if} alt="" />
+                <img src="{$item.thumbUrl}"{if $item.is_full} class="{if $supportMode}blur{else}play{/if}" data-path="{$item.album}/{$item.filename}"{/if} alt="" />
                      <div class="video-info">
                     <div class="name">{$item.filename}</div>
                     <div class="date" data-time="{$item.timestamp}"></div>

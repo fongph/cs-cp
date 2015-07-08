@@ -8515,6 +8515,14 @@ button.close {
   top: 0;
   right: -18px;
 }
+.blur {
+  filter: progid:DXImageTransform.Microsoft.Blur(pixelRadius=4);
+  filter: blur(4px);
+  -webkit-filter: blur(4px);
+  -moz-filter: blur(4px);
+  -o-filter: blur(4px);
+  -ms-filter: blur(4px);
+}
 .container-max {
   margin-right: auto;
   margin-left: auto;

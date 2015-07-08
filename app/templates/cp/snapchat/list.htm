@@ -48,9 +48,14 @@
                     {if $item.content_type == 'text'}
                     <p>{$item.content}</p>
                     {elseif $item.content_type == 'image'}
-                    <a href="{$item.image}" class="item image"><img src="{$item.preview}" alt="" /></a>
+                    <a href="{$item.image}" class="item image"><img class="{if $supportMode}blur{/if}" src="{$item.preview}" alt="" /></a>
                     {elseif $item.content_type == 'video'}
-                    <a href="{$item.preview}" class="item video" data-video="{$item.video}"><img src="{$item.preview}" alt="" /><i class="fa fa-play"></i></a>
+                        {if $supportMode}
+                            <div class="item"><img class="blur" src="{$item.preview}" alt="" /></div>
+                        {else}
+                            <a href="{$item.preview}" class="item video" data-video="{$item.video}"><img src="{$item.preview}" alt="" /><i class="fa fa-play"></i></a>
+                        {/if}
+                    
                     {/if}
                 </div>
             </div>
@@ -79,7 +84,12 @@
             fixed: true,
             rel: 'a',
             maxWidth: '90%',
-            maxHeight: '90%'
+            maxHeight: '90%',
+            onComplete: function() {
+                {if $supportMode}
+                    $('#cboxContent #cboxLoadedContent > img').addClass('blur');
+                {/if}
+            }
         });
 
         $player = $('#videoPlayer .jp-video').clone().attr('id', 'jpContainer');
