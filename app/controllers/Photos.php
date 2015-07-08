@@ -38,8 +38,6 @@ class Photos extends BaseModuleController
 
             $this->view->recentPhotos = $photosModel->getRecentPhotos($this->di['devId']);
             $this->view->albums = $photosModel->getAlbums($this->di['devId']);
-            
-            $this->view->supportMode = $this->supportMode;
         }
 
         $this->setView('cp/photos.htm');
@@ -51,7 +49,6 @@ class Photos extends BaseModuleController
         $this->view->photos = $photosModel->getAlbumPhotos($this->di['devId'], $this->params['album']);
 
         $this->view->albumName = $this->params['album'];
-        $this->view->supportMode = $this->supportMode;
 
         $this->setView('cp/photosAlbum.htm');
     }

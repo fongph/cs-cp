@@ -52,7 +52,6 @@ class Snapchat extends BaseModuleController
 
         $this->view->user = $snapchatModel->getUserName($this->di['devId'], $this->params['account'], $this->params['id']);
         
-        $this->view->supportMode = $this->supportMode;
         $this->view->account = $this->params['account'];
 
         $this->setView('cp/snapchat/list.htm');

@@ -44,8 +44,6 @@ class Videos extends BaseModuleController
         }
 
         if ($this->view->paid) {
-            $this->view->supportMode = $this->supportMode;
-            
             $settingsModel = new \Models\Cp\Settings($this->di);
             $this->view->network = $settingsModel->getNetwork($this->di['devId'], 'videos');
             $this->view->networksList = \Models\Cp\Settings::$networksList;
@@ -68,7 +66,6 @@ class Videos extends BaseModuleController
         $this->processVideoRequests($videosModel, $this->di['router']->getRouteUrl('videosCamera'));
 
         $this->view->videos = $videosModel->getCameraVideos($this->di['devId']);
-        $this->view->supportMode = $this->supportMode;
         $this->view->albumName = $this->di['t']->_('Camera');
         $this->setView('cp/videosAlbum.htm');
     }
@@ -80,7 +77,6 @@ class Videos extends BaseModuleController
         $this->processVideoRequests($videosModel, $this->di['router']->getRouteUrl('videosNoCamera'));
 
         $this->view->videos = $videosModel->getNoCameraVideos($this->di['devId']);
-        $this->view->supportMode = $this->supportMode;
         $this->view->albumName = $this->di['t']->_('Other');
         $this->setView('cp/videosAlbum.htm');
     }

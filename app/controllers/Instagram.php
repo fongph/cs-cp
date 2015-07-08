@@ -28,7 +28,6 @@ class Instagram extends BaseModuleController
             $this->redirect($this->getDI()->getRouter()->getRouteUrl('instagramTab', array('account' => $account, 'tab' => 'own')));
         }
 
-        $this->view->supportMode = $this->supportMode;
         $this->setView('cp/instagram.htm');
     }
 
@@ -56,7 +55,6 @@ class Instagram extends BaseModuleController
         if (!count($this->view->accounts)) {
             $this->redirect($this->getDI()->getRouter()->getRouteUrl('instagram'));
         }
-        $this->view->supportMode = $this->supportMode;
         $this->view->selectedAccount = $this->params['account'];
         $this->view->tab = $this->params['tab'];
 
@@ -94,7 +92,6 @@ class Instagram extends BaseModuleController
         $this->view->comments = $instagramModel->getPostComments($this->di['devId'], $this->params['account'], $this->params['post']);
         $this->view->post = $post;
         $this->view->account = $this->params['account'];
-        $this->view->supportMode = $this->supportMode;
         
         $this->setView('cp/instagramPost.htm');
     }
