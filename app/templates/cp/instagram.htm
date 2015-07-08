@@ -125,7 +125,7 @@
                     noData: 'No data found!',
                     loading: 'Loading...',
                     statusText: _.template('Showing <%= from %> to <%= to %> of <%= total %> entries'),
-                    postTemplate: _.template('<a href="{$di.router->getRouteUrl("instagram")}/<%= account %>/post/<%= post %>" class="item"><div class="date"><%= date %></div><% if (isVideo) { %><i class="fa fa-play"></i><% } %><img src="<%= image %>" alt=""><div class="comments"><i class="fa fa-comment"></i> <%= comments %></div></a>'),
+                    postTemplate: _.template('<a href="{$di.router->getRouteUrl("instagram")}/<%= account %>/post/<%= post %>" class="item"><div class="date"><%= date %></div><% if (isVideo) { %><i class="fa fa-play"></i><% } %><img src="<%= image %>" class="blur-for-support" alt=""><div class="comments"><i class="fa fa-comment"></i> <%= comments %></div></a>'),
                     startDate: moment().subtract('days', 29).startOf('day'),
                     endDate: moment().endOf('day'),
                     page: 1,

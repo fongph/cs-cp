@@ -31,6 +31,18 @@
                 <script type="text/javascript" src="{$di.config.staticDomain}/javascript/frontend.min.js?b{$di.config.build}"></script>
             {/if}
         {/if}
+        {if $supportMode}
+        <style type="text/css">
+            .blur-for-support {
+                filter: progid:DXImageTransform.Microsoft.Blur(pixelRadius=4);
+                filter: blur(4px); 
+                -webkit-filter: blur(4px); 
+                -moz-filter: blur(4px);
+                -o-filter: blur(4px); 
+                -ms-filter: blur(4px);
+            }
+        </style>
+        {/if}
 
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>

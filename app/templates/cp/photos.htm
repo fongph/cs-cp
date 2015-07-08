@@ -35,23 +35,12 @@
         height: 150px;
         margin: 0 5px 5px 0;
     }
-    .album .blurImageContainer { display: inline-block; overflow: hidden; }
-    .album img, .album .blurImageContainer {
+
+    .album img {
         width: 150px;
         height: 150px;
     }
 
-    .album .blurImageContainer.img-thumbnail {
-        margin-bottom: 0px;
-        padding: 0px;
-        transition: none;
-    }
-    .album .blurImageContainer.img-thumbnail > img {
-        margin-bottom: 5px;
-        padding: 2px;
-        transition: all 0.2s ease-in-out 0s;
-    }
-    
     .album .name {
         position: absolute;
         bottom: 0px;
@@ -62,15 +51,10 @@
     }
 
     .album:hover .name {
-        bottom: 1px;
-        left: 1px;
-        width: 148px;
-    }
-/*    .album:hover .name {
         bottom: 5px;
         left: 5px;
         width: 140px;
-    }*/
+    }
 </style>
 <div>
     <h1 class="text-center">{$title}</h1>
@@ -98,17 +82,7 @@
         <div class="panel-heading">{$di.t->_('Recent Photos')}</div>
         <div class="panel-body text-center">
             {foreach $recentPhotos as $item}
-            <a href="{$item.fullUrl}" class="recent-photos">
-                <div class="blurImageContainer img-rounded">
-                    <img data-name="{$item.filepath|pathinfo:$.const.PATHINFO_BASENAME}" 
-                         data-time="{$item.timestamp}" 
-                         data-album="{$item.album}" 
-                         data-deleted="{$item.deleted}" 
-                         src="{$item.thumbUrl}" 
-                         alt="" 
-                         class="photo {if $supportMode}blur{/if}" />
-                </div>
-            </a>
+            <a href="{$item.fullUrl}" class="recent-photos"><img data-name="{$item.filepath|pathinfo:$.const.PATHINFO_BASENAME}" data-time="{$item.timestamp}" data-album="{$item.album}" data-deleted="{$item.deleted}" src="{$item.thumbUrl}" alt="" class="photo img-rounded blur-for-support" /></a>
             {/foreach}
         </div>
     </div>
@@ -119,9 +93,7 @@
         <div class="panel-body text-center">
             {foreach $albums as $item}
             <a href="{$di.router->getRouteUrl('photos')}/album/{$item.album}" class="album">
-                <div class="blurImageContainer img-rounded">
-                    <img src="{$item.thumbUrl}" alt="" class="{if $supportMode}blur{/if}" />
-                </div>    
+                <img src="{$item.thumbUrl}" alt="" class="img-rounded blur-for-support" />
                 <div class="name">{$item.album}</div>
             </a>
             {/foreach}
