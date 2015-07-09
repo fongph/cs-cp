@@ -50,7 +50,8 @@ abstract class BaseModuleController extends BaseController
 
         $modulesModel = new Modules($this->di);
 
-        if ($modulesModel->isModuleActive($this->module) === false && $this->module !== 'locations') {
+        if ($modulesModel->isModuleActive($this->module) === false && $this->module !== 'locations' && 
+                !($this->di['isTest'] && $this->module === Modules::SNAPCHAT)) {
             $this->redirect($this->di['router']->getRouteUrl(Modules::CALLS));
         }
 
@@ -72,14 +73,21 @@ abstract class BaseModuleController extends BaseController
                     'active' => $routeName == $this->module
                 );
             }
+            if ($this->di['isTest'] && $routeName === Modules::SNAPCHAT) {
+                $this->view->cpMenu[$this->di['router']->getRouteUrl($routeName)] = array(
+                    'name' => $this->di['t']->_($name),
+                    'class' => $routeName,
+                    'active' => $routeName == $this->module
+                );
+            }
         }
     }
-    
+
     protected function postAction()
     {
         parent::postAction();
 
-        $this->di->setShared('deviceModules', function(){
+        $this->di->setShared('deviceModules', function() {
             $modules = new DeviceModulesRecord($this->di->get('db'));
             if ($this->di->get('currentDevice')['os'] == 'icloud') {
                 $modules->loadByDevId($this->di->get('devId'));
