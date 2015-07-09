@@ -11,33 +11,56 @@ class Emails extends BaseModel
     const PATH_TRASH = 'trash';
 
     private $allowedTags = array(
-        'html' => false,
-        'h1' => array('id', 'class'),
-        'h2' => array('id', 'class'),
-        'h3' => array('id', 'class'),
-        'h4' => array('id', 'class'),
-        'h5' => array('id', 'class'),
-        'h6' => array('id', 'class'),
-        'p' => array('id', 'class'),
-        'span' => array('id', 'class'),
-        'a' => array('id', 'class', 'href'),
-        'img' => array('id', 'class', 'src', 'alt', FALSE),
-        'br' => array(FALSE),
-        'hr' => array(FALSE),
-        'pre' => array('id', 'class'),
-        'code' => array('id', 'class'),
-        'ul' => array('id', 'class'),
-        'ol' => array('id', 'class'),
-        'li' => array('id', 'class'),
-        'table' => array('id', 'class'),
-        'tr' => array('id', 'class'),
-        'td' => array('id', 'class'),
-        'th' => array('id', 'class'),
-        'thead' => array('id', 'class'),
-        'tbody' => array('id', 'class'),
-        'tfoot' => array('id', 'class'),
-        'cut' => array('text', FALSE),
-        'video' => array()
+        'a' => array('href', 'target'),
+        'abbr' => array(),
+        'acronym' => array(),
+        'address' => array(),
+        'b' => array(),
+        'big' => array(),
+        'blockquote' => array('cite'),
+        'body' => array('alink', 'background', 'bgcolor', 'bgproperties', 'bottommargin', 'leftmargin', 'link', 'rightmargin', 'scroll', 'text', 'topmargin', 'vlink'),
+        'br' => array('clear'),
+        'caption' => array('align', 'valign'),
+        'center' => array(),
+        'cite' => array(),
+        'code' => array(),
+        'col' => array('align', 'span', 'valign', 'width'),
+        'colgroup' => array(),
+        'dd' => array(),
+        'div' => array('align'),
+        'dl' => array(),
+        'dt' => array(),
+        'em' => array(),
+        'font' => array('color', 'face', 'size'),
+        'h1' => array('align'),
+        'h2' => array('align'),
+        'h3' => array('align'),
+        'h4' => array('align'),
+        'h5' => array('align'),
+        'h6' => array('align'),
+        'hr' => array('align', 'color', 'noshade', 'size', 'width'),
+        'html' => array('xmlns'),
+        'i' => array(''),
+        'img' => array('align', 'alt', 'border', 'height', 'hspace', 'ismap', 'src', 'vspace', 'width', 'usemap'),
+        'li' => array('type', 'value'),
+        'ol' => array('type', 'start'),
+        'p' => array('align'),
+        'pre' => array(),
+        'small' => array(),
+        'span' => array(),
+        'strike' => array(),
+        'strong' => array(),
+        'sub' => array(),
+        'sup' => array(),
+        'table' => array('align', 'background', 'bgcolor', 'border', 'bordercolor', 'cellpadding', 'cellspacing', 'cols', 'frame', 'height', 'rules', 'width'),
+        'tbody' => array('align', 'bgcolor', 'valign'),
+        'td' => array('abbr', 'align', 'background', 'bgcolor', 'bordercolor', 'colspan', 'headers', 'height', 'nowrap', 'rowspan', 'valign', 'width'),
+        'tfoot' => array('align', 'bgcolor', 'valign'),
+        'th' => array('abbr', 'align', 'background', 'bgcolor', 'bordercolor', 'colspan', 'headers', 'height', 'nowrap', 'rowspan', 'valign', 'width'),
+        'thead' => array('align', 'bgcolor', 'valign'),
+        'tr' => array('align', 'bgcolor', 'bordercolor', 'valign'),
+        'u' => array(),
+        'ul' => array('type')
     );
 
     public function getDataTableData($devId, $params = array())
@@ -147,78 +170,41 @@ class Emails extends BaseModel
         return $this->getDb()->query("SELECT `text` FROM `emails` WHERE `dev_id` = {$devId} AND `account` = {$account} AND `timestamp` = {$timestamp} LIMIT 1")->fetchColumn();
     }
 
-    private function xssClean($data)
+    function removeNotAllowedNodes(\DOMNode &$element)
     {
-// Fix &entity\n;
-        $data = str_replace(array('&amp;', '&lt;', '&gt;'), array('&amp;amp;', '&amp;lt;', '&amp;gt;'), $data);
-        $data = preg_replace('/(&#*\w+)[\x00-\x20]+;/u', '$1;', $data);
-        $data = preg_replace('/(&#x*[0-9A-F]+);*/iu', '$1;', $data);
-        $data = html_entity_decode($data, ENT_COMPAT, 'UTF-8');
+        if ($element->hasChildNodes()) {
+            for ($i = $element->childNodes->length - 1; $i >= 0; $i--) {
+                $child = $element->childNodes->item($i);
 
-// Remove any attribute starting with "on" or xmlns
-//        $data = preg_replace('#(<[^>]+?[\x00-\x20"\'])(?:on|xmlns)[^>]*+>#iu', '$1>', $data);
-//
-//        // Remove javascript: and vbscript: protocols
-//        $data = preg_replace('#([a-z]*)[\x00-\x20]*=[\x00-\x20]*([`\'"]*)[\x00-\x20]*j[\x00-\x20]*a[\x00-\x20]*v[\x00-\x20]*a[\x00-\x20]*s[\x00-\x20]*c[\x00-\x20]*r[\x00-\x20]*i[\x00-\x20]*p[\x00-\x20]*t[\x00-\x20]*:#iu', '$1=$2nojavascript...', $data);
-//        $data = preg_replace('#([a-z]*)[\x00-\x20]*=([\'"]*)[\x00-\x20]*v[\x00-\x20]*b[\x00-\x20]*s[\x00-\x20]*c[\x00-\x20]*r[\x00-\x20]*i[\x00-\x20]*p[\x00-\x20]*t[\x00-\x20]*:#iu', '$1=$2novbscript...', $data);
-//        $data = preg_replace('#([a-z]*)[\x00-\x20]*=([\'"]*)[\x00-\x20]*-moz-binding[\x00-\x20]*:#u', '$1=$2nomozbinding...', $data);
-//
-//        // Only works in IE: <span style="width: expression(alert('Ping!'));"></span>
-//        $data = preg_replace('#(<[^>]+?)style[\x00-\x20]*=[\x00-\x20]*[`\'"]*.*?expression[\x00-\x20]*\([^>]*+>#i', '$1>', $data);
-//        $data = preg_replace('#(<[^>]+?)style[\x00-\x20]*=[\x00-\x20]*[`\'"]*.*?behaviour[\x00-\x20]*\([^>]*+>#i', '$1>', $data);
-//        $data = preg_replace('#(<[^>]+?)style[\x00-\x20]*=[\x00-\x20]*[`\'"]*.*?s[\x00-\x20]*c[\x00-\x20]*r[\x00-\x20]*i[\x00-\x20]*p[\x00-\x20]*t[\x00-\x20]*:*[^>]*+>#iu', '$1>', $data);
-// Remove namespaced elements (we do not need them)
-        $data = preg_replace('#</*\w+:\w[^>]*+>#i', '', $data);
+                if ($child instanceof \DOMElement) {
+                    if (!key_exists($child->tagName, $this->allowedTags)) {
+                        $element->removeChild($child);
+                    } else {
+                        $this->removeNotAllowedNodes($child);
+                    }
+                }
+            }
+        }
 
-        do {
-// Remove really unwanted tags
-            $old_data = $data;
-            $data = preg_replace('#</*(?:applet|b(?:ase|gsound|link)|embed|frame(?:set)?|i(?:frame|layer)|l(?:ayer|ink)|meta|object|s(?:cript|tyle)|xml)[^>]*+>#i', '', $data);
-        } while ($old_data !== $data);
-
-// we are done...
-        return $data;
-    }
-
-    private function processDom()
-    {
-        
+        if ($element->hasAttributes()) {
+            for ($i = $element->attributes->length - 1; $i >= 0; $i--) {
+                $name = $element->attributes->item($i)->name;
+                if ($name !== 'style' && !in_array($name, $this->allowedTags[$element->tagName])) {
+                    $element->removeAttribute($name);
+                }
+            }
+        }
     }
 
     public function replaceImageSrc($content)
     {
-        function crawlerProcessor($crawler, $level = 0) {
-            //echo '<b>Level: </b>' . $level . PHP_EOL;
-            foreach ($crawler as $value) {
-                //p($value);
-                crawlerProcessor($crawler->children(), ++$level);
-            }
-        };
-
-        //$content = $this->xssClean($content);
-
-        $crawler = new \Symfony\Component\DomCrawler\Crawler();
-        $crawler->addContent($content);
-
-        crawlerProcessor($crawler);
-        die;
-        var_dump($crawler->html());
-        
-        //p($crawler->count());
-
-        p($crawler->children());
-
-        foreach ($crawler as $value) {
-            p($value);
-        }
-
-        return 1; //$content;
-
         $dom = new \DOMDocument('1.0', 'UTF-8');
         libxml_use_internal_errors(true);
 
         $dom->loadHTML('<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL . $content);
         $dom->normalizeDocument();
+        
+        $this->removeNotAllowedNodes($dom);
 
         $images = $dom->getElementsByTagName("img");
 

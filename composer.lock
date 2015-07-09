@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "90733b7980ae05ab74f5833b57941258",
+    "hash": "25ef0bbbca1995898e3eb8768b51c6f0",
     "packages": [
         {
             "name": "boomers/cs-billing",
@@ -39,7 +39,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-devices.git",
-                "reference": "a25ee5a1d3c39c824b2fe188ccb2437ad2f41862"
+                "reference": "2ecf16cdd5331c142c0f1e5fb66542d47fd1c53d"
             },
             "require": {
                 "boomers/cs-mail": "dev-master",
@@ -48,7 +48,8 @@
                 "boomers/cs-users": "dev-master",
                 "boomers/ip": "dev-master",
                 "php": ">=5.4.0",
-                "predis/predis": "1.0.0"
+                "predis/predis": "1.0.0",
+                "rastor/eventmanager": "*"
             },
             "require-dev": {
                 "phpunit/phpunit": "4.*"
@@ -62,7 +63,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2015-06-24 12:34:18"
+            "time": "2015-07-06 08:53:57"
         },
         {
             "name": "boomers/cs-icloud",
@@ -96,11 +97,12 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-mail.git",
-                "reference": "c4107e4578f068eed5787e4d4966144883581dbd"
+                "reference": "6de6b16bd93e4c44da0801603de3c8d39f66cce6"
             },
             "require": {
                 "guzzlehttp/guzzle": "~5.0",
-                "php": ">=5.4.0"
+                "php": ">=5.4.0",
+                "rastor/eventmanager": "1.1"
             },
             "require-dev": {
                 "phpunit/phpunit": "4.*"
@@ -114,7 +116,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2015-06-26 09:43:20"
+            "time": "2015-07-07 14:32:31"
         },
         {
             "name": "boomers/cs-models",
@@ -122,7 +124,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-models.git",
-                "reference": "4eccaadb28f2ddb2571aaf3f835f5a2fa9aace1c"
+                "reference": "ad514bb04a69773d1179469925bf26a57a7565ff"
             },
             "require": {
                 "php": ">=5.4.0"
@@ -136,7 +138,7 @@
                     "CS\\Models\\": "src/"
                 }
             },
-            "time": "2015-06-25 08:41:55"
+            "time": "2015-07-07 09:54:07"
         },
         {
             "name": "boomers/cs-queue",
@@ -144,7 +146,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-queue.git",
-                "reference": "e9a6c8dbefcf4aa8ad1904ae240fbaefc1dcccd0"
+                "reference": "b437c1b1eeedff47e8dd181dde9c181ecbb840bd"
             },
             "require": {
                 "boomers/cs-models": "dev-master",
@@ -159,7 +161,7 @@
                     "CS\\Queue\\": "src/"
                 }
             },
-            "time": "2015-06-24 15:30:26"
+            "time": "2015-06-30 08:52:49"
         },
         {
             "name": "boomers/cs-settings",
@@ -167,7 +169,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-settings.git",
-                "reference": "0c20d923e47c983918c18e7cd5f6fc75a68caa7e"
+                "reference": "8cada280c156639726dc6bda3a8ad5e597f7557b"
             },
             "require": {
                 "php": ">=5.4.0"
@@ -178,7 +180,7 @@
                     "CS\\Settings\\": "src/"
                 }
             },
-            "time": "2015-06-18 12:35:18"
+            "time": "2015-07-03 09:17:10"
         },
         {
             "name": "boomers/cs-users",
@@ -186,13 +188,17 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-users.git",
-                "reference": "0cb493db12a2646febc8e693be0ff97ef990a416"
+                "reference": "9323f962a9d1da54c5a9f5165b32483ce989a290"
             },
             "require": {
                 "boomers/cs-mail": "dev-master",
                 "boomers/cs-models": "dev-master",
                 "boomers/ip": "dev-master",
-                "php": ">=5.3.0"
+                "filp/whoops": "~1.0",
+                "monolog/monolog": "1.*",
+                "php": ">=5.3.0",
+                "rastor/eventmanager": "1.1",
+                "rastor/jira-client": "0.3"
             },
             "require-dev": {
                 "phpunit/phpunit": "4.*"
@@ -206,7 +212,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2015-06-23 06:53:28"
+            "time": "2015-07-07 14:58:55"
         },
         {
             "name": "boomers/ip",
@@ -252,50 +258,6 @@
                 "MIT"
             ],
             "time": "2015-04-08 09:41:16"
-        },
-        {
-            "name": "ezyang/htmlpurifier",
-            "version": "v4.6.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/ezyang/htmlpurifier.git",
-                "reference": "6f389f0f25b90d0b495308efcfa073981177f0fd"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/ezyang/htmlpurifier/zipball/6f389f0f25b90d0b495308efcfa073981177f0fd",
-                "reference": "6f389f0f25b90d0b495308efcfa073981177f0fd",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.2"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "HTMLPurifier": "library/"
-                },
-                "files": [
-                    "library/HTMLPurifier.composer.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "LGPL"
-            ],
-            "authors": [
-                {
-                    "name": "Edward Z. Yang",
-                    "email": "admin@htmlpurifier.org",
-                    "homepage": "http://ezyang.com"
-                }
-            ],
-            "description": "Standards compliant HTML filter written in PHP",
-            "homepage": "http://htmlpurifier.org/",
-            "keywords": [
-                "html"
-            ],
-            "time": "2013-11-30 08:25:19"
         },
         {
             "name": "fenom/fenom",
@@ -349,16 +311,16 @@
         },
         {
             "name": "filp/whoops",
-            "version": "1.1.6",
+            "version": "1.1.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/filp/whoops.git",
-                "reference": "37b5e653c99cbb9113108d7dc59a0ddc306acc46"
+                "reference": "72538eeb70bbfb11964412a3d098d109efd012f7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/filp/whoops/zipball/37b5e653c99cbb9113108d7dc59a0ddc306acc46",
-                "reference": "37b5e653c99cbb9113108d7dc59a0ddc306acc46",
+                "url": "https://api.github.com/repos/filp/whoops/zipball/72538eeb70bbfb11964412a3d098d109efd012f7",
+                "reference": "72538eeb70bbfb11964412a3d098d109efd012f7",
                 "shasum": ""
             },
             "require": {
@@ -403,7 +365,7 @@
                 "whoops",
                 "zf2"
             ],
-            "time": "2015-05-29 15:12:07"
+            "time": "2015-06-29 05:42:04"
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -563,6 +525,52 @@
                 "stream"
             ],
             "time": "2014-10-12 19:18:40"
+        },
+        {
+            "name": "htmlawed/htmlawed",
+            "version": "1.1.19",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/kesar/HTMLawed.git",
+                "reference": "620c38edd57e680260ebd8dd0e98167d97e9a7bf"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/kesar/HTMLawed/zipball/620c38edd57e680260ebd8dd0e98167d97e9a7bf",
+                "reference": "620c38edd57e680260ebd8dd0e98167d97e9a7bf",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">4.4.0"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "htmLawed.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0+",
+                "LGPL-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "Santosh Patnaik",
+                    "homepage": "http://www.bioinformatics.org/people/index.php?user_hash=558b661f92d0ff7b",
+                    "role": "Developer"
+                }
+            ],
+            "description": "htmLawed - Process text with HTML markup to make it more compliant with HTML  standards and administrative policies",
+            "homepage": "http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed/",
+            "keywords": [
+                "HTMLtidy",
+                "html",
+                "sanitize",
+                "strip",
+                "tags"
+            ],
+            "time": "2015-04-05 17:23:05"
         },
         {
             "name": "monolog/monolog",
@@ -775,6 +783,91 @@
             "time": "2014-10-01 14:18:42"
         },
         {
+            "name": "rastor/eventmanager",
+            "version": "v1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/oRastor/php-event-manager.git",
+                "reference": "6b64e1b1b8b0dab8c6293339614729c4c8256c84"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/oRastor/php-event-manager/zipball/6b64e1b1b8b0dab8c6293339614729c4c8256c84",
+                "reference": "6b64e1b1b8b0dab8c6293339614729c4c8256c84",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "EventManager": "."
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Ashwin Surajbali",
+                    "email": "ashwin@redinkdesign.net",
+                    "homepage": "http://www.redinkdesign.co"
+                }
+            ],
+            "description": "PHP Event Manager",
+            "homepage": "https://github.com/ashwinks/php-event-manager.git",
+            "keywords": [
+                "event driven",
+                "event manager",
+                "events"
+            ],
+            "time": "2015-07-06 08:29:29"
+        },
+        {
+            "name": "rastor/jira-client",
+            "version": "0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/oRastor/jira-client.git",
+                "reference": "14c4b873f7f8b5a780d4fbe54d943e0abf59143f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/oRastor/jira-client/zipball/14c4b873f7f8b5a780d4fbe54d943e0abf59143f",
+                "reference": "14c4b873f7f8b5a780d4fbe54d943e0abf59143f",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/guzzle": "~5.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "JiraClient\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Orest Budzhak",
+                    "email": "doom4eg@gmail.com"
+                }
+            ],
+            "description": "A simple PHP JIRA REST client",
+            "keywords": [
+                "api",
+                "client",
+                "jira",
+                "rest"
+            ],
+            "time": "2015-07-02 13:23:04"
+        },
+        {
             "name": "rastor/system",
             "version": "0.5.4.11",
             "source": {
@@ -819,16 +912,16 @@
         },
         {
             "name": "react/promise",
-            "version": "v2.2.0",
+            "version": "v2.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/reactphp/promise.git",
-                "reference": "365fcee430dfa4ace1fbc75737ca60ceea7eeeef"
+                "reference": "3b6fca09c7d56321057fa8867c8dbe1abf648627"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/reactphp/promise/zipball/365fcee430dfa4ace1fbc75737ca60ceea7eeeef",
-                "reference": "365fcee430dfa4ace1fbc75737ca60ceea7eeeef",
+                "url": "https://api.github.com/repos/reactphp/promise/zipball/3b6fca09c7d56321057fa8867c8dbe1abf648627",
+                "reference": "3b6fca09c7d56321057fa8867c8dbe1abf648627",
                 "shasum": ""
             },
             "require": {
@@ -855,11 +948,11 @@
             "authors": [
                 {
                     "name": "Jan Sorgalla",
-                    "email": "jsorgalla@googlemail.com"
+                    "email": "jsorgalla@gmail.com"
                 }
             ],
             "description": "A lightweight implementation of CommonJS Promises/A for PHP",
-            "time": "2014-12-30 13:32:42"
+            "time": "2015-07-03 13:48:55"
         },
         {
             "name": "symfony/console",
@@ -919,59 +1012,6 @@
             "time": "2015-06-10 15:30:22"
         },
         {
-            "name": "symfony/dom-crawler",
-            "version": "v2.7.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/DomCrawler.git",
-                "reference": "11d8eb8ccc1533f4c2d89a025f674894fda520b3"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/DomCrawler/zipball/11d8eb8ccc1533f4c2d89a025f674894fda520b3",
-                "reference": "11d8eb8ccc1533f4c2d89a025f674894fda520b3",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.9"
-            },
-            "require-dev": {
-                "symfony/css-selector": "~2.3",
-                "symfony/phpunit-bridge": "~2.7"
-            },
-            "suggest": {
-                "symfony/css-selector": ""
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.7-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Symfony\\Component\\DomCrawler\\": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
-                },
-                {
-                    "name": "Symfony Community",
-                    "homepage": "https://symfony.com/contributors"
-                }
-            ],
-            "description": "Symfony DomCrawler Component",
-            "homepage": "https://symfony.com",
-            "time": "2015-05-22 14:54:25"
-        },
-        {
             "name": "videlalvaro/php-amqplib",
             "version": "v2.2.6",
             "source": {
@@ -1015,6 +1055,117 @@
                 "rabbitmq"
             ],
             "time": "2013-12-22 12:49:53"
+        },
+        {
+            "name": "voku/anti-xss",
+            "version": "1.0.9",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/voku/anti-xss.git",
+                "reference": "bca4451a7d095181938b7eff5bbe528370da9d51"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/voku/anti-xss/zipball/bca4451a7d095181938b7eff5bbe528370da9d51",
+                "reference": "bca4451a7d095181938b7eff5bbe528370da9d51",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0",
+                "voku/portable-utf8": "1.*"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "4.*",
+                "satooshi/php-coveralls": "0.7.*@dev"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "voku": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "CC-BY-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "Lars Moelleken",
+                    "homepage": "http://www.moelleken.org/"
+                },
+                {
+                    "name": "EllisLab Dev Team",
+                    "homepage": "http://ellislab.com/"
+                }
+            ],
+            "description": "anti xss-library",
+            "homepage": "https://github.com/voku/anti-xss",
+            "keywords": [
+                "anti-xss",
+                "clean",
+                "security",
+                "xss"
+            ],
+            "time": "2015-06-27 22:36:33"
+        },
+        {
+            "name": "voku/portable-utf8",
+            "version": "1.5.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/voku/portable-utf8.git",
+                "reference": "04e36191940e326c984635ffdf7f0233049b67a3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/voku/portable-utf8/zipball/04e36191940e326c984635ffdf7f0233049b67a3",
+                "reference": "04e36191940e326c984635ffdf7f0233049b67a3",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "4.*",
+                "satooshi/php-coveralls": "0.7.*@dev"
+            },
+            "suggest": {
+                "ext-iconv": "Use iconv for best performance",
+                "ext-intl": "Use Intl for best performance",
+                "ext-mbstring": "Use Mbstring for best performance"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "voku": "src",
+                    "Normalizer": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "CC-BY-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "Hamid Sarfraz",
+                    "homepage": "http://pageconfig.com/"
+                },
+                {
+                    "name": "Lars Moelleken",
+                    "homepage": "http://www.moelleken.org/"
+                }
+            ],
+            "description": "Portable UTF-8 library with polyfill / shim for Iconv, Intl, Mbstring, Normalizrer etc.",
+            "homepage": "https://github.com/voku/portable-utf8",
+            "keywords": [
+                "UTF",
+                "clean",
+                "php",
+                "unicode",
+                "utf-8",
+                "utf8"
+            ],
+            "time": "2015-06-25 07:44:47"
         }
     ],
     "packages-dev": [],
