@@ -124,7 +124,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-models.git",
-                "reference": "ad514bb04a69773d1179469925bf26a57a7565ff"
+                "reference": "797a9398c9f1d80fe1a161efb8bd3b8a3e147c29"
             },
             "require": {
                 "php": ">=5.4.0"
@@ -138,7 +138,7 @@
                     "CS\\Models\\": "src/"
                 }
             },
-            "time": "2015-07-07 09:54:07"
+            "time": "2015-07-10 08:03:19"
         },
         {
             "name": "boomers/cs-queue",
@@ -146,7 +146,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-queue.git",
-                "reference": "b437c1b1eeedff47e8dd181dde9c181ecbb840bd"
+                "reference": "11c1c66be5bc0aecf0a5bb09b0a9d4cea1480028"
             },
             "require": {
                 "boomers/cs-models": "dev-master",
@@ -161,7 +161,7 @@
                     "CS\\Queue\\": "src/"
                 }
             },
-            "time": "2015-06-30 08:52:49"
+            "time": "2015-07-10 08:06:33"
         },
         {
             "name": "boomers/cs-settings",
@@ -188,7 +188,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-users.git",
-                "reference": "9323f962a9d1da54c5a9f5165b32483ce989a290"
+                "reference": "7c7beabef664f4f32e9bbc93864953d713f88d99"
             },
             "require": {
                 "boomers/cs-mail": "dev-master",
@@ -212,7 +212,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2015-07-07 14:58:55"
+            "time": "2015-07-10 11:18:28"
         },
         {
             "name": "boomers/ip",
