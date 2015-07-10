@@ -43,6 +43,8 @@ $di->setShared('mailSender', function() use ($di) {
         $mailSender->setUserId($authData['id']);
     }
     
+    CS\Users\UsersManager::registerListeners($di['db']);
+    
     return $mailSender->setLocale($di['t']->getLocale())
                     ->setSiteId($di['config']['site']);
 });
