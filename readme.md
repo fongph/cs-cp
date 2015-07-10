@@ -1,5 +1,6 @@
 ## Инструменты
  - composer
+ - nodejs
  - bower
  - grunt
  - php_intl.so || php_intl.dll 
