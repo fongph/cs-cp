@@ -56,18 +56,20 @@
                 container: 'body'
             });
         });
-
-        $(".album-item").colorbox({
-            fixed: true,
-            rel: 'recent',
-            maxWidth: '90%',
-            maxHeight: '90%',
-            onComplete: function() {
-                {if $supportMode}
-                    $('#cboxContent #cboxLoadedContent > img').addClass('blur');
-                {/if}
-            }
-        });
+        
+        {if $supportMode}
+            $(".album-item").click(function(e){
+                e.preventDefault();
+                alert('Not allowed on support mode!');
+            });
+        {else}
+            $(".album-item").colorbox({
+                fixed: true,
+                rel: 'recent',
+                maxWidth: '90%',
+                maxHeight: '90%'
+            });
+        {/if}
 
         $('.photo').hover(function() {
             $(this).toggleClass('img-rounded img-thumbnail');

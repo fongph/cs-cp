@@ -119,18 +119,19 @@
                 });
             });
 
-            
-            $(".recent-photos").colorbox({
-                fixed: true,
-                rel: 'recent',
-                maxWidth: '90%',
-                maxHeight: '90%',
-                onComplete: function() {
-                    {if $supportMode}
-                        $('#cboxContent #cboxLoadedContent > img').addClass('blur');
-                    {/if}
-                }
-            });
+            {if $supportMode}
+                $(".recent-photos").click(function(e){
+                    e.preventDefault();
+                    alert('Not allowed on support mode!');
+                });
+            {else}
+                $(".recent-photos").colorbox({
+                    fixed: true,
+                    rel: 'recent',
+                    maxWidth: '90%',
+                    maxHeight: '90%'
+                });
+            {/if}
 
             $('#network').change(function() {
                 $(this).closest('form').submit();
