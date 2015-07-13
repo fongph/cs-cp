@@ -181,7 +181,8 @@ $console->register('update-demo-user-data')
                 $pdo->exec("UPDATE `video` SET `timestamp` = `timestamp` + {$value} WHERE {$devicesExpression}");
                 $pdo->exec("UPDATE `vk_messages` SET `timestamp` = `timestamp` + {$value} WHERE {$devicesExpression}");
                 $pdo->exec("UPDATE `whatsapp_messages` SET `timestamp` = `timestamp` + {$value} WHERE {$devicesExpression}");
-                
+                $pdo->exec("UPDATE `notes` SET `timestamp` = `timestamp` + {$value} WHERE {$devicesExpression}");
+
             } catch (\Exception $exception) {
                 $logger->addError(sprintf(
                                 'Exception during updatting demo user data - %s: "%s" at %s line %s', get_class($exception), $exception->getMessage(), $exception->getFile(), $exception->getLine()
