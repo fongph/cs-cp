@@ -69,11 +69,13 @@ $default = array(
             'how-to-install/ios-instructions.html' => 'iPhone Installation Guide',
             'how-to-install/root-instructions.html' => 'Root Instructions',
             'instructions/activate-location-ios.html' => 'How to Activate Location',
-            'instructions/activate-findmyiphone.html' => 'Location Tracking Activation Guide'
+            'instructions/activate-findmyiphone.html' => 'Location Tracking Activation Guide',
+            'instructions/keylogger-activation.html' => 'How to enable Keylogger'
         ),
         'auth' => array(
             'instructions/activate-location-ios.html',
-            'instructions/activate-findmyiphone.html'
+            'instructions/activate-findmyiphone.html',
+            'instructions/keylogger-activation.html'
         )
     ),
     'bundlesNamespace' => 'first'
