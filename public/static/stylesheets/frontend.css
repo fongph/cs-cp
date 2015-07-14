@@ -8523,6 +8523,15 @@ button.close {
   -o-filter: blur(4px);
   -ms-filter: blur(4px);
 }
+.text-left-important {
+  text-align: left;
+}
+.text-left-important .text-center {
+  text-align: left;
+}
+.text-left-important .text-right {
+  text-align: left;
+}
 .container-max {
   margin-right: auto;
   margin-left: auto;
