@@ -186,10 +186,14 @@
         });
     </script>
     {else}
-        {if $di.currentDevice.os=='android' && !$di.currentDevice.rooted}
-            {include "content/{$di.t->getLocale()}/rootPhone.html"}
-        {elseif $di.currentDevice.os=='android' && $di.currentDevice.app_version > 6 && $di.currentDevice.rooted && !$di.currentDevice.rootAccess}   
-            {include "content/{$di.t->getLocale()}/rootAccessPhone.html"}    
+        {if $di.currentDevice.os=='android' && (!$di.currentDevice.rooted || !$di.currentDevice.android_xposed_installed)}
+            {if !$di.currentDevice.rooted && !$di.currentDevice.android_xposed_installed}
+                {include "content/{$di.t->getLocale()}/noXposedAndRoot.html"}
+            {elseif !$di.currentDevice.rooted}
+                {include "content/{$di.t->getLocale()}/rootPhone.html"}
+            {elseif !$di.currentDevice.android_xposed_installed}
+            
+            {/if}
         {else}
             <h3>{$di.t->_('Waiting for messages... Why can the data be unavailable?')}</h3>
             {include "content/{$di.t->getLocale()}/noData.html"}

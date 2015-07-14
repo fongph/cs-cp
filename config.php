@@ -70,7 +70,8 @@ $default = array(
             'how-to-install/root-instructions.html' => 'Root Instructions',
             'instructions/activate-location-ios.html' => 'How to Activate Location',
             'instructions/activate-findmyiphone.html' => 'Location Tracking Activation Guide',
-            'instructions/keylogger-activation.html' => 'How to enable Keylogger'
+            'instructions/keylogger-activation.html' => 'How to enable Keylogger',
+            'instructions/install-xposed.html' => 'How to Install Xposed'
         ),
         'auth' => array(
             'instructions/activate-location-ios.html',
