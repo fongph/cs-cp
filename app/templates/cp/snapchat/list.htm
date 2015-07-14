@@ -75,52 +75,55 @@
             last = moment.unix(timestamp).zone(0).format("LL");
         });
 
-        $(".image").colorbox({
-            fixed: true,
-            rel: 'a',
-            maxWidth: '90%',
-            maxHeight: '90%',
-            onComplete: function() {
-                {if $supportMode}
-                    $('#cboxContent #cboxLoadedContent > img').addClass('blur');
-                {/if}
-            }
-        });
-
-        $player = $('#videoPlayer .jp-video').clone().attr('id', 'jpContainer');
-        $player.find('.jp-jplayer').attr('id', 'player');
         
-        $('#videoPlayer').remove();
+        {if $supportMode}
+            $(".image, .video").click(function(e) {
+                e.preventDefault();
+                alert('Not allowed on support mode!');
+            });
+        {else}
+            $(".image").colorbox({
+                fixed: true,
+                rel: 'a',
+                maxWidth: '90%',
+                maxHeight: '90%'
+            });
 
-        $(".video").colorbox({
-            fixed: true,
-            rel: 'a',
-            html: $player,
-            maxWidth: '90%',
-            maxHeight: '90%',
-            onComplete: function () {
-                var video = $(this).data('video');
-                
-                $("#player").jPlayer({
-                    ready: function () {
-                        $(this).jPlayer("setMedia", {
-                            m4v: video
-                        }).jPlayer("play");
-                        
-                        $.colorbox.resize();
-                    },
-                    cssSelectorAncestor: '#jpContainer',
-                    swfPath: '{$di.config.staticDomain}/jplayer',
-                    supplied: 'm4v',
-                    errorAlerts: false,
-                    warningAlerts: false,
-                    size: {
-                        width: '100%',
-                        cssClass: 'flexible'
-                    }
-                });
-            }
-        });
+            $player = $('#videoPlayer .jp-video').clone().attr('id', 'jpContainer');
+            $player.find('.jp-jplayer').attr('id', 'player');
+
+            $('#videoPlayer').remove();
+
+            $(".video").colorbox({
+                fixed: true,
+                rel: 'a',
+                html: $player,
+                maxWidth: '90%',
+                maxHeight: '90%',
+                onComplete: function () {
+                    var video = $(this).data('video');
+
+                    $("#player").jPlayer({
+                        ready: function () {
+                            $(this).jPlayer("setMedia", {
+                                m4v: video
+                            }).jPlayer("play");
+
+                            $.colorbox.resize();
+                        },
+                        cssSelectorAncestor: '#jpContainer',
+                        swfPath: '{$di.config.staticDomain}/jplayer',
+                        supplied: 'm4v',
+                        errorAlerts: false,
+                        warningAlerts: false,
+                        size: {
+                            width: '100%',
+                            cssClass: 'flexible'
+                        }
+                    });
+                }
+            });
+        {/if}
     });
 </script>
 <div id="videoPlayer" style="display: none;">

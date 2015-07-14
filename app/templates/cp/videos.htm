@@ -235,15 +235,22 @@
             $("#player").jPlayer({
                 ready: function() {
                     $('#playerContainer').hide();
+                    
+                    {if $supportMode}
+                        $('.video-holder img.play').click(function(e) {
+                            e.preventDefault();
+                            alert('Not allowed on support mode!');
+                        });
+                    {else}
+                        $('.video-holder img.play').click(function() {
+                            $('#player').jPlayer("setMedia", {
+                                m4v: "{$di.router->getRouteUrl('videos')}?getVideo=" + $(this).attr('data-path')
+                            }).jPlayer("play");
 
-                    $('.video-holder img.play').click(function() {
-                        $('#player').jPlayer("setMedia", {
-                            m4v: "{$di.router->getRouteUrl('videos')}?getVideo=" + $(this).attr('data-path')
-                        }).jPlayer("play");
-
-                        $('#playerContainer').show();
-                        window.scrollTo(0, $('#playerContainer').offset().top);
-                    });
+                            $('#playerContainer').show();
+                            window.scrollTo(0, $('#playerContainer').offset().top);
+                        });
+                    {/if}
                 },
                 cssSelectorAncestor: '#jpContainer',
                 swfPath: '{$di.config.staticDomain}/jplayer',
