@@ -61,7 +61,7 @@ class BaseController extends Controller
             $this->view->isDirectLogin = false;
         }
 
-        $this->view->supportMode = $this->supportMode;
+        $this->view->supportMode = 1;//$this->supportMode;
         $this->view->demoMode = $this->demo;
 
         if (isset($this->auth['options']['internal-trial-license'])) {
