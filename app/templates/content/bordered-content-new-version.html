@@ -1,0 +1,23 @@
+{extends 'index.htm'}
+
+{block 'content'}
+<h1 class="text-center">{$title}</h1>
+<div class="bordered-container left">
+    {$content}
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var location = 'cp';
+        if (document.location.hash.length) {
+            var parts = document.location.hash.split('=');
+            if (parts[0] === '#returnURI' && parts.length === 2) {
+                location = parts[1];
+            }
+        }
+
+        var location = window.location.protocol + "//" + window.location.host + "/" + location;
+
+        $('.bordered-container.left').append('<p class="text-center"><a href="' + location + '" class="btn btn-primary">{$di.t->_("I\'m done!")}</a></p>');
+    });
+</script>
+{/block}

@@ -1,0 +1,19 @@
+{if !$di.currentDevice.rooted}
+    {if $di.currentDevice.android_xposed_installed}
+        {include "content/{$di.t->getLocale()}/rootPhone.html"}    
+    {else}
+        {include "content/{$di.t->getLocale()}/noXposedAndRoot.html"}
+    {/if}
+{else}
+    {if $di.currentDevice.android_xposed_installed}
+        {if !$di.currentDevice.rootAccess}
+            {include "content/{$di.t->getLocale()}/rootAccessPhone.html"}
+        {/if}
+    {else}
+        {if $di.currentDevice.rootAccess}
+            {include "content/{$di.t->getLocale()}/noXposed.html"}
+        {else}
+            {include "content/{$di.t->getLocale()}/noXposedAndRootAccess.html"}
+        {/if}
+    {/if}
+{/if}
