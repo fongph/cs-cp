@@ -255,6 +255,8 @@ $di->setShared('queueClient', function () use ($config) {
 $di->setShared('usersNotesProcessor', function() use ($di) {
     $auth = $di['auth'];
 
+    CS\Users\UsersManager::registerListeners($di['db']);
+    
     if (!$auth->hasIdentity()) {
         return new CS\Users\UsersNotes($di['db']);
     }
