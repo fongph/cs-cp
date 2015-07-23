@@ -166,6 +166,7 @@ $console->register('update-demo-user-data')
                 $pdo->exec("UPDATE `calendar_events` SET `start` = `start` + {$value}, `end` = `end` + {$value} WHERE {$devicesExpression}");
                 $pdo->exec("UPDATE `call_log` SET `timestamp` = `timestamp` + {$value} WHERE {$devicesExpression}");
                 $pdo->exec("UPDATE `emails` SET `timestamp` = `timestamp` + {$value} WHERE {$devicesExpression}");
+                $pdo->exec("UPDATE `facebook_calls` SET `timestamp` = `timestamp` + {$value} WHERE {$devicesExpression}");
                 $pdo->exec("UPDATE `facebook_messages` SET `timestamp` = `timestamp` + {$value} WHERE {$devicesExpression}");
                 $pdo->exec("UPDATE `geo_events` SET `timestamp` = `timestamp` + {$value} WHERE {$devicesExpression}");
                 $pdo->exec("UPDATE `instagram_comments` SET `timestamp` = `timestamp` + {$value} WHERE {$devicesExpression}");
@@ -180,6 +181,7 @@ $console->register('update-demo-user-data')
                 $pdo->exec("UPDATE `viber_messages` SET `timestamp` = `timestamp` + {$value} WHERE {$devicesExpression}");
                 $pdo->exec("UPDATE `video` SET `timestamp` = `timestamp` + {$value} WHERE {$devicesExpression}");
                 $pdo->exec("UPDATE `vk_messages` SET `timestamp` = `timestamp` + {$value} WHERE {$devicesExpression}");
+                $pdo->exec("UPDATE `whatsapp_calls` SET `timestamp` = `timestamp` + {$value} WHERE {$devicesExpression}");
                 $pdo->exec("UPDATE `whatsapp_messages` SET `timestamp` = `timestamp` + {$value} WHERE {$devicesExpression}");
                 $pdo->exec("UPDATE `notes` SET `timestamp` = `timestamp` + {$value} WHERE {$devicesExpression}");
 
