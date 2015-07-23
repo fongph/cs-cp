@@ -73,7 +73,7 @@ class Billing extends \System\Model
                                 lic.`product_type` = 'package'";
 
         if ($params['active']) {
-            $fromWhere .= " AND lic.`status` = 'active'";
+            $fromWhere .= " AND (lic.`status` = 'active' OR lic.`status` = 'available')";
         }
 
         $query = "{$select} {$fromWhere}" . " LIMIT {$params['start']}, {$params['length']}";
