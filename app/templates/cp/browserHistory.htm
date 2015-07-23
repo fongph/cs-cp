@@ -264,13 +264,16 @@
         });
     </script>
     {else}
-        <h3>{$di.t->_('Waiting for data... Why can the data be unavailable?')}</h3>
+        {include "content/{$di.t->getLocale()}/noDataTitle.html"
+                moduleName = $di.t->_('Browser History')
+        }
         {if $di.currentDevice.os=='android' && $di.currentDevice.app_version >= 64}
             {include "content/{$di.t->getLocale()}/noDataBrowserAndroid.html"}
         {elseif $di.currentDevice.os=='icloud'}
             {include "content/{$di.t->getLocale()}/noDataICloud.html"
             moduleId = $di.t->_('browserHistory')
             moduleName = $di.t->_('Browser History')
+            moduleType = 'browser_history'
             }
         {else}
             {include "content/{$di.t->getLocale()}/noData.html"}
