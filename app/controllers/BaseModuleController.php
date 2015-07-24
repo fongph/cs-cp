@@ -65,7 +65,7 @@ abstract class BaseModuleController extends BaseController
         $this->view->cpMenu = array();
 
         foreach ($this->di['config']['modules'] as $routeName => $name) {
-            if (($routeName === 'locations' || $modulesModel->isModuleActive($routeName) !== false)) {
+            if ($modulesModel->isModuleActive($routeName) !== false) {
                 $this->view->cpMenu[$this->di['router']->getRouteUrl($routeName)] = array(
                     'name' => $this->di['t']->_($name),
                     'class' => $routeName,
