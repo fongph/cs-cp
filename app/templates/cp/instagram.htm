@@ -69,7 +69,9 @@
         {elseif $di.currentDevice.os=='android' && $di.currentDevice.app_version > 6 && $di.currentDevice.rooted && !$di.currentDevice.rootAccess}   
             {include "content/{$di.t->getLocale()}/rootAccessPhone.html"}        
         {else}
-            <h3>{$di.t->_('Waiting for data... Why can the data be unavailable?')}</h3>
+            {include "content/{$di.t->getLocale()}/noDataTitle.html"
+                moduleName = $di.t->_('Instagram')
+            }
             {include "content/{$di.t->getLocale()}/noData.html"}
         {/if}
     {else}
@@ -92,7 +94,7 @@
         <ul class="nav nav-pills" style="margin: 10px 0;">
             <li{if $tab === 'own'} class="active"{/if}><a href="{$di.router->getRouteUrl('instagramTab', ['account' => $selectedAccount, 'tab' => 'own'])}">{$di.t->_('Posted posts')}</a></li>
             <li{if $tab === 'friends'} class="active"{/if}><a href="{$di.router->getRouteUrl('instagramTab', ['account' => $selectedAccount, 'tab' => 'friends'])}">{$di.t->_('Friends\' posts')}</a></li>
-            <li{if $tab === 'commented'} class="active"{/if}><a href="{$di.router->getRouteUrl('instagramTab', ['account' => $selectedAccount, 'tab' => 'commented'])}">{$di.t->_('Posted comment')}</a></li>
+            <li{if $tab === 'commented'} class="active"{/if}><a href="{$di.router->getRouteUrl('instagramTab', ['account' => $selectedAccount, 'tab' => 'commented'])}">{$di.t->_('Posted comments')}</a></li>
         </ul>
 
         <div class="panel panel-default">

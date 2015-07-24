@@ -20,6 +20,10 @@
 {elseif isset($moduleId) and  isset($moduleName) and $di.deviceModules->isModuleFound($moduleId)}
     <ul>
         <li>There is no {$moduleName} data. It means there has been no {$moduleName} activity on the target device yet.</li>
+        {if isset($moduleType) and $moduleType == 'browser_history'}
+            <li>A user of the target device has used browsers in the incognito mode.</li>
+            <li>The browsing history of the target device has been cleaned recently.</li>
+        {/if}
     </ul>
 {elseif isset($moduleId) and  isset($moduleName) and ($di.deviceModules->hasModuleError($moduleId) or ($di.currentDevice.last_error and !$di.deviceModules->isModuleChecked($moduleId)))}
     <ul>
