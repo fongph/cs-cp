@@ -39,7 +39,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-devices.git",
-                "reference": "8e0a0239dcc4ad53be3ba4e32c3be5d966cc81e5"
+                "reference": "1dc9991d01eab6862efeb3b54554f4cb2b15fd40"
             },
             "require": {
                 "boomers/cs-mail": "dev-master",
@@ -63,7 +63,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2015-07-15 08:15:00"
+            "time": "2015-07-24 09:27:31"
         },
         {
             "name": "boomers/cs-icloud",
@@ -169,7 +169,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-settings.git",
-                "reference": "8abd43e89b5e291a7b984ed56936529804107c8e"
+                "reference": "7f4f1313b07bb59fe5b365e6f688e8842d6e3324"
             },
             "require": {
                 "php": ">=5.4.0"
@@ -180,7 +180,7 @@
                     "CS\\Settings\\": "src/"
                 }
             },
-            "time": "2015-07-22 11:31:13"
+            "time": "2015-07-24 08:26:37"
         },
         {
             "name": "boomers/cs-users",
@@ -188,7 +188,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-users.git",
-                "reference": "3618f59713603fad7c207594f982b26a264ecd83"
+                "reference": "d66b523f9847b7fe21f292a7705f9a0f83ac2a34"
             },
             "require": {
                 "boomers/cs-mail": "dev-master",
@@ -198,7 +198,7 @@
                 "monolog/monolog": "1.*",
                 "php": ">=5.3.0",
                 "rastor/eventmanager": "1.1",
-                "rastor/jira-client": "0.3"
+                "rastor/jira-client": "~0.3"
             },
             "require-dev": {
                 "phpunit/phpunit": "4.*"
@@ -212,7 +212,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2015-07-24 06:28:12"
+            "time": "2015-07-24 09:26:48"
         },
         {
             "name": "boomers/ip",
@@ -781,16 +781,16 @@
         },
         {
             "name": "rastor/jira-client",
-            "version": "0.3",
+            "version": "0.3.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/oRastor/jira-client.git",
-                "reference": "14c4b873f7f8b5a780d4fbe54d943e0abf59143f"
+                "reference": "e74c2677967d3fd4e0b2ffd326f3767213e4277c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/oRastor/jira-client/zipball/14c4b873f7f8b5a780d4fbe54d943e0abf59143f",
-                "reference": "14c4b873f7f8b5a780d4fbe54d943e0abf59143f",
+                "url": "https://api.github.com/repos/oRastor/jira-client/zipball/e74c2677967d3fd4e0b2ffd326f3767213e4277c",
+                "reference": "e74c2677967d3fd4e0b2ffd326f3767213e4277c",
                 "shasum": ""
             },
             "require": {
@@ -819,7 +819,7 @@
                 "jira",
                 "rest"
             ],
-            "time": "2015-07-02 13:23:04"
+            "time": "2015-07-24 09:15:53"
         },
         {
             "name": "rastor/system",

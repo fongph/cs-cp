@@ -72,13 +72,6 @@ abstract class BaseModuleController extends BaseController
                     'active' => $routeName == $this->module
                 );
             }
-            if ($this->di['isTest'] && $routeName === Modules::SNAPCHAT) {
-                $this->view->cpMenu[$this->di['router']->getRouteUrl($routeName)] = array(
-                    'name' => $this->di['t']->_($name),
-                    'class' => $routeName,
-                    'active' => $routeName == $this->module
-                );
-            }
         }
     }
 
