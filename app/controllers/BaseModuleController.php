@@ -50,8 +50,7 @@ abstract class BaseModuleController extends BaseController
 
         $modulesModel = new Modules($this->di);
 
-        if ($modulesModel->isModuleActive($this->module) === false && $this->module !== 'locations' && 
-                !($this->di['isTest'] && $this->module === Modules::SNAPCHAT)) {
+        if ($modulesModel->isModuleActive($this->module) === false) {
             $this->redirect($this->di['router']->getRouteUrl(Modules::CALLS));
         }
 
