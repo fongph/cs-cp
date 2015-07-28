@@ -25,9 +25,9 @@ class Index extends BaseController
                                                 'instructions/activate-location-ios.html'])) {
                 $this->view->link = $this->di['router']->getRouteUrl('activate-location').'?activate=1';
             } 
-            else if(in_array($this->params['uri'], ['instructions/keylogger-activation.html']) and $this->getRequest()->hasGet('activate')) {
-                $this->view->link = $this->di['router']->getRouteUrl('activate-keylogger').'?activate=1';
-            }
+//            else if(in_array($this->params['uri'], ['instructions/keylogger-activation.html']) and $this->getRequest()->hasGet('activate')) {
+//                $this->view->link = $this->di['router']->getRouteUrl('activate-keylogger').'?activate=1';
+//            }
             
             $contentModel = new \Models\Content($this->di);
             $path = $contentModel->getTemplatePath($this->params['uri']);
