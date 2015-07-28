@@ -82,19 +82,6 @@ class Instructions extends BaseController {
             $this->redirect($this->di['router']->getRouteUrl('keylogger'));
         } else $this ->error404 ();
         
-//        $settingsModel = new \Models\Cp\Settings($this->di);
-//        $settings = $settingsModel->getDeviceSettings($this->di['devId']);
-//        
-////        if ($this->getRequest()->hasGet('activate')) {
-////            $settingsModel->activateKeylogger($this->di['devId']);
-////            $this->di['flashMessages']->add(FlashMessages::SUCCESS, $this->di['t']->_('Updated!'));
-////            $this->redirect($this->di['router']->getRouteUrl('keylogger'));
-////        }
-//        
-//        $this->setView('instructions/keyloggerActivation.html');
-//        $this->view->title = $this->di['t']->_('Keylogger Activation');
-//        $this->view->title_page = $this->di['t']->_('Keylogger Activation');
-//        $this->view->previos = $this -> pagePrev('keylogger');
     }
     
 }
