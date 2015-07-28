@@ -4,6 +4,16 @@
     {if !$paid}
         {insert "cp/updatePackage.html"}
     {elseif $hasRecords}
+    
+    {if isset($serviceKeylogger) && !$serviceKeylogger && $hasRecords}
+        
+        <p class="bg-warning" style="padding: 10px;">
+            Keylogger is currently disabled. 
+            If you want to view updated information, you need to <a href="{$di.router->getRouteUrl('content', ['uri' => 'instructions/keylogger-activation.html'])}">activate Keylogger</a>.
+        </p>
+        
+    {/if}
+    
     <div class="daterangepickerWrapper">
         <div id="reportrange" class="btn btn-default pull-right">
             <i class="fa fa-calendar fa-lg"></i>
@@ -131,7 +141,9 @@
         {if $di.currentDevice.os=='android'}
             {include "content/{$di.t->getLocale()}/noDataKeyloggerAndroid.html"}
         {else}
-            <h3>{$di.t->_('Waiting for data... Why can the data be unavailable?')}</h3>
+            {include "content/{$di.t->getLocale()}/noDataTitle.html"
+                moduleName = $di.t->_('Keylogger')
+            }
             {include "content/{$di.t->getLocale()}/noData.html"}
         {/if}
     {/if}

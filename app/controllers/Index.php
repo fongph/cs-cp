@@ -21,18 +21,30 @@ class Index extends BaseController
                 $this->error404();
             }
             
+            if(in_array($this->params['uri'], ['instructions/activate-location-android.html', 
+                                                'instructions/activate-location-ios.html'])) {
+                $this->view->link = $this->di['router']->getRouteUrl('activate-location').'?activate=1';
+            } 
+//            else if(in_array($this->params['uri'], ['instructions/keylogger-activation.html'])) {
+//                $this->view->link = $this->di['router']->getRouteUrl('activate-keylogger').'?activate=1';
+//            }
+            
             $contentModel = new \Models\Content($this->di);
             $path = $contentModel->getTemplatePath($this->params['uri']);
             $this->setView($path);
             $this->view->title = $this->di['t']->_($this->di['config']['contents']['names'][$this->params['uri']]);
-            $this->setLayout('content/bordered-content.html');
+            if(in_array($this->params['uri'], ['instructions/keylogger-activation.html'])) {
+                $this->setLayout('content/instructions-keylogger-content.html');
+            } else
+                $this->setLayout('content/bordered-content.html');
         } else {
             $this->error404();
         }
     }
 
     public function loginAction()
-    {
+    {   
+        
         if ($this->di->getAuth()->hasIdentity()) {
             $this->loginRedirect();
         }
@@ -349,5 +361,5 @@ class Index extends BaseController
         $this->view->title = $this->di['t']->_('iOS iCloud Installation Guide');
         $this->view->title_page = $this->di['t']->_('iOS iCloud Installation Guide for Support');
     }
-
+    
 }
