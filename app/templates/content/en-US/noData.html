@@ -1,5 +1,9 @@
 <ul>
-    <li>There is really no such data on the device</li>
+    <li>There is no such data on the target device</li>
     <li>The Internet connection is down<br />Indications: device is offline (see <a href="{$di.router->getRouteUrl('settings')}">Settings</a> page)</li>
-    <li>The application is deleted</li>
+    {if isset($applicationId) && isset($applicationName)}
+    <li>{$applicationName} application is deleted </li>
+    {if $applicationId != 'emails'}<li>A user hasn't logged in the app yet. There haven't been any activities, and thus, there is no data to monitor.</li>{/if}
+    {/if}
+    <li>Pumpic application is deleted</li>
 </ul>

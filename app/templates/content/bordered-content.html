@@ -7,7 +7,8 @@
 </div>
 <script type="text/javascript">
     $(document).ready(function () {
-        $('.bordered-container.left').append('<p class="text-center"><a href="' + document.referrer + '" class="btn btn-primary">{$di.t->_("I\'m done!")}</a></p>');
+        var link = {if isset($link)}'{$link}'{else}document.referrer{/if};
+        $('.bordered-container.left').append('<p class="text-center"><a href="' + link + '" class="btn btn-primary">{$di.t->_("I\'m done!")}</a></p>');
     });
 </script>
 {/block}

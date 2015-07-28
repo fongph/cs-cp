@@ -6,3 +6,4 @@ Disallow: /instructions/rooting-android
 Disallow: /instructions/wizard-android
 Disallow: /instructions/wizard-ios
 Disallow: /instructions/wizard-icloud
+Disallow: /instructions/keylogger-activation

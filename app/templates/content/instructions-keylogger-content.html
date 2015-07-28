@@ -1,13 +1,91 @@
 {extends 'index.htm'}
 
 {block 'content'}
+<style>
+    .mobile-mt10 { margin-top: 0px;  }
+    
+    .nav-buttons {
+        list-style: outside none none;
+        margin: 10px 0;
+        overflow: hidden;
+        padding: 0;
+        border-bottom: none;
+        text-align: left;
+    }
+    .nav-buttons li {
+        display: inline-block;
+        margin: 0 3px 10px;
+        text-align: center;
+        vertical-align: middle;
+    }
+    .nav-buttons li > a {
+        border: 1px solid #16a89e;
+        display: inline-block;
+        font-size: 19px;
+        padding: 10px 20px;
+        vertical-align: middle;
+        color: #16a89e;
+        text-decoration: none;
+        border-radius: 0px;
+        -webkit-border-radius: 0px;
+        -moz-border-radius: 0px;
+    }
+    .nav-buttons li.active {
+        cursor: pointer;
+        border: none;
+    }
+    .nav-buttons li.active > a, 
+    .nav-buttons li > a:hover {
+        background: #16a89e !important;
+        color: #fff !important;
+        text-decoration: none !important;
+        cursor: pointer !important;
+        border: 1px solid #16a89e !important;
+    }
+    
+    @media only screen and (max-width: 480px) {
+      .nav-buttons { 
+          text-align: center;
+      }
+      
+      .mobile-mt10 {
+          margin-top: 10px;
+      }
+    }
+    
+    @media (max-width: 642px) { 
+       .nav-buttons { 
+          text-align: center;
+      }
+      
+      .mobile-mt10 {
+          margin-top: 10px;
+      }
+    }
+    
+    .instruction-container {
+        display: inline-block;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        margin-top: 15px;
+        padding: 20px 30px;
+    }
+    
+    .instruction-container ul,
+    .instruction-container ol {
+        margin: 0 10px;
+        padding: 0px 10px;
+    }
+</style>
+
 <h1 class="text-center">{$title}</h1>
-<div class="bordered-container left">
+<div class="instruction-container">
     {$content}
 </div>
 <script type="text/javascript">
     $(document).ready(function () {
-        $('.bordered-container.left').append('<p class="text-center"><a href="' + document.referrer + '" class="btn btn-primary">{$di.t->_("I\'m done!")}</a></p>');
+        var link = {if isset($link)}'{$link}'{else}document.referrer{/if};
+        $('.btn-done').html('<p class="text-center"><a href="' + link + '" class="btn btn-primary">{$di.t->_("I\'m done!")}</a></p>');
     });
 </script>
 {/block}

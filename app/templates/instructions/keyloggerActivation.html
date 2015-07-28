@@ -1,4 +1,65 @@
 <style>
+    .mobile-mt10 { margin-top: 0px;  }
+    
+    .nav-buttons {
+        list-style: outside none none;
+        margin: 10px 0;
+        overflow: hidden;
+        padding: 0;
+        border-bottom: none;
+        text-align: left;
+    }
+    .nav-buttons li {
+        display: inline-block;
+        margin: 0 3px 10px;
+        text-align: center;
+        vertical-align: middle;
+    }
+    .nav-buttons li > a {
+        border: 1px solid #16a89e;
+        display: inline-block;
+        font-size: 19px;
+        padding: 10px 20px;
+        vertical-align: middle;
+        color: #16a89e;
+        text-decoration: none;
+        border-radius: 0px;
+        -webkit-border-radius: 0px;
+        -moz-border-radius: 0px;
+    }
+    .nav-buttons li.active {
+        cursor: pointer;
+        border: none;
+    }
+    .nav-buttons li.active > a, 
+    .nav-buttons li > a:hover {
+        background: #16a89e !important;
+        color: #fff !important;
+        text-decoration: none !important;
+        cursor: pointer !important;
+        border: 1px solid #16a89e !important;
+    }
+    
+    @media only screen and (max-width: 480px) {
+      .nav-buttons { 
+          text-align: center;
+      }
+      
+      .mobile-mt10 {
+          margin-top: 10px;
+      }
+    }
+    
+    @media (max-width: 642px) { 
+       .nav-buttons { 
+          text-align: center;
+      }
+      
+      .mobile-mt10 {
+          margin-top: 10px;
+      }
+    }
+    
     .instruction-container {
         display: inline-block;
         border: 1px solid #ccc;
@@ -6,57 +67,150 @@
         margin-top: 15px;
         padding: 20px 30px;
     }
+    
     .instruction-container ul,
     .instruction-container ol {
         margin: 0 10px;
         padding: 0px 10px;
     }
-    .img-thumbnail {
-        width: 276px;
-        height: 486px;
-    }
 </style>
+
 <div>
     <h1 class="text-center">{$title}</h1>
     <div class="instruction-container">
-        <div class="tab-content">
-
-            <div class="container">
-                <div class="row">
-                    <div class="col-sm-12 col-md-12 col-lg-12">
-                        
-                        <p>Location activation allows tracking the target device on the map. It will also let you follow route history and set Geofences in order to quickly find out if a user of the target device leaves or enters specified restricted areas.</p>
-
-                        <ol>
-                            <li>
-                                <p>Go to “Settings” menu;</p>
-                                <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/activateLocationIos/1.png" alt="" /></p>
-                            </li>
-                            <li>
-                                <p>Proceed to “Privacy” section;</p>
-                                <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/activateLocationIos/2.png" alt="" /></p>
-                            </li>
-                            <li>
-                                <p>Enter “Location Services”;</p>
-                                <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/activateLocationIos/3.png" alt="" /></p>
-                            </li>
-                            <li>
-                                <p>Enable “Location Services”;</p>
-                                <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/activateLocationIos/4.png" alt="" /></p>
-                            </li>
-                            <li>
-                                <p>Location is activated.</p>
-                                <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/activateLocationIos/5.png" alt="" /></p>
-                            </li>
-                        </ol>
-                        
-                        <p><b>Note:</b> it is impossible to prevent a tracked user from changing Location settings. In case the above settings are deactivated, Pumpic will stop tracking the location of the target device. However, you will receive a notification immediately.</p>
-                        <p>Are you done? Please wait for 20 minutes until Pumpic starts collecting data.</p>
-                        <p><a href="{$previos}" class="btn btn-primary">I'm done!</a></p>
-                    </div>
+    
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12 col-md-12 col-lg-12">
+                    <ul style="margin: 10px 0;padding:0px;" class="nav-buttons nav nav-tabs">
+                        <li class="active"><a href="#android_5" data-toggle="tab">Android 5</a></li>
+                        <li><a href="#android_2_4" data-toggle="tab">Android 2-4</a></li>
+                    </ul>
                 </div>
             </div>
+        </div>    
+
+        <div class="tab-content">
             
-        </div>
-    </div>    
+            <div class="tab-pane active" id="android_5">
+                <div class="container">
+                    <div class="row">
+                        
+                        <div class="col-sm-12 col-md-12 col-lg-12">
+                            <h3 class="text-center">How to Enable Keylogger</h3>
+                            
+                            <p>Keylogger from Pumpic introduces a wider scope of monitoring options. With its help, you can track real-time activity of a target cell phone user including all keystrokes pressed via any particular app running. To activate Keylogger you need to enable “Default Keyboard”, which is preinstalled in Pumpic app. It will take you 10 simple steps to complete.</p>
+                            
+                            <h4>Enable Default Keyboard</h4>
+                            
+                            <ol>
+                                <li>
+                                    <p>Go to “Settings” menu;</p>
+                                    <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/keylogger/android_5/1.png" alt="" /></p>
+                                </li>
+                                <li>
+                                    <p>Proceed to “Language & input”;</p>
+                                    <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/keylogger/android_5/2.png" alt="" /></p>
+                                </li>
+                                <li>
+                                    <p>Choose “Current Keyboard”;</p>
+                                    <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/keylogger/android_5/4.png" alt="" /></p>
+                                </li>
+                                <li>
+                                    <p>A pop-up “Change keyboard” will appear;
+                                    <br />Tap “CHOOSE KEYBOARDS”;</p>
+                                    <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/keylogger/android_5/5.png" alt="" /></p>
+                                </li>
+                                
+                                <li>
+                                    <p>Enable “Default Keyboard”;</p>
+                                    <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/keylogger/android_5/6.png" alt="" /></p>
+                                </li>
+                                <li>
+                                    <p>A pop-up will appear;<br />Tap “OK”;</p>
+                                    <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/keylogger/android_5/7.png" alt="" /></p>
+                                </li>
+                                <li>
+                                    <p>Tap “Return” button;</p>
+                                    <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/keylogger/android_5/8.png" alt="" /></p>
+                                </li>
+                                <li>
+                                    <p>Choose “Current Keyboard” once again;</p>
+                                    <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/keylogger/android_5/9.png" alt="" /></p>
+                                </li>
+                                <li>
+                                    <p>A pop-up “Change keyboard” will appear;<br />Select “Default Keyboard”;</p>
+                                    <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/keylogger/android_5/10.png" alt="" /></p>
+                                </li>
+                                <li>
+                                    <p>“Default Keyboard” is enabled.</p>
+                                    <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/keylogger/android_5/11.png" alt="" /></p>
+                                </li>
+                            </ol>
+
+                            <p><b>Note:</b> the switch between keyboards cannot be prevented at any time. In case the keyboard is changed, you will stop receiving logs until "Default Keyboard" is re-enabled. However, you will receive a notification immediately.</p>
+                            <p>Are you done? Please wait for 20 minutes until Pumpic starts collecting the data.</p>
+                            <p><a href="{$previos}" class="btn btn-primary">I'm done!</a></p>
+                        </div>
+                    </div>
+                </div>    
+            </div>  <!-- #android_5 -->   
+            <div class="tab-pane" id="android_2_4">    
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12 col-lg-12">
+
+                            <h3 class="text-center">How to Enable Keylogger</h3>
+                            
+                            <p>Keylogger from Pumpic introduces a wider scope of monitoring options. With its help, you can track real-time activity of a target cell phone user including all keystrokes pressed via any particular app running. To activate Keylogger you need to enable “Default Keyboard”, which is preinstalled in Pumpic app. It will take you 9 simple steps to complete.</p>
+                            
+                            <h4>Enable Default Keyboard</h4>
+                            
+                            <ol>
+                                <li>
+                                    <p>Open up Settings on the target phone from home screen</p>
+                                </li>
+                                <li>
+                                    <p>Tap on Personal and choose "Language and input"</p>
+                                </li>
+                                <li>
+                                    <p>"Default keyboard" will be displayed under this menu.</p>
+                                </li>
+                                <li>
+                                    <p>Checkmark "Default keyboard"</p>
+                                    <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/keylogger/1.jpg" alt="" /></p>
+                                </li>
+                                <li>
+                                    <p>Press "OK", once the pop-up window appears</p>
+                                    <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/keylogger/2.jpg" alt="" /></p>
+                                </li>
+                                <li>
+                                    <p>Go to the "Default" settings</p>
+                                    <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/keylogger/3.jpg" alt="" /></p>
+                                </li>
+                                <li>
+                                    <p>Checkmark "Default Keyboard" as the preferred input method</p>
+                                    <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/keylogger/4.jpg" alt="" /></p>
+                                </li>
+                                <li>
+                                    <p>After all the changes are saved, Keylogger is enabled</p>
+                                    <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/keylogger/5.jpg" alt="" /></p>
+                                </li>
+                                <li>
+                                    <p>After the Keylogger feature has been activated, your Keyboard will look like this:</p>
+                                    <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/keylogger/6.jpg" alt="" /></p>
+                                </li>
+                            </ol>
+                            
+                            <p><b>Note:</b> the switch between keyboards cannot be prevented at any time. In case the keyboard is changed, you will stop receiving logs until "Default Keyboard" is re-enabled. However, you will receive a notification immediately.</p>
+                            <p>Are you done? Please wait for 20 minutes until Pumpic starts collecting the data.</p>
+                            <p><a href="{$previos}" class="btn btn-primary">I'm done!</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div> <!-- #android_2_4 -->
+
+        </div> <!-- .tab-content -->
+        
+    </div> <!-- .instruction-container -->   
 </div>
