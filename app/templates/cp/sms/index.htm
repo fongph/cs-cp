@@ -38,9 +38,9 @@
                 startDate: moment().subtract('days', 29).startOf('day'),
                 endDate: moment().endOf('day'),
                 table: null,
-                typeTmpl: _.template('<i class="sms-<%= type %> hidden-xs" title="<%= title %>"></i><span class="visible-xs"><%= title %></span>'),
-                messageLinkTemplate: _.template('<a href="{$di.router->getRouteUrl("sms")}/<%= phone %>#<%= message %>"><%= date %></a>'),
-                groupMessageLinkTemplate: _.template('<a href="{$di.router->getRouteUrl("sms")}/group/<%= group %>#<%= message %>"><%= date %></a>'),
+                typeTmpl: _.template('<i class="sms-<%= type %> hidden-xs" title="<%- title %>"></i><span class="visible-xs"><%- title %></span>'),
+                messageLinkTemplate: _.template('<a href="{$di.router->getRouteUrl("sms")}/<%- phone %>#<%= message %>"><%- date %></a>'),
+                groupMessageLinkTemplate: _.template('<a href="{$di.router->getRouteUrl("sms")}/group/<%- group %>#<%- message %>"><%- date %></a>'),
                 selectRanges: {
                     "{$di.t->_('Today')}": [moment().startOf('day'), moment().endOf('day')],
                     "{$di.t->_('Yesterday')}": [moment().subtract('days', 1).startOf('day'), moment().subtract('days', 1).endOf('day')],
@@ -130,7 +130,10 @@
                                 }
                             },
                             {
-                                mData: 'number'
+                                mData: 'number',
+                                mRender: function(value) {
+                                    return _.escape(value);
+                                }
                             },
                             {
                                 mData: 'name',
@@ -139,7 +142,7 @@
                                         return '<b>{$di['t']->_('Group')}</b>';
                                     }
                                     
-                                    return value;
+                                    return _.escape(value);
                                 }
                             },
                             {
@@ -153,6 +156,7 @@
                                         } else {
                                             content = value;
                                         }
+                                        var content = _.escape(content);
                                     }
                                     
                                     if (data.multimedia != 'none') {

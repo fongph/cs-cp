@@ -137,7 +137,7 @@ $console->register('update-demo-user-data')
                 $output->writeln("<error>Demo user id not defined for this build!</error>");
                 return;
             }
-            
+
             $demoUserId = $config['demo'];
 
             $di = new System\DI();
@@ -147,19 +147,18 @@ $console->register('update-demo-user-data')
 
             $logger = new Monolog\Logger('logger');
             $logger->pushHandler(new Monolog\Handler\StreamHandler(ROOT_PATH . 'logs/demo.log', Monolog\Logger::INFO));
-            
+
             $userDevices = $di['db']->query("SELECT `id` FROM `devices` WHERE `user_id` = {$demoUserId}")->fetchAll(\PDO::FETCH_COLUMN);
-            
+
             /**
              * @todo Update to use multiple data databases
              */
-            
             $pdo = $di['dataDb'];
-            
+
             try {
                 $value = $days * 3600 * 24;
                 $devicesExpression = '`dev_id` IN (' . implode(',', $userDevices) . ')';
-                
+
                 $pdo->beginTransaction();
                 $pdo->exec("UPDATE `applications_timelines` SET `start` = `start` + {$value}, `finish` = `finish` + {$value} WHERE {$devicesExpression}");
                 $pdo->exec("UPDATE `browser_history` SET `timestamp` = `timestamp` + {$value} WHERE {$devicesExpression}");
@@ -193,7 +192,7 @@ $console->register('update-demo-user-data')
                 $output->writeln("<error>Exception during updating demo user data</error>");
                 return;
             }
-            
+
             $pdo->commit();
 
             $message = date('r') . " - User data successfully updated by $days days!";
@@ -201,7 +200,7 @@ $console->register('update-demo-user-data')
             $logger->addInfo($message);
             $output->writeln($message);
         });
-        
+
 $console->register('update-demo-user-devices-status')
         ->setDescription('Update demo user devices last update time')
         ->setCode(function (InputInterface $input, OutputInterface $output) {
@@ -216,7 +215,7 @@ $console->register('update-demo-user-devices-status')
                 $output->writeln("<error>Demo user id not defined for this build!</error>");
                 return;
             }
-            
+
             $demoUserId = $config['demo'];
 
             $di = new System\DI();
@@ -226,18 +225,17 @@ $console->register('update-demo-user-devices-status')
 
             $logger = new Monolog\Logger('logger');
             $logger->pushHandler(new Monolog\Handler\StreamHandler(ROOT_PATH . 'logs/demo.log', Monolog\Logger::INFO));
-            
+
             /**
              * @todo Update to use multiple data databases
              */
-            
             $pdo = $di['dataDb'];
-            
+
             try {
                 $pdo->beginTransaction();
-                
+
                 $userDevices = $di['db']->query("SELECT `id`, `os` FROM `devices` WHERE `user_id` = {$demoUserId}")->fetchAll(\PDO::FETCH_ASSOC);
-                
+
                 if (count($userDevices)) {
                     foreach ($userDevices as $device) {
                         $time = time() - rand(0, 900);
@@ -256,7 +254,7 @@ $console->register('update-demo-user-devices-status')
                 $output->writeln("<error>Exception during updating demo user data</error>");
                 return;
             }
-            
+
             $pdo->commit();
 
             $message = "User devices last update date successfully updated!";
@@ -294,6 +292,18 @@ $console->register('add-user')
             ->save();
 
             $output->writeln(sprintf('Record created for user <info>%s</info>', $email));
+        });
+        
+$console->register('icloud-info')
+        ->setDefinition(array(
+            new InputArgument('email', InputArgument::REQUIRED, 'User email'),
+            new InputArgument('password', InputArgument::REQUIRED, 'User password'),
+        ))
+        ->setDescription('Create new user')
+        ->setCode(function (InputInterface $input, OutputInterface $output) {
+            $icloud = new \CS\ICloud\Locations\Sosumi($input->getArgument('email'), $input->getArgument('password'));
+            
+            $output->writeln(print_r($icloud->devices, true));
         });
 
 $console->run();

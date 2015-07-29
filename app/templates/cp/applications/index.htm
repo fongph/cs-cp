@@ -34,7 +34,7 @@
 
     <script>
         $(document).ready(function() {
-            var lnkTemplate = _.template('<% if (url.length) { %><a href="<%= url %>" target="_blank" class="disable-on-demo"><%= name %></a><% } else { %><%= name %><% } %>');
+            var lnkTemplate = _.template('<% if (url.length) { %><a href="<%- url %>" target="_blank" class="disable-on-demo"><%- name %></a><% } else { %><%- name %><% } %>');
 
             var applications = {
                 url: '{$di.config.domain}/cp/applications',
@@ -90,7 +90,10 @@
                             },
                             {
                                 bSortable: false,
-                                mData: "version"
+                                mData: "version",
+                                mRender: function(value) {
+                                    return _.escape(value);
+                                }
                             },
                             {
                                 mData: null,

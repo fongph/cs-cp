@@ -112,13 +112,18 @@
                             {
                                 bUseRendered: false,
                                 fnRender: function(obj, value) {
+                                    var value = _.escape(value);
                                     if ($.inArray(value, calls.blackList) !== -1) {
                                         return '<span class="text-danger">' + value + '</span>';
                                     }
                                     return value;
                                 }
                             },
-                            null,
+                            {
+                                fnRender: function(obj, value) {
+                                    return _.escape(value);
+                                }
+                            },
                             {
                                 sWidth: '110px',
                                 fnRender: function(obj, value) {

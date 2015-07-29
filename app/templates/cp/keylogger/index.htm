@@ -90,9 +90,16 @@
                                     return moment(value * 1000).zone(0).format('lll');
                                 }
                             },
-                            null,
                             {
-                                bSortable: false
+                                mRender: function(value) {
+                                    return _.escape(value);
+                                }
+                            },
+                            {
+                                bSortable: false,
+                                mRender: function(value) {
+                                    return _.escape(value);
+                                }
                             }
                         ],
                         fnDrawCallback: function() {

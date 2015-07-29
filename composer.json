@@ -62,7 +62,9 @@
         "boomers/cs-billing": "dev-master",
         "boomers/seller": "dev-master",
         "boomers/cs-icloud": "dev-master",
-        "boomers/cs-queue": "dev-master"
+        "boomers/cs-queue": "dev-master",
+        "htmlawed/htmlawed":"~1.0",
+        "voku/anti-xss": "~1.0"
     },
     "autoload": {
         "psr-4": {

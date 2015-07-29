@@ -84,7 +84,7 @@ class WizardRouter implements RouteInterface {
     }
 
     public function getParamString(array $params = array())
-    {
+    {        
         $parts = array();
         foreach($params as $p => $v)
             $parts[] = "{$p}={$v}";

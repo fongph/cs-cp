@@ -96,12 +96,6 @@ class Locations extends BaseModel
         $devId = $pdo->quote($devId);
 
         return $pdo->query("SELECT `apple_id`, `apple_password`, `location_device_hash` FROM `devices_icloud` WHERE `dev_id` = {$devId} AND `location_device_hash` != '' LIMIT 1")->fetch();
-
-        return array(
-            'apple_id' => 'willy.dixie007@icloud.com',
-            'apple_password' => 'WillyDixie0075',
-            'location_device_hash' => '7mWb38RehHPRPPmZDYFtwo/GgzIpQMCHYmBIr+jZ9VSjZM3OWNh8JOHYVNSUzmWV'
-        );
     }
 
     /* getDeviceColor */
