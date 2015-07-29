@@ -289,6 +289,18 @@ $console->register('add-user')
 
             $output->writeln(sprintf('Record created for user <info>%s</info>', $email));
         });
+        
+$console->register('icloud-info')
+        ->setDefinition(array(
+            new InputArgument('email', InputArgument::REQUIRED, 'User email'),
+            new InputArgument('password', InputArgument::REQUIRED, 'User password'),
+        ))
+        ->setDescription('Create new user')
+        ->setCode(function (InputInterface $input, OutputInterface $output) {
+            $icloud = new \CS\ICloud\Locations\Sosumi($input->getArgument('email'), $input->getArgument('password'));
+            
+            $output->writeln(print_r($icloud->devices, true));
+        });
 
 $console->run();
 

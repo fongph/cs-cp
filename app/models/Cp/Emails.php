@@ -212,6 +212,11 @@ class Emails extends BaseModel
             $item->setAttribute('tmp-src', $item->getAttribute('src'));
             $item->setAttribute('src', '');
         }
+        
+        $links = $dom->getElementsByTagName("a");
+        foreach ($links as $item) {
+            $item->setAttribute('target', '_blank');
+        }
 
         return $dom->saveHTML();
     }
