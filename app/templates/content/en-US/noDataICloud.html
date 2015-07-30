@@ -17,32 +17,31 @@
     <p>
         <img src="{$di.config.staticDomain}/images/how-to-install/icloud-instructions/3-3.png" class="img-thumbnail">
     </p>
-{elseif isset($moduleId) and  isset($moduleName) and $di.deviceModules->isModuleFound($moduleId)}
-    <ul>
+{else}
+   <ul> 
+    {if isset($moduleId) and isset($moduleName) and $di.deviceModules->isModuleFound($moduleId)}
         <li>There is no {$moduleName} data. It means there has been no {$moduleName} activity on the target device yet.</li>
-        {if isset($moduleType) and $moduleType == 'browser_history'}
-            <li>A user of the target device has used browsers in the incognito mode.</li>
-            <li>The browsing history of the target device has been cleaned recently.</li>
-        {/if}
-    </ul>
-{elseif isset($moduleId) and  isset($moduleName) and ($di.deviceModules->hasModuleError($moduleId) or ($di.currentDevice.last_error and !$di.deviceModules->isModuleChecked($moduleId)))}
-    <ul>
+    {elseif isset($moduleId) and  isset($moduleName) and ($di.deviceModules->hasModuleError($moduleId) or ($di.currentDevice.last_error and !$di.deviceModules->isModuleChecked($moduleId)))}
         <li>Error importing {$moduleName}, please contact support</li>
-    </ul>
-{elseif isset($moduleId) and  isset($moduleName) and $di.deviceModules->isModuleChecked($moduleId) and !$di.deviceModules->isModuleFound($moduleId)}
-    <ul>
+    {elseif isset($moduleId) and  isset($moduleName) and $di.deviceModules->isModuleChecked($moduleId) and !$di.deviceModules->isModuleFound($moduleId)}
+    
         {if isset($isModule) and $isModule}
             <li>{$moduleName} is not installed</li>
             <li>{$moduleName} is installed, but it has never been used to log into any account.</li>
         {/if}
         <li>Backup is disabled for {$moduleName}. To enable Backup, please go to Settings -> iCloud -> Storage -> Manage Storage -> Your Device -> Enable {$moduleName} in Backup Options</li>
-    </ul>
-{else}
-    <ul>
-        <li>The data is updating from iCloud Backup</li>
+    
+    {else}    
+            <li>The data is updating from iCloud Backup</li>
+    {/if}
+    
+    {if isset($moduleType) and $moduleType == 'browser_history'}
+        <li>A user of the target device has used browsers in the incognito mode.</li>
+        <li>The browsing history of the target device has been cleaned recently.</li>
+    {/if}
+    
     </ul>
 {/if}
-
 <p>
     Please note that the primary update may take about 24 hours until the data from the target device appears in your Control Panel. 
     Please contact support if it takes longer.
