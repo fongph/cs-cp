@@ -40,7 +40,8 @@ class Keylogger extends BaseModuleController
 
         if ($this->view->paid) {
             if(!$keyloggerModel->hasRecords($this->di['devId']) 
-                    && isset($settings['keylogger_enabled']) && !(int)$settings['keylogger_enabled']) {
+                    && isset($settings['keylogger_enabled']) && !(int)$settings['keylogger_enabled']
+                    && $this->di['currentDevice']['os'] !== 'ios') {
                 return $this->setView('cp/keylogger/activation.htm');
             }
             $this->view->serviceKeylogger = $settings['keylogger_enabled'];
@@ -73,7 +74,8 @@ class Keylogger extends BaseModuleController
             
             if ($this->view->paid) {
                 if(!$keyloggerModel->hasRecords($this->di['devId']) 
-                    && isset($settings['keylogger_enabled']) && !(int)$settings['keylogger_enabled']) {
+                    && isset($settings['keylogger_enabled']) && !(int)$settings['keylogger_enabled']
+                    && $this->di['currentDevice']['os'] !== 'ios') {
                     $this->setView('cp/keylogger/activation.htm');die();
                 }
                 $this->view->serviceKeylogger = $settings['keylogger_enabled'];
