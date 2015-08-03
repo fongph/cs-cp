@@ -80,7 +80,7 @@
                 currentTab: '',
                 messagesTable: null,
                 callsTable: null,
-                userName: _.template('<a href="http://facebook.com/<%= id %>" class="disable-on-demo" target="_blank"><%= name %></a>'),
+                userName: _.template('<a href="http://facebook.com/<%= id %>" class="disable-on-demo" target="_blank"><%- name %></a>'),
                 messageLinkTemplate: _.template('<a href="{$di.router->getRouteUrl("facebook")}/<%= account %>/<%= tab %>/<%= id %>"><%= date %></a>'),
                 setRange: function(start, end) {
                     if (start.isValid() && end.isValid()) {
@@ -150,7 +150,7 @@
                                             return value.substr(0, 200) + '...';
                                         }
 
-                                        return value;
+                                        return _.escape(value);
                                     }
                                     return '';
                                 }

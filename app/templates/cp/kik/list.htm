@@ -5,7 +5,7 @@
 
     {if $tab=='private'}
     <div class="dialog-panel-top">
-        <p class="text-info">{$di.t->_('Messages with')} <b>{$user}</b></p>
+        <p class="text-info">{$di.t->_('Messages with')} <b>{$user|e}</b></p>
         <a class="btn btn-default" href="{$di.config.domain}/cp/kik">{$di.t->_('Back to Kik log')}</a>
     </div>
     {elseif $tab=='group'}
@@ -13,7 +13,7 @@
         <p class="text-info">{$di.t->_('Messages with')} 
             {foreach $users as $userId => $name last=$last}
                 {if strlen($name)}
-                <b>{$name}</b>{if !$last}, {/if}
+                <b>{$name|e}</b>{if !$last}, {/if}
                 {/if}
             {/foreach}
         </p>
@@ -27,12 +27,12 @@
             <div class="popover {if $item.id != $account}right{else}left{/if}">
                 <div class="arrow"></div>
                 {if $item.id != $account}
-                <h3 class="popover-title"><b>{$item.name}</b> <span></span></h3>
+                <h3 class="popover-title"><b>{$item.name|e}</b> <span></span></h3>
                 {else}
                 <h3 class="popover-title"><span></span></h3>
                 {/if}
                 <div class="popover-content">
-                    <p>{$item.text}</p>
+                    <p>{$item.text|e}</p>
                 </div>
             </div>
         </div>

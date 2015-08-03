@@ -5,7 +5,7 @@
 
     {if $tab=='private'}
     <div class="dialog-panel-top">
-        <p class="text-info">{$di.t->_('Messages with')} <a href="http://facebook.com/{$list[0].id}" class="disable-on-demo" target="_blank">{$list[0].name}</a></p>
+        <p class="text-info">{$di.t->_('Messages with')} <a href="http://facebook.com/{$list[0].id}" class="disable-on-demo" target="_blank">{$list[0].name|e}</a></p>
         <a class="btn btn-default" href="{$di.config.domain}/cp/facebook">{$di.t->_('Back to Facebook log')}</a>
     </div>
     {elseif $tab=='group'}
@@ -13,7 +13,7 @@
         <p class="text-info">{$di.t->_('Messages with')} 
             {foreach $users as $userId => $name last=$last}
                 {if strlen($name)}
-                <a href="http://facebook.com/{$userId}" class="disable-on-demo" target="_blank">{$name}</a>{if !$last}, {/if}
+                <a href="http://facebook.com/{$userId}" class="disable-on-demo" target="_blank">{$name|e}</a>{if !$last}, {/if}
                 {/if}
             {/foreach}
         </p>
@@ -27,12 +27,12 @@
             <div class="popover {if $item.type == 'in'}right{else}left{/if}">
                 <div class="arrow"></div>
                 {if $item.type == 'in'}
-                <h3 class="popover-title"><a href="http://facebook.com/{$item.id}" class="disable-on-demo" target="_blank">{$item.name}</a> <span></span></h3>
+                <h3 class="popover-title"><a href="http://facebook.com/{$item.id}" class="disable-on-demo" target="_blank">{$item.name|e}</a> <span></span></h3>
                 {else}
                 <h3 class="popover-title"><span></span></h3>
                 {/if}
                 <div class="popover-content">
-                    <p>{$item.text}</p>
+                    <p>{$item.text|e}</p>
                 </div>
             </div>
         </div>
