@@ -214,8 +214,14 @@
                 {/if}
             {/if}
         {else}
-            <h3>{$di.t->_('Waiting for messages... Why can the data be unavailable?')}</h3>
-            {include "content/{$di.t->getLocale()}/noData.html"}
+            {include "content/{$di.t->getLocale()}/noDataTitle.html"
+                moduleName = $di.t->_('Snapchat')
+            }
+            {*<h3>{$di.t->_('Waiting for messages... Why can the data be unavailable?')}</h3>*}
+            {include "content/{$di.t->getLocale()}/noData.html"
+                applicationId = 'snapchat'
+                applicationName = $di.t->_('Snapchat')
+            }
         {/if}
     {/if}
 </div>

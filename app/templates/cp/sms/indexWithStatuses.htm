@@ -6,6 +6,14 @@
 <div>
     <h1 class="text-center">{$title}</h1>
 
+    {if isset($limitEnd) && !$limitEnd}
+        <p class="bg-warning" style="padding: 10px;">
+            Your limit has expired. You will not be able to monitor new SMS data any longer. 
+            Please consider the opportunity to buy <a target="_blank" href="http://pumpic.com/store.html">Premium subscription</a> or an additional 
+            <a href="http://pumpic.com/buy.html?product=unlimited-sms&device={$di.devId}">Unlimited SMS</a> option to resume monitoring.
+        </p>
+    {/if} 
+    
     {insert "inc.flashMessages.htm"}
 
     {if $hasRecords}
@@ -223,7 +231,9 @@
         });
     </script>
     {else}
-        <h3>{$di.t->_('Waiting for data... Why can the data be unavailable?')}</h3>
+        {include "content/{$di.t->getLocale()}/noDataTitle.html"
+                moduleName = $di.t->_('SMS')
+        }
         {if $di.currentDevice.os=='icloud'}
             {include "content/{$di.t->getLocale()}/noDataICloud.html"}
         {else}
