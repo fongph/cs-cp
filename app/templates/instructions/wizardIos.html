@@ -52,9 +52,20 @@
         
         
         <h4 class="text-center">{$di.t->_('Installation Instructions')}</h4>
-        <p class="text-center"><b>Pumpic works on jailbroken iPhones, iPads and iPods Touch. Find out how to jailbreak your iOS device using the following links: <a href="http://www.redmondpie.com/how-to-jailbreak-ios-8.1-using-pangu-for-mac-guide/" target="_blank" rel="nofollow">iOS 8.1</a>, <a href="http://www.redmondpie.com/how-to-jailbreak-ios-8.1.2-using-taig-guide/" target="_blank" rel="nofollow">iOS 8.1.2</a>, <a href="http://evasi0n.com/" target="_blank" rel="nofollow">iOS 7</a>, <a href="http://www.redmondpie.com/jailbreak-ios-6.1.3-6.1.4-6.1.5-untethered-on-all-devices-with-p0sixspwn-tutorial/" target="_blank" rel="nofollow">iOS 6</a></b></p>
+        
+        <p class="text-center">
+            Pumpic works on jailbroken iPhones, iPads and iPods Touch. <b>Supported OS versions: 6.0-8.4</b>
+            Find out how to jailbreak your iOS device using the following links:
+            <a href="http://www.redmondpie.com/jailbreak-ios-8.4-using-taig-v2.2-on-iphone-ipad-how-to-tutorial/" target="_blank" rel="nofollow">iOS 8.1-8.4 (Windows)</a>,
+            <a href="http://www.redmondpie.com/how-to-jailbreak-ios-8.4-with-taig-on-mac-os-x/" target="_blank" rel="nofollow">iOS 8.1-8.4 (Mac)</a>,
+            <a href="http://www.redmondpie.com/how-to-jailbreak-ios-8.1-using-pangu-for-mac-guide/" target="_blank" rel="nofollow">iOS 8.0-8.1</a>,
+            <a href="http://evasi0n.com/" target="_blank" rel="nofollow">iOS 7</a>,
+            <a href="http://www.redmondpie.com/jailbreak-ios-6.1.3-6.1.4-6.1.5-untethered-on-all-devices-with-p0sixspwn-tutorial/" target="_blank" rel="nofollow">iOS 6</a>.
+            <br /><b>Find out if device is <a href="/instructions/detect-ios-jailbreak.html" target="_blank" rel="nofollow">jailbroken</a></b>.
+        </p>
         <p class="text-center"><b>If the target device is NOT jailbroken, use <a href="{$di->getRouter()->getRouteUrl('wizardSetup', ['platform'=>'icloud'])}">iCloud solution</a> setup instructions.</b></p>
-        <p class="text-center"><b>GPS must be turned ON before installation</b></p>
+        <p class="text-center"><b>You can <a href="/instructions/hide-cydia-icon.html" target="_blank" rel="nofollow">hide Cydia icon</a> after installing application.</b></p>
+
 
         <ol>
             {insert "wizard/ios/setup.instruction.list.all.htm"}

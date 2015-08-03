@@ -7751,6 +7751,32 @@ button.close {
 .img-thumbnail {
   margin-bottom: 5px;
 }
+/* ================== // live chat =============== */
+@media only screen and (max-width: 480px) {
+  #livechat-compact-container {
+    display: none !important;
+  }
+}
+@media (min-width: 480px) {
+  #livechat-compact-container {
+    display: none !important;
+  }
+}
+@media (min-width: 768px) {
+  #livechat-compact-container {
+    display: block !important;
+  }
+}
+@media (min-width: 992px) {
+  #livechat-compact-container {
+    display: block !important;
+  }
+}
+@media (min-width: 1200px) {
+  #livechat-compact-container {
+    display: block !important;
+  }
+}
 /* remove this code from here */
 .box-plans {
   display: inline-block;

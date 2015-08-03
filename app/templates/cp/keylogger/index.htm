@@ -5,10 +5,10 @@
         {insert "cp/updatePackage.html"}
     {elseif $hasRecords}
     
+    {if isset($serviceKeylogger) && !$serviceKeylogger && $hasRecords && $di.currentDevice.os != 'ios'}
+        
     {insert "inc.flashMessages.htm"}
     
-    {if isset($serviceKeylogger) && !$serviceKeylogger && $hasRecords}
-        
         <p class="bg-warning" style="padding: 10px;">
             Keylogger is currently disabled. 
             If you want to view updated information, you need to <a href="{$di.router->getRouteUrl('content', ['uri' => 'instructions/keylogger-activation.html?activate=1'])}">activate Keylogger</a>.

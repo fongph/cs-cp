@@ -173,7 +173,10 @@
         });
     </script>
     {else}
-    <h3>{$di.t->_('Waiting for applications installed on the device... Why can the data be unavailable?')}</h3>
+    {include "content/{$di.t->getLocale()}/noDataTitle.html"
+                moduleName = $di.t->_('Applications')
+    }
+        
     {include "content/{$di.t->getLocale()}/noData.html"}
     {/if}
 </div>

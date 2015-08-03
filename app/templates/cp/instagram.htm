@@ -72,7 +72,10 @@
             {include "content/{$di.t->getLocale()}/noDataTitle.html"
                 moduleName = $di.t->_('Instagram')
             }
-            {include "content/{$di.t->getLocale()}/noData.html"}
+            {include "content/{$di.t->getLocale()}/noData.html"
+                applicationId = 'instagram'
+                applicationName = $di.t->_('Instagram')
+            }
         {/if}
     {else}
         <div class="row form-inline">

@@ -279,7 +279,10 @@
         });
     </script>
     {else}
-    <h3>{$di.t->_('Waiting for videos... Why can the data be unavailable?')}</h3>
+    {include "content/{$di.t->getLocale()}/noDataTitle.html"
+        moduleName = $di.t->_('Videos')
+    }
+    {*<h3>{$di.t->_('Waiting for videos... Why can the data be unavailable?')}</h3>*}
     {include "content/{$di.t->getLocale()}/noData.html"}
     {/if}
 </div>

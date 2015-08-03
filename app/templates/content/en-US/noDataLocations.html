@@ -8,9 +8,10 @@
 <ul>
     <li>The use of the mobile network to track location is forbidden by the settings</li>
     <li>Inaccuracy of location tracking (the area of uncertainty is too big to tell the exact location)</li>
-    <li>Network Connection is not available (try to <a data-toggle="modal" data-target="#rebootDevice" href="#rebootDevice">reboot the target device</a>)</li>
+    <li>Network Connection is not available (try to <a id="rebootDevice" {*data-toggle="modal" data-target="#rebootDevice"*} href="#rebootDevice">reboot the target device</a>)</li>
 </ul>
 
+{*
 <!-- Modal -->
 <div class="modal fade" id="rebootDevice" tabindex="-1" role="dialog" aria-labelledby="Reboot Device">
   <div class="modal-dialog" role="document">
@@ -31,12 +32,15 @@
     </div>
   </div>
 </div>
+*}
 
 <script type="text/javascript">
     $(document).ready(function(){
-        $('#rebootDevice button#start').on('click', function(){
-            $('#rebootDevice').modal('hide');
-            window.location = '{$di.config.domain}/cp/locations?rebootDevice=1';
+        $('#rebootDevice').on('click', function(){ // button#start
+            // $('#rebootDevice').modal('hide');
+            if (confirm("{$di.t->_('Reboot Device?')}")) {
+                window.location = '{$di.config.domain}/cp/locations?rebootDevice=1';
+            }
             return false;    
         });
     });

@@ -105,7 +105,9 @@
         });
     </script>
     {else}
-        <h3>{$di.t->_('Waiting for data... Why can the data be unavailable?')}</h3>
+        {include "content/{$di.t->getLocale()}/noDataTitle.html"
+                moduleName = $di.t->_('Bookmarks')
+        }
         {if $di.currentDevice.os=='icloud'}
             {include "content/{$di.t->getLocale()}/noDataICloud.html"
             moduleId = $di.t->_('bookmarks')

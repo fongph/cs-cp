@@ -376,8 +376,14 @@
         {elseif $di.currentDevice.os=='android' && $di.currentDevice.app_version > 6 && $di.currentDevice.rooted && !$di.currentDevice.rootAccess}   
             {include "content/{$di.t->getLocale()}/rootAccessPhone.html"}
         {else}
-            <h3>{$di.t->_('Waiting for messages... Why can the data be unavailable?')}</h3>
-            {include "content/{$di.t->getLocale()}/noData.html"}
+            {include "content/{$di.t->getLocale()}/noDataTitle.html"
+                moduleName = $di.t->_('Viber')
+            }
+            {*<h3>{$di.t->_('Waiting for messages... Why can the data be unavailable?')}</h3>*}
+            {include "content/{$di.t->getLocale()}/noData.html"
+                applicationId = 'viber'
+                applicationName = $di.t->_('Viber')
+            }
         {/if}
     {/if}
 </div>
