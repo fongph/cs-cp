@@ -5,14 +5,14 @@
 
     {if $tab=='private'}
     <div class="dialog-panel-top">
-        <p class="text-info">{$di.t->_('Messages with')} <b>{$list[0].name}</b></p>
+        <p class="text-info">{$di.t->_('Messages with')} <b>{$list[0].name|e}</b></p>
         <a class="btn btn-default" href="{$di.config.domain}/cp/whatsapp#private">{$di.t->_('Back to Whatsapp log')}</a>
     </div>
     {elseif $tab=='group'}
     <div class="dialog-panel-top">
         <p class="text-info">{$di.t->_('Messages with')} 
             {foreach $users as $userId => $name last=$last}
-                <b>{$name}</b>{* ({$userId})*}{if !$last}, {/if}
+                <b>{$name|e}</b>{* ({$userId})*}{if !$last}, {/if}
             {/foreach}
         </p>
         <a class="btn btn-default" href="{$di.config.domain}/cp/whatsapp#group">{$di.t->_('Back to Whatsapp log')}</a>
@@ -25,12 +25,12 @@
             <div class="popover {if $item.type == 'in'}right{else}left{/if}">
                 <div class="arrow"></div>
                 {if $item.type == 'in'}
-                <h3 class="popover-title"><b>{if strlen($item.name)}{$item.name}{else}{$item.phone}{/if}</b> <span></span></h3>
+                <h3 class="popover-title"><b>{if strlen($item.name)}{$item.name|e}{else}{$item.phone|e}{/if}</b> <span></span></h3>
                 {else}
                 <h3 class="popover-title"><span></span></h3>
                 {/if}
                 <div class="popover-content">
-                    <p>{$item.text}</p>
+                    <p>{$item.text|e}</p>
                 </div>
             </div>
         </div>

@@ -159,8 +159,12 @@
                         oLanguage: {
                             sUrl: '{$di.config.staticDomain}/datatables/language/{$di.t->getLocale()}.txt'
                         },
-                        aoColumns: [{
-                                mData: "name"
+                        aoColumns: [
+                            {
+                                mData: "name",
+                                fnRender: function(obj, value) {
+                                    return _.escape(value);
+                                }
                             },
                             {
                                 mData: "text",
@@ -170,7 +174,7 @@
                                             return value.substr(0, 200) + '...';
                                         }
 
-                                        return value;
+                                        return _.escape(value);
                                     }
                                     return '';
                                 }
@@ -209,7 +213,10 @@
                         },
                         aoColumns: [
                             {
-                                mData: "name"
+                                mData: "name",
+                                fnRender: function(obj, value) {
+                                    return _.escape(value);
+                                }
                             },
                             {
                                 mData: "text",
@@ -218,7 +225,7 @@
                                         return value.substr(0, 200) + '...';
                                     }
 
-                                    return value;
+                                    return _.escape(value);
                                 }
                             },
                             {
@@ -254,8 +261,12 @@
                         oLanguage: {
                             sUrl: '{$di.config.staticDomain}/datatables/language/{$di.t->getLocale()}.txt'
                         },
-                        aoColumns: [{
-                                mData: "name"
+                        aoColumns: [
+                            {
+                                mData: "name",
+                                fnRender: function(obj, value) {
+                                    return _.escape(value);
+                                }
                             },
                             {
                                 mData: "type",
