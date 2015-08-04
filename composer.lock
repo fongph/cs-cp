@@ -97,7 +97,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-mail.git",
-                "reference": "2ffa30e0b9e4ae3965c7ed3bd5e53e959fecf8e5"
+                "reference": "08bb397be373064813aec5d7310bcb5631ced815"
             },
             "require": {
                 "guzzlehttp/guzzle": "~5.0",
@@ -116,7 +116,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2015-07-27 07:20:32"
+            "time": "2015-08-03 12:13:39"
         },
         {
             "name": "boomers/cs-models",
@@ -124,7 +124,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-models.git",
-                "reference": "797a9398c9f1d80fe1a161efb8bd3b8a3e147c29"
+                "reference": "3e148f73b607a4719eb854377ea7c34debc5f81f"
             },
             "require": {
                 "php": ">=5.4.0"
@@ -138,7 +138,7 @@
                     "CS\\Models\\": "src/"
                 }
             },
-            "time": "2015-07-10 08:03:19"
+            "time": "2015-08-04 06:42:16"
         },
         {
             "name": "boomers/cs-queue",
@@ -169,7 +169,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-settings.git",
-                "reference": "7f4f1313b07bb59fe5b365e6f688e8842d6e3324"
+                "reference": "c69f5724e8164d86a45c53f87fbb99dc80f0a1d8"
             },
             "require": {
                 "php": ">=5.4.0"
@@ -180,7 +180,7 @@
                     "CS\\Settings\\": "src/"
                 }
             },
-            "time": "2015-07-24 08:26:37"
+            "time": "2015-07-31 06:14:57"
         },
         {
             "name": "boomers/cs-users",
@@ -956,16 +956,16 @@
         },
         {
             "name": "symfony/console",
-            "version": "v2.7.2",
+            "version": "v2.7.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Console.git",
-                "reference": "8cf484449130cabfd98dcb4694ca9945802a21ed"
+                "reference": "d6cf02fe73634c96677e428f840704bfbcaec29e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Console/zipball/8cf484449130cabfd98dcb4694ca9945802a21ed",
-                "reference": "8cf484449130cabfd98dcb4694ca9945802a21ed",
+                "url": "https://api.github.com/repos/symfony/Console/zipball/d6cf02fe73634c96677e428f840704bfbcaec29e",
+                "reference": "d6cf02fe73634c96677e428f840704bfbcaec29e",
                 "shasum": ""
             },
             "require": {
@@ -1009,7 +1009,7 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "time": "2015-07-09 16:07:40"
+            "time": "2015-07-28 15:18:12"
         },
         {
             "name": "videlalvaro/php-amqplib",
