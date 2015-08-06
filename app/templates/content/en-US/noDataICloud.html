@@ -44,7 +44,8 @@
     
     {/if}
     
-    {if isset($moduleType) and $moduleType == 'browser_history' and $di.deviceModules->isModuleFound($moduleId)}
+    {if isset($moduleType) and $moduleType == 'browser_history' and $di.deviceModules->isModuleFound($moduleId)
+    or ($moduleId == 'browserHistory' and $di.deviceModules->getModuleErrorCode($moduleId) == 160)}
         <li>A user of the target device has used browsers in the incognito mode.</li>
         <li>The browsing history of the target device has been cleaned recently.</li>
     {/if}
