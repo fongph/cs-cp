@@ -64,7 +64,8 @@
         "boomers/cs-icloud": "dev-master",
         "boomers/cs-queue": "dev-master",
         "htmlawed/htmlawed":"~1.0",
-        "voku/anti-xss": "~1.0"
+        "voku/anti-xss": "~1.0",
+        "league/url": "^3.3"
     },
     "autoload": {
         "psr-4": {

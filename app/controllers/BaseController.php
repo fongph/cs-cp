@@ -17,7 +17,7 @@ class BaseController extends Controller
         $refere = new \Models\Referer($this->di);
         $refere->setReferer()
                 ->setLanding();
-        
+
         if ($this->di['auth']->hasIdentity()) {
             $this->auth = $this->di['auth']->getIdentity();
 
@@ -26,8 +26,6 @@ class BaseController extends Controller
             }
 
             if (!$this->di['config']['demo'] && !$this->getRequest()->hasCookie('s') && !isset($this->auth['admin_id'])) {
-                $this->di['logger']->addInfo("Logging not admin authentiacation", array('cookie' => $_COOKIE, 'auth' => $this->auth));
-
                 $this->di['usersManager']->logAuth($this->auth['id']);
 
                 $usersModel = new \Models\Users($this->di);
@@ -39,6 +37,10 @@ class BaseController extends Controller
             $this->demo = true;
             $refere->setDocumentReferer()
                     ->scroogeFrogSend();
+        }
+
+        if ($this->di->getRequest()->hasGet('deviceId')) {
+            $this->setDevice();
         }
     }
 
@@ -56,7 +58,7 @@ class BaseController extends Controller
     {
         if ($this->auth) {
             $this->view->authData = $this->auth;
-            $this->view->isDirectLogin = isset($this->auth['admin_id']) && (int)$this->auth['admin_id'];
+            $this->view->isDirectLogin = isset($this->auth['admin_id']) && (int) $this->auth['admin_id'];
         } else {
             $this->view->isDirectLogin = false;
         }
@@ -106,6 +108,24 @@ class BaseController extends Controller
 
             $this->redirect($this->di->getRouter()->getRouteUrl('cp'));
         }
+    }
+
+    private function setDevice()
+    {
+        $deviceId = $this->di->getRequest()->get('deviceId');
+
+        if ($deviceId > 0) {
+            $devicesModel = new \Models\Devices($this->di);
+            $devicesModel->setCurrentDevId($deviceId);
+        }
+
+        $server = $this->di->getRequest()->server();
+
+        $url = \League\Url\Url::createFromServer($server);
+        $query = $url->getQuery();
+        $query->offsetUnset('deviceId');
+
+        $this->redirect((string) $url);
     }
 
 }
