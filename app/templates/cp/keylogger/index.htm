@@ -147,13 +147,9 @@
         });
     </script>
     {else}
-        {if $di.currentDevice.os=='android'}
-            {include "content/{$di.t->getLocale()}/noDataKeyloggerAndroid.html"}
-        {else}
-            {include "content/{$di.t->getLocale()}/noDataTitle.html"
-                moduleName = $di.t->_('Keylogger')
-            }
-            {include "content/{$di.t->getLocale()}/noData.html"}
-        {/if}
+        {include "content/{$di.t->getLocale()}/noDataTitle.html"
+            moduleName = $di.t->_('Keylogger')
+        }
+        {include "content/{$di.t->getLocale()}/noData.html"}
     {/if}
 </div>
