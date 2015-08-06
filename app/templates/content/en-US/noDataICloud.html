@@ -19,20 +19,29 @@
     </p>
 {else}
    <ul> 
-    {if isset($moduleId) and isset($moduleName) and $di.deviceModules->isModuleFound($moduleId)}
-        <li>There is no {$moduleName} data. It means there has been no {$moduleName} activity on the target device yet.</li>
-    {elseif isset($moduleId) and  isset($moduleName) and ($di.deviceModules->hasModuleError($moduleId) or ($di.currentDevice.last_error and !$di.deviceModules->isModuleChecked($moduleId)))}
-        <li>Error importing {$moduleName}, please contact <a href="{$di.config.domain}/support">support</a></li>
-    {elseif isset($moduleId) and  isset($moduleName) and $di.deviceModules->isModuleChecked($moduleId) and !$di.deviceModules->isModuleFound($moduleId)}
+    {if isset($moduleId) and  isset($moduleName) and ($di.deviceModules->hasModuleError($moduleId))
+        and ($moduleId == 'browserHistory' and $di.deviceModules->getModuleErrorCode($moduleId) != 160 )}   
+       <li>Error importing {$moduleName}, please contact <a href="{$di.config.domain}/support">support</a></li>
+    {else}
     
-        {if isset($isModule) and $isModule}
-            <li>{$moduleName} is not installed</li>
-            <li>{$moduleName} is installed, but it has never been used to log into any account.</li>
+        {if isset($moduleId) and isset($moduleName) and $di.deviceModules->isModuleFound($moduleId)}
+            <li>There is no {$moduleName} data. It means there has been no {$moduleName} activity on the target device yet.</li>
+        {elseif isset($moduleId) and  isset($moduleName) and $di.deviceModules->hasModuleError($moduleId) and  $moduleId != 'browserHistory' 
+                or ($di.currentDevice.last_error and !$di.deviceModules->isModuleChecked($moduleId))
+                }      
+            <li>Error importing {$moduleName}, please contact <a href="{$di.config.domain}/support">support</a></li>
+        {elseif isset($moduleId) and  isset($moduleName) and $di.deviceModules->isModuleChecked($moduleId) and !$di.deviceModules->isModuleFound($moduleId)}
+
+            {if isset($isModule) and $isModule}
+                <li>{$moduleName} is not installed</li>
+                <li>{$moduleName} is installed, but it has never been used to log into any account.</li>
+            {/if}
+                <li>Backup is disabled for {$moduleName}. To enable Backup, please go to Settings -> iCloud -> Storage -> Manage Storage -> Your Device -> {if $moduleId == 'photos'}Enable Camera Roll{else}Enable {$moduleName} in Backup Options{/if}</li>
+
+        {else}    
+                <li>The data is updating from iCloud Backup</li>
         {/if}
-            <li>Backup is disabled for {$moduleName}. To enable Backup, please go to Settings -> iCloud -> Storage -> Manage Storage -> Your Device -> {if $moduleId == 'photos'}Enable Camera Roll{else}Enable {$moduleName} in Backup Options{/if}</li>
-                
-    {else}    
-            <li>The data is updating from iCloud Backup</li>
+    
     {/if}
     
     {if isset($moduleType) and $moduleType == 'browser_history' and $di.deviceModules->isModuleFound($moduleId)}
