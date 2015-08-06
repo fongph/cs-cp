@@ -39,7 +39,7 @@ class BaseController extends Controller
                     ->scroogeFrogSend();
         }
 
-        if ($this->di->getRequest()->hasGet('deviceId')) {
+        if ($this->di->getRequest()->hasGet('setDeviceId')) {
             $this->setDevice();
         }
     }
@@ -112,7 +112,7 @@ class BaseController extends Controller
 
     private function setDevice()
     {
-        $deviceId = $this->di->getRequest()->get('deviceId');
+        $deviceId = $this->di->getRequest()->get('setDeviceId');
 
         if ($deviceId > 0) {
             $devicesModel = new \Models\Devices($this->di);
@@ -123,7 +123,7 @@ class BaseController extends Controller
 
         $url = \League\Url\Url::createFromServer($server);
         $query = $url->getQuery();
-        $query->offsetUnset('deviceId');
+        $query->offsetUnset('setDeviceId');
 
         $this->redirect((string) $url);
     }
