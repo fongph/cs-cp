@@ -86,7 +86,7 @@ class Keylogger extends BaseModuleController
                 $this->view->hasRecords = false;
             }
 
-            if(!$this->view->serviceKeylogger and !$this->view->hasRecords) {
+            if($this->view->paid and !$settings['keylogger_enabled'] and !$this->view->hasRecords) {
                 $this->setView('cp/keylogger/activation.htm'); 
             } else
                 $this->setView('cp/keylogger/index.htm');
