@@ -83,13 +83,13 @@ class Keylogger extends BaseModuleController
             if ($this->view->paid) {
                 $this->view->serviceKeylogger = $settings['keylogger_enabled'];
                 $this->view->hasRecords = $keyloggerModel->hasRecords($this->di['devId']);
-                $this->view->hasRecords = false;
-            }
-
-            if($this->view->paid and !$settings['keylogger_enabled'] and !$this->view->hasRecords) {
-                $this->setView('cp/keylogger/activation.htm'); 
+                if(!(int)$settings['keylogger_enabled'] and !$this->view->hasRecords) {
+                    $this->setView('cp/keylogger/activation.htm');
+                } else 
+                    $this->setView('cp/keylogger/index.htm');
             } else
                 $this->setView('cp/keylogger/index.htm');
+            
             
         } else {
             
