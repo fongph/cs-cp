@@ -1,0 +1,143 @@
+<style>
+    .mobile-mt10 { margin-top: 0px;  }
+    
+    .nav-buttons {
+        list-style: outside none none;
+        margin: 10px 0;
+        overflow: hidden;
+        padding: 0;
+        border-bottom: none;
+        text-align: left;
+    }
+    .nav-buttons li {
+        display: inline-block;
+        margin: 0 3px 10px;
+        text-align: center;
+        vertical-align: middle;
+    }
+    .nav-buttons li > a {
+        border: 1px solid #16a89e;
+        display: inline-block;
+        font-size: 19px;
+        padding: 10px 20px;
+        vertical-align: middle;
+        color: #16a89e;
+        text-decoration: none;
+        border-radius: 0px;
+        -webkit-border-radius: 0px;
+        -moz-border-radius: 0px;
+    }
+    .nav-buttons li.active {
+        cursor: pointer;
+        border: none;
+    }
+    .nav-buttons li.active > a, 
+    .nav-buttons li > a:hover {
+        background: #16a89e !important;
+        color: #fff !important;
+        text-decoration: none !important;
+        cursor: pointer !important;
+        border: 1px solid #16a89e !important;
+    }
+    
+    @media only screen and (max-width: 480px) {
+      .nav-buttons { 
+          text-align: center;
+      }
+      
+      .mobile-mt10 {
+          margin-top: 10px;
+      }
+    }
+    
+    @media (max-width: 642px) { 
+       .nav-buttons { 
+          text-align: center;
+      }
+      
+      .mobile-mt10 {
+          margin-top: 10px;
+      }
+    }
+    
+    .instruction-container {
+        display: inline-block;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        margin-top: 15px;
+        padding: 20px 30px;
+        width: 100%;
+    }
+    
+    .instruction-container ul,
+    .instruction-container ol {
+        margin: 0 10px;
+        padding: 0px 10px;
+    }
+</style>
+
+<div class="instruction-container">
+    <p>These guidelines will help you uninstall Pumpic from the target device. However, take notice that after removing the app you will not be able to monitor the target device.</p>
+    <p><b>Note:</b> the following steps must be performed on the target device (physical access is required).</p>
+    <ol>
+        <li>
+            <p>Open “Cydia”;</p>
+            <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/uninstall/ios/0_1.png"></p>
+        </li>
+        <li>
+            <p>Go to “Sources”;</p>
+            <p><img class="img-thumbnail"  src="{$di.config.staticDomain}/images/instructions/uninstall/ios/0_2.png"></p>
+        </li>
+        <li>
+            <p>Select “Development API (ios.loadapps.org)”;</p>
+            <p><img class="img-thumbnail"  src="{$di.config.staticDomain}/images/instructions/uninstall/ios/1.png"></p>
+        </li>
+        <li>
+            <p>Proceed to “All Packages”;</p>
+            <p><img class="img-thumbnail"  src="{$di.config.staticDomain}/images/instructions/uninstall/ios/2.png"></p>
+        </li>
+        <li>
+            <p>Select “updated”;</p>
+            <p><img class="img-thumbnail"  src="{$di.config.staticDomain}/images/instructions/uninstall/ios/3.png"></p>
+        </li>
+        <li>
+            <p>Tap “Modify”;</p>
+            <p><img class="img-thumbnail"  src="{$di.config.staticDomain}/images/instructions/uninstall/ios/4.png"></p>
+        </li>
+        <li>
+            <p>Tap “Remove”;</p>
+            <p><img class="img-thumbnail"  src="{$di.config.staticDomain}/images/instructions/uninstall/ios/5.png"></p>
+        </li>
+        <li>
+            <p>Wait a while and tap “Restart SpringBoard”;</p>
+            <p><img class="img-thumbnail"  src="{$di.config.staticDomain}/images/instructions/uninstall/ios/5_1.png"></p>
+        </li>
+        <li>
+            <p>Go back to “Cydia”;</p>
+            <p><img class="img-thumbnail"  src="{$di.config.staticDomain}/images/instructions/uninstall/ios/0_1.png"></p>
+        </li>
+        <li>
+            <p>Go to “Sources”;</p>
+            <p><img class="img-thumbnail"  src="{$di.config.staticDomain}/images/instructions/uninstall/ios/0_2.png"></p>
+        </li>
+        <li>
+            <p>Tap “Refresh”;</p>
+            <p><img class="img-thumbnail"  src="{$di.config.staticDomain}/images/instructions/uninstall/ios/6.png"></p>
+        </li>
+        <li>
+            <p>Tap “Edit”;</p>
+            <p><img class="img-thumbnail"  src="{$di.config.staticDomain}/images/instructions/uninstall/ios/7.png"></p>
+        </li>
+        <li>
+            <p>Tap minus near “Development API (ios.loadapps.org)”;</p>
+            <p><img class="img-thumbnail"  src="{$di.config.staticDomain}/images/instructions/uninstall/ios/8.png"></p>
+        </li>
+        <li>
+            <p>Tap “Delete”;</p>
+            <p><img class="img-thumbnail"  src="{$di.config.staticDomain}/images/instructions/uninstall/ios/9.png"></p>
+        </li>
+        <li>
+            <p>Now Pumpic is deleted from the target device. <br />The monitoring process is stopped.</p>
+        </li>
+    </ol>
+</div>

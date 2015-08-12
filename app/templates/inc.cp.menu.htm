@@ -23,7 +23,7 @@
         'smsCommands' => 'default'
     ]}
 {/if}
-<ul data-role="panelbar" class="nav">
+<ul data-role="panelbar" class="nav {if !$di.config.demo}nav-cp-left-bar{/if}">
     {foreach $cpMenu as $url => $menu}
     <li{if $menu.active} class="active"{/if}>
         <a href="{$url}">
