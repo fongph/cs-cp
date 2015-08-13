@@ -183,6 +183,8 @@ $console->register('update-demo-user-data')
                 $pdo->exec("UPDATE `whatsapp_calls` SET `timestamp` = `timestamp` + {$value} WHERE {$devicesExpression}");
                 $pdo->exec("UPDATE `whatsapp_messages` SET `timestamp` = `timestamp` + {$value} WHERE {$devicesExpression}");
                 $pdo->exec("UPDATE `notes` SET `timestamp` = `timestamp` + {$value} WHERE {$devicesExpression}");
+                $pdo->exec("UPDATE `snapchat_messages` SET `timestamp` = `timestamp` + {$value} WHERE {$devicesExpression}");
+                
 
             } catch (\Exception $exception) {
                 $logger->addError(sprintf(
