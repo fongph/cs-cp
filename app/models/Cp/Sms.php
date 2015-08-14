@@ -63,6 +63,11 @@ class Sms extends BaseModel
         return $this->getDb()->query("SELECT `dev_id` FROM `sms_log` WHERE `dev_id` = {$devId} LIMIT 1")->fetchColumn() !== false;
     }
 
+    public function getLastTimestamp($devId) {
+        $devId = $this->getDb()->quote($devId);
+        return $this->getDb()->query("SELECT `timestamp` FROM `sms_log` WHERE `dev_id` = {$devId} GROUP BY `timestamp` ORDER BY `timestamp` DESC LIMIT 1")->fetch();
+    }
+    
     public function getPhoneSmsList($devId, $phoneNumber)
     {
         $devId = $this->getDb()->quote($devId);

@@ -238,4 +238,16 @@ class Whatsapp extends BaseModel {
         
         return $this->getDb()->query("SELECT `dev_id` FROM `whatsapp_messages` WHERE `dev_id` = {$devId} LIMIT 1")->fetchColumn() !== false;
     }
+    
+    public function getLastTimestamp($devId) {
+        $devId = $this->getDb()->quote($devId);
+        return $this->getDb()->query("SELECT `w`.`timestamp` as `timestamp` FROM 
+                ( SELECT `timestamp` FROM `whatsapp_messages` WHERE `dev_id` = {$devId} 
+                  UNION 
+                  SELECT `timestamp` FROM `whatsapp_calls` WHERE `dev_id` = {$devId}) as `w` 
+                WHERE 1
+                GROUP BY `w`.`timestamp` 
+                ORDER BY `w`.`timestamp` DESC 
+                LIMIT 1")->fetch();
+    }
 }

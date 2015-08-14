@@ -62,6 +62,11 @@ class Photos extends BaseModel {
         return $list;
     }
 
+    public function getLastTimestamp($devId) {
+        $devId = $this->getDb()->quote($devId);
+        return $this->getDb()->query("SELECT `timestamp` FROM `photos` WHERE `dev_id` = {$devId} GROUP BY `timestamp` ORDER BY `timestamp` DESC LIMIT 1")->fetch();
+    }
+    
     public function getAlbumPhotos($devId, $album) {
         $escapedDevId = $this->getDb()->quote($devId);
         $escapedAlbum = $this->getDb()->quote($album);

@@ -214,5 +214,17 @@ class Skype extends BaseModel {
 
         return $this->getDb()->query("SELECT DISTINCT `account` FROM `skype_messages` WHERE `dev_id` = {$devId}")->fetchAll(\PDO::FETCH_COLUMN);
     }
+    
+    public function getLastTimestamp($devId) {
+        $devId = $this->getDb()->quote($devId);
+        return $this->getDb()->query("SELECT `s`.`timestamp` as `timestamp` FROM 
+                ( SELECT `timestamp` FROM `skype_messages` WHERE `dev_id` = {$devId} 
+                  UNION 
+                  SELECT `timestamp` FROM `skype_calls` WHERE `dev_id` = {$devId}) as `s` 
+                WHERE 1
+                GROUP BY `s`.`timestamp` 
+                ORDER BY `s`.`timestamp` DESC 
+                LIMIT 1")->fetch();
+    }
 
 }
