@@ -7713,6 +7713,13 @@ button.close {
   top: 0;
   right: -18px;
 }
+.icon-star-bar {
+  width: 30px;
+  height: 20px;
+  background: url('/static/img/button_left_mobile.png') no-repeat;
+  margin: 0 auto;
+  display: block;
+}
 .blur {
   filter: progid:DXImageTransform.Microsoft.Blur(pixelRadius=4);
   filter: blur(4px);

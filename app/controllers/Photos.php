@@ -10,7 +10,8 @@ class Photos extends BaseModuleController
 {
 
     protected $module = Modules::PHOTOS;
-
+    protected $lengthPage = 10;
+    
     protected function init()
     {
         parent::init();
@@ -46,8 +47,16 @@ class Photos extends BaseModuleController
     public function albumAction()
     {
         $photosModel = new \Models\Cp\Photos($this->di);
-        $this->view->photos = $photosModel->getAlbumPhotos($this->di['devId'], $this->params['album']);
-
+        
+        if ($this->getRequest()->isAjax()) {
+            $currPage = ($this->getRequest()->hasPost('currPage') && $this->getRequest()->post('currPage') > 0) ? $this->getRequest()->post('currPage') - 1 : 0;
+            $data = $photosModel->getAlbumPhotos($this->di['devId'], $this->params['album'], $currPage, $this->lengthPage);
+            $this->makeJSONResponse($data);
+        }
+        
+        $this->view->photos = $photosModel->getAlbumPhotos($this->di['devId'], $this->params['album'], 0, $this->lengthPage);
+        $this->view->lengthPage = $this->lengthPage;
+        $this->view->totalPage = $photosModel->getTotalPages($this->di['devId'], $this->params['album'], $this->lengthPage);
         $this->view->albumName = $this->params['album'];
 
         $this->setView('cp/photosAlbum.htm');

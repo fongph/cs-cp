@@ -33,6 +33,9 @@ module.exports = function (grunt) {
                     './app/assets/javascript/deprecated/jquery.cookie.js',
                     './app/assets/javascript/zone-selector.js',
                     './app/assets/javascript/scheduler.js',
+                    
+                    './app/assets/javascript/deprecated/twbsPagination/jquery.twbsPagination.js',
+                    
                     './app/assets/javascript/main.js',
                     './app/assets/javascript/backend.js'
                 ],

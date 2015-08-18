@@ -67,11 +67,20 @@ class Photos extends BaseModel {
         return $this->getDb()->query("SELECT `timestamp` FROM `photos` WHERE `dev_id` = {$devId} GROUP BY `timestamp` ORDER BY `timestamp` DESC LIMIT 1")->fetch();
     }
     
-    public function getAlbumPhotos($devId, $album) {
+    public function getAlbumPhotos($devId, $album, $page = 0, $length = 10) {
         $escapedDevId = $this->getDb()->quote($devId);
         $escapedAlbum = $this->getDb()->quote($album);
 
-        $list = $this->getDb()->query("SELECT `timestamp`, `parent` album, `filepath`, `tmp_name` filename, `deleted` FROM `photos` WHERE `dev_id` = {$escapedDevId} AND `saved` > 0 AND `parent` = {$escapedAlbum} ORDER BY `timestamp` DESC")->fetchAll();
+        $list = $this->getDb()->query("SELECT `timestamp`, 
+                `parent` album, 
+                `filepath`, 
+                `tmp_name` filename, 
+                `deleted` 
+             FROM `photos` 
+             WHERE `dev_id` = {$escapedDevId} 
+                    AND `saved` > 0 
+                    AND `parent` = {$escapedAlbum}
+             ORDER BY `timestamp` DESC LIMIT {$page}, {$length}")->fetchAll();
 
         foreach ($list as $key => $value) {
             $list[$key]['thumbUrl'] = $this->getCDNAuthorizedUrl(urlencode($devId) . '/photos/' . urlencode($value['album']) . '/thumb_' . urlencode($value['filename']));
@@ -81,4 +90,10 @@ class Photos extends BaseModel {
         return $list;
     }
 
+    public function getTotalPages($devId, $album, $length) {
+        $escapedDevId = $this->getDb()->quote($devId);
+        $escapedAlbum = $this->getDb()->quote($album);
+        $count = $this->getDb()->query("SELECT COUNT(`id`) as count FROM `photos` WHERE `dev_id` = {$escapedDevId} AND `saved` > 0 AND `parent` = {$escapedAlbum} ORDER BY `timestamp` DESC")->fetch();
+        return ($count['count']) ? ceil($count['count'] / $length) : false;
+    }
 }
