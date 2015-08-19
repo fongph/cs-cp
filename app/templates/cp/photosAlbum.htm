@@ -170,7 +170,7 @@
                     data: { 'currPage': page },
                     dataType: 'json',
                     beforeSend: function() {
-                        $('.panel-body').html('Loader..');
+                        $('.panel-body').html('loading..');
                     },
                     success: function (result) {
                        if(result.length) {
