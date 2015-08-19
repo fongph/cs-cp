@@ -176,7 +176,7 @@
                            $('.panel-body').html('');
                            $.each( result, function(key, value) {
                                $('.panel-body').append('<a href="'+ value.fullUrl +'" class="album-item">'+
-                                    '<img data-name="'+ value.filepath +' {$item.filepath|pathinfo:$.const.PATHINFO_BASENAME|e}"'+ 
+                                    '<img data-name="'+ value.filepath +'"'+ 
                                          'data-time="'+ value.timestamp +'"'+ 
                                          'data-album="'+ value.album +'"'+
                                          'data-deleted="'+ value.deleted +'"'+ 
