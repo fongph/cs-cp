@@ -157,11 +157,11 @@
             nextClass: 'panel_next',
             prevClass: 'panel_previous',
             onPageClick: function (event, page) {
+                
+                var pageData = $('#panel_paginate').data();
                 if($('#panel_paginate_info')) 
                     $('#panel_paginate_info').html( "Showing "+page+" to "+ pageData.twbsPagination.options.totalPages +" of "+ pageData.twbsPagination.options.totalPages +" entries" );
             
-                var pageData = $('#panel_paginate').data();
-                
                 $.ajax({
                     type: 'POST',
                     url: "{$di.router->getRouteUrl('photos')}/album/{$albumName|e}",
