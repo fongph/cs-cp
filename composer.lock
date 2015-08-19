@@ -97,7 +97,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-mail.git",
-                "reference": "08bb397be373064813aec5d7310bcb5631ced815"
+                "reference": "a90710f786cb65949fb1995b3acc301b6d396433"
             },
             "require": {
                 "guzzlehttp/guzzle": "~5.0",
@@ -116,7 +116,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2015-08-03 12:13:39"
+            "time": "2015-08-19 08:04:39"
         },
         {
             "name": "boomers/cs-models",
