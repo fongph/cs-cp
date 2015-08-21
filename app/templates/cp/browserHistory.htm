@@ -13,7 +13,7 @@
             <input class="btn btn-warning" type="submit" value="{$di.t->_('Add domain')}"/>
         </form>  
     {/if}
-    <ul class="nav nav-pills" style="overflow: hidden;{if !$isDeviceBlockSiteAvailable} display: none{/if}">
+    <ul class="nav nav-pills nav-pills-fix" style="overflow: hidden;{if !$isDeviceBlockSiteAvailable} display: none{/if}">
         <li><a href="#history" data-toggle="tab">{$di.t->_('History')}</a></li>
         <li><a href="#blocked" data-toggle="tab">{$di.t->_('Blocked')}</a></li>
     </ul>
@@ -28,7 +28,7 @@
                 </div>
             </div>
 
-            <div class="table-container">
+            <div class="table-container table-browser-history">
                 <table id="history-datatable" aria-describedby="datatables_info">
                     <thead>
                         <tr role="row">
@@ -43,7 +43,7 @@
             </div>
         </div>
         <div class="tab-pane" id="blocked">
-            <div class="table-container">
+            <div class="table-container table-browser-history">
                 <table id="blocked-datatable" aria-describedby="datatables_info">
                     <thead>
                         <tr role="row">

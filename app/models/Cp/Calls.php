@@ -60,6 +60,11 @@ class Calls extends BaseModel {
         return $this->getDb()->query("SELECT `dev_id` FROM `call_log` WHERE `dev_id` = {$devId} LIMIT 1")->fetchColumn() !== false;
     }
 
+    public function getLastTimestamp($devId) {
+        $devId = $this->getDb()->quote($devId);
+        return $this->getDb()->query("SELECT `timestamp` FROM `call_log` WHERE `dev_id` = {$devId} GROUP BY `timestamp` ORDER BY `timestamp` DESC LIMIT 1")->fetch();
+    }
+    
     public function getBlackList($devId) {
         $devId = $this->getDB()->quote($devId);
 

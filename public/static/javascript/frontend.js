@@ -12812,6 +12812,10 @@ $(document).ready(function () {
         e.preventDefault();
         $('body').toggleClass('menu-active');
     });
+    
+    $('.navbar-toggle').on('click', function() {
+       $(this).toggleClass('collapsed'); 
+    });
 
 });
 

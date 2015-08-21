@@ -5,10 +5,12 @@
 <div class="bordered-container left">
     {$content}
 </div>
+{if !isset($button) || $button}
 <script type="text/javascript">
     $(document).ready(function () {
         var link = {if isset($link)}'{$link}'{else}document.referrer{/if};
-        $('.bordered-container.left').append('<p class="text-center"><a href="' + link + '" class="btn btn-primary">{$di.t->_("I\'m done!")}</a></p>');
+        $('.bordered-container.left').append('<p class="text-{if isset($alignButton)}{$alignButton}{else}center{/if}"><a href="' + link + '" class="btn btn-primary">{$di.t->_("I\'m done!")}</a></p>');
     });
 </script>
+{/if}
 {/block}

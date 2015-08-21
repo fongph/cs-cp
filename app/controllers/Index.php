@@ -17,7 +17,14 @@ class Index extends BaseController
     public function contentAction()
     {
         if (isset($this->di['config']['contents']['names'][$this->params['uri']]) && !$this->demo) {
-            if ($this->auth === null && in_array($this->params['uri'], $this->di['config']['contents']['auth'])) {
+            
+            
+            
+            if(in_array($this->params['uri'], ['instructions/uninstall-pumpic-ios.html', 
+                                                'instructions/uninstall-pumpic-android.html'])) 
+            {
+                $this->instructionUninstall();
+            } else if ($this->auth === null && in_array($this->params['uri'], $this->di['config']['contents']['auth'])) {
                 $this->error404();
             }
             
@@ -34,6 +41,12 @@ class Index extends BaseController
             $path = $contentModel->getTemplatePath($this->params['uri']);
             $this->setView($path);
             $this->view->title = $this->di['t']->_($this->di['config']['contents']['names'][$this->params['uri']]);
+            
+            if(in_array($this->params['uri'], ['instructions/activate-location-ios.html', 
+                'instructions/activate-location-android.html', 'instructions/install-xposed.html'])) {
+                $this->view->alignButton = 'left';
+            }
+            
             if(in_array($this->params['uri'], ['instructions/keylogger-activation.html'])) {
                 $this->setLayout('content/instructions-keylogger-content.html');
             } else
@@ -43,6 +56,15 @@ class Index extends BaseController
         }
     }
 
+    public function instructionUninstall() 
+    {
+        $contentModel = new \Models\Content($this->di);
+        $path = $contentModel->getTemplatePath($this->params['uri']);
+        $this->setView($path);
+        $this->view->title = $this->di['t']->_($this->di['config']['contents']['names'][$this->params['uri']]);
+        $this->view->button = false;
+    }
+    
     public function loginAction()
     {   
         

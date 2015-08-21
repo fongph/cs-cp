@@ -158,6 +158,11 @@ class BrowserHistory extends BaseModel {
         
         return true;
     }
+    
+    public function getLastTimestamp($devId) {
+        $devId = $this->getDb()->quote($devId);
+        return $this->getDb()->query("SELECT `timestamp` FROM `browser_history` WHERE `dev_id` = {$devId} GROUP BY `timestamp` ORDER BY `timestamp` DESC LIMIT 1")->fetch();
+    }
 
     public function hasRecords($devId) {
         $devId = $this->getDb()->quote($devId);

@@ -7,6 +7,7 @@
         width: 150px;
         height: 150px;
         margin-bottom: 5px;
+        margin-right: 5px;
     }
 
     .photo-info {
@@ -16,6 +17,52 @@
 
     .photo-info dl {
         margin: 10px 0 0 0;
+    }
+    
+    /* ============ paginate panel============== */
+    .panel-pagination {
+        margin: 0px;
+        padding: 0px;
+    }
+    .panel-pagination li {
+        background-color: #f3f3f3;
+        border: 1px solid #999999;
+        list-style: none;
+        float: left;
+        position: relative;
+        margin-bottom: 0;
+        padding: 6px 12px;
+        text-align: center;
+        vertical-align: middle;
+        white-space: nowrap;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+    .panel-pagination li:hover, .panel-pagination li.disabled {
+        cursor: default;
+        background-color: #dadada;
+        border: 1px solid #7a7a7a;
+    }
+    .panel-pagination li a, .panel-pagination li:hover > a {
+        cursor: inherit;
+    }
+    
+    .panel-pagination li.panel_previous {
+        border-bottom-right-radius: 0;
+        border-top-right-radius: 0;
+    }
+    
+    .panel-pagination li.panel_next {
+        border-bottom-left-radius: 0;
+        border-top-left-radius: 0;
+    }
+    .panel-pagination li > a {
+        width: 100%;
+        height: 100%;
+        font-size: 14px;
+        font-weight: normal;
+        line-height: 1.42857;
+        color: #303030;
     }
 </style>
 <div>
@@ -32,14 +79,33 @@
         <div class="panel-heading">{$albumName|e}</div>
         <div class="panel-body text-center">
             {foreach $photos as $item}
-            <a href="{$item.fullUrl|e}" class="album-item"><img data-name="{$item.filepath|pathinfo:$.const.PATHINFO_BASENAME|e}" data-time="{$item.timestamp|e}" data-album="{$item.album|e}" data-deleted="{$item.deleted|e}" src="{$item.thumbUrl|e}" alt="" class="photo img-rounded blur-for-support" /></a>
+            <a href="{$item.fullUrl|e}" class="album-item">
+                <img data-name="{$item.filepath|pathinfo:$.const.PATHINFO_BASENAME|e}" 
+                     data-time="{$item.timestamp|e}" 
+                     data-album="{$item.album|e}" 
+                     data-deleted="{$item.deleted|e}" 
+                     src="{$item.thumbUrl|e}" 
+                     alt="" 
+                     class="photo img-rounded blur-for-support" />
+            </a>
             {/foreach}
+        </div>
+        <div class="panel-footer">
+            <div class="row">
+                <div class="col-xs-7 text-left">
+                    <div class="panel_paginate_info" id="panel_paginate_info">Showing 1 to {$totalPage} of {$totalPage} entries</div>
+                </div>
+                <div class="col-xs-5 text-right">
+                    <div class="panel_paginate btn-group" id="panel_paginate"></div>
+                </div>
+            </div>
         </div>
     </div>
     {/if}
 </div>
 <script type="text/javascript">
-    $(document).ready(function(e) {
+    
+    function blockPhotoInfo() {
         var photoTmpl = _.template('<div class="photo-info"><strong class="text-info"><%- name %></strong><dl><dt>{$di.t->_('Date')}</dt><dd><%- time %></dd><dt>{$di.t->_('Album')}</dt><dd><%- album %></dd><dt>{$di.t->_('Deleted')}</dt><dd><% if (deleted > 0) { %>{$di.t->_('Yes')}<% } else { %>{$di.t->_('No')}<% } %></dd></dl></div>');
 
         $('.photo').each(function() {
@@ -58,7 +124,7 @@
         });
         
         {if $supportMode}
-            $(".album-item").click(function(e){
+            $(".album-item").on('click', function(e){
                 e.preventDefault();
                 alert('Not allowed on support mode!');
             });
@@ -76,5 +142,60 @@
         }, function() {
             $(this).toggleClass('img-rounded img-thumbnail');
         });
+    }
+    
+    $(document).ready(function(e) {
+        blockPhotoInfo();
+        
+        $('#panel_paginate').twbsPagination({
+            totalPages: {$totalPage},
+            visiblePages: 0,
+            displayFirst: false,
+            displayLast: false,
+            paginationClass: "panel-pagination clearfix",
+            prev: '<i class="fa fa-arrow-left"></i>',
+            next: '<i class="fa fa-arrow-right"></i>',
+            nextClass: 'panel_next',
+            prevClass: 'panel_previous',
+            onPageClick: function (event, page) {
+                
+                var pageData = $('#panel_paginate').data();
+                if($('#panel_paginate_info')) 
+                    $('#panel_paginate_info').html( "Showing "+page+" to "+ pageData.twbsPagination.options.totalPages +" of "+ pageData.twbsPagination.options.totalPages +" entries" );
+            
+                $.ajax({
+                    type: 'POST',
+                    url: "{$di.router->getRouteUrl('photos')}/album/{$albumName|e}",
+                    async: false,
+                    data: { 'currPage': page },
+                    dataType: 'json',
+                    beforeSend: function() {
+                        $('.panel-body').html('loading..');
+                    },
+                    success: function (result) {
+                       if(result.length) {
+                           $('.panel-body').html('');
+                           $.each( result, function(key, value) {
+                               $('.panel-body').append('<a href="'+ value.fullUrl +'" class="album-item">'+
+                                    '<img data-name="'+ value.filepath +'"'+ 
+                                         'data-time="'+ value.timestamp +'"'+ 
+                                         'data-album="'+ value.album +'"'+
+                                         'data-deleted="'+ value.deleted +'"'+ 
+                                         'src="'+ value.thumbUrl +'"'+ 
+                                         'alt=""'+ 
+                                         'class="photo img-rounded blur-for-support" />'+
+                                '</a>');
+                           });
+                           blockPhotoInfo();
+                       } 
+                    },
+                    error: function(){
+                        $('.panel-body').html('ERROR');
+                    }
+                });
+                
+            }
+        });
+        
     });
 </script>

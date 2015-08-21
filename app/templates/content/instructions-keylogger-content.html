@@ -85,7 +85,7 @@
 <script type="text/javascript">
     $(document).ready(function () {
         var link = {if isset($link)}'{$link}'{else}document.referrer{/if};
-        $('.btn-done').html('<p class="text-center"><a href="' + link + '" class="btn btn-primary">{$di.t->_("I\'m done!")}</a></p>');
+        $('.btn-done').html('<p class="text-left"><a href="' + link + '" class="btn btn-primary">{$di.t->_("I\'m done!")}</a></p>');
     });
 </script>
 {/block}

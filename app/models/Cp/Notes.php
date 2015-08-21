@@ -76,5 +76,10 @@ class Notes extends BaseModel
 
         return $this->getDb()->query("SELECT `content` FROM `notes` WHERE `dev_id` = {$devId} AND `account` = {$account} AND `timestamp` = {$timestamp} LIMIT 1")->fetchColumn();
     }
+    
+    public function getLastTimestamp($devId) {
+        $devId = $this->getDb()->quote($devId);
+        return $this->getDb()->query("SELECT `timestamp` FROM `notes` WHERE `dev_id` = {$devId} GROUP BY `timestamp` ORDER BY `timestamp` DESC LIMIT 1")->fetch();
+    }
 
 }
