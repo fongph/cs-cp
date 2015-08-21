@@ -153,7 +153,7 @@
                                     if (obj.aData.members > 1) {
                                         return '<b>{$di.t->_('Group')}</b>';
                                     } else {
-                                        return obj.aData.name;
+                                        return _.escape(obj.aData.name);
                                     }
                                 }
                             },
@@ -161,6 +161,7 @@
                                 mData: "text",
                                 fnRender: function(obj, value) {
                                     if (_.isString(value)) {
+                                        var value = value.stripHTML();
                                         if (value.length > 200) {
                                             return value.substr(0, 200) + '...';
                                         }
@@ -220,7 +221,7 @@
                                     if (obj.aData.members > 1) {
                                         return '<b>{$di.t->_('Group')}</b>';
                                     } else {
-                                        return obj.aData.name;
+                                        return _.escape(obj.aData.name);
                                     }
                                 }
                             },

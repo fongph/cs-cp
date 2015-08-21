@@ -8,7 +8,7 @@
     <h4>{$di.t->_('Conference Call Members:')}</h4>
     {foreach $users as $userId => $name}
     {if strlen($name)}
-    <p class="text-info">{$name} ({$userId})</p>
+    <p class="text-info">{$name|e} ({$userId})</p>
     {/if}
     {/foreach}
 </div>

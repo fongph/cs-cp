@@ -5,7 +5,7 @@
 
     {if $tab=='private'}
     <div class="dialog-panel-top">
-        <p class="text-info">{$di.t->_('Messages with')} <b>{$list[0].name}</b></p>
+        <p class="text-info">{$di.t->_('Messages with')} <b>{$list[0].name|e}</b></p>
         <a class="btn btn-default" href="{$di.config.domain}/cp/skype">{$di.t->_('Back to Skype log')}</a>
     </div>
     {elseif $tab=='group'}
@@ -13,7 +13,7 @@
         <p class="text-info">{$di.t->_('Messages with')} 
             {foreach $users as $userId => $name last=$last}
                 {if strlen($name)}
-                <b>{$name}</b>{if !$last}, {/if}
+                <b>{$name|e}</b>{if !$last}, {/if}
                 {/if}
             {/foreach}
         </p>
@@ -27,12 +27,12 @@
             <div class="popover {if $item.type == 'in'}right{else}left{/if}">
                 <div class="arrow"></div>
                 {if $item.type == 'in'}
-                <h3 class="popover-title"><b>{$item.name}</b> <span></span></h3>
+                <h3 class="popover-title"><b>{$item.name|e}</b> <span></span></h3>
                 {else}
                 <h3 class="popover-title"><span></span></h3>
                 {/if}
                 <div class="popover-content">
-                    <p>{$item.text}</p>
+                    <p>{$item.text|ereplace:'/(<([^>]+)>)/i':''}{* HTML tags escaping *}</p>
                 </div>
             </div>
         </div>
