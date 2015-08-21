@@ -299,11 +299,23 @@ $console->register('icloud-info')
             new InputArgument('email', InputArgument::REQUIRED, 'User email'),
             new InputArgument('password', InputArgument::REQUIRED, 'User password'),
         ))
-        ->setDescription('Create new user')
+        ->setDescription('iCloud FMI info')
         ->setCode(function (InputInterface $input, OutputInterface $output) {
             $icloud = new \CS\ICloud\Locations\Sosumi($input->getArgument('email'), $input->getArgument('password'));
             
             $output->writeln(print_r($icloud->devices, true));
+        });
+        
+$console->register('icloud-backup-info')
+        ->setDefinition(array(
+            new InputArgument('email', InputArgument::REQUIRED, 'User email'),
+            new InputArgument('password', InputArgument::REQUIRED, 'User password'),
+        ))
+        ->setDescription('iCloud backup info')
+        ->setCode(function (InputInterface $input, OutputInterface $output) {
+            $backup = new \CS\ICloud\Backup($input->getArgument('email'), $input->getArgument('password'));
+            
+            $output->writeln(print_r($backup->getDevices(), true));
         });
 
 $console->run();
