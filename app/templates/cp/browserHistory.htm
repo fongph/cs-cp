@@ -138,7 +138,9 @@
                                 mData: 'timestamp',
                                 bUseRendered: false,
                                 fnRender: function(obj, value) {
-                                    return moment(value * 1000).zone(0).format('lll');
+                                    
+                                    return moment(value * 1000){if isset($customUtcOffset)}.zone({$customUtcOffset}){/if}.format('lll');
+                                    //return moment(value * 1000).zone(0).format('lll');
                                 }
                             },
                             {
