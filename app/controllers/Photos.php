@@ -49,14 +49,16 @@ class Photos extends BaseModuleController
         $photosModel = new \Models\Cp\Photos($this->di);
         
         if ($this->getRequest()->isAjax()) {
-            $currPage = ($this->getRequest()->hasPost('currPage') && $this->getRequest()->post('currPage') > 0) ? $this->getRequest()->post('currPage') - 1 : 0;
-            $data = $photosModel->getAlbumPhotos($this->di['devId'], $this->params['album'], $currPage, $this->lengthPage);
+            $currPage = ($this->getRequest()->hasPost('currPage') && $this->getRequest()->post('currPage') > 0) ? $this->getRequest()->post('currPage') : 0;
+            $perPage = ($this->getRequest()->hasPost('perPage') && $this->getRequest()->post('perPage') > 0) ? $this->getRequest()->post('perPage') : $this->lengthPage;
+            
+            $data = $photosModel->getAlbumPhotos($this->di['devId'], $this->params['album'], $currPage, $perPage);
             $this->makeJSONResponse($data);
         }
         
-        $this->view->photos = $photosModel->getAlbumPhotos($this->di['devId'], $this->params['album'], 0, $this->lengthPage);
-        $this->view->lengthPage = $this->lengthPage;
-        $this->view->totalPage = $photosModel->getTotalPages($this->di['devId'], $this->params['album'], $this->lengthPage);
+        $this->view->hasPhotos = $photosModel->getCountItems($this->di['devId'], $this->params['album']);
+//        $this->view->lengthPage = $this->lengthPage;
+//        $this->view->totalPage = $photosModel->getTotalPages($this->di['devId'], $this->params['album'], $this->lengthPage);
         $this->view->albumName = $this->params['album'];
 
         $this->setView('cp/photosAlbum.htm');

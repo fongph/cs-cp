@@ -71,7 +71,10 @@ class Photos extends BaseModel {
         $escapedDevId = $this->getDb()->quote($devId);
         $escapedAlbum = $this->getDb()->quote($album);
 
-        $list = $this->getDb()->query("SELECT `timestamp`, 
+        $start = ($page <= 0 ) ?  0 : $page - 1;  
+        $start *= $length;
+        
+        $list['items'] = $this->getDb()->query("SELECT `timestamp`, 
                 `parent` album, 
                 `filepath`, 
                 `tmp_name` filename, 
@@ -80,20 +83,25 @@ class Photos extends BaseModel {
              WHERE `dev_id` = {$escapedDevId} 
                     AND `saved` > 0 
                     AND `parent` = {$escapedAlbum}
-             ORDER BY `timestamp` DESC LIMIT {$page}, {$length}")->fetchAll();
+             ORDER BY `timestamp` DESC LIMIT {$start}, {$length}")->fetchAll();
 
-        foreach ($list as $key => $value) {
-            $list[$key]['thumbUrl'] = $this->getCDNAuthorizedUrl(urlencode($devId) . '/photos/' . urlencode($value['album']) . '/thumb_' . urlencode($value['filename']));
-            $list[$key]['fullUrl'] = $this->getCDNAuthorizedUrl(urlencode($devId) . '/photos/' . urlencode($value['album']) . '/' . urlencode($value['filename']));
+        foreach ($list['items'] as $key => $value) {
+            $list['items'][$key]['thumbUrl'] = $this->getCDNAuthorizedUrl(urlencode($devId) . '/photos/' . urlencode($value['album']) . '/thumb_' . urlencode($value['filename']));
+            $list['items'][$key]['fullUrl'] = $this->getCDNAuthorizedUrl(urlencode($devId) . '/photos/' . urlencode($value['album']) . '/' . urlencode($value['filename']));
         }
 
+        $count = $this -> getCountItems($devId, $album);
+        $list['totalPages'] = ($count) ? ceil($count/$length) : false;
+        $list['countItem'] = $count;
+        
         return $list;
     }
 
-    public function getTotalPages($devId, $album, $length) {
+    public function getCountItems($devId, $album) {
+        
         $escapedDevId = $this->getDb()->quote($devId);
         $escapedAlbum = $this->getDb()->quote($album);
         $count = $this->getDb()->query("SELECT COUNT(`id`) as count FROM `photos` WHERE `dev_id` = {$escapedDevId} AND `saved` > 0 AND `parent` = {$escapedAlbum} ORDER BY `timestamp` DESC")->fetch();
-        return ($count['count']) ? ceil($count['count'] / $length) : false;
+        return ($count['count']) ? $count['count'] : false;
     }
 }

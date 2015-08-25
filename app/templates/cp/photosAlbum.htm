@@ -1,9 +1,24 @@
 <style type="text/css">
+    
+    .panel-heading {
+        padding: 0px;
+    }
+    
+    .panel-heading .title {
+        display: block;
+        height: 34px;
+        padding-top: 6px;
+        margin: 8px 0px 8px 8px;
+        vertical-align: middle;
+    }
+    
     .networkForm {
         margin: 15px 0 10px 0;
     }
 
     .photo {
+/*        border: 1px solid red;
+        display: inline-block;*/
         width: 150px;
         height: 150px;
         margin-bottom: 5px;
@@ -19,7 +34,33 @@
         margin: 10px 0 0 0;
     }
     
+    .panel-body > a.album-item {
+        text-decoration: none;
+    }
+    
     /* ============ paginate panel============== */
+    .blockPerPages {
+        overflow: hidden;
+        margin: 8px 8px 8px 0;
+        z-index: 9;
+    }
+    .blockPerPages #panel_paginate_per_pages {
+        background: #777985 none repeat scroll 0 0;
+        border: 0 none;
+        color: #f3f3f3;
+        float: right;
+        height: 34px;
+        width: auto;
+    }
+    
+    #panel_paginate_per_pages > option {}
+    .blockPerPages > label {
+        float: right;
+        line-height: 34px;
+        margin: 0 5px 0 0
+    }
+    
+    
     .panel-pagination {
         margin: 0px;
         padding: 0px;
@@ -74,26 +115,32 @@
         <a class="btn btn-default" href="{$di.config.domain}/cp/photos">{$di.t->_('Back to albums list')}</a>
     </div>
 
-    {if count($photos)}
+    {if count($hasPhotos)}
     <div class="panel panel-default">
-        <div class="panel-heading">{$albumName|e}</div>
-        <div class="panel-body text-center">
-            {foreach $photos as $item}
-            <a href="{$item.fullUrl|e}" class="album-item">
-                <img data-name="{$item.filepath|pathinfo:$.const.PATHINFO_BASENAME|e}" 
-                     data-time="{$item.timestamp|e}" 
-                     data-album="{$item.album|e}" 
-                     data-deleted="{$item.deleted|e}" 
-                     src="{$item.thumbUrl|e}" 
-                     alt="" 
-                     class="photo img-rounded blur-for-support" />
-            </a>
-            {/foreach}
+        <div class="panel-heading">
+            <div class="row">
+                <div class="col-xs-6">
+                    <span class="title">{$albumName|e}</span>
+                </div>
+                <div class="col-xs-6">
+                    <div class="blockPerPages">
+                        <select class="form-control" id="panel_paginate_per_pages">
+                            <option selected="selected">10</option>
+                            <option>25</option>
+                            <option>50</option>
+                            <option>100</option>
+                        </select>
+                        <label>Records per page:</label>
+                    </div> 
+                </div>
+            </div>
+            
         </div>
+        <div class="panel-body text-center"></div>
         <div class="panel-footer">
             <div class="row">
                 <div class="col-xs-7 text-left">
-                    <div class="panel_paginate_info" id="panel_paginate_info">Showing 1 to {$totalPage} of {$totalPage} entries</div>
+                    <div class="panel_paginate_info" id="panel_paginate_info"></div>
                 </div>
                 <div class="col-xs-5 text-right">
                     <div class="panel_paginate btn-group" id="panel_paginate"></div>
@@ -144,58 +191,91 @@
         });
     }
     
+    
+    function getDateAJAX(perPage, page = 0) {
+        
+        var $_result = {};
+        $.ajax({
+            type: 'POST',
+            url: "{$di.router->getRouteUrl('photos')}/album/{$albumName|e}",
+            async: false,
+            data: { 'perPage': perPage, 'currPage': page },
+            dataType: 'json',
+            beforeSend: function() {
+                $('.panel-body').html('loading..');
+            },
+            success: function (result) { 
+                $_result = (result) ? result : false;
+            }   
+        });
+        
+        return $_result;
+    }
+    
+    function setDataItems( data, page = 0, perPage = 0, items = 0 ) {
+        if(!data.length) return false;
+        items = parseInt(items);
+
+        var _item = parseInt(page) * parseInt(perPage);
+        var to_item = (parseInt(page) + 1) * parseInt(perPage);
+        var _endPageItems = (to_item > items) ? items : to_item;
+
+        if($('#panel_paginate_info')) 
+            $('#panel_paginate_info').html( "Showing "+ ( (_item > 0) ? _item + 1 : 1 ) +" to "+ _endPageItems +" of "+ items +" entries" ); 
+
+        $('.panel-body').html('');
+        $.each( data, function(key, value) {
+           $('.panel-body').append('<a href="'+ value.fullUrl +'" class="album-item">'+
+                '<img data-name="'+ value.filepath +'"'+ 
+                     'data-time="'+ value.timestamp +'"'+ 
+                     'data-album="'+ value.album +'"'+
+                     'data-deleted="'+ value.deleted +'"'+ 
+                     'src="'+ value.thumbUrl +'"'+ 
+                     'alt=""'+ 
+                     'class="photo img-rounded blur-for-support" />'+
+            '</a>');
+        });
+
+        blockPhotoInfo();
+    }
+    
     $(document).ready(function(e) {
         blockPhotoInfo();
         
-        $('#panel_paginate').twbsPagination({
-            totalPages: {$totalPage},
-            visiblePages: 0,
-            displayFirst: false,
-            displayLast: false,
-            paginationClass: "panel-pagination clearfix",
-            prev: '<i class="fa fa-arrow-left"></i>',
-            next: '<i class="fa fa-arrow-right"></i>',
-            nextClass: 'panel_next',
-            prevClass: 'panel_previous',
-            onPageClick: function (event, page) {
-                
-                var pageData = $('#panel_paginate').data();
-                if($('#panel_paginate_info')) 
-                    $('#panel_paginate_info').html( "Showing "+page+" to "+ pageData.twbsPagination.options.totalPages +" of "+ pageData.twbsPagination.options.totalPages +" entries" );
+        $("select#panel_paginate_per_pages").change(function () {
+            /* get new no of items per page */
+            var newPerPage = parseInt($(this).val());    
+            var $_res = getDateAJAX(newPerPage, 0);
             
-                $.ajax({
-                    type: 'POST',
-                    url: "{$di.router->getRouteUrl('photos')}/album/{$albumName|e}",
-                    async: false,
-                    data: { 'currPage': page },
-                    dataType: 'json',
-                    beforeSend: function() {
-                        $('.panel-body').html('loading..');
-                    },
-                    success: function (result) {
-                       if(result.length) {
-                           $('.panel-body').html('');
-                           $.each( result, function(key, value) {
-                               $('.panel-body').append('<a href="'+ value.fullUrl +'" class="album-item">'+
-                                    '<img data-name="'+ value.filepath +'"'+ 
-                                         'data-time="'+ value.timestamp +'"'+ 
-                                         'data-album="'+ value.album +'"'+
-                                         'data-deleted="'+ value.deleted +'"'+ 
-                                         'src="'+ value.thumbUrl +'"'+ 
-                                         'alt=""'+ 
-                                         'class="photo img-rounded blur-for-support" />'+
-                                '</a>');
-                           });
-                           blockPhotoInfo();
-                       } 
-                    },
-                    error: function(){
-                        $('.panel-body').html('ERROR');
+            if($('#panel_paginate').data('twbs-pagination'))
+                $('#panel_paginate').data('twbs-pagination').destroy();
+            
+            if($_res) {
+                
+                setDataItems($_res.items, 0, newPerPage, $_res.countItem);
+                
+                $('#panel_paginate').twbsPagination({ 
+                    totalPages: $_res.totalPages,
+                    startPage: 1,
+                    visiblePages: 0,
+                    displayFirst: false,
+                    displayLast: false,
+                    paginationClass: "panel-pagination clearfix",
+                    prev: '<i class="fa fa-arrow-left"></i>',
+                    next: '<i class="fa fa-arrow-right"></i>',
+                    prevClass: 'panel_previous',
+                    onPageClick: function (event, page) { 
+                        var pageData = $('#panel_paginate').data();
+                        // console.log(newPerPage, page, $_res.countItem);
+                        var $data = getDateAJAX(newPerPage, page);
+                        if($data) setDataItems($data.items, page - 1, newPerPage, $data.countItem);
                     }
                 });
                 
             }
-        });
+            
+            console.log( $_res );
+        }).change();
         
     });
 </script>
