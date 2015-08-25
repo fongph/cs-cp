@@ -192,7 +192,7 @@
     }
     
     
-    function getDateAJAX(perPage, page = 0) {
+    function getDateAJAX(perPage, page) {
         
         var $_result = {};
         $.ajax({
@@ -212,7 +212,7 @@
         return $_result;
     }
     
-    function setDataItems( data, page = 0, perPage = 0, items = 0 ) {
+    function setDataItems( data, page, perPage, items ) {
         if(!data.length) return false;
         items = parseInt(items);
 
