@@ -44,5 +44,12 @@ function validatePhoneNumber($value)
 }
 
 function goBack() {   
-    return (isset($_COOKIE['document_referer'])) ? $_COOKIE['document_referer'] : false;
+    
+    $_url = false;
+    if(isset($_COOKIE['document_referer'])) {
+        $_url = $_COOKIE['document_referer'];
+        if(isset($_GET['_ga'])) $_url .= '#'. $_GET['_ga'];
+    }
+    
+    return $_url;
 }
