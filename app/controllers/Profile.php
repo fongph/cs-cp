@@ -114,7 +114,7 @@ class Profile extends BaseController
                             $userNotes->licenseUpgraded($deviceObserver->getDevice()->getId(), $oldLicenseId, $deviceObserver->getLicense()->getId());
                             $this->di->getFlashMessages()->add(FlashMessages::SUCCESS, $this->di->getTranslator()->_('Subscription has been upgraded'));
                             
-                            $eventManager = EventManager::getInstance();
+                            $eventManager = \EventManager\EventManager::getInstance();
                             $eventManager->emit('license-unassigned', array(
                                 'userId' => $deviceObserver->getLicense()->getUserId(),
                                 'deviceId' => $deviceObserver->getDevice()->getId(),
@@ -134,7 +134,7 @@ class Profile extends BaseController
                             $queueManage->addTaskDevice('downloadChannel-priority', $this->getDeviceRecord()->getICloudDevice());
                         }
                         
-                        $eventManager = EventManager::getInstance();
+                        $eventManager = \EventManager\EventManager::getInstance();
                         $eventManager->emit('license-assigned', array(
                             'userId' => $deviceObserver->getLicense()->getUserId(),
                             'deviceId' => $deviceObserver->getDevice()->getId(),
