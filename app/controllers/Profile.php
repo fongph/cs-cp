@@ -115,11 +115,6 @@ class Profile extends BaseController
                             $this->di->getFlashMessages()->add(FlashMessages::SUCCESS, $this->di->getTranslator()->_('Subscription has been upgraded'));
                             
                             $eventManager = \EventManager\EventManager::getInstance();
-                            $eventManager->emit('license-unassigned', array(
-                                'userId' => $deviceObserver->getLicense()->getUserId(),
-                                'deviceId' => $deviceObserver->getDevice()->getId(),
-                                'licenseId' => $oldLicenseId
-                            ));
                             $eventManager->emit('license-assigned', array(
                                 'userId' => $deviceObserver->getLicense()->getUserId(),
                                 'deviceId' => $deviceObserver->getDevice()->getId(),
