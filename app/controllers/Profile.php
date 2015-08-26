@@ -113,15 +113,34 @@ class Profile extends BaseController
                         })->setAfterSave(function() use ($deviceObserver, $userNotes, $oldLicenseId) {
                             $userNotes->licenseUpgraded($deviceObserver->getDevice()->getId(), $oldLicenseId, $deviceObserver->getLicense()->getId());
                             $this->di->getFlashMessages()->add(FlashMessages::SUCCESS, $this->di->getTranslator()->_('Subscription has been upgraded'));
+                            
+                            $eventManager = EventManager::getInstance();
+                            $eventManager->emit('license-unassigned', array(
+                                'userId' => $deviceObserver->getLicense()->getUserId(),
+                                'deviceId' => $deviceObserver->getDevice()->getId(),
+                                'licenseId' => $oldLicenseId
+                            ));
+                            $eventManager->emit('license-assigned', array(
+                                'userId' => $deviceObserver->getLicense()->getUserId(),
+                                'deviceId' => $deviceObserver->getDevice()->getId(),
+                                'licenseId' => $deviceObserver->getLicense()->getId()
+                            ));
                         });
                 } else {
                     $deviceObserver->setAfterSave(function() use($deviceObserver, $userNotes) {
-                        
                         $userNotes->licenseAssigned($deviceObserver->getLicense()->getId(), $deviceObserver->getDevice()->getId());
                         if($this->getDeviceRecord()->getOS() === DeviceRecord::OS_ICLOUD){
                             $queueManage = new QueueManager($this->di->get('queueClient'));
                             $queueManage->addTaskDevice('downloadChannel-priority', $this->getDeviceRecord()->getICloudDevice());
                         }
+                        
+                        $eventManager = EventManager::getInstance();
+                        $eventManager->emit('license-assigned', array(
+                            'userId' => $deviceObserver->getLicense()->getUserId(),
+                            'deviceId' => $deviceObserver->getDevice()->getId(),
+                            'licenseId' => $deviceObserver->getLicense()->getId()
+                        ));
+                        
                         $this->di->getFlashMessages()->add(FlashMessages::SUCCESS, $this->di->getTranslator()->_('Subscription has been assigned to your device'));
                     });
                 }
