@@ -41,6 +41,10 @@ class BrowserHistory extends BaseModuleController
         }
         $this->view->isDeviceBlockSiteAvailable = DeviceOptions::isDeviceBlockSiteAvailable($this->di['currentDevice']['os']);
 
+        if($this->di['currentDevice']['os'] != 'icloud'){
+            $this->view->customUtcOffset = 0;
+        }
+        
         $this->setView('cp/browserHistory.htm');
     }
 
