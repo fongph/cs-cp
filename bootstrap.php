@@ -31,8 +31,7 @@ $di->setShared('mailSender', function() use ($di) {
         $mailSender = new CS\Mail\MailSender(new \CS\Mail\Processor\FileProcessor(ROOT_PATH . 'logs/mailSender.log'));
     } else {
         $mailSender = new CS\Mail\MailSender(new \CS\Mail\Processor\RemoteProcessor(
-                GlobalSettings::getMailSenderURL($di['config']['site']), 
-                GlobalSettings::getMailSenderSecret($di['config']['site'])
+                GlobalSettings::getMailSenderURL($di['config']['site']), GlobalSettings::getMailSenderSecret($di['config']['site'])
         ));
     }
 
@@ -42,9 +41,9 @@ $di->setShared('mailSender', function() use ($di) {
         $authData = $auth->getIdentity();
         $mailSender->setUserId($authData['id']);
     }
-    
+
     CS\Users\UsersManager::registerListeners($di['db']);
-    
+
     return $mailSender->setLocale($di['t']->getLocale())
                     ->setSiteId($di['config']['site']);
 });
@@ -165,8 +164,8 @@ $di->setShared('router', function() use($config, $di) {
     $router->add('wizard-android', new \System\Router\Regex('/instructions/wizard-android', array('controller' => 'Index', 'action' => 'wizardAndroid', 'public' => true)));
     $router->add('wizard-ios', new \System\Router\Regex('/instructions/wizard-ios', array('controller' => 'Index', 'action' => 'wizardIos', 'public' => true)));
     $router->add('wizard-icloud', new \System\Router\Regex('/instructions/wizard-icloud', array('controller' => 'Index', 'action' => 'wizardIcloud', 'public' => true)));
-    
-    
+
+
     return $router;
 });
 
@@ -258,7 +257,7 @@ $di->setShared('usersNotesProcessor', function() use ($di) {
     $auth = $di['auth'];
 
     CS\Users\UsersManager::registerListeners($di['db']);
-    
+
     if (!$auth->hasIdentity()) {
         return new CS\Users\UsersNotes($di['db']);
     }
@@ -272,12 +271,16 @@ $di->setShared('usersNotesProcessor', function() use ($di) {
     return new CS\Users\UsersNotes($di['db'], $authData['id']);
 });
 
+$di->setShared('eventManager', function() {
+    return \EventManager\EventManager::getInstance();
+});
+
 $di->setShared('usersManager', function() use ($di) {
     $usersManager = new CS\Users\UsersManager($di['db']);
 
     return $usersManager->setUsersNotesProcessor($di['usersNotesProcessor']);
 });
- 
+
 $di->setShared('devicesManager', function() use ($di) {
     $devicesManager = new CS\Devices\Manager($di['db']);
 
@@ -295,7 +298,7 @@ $di->setShared('gatewaysContainer', function () {
 $di->setShared('billingManager', function () use ($di) {
     $billingManager = new \CS\Billing\Manager($di['db']);
     $billingManager->setGatewaysContainer($di['gatewaysContainer']);
-    
+
     return $billingManager;
 });
 
@@ -303,19 +306,19 @@ $di->set('isTestUser', function($id) use($config) {
 
     if ($config['environment'] == 'production') {
         return in_array($id, array(
-            1, //b.orest@dizboard.com
-            2, //pm@dizboard.com
-            10, //p.olya@dizboard.com
-            11, //g.zhenya@dizboard.com
-            280 //qa@dizboard.com
-        )) || (\IP::getRealIP() === '176.38.120.13');
+                    1, //b.orest@dizboard.com
+                    2, //pm@dizboard.com
+                    10, //p.olya@dizboard.com
+                    11, //g.zhenya@dizboard.com
+                    280 //qa@dizboard.com
+                )) || (\IP::getRealIP() === '176.38.120.13');
     }
 
     return true;
 });
 
 $di->setShared('isTest', function() use($config) {
-    
+
     if ($config['environment'] == 'production') {
         return (\IP::getRealIP() == '176.38.120.13');
     }

@@ -253,10 +253,15 @@ class Wizard extends BaseController {
                                         $this->di['usersNotesProcessor']->deviceAdded($deviceObserver->getDevice()->getId());
                                         $this->di['usersNotesProcessor']->licenseAssigned($deviceObserver->getLicense()->getId(), $deviceObserver->getDevice()->getId());
                                         
-                                        $eventManager = \EventManager\EventManager::getInstance();
-                                        $eventManager->emit('device-added', array(
+                                        $this->di['eventManager']->emit('device-added', array(
                                             'userId' => $deviceObserver->getDevice()->getUserId(),
                                             'deviceId' => $deviceObserver->getDevice()->getId()
+                                        ));
+                                        
+                                        $this->di['eventManager']->emit('license-assigned', array(
+                                            'userId' => $deviceObserver->getDevice()->getUserId(),
+                                            'deviceId' => $deviceObserver->getDevice()->getId(),
+                                            'licenseId' => $deviceObserver->getLicense()->getId()
                                         ));
 
                                         $queueManager = new \CS\Queue\Manager($this->di['queueClient']);

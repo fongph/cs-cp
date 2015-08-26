@@ -148,12 +148,6 @@ class DeviceSettings extends BaseModuleController
         try {
             $this->di['devicesManager']->deleteDevice($this->di['devId']);
             
-            $eventManager = \EventManager\EventManager::getInstance();
-            $eventManager->emit('device-deleted', array(
-                'userId' => $this->auth['id'],
-                'deviceId' => $this->di['devId']
-            ));
-            
             $this->di->getFlashMessages()->add(FlashMessages::SUCCESS, $this->di['t']->_('The device has been successfully unassigned from your account!'));
             $this->redirect($this->di['router']->getRouteUrl('profile'));
         } catch (\Exception $e) {

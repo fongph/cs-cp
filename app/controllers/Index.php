@@ -176,6 +176,10 @@ class Index extends BaseController
                 ); // $this->getRequest()->post('email'),  $this->getRequest()->post('name'), 
 
                 $this->di->get('usersNotesProcessor')->supportTicketSent($ticketId);
+                
+                $this->di['eventManager']->emit('cp-support-completed', array(
+                    'userId' => $this->auth['id']
+                ));
 
                 $this->view->success = true;
 

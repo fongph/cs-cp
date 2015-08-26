@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "b553a2a7848db37650ce18dded71af56",
+    "hash": "207b4235a2050ecb14981644ddb663a0",
     "packages": [
         {
             "name": "boomers/cs-billing",
@@ -39,7 +39,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-devices.git",
-                "reference": "4e7bb769695354cde8718e7773a91ab1445c97cc"
+                "reference": "68da047006cff1b225de789a7aa3862a0a128c1f"
             },
             "require": {
                 "boomers/cs-mail": "dev-master",
@@ -63,7 +63,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2015-07-27 05:47:51"
+            "time": "2015-08-26 10:22:06"
         },
         {
             "name": "boomers/cs-icloud",
@@ -169,7 +169,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-settings.git",
-                "reference": "544c3b52e19c433e9734580f1fbd4fb4156015d5"
+                "reference": "0820e0e4fd73c0c6c121e0ab12317b57bbeaa166"
             },
             "require": {
                 "php": ">=5.4.0"
@@ -180,7 +180,7 @@
                     "CS\\Settings\\": "src/"
                 }
             },
-            "time": "2015-08-13 12:11:02"
+            "time": "2015-08-20 07:04:12"
         },
         {
             "name": "boomers/cs-users",
@@ -527,52 +527,6 @@
             "time": "2014-10-12 19:18:40"
         },
         {
-            "name": "htmlawed/htmlawed",
-            "version": "1.1.19",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/kesar/HTMLawed.git",
-                "reference": "620c38edd57e680260ebd8dd0e98167d97e9a7bf"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/kesar/HTMLawed/zipball/620c38edd57e680260ebd8dd0e98167d97e9a7bf",
-                "reference": "620c38edd57e680260ebd8dd0e98167d97e9a7bf",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">4.4.0"
-            },
-            "type": "library",
-            "autoload": {
-                "files": [
-                    "htmLawed.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "GPL-2.0+",
-                "LGPL-3.0"
-            ],
-            "authors": [
-                {
-                    "name": "Santosh Patnaik",
-                    "homepage": "http://www.bioinformatics.org/people/index.php?user_hash=558b661f92d0ff7b",
-                    "role": "Developer"
-                }
-            ],
-            "description": "htmLawed - Process text with HTML markup to make it more compliant with HTML  standards and administrative policies",
-            "homepage": "http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed/",
-            "keywords": [
-                "HTMLtidy",
-                "html",
-                "sanitize",
-                "strip",
-                "tags"
-            ],
-            "time": "2015-04-05 17:23:05"
-        },
-        {
             "name": "league/url",
             "version": "3.3.5",
             "source": {
@@ -881,16 +835,16 @@
         },
         {
             "name": "rastor/jira-client",
-            "version": "0.3.3",
+            "version": "0.3.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/oRastor/jira-client.git",
-                "reference": "e74c2677967d3fd4e0b2ffd326f3767213e4277c"
+                "reference": "24cfcc209d1d0cc7e7ae8509b7ae61edf04b8ddc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/oRastor/jira-client/zipball/e74c2677967d3fd4e0b2ffd326f3767213e4277c",
-                "reference": "e74c2677967d3fd4e0b2ffd326f3767213e4277c",
+                "url": "https://api.github.com/repos/oRastor/jira-client/zipball/24cfcc209d1d0cc7e7ae8509b7ae61edf04b8ddc",
+                "reference": "24cfcc209d1d0cc7e7ae8509b7ae61edf04b8ddc",
                 "shasum": ""
             },
             "require": {
@@ -919,7 +873,7 @@
                 "jira",
                 "rest"
             ],
-            "time": "2015-07-24 09:15:53"
+            "time": "2015-08-26 08:03:23"
         },
         {
             "name": "rastor/system",
@@ -1155,134 +1109,6 @@
                 "rabbitmq"
             ],
             "time": "2013-12-22 12:49:53"
-        },
-        {
-            "name": "voku/anti-xss",
-            "version": "1.2.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/voku/anti-xss.git",
-                "reference": "badaf7be79da59f481faa35c32997456ee704210"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/voku/anti-xss/zipball/badaf7be79da59f481faa35c32997456ee704210",
-                "reference": "badaf7be79da59f481faa35c32997456ee704210",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.0",
-                "voku/portable-utf8": "1.*"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "4.*",
-                "satooshi/php-coveralls": "0.7.*@dev"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.0.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "voku\\helper\\": "src/voku/helper/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "EllisLab Dev Team",
-                    "homepage": "http://ellislab.com/"
-                },
-                {
-                    "name": "Lars Moelleken",
-                    "email": "lars@moelleken.org",
-                    "homepage": "http://www.moelleken.org/"
-                }
-            ],
-            "description": "anti xss-library",
-            "homepage": "https://github.com/voku/anti-xss",
-            "keywords": [
-                "anti-xss",
-                "clean",
-                "security",
-                "xss"
-            ],
-            "time": "2015-08-13 13:11:38"
-        },
-        {
-            "name": "voku/portable-utf8",
-            "version": "1.6.5",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/voku/portable-utf8.git",
-                "reference": "2b5fa3a5750bea84819519bcc5673a7ddbc03eb4"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/voku/portable-utf8/zipball/2b5fa3a5750bea84819519bcc5673a7ddbc03eb4",
-                "reference": "2b5fa3a5750bea84819519bcc5673a7ddbc03eb4",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "4.*",
-                "satooshi/php-coveralls": "0.7.*@dev"
-            },
-            "suggest": {
-                "ext-iconv": "Use iconv for best performance",
-                "ext-intl": "Use Intl for best performance",
-                "ext-mbstring": "Use Mbstring for best performance"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.6.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "voku\\": "src/voku/"
-                },
-                "classmap": [
-                    "src/Normalizer.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "CC-BY-3.0"
-            ],
-            "authors": [
-                {
-                    "name": "Hamid Sarfraz",
-                    "homepage": "http://pageconfig.com/"
-                },
-                {
-                    "name": "Lars Moelleken",
-                    "homepage": "http://www.moelleken.org/"
-                },
-                {
-                    "name": "Nicolas Grekas",
-                    "email": "p@tchwork.com"
-                }
-            ],
-            "description": "Portable UTF-8 library with polyfill / shim for Iconv, Intl, Mbstring, Normalizrer etc.",
-            "homepage": "https://github.com/voku/portable-utf8",
-            "keywords": [
-                "UTF",
-                "clean",
-                "php",
-                "unicode",
-                "utf-8",
-                "utf8"
-            ],
-            "time": "2015-08-12 15:36:47"
         }
     ],
     "packages-dev": [],
