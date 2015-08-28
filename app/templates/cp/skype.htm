@@ -90,7 +90,8 @@
                 "{$di.t->_('Last 7 Days')}": [moment().subtract('days', 6).startOf('day'), moment().endOf('day')],
                 "{$di.t->_('Last 30 Days')}": [moment().subtract('days', 29).startOf('day'), moment().endOf('day')],
                 "{$di.t->_('This Month')}": [moment().startOf('month'), moment().endOf('month')],
-                "{$di.t->_('Last Month')}": [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
+                "{$di.t->_('Last Month')}": [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')],
+                "{$di.t->_('All Time')}": [ moment([2010, 11, 31, 00, 00]), moment().endOf('day')]
             };
 
             var skype = {
