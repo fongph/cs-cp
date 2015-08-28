@@ -9481,12 +9481,8 @@ div.dataTables_processing {
     -webkit-overflow-scrolling: touch;
   }
   /* fix mobile */
-  .table-container thead {
-    width: 20%;
-  }
-  .table-container tbody {
-    width: 80%;
-  }
+  /*    .table-container thead { width: 20%; }
+    .table-container tbody { width: 80%; }*/
   .table-container thead tr {
     display: block;
   }
