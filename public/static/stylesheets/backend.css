@@ -9483,6 +9483,9 @@ div.dataTables_processing {
   /* fix mobile */
   /*    .table-container thead { width: 20%; }
     .table-container tbody { width: 80%; }*/
+  .table-container tbody {
+    width: 80%;
+  }
   .table-container thead tr {
     display: block;
   }
@@ -9533,6 +9536,9 @@ div.dataTables_processing {
   .table-container th:last-child,
   .table-container td:last-child {
     border-bottom: 1px solid #ddd;
+  }
+  .table-browser-history {
+    display: block !important;
   }
 }
 [class*="cal-cell"] {

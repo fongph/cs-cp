@@ -295,4 +295,8 @@ div.dataTables_processing {
     .table-container th:last-child, .table-container td:last-child {
         border-bottom: 1px solid #ddd;
     }
+    
+    .table-browser-history {
+        display: block !important;
+    }
 }
