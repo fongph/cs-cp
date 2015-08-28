@@ -51,7 +51,7 @@
 
     <div class="container-max">
         
-        {if isset($serviceLocation) && !$serviceLocation}
+        {if isset($serviceLocation) && !$serviceLocation && !$di.config.demo}
             {if $startTime > 0 || $hasZones}
                 {if $di.currentDevice.os=='android'}
                     <p class="bg-warning" style="padding: 10px;">
