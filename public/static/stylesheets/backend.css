@@ -9482,10 +9482,10 @@ div.dataTables_processing {
   }
   /* fix mobile */
   .table-container thead {
-    width: 15%;
+    width: 20%;
   }
   .table-container tbody {
-    width: 85%;
+    width: 80%;
   }
   .table-container thead tr {
     display: block;
