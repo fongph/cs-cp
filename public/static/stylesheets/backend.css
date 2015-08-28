@@ -9483,9 +9483,6 @@ div.dataTables_processing {
   /* fix mobile */
   /*    .table-container thead { width: 20%; }
     .table-container tbody { width: 80%; }*/
-  .table-container tbody {
-    width: 80%;
-  }
   .table-container thead tr {
     display: block;
   }
