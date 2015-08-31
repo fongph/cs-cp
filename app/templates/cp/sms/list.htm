@@ -5,7 +5,7 @@
 
     {if $isGroup}
     <div class="dialog-panel-top">
-        <p class="text-info">{$di.t->_('Messages with')} 
+        <p class="text-info">{$di.t->_('Messages with:')} 
             {foreach $members as $item last=$last}
                 {if strlen($item.name)}<b>{$item.name|e} ({$item.phone|e})</b>{else}<b>{$item.phone|e}</b>{/if}{if !$last}, {/if}
             {/foreach}
