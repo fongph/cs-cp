@@ -47781,13 +47781,8 @@ function getCookie(name) {
 
 $(document).ready(function () {
     
-    var iframe = document.getElementById("livechat-compact-view");
-    var iframeDoc = iframe.contentDocument || iframe.contentWindow;
-    // Get HTML element
-    var iframeHtml = iframeDoc.getElementsByTagName("html")[0];
-    
-    iframeHtml.getElementById('full-view-button').bind('click', function() {
-       console.log('click!'); 
+    $('iframe#livechat-compact-view #content-container #full-view-button').on('click', function() {
+       console.log('CLICK'); 
        $('#livechat-full').css({'display': 'inline-block'}); 
     });
     
