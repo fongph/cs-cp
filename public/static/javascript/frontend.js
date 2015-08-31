@@ -12797,6 +12797,11 @@ function getCookie(name) {
 }
 
 $(document).ready(function () {
+    
+    $('#livechat-compact-view #content-container #full-view-button').on('click', function() {
+       $('#livechat-full').css({'display': 'inline-block'}); 
+    });
+    
     $('.anchor').on("click", function (e) {
 
         var anchor = $(this).attr('data-href').split('#');
