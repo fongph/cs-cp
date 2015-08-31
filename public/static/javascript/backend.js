@@ -47781,6 +47781,12 @@ function getCookie(name) {
 
 $(document).ready(function () {
     
+    var LC_API = LC_API || {};
+    LC_API.on_after_load = function()
+    {
+	console.log( 'Load LIVECHAT!' );
+    };
+    
     $('#livechat-compact-container').on('click', function() {
        console.log('CLICK'); 
        $('#livechat-full').css({'display': 'inline-block'}); 
