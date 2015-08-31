@@ -26,22 +26,30 @@ function getCookie(name) {
         return false;
 }
 
+//var LC_API = LC_API || {};
+//var livechat_chat_started = false;
+//
+//LC_API.on_before_load = function()
+//{
+//        // don't hide the chat window only if visitor
+//        // is currently chatting with an agent
+//        if (LC_API.visitor_engaged() === false && livechat_chat_started === false)
+//        {
+//                LC_API.hide_chat_window();
+//        }
+//};
+//
+//LC_API.on_chat_started = function()
+//{
+//        livechat_chat_started = true;
+//};
+
 var LC_API = LC_API || {};
-var livechat_chat_started = false;
-
-LC_API.on_before_load = function()
+LC_API.on_after_load = function()
 {
-        // don't hide the chat window only if visitor
-        // is currently chatting with an agent
-        if (LC_API.visitor_engaged() === false && livechat_chat_started === false)
-        {
-                LC_API.hide_chat_window();
+	if(LC_API.chat_window_maximized()) {
+            LC_API.hide_chat_window();
         }
-};
-
-LC_API.on_chat_started = function()
-{
-        livechat_chat_started = true;
 };
 
 $(document).ready(function () {
