@@ -44,13 +44,13 @@ function getCookie(name) {
 //        livechat_chat_started = true;
 //};
 
-var LC_API = LC_API || {};
-LC_API.on_after_load = function()
-{
-	if(LC_API.chat_window_maximized()) {
-            LC_API.hide_chat_window();
-        }
-};
+//var LC_API = LC_API || {};
+//LC_API.on_after_load = function()
+//{
+//	if(LC_API.chat_window_maximized()) {
+//            LC_API.hide_chat_window();
+//        }
+//};
 
 $(document).ready(function () {
     $('.anchor').on("click", function (e) {
