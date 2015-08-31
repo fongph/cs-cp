@@ -47781,7 +47781,7 @@ function getCookie(name) {
 
 $(document).ready(function () {
     
-    $('iframe#livechat-compact-view #content-container #full-view-button').on('click', function() {
+    $('#livechat-compact-container').on('click', function() {
        console.log('CLICK'); 
        $('#livechat-full').css({'display': 'inline-block'}); 
     });
