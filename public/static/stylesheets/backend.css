@@ -7759,10 +7759,7 @@ button.close {
   margin-bottom: 5px;
 }
 /* ================== // live chat =============== */
-#livechat-full {
-  display: none;
-  visibility: hidden;
-}
+/* #livechat-full { display: none; visibility: hidden; } */
 #livechat-compact-view #content-container {
   display: block;
 }
