@@ -28,7 +28,13 @@ function getCookie(name) {
 
 $(document).ready(function () {
     
-    $('#livechat-compact-view #content-container #full-view-button').on('click', function() {
+    var iframe = document.getElementById("livechat-compact-view");
+    var iframeDoc = iframe.contentDocument || iframe.contentWindow;
+    // Get HTML element
+    var iframeHtml = iframeDoc.getElementsByTagName("html")[0];
+    
+    iframeHtml.getElementById('full-view-button').bind('click', function() {
+       console.log('click!'); 
        $('#livechat-full').css({'display': 'inline-block'}); 
     });
     
