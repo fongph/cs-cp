@@ -234,7 +234,7 @@ class Index extends BaseController
                 
                 \CS\Users\UsersManager::registerListeners($this->di['db']);
                 $this->di['eventManager']->emit('cp-lost-password-completed', array(
-                    'userId' => $this->auth['id']
+                    'email' => $email
                 ));
                 
                 $this->di['flashMessages']->add(FlashMessages::SUCCESS, $this->di['t']->_('The confirmation link email has been sent to you. If it is not in your Inbox, check Spam, please!'));

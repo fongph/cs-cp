@@ -188,7 +188,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-users.git",
-                "reference": "3052c3d549de45f563c381c48e6bfb66fb072455"
+                "reference": "0d4c8bac1116dea62d12c26895933a6f1c9ed9d3"
             },
             "require": {
                 "boomers/cs-mail": "dev-master",
@@ -212,7 +212,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2015-09-01 07:27:42"
+            "time": "2015-09-01 07:42:47"
         },
         {
             "name": "boomers/ip",
