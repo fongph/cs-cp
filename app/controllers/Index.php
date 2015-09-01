@@ -231,6 +231,11 @@ class Index extends BaseController
 
             try {
                 $usersManager->lostPassword($this->di['config']['site'], $email);
+                
+                $this->di['eventManager']->emit('cp-lost-password-completed', array(
+                    'userId' => $this->auth['id']
+                ));
+                
                 $this->di['flashMessages']->add(FlashMessages::SUCCESS, $this->di['t']->_('The confirmation link email has been sent to you. If it is not in your Inbox, check Spam, please!'));
                 $this->redirect($this->di['router']->getRouteUrl('main'));
             } catch (\CS\Users\UsersEmailNotFoundException $e) {
