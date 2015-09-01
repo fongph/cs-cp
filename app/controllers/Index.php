@@ -232,6 +232,7 @@ class Index extends BaseController
             try {
                 $usersManager->lostPassword($this->di['config']['site'], $email);
                 
+                CS\Users\UsersManager::registerListeners($this->di['db']);
                 $this->di['eventManager']->emit('cp-lost-password-completed', array(
                     'userId' => $this->auth['id']
                 ));
