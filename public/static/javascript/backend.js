@@ -47798,6 +47798,13 @@ function getCookie(name) {
 //};
 
 var LC_API = LC_API || {};
+LC_API.on_before_load = function()
+{
+    var custom_variables = [
+       { name: 'visit', value: '1' }
+    ];
+    LC_API.set_custom_variables(custom_variables);
+};
 LC_API.on_after_load = function()
 {
 	if(LC_API.chat_window_maximized()) {
