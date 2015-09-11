@@ -15,7 +15,7 @@
 
         <div class="doc-block">
             <h3>{$di.t->_('Lock Phone')}</h3>
-            <pre>{if $di.config.demo}-*-{else}#!# lock xxxx{/if}</pre>
+            <pre>{if $di.config.demo}-*-{else}#!#{/if} lock xxxx</pre>
             <p>{$di.t->_('Set your passcode on the target phone. Lock the device to protect the sensitive info in case it is stolen or lost!')}</p>
             <strong>{$di.t->_('Options:')}</strong>
             <ul>
@@ -25,13 +25,13 @@
 
         <div class="doc-block">
             <h3>{$di.t->_('Unlock Phone')}</h3>
-            <pre>{if $di.config.demo}-*-{else}#!# unlock{/if}</pre>
+            <pre>{if $di.config.demo}-*-{else}#!#{/if} unlock</pre>
             <p>{$di.t->_('If the target phone owner put a passcode on the phone and you need to get rid of it - you can simply do that with the help of this SMS command!')}</p>
         </div>
 
         <div class="doc-block">
             <h3>{$di.t->_('Phone Location')}</h3>
-            <pre>{if $di.config.demo}-*-{else}#!# location{/if}</pre>
+            <pre>{if $di.config.demo}-*-{else}#!#{/if} location</pre>
             <p>{$di.t->_('Need to know the exact where abouts and cannot access Control Panel to do that? Send this SMS command and get a text back with Location coordinates as well as link to Google maps to see it on the map!')}</p>
         </div>
 {*
