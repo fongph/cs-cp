@@ -4,6 +4,7 @@ namespace Controllers;
 
 use System\FlashMessages,
     Models\Modules,
+    CS\Models\Device\DeviceModulesRecord,    
     CS\Devices\Limitations;
 
 class Photos extends BaseModuleController
@@ -39,6 +40,8 @@ class Photos extends BaseModuleController
 
             $this->view->recentPhotos = $photosModel->getRecentPhotos($this->di['devId']);
             $this->view->albums = $photosModel->getAlbums($this->di['devId']);
+            $this->view->moduleId = Modules::PHOTOS; 
+            
         }
 
         $this->setView('cp/photos.htm');

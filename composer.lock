@@ -12,7 +12,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-billing.git",
-                "reference": "1c11d806c80a878163c71f88810d8ebc981e3d73"
+                "reference": "ea074f5735f15dde7908a66ec0d46297f3881ae3"
             },
             "require": {
                 "boomers/cs-models": "dev-master",
@@ -31,7 +31,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2015-05-27 06:49:56"
+            "time": "2015-09-04 14:23:22"
         },
         {
             "name": "boomers/cs-devices",
@@ -71,7 +71,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-icloud.git",
-                "reference": "96a58e59db56309dff9875ec3e37bb7824a40120"
+                "reference": "a7cb848b664d33ea2a14933f7904376b0e63172f"
             },
             "require": {
                 "php": ">=5.3.0"
@@ -89,7 +89,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2015-06-23 08:58:59"
+            "time": "2015-09-07 13:29:43"
         },
         {
             "name": "boomers/cs-mail",
@@ -97,7 +97,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-mail.git",
-                "reference": "a90710f786cb65949fb1995b3acc301b6d396433"
+                "reference": "86a12e4054e4040bc21e09a24ecfeb94e8629835"
             },
             "require": {
                 "guzzlehttp/guzzle": "~5.0",
@@ -116,7 +116,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2015-08-19 08:04:39"
+            "time": "2015-09-03 06:40:07"
         },
         {
             "name": "boomers/cs-models",
@@ -124,7 +124,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-models.git",
-                "reference": "3e148f73b607a4719eb854377ea7c34debc5f81f"
+                "reference": "8191819944962a6be4a752f6c463f52379509a95"
             },
             "require": {
                 "php": ">=5.4.0"
@@ -138,7 +138,7 @@
                     "CS\\Models\\": "src/"
                 }
             },
-            "time": "2015-08-04 06:42:16"
+            "time": "2015-09-11 07:05:36"
         },
         {
             "name": "boomers/cs-queue",
@@ -146,7 +146,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-queue.git",
-                "reference": "1299863088fde81a4dd4dbea3e797c7a440a92dd"
+                "reference": "45bb5f708d38e10bfff3114bd556089854ec8046"
             },
             "require": {
                 "boomers/cs-models": "dev-master",
@@ -161,7 +161,7 @@
                     "CS\\Queue\\": "src/"
                 }
             },
-            "time": "2015-07-17 12:51:46"
+            "time": "2015-09-09 07:48:39"
         },
         {
             "name": "boomers/cs-settings",
@@ -169,7 +169,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-settings.git",
-                "reference": "0820e0e4fd73c0c6c121e0ab12317b57bbeaa166"
+                "reference": "8e1443c099dc13884fe006eb24e2c7249cfdb77f"
             },
             "require": {
                 "php": ">=5.4.0"
@@ -180,7 +180,7 @@
                     "CS\\Settings\\": "src/"
                 }
             },
-            "time": "2015-08-20 07:04:12"
+            "time": "2015-09-03 08:59:39"
         },
         {
             "name": "boomers/cs-users",
@@ -188,7 +188,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-users.git",
-                "reference": "0d4c8bac1116dea62d12c26895933a6f1c9ed9d3"
+                "reference": "cf576bcb3836bcce7bb2e3677e1acdc4397bd343"
             },
             "require": {
                 "boomers/cs-mail": "dev-master",
@@ -212,7 +212,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2015-09-01 07:42:47"
+            "time": "2015-09-10 12:31:52"
         },
         {
             "name": "boomers/ip",
@@ -964,16 +964,16 @@
         },
         {
             "name": "symfony/console",
-            "version": "v2.7.3",
+            "version": "v2.7.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Console.git",
-                "reference": "d6cf02fe73634c96677e428f840704bfbcaec29e"
+                "reference": "9ff9032151186bd66ecee727d728f1319f52d1d8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Console/zipball/d6cf02fe73634c96677e428f840704bfbcaec29e",
-                "reference": "d6cf02fe73634c96677e428f840704bfbcaec29e",
+                "url": "https://api.github.com/repos/symfony/Console/zipball/9ff9032151186bd66ecee727d728f1319f52d1d8",
+                "reference": "9ff9032151186bd66ecee727d728f1319f52d1d8",
                 "shasum": ""
             },
             "require": {
@@ -1017,20 +1017,20 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "time": "2015-07-28 15:18:12"
+            "time": "2015-09-03 11:40:38"
         },
         {
             "name": "true/punycode",
-            "version": "2.0.0",
+            "version": "v2.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/true/php-punycode.git",
-                "reference": "13d3aada7d7d5d1812316031d8d85f5d97178c4e"
+                "reference": "b672918d992b84f8016bbe353a42516928393c63"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/true/php-punycode/zipball/13d3aada7d7d5d1812316031d8d85f5d97178c4e",
-                "reference": "13d3aada7d7d5d1812316031d8d85f5d97178c4e",
+                "url": "https://api.github.com/repos/true/php-punycode/zipball/b672918d992b84f8016bbe353a42516928393c63",
+                "reference": "b672918d992b84f8016bbe353a42516928393c63",
                 "shasum": ""
             },
             "require": {
@@ -1063,7 +1063,7 @@
                 "idna",
                 "punycode"
             ],
-            "time": "2015-06-24 09:36:39"
+            "time": "2015-09-01 14:53:31"
         },
         {
             "name": "videlalvaro/php-amqplib",

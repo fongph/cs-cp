@@ -59,6 +59,17 @@
 <div>
     <h1 class="text-center">{$title}</h1>
 
+    {if count($recentPhotos) && $di.currentDevice.os == 'icloud' 
+            && !is_null($di.deviceModules->getModuleParams($moduleId)) 
+                && $di.deviceModules->getModuleParams($moduleId) == 0}
+    
+    {include "content/{$di.t->getLocale()}/dataICloudNoModule.html"
+        moduleId = $moduleId
+        moduleName = $di.t->_('Photos')
+    }            
+         
+    {/if}
+    
     {insert "inc.flashMessages.htm"}
 
     {if !$paid}
@@ -151,16 +162,31 @@
         });
     </script>
     {else}
-        {include "content/{$di.t->getLocale()}/noDataTitle.html"
-            moduleName = $di.t->_('Photos')
-        }
-        {if $di.currentDevice.os=='icloud'}
-            {include "content/{$di.t->getLocale()}/noDataICloud.html"
-            moduleId = 'photos'
-            moduleName = $di.t->_('Photos')
+    
+        {if $di.currentDevice.os == 'icloud'
+            && !is_null($di.deviceModules->getModuleParams($moduleId))
+                && $di.deviceModules->getModuleParams($moduleId) == 0}
+                
+           {include "content/{$di.t->getLocale()}/noDataICloudNoModule.html"
+                moduleId = $moduleId
+                moduleName = $di.t->_('Photos')
+            }      
+                
+        {else}        
+    
+    
+            {include "content/{$di.t->getLocale()}/noDataTitle.html"
+                moduleName = $di.t->_('Photos')
             }
-        {else}
-            {include "content/{$di.t->getLocale()}/noData.html"}
-        {/if}
+            {if $di.currentDevice.os=='icloud'}
+                {include "content/{$di.t->getLocale()}/noDataICloud.html"
+                moduleId = $moduleId
+                moduleName = $di.t->_('Photos')
+                }
+            {else}
+                {include "content/{$di.t->getLocale()}/noData.html"}
+            {/if}
+            
+         {/if}   
     {/if}
 </div>

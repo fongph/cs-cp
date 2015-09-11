@@ -46,6 +46,7 @@ class Whatsapp extends BaseModuleController
                 ($this->di['currentDevice']['os'] === 'ios' && $this->di['currentDevice']['app_version'] >= 7);
         
         if ($this->view->paid) {
+            $this->view->moduleId = Modules::WHATSAPP;
             $this->view->hasRecords = $whatsappModel->hasRecords($this->di['devId']);
         }
 

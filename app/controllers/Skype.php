@@ -43,6 +43,7 @@ class Skype extends BaseModuleController
         }
 
         if ($this->view->paid) {
+            $this->view->moduleId = Modules::SKYPE;
             $this->view->accounts = $skypeModel->getAccountsList($this->di['devId']);
         }
 
