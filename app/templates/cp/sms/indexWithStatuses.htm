@@ -6,7 +6,7 @@
 <div>
     <h1 class="text-center">{$title}</h1>
 
-    {if isset($limitEnd) && !$limitEnd}
+    {if isset($limitEnd) && !$limitEnd && !$supportMode}
         <p class="bg-warning" style="padding: 10px;">
             Your limit has expired. You will not be able to monitor new SMS data any longer. 
             Please consider the opportunity to buy <a target="_blank" href="http://pumpic.com/store.html">Premium subscription</a> or an additional 
