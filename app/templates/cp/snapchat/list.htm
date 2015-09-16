@@ -42,11 +42,11 @@
                 {if $item.type == 'out'}
                 <h3 class="popover-title"><span></span></h3>
                 {else}
-                <h3 class="popover-title"><b>{if strlen($item.name)}{$item.name}{else}{$item.user_id}{/if}</b> <span></span></h3>
+                <h3 class="popover-title"><b>{if strlen($item.name)}{$item.name|e}{else}{$item.user_id}{/if}</b> <span></span></h3>
                 {/if}
                 <div class="popover-content">
                     {if $item.content_type == 'text'}
-                    <p>{$item.content}</p>
+                    <p>{$item.content|e}</p>
                     {elseif $item.content_type == 'image'}
                     <a href="{$item.image}" class="item image"><img src="{$item.preview}" class="blur-for-support" alt="" /></a>
                     {elseif $item.content_type == 'video'}

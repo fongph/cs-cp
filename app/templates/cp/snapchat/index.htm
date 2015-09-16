@@ -115,7 +115,7 @@
                                 mData: "name",
                                 fnRender: function(obj, value) {
                                     if (value.length) {
-                                        return value;
+                                        return _.escape(value);
                                     }
                                     
                                     return obj.aData.user_id;
@@ -126,14 +126,17 @@
                                 fnRender: function(obj, value) {
 
                                     if (obj.aData.content_type == 'text') {
+                                        var content = '';
                                         if (_.isString(value)) {
                                             if (value.length > 200) {
-                                                return value.substr(0, 200) + '...';
+                                                content = value.substr(0, 200) + '...';
+                                            } else {
+                                                content = value;
                                             }
-
-                                            return value;
+                                            var content = _.escape(content);
                                         }
-                                        return '';
+                                        
+                                        return content;
                                     }
                                     
                                     return '<p class="attachment ' + obj.aData.content_type + '"><p>';
