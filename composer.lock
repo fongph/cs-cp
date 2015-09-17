@@ -5,6 +5,7 @@
         "This file is @generated automatically"
     ],
     "hash": "207b4235a2050ecb14981644ddb663a0",
+    "content-hash": "bc5f786f6def29e3cbfd29efd3c2212e",
     "packages": [
         {
             "name": "boomers/cs-billing",
@@ -124,7 +125,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-models.git",
-                "reference": "8191819944962a6be4a752f6c463f52379509a95"
+                "reference": "56720fdb43f00ed45d232c046ed6673f36df323e"
             },
             "require": {
                 "php": ">=5.4.0"
@@ -138,7 +139,7 @@
                     "CS\\Models\\": "src/"
                 }
             },
-            "time": "2015-09-11 07:05:36"
+            "time": "2015-09-17 07:22:05"
         },
         {
             "name": "boomers/cs-queue",
@@ -169,7 +170,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-settings.git",
-                "reference": "8e1443c099dc13884fe006eb24e2c7249cfdb77f"
+                "reference": "85a667fc89ca145fe2bb00e341bb7ed15d52c274"
             },
             "require": {
                 "php": ">=5.4.0"
@@ -180,7 +181,7 @@
                     "CS\\Settings\\": "src/"
                 }
             },
-            "time": "2015-09-03 08:59:39"
+            "time": "2015-09-14 13:52:51"
         },
         {
             "name": "boomers/cs-users",
@@ -188,7 +189,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-users.git",
-                "reference": "cf576bcb3836bcce7bb2e3677e1acdc4397bd343"
+                "reference": "c31ff0457631c60771c4d0eb16603ea0cef003ce"
             },
             "require": {
                 "boomers/cs-mail": "dev-master",
@@ -212,7 +213,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2015-09-10 12:31:52"
+            "time": "2015-09-16 14:59:48"
         },
         {
             "name": "boomers/ip",
@@ -239,7 +240,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/seller.git",
-                "reference": "36dbf462975288e4d18894da3495d5ef63b9d4b7"
+                "reference": "349dd73cde1d47494d143c95f74fa0c5292f6e7f"
             },
             "require": {
                 "guzzlehttp/guzzle": "~5.0",
@@ -257,7 +258,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2015-04-08 09:41:16"
+            "time": "2015-09-15 06:33:13"
         },
         {
             "name": "fenom/fenom",
@@ -835,16 +836,16 @@
         },
         {
             "name": "rastor/jira-client",
-            "version": "0.3.4",
+            "version": "0.3.4.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/oRastor/jira-client.git",
-                "reference": "24cfcc209d1d0cc7e7ae8509b7ae61edf04b8ddc"
+                "reference": "2edc0223d9d890f69b26e951f54c1c9b9dead12c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/oRastor/jira-client/zipball/24cfcc209d1d0cc7e7ae8509b7ae61edf04b8ddc",
-                "reference": "24cfcc209d1d0cc7e7ae8509b7ae61edf04b8ddc",
+                "url": "https://api.github.com/repos/oRastor/jira-client/zipball/2edc0223d9d890f69b26e951f54c1c9b9dead12c",
+                "reference": "2edc0223d9d890f69b26e951f54c1c9b9dead12c",
                 "shasum": ""
             },
             "require": {
@@ -873,7 +874,7 @@
                 "jira",
                 "rest"
             ],
-            "time": "2015-08-26 08:03:23"
+            "time": "2015-09-16 13:33:12"
         },
         {
             "name": "rastor/system",

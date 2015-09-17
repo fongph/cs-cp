@@ -12813,7 +12813,7 @@ function getCookie(name) {
 //{
 //        livechat_chat_started = true;
 //};
-
+/*
 var LC_API = LC_API || {};
 LC_API.on_before_load = function()
 {
@@ -12829,7 +12829,7 @@ LC_API.on_after_load = function()
             LC_API.minimize_chat_window();
         }
 };
-
+*/
 $(document).ready(function () {
     $('.anchor').on("click", function (e) {
 
