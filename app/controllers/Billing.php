@@ -290,7 +290,7 @@ class Billing extends BaseController
         $license = $billingModel->getUserLicenseInfo($this->auth['id'], $this->params['id'], false);
 
         if ($license == false) {
-            $this->di->getFlashMessages()->add(FlashMessages::ERROR, "Plan was not found!");
+            $this->di->getFlashMessages()->add(FlashMessages::ERROR, "Subscription was not found!");
             $this->redirect($this->di->getRouter()->getRouteUrl('billing'));
         }
         
@@ -313,10 +313,10 @@ class Billing extends BaseController
             $this->getDI()->get('logger')->addInfo('Subscription not found!', array('exception' => $e));
             $this->getDI()->getFlashMessages()->add(FlashMessages::ERROR, "Subscription auto-renew can't be disabled!");
         } catch (\CS\Billing\Exceptions\GatewayException $e) {
-            $this->getDI()->getFlashMessages()->add(FlashMessages::ERROR, "Error during operation!");
+            $this->getDI()->getFlashMessages()->add(FlashMessages::ERROR, "Operation error! или Process error!");
             $this->getDI()->get('logger')->addWarning('Gateway request was not successfuly completed!', array('exception' => $e, 'gatewayResponse' => $e->getResponse()->getMessage()));
         } catch (\Seller\Exception\SellerException $e) {
-            $this->getDI()->getFlashMessages()->add(FlashMessages::ERROR, "Error during operation!");
+            $this->getDI()->getFlashMessages()->add(FlashMessages::ERROR, "Operation error! или Process error!");
             $this->getDI()->get('logger')->addError('Gateway exception!', array('exception' => $e));
         }
         
@@ -377,7 +377,7 @@ class Billing extends BaseController
         $license = $billingModel->getUserLicenseInfo($this->auth['id'], $this->params['id'], false);
         
         if ($license == false) {
-            $this->di->getFlashMessages()->add(FlashMessages::ERROR, "Plan was not found!");
+            $this->di->getFlashMessages()->add(FlashMessages::ERROR, "Subscription was not found!");
             $this->redirect($this->di->getRouter()->getRouteUrl('billing'));
         }
         
@@ -390,12 +390,12 @@ class Billing extends BaseController
             $this->getDI()->getFlashMessages()->add(FlashMessages::SUCCESS, "Congratulations! Your subscription auto-renewal is confirmed successfully with 50% DISCOUNT.");
         } catch (\CS\Billing\Exceptions\RecordNotFoundException $e) {
             $this->getDI()->get('logger')->addInfo('Subscription not found!', array('exception' => $e));
-            $this->getDI()->getFlashMessages()->add(FlashMessages::ERROR, "Subscription auto-renew can't be apply cupon!");
+            $this->getDI()->getFlashMessages()->add(FlashMessages::ERROR, "Discount can't be applied to this subscription!");
         } catch (\CS\Billing\Exceptions\GatewayException $e) {
-            $this->getDI()->getFlashMessages()->add(FlashMessages::ERROR, "Error during operation!");
+            $this->getDI()->getFlashMessages()->add(FlashMessages::ERROR, "Operation error! или Process error!");
             $this->getDI()->get('logger')->addWarning('Gateway request was not successfuly completed!', array('exception' => $e, 'gatewayResponse' => $e->getResponse()->getMessage()));
         } catch (\Seller\Exception\SellerException $e) {
-            $this->getDI()->getFlashMessages()->add(FlashMessages::ERROR, "Error during operation!");
+            $this->getDI()->getFlashMessages()->add(FlashMessages::ERROR, "Operation error! или Process error!");
             $this->getDI()->get('logger')->addError('Gateway exception!', array('exception' => $e));
         }
         
