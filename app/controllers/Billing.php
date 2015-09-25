@@ -361,7 +361,7 @@ class Billing extends BaseController
         $license = $billingModel->getUserLicenseInfo($this->auth['id'], $this->params['id'], false);
         
         if ($license == false) {
-            $this->di->getFlashMessages()->add(FlashMessages::ERROR, "Plan was not found!");
+            $this->di->getFlashMessages()->add(FlashMessages::ERROR, "Subscription was not found!");
             $this->redirect($this->di->getRouter()->getRouteUrl('billing'));
         }
         
@@ -408,7 +408,7 @@ class Billing extends BaseController
         $license = $billingModel->getUserLicenseInfo($this->auth['id'], $this->params['id'], false);
         
         if ($license == false) {
-            $this->di->getFlashMessages()->add(FlashMessages::ERROR, "Plan was not found!");
+            $this->di->getFlashMessages()->add(FlashMessages::ERROR, "Subscription was not found!");
             $this->redirect($this->di->getRouter()->getRouteUrl('billing'));
         }
         
@@ -428,7 +428,7 @@ class Billing extends BaseController
         if($license_id != null) {
             $license = $billingModel->getUserLicenseInfo($this->auth['id'], (int)$license_id, false);
             if ($license == false) {
-                $this->di->getFlashMessages()->add(FlashMessages::ERROR, "Plan was not found!");
+                $this->di->getFlashMessages()->add(FlashMessages::ERROR, "Subscription was not found!");
                 $this->redirect($this->di->getRouter()->getRouteUrl('billing'));
             }
         }
