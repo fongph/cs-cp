@@ -21,6 +21,7 @@ module.exports = function (grunt) {
                     './bower_components/underscore/underscore.js',
                     './bower_components/jquery.maskedinput/src/jquery.maskedinput.js',
                     './bower_components/bootstrap-touchspin/src/jquery.bootstrap-touchspin.js',
+                    './bower_components/bootstrap-switch/dist/js/bootstrap-switch.js',
                     './bower_components/bootstrap-datepicker/js/bootstrap-datepicker.js',
                     './bower_components/jquery-colorbox/jquery.colorbox.js',
                     './app/assets/javascript/deprecated/bootstrap-datepaginator.js',

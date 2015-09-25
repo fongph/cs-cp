@@ -4,6 +4,7 @@ namespace Controllers;
 
 use CS\Models\Device\DeviceICloudRecord;
 use CS\Models\Device\DeviceRecord;
+use CS\Settings\GlobalSettings;
 use System\FlashMessages,
     Models\Modules;
 
@@ -22,29 +23,81 @@ class DeviceSettings extends BaseModuleController
     public function indexAction()
     {
         $settingsModel = new \Models\Cp\Settings($this->di);
+        $infoModel = new \Models\Cp\Info($this->di);
 
         if ($this->getRequest()->isPost()) {
             $this->checkDemo($this->di['router']->getRouteUrl('settings'));
 
             if ($this->getRequest()->hasPost('phonesBlackList', 'phone')) {
                 try {
-                    if ($settingsModel->addBlackListPhone($this->di['devId'], $this->getRequest()->post('phone'))) {
-                        $this->di['flashMessages']->add(FlashMessages::SUCCESS, $this->di['t']->_('The phone number has been successfully added!'));
+                    if ($settingsModel->addBlackListPhone($this->di['devId'], htmlspecialchars($this->getRequest()->post('phone')))) {
+                        $this->makeJSONResponse([
+                            'status' => 201,
+                            'message' => $this->di['t']->_('The phone number has been successfully added!')
+                        ]);
                     } else {
-                        $this->di['flashMessages']->add(FlashMessages::ERROR, $this->di['t']->_('Error occurred during adding the phone number!'));
+                        $this->makeJSONResponse([
+                            'status' => 422,
+                            'message' => $this->di['t']->_('Error occurred during adding the phone number!')
+                        ]);
                     }
                 } catch (\Models\Cp\Settings\InvalidPhoneNumberException $e) {
-                    $this->di['flashMessages']->add(FlashMessages::ERROR, $this->di['t']->_('Invalid phone number!'));
+                    $this->makeJSONResponse([
+                        'status' => 422,
+                        'message' => $this->di['t']->_('Invalid phone number!')
+                    ]);
                 } catch (\Models\Cp\Settings\PhoneNumberExistException $e) {
-                    $this->di['flashMessages']->add(FlashMessages::ERROR, $this->di['t']->_('The phone number already exists on the list!'));
+                    $this->makeJSONResponse([
+                        'status' => 422,
+                        'message' => $this->di['t']->_('The phone number already exists on the list!')
+                    ]);
                 }
+            } else if ($this->getRequest()->hasPost('wordsBlackList', 'badWord')) {
+                try {
+                    if ($settingsModel->addBadWord($this->di['devId'], htmlspecialchars($this->getRequest()->post('badWord')))) {
+                        $this->makeJSONResponse([
+                            'status' => 201,
+                            'message' => $this->di['t']->_('The bad word has been successfully added!')
+                        ]);
+                    } else {
+                        $this->makeJSONResponse([
+                            'status' => 422,
+                            'message' => $this->di['t']->_('Error occurred during adding the bad word!')
+                        ]);
+                    }
+                } catch (\Models\Cp\Settings\BadWordExistException $e) {
+                    $this->makeJSONResponse([
+                        'status' => 422,
+                        'message' => $this->di['t']->_('The bad word already exists on the list!')
+                    ]);
+                }
+
+                $this->makeJSONResponse([
+                    'status' => 500,
+                    'message' => $this->di['t']->_('Something went wrong')
+                ]);
+
+            } else if ($this->getRequest()->hasPost('simNotifications')) {
+                $simNotifications = $this->getRequest()->post('simNotifications');
+                $simNotifications = $simNotifications == 'true'? 1 : 0;
+
+                if($settingsModel->setSimChangeNotifications($this->di['devId'], $simNotifications)) {
+                    $this->makeJSONResponse([
+                        'status' => 200,
+                        'message' => $this->di['t']->_('Sim change notifications changed!')
+                    ]);
+                }
+
+                $this->makeJSONResponse([
+                    'status' => 422,
+                    'message' => $this->di['t']->_('Sim change notifications doesn\'t changed!')
+                ]);
+
             } else if ($this->getRequest()->hasPost('deviceSettings', 'name')) {
-                $simNotifications = $this->getRequest()->hasPost('simNotificactions');
 
                 $devicesModel = new \Models\Devices($this->di);
                 try {
                     $devicesModel->setDeviceName($this->di['devId'], $this->getRequest()->post('name'));
-                    $settingsModel->setSimChangeNotifications($this->di['devId'], $simNotifications);
 
                     $this->di['flashMessages']->add(FlashMessages::SUCCESS, $this->di['t']->_('The settings have been successfully updated!'));
                 } catch (\Models\Devices\InvalidDeviceNameException $e) {
@@ -63,20 +116,47 @@ class DeviceSettings extends BaseModuleController
             } else if ($this->getRequest()->hasGet('delete')) {
                 $this->deleteDevice();
             }
-
             $this->redirect($this->di['router']->getRouteUrl('settings'));
         } else if ($this->getRequest()->hasGet('removePhonesBlackList')) {
             $this->checkDemo($this->di['router']->getRouteUrl('settings'));
 
             try {
                 $settingsModel->removeBlackListPhone($this->di['devId'], $this->getRequest()->get('removePhonesBlackList'));
-
-                $this->di['flashMessages']->add(FlashMessages::SUCCESS, $this->di['t']->_('The phone number has been successfully deleted!'));
+                $this->makeJSONResponse([
+                    'status' => 200,
+                    'message' => $this->di['t']->_('The phone number has been successfully deleted!')
+                ]);
             } catch (\Models\Cp\Settings\PhoneNumberNotFoundInListException $e) {
-                $this->di['flashMessages']->add(FlashMessages::ERROR, $this->di['t']->_('The phone is not on the list!'));
+                $this->makeJSONResponse([
+                    'status' => 422,
+                    'message' => $this->di['t']->_('The phone is not on the list!')
+                ]);
             }
 
-            $this->redirect($this->di['router']->getRouteUrl('settings'));
+            $this->makeJSONResponse([
+                'status' => 500,
+                'message' => $this->di['t']->_('Something went wrong')
+            ]);
+        } else if ($this->getRequest()->hasGet('removeWordsBlackList')) {
+            $this->checkDemo($this->di['router']->getRouteUrl('settings'));
+
+            try {
+                $settingsModel->removeBlackListWord($this->di['devId'], $this->getRequest()->get('removeWordsBlackList'));
+                $this->makeJSONResponse([
+                    'status' => 200,
+                    'message' => $this->di['t']->_('The word has been successfully deleted!')
+                ]);
+            } catch (\Models\Cp\Settings\BadWordNotFoundInListException $e) {
+                $this->makeJSONResponse([
+                    'status' => 422,
+                    'message' => $this->di['t']->_('The word is not on the list!')
+                ]);
+            }
+
+            $this->makeJSONResponse([
+                'status' => 500,
+                'message' => $this->di['t']->_('Something went wrong')
+            ]);
         } else if ($this->getRequest()->hasGet('rebootDevice')) {
             $this->checkDemo($this->di['router']->getRouteUrl('settings'));
 
@@ -102,7 +182,23 @@ class DeviceSettings extends BaseModuleController
 
         $this->view->currentDevice = $this->di->get('currentDevice');
         $this->view->data = $settingsModel->getSettings($this->di['devId']);
+        $this->view->info = $infoModel->getInfo($this->di['devId']);
+        $this->view->osVersion = $this->di->get('currentDevice')['os_version'];
+        if($this->di->get('currentDevice')['os'] == 'android') {
+            $exploded = explode('_', $this->di->get('currentDevice')['os_version']);
+            if(count($exploded) == 2) {
+                $this->view->osVersion = $exploded[1];
+            }
+        }
+        $this->view->visitData = [
+            'created' => date('d.m.Y H:i', strtotime($this->view->currentDevice['created_at'])),
+            'last' => date('d.m.Y H:i', $this->view->currentDevice['last_visit']),
+        ];
         $this->view->hasPackage = ($this->di['currentDevice']['package_name'] !== null);
+//        var_dump($this->view->hasPackage, $this->di->get('currentDevice'), $settingsModel->getSettings($this->di['devId']));die;
+        if($this->di->get('currentDevice')['os'] != 'icloud') {
+            $this->view->appLastVersion = GlobalSettings::getVersionApp($this->di->get('currentDevice')['os']);
+        }
 
         try {
             $this->view->iCloudRecord = new DeviceICloudRecord($this->di->get('db'));
@@ -122,6 +218,8 @@ class DeviceSettings extends BaseModuleController
         $outgoingLimitationCount = $this->getRequest()->post('outgoingSmsLimitationCount', 1);
         $outgoingLimitationAlert = $this->getRequest()->hasPost('outgoingSmsLimitationAlert');
         $outgoingLimitationMessage = $this->getRequest()->post('outgoingSmsLimitationMessage', '');
+
+//        var_dump($outgoingLimitation, $outgoingLimitationCount, $outgoingLimitationAlert, $outgoingLimitationMessage);die;
 
         $settingsModel = new \Models\Cp\Settings($this->di);
         try {

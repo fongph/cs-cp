@@ -68,6 +68,25 @@ class Settings extends BaseModel
         return $this->setPhonesBlackListString($devId, $newString);
     }
 
+    public function addBadWord($devId, $word)
+    {
+        if (($blackString = $this->getWordBlackListString($devId)) === false) {
+            throw new Settings\SettingsNotFoundException("Device black phones list not found");
+        }
+
+        $list = $this->buildBlackList($blackString);
+
+        if (in_array($word, $list)) {
+            throw new Settings\BadWordExistException();
+        }
+
+        array_push($list, $word);
+
+        $newString = $this->blackListToString($list);
+
+        return $this->setWordsBlackListString($devId, $newString);
+    }
+
     public function removeBlackListPhone($devId, $phone)
     {
         if (($blackString = $this->getPhoneBlackListString($devId)) === false) {
@@ -86,6 +105,24 @@ class Settings extends BaseModel
         return $this->setPhonesBlackListString($devId, $value);
     }
 
+    public function removeBlackListWord($devId, $word)
+    {
+        if (($blackString = $this->getWordBlackListString($devId)) === false) {
+            throw new Settings\SettingsNotFoundException("Device black words list not found");
+        }
+
+        $list = $this->buildBlackList($blackString);
+
+        if (($key = array_search($word, $list)) === false) {
+            throw new Settings\BadWordNotFoundInListException();
+        }
+
+        unset($list[$key]);
+        $value = $this->blackListToString($list);
+
+        return $this->setWordsBlackListString($devId, $value);
+    }
+
     public function setSimChangeNotifications($devId, $simNotifications)
     {
         $escapedDevId = $this->getDB()->quote($devId);
@@ -102,7 +139,7 @@ class Settings extends BaseModel
     public function setSmsSettings($devId, $blackWords, $outgoingLimitation, $outgoingLimitationCount, $outgoingLimitationAlert, $outgoingLimitationMessage)
     {
 
-        if (!strlen($outgoingLimitationMessage)) {
+        if ($outgoingLimitationAlert && !strlen($outgoingLimitationMessage)) {
             throw new Settings\InvalidSmsLimitationMessageException("Bad alert message!");
         }
 
@@ -149,6 +186,13 @@ class Settings extends BaseModel
         return $this->getDb()->query("SELECT `bl_phones` FROM `dev_settings` WHERE `dev_id` = {$escapedDevId} LIMIT 1")->fetchColumn();
     }
 
+    public function getWordBlackListString($devId)
+    {
+        $escapedDevId = $this->getDB()->quote($devId);
+
+        return $this->getDb()->query("SELECT `bl_words` FROM `dev_settings` WHERE `dev_id` = {$escapedDevId} LIMIT 1")->fetchColumn();
+    }
+
     public function setRebootDevice($devId)
     {
         $escapedDevId = $this->getDB()->quote($devId);
@@ -169,6 +213,15 @@ class Settings extends BaseModel
         $escapedValue = $this->getDB()->quote($value);
 
         return $this->getDb()->exec("UPDATE `dev_settings` SET `bl_phones` = {$escapedValue} WHERE `dev_id` = {$escapedDevId} LIMIT 1");
+    }
+
+
+    public function setWordsBlackListString($devId, $value)
+    {
+        $escapedDevId = $this->getDB()->quote($devId);
+        $escapedValue = $this->getDB()->quote($value);
+
+        return $this->getDb()->exec("UPDATE `dev_settings` SET `bl_words` = {$escapedValue} WHERE `dev_id` = {$escapedDevId} LIMIT 1");
     }
 
     protected function rebuildBlackWordsList($string)
@@ -245,6 +298,7 @@ class Settings extends BaseModel
         return array(
             'settings' => $settings,
             'blackListPhones' => $this->buildBlackList($settings['bl_phones']),
+            'blackListWords' => $this->buildBlackList($settings['bl_words']),
             'lockActive' => DeviceOptions::isLockActive($devInfo['os'], $devInfo['os_version']),
             'blockSMSActive' => DeviceOptions::isBlockSMSActive($devInfo['os'], $devInfo['os_version']),
             'rebootApplicationActive' => DeviceOptions::isRebootApplicationActive($devInfo['os']),
