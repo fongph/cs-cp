@@ -13,7 +13,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-billing.git",
-                "reference": "ea074f5735f15dde7908a66ec0d46297f3881ae3"
+                "reference": "cbf6c3f6e5c2f14acf9554821f134fd1e9e11e90"
             },
             "require": {
                 "boomers/cs-models": "dev-master",
@@ -32,7 +32,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2015-09-04 14:23:22"
+            "time": "2015-09-25 10:54:16"
         },
         {
             "name": "boomers/cs-devices",
@@ -98,7 +98,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-mail.git",
-                "reference": "86a12e4054e4040bc21e09a24ecfeb94e8629835"
+                "reference": "79fac16f2bd1e0d774bf413f06c470842ec63c82"
             },
             "require": {
                 "guzzlehttp/guzzle": "~5.0",
@@ -117,7 +117,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2015-09-03 06:40:07"
+            "time": "2015-09-25 10:57:22"
         },
         {
             "name": "boomers/cs-models",
@@ -125,7 +125,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-models.git",
-                "reference": "56720fdb43f00ed45d232c046ed6673f36df323e"
+                "reference": "babe4ad8eb38f8af29ab896db05db963f71fbb2b"
             },
             "require": {
                 "php": ">=5.4.0"
@@ -139,7 +139,7 @@
                     "CS\\Models\\": "src/"
                 }
             },
-            "time": "2015-09-17 07:22:05"
+            "time": "2015-09-25 10:56:15"
         },
         {
             "name": "boomers/cs-queue",
@@ -836,16 +836,16 @@
         },
         {
             "name": "rastor/jira-client",
-            "version": "0.3.4.2",
+            "version": "0.3.4.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/oRastor/jira-client.git",
-                "reference": "2edc0223d9d890f69b26e951f54c1c9b9dead12c"
+                "reference": "3282f37f7a120dfe994b966f7d8464f0f06bbc94"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/oRastor/jira-client/zipball/2edc0223d9d890f69b26e951f54c1c9b9dead12c",
-                "reference": "2edc0223d9d890f69b26e951f54c1c9b9dead12c",
+                "url": "https://api.github.com/repos/oRastor/jira-client/zipball/3282f37f7a120dfe994b966f7d8464f0f06bbc94",
+                "reference": "3282f37f7a120dfe994b966f7d8464f0f06bbc94",
                 "shasum": ""
             },
             "require": {
@@ -874,7 +874,7 @@
                 "jira",
                 "rest"
             ],
-            "time": "2015-09-16 13:33:12"
+            "time": "2015-09-24 10:05:18"
         },
         {
             "name": "rastor/system",
@@ -968,12 +968,12 @@
             "version": "v2.7.4",
             "source": {
                 "type": "git",
-                "url": "https://github.com/symfony/Console.git",
+                "url": "https://github.com/symfony/console.git",
                 "reference": "9ff9032151186bd66ecee727d728f1319f52d1d8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Console/zipball/9ff9032151186bd66ecee727d728f1319f52d1d8",
+                "url": "https://api.github.com/repos/symfony/console/zipball/9ff9032151186bd66ecee727d728f1319f52d1d8",
                 "reference": "9ff9032151186bd66ecee727d728f1319f52d1d8",
                 "shasum": ""
             },

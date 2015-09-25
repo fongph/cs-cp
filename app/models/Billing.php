@@ -36,7 +36,7 @@ class Billing extends \System\Model
 
         $unlimitedValue = $this->getDb()->quote(\CS\Models\Limitation\LimitationRecord::UNLIMITED_VALUE);
 
-        $select = "SELECT lic.`id`, p.`name`, lic.`amount`, lic.`currency`,
+        $select = "SELECT lic.`id`, p.`name`, p.`id` as p_id, lic.`amount`, lic.`currency`,
             lic.`activation_date`, lic.`expiration_date`, lic.`status`,
             d.`id` `deviceId`,
             d.`name` `device`,

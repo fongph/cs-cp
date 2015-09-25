@@ -12789,13 +12789,22 @@ $.fn.tableScroll = function () {
     });
 };
 
-function getCookie(name) {
-    if ($.cookie(name)) {
-        return $.cookie(name);
+function clearCookie(name) {
+    if($.cookie(name)) {
+        $.removeCookie(name, { path: '/' });
+    }
+}
+
+function setCookie(name, value) {
+    $.cookie(name, value, { expires: 7, path: '/' });
+}
+
+function getCookie( name ) {
+    if($.cookie(name)) {
+        return $.cookie(name); 
     } else
         return false;
 }
-
 //var LC_API = LC_API || {};
 //var livechat_chat_started = false;
 //

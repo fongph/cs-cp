@@ -1,9 +1,31 @@
 <style>
+    #breadcrumbs {
+        color: #fff;
+        background: #4d4f5b;
+        padding: 10px 15px;
+        margin: 10px 0px;
+        border-radius: 5px;
+        -moz-border-radius: 5px;
+        -webkit-border-radius: 5px;
+    }
+    #breadcrumbs > a {
+        color: #fff;
+    }
+    
+    #breadcrumbs > span {
+        color: #ccc;
+    }
+    
     dd {
         padding-left: 20px;
     }
 </style>
 <div>
+    <div id="breadcrumbs">
+        <a href="{$di.router->getRouteUrl('billing')}">Subscriptions</a> /
+        <span>{$title}</span>
+    </div>
+    
     <h1 class="text-center">{$title}</h1>
 
     {insert "inc.flashMessages.htm"}
@@ -19,9 +41,10 @@
         <dd data-time="{$license.expiration_date}">-</dd>
         <dt>{$di.t->_('Status')}</dt>
         <dd>{$license.status}</dd>
+        
         {if isset($license.details.payment_method) && $license.details.payment_method == 'fastspring'}
             {if isset($license.details.cancelable)}
-            <dt>{$di.t->_('Subscription auto-renew')}</dt>
+            <dt>{$di.t->_('Subscription auto-renewal')}</dt>
             <dd>
                 {if $license.details.cancelable === 'false'}
                 {$di.t->_('off')} <a href="{$di.router->getRouteUrl('billingLicenseEnable', ['id' => $license.id])}" class="btn btn-xs btn-success">{$di.t->_('enable')}</a>
@@ -36,11 +59,25 @@
         <a href="{$license.details.customerUrl}" target="_blank">{$di.t->_('Subscription details at FastSpring')}</a>
     {/if}
 
-    <div style="margin-top: 20px;">
+    {*<div style="margin-top: 20px;">
         <a href="{$di.router->getRouteUrl('billing')}" class="btn btn-default"><i class="fa fa-angle-left"></i> {$di.t->_('Back')}</a>
-    </div>
-    
+    </div>*}
     <script>
+        function getDiscount() {
+            var $_result = {};
+            $.ajax({
+                type: 'POST',
+                url: "{$di.router->getRouteUrl('billingDiscount')}",
+                async: false,
+                data: { 'license_id': "{$license.id}" },
+                dataType: 'json',
+                success: function (result) { 
+                    $_result = (result) ? result : false;
+                }   
+            });
+
+            return $_result;
+        }
         $(document).ready(function () {
             $('dd[data-time]').each(function () {
                 if ($(this).attr('data-time') > 0) {
@@ -49,6 +86,13 @@
             });
             
             $('#disableSubscription').click(function(){
+                var data = { 'license_id': "{$license.id}" };    
+                var discount = getDiscount();
+                console.log( discount.success );
+                if(discount && discount.success) {
+                    window.location = "{$di.router->getRouteUrl('billingLicenseDiscount', ['id' => $license.id])}";
+                    return false;
+                } else
                     confirm("{$di.t->_('Disable subscription auto-renew?')}");
             });
         });
