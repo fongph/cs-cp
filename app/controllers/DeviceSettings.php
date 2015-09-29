@@ -54,7 +54,7 @@ class DeviceSettings extends BaseModuleController
                 }
             } else if ($this->getRequest()->hasPost('wordsBlackList', 'badWord')) {
                 try {
-                    if ($settingsModel->addBadWord($this->di['devId'], htmlspecialchars($this->getRequest()->post('badWord')))) {
+                    if ($settingsModel->addBadWord($this->di['devId'], $this->getRequest()->post('badWord'))) {
                         $this->makeJSONResponse([
                             'status' => 201,
                             'message' => $this->di['t']->_('The bad word has been successfully added!')
@@ -65,6 +65,11 @@ class DeviceSettings extends BaseModuleController
                             'message' => $this->di['t']->_('Error occurred during adding the bad word!')
                         ]);
                     }
+                } catch (\Models\Cp\Settings\InvalidBadWordException $e) {
+                    $this->makeJSONResponse([
+                        'status' => 422,
+                        'message' => $this->di['t']->_('Invalid word!')
+                    ]);
                 } catch (\Models\Cp\Settings\BadWordExistException $e) {
                     $this->makeJSONResponse([
                         'status' => 422,
@@ -179,10 +184,12 @@ class DeviceSettings extends BaseModuleController
             $this->setView('cp/settings-delete.htm');
             return;
         }
-
+        
         $this->view->currentDevice = $this->di->get('currentDevice');
         $this->view->data = $settingsModel->getSettings($this->di['devId']);
-        $this->view->info = $infoModel->getInfo($this->di['devId']);
+        
+        //d($this->view->data);
+        
         $this->view->osVersion = $this->di->get('currentDevice')['os_version'];
         if($this->di->get('currentDevice')['os'] == 'android') {
             $exploded = explode('_', $this->di->get('currentDevice')['os_version']);
@@ -190,10 +197,12 @@ class DeviceSettings extends BaseModuleController
                 $this->view->osVersion = $exploded[1];
             }
         }
+        
         $this->view->visitData = [
-            'created' => date('d.m.Y H:i', strtotime($this->view->currentDevice['created_at'])),
-            'last' => date('d.m.Y H:i', $this->view->currentDevice['last_visit']),
+            'created' => date('d.m.Y H:i', strtotime(0)),
+            'last' => date('d.m.Y H:i', 0),
         ];
+        
         $this->view->hasPackage = ($this->di['currentDevice']['package_name'] !== null);
 //        var_dump($this->view->hasPackage, $this->di->get('currentDevice'), $settingsModel->getSettings($this->di['devId']));die;
         if($this->di->get('currentDevice')['os'] != 'icloud') {

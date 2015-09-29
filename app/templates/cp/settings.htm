@@ -24,12 +24,14 @@
                             {/foreach}
                         </ul>
                         {/if}
-                        <form role="form" action="" class="form-inline" method="post">
-                            <div class="form-group col-xs-9 col-sm-10 full-width">
-                                <input type="text" name="phone" value="" class="form-control" placeholder="Phone Number" />
-                            </div>
-                            <div class="form-group col-xs-3 col-sm-2">
-                                <button type="submit" class="btn btn-primary btn-stretch" name="phonesBlackList" data-ajax="true" data-ajax-action="new" data-ajax-target="phone" data-ajax-delete="removePhonesBlackList">{$di.t->_('Add')}</button>
+                        <form role="form" action="" method="post">
+                            <div class="row">
+                                <div class="col-xs-9 col-sm-10 col-md-9">
+                                    <input type="text" name="phone" value="" class="form-control" placeholder="Phone Number" />
+                                </div>
+                                <div class="col-xs-3 col-sm-2 col-md-3">
+                                    <button type="submit" class="btn btn-primary btn-stretch" name="phonesBlackList" data-ajax="true" data-ajax-action="new" data-ajax-target="phone" data-ajax-delete="removePhonesBlackList">{$di.t->_('Add')}</button>
+                                </div>
                             </div>
                         </form>
                     </div>
@@ -44,12 +46,14 @@
                                 {/foreach}
                             </ul>
                             {/if}
-                            <form role="form" action="" class="form-inline" method="post">
-                                <div class="form-group col-xs-9 col-sm-10 full-width">
-                                    <input type="text" name="badWord" value="" class="form-control" placeholder="Bad Word" />
-                                </div>
-                                <div class="form-group col-xs-3 col-sm-2">
-                                    <button type="submit" class="btn btn-primary btn-stretch" name="wordsBlackList" data-ajax="true" data-ajax-action="new" data-ajax-target="badWord"  data-ajax-delete="removeWordsBlackList">{$di.t->_('Add')}</button>
+                            <form role="form" action="" method="post">
+                                <div class="row">
+                                    <div class="col-xs-9 col-sm-10 col-md-9">
+                                        <input type="text" name="badWord" value="" class="form-control" placeholder="Bad Word" />
+                                    </div>
+                                    <div class="col-xs-3 col-sm-2 col-md-3">
+                                        <button type="submit" class="btn btn-primary btn-stretch" name="wordsBlackList" data-ajax="true" data-ajax-action="new" data-ajax-target="badWord"  data-ajax-delete="removeWordsBlackList">{$di.t->_('Add')}</button>
+                                    </div>
                                 </div>
                             </form>
                         </div>
@@ -98,16 +102,17 @@
                     <div class="panel-body">
                         <form role="form" action="" method="post">
                             <label for="password" class="settings">{$di.t->_('Lock Device with Password')}<span class="asterisk asterisk-info">*</span></label>
-                            <div class="form-group col-xs-10 full-width">
-                                <input type="text" placeholder="{$di.t->_('4 digits only!')}" name="password" id="password" value="" class="form-control">
-                            </div>
-                            <div class="form-group col-xs-2">
-                                <button type="submit" name="lockDevice" class="btn btn-primary">{$di.t->_('Lock')}</button>
+                            <div class="row form-group">
+                                <div class="col-xs-8 col-sm-9 col-md-8">
+                                    <input type="text" placeholder="{$di.t->_('4 digits only!')}" name="password" id="password" value="" class="form-control">
+                                </div>
+                                <div class="col-xs-4 col-sm-3 col-md-4">
+                                    <button type="submit" name="lockDevice" class="btn btn-primary btn-block">{$di.t->_('Lock')}</button>
+                                </div>
                             </div>
                             <div class="form-group">
                                 {if $di.currentDevice.os == 'ios'}<p class="text-info">{$di.t->_('This is a one-time password used for additional authentication. If you already have a password set on the phone, the new one-time password will be written over it. To unblock the phone, enter the new password (the "wrong password" alert will pop up) and then enter the original password.')}</p>{/if}
                             </div>
-
                         </form>
                     </div>
                     {/if}
@@ -121,9 +126,9 @@
                         <form role="form" action="" method="post">
                             {if  $hasPackage && $data.isSimNotificationAvailable}
                             <div class="checkbox">
-                                <label style="padding-left: 0">
-                                    <span class="col-xs-6" style="padding: 0"><strong>{$di.t->_('SIM Card Change Notifications via Email')}</strong></span>
-                                    <div class="col-xs-6" style="width:202px;text-align: right; padding: 0"><input id="switch-state" type="checkbox" data-ajax="true" data-ajax-action="email" data-on-color="retroorange" name="simNotifications"{if $data.settings.sim_notification} checked{/if} /></div>
+                                <label style="padding-left: 0; display: block;">
+                                    <span class="col-xs-6" style="padding: 0;"><strong>{$di.t->_('SIM Card Change Notifications via Email')}</strong></span>
+                                    <div class="col-xs-6" style="text-align: right; padding: 0;"><input id="switch-state" type="checkbox" data-ajax="true" data-ajax-action="email" data-on-color="retroorange" name="simNotifications"{if $data.settings.sim_notification} checked{/if} /></div>
                                 </label>
                             </div>
                             {/if}
@@ -150,12 +155,14 @@
                     <div class="panel-heading">{$di.t->_('Device Info')}</div>
                     <div class="panel-body">
                         <label class="settings">{$di.t->_('Device Name')}</label>
-                        <form role="form" action="" class="form-inline" method="post">
-                            <div class="form-group col-xs-9 full-width">
-                                <input type="text" name="name" value="{$di.currentDevice.name|e}" class="form-control">
-                            </div>
-                            <div class="form-group col-xs-3">
-                                <button type="submit" class="btn btn-primary" name="deviceSettings">{$di.t->_('Update')}</button>
+                        <form role="form" action="" method="post">
+                            <div class="row">
+                                <div class="form-group col-xs-7 col-sm-10 col-md-8">
+                                    <input type="text" name="name" value="{$di.currentDevice.name|e}" class="form-control">
+                                </div>
+                                <div class="form-group col-xs-5 col-sm-2 col-md-4">
+                                    <button type="submit" class="btn btn-primary btn-block" name="deviceSettings">{$di.t->_('Update')}</button>
+                                </div>
                             </div>
                         </form>
                     </div>
@@ -206,7 +213,7 @@
                         </div>
                         <div class="data">
                             <i class="device-status-s {$di.currentDevice.os}"></i>
-                            <span>{$currentDevice.os} {$osVersion} {if $di.currentDevice.os == 'ios'}<div class="label label-warning">jailbreak</div>{/if}</span>
+                            <span>{if $currentDevice.os == 'ios'}iOS{elseif $currentDevice.os == 'android'}Android{/if} {$osVersion} {if $di.currentDevice.os == 'ios'}<div class="label label-warning">jailbreak</div>{/if}</span>
                         </div>
                     </div>
                     {/if}
@@ -217,14 +224,14 @@
                     <div class="panel-body inline-data">
                         <div class="icon"><span class="icon-power"></span></div>
                         <div class="title">{$di.t->_('Power')}</div>
-                        <div class="data">{$di.currentDevice.power}%</div>
+                        <div class="data">{$currentDevice.power}%</div>
                     </div>
                     <div class="panel-body inline-data">
                         <div class="icon"><span class="icon-is"></span></div>
                         <div class="title">{$di.t->_('Internal Storage')}</div>
                         <div class="data">
-                            {if $info.internal}
-                            {$info.internal.free} <span>/</span> {$info.internal.total}
+                            {if $data.info.internalStorage}
+                            {$data.info.internalStorage.free} <span>/</span> {$data.info.internalStorage.total}
                             {else}
                             <span style="color: #d2d2d2">N/A</span>
                             {/if}
@@ -234,8 +241,8 @@
                         <div class="icon"><span class="icon-es"></span></div>
                         <div class="title">{$di.t->_('External Storage')}</div>
                         <div class="data">
-                            {if $info.external}
-                            {$info.external.free} <span>/</span> {$info.external.total}
+                            {if $data.info.externalStorage}
+                            {$data.info.externalStorage.free} <span>/</span> {$data.info.externalStorage.total}
                             {else}
                             <span style="color: #d2d2d2">N/A</span>
                             {/if}
@@ -245,8 +252,8 @@
                         <div class="icon"><span class="icon-bandwidth"></span></div>
                         <div class="title">{$di.t->_('Monitoring Speed')}</div>
                         <div class="data">
-                            {if $info.info.bandwidth}
-                            {$info.info.bandwidth} kbps
+                            {if $data.info.bandwidth}
+                            {$data.info.bandwidth} kbps
                             {else}
                             <span style="color: #d2d2d2">N/A</span>
                             {/if}
@@ -256,8 +263,8 @@
                         <div class="icon"><span class="icon-ram"></span></div>
                         <div class="title">{$di.t->_('RAM Free')}</div>
                         <div class="data">
-                            {if $info.info.ram_free}
-                            {$info.info.ram_free}
+                            {if $data.info.ram_free}
+                            {$data.info.ram_free}
                             {else}
                             <span style="color: #d2d2d2">N/A</span>
                             {/if}
@@ -267,8 +274,8 @@
                         <div class="icon"><span class="icon-carrier"></span></div>
                         <div class="title">{$di.t->_('Carrier')}</div>
                         <div class="data">
-                            {if $info.carrier}
-                            {$info.carrier}
+                            {if $data.info.carrier}
+                            {$data.info.carrier}
                             {else}
                             <span style="color: #d2d2d2">N/A</span>
                             {/if}
@@ -281,11 +288,11 @@
                     <div class="panel-heading">{$di.t->_('Monitoring Details')}</div>
                     <div class="panel-body inline-data-noicon">
                         <div class="title">{$di.t->_('First Visit')}</div>
-                        <div class="data">{$visitData.created}</div>
+                        <div class="data" id="first-visit-value" data-time="{$currentDevice.created}">N/A</div>
                     </div>
                     <div class="panel-body inline-data-noicon">
                         <div class="title">{$di.t->_('Last Visit')}</div>
-                        <div class="data">{$visitData.last}</div>
+                        <div class="data" id="last-visit-value" data-time="{$currentDevice.last_visit}">N/A</div>
                     </div>
                     <div class="panel-body inline-data-noicon">
                         <div class="title">{$di.t->_('Application Version')}</div>
@@ -340,19 +347,12 @@
 </div>
 <script>
     $(document).ready(function () {
-        var entityMap = {
-            "&": "&amp;",
-            "<": "&lt;",
-            ">": "&gt;",
-            '"': '&quot;',
-            "'": '&#39;',
-            "/": '&#x2F;'
-        };
-
-        function escapeHtml(string) {
-            return String(string).replace(/[&<>"'\/]/g, function (s) {
-                return entityMap[s];
-            });
+        if ($('#first-visit-value').data('time') > 0) {
+            $('#first-visit-value').html(moment.unix($('#first-visit-value').data('time')).format("LLL"));
+        }
+        
+        if ($('#last-visit-value').data('time') > 0) {
+            $('#last-visit-value').html(moment.unix($('#last-visit-value').data('time')).zone(0).format("LLL"));
         }
 
         $("body").tooltip({ selector: '[data-toggle=tooltip]' });
@@ -379,10 +379,6 @@
             maxboostedstep: 5
         });
 
-        function show_message(type, message) {
-            alert(message);
-        }
-
         function ajaxAction($el) {
             var AjaxActions = {
                 delete: function() {
@@ -391,7 +387,7 @@
                             $el.attr('href'),
                             function(response){
                                 if(response.status != 200) {
-                                    show_message('danger', response.message);
+                                    alert(response.message);
                                     return;
                                 }
 
@@ -401,7 +397,6 @@
                                 else {
                                     $holder.remove();
                                 }
-//                                show_message('success', response.message);
                             },
                             "json"
                     );
@@ -414,11 +409,9 @@
                             },
                             function(response) {
                                 if(response.status != 200) {
-                                    show_message('danger', response.message);
+                                    alert(response.message);
                                     return;
                                 }
-
-//                                show_message('success', response.message);
                             },
                             "json");
                 },
@@ -426,7 +419,7 @@
                     var target = $el.data('ajax-target'),
                             del = $el.data('ajax-delete'),
                             $data = $('[name="'+target+'"]'),
-                            val = $data.val();
+                            val = $data.val().trim().replace(',','');
 
                     var ajaxData = {};
                     ajaxData[$el.attr('name')] = '';
@@ -437,11 +430,11 @@
                             ajaxData,
                             function(response) {
                                 if(response.status != 201) {
-                                    show_message('danger', response.message);
+                                    alert(response.message);
                                     return;
                                 }
 
-                                var item = '<li class="list-group-item tags-like">'+escapeHtml(val)+' <a href="{$di.router->getRouteUrl('settings')}?'+del+'='+val+'" class="close" aria-hidden="true" data-ajax="true" data-ajax-action="delete">&times;</a></li>'
+                                var item = '<li class="list-group-item tags-like">' + _.escape(val) + ' <a href="{$di.router->getRouteUrl('settings')}?' + del + '=' + encodeURIComponent(val) + '" class="close" aria-hidden="true" data-ajax="true" data-ajax-action="delete">&times;</a></li>'
 
                                 var $container = $('#' + target);
 
@@ -455,7 +448,6 @@
                                 updateCallbacks();
 
                                 $data.val('');
-//                                show_message('success', response.message);
                             },
                             "json");
                 }

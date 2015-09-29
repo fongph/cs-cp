@@ -11,12 +11,13 @@ class Info extends BaseModel
     {
         $escapedDevId = $this->getDB()->quote($devId);
 
-        return $this->getDb()->query("SELECT * FROM `dev_info` WHERE `dev_id` = {$escapedDevId} LIMIT 1")->fetch();
+        return $this->getDb()->query("SELECT * FROM `dev_info` WHERE `dev_id` = {$escapedDevId} LIMIT 1")->fetch(\PDO::FETCH_ASSOC);
     }
 
     public function getInfo($devId)
     {
-        $devInfo = $this->di['currentDevice'];
+        $escapedDevId = $this->getDB()->quote($devId);
+        $info = $this->getDb()->query("SELECT * FROM `dev_info` WHERE `dev_id` = {$escapedDevId} LIMIT 1")->fetch(\PDO::FETCH_ASSOC);
 
         if (($info = $this->getDeviceInfo($devId)) === false) {
             throw new Settings\SettingsNotFoundException("Device info not found");
@@ -33,7 +34,7 @@ class Info extends BaseModel
         ] : null;
 
         return array(
-            'info' => $info,
+            'data' => $info,
             'internal' => $internal,
             'external' => $external,
             'carrier' => $info['carrier']? explode('_', $info['carrier'])[0] : null
