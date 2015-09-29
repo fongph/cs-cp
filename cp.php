@@ -55,7 +55,7 @@ $console->register('build')
             $demo = $input->getOption('demo');
 
             if ($site < 0 || $site > 255) {
-                $output->writeln("<error>Site must be between 0 and 255!<.error>");
+                $output->writeln("<error>Site must be between 0 and 255!</error>");
                 return;
             }
 

@@ -15,7 +15,8 @@
         "underscore": "1.8.2",
         "jquery": "1.11.0",
         "jquery.cookie": "1.4.1",
-        "font-awesome": "4.3"
+        "font-awesome": "4.3",
+        "bootstrap-switch": "3.3.2"
     },
     "resolutions": {
         "bootstrap": "3.3.4",

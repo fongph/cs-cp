@@ -15,6 +15,7 @@ abstract class BaseModuleController extends BaseController
 
     protected function initCP()
     {
+
         $devicesManager = new DevicesManager($this->di['db']);
         $devicesModel = new \Models\Devices($this->di);
 
