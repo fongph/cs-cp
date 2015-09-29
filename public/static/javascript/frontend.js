@@ -12789,13 +12789,22 @@ $.fn.tableScroll = function () {
     });
 };
 
-function getCookie(name) {
-    if ($.cookie(name)) {
-        return $.cookie(name);
+function clearCookie(name) {
+    if($.cookie(name)) {
+        $.removeCookie(name, { path: '/' });
+    }
+}
+
+function setCookie(name, value) {
+    $.cookie(name, value, { expires: 7, path: '/' });
+}
+
+function getCookie( name ) {
+    if($.cookie(name)) {
+        return $.cookie(name); 
     } else
         return false;
 }
-
 //var LC_API = LC_API || {};
 //var livechat_chat_started = false;
 //
@@ -12813,7 +12822,7 @@ function getCookie(name) {
 //{
 //        livechat_chat_started = true;
 //};
-
+/*
 var LC_API = LC_API || {};
 LC_API.on_before_load = function()
 {
@@ -12829,7 +12838,7 @@ LC_API.on_after_load = function()
             LC_API.minimize_chat_window();
         }
 };
-
+*/
 $(document).ready(function () {
     $('.anchor').on("click", function (e) {
 

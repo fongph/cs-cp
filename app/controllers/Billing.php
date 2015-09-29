@@ -4,15 +4,18 @@ namespace Controllers;
 
 use CS\ICloud\Backup as ICloudBackup,
     CS\Models\License\LicenseRecord,
+    CS\Users\UsersManager,    
     CS\Users\UsersNotes,
-    System\FlashMessages,
+    System\FlashMessages,    
     CS\Settings\GlobalSettings,
     CS\Devices\Manager as DevicesManager,
     CS\Models\License\LicenseNotFoundException;
 
+use CS\Models\Discount\DiscountRecord;
+
 class Billing extends BaseController
 {
-
+    
     public function preAction()
     {
         $this->checkDemo($this->di['router']->getRouteUrl('cp'));
@@ -270,16 +273,24 @@ class Billing extends BaseController
         }
 
         $this->view->license = $license;
-        $this->setView('billing/license.htm');
+        
+        if($this->auth['id'] == 317) { // заглушка
+            $this->view->title = $this->di->getTranslator()->_('Subscription details');
+            
+            $this->setView('billing/_license.htm');
+        } else
+            $this->setView('billing/license.htm');
     }
 
     public function disableLicenseAction()
     {
         $billingModel = new \Models\Billing($this->di);
+        $discount = new \Models\Discounts( $this->di );
+        
         $license = $billingModel->getUserLicenseInfo($this->auth['id'], $this->params['id'], false);
 
         if ($license == false) {
-            $this->di->getFlashMessages()->add(FlashMessages::ERROR, "Plan was not found!");
+            $this->di->getFlashMessages()->add(FlashMessages::ERROR, "Subscription was not found!");
             $this->redirect($this->di->getRouter()->getRouteUrl('billing'));
         }
         
@@ -287,15 +298,25 @@ class Billing extends BaseController
         
         try {
             $this->di['billingManager']->cancelLicenseSubscription($this->params['id']);
-            $this->getDI()->getFlashMessages()->add(FlashMessages::SUCCESS, "Subscription auto-renew successfully disabled!");
+            
+            if($this->auth['id'] == 317) { // заглушка
+                if($descArray = $discount->getDiscount($this->auth['id'], $this->params['id'])) {
+                    $discount->deleteDiscount($descArray['id']);
+                }   
+                
+                $this->getDI()->getFlashMessages()->add(FlashMessages::SUCCESS, "Subscription auto-renewal is successfully disabled!");
+            } else {
+                $this->getDI()->getFlashMessages()->add(FlashMessages::SUCCESS, "Subscription auto-renew successfully disabled!");
+            }
+               
         } catch (\CS\Billing\Exceptions\RecordNotFoundException $e) {
             $this->getDI()->get('logger')->addInfo('Subscription not found!', array('exception' => $e));
             $this->getDI()->getFlashMessages()->add(FlashMessages::ERROR, "Subscription auto-renew can't be disabled!");
         } catch (\CS\Billing\Exceptions\GatewayException $e) {
-            $this->getDI()->getFlashMessages()->add(FlashMessages::ERROR, "Error during operation!");
+            $this->getDI()->getFlashMessages()->add(FlashMessages::ERROR, "Operation error! или Process error!");
             $this->getDI()->get('logger')->addWarning('Gateway request was not successfuly completed!', array('exception' => $e, 'gatewayResponse' => $e->getResponse()->getMessage()));
         } catch (\Seller\Exception\SellerException $e) {
-            $this->getDI()->getFlashMessages()->add(FlashMessages::ERROR, "Error during operation!");
+            $this->getDI()->getFlashMessages()->add(FlashMessages::ERROR, "Operation error! или Process error!");
             $this->getDI()->get('logger')->addError('Gateway exception!', array('exception' => $e));
         }
         
@@ -330,5 +351,129 @@ class Billing extends BaseController
         
         $this->redirect($this->di->getRouter()->getRouteUrl('billingLicense', array('id' => $license['id'])));
     }
+    
+    /**
+     * Discount
+     */
+    public function discountLicenseAction() {
+        
+        $billingModel = new \Models\Billing($this->di);
+        $license = $billingModel->getUserLicenseInfo($this->auth['id'], $this->params['id'], false);
+        
+        if ($license == false) {
+            $this->di->getFlashMessages()->add(FlashMessages::ERROR, "Subscription was not found!");
+            $this->redirect($this->di->getRouter()->getRouteUrl('billing'));
+        }
+        
+        $this->view->title=$this->di->getTranslator()->_('Disable auto-renewal');
+        $this->view->license = $license;
+        $this->setView('billing/discount.htm');
+    }
+    
+    public function enableDiscountAction() {
+        
+        $discount = new \Models\Discounts( $this->di );
+        $billingModel = new \Models\Billing($this->di);
+        $license = $billingModel->getUserLicenseInfo($this->auth['id'], $this->params['id'], false);
+        
+        if ($license == false) {
+            $this->di->getFlashMessages()->add(FlashMessages::ERROR, "Subscription was not found!");
+            $this->redirect($this->di->getRouter()->getRouteUrl('billing'));
+        }
+        
+        try {
+            $this->di['billingManager']->applyCuponLicenseSubscription($this->params['id'], DiscountRecord::DISCOUNT_50);
+            // completed
+            if($descArray = $discount->getDiscount($this->auth['id'], $this->params['id'])) {
+                $discount->completedDiscount($descArray['id']);
+            }     
+            $this->getDI()->getFlashMessages()->add(FlashMessages::SUCCESS, "Congratulations! Your subscription auto-renewal is confirmed successfully with 50% DISCOUNT.");
+        } catch (\CS\Billing\Exceptions\RecordNotFoundException $e) {
+            $this->getDI()->get('logger')->addInfo('Subscription not found!', array('exception' => $e));
+            $this->getDI()->getFlashMessages()->add(FlashMessages::ERROR, "Discount can't be applied to this subscription!");
+        } catch (\CS\Billing\Exceptions\GatewayException $e) {
+            $this->getDI()->getFlashMessages()->add(FlashMessages::ERROR, "Operation error! или Process error!");
+            $this->getDI()->get('logger')->addWarning('Gateway request was not successfuly completed!', array('exception' => $e, 'gatewayResponse' => $e->getResponse()->getMessage()));
+        } catch (\Seller\Exception\SellerException $e) {
+            $this->getDI()->getFlashMessages()->add(FlashMessages::ERROR, "Operation error! или Process error!");
+            $this->getDI()->get('logger')->addError('Gateway exception!', array('exception' => $e));
+        }
+        
+        $this->redirect($this->di->getRouter()->getRouteUrl('billingLicense', array('id' => $license['id'])));
+    }
+    
+    public function cancellationLicenseAction() {
+        
+        $billingModel = new \Models\Billing($this->di);
+        $license = $billingModel->getUserLicenseInfo($this->auth['id'], $this->params['id'], false);
+        
+        if ($license == false) {
+            $this->di->getFlashMessages()->add(FlashMessages::ERROR, "Subscription was not found!");
+            $this->redirect($this->di->getRouter()->getRouteUrl('billing'));
+        }
+        
+        $this->view->title=$this->di->getTranslator()->_('Confirm subscription cancellation');
+        $this->view->license = $license;
+        $this->setView('billing/cancellation.htm');
+    }
 
+    public function cancellationAction() { 
+        $license_id = $this->getRequest()->post('license_id');
+        
+        $feadback = $this->getRequest()->post('feadback');
+        $changed = ($this->getRequest()->post('changed')) ? true : false;
+        $confirm = ($this->getRequest()->post('confirm')) ? true : false;
+        
+        $billingModel = new \Models\Billing($this->di);
+        if($license_id != null) {
+            $license = $billingModel->getUserLicenseInfo($this->auth['id'], (int)$license_id, false);
+            if ($license == false) {
+                $this->di->getFlashMessages()->add(FlashMessages::ERROR, "Subscription was not found!");
+                $this->redirect($this->di->getRouter()->getRouteUrl('billing'));
+            }
+        }
+        
+        if($feadback) {
+            $um = new UsersManager($this->di->get('db'));
+            $info_user = $um->getUser($this->auth['id']);
+            
+            /** @var $mailSender \CS\Mail\MailSender */
+            $mailSender = $this->di->get('mailSender');
+            $mailSender->sendConfirmCancellationLicence( $this->di['config']['supportEmail'], $info_user->getName(), $this->auth['login'], strip_tags(trim($feadback)) );
+        }
+        
+        if($changed) {
+            $this->redirect($this->di->getRouter()->getRouteUrl('billingLicense', array('id' => $license_id)));
+        } elseif($confirm) {
+            $this->redirect($this->di->getRouter()->getRouteUrl('billingLicenseDisable', array('id' => $license_id)));
+        }
+        
+    }
+    
+    // ajax
+    public function discountAction() {
+        
+        if ($this->getRequest()->isAjax()) {
+            $result = array('success'=> false);
+            $billingModel = new \Models\Billing($this->di);
+            $discount = new \Models\Discounts( $this->di );
+
+            $license_id = $this->getRequest()->post('license_id');
+            if($license_id != null) {
+                $license = $billingModel->getUserLicenseInfo($this->auth['id'], (int)$license_id, false);
+                
+                if($license && !$discount->getDiscountUserId($this->auth['id'])) {
+                    $discount->setDiscount($this->auth['id'], $license_id);
+                }   
+                
+                if($discount->getDiscount($this->auth['id'], $license_id))
+                    $result = array('success'=> true);
+                
+            }
+            
+            $this->makeJSONResponse( $result );
+        }
+        
+    }
+    
 }
