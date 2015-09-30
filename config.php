@@ -59,7 +59,7 @@ $default = array(
         Modules::SNAPCHAT => 'Snapchat',
         Modules::VK => 'VK Messages',
         Modules::KEYLOGGER => 'Keylogger',
-        Modules::SMS_COMMANDS => 'Sms Commands',
+        Modules::SMS_COMMANDS => 'SMS Commands',
         Modules::SETTINGS => 'Device Settings'
     ),
     'contents' => array(
