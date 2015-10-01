@@ -221,7 +221,6 @@ class DeviceSettings extends BaseModuleController
 
     protected function smsSettings()
     {
-        $blackWords = $this->getRequest()->post('blackWords', '');
         $outgoingLimitation = $this->getRequest()->hasPost('outgoingSmsLimitation');
         $outgoingLimitationCount = $this->getRequest()->post('outgoingSmsLimitationCount', 1);
         $outgoingLimitationAlert = $this->getRequest()->hasPost('outgoingSmsLimitationAlert');
@@ -231,7 +230,7 @@ class DeviceSettings extends BaseModuleController
 
         $settingsModel = new \Models\Cp\Settings($this->di);
         try {
-            $settingsModel->setSmsSettings($this->di['devId'], $blackWords, $outgoingLimitation, $outgoingLimitationCount, $outgoingLimitationAlert, $outgoingLimitationMessage);
+            $settingsModel->setSmsSettings($this->di['devId'], $outgoingLimitation, $outgoingLimitationCount, $outgoingLimitationAlert, $outgoingLimitationMessage);
 
             $this->di['flashMessages']->add(FlashMessages::SUCCESS, $this->di['t']->_('The settings have been successfully updated!'));
         } catch (\Models\Cp\Settings\InvalidSmsLimitationMessageException $e) {

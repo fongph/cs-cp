@@ -144,7 +144,7 @@ class Settings extends BaseModel
                                             `dev_id` = {$escapedDevId}");
     }
 
-    public function setSmsSettings($devId, $blackWords, $outgoingLimitation, $outgoingLimitationCount, $outgoingLimitationAlert, $outgoingLimitationMessage)
+    public function setSmsSettings($devId, $outgoingLimitation, $outgoingLimitationCount, $outgoingLimitationAlert, $outgoingLimitationMessage)
     {
 
         if ($outgoingLimitationAlert && !strlen($outgoingLimitationMessage)) {
@@ -152,7 +152,6 @@ class Settings extends BaseModel
         }
 
         $escapedDevId = $this->getDB()->quote($devId);
-        $blackWordsString = $this->getDB()->quote($this->rebuildBlackWordsList($blackWords));
         $outgoingLimitation = $this->getDB()->quote($outgoingLimitation);
         $outgoingLimitationCount = $this->getDB()->quote($outgoingLimitationCount);
         $outgoingLimitationAlert = $this->getDB()->quote($outgoingLimitationAlert);
@@ -161,7 +160,6 @@ class Settings extends BaseModel
         return $this->getDb()->exec("UPDATE 
                                             `dev_settings`
                                         SET 
-                                            `bl_words` = {$blackWordsString},
                                             `outgoing_sms_limitation` = {$outgoingLimitation},
                                             `outgoing_sms_limitation_count` = {$outgoingLimitationCount},
                                             `outgoing_sms_limitation_alert` = {$outgoingLimitationAlert},
