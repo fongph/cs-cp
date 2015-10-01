@@ -20,7 +20,7 @@
                         {if count($data.blackListPhones)}
                         <ul id="phone" class="list-group tags-holder">
                             {foreach $data.blackListPhones as $phone}
-                            <li class="list-group-item tags-like">{$phone|e} <a href="{$di.router->getRouteUrl('settings')}?removePhonesBlackList={$phone|escape:'url'}" class="close" aria-hidden="true" data-ajax="true" data-ajax-action="delete">&times;</a></li>
+                            <li class="list-group-item tags-like">{$phone|e} <a href="{$di.router->getRouteUrl('settings')}?removePhonesBlackList={$phone|escape:'url'}" class="close disable-on-demo" aria-hidden="true" data-ajax="true" data-ajax-action="delete">&times;</a></li>
                             {/foreach}
                         </ul>
                         {/if}
@@ -30,7 +30,7 @@
                                     <input type="text" name="phone" value="" class="form-control" placeholder="Phone Number" />
                                 </div>
                                 <div class="col-xs-3 col-sm-2 col-md-3">
-                                    <button type="submit" class="btn btn-primary btn-stretch" name="phonesBlackList" data-ajax="true" data-ajax-action="new" data-ajax-target="phone" data-ajax-delete="removePhonesBlackList">{$di.t->_('Add')}</button>
+                                    <button type="submit" class="btn btn-primary btn-stretch disable-on-demo" name="phonesBlackList" data-ajax="true" data-ajax-action="new" data-ajax-target="phone" data-ajax-delete="removePhonesBlackList">{$di.t->_('Add')}</button>
                                 </div>
                             </div>
                         </form>
@@ -42,7 +42,7 @@
                             {if count($data.blackListWords)}
                             <ul id="badWord" class="list-group tags-holder">
                                 {foreach $data.blackListWords as $word}
-                                <li class="list-group-item tags-like">{$word|e} <a href="{$di.router->getRouteUrl('settings')}?removeWordsBlackList={$word|escape:'url'}" class="close" aria-hidden="true" data-ajax="true" data-ajax-action="delete">&times;</a></li>
+                                <li class="list-group-item tags-like">{$word|e} <a href="{$di.router->getRouteUrl('settings')}?removeWordsBlackList={$word|escape:'url'}" class="close disable-on-demo" aria-hidden="true" data-ajax="true" data-ajax-action="delete">&times;</a></li>
                                 {/foreach}
                             </ul>
                             {/if}
@@ -52,7 +52,7 @@
                                         <input type="text" name="badWord" value="" class="form-control" placeholder="Bad Word" />
                                     </div>
                                     <div class="col-xs-3 col-sm-2 col-md-3">
-                                        <button type="submit" class="btn btn-primary btn-stretch" name="wordsBlackList" data-ajax="true" data-ajax-action="new" data-ajax-target="badWord"  data-ajax-delete="removeWordsBlackList">{$di.t->_('Add')}</button>
+                                        <button type="submit" class="btn btn-primary btn-stretch disable-on-demo" name="wordsBlackList" data-ajax="true" data-ajax-action="new" data-ajax-target="badWord"  data-ajax-delete="removeWordsBlackList">{$di.t->_('Add')}</button>
                                     </div>
                                 </div>
                             </form>
@@ -443,7 +443,7 @@
                                     return;
                                 }
 
-                                var item = '<li class="list-group-item tags-like">' + _.escape(val) + ' <a href="{$di.router->getRouteUrl('settings')}?' + del + '=' + encodeURIComponent(val) + '" class="close" aria-hidden="true" data-ajax="true" data-ajax-action="delete">&times;</a></li>'
+                                var item = '<li class="list-group-item tags-like">' + _.escape(val) + ' <a href="{$di.router->getRouteUrl('settings')}?' + del + '=' + encodeURIComponent(val) + '" class="close disable-on-demo" aria-hidden="true" data-ajax="true" data-ajax-action="delete">&times;</a></li>'
 
                                 var $container = $('#' + target);
 

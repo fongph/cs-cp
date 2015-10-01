@@ -68,8 +68,12 @@
             moment.locale('{$di.t->getLocale()}');
             {if $di.config.demo}
             $(document).ready(function(){
-                $('body').on('click', '.disable-on-demo', function(e){
+                disabledOnDemoAlert = function() {
                     alert("{$di.t->_('Not available in demo.')}");
+                };
+                
+                $('body').on('click', '.disable-on-demo', function(e){
+                    disabledOnDemoAlert();
                     e.preventDefault();
                 });
             });
