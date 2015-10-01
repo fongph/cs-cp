@@ -67,7 +67,7 @@ class Kik extends BaseModuleController
         parent::postAction();
         $this->buildCpMenu();
 
-        $this->view->title = $this->di['t']->_('Kik Messages');
+        $this->view->title = $this->di['t']->_('Kik');
     }
     
     protected function isModulePaid()

@@ -77,7 +77,7 @@ class Sms extends BaseModuleController {
         parent::postAction();
         $this->buildCpMenu();
 
-        $this->view->title = $this->di['t']->_('View SMS');
+        $this->view->title = $this->di['t']->_('SMS');
 
         if($this->di['currentDevice']['os'] != 'icloud'){
             $this->view->customUtcOffset = 0;

@@ -85,7 +85,7 @@ class Emails extends BaseModuleController
         parent::postAction();
         $this->buildCpMenu();
 
-        $this->view->title = $this->di['t']->_('View Emails');
+        $this->view->title = $this->di['t']->_('Emails');
     }
     
     protected function isModulePaid()

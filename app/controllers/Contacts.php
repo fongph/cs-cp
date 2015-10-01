@@ -42,7 +42,7 @@ class Contacts extends BaseModuleController
         parent::postAction();
         $this->buildCpMenu();
 
-        $this->view->title = $this->di['t']->_('View Contacts');
+        $this->view->title = $this->di['t']->_('Contacts');
     }
     
     protected function isModulePaid()

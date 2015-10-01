@@ -41,7 +41,7 @@ class Bookmarks extends BaseModuleController {
         parent::postAction();
         $this->buildCpMenu();
 
-        $this->view->title = $this->di['t']->_('View Bookmarks');
+        $this->view->title = $this->di['t']->_('Bookmarks');
     }
     
     protected function isModulePaid()

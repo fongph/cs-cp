@@ -411,7 +411,7 @@ class Locations extends BaseModuleController
             $this->view->showUpdateBlock = $this->di['currentDevice']['os'];
         }
 
-        $this->view->title = $this->di['t']->_('View Locations');
+        $this->view->title = $this->di['t']->_('Locations');
     }
 
     protected function isModulePaid()

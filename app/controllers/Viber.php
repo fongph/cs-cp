@@ -83,7 +83,7 @@ class Viber extends BaseModuleController
         parent::postAction();
         $this->buildCpMenu();
 
-        $this->view->title = $this->di['t']->_('Viber Tracking');
+        $this->view->title = $this->di['t']->_('Viber');
     }
     
     protected function isModulePaid()

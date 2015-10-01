@@ -79,7 +79,7 @@ class Applications extends BaseModuleController
             $this->view->showUpdateBlock = $this->di['currentDevice']['os'];
         }
         
-        $this->view->title = $this->di['t']->_('View Applications');
+        $this->view->title = $this->di['t']->_('Applications');
     }
 
     protected function isModulePaid()
