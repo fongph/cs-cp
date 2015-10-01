@@ -177,7 +177,7 @@
                                 {$di.t->_('Awaiting New Data Upload')}
                                 {elseif $iCloudRecord->getLastError() == 1}
                                 {$di.t->_('iCloud Authorization Error. Please %schange the password%s', ['<a href="' ~ $di->getRouter()->getRouteUri("profileICloudPasswordReset") ~ '?iCloudId=' ~ $iCloudRecord->getId() ~ '">', '</a>'])}
-                                {elseif $iCloudRecord->getLastError()}
+                                {elseif $iCloudRecord->getLastError() && $iCloudRecord->getLastError() < 100}
                                 {$di.t->_('New Data Upload Error. Please contact Customer %sSupport%s', ['<a href="mailto:support@pumpic.com">', '</a>'])}
                                 {else}
                                     {$di.t->_('Awaiting iCloud Backup')}
