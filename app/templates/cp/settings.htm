@@ -3,7 +3,7 @@
         padding-left: 20px;
     }
 </style>
-<div>
+<div id="device-settings-page">
     <h1 class="text-center">{$title}</h1>
     <div class="container-max">
         <div class="row">
@@ -171,29 +171,38 @@
                         <div class="title">{$di.t->_('Device Status')}</div>
                         <div class="data">
                             {if $di.currentDevice.os == 'icloud'}
-                            <span>
-                            {if isset($iCloudRecord) && $iCloudRecord->getId()}
-                            {if $iCloudRecord->getProcessing()}
-                            {$di.t->_('Awaiting New Data Upload')}
-                            {elseif $iCloudRecord->getLastError() == 1}
-                            {$di.t->_('iCloud Authorization Error. Please %schange the password%s', ['<a href="' ~ $di->getRouter()->getRouteUri("profileICloudPasswordReset") ~ '?iCloudId=' ~ $iCloudRecord->getId() ~ '">', '</a>'])}
-                            {elseif $iCloudRecord->getLastError()}
-                            {$di.t->_('New Data Upload Error. Please contact Customer %sSupport%s', ['<a href="mailto:support@pumpic.com">', '</a>'])}
+                                <span>
+                                {if isset($iCloudRecord) && $iCloudRecord->getId()}
+                                {if $iCloudRecord->getProcessing()}
+                                {$di.t->_('Awaiting New Data Upload')}
+                                {elseif $iCloudRecord->getLastError() == 1}
+                                {$di.t->_('iCloud Authorization Error. Please %schange the password%s', ['<a href="' ~ $di->getRouter()->getRouteUri("profileICloudPasswordReset") ~ '?iCloudId=' ~ $iCloudRecord->getId() ~ '">', '</a>'])}
+                                {elseif $iCloudRecord->getLastError()}
+                                {$di.t->_('New Data Upload Error. Please contact Customer %sSupport%s', ['<a href="mailto:support@pumpic.com">', '</a>'])}
+                                {else}
+                                    {$di.t->_('Awaiting iCloud Backup')}
+                                {/if}
+                                {/if}
+                                </span>
                             {else}
-                                {$di.t->_('Awaiting iCloud Backup')}
-                            {/if}
-                            {/if}
-                            </span>
-                            {else}
-                            {if $di.currentDevice.online}
-                            {if $di.currentDevice.network=='wifi'}
-                            <span>wifi</span>
-                            {else}
-                            <span>mobile</span>
-                            {/if}
-                            {else}
-                            <span>offline</span>
-                            {/if}
+                                {if $di.currentDevice.online}
+                                    {if $di.currentDevice.network == 'wifi'}
+                                        <div class="network-status wifi">
+                                            <div class="icon"></div>
+                                            <div class="name">WiFi</div>
+                                        </div>
+                                    {else}
+                                        <div class="network-status mobile">
+                                            <div class="icon"></div>
+                                            <div class="name">Mobile Network</div>
+                                        </div>
+                                    {/if}
+                                {else}
+                                    <div class="network-status offline">
+                                        <div class="icon"></div>
+                                        <div class="name">Offline</div>
+                                    </div>
+                                {/if}
                             {/if}
                         </div>
                     </div>
@@ -212,7 +221,7 @@
                             {$di.t->_('Operating System')}
                         </div>
                         <div class="data">
-                            <i class="device-status-s {$di.currentDevice.os}"></i>
+                            <i class="device-status-s online {$di.currentDevice.os}"></i>
                             <span>{if $currentDevice.os == 'ios'}iOS{elseif $currentDevice.os == 'android'}Android{/if} {$osVersion} {if $di.currentDevice.os == 'ios'}<div class="label label-warning">jailbreak</div>{/if}</span>
                         </div>
                     </div>

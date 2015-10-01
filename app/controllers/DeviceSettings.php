@@ -81,12 +81,11 @@ class DeviceSettings extends BaseModuleController
                     'status' => 500,
                     'message' => $this->di['t']->_('Something went wrong')
                 ]);
-
             } else if ($this->getRequest()->hasPost('simNotifications')) {
                 $simNotifications = $this->getRequest()->post('simNotifications');
-                $simNotifications = $simNotifications == 'true'? 1 : 0;
+                $simNotifications = $simNotifications == 'true' ? 1 : 0;
 
-                if($settingsModel->setSimChangeNotifications($this->di['devId'], $simNotifications)) {
+                if ($settingsModel->setSimChangeNotifications($this->di['devId'], $simNotifications)) {
                     $this->makeJSONResponse([
                         'status' => 200,
                         'message' => $this->di['t']->_('Sim change notifications changed!')
@@ -97,7 +96,6 @@ class DeviceSettings extends BaseModuleController
                     'status' => 422,
                     'message' => $this->di['t']->_('Sim change notifications doesn\'t changed!')
                 ]);
-
             } else if ($this->getRequest()->hasPost('deviceSettings', 'name')) {
 
                 $devicesModel = new \Models\Devices($this->di);
@@ -184,38 +182,39 @@ class DeviceSettings extends BaseModuleController
             $this->setView('cp/settings-delete.htm');
             return;
         }
-        
+
         $this->view->currentDevice = $this->di->get('currentDevice');
         $this->view->data = $settingsModel->getSettings($this->di['devId']);
-        
+
         //d($this->view->data);
-        
+
         $this->view->osVersion = $this->di->get('currentDevice')['os_version'];
-        if($this->di->get('currentDevice')['os'] == 'android') {
+        if ($this->di->get('currentDevice')['os'] == 'android') {
             $exploded = explode('_', $this->di->get('currentDevice')['os_version']);
-            if(count($exploded) == 2) {
+            if (count($exploded) == 2) {
                 $this->view->osVersion = $exploded[1];
             }
         }
-        
+
         $this->view->visitData = [
             'created' => date('d.m.Y H:i', strtotime(0)),
             'last' => date('d.m.Y H:i', 0),
         ];
-        
+
         $this->view->hasPackage = ($this->di['currentDevice']['package_name'] !== null);
 //        var_dump($this->view->hasPackage, $this->di->get('currentDevice'), $settingsModel->getSettings($this->di['devId']));die;
-        if($this->di->get('currentDevice')['os'] != 'icloud') {
+        if ($this->di->get('currentDevice')['os'] != 'icloud') {
             $this->view->appLastVersion = GlobalSettings::getVersionApp($this->di->get('currentDevice')['os']);
         }
 
-        try {
-            $this->view->iCloudRecord = new DeviceICloudRecord($this->di->get('db'));
-            if ($this->view->currentDevice['os'] == 'icloud')
+        if ($this->view->currentDevice['os'] == 'icloud') {
+            try {
+                $this->view->iCloudRecord = new DeviceICloudRecord($this->di->get('db'));
                 $this->view->iCloudRecord->loadByDevId($this->di->get('devId'));
-        } catch (\Exception $e) {
-            
-        };
+            } catch (\Exception $e) {
+                // ignore...
+            }
+        }
 
         $this->setView('cp/settings.htm');
     }
@@ -254,7 +253,7 @@ class DeviceSettings extends BaseModuleController
 
         try {
             $this->di['devicesManager']->deleteDevice($this->di['devId']);
-            
+
             $this->di->getFlashMessages()->add(FlashMessages::SUCCESS, $this->di['t']->_('The device has been successfully unassigned from your account!'));
             $this->redirect($this->di['router']->getRouteUrl('profile'));
         } catch (\Exception $e) {

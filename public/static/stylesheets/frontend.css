@@ -8519,6 +8519,9 @@ a.list-group-item-danger.active:focus {
 .panel-body.inline-data > .data span {
   color: #4d4f5b;
 }
+.panel-body.inline-data > .data > * {
+  vertical-align: middle;
+}
 .panel-body.inline-data-noicon {
   border-top: 1px solid #e7e7e7;
 }
@@ -8539,6 +8542,9 @@ a.list-group-item-danger.active:focus {
 }
 .panel-body.inline-data-noicon > .data span {
   color: #4d4f5b;
+}
+.panel-body.inline-data-noicon > .data > * {
+  vertical-align: middle;
 }
 .fl-right {
   float: right;

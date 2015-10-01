@@ -8859,6 +8859,47 @@ p.attachment.vcard {
   top: 304px;
   left: 29px;
 }
+#device-settings-page .bootstrap-switch-focused {
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+#device-settings-page .input-group-btn:first-child > .btn,
+#device-settings-page .input-group-btn:first-child > .btn-group {
+  margin-right: -2px;
+}
+#device-settings-page .network-status {
+  display: block;
+  float: right;
+  overflow: auto;
+  margin: -5px 0 -7px;
+}
+#device-settings-page .network-status .name {
+  display: block;
+  margin-left: -28px;
+  padding: 5px 0 0 32px;
+  float: left;
+  font-size: 14px;
+  height: 28px;
+}
+#device-settings-page .network-status .icon {
+  display: block;
+  float: left;
+  width: 25px;
+  height: 28px;
+  background: url('../img/device-status-icons-big.png') no-repeat -25px 28px;
+}
+#device-settings-page .network-status.mobile .icon {
+  background-position: 0px 0px;
+}
+#device-settings-page .network-status.wifi .icon {
+  background-position: 0px -28px;
+}
+#device-settings-page .network-status.offline .name {
+  color: #c4c4c4;
+}
+#device-settings-page .network-status.offline .icon {
+  background-position: 0px -56px;
+}
 /* Plugins */
 .bootstrap-touchspin .input-group-btn-vertical {
   position: relative;
@@ -11677,6 +11718,9 @@ a.list-group-item-danger.active:focus {
 .panel-body.inline-data > .data span {
   color: #4d4f5b;
 }
+.panel-body.inline-data > .data > * {
+  vertical-align: middle;
+}
 .panel-body.inline-data-noicon {
   border-top: 1px solid #e7e7e7;
 }
@@ -11697,6 +11741,9 @@ a.list-group-item-danger.active:focus {
 }
 .panel-body.inline-data-noicon > .data span {
   color: #4d4f5b;
+}
+.panel-body.inline-data-noicon > .data > * {
+  vertical-align: middle;
 }
 .fl-right {
   float: right;

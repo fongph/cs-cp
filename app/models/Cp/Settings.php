@@ -300,7 +300,7 @@ class Settings extends BaseModel
         return $this->getDb()->query("SELECT * FROM `dev_info` WHERE `dev_id` = {$escapedDevId} LIMIT 1")->fetch(\PDO::FETCH_ASSOC);
     }
 
-    public static function formatBytes($bytes, $precision = 3)
+    public static function formatBytes($bytes, $precision = 2)
     {
         $base = log($bytes, 1024);
         $suffixes = array('', 'kB', 'MB', 'GB', 'TB');
