@@ -70,7 +70,7 @@ class BrowserHistory extends BaseModuleController
         parent::postAction();
         $this->buildCpMenu();
 
-        $this->view->title = $this->di['t']->_('View Browser History');
+        $this->view->title = $this->di['t']->_('Browser History');
     }
 
     protected function isModulePaid()

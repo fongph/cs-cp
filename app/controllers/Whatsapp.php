@@ -86,7 +86,7 @@ class Whatsapp extends BaseModuleController
         parent::postAction();
         $this->buildCpMenu();
 
-        $this->view->title = $this->di['t']->_('Whatsapp Tracking');
+        $this->view->title = $this->di['t']->_('Whatsapp');
 
         if ($this->di['currentDevice']['os'] != 'icloud') {
             $this->view->customTimezoneOffset = 0;

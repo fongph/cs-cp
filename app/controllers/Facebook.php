@@ -80,7 +80,7 @@ class Facebook extends BaseModuleController
         parent::postAction();
         $this->buildCpMenu();
 
-        $this->view->title = $this->di['t']->_('Facebook Messages');
+        $this->view->title = $this->di['t']->_('Facebook');
     }
 
     protected function isModulePaid()

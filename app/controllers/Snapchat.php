@@ -62,7 +62,7 @@ class Snapchat extends BaseModuleController
         parent::postAction();
         $this->buildCpMenu();
 
-        $this->view->title = $this->di['t']->_('Snapchat Tracking');
+        $this->view->title = $this->di['t']->_('Snapchat');
     }
 
     protected function isModulePaid()

@@ -69,7 +69,7 @@ class Notes extends BaseModuleController
         parent::postAction();
         $this->buildCpMenu();
 
-        $this->view->title = $this->di['t']->_('View Notes');
+        $this->view->title = $this->di['t']->_('Notes');
 
         if($this->di['currentDevice']['os'] != 'icloud'){
             $this->view->customTimezoneOffset = 0;

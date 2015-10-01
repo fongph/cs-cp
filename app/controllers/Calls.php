@@ -47,7 +47,7 @@ class Calls extends BaseModuleController
         parent::postAction();
         $this->buildCpMenu();
 
-        $this->view->title = $this->di['t']->_('View Calls');
+        $this->view->title = $this->di['t']->_('Calls');
     }
 
     protected function isModulePaid()

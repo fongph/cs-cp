@@ -42,7 +42,7 @@ class Calendar extends BaseModuleController
         parent::postAction();
         $this->buildCpMenu();
 
-        $this->view->title = $this->di['t']->_('View Calendar');
+        $this->view->title = $this->di['t']->_('Calendar');
     }
     
     protected function isModulePaid()

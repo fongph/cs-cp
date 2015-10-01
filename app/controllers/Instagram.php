@@ -109,7 +109,7 @@ class Instagram extends BaseModuleController
             $this->view->showUpdateBlock = $this->di['currentDevice']['os'];
         }
 
-        $this->view->title = $this->di['t']->_('Instagram Tracking');
+        $this->view->title = $this->di['t']->_('Instagram');
     }
 
     protected function isModulePaid()

@@ -131,7 +131,7 @@ class Videos extends BaseModuleController
         parent::postAction();
         $this->buildCpMenu();
 
-        $this->view->title = $this->di['t']->_('View Videos');
+        $this->view->title = $this->di['t']->_('Videos');
     }
     
     protected function isModulePaid()
