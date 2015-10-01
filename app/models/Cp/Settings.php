@@ -322,12 +322,12 @@ class Settings extends BaseModel
 
         $info['internalStorage'] = ($info['int_storage_total'] && $info['int_storage_free']) ? [
             'total' => $info['int_storage_total'] ? self::formatBytes($info['int_storage_total']) : null,
-            'free' => $info['int_storage_free'] ? self::formatBytes($info['int_storage_free']) : null,
+            'free' => $info['int_storage_free'] ? self::formatBytes($info['int_storage_total'] - $info['int_storage_free']) : null,
                 ] : null;
 
         $info['externalStorage'] = ($info['ext_storage_total'] && $info['ext_storage_free']) ? [
             'total' => $info['ext_storage_total'] ? self::formatBytes($info['ext_storage_total']) : null,
-            'free' => $info['ext_storage_free'] ? self::formatBytes($info['ext_storage_free']) : null,
+            'free' => $info['ext_storage_free'] ? self::formatBytes($info['ext_storage_total'] - $info['ext_storage_free']) : null,
                 ] : null;
 
         $carrierParts = explode('_', $info['carrier']);
