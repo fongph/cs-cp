@@ -1,4 +1,4 @@
-{if $di.currentDevice.processing == 2}
+{if $di.currentDevice.processing == 2 || !$di.currentDevice.last_commited}
     <p>This account has unfinished backup. In order to finish it the device has to meet the following requirements:</p>
     <ul>
         <li>Connected to the Wi-Fi</li>

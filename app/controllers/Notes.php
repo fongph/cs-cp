@@ -36,6 +36,7 @@ class Notes extends BaseModuleController
             $accounts = $notesModels->getAccountsList($this->di['devId']);
 
             $this->view->accountsList = $accounts;
+            $this->view->hasRecords = (count($accounts) > 0);
         }
         
         $this->setView('cp/notes/index.htm');

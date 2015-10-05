@@ -40,8 +40,7 @@ class Photos extends BaseModuleController
 
             $this->view->recentPhotos = $photosModel->getRecentPhotos($this->di['devId']);
             $this->view->albums = $photosModel->getAlbums($this->di['devId']);
-            $this->view->moduleId = Modules::PHOTOS; 
-            
+            $this->view->hasRecords = (count($this->view->albums) || count($this->view->recentPhotos));
         }
 
         $this->setView('cp/photos.htm');
@@ -77,6 +76,8 @@ class Photos extends BaseModuleController
         if($this->di['currentDevice']['os'] != 'icloud'){
             $this->view->customTimezoneOffset = 0;
         }
+        
+        $this->view->moduleId = Modules::PHOTOS;
     }
     
     protected function isModulePaid()

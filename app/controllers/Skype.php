@@ -42,9 +42,10 @@ class Skype extends BaseModuleController
             $this->makeJSONResponse($data);
         }
 
+        
         if ($this->view->paid) {
-            $this->view->moduleId = Modules::SKYPE;
             $this->view->accounts = $skypeModel->getAccountsList($this->di['devId']);
+            $this->view->hasRecords = count($this->view->accounts);
         }
 
         $this->setView('cp/skype.htm');
@@ -102,6 +103,8 @@ class Skype extends BaseModuleController
         if($this->di['currentDevice']['os'] != 'icloud'){
             $this->view->customTimezoneOffset = 0;
         }
+        
+        $this->view->moduleId = Modules::SKYPE;
     }
     
     protected function isModulePaid()
