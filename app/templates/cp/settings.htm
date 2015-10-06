@@ -306,7 +306,7 @@
                     <div class="panel-body inline-data-noicon">
                         <div class="title">{$di.t->_('Application Version')}</div>
                         <div class="data">
-                            {if $appLastVersion != $currentDevice.app_version}
+                            {if $appLastVersion > $currentDevice.app_version}
                             <span class="outdate" data-toggle="tooltip" data-placement="top" data-original-title="
                         {$di.t->_('The new version of the app is available already. To improve the accuracy of the app operation and use all provided features to the fullest we recommend updating Pumpic on the target device.')}
                         {if $currentDevice.os == 'ios'}
