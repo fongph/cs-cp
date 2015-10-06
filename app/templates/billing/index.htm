@@ -44,6 +44,10 @@
         </table>
     </div>
     
+    <div class="text-right">
+        <a href="{$di.config.registration}" class="btn btn-danger ga-action-click" ga-label="buy-subscription" ga-category="control-panel" ga-action="click-store-link">{$di.t->_('Buy Subscription')}</a>
+    </div>
+    
     <p id="promo-info" class="text-info hidden"><span class="asterisk asterisk-info">*</span> Promo subscriptions become available only after assigning a paid subscription.</p>
     
     {if !$di->get('isWizardEnabled')}
@@ -83,6 +87,21 @@
                 {else}
                     url: '{$di.config.domain}/billing',
                 {/if}
+                freePackageId: {
+                    'basic-6m': 26,
+                    'basic-12m': 27,
+                    'premium-6m': 28,
+                    'premium-12m': 29
+                },    
+                validateFreePackage: function( p_id ) {
+                    var _validate = false;
+                    $.each(billing.freePackageId,function(key, id) {
+                       if(id == p_id) { 
+                            _validate = true;
+                        }    
+                    });
+                    return _validate;
+                },
                 tab: null,
                 table: null,
                 unlimitValue: '{$unlimitedValue}',
@@ -182,8 +201,9 @@
                                 mRender: function() {
                                     var data = arguments[2];
                                     var lnk = '{$di.router->getRouteUrl('billingLicense')}'.replace(':id', data.id);
-                                    
-                                    return data.name + '<br/>' + '<a href="' + lnk + '" class="btn btn-info btn-xs">{$di.t->_('Details')}</a>';
+                                    // console.log( data );
+                                    var _detailes = (!billing.validateFreePackage(data.p_id) && !parseInt(data.trial)) ? '<br/>' + '<a href="' + lnk + '" class="btn btn-info btn-xs">{$di.t->_('Details')}</a>' : '';
+                                    return data.name + _detailes;
                                 }
                             },
                             {

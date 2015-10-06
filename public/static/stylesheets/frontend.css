@@ -4131,13 +4131,13 @@ a.thumbnail.active {
 .alert-success {
   background-color: #b1e5d7;
   border-color: #b1e5d7;
-  color: #ffffff;
+  color: #6b7081;
 }
 .alert-success hr {
   border-top-color: #9edfcd;
 }
 .alert-success .alert-link {
-  color: #e6e6e6;
+  color: #545865;
 }
 .alert-info {
   background-color: #94d0e4;
@@ -8806,7 +8806,8 @@ a.list-group-item-danger.active:focus {
   display: inline-block;
 }
 .alert-success {
-  color: #333;
+  /*color: #333;*/
+  color: #6b7081;
 }
 .alert i {
   margin-right: 3px;
