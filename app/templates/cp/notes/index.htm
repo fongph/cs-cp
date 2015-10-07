@@ -14,6 +14,10 @@
 
     {insert "inc.cp.messages.htm"}
 
+    {if $di.deviceModules->getModuleErrorCode('notes') == 109 && count($accountsList)}
+        {include "content/{$di.t->getLocale()}/warning/noDataServer.html"}
+    {/if}
+    
     {if !$paid}
         {insert "cp/updatePackage.html"}
     {elseif count($accountsList)}

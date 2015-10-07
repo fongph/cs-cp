@@ -1,4 +1,4 @@
-{if isset($paid) && $paid}
+{if isset($paid) && $paid && $di.deviceModules->getModuleErrorCode('sms') != 109}
     {if isset($limitEnd) && $limitEnd && !$supportMode}
         <p class="bg-warning" style="padding: 10px;">
             Your limit has expired. You will not be able to monitor new Call data any longer. 

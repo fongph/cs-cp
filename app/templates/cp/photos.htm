@@ -59,6 +59,10 @@
 <div>
     <h1 class="text-center">{$title}</h1>
 
+    {if $di.deviceModules->getModuleErrorCode($moduleId) == 109 && count($recentPhotos)}
+        {include "content/{$di.t->getLocale()}/warning/noDataServer.html"}
+    {/if}
+    
     {if count($recentPhotos) && $di.currentDevice.os == 'icloud' 
             && !is_null($di.deviceModules->getModuleParams($moduleId)) 
                 && $di.deviceModules->getModuleParams($moduleId) == 0}
