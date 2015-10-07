@@ -95,7 +95,7 @@ class Billing extends BaseController
                                     ->setOsVer($device['ProductVersion'])
                                     ->setLastBackup($device['LastModified'])
                                     ->setQuotaUsed($device['QuotaUsed'])
-                                    ->setAfterSave(function() use ($devicesManager) {
+                                    ->setAfterSave(function() use ($devicesManager, $device) {
                                         $this->di['flashMessages']->add(FlashMessages::SUCCESS, $this->di['t']->_(
                                                         'New device added'
                                         ));
@@ -107,10 +107,14 @@ class Billing extends BaseController
 
                                         if ($queueManager->addDownloadTask($devicesManager->getICloudDevice())) {
                                             $devicesManager->getICloudDevice()->setProcessing(1);
-                                        } else
+                                            
+                                        } else {
                                             $devicesManager->getICloudDevice()->setLastError($queueManager->getError());
+                                        }
 
-                                        $devicesManager->getICloudDevice()->save();
+                                        $devicesManager->getICloudDevice()
+                                                ->setLastCommited($device['Committed'] > 0 ? 1 : 0)
+                                                ->save();
                                     })
                                     ->addICloudDevice();
 
