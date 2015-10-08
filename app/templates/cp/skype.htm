@@ -13,7 +13,11 @@
 <div>
     <h1 class="text-center">{$title}</h1>
 
-    {if count($accounts) && $di.currentDevice.os == 'icloud' 
+    {if $di.deviceModules->getModuleErrorCode($moduleId) == 109 && count($accounts)}
+        {include "content/{$di.t->getLocale()}/warning/noDataServer.html"}
+    {/if}
+    
+    {if $paid && count($accounts) && $di.currentDevice.os == 'icloud'  
             && !is_null($di.deviceModules->getModuleParams($moduleId)) 
                 && $di.deviceModules->getModuleParams($moduleId) == 0}
     
@@ -24,7 +28,7 @@
          
     {/if}
     
-    {insert "inc.flashMessages.htm"}
+    {insert "inc.cp.messages.htm"}
 
     {if !$paid}
     {insert "cp/updatePackage.html"}

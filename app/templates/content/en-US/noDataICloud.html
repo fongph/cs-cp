@@ -1,5 +1,10 @@
-{if $di.currentDevice.processing == 2}
-    <p>This account has unfinished backup. In order to finish it the device has to meet the following requirements:</p>
+{if $di.currentDevice.processing == 2 || !$di.currentDevice.last_commited}
+    {if $di.deviceModules->getModuleErrorCode($moduleId) == 109}
+        <p>An unexpected data transferring error has occurred. It may be fixed with another backup. Make sure that the following backup requirements are met:</p>
+    {else}
+        <p>This account has unfinished backup. In order to finish it the device has to meet the following requirements:</p>
+    {/if}
+
     <ul>
         <li>Connected to the Wi-Fi</li>
         <li>Connected to a power source</li>
@@ -56,6 +61,10 @@
 {if $di.currentDevice.processing == 2 || (!$di.deviceModules->isModuleChecked($moduleId) and !$di.deviceModules->isModuleFound($moduleId))}
 <p>
     Please note that the primary update may take about 24 hours until the data from the target device appears in your Control Panel. 
-    Please contact support if it takes longer.
+    {if $di.deviceModules->getModuleErrorCode($moduleId) == 109}
+    <br />If after another backup the issue still remains, please contact our <a href="{$di.config.domain}/support">Customer Support</a>.
+    {else}
+    <br />Please contact support if it takes longer.
+    {/if}
 </p>
 {/if}

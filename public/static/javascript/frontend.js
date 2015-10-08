@@ -12839,7 +12839,27 @@ LC_API.on_after_load = function()
         }
 };
 */
+
+function TrackEventGA(Category, Action, Label, Value) {
+    "use strict";
+    if (typeof (_gaq) !== "undefined") {
+        _gaq.push(['_trackEvent', Category, Action, Label, Value]);
+    } else if (typeof (ga) !== "undefined") {
+        ga('send', 'event', Category, Action, Label, Value);
+    }
+}
+
 $(document).ready(function () {
+    $('.ga-action-click').on('click', function() {
+           var _ga_action = ($(this).attr('ga-action')) ? $(this).attr('ga-action') : false,
+               _ga_category = ($(this).attr('ga-category')) ? $(this).attr('ga-category') : false,
+               _ga_label = ($(this).attr('ga-label')) ? $.trim( $(this).attr('ga-label').toLowerCase() ).replace(/\s/g,'-') : false;
+        
+        if(_ga_action && _ga_category && _ga_label) {
+            TrackEventGA(_ga_category, _ga_action, _ga_label);
+        }
+    });
+    
     $('.anchor').on("click", function (e) {
 
         var anchor = $(this).attr('data-href').split('#');

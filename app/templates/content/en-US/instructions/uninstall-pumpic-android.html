@@ -76,7 +76,7 @@
     }
 </style>
 
-<div class="instruction-container">
+<div class="{if !$di.auth->hasIdentity()}instruction-container{/if}">
     <p>These guidelines will help you uninstall Pumpic from the target device. However, take notice that after removing the app you will not be able to monitor the target device.</p>
     <p><b>Note:</b> the following steps must be performed on the target device (physical access is required).</p>
     <p>Administrator rights withdrawal</p>

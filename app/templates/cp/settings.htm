@@ -8,7 +8,7 @@
     <div class="container-max">
         <div class="row">
             <div class="col-lg-12">
-                {insert "inc.flashMessages.htm"}
+                {insert "inc.cp.messages.htm"}
             </div>
 
             <div class="col-lg-6 col-md-6">
@@ -306,11 +306,11 @@
                     <div class="panel-body inline-data-noicon">
                         <div class="title">{$di.t->_('Application Version')}</div>
                         <div class="data">
-                            {if $appLastVersion != $currentDevice.app_version}
+                            {if $appLastVersion > $currentDevice.app_version}
                             <span class="outdate" data-toggle="tooltip" data-placement="top" data-original-title="
                         {$di.t->_('The new version of the app is available already. To improve the accuracy of the app operation and use all provided features to the fullest we recommend updating Pumpic on the target device.')}
                         {if $currentDevice.os == 'ios'}
-                        {$di.t->_('The app will be updated automatically within one hour. Please ensure accurate Wi-Fi connection. You can update the app manually as well. To do so, run Pumpic on the target device, enter the master password, and tap “Update App”.')}
+                        {$di.t->_('The app will be updated automatically within one hour. Please ensure accurate Wi-Fi connection.')}
                         {elseif $currentDevice.os == 'android'}
                         {if $currentDevice.rooted == 1}
                         {$di.t->_('The app will be updated automatically within one hour. Please ensure accurate Wi-Fi connection. Also, make sure that Pumpic is provided the Super User rights. You can update the app manually as well. To do so, run Pumpic on the target device, enter the master password, and tap “Update App”.')}

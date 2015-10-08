@@ -196,11 +196,6 @@ class DeviceSettings extends BaseModuleController
             }
         }
 
-        $this->view->visitData = [
-            'created' => date('d.m.Y H:i', strtotime(0)),
-            'last' => date('d.m.Y H:i', 0),
-        ];
-
         $this->view->hasPackage = ($this->di['currentDevice']['package_name'] !== null);
 //        var_dump($this->view->hasPackage, $this->di->get('currentDevice'), $settingsModel->getSettings($this->di['devId']));die;
         if ($this->di->get('currentDevice')['os'] != 'icloud') {

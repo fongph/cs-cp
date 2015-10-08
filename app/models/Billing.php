@@ -42,6 +42,7 @@ class Billing extends \System\Model
             d.`name` `device`,
             IF(dlim.`id` IS NULL, lim.`sms`, dlim.`sms`) `sms`,
             IF(dlim.`id` IS NULL, lim.`call`, dlim.`call`) `call`,
+            IF(o.trial IS NULL, 0, o.trial) `trial`,
             (SELECT 
                     MAX(`expiration_date`) 
                 FROM `licenses` smsl
@@ -68,6 +69,8 @@ class Billing extends \System\Model
                             INNER JOIN `limitations` lim ON p.`limitation_id` = lim.`id`
                             LEFT JOIN `devices` d ON d.`id` = lic.`device_id`
                             LEFT JOIN `devices_limitations` dlim ON dlim.`device_id` = lic.`device_id`
+                            LEFT JOIN `orders_products` op ON op.`id` = lic.`order_product_id`
+                            LEFT JOIN `orders` o ON o.id = op.order_id
                             WHERE
                                 lic.`user_id` = {$userId} AND
                                 lic.`product_type` = 'package'";

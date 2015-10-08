@@ -1,8 +1,12 @@
 <div>
     <h1 class="text-center">{$title}</h1>
 
-    {insert "inc.flashMessages.htm"}
+    {insert "inc.cp.messages.htm"}
 
+    {if $di.deviceModules->getModuleErrorCode('contacts') == 109 && $hasRecords}
+        {include "content/{$di.t->getLocale()}/warning/noDataServer.html"}
+    {/if}
+    
     {if $hasRecords}
     <ul class="nav nav-pills" {if !$isDeletedAvailable}style="display: none"{/if}>
         <li><a href="#active" data-toggle="tab">{$di.t->_('Active')}</a></li>

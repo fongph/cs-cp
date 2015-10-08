@@ -46,7 +46,6 @@ class Whatsapp extends BaseModuleController
                 ($this->di['currentDevice']['os'] === 'ios' && $this->di['currentDevice']['app_version'] >= 7);
         
         if ($this->view->paid) {
-            $this->view->moduleId = Modules::WHATSAPP;
             $this->view->hasRecords = $whatsappModel->hasRecords($this->di['devId']);
         }
 
@@ -91,6 +90,8 @@ class Whatsapp extends BaseModuleController
         if ($this->di['currentDevice']['os'] != 'icloud') {
             $this->view->customTimezoneOffset = 0;
         }
+        
+        $this->view->moduleId = Modules::WHATSAPP;
     }
     
     protected function isModulePaid()

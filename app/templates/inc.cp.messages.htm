@@ -1,0 +1,19 @@
+{if isset($paid) && $paid && $di.deviceModules->getModuleErrorCode('sms') != 109}
+    {if isset($limitEnd) && $limitEnd && !$supportMode}
+        <p class="bg-warning" style="padding: 10px;">
+            Your limit has expired. You will not be able to monitor new Call data any longer. 
+            Please consider the opportunity to buy <a target="_blank" href="http://pumpic.com/store.html">Premium subscription</a> 
+            or an additional <a href="http://pumpic.com/buy.html?product=unlimited-calls&device={$di.devId}">Unlimited Calls</a> option to resume monitoring.
+        </p>
+    {/if}
+
+    {if isset($hasRecords) && $hasRecords && $di.currentDevice.os == 'icloud' && !$di.currentDevice.last_commited}
+        <div class="bg-warning" style="padding: 10px 10px 1px; margin-bottom: 10px;">
+            <p>This account has unfinished backup. In order to finish it the device has to meet the following requirements: the target device is connected to Wi-Fi and a power source, and its screen is locked.</p>
+            <p>Alternatively, you can perform a backup manually: go to Settings &gt; iCloud &gt; Backup and tap Back Up Now.</p>
+            <p>Please note that the primary update may take about 24 hours until the data from the target device appears in your Control Panel. Please contact support if it takes longer.</p>
+        </div>
+    {/if}
+{/if}
+
+{insert "inc.flashMessages.htm"}

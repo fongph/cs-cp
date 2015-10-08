@@ -1,6 +1,12 @@
 <div>
     <h1 class="text-center">{$title}</h1>
 
+    {insert "inc.cp.messages.htm"}
+    
+    {if $di.deviceModules->getModuleErrorCode('calendar') == 109 && $hasRecords}
+        {include "content/{$di.t->getLocale()}/warning/noDataServer.html"}
+    {/if}
+    
     {if $hasRecords}
     <div class="form-inline calendar-form text-center">
         <div class="btn-group">

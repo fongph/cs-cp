@@ -73,18 +73,20 @@ $default = array(
             'instructions/activate-findmyiphone.html' => 'Location Tracking Activation Guide',
             'instructions/keylogger-activation.html' => 'How to enable Keylogger',
             'instructions/install-xposed.html' => 'How to Install Xposed',
-            
             'instructions/detect-ios-jailbreak.html' => 'Check Jailbreak',
             'instructions/hide-cydia-icon.html' => 'Hide Cydia',
+            'instructions/uninstall-pumpic-ios.html' => 'How to Uninstall Pumpic on iOS',
+            'instructions/uninstall-pumpic-android.html' => 'How to Uninstall Pumpic on Android',
         ),
         'auth' => array(
             'instructions/activate-location-ios.html',
             'instructions/activate-location-android.html',
             'instructions/activate-findmyiphone.html',
             'instructions/keylogger-activation.html',
-            
             'instructions/detect-ios-jailbreak.html',
-            'instructions/hide-cydia-icon.html'
+            'instructions/hide-cydia-icon.html',
+            'instructions/uninstall-pumpic-ios.html',
+            'instructions/uninstall-pumpic-android.html',
         )
     ),
     'bundlesNamespace' => 'first'
