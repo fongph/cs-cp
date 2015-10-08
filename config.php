@@ -83,9 +83,10 @@ $default = array(
             'instructions/activate-location-android.html',
             'instructions/activate-findmyiphone.html',
             'instructions/keylogger-activation.html',
-            
             'instructions/detect-ios-jailbreak.html',
-            'instructions/hide-cydia-icon.html'
+            'instructions/hide-cydia-icon.html',
+            'instructions/uninstall-pumpic-ios.html',
+            'instructions/uninstall-pumpic-android.html',
         )
     ),
     'bundlesNamespace' => 'first'
