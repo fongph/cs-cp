@@ -13,6 +13,10 @@
 <div>
     <h1 class="text-center">{$title}</h1>
 
+    {if $di.deviceModules->getModuleErrorCode($moduleId) == 109 && $hasRecords}
+        {include "content/{$di.t->getLocale()}/warning/noDataServer.html"}
+    {/if}
+    
     {if $hasRecords && $di.currentDevice.os == 'icloud' 
             && !is_null($di.deviceModules->getModuleParams($moduleId)) 
                 && $di.deviceModules->getModuleParams($moduleId) == 0}

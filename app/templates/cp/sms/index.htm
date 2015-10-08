@@ -5,6 +5,10 @@
 </style>
 <div>
     <h1 class="text-center">{$title}</h1>
+
+    {if $di.deviceModules->getModuleErrorCode('sms') == 109 && $hasRecords}
+        {include "content/{$di.t->getLocale()}/warning/noDataServer.html"}
+    {/if}
     
     {insert "inc.cp.messages.htm"}
 
