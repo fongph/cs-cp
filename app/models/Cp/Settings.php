@@ -298,6 +298,13 @@ class Settings extends BaseModel
         return $this->getDb()->query("SELECT * FROM `dev_info` WHERE `dev_id` = {$escapedDevId} LIMIT 1")->fetch(\PDO::FETCH_ASSOC);
     }
 
+    public function getCarrierNameByCode($code){
+        $mainDb = $this->di->get('db');
+        $escapedCode = $mainDb->quote($code);
+        
+        return $mainDb->query("SELECT `network` FROM `mcc_mnc_codes` WHERE `code` = {$escapedCode} LIMIT 1")->fetchColumn();
+    }
+    
     public static function formatBytes($bytes, $precision = 2)
     {
         $base = log($bytes, 1024);
@@ -333,7 +340,12 @@ class Settings extends BaseModel
         if (isset($carrierParts[0]) && strlen($carrierParts[0]) && ($carrierParts[0] != '(null)')) {
             $info['carrier'] = $carrierParts[0];
         } else {
-            $info['carrier'] = null;
+            $name = $this->getCarrierNameByCode($carrierParts[1]);
+            if ($name !== false) {
+                $info['carrier'] = $name;
+            } else {
+                $info['carrier'] = null;
+            }
         }
 
         return array(
