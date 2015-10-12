@@ -836,16 +836,16 @@
         },
         {
             "name": "rastor/jira-client",
-            "version": "0.3.4.5",
+            "version": "0.3.4.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/oRastor/jira-client.git",
-                "reference": "3282f37f7a120dfe994b966f7d8464f0f06bbc94"
+                "reference": "41201a95854a794b24522390cd3832601edfdacd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/oRastor/jira-client/zipball/3282f37f7a120dfe994b966f7d8464f0f06bbc94",
-                "reference": "3282f37f7a120dfe994b966f7d8464f0f06bbc94",
+                "url": "https://api.github.com/repos/oRastor/jira-client/zipball/41201a95854a794b24522390cd3832601edfdacd",
+                "reference": "41201a95854a794b24522390cd3832601edfdacd",
                 "shasum": ""
             },
             "require": {
@@ -874,7 +874,7 @@
                 "jira",
                 "rest"
             ],
-            "time": "2015-09-24 10:05:18"
+            "time": "2015-10-12 06:51:01"
         },
         {
             "name": "rastor/system",
