@@ -19,13 +19,11 @@ class Index extends BaseController
         if (isset($this->di['config']['contents']['names'][$this->params['uri']]) && !$this->demo) {
             
             
-            
-            if(in_array($this->params['uri'], ['instructions/uninstall-pumpic-ios.html', 
-                                                'instructions/uninstall-pumpic-android.html'])) 
-            {
-                $this->instructionUninstall();
-            } else if ($this->auth === null && in_array($this->params['uri'], $this->di['config']['contents']['auth'])) {
+            if ($this->auth === null && in_array($this->params['uri'], $this->di['config']['contents']['auth'])) {
                 $this->error404();
+            } else if (in_array($this->params['uri'], ['instructions/uninstall-pumpic-ios.html', 
+                                                'instructions/uninstall-pumpic-android.html'])) {
+                $this->instructionUninstall();
             }
             
             if(in_array($this->params['uri'], ['instructions/activate-location-android.html', 
@@ -184,7 +182,7 @@ class Index extends BaseController
                 $this->view->success = true;
 
                 // Your ticket #%1$s has been successfully sent!<br/> Our Support Team will contact you within 1 business day.
-                $this->di['flashMessages']->add(FlashMessages::SUCCESS, $this->di['t']->_('Ticket #%1$s has been successfully sent.<br/> Our support representative will contact you as soon as possible.', array('ticketId' => $ticketId)));
+                $this->di['flashMessages']->add(FlashMessages::SUCCESS, $this->di['t']->_('Ticket #%1$s has been successfully sent. Our support representative will contact you via email as soon as possible.', array('ticketId' => $ticketId)));
             } catch (\Models\Support\SupportEmptyFieldException $e) {
                 $this->di['flashMessages']->add(FlashMessages::ERROR, $this->di['t']->_('Please, fill all the data carefully.'));
             } catch (\Models\Support\SupportInvalidEmailException $e) {
