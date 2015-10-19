@@ -65,6 +65,10 @@ class BaseController extends Controller
 
         $this->view->supportMode = $this->supportMode;
         $this->view->demoMode = $this->demo;
+        
+        if (!isset($this->view->norobots)) {
+            $this->view->norobots = true;
+        }
 
         if (isset($this->auth['options']['internal-trial-license'])) {
             $advertisingModel = new \Models\Advertising($this->di);

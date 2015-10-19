@@ -65,6 +65,7 @@ class Index extends BaseController
     
     public function loginAction()
     {   
+        $this->view->norobots = false;
         
         if ($this->di->getAuth()->hasIdentity()) {
             $this->loginRedirect();
