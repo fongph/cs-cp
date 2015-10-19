@@ -170,7 +170,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-settings.git",
-                "reference": "79c3dbb85bf6742c19a2b12e36358e7b6eceaebb"
+                "reference": "f9cca4c552f9b800c6b4f2419a4925585205f89d"
             },
             "require": {
                 "php": ">=5.4.0"
@@ -181,7 +181,7 @@
                     "CS\\Settings\\": "src/"
                 }
             },
-            "time": "2015-10-19 11:15:22"
+            "time": "2015-10-19 12:42:31"
         },
         {
             "name": "boomers/cs-users",
