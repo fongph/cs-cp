@@ -13,8 +13,8 @@ RewriteRule ^how-to-install/android-instructions\.html$ http://pumpic\.com/store
 RewriteRule ^how-to-install/root-instructions\.html$ http://pumpic\.com/store\.html [L,R=301]
 RewriteRule ^how-to-install/blackberry-instructions\.html$ http://pumpic\.com/store\.html [L,R=301]
 
-RewriteRule ^rooting-android$ http://cp.pumpic.com/instructions/rooting-android [L,R=301]
-RewriteRule ^superuser$ http://cp.pumpic.com/instructions/granting-superuser-rights [L,R=301]
+RewriteRule ^rooting-android$ https://cp.pumpic.com/instructions/rooting-android [L,R=301]
+RewriteRule ^superuser$ https://cp.pumpic.com/instructions/granting-superuser-rights [L,R=301]
 
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
