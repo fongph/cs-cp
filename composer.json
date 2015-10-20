@@ -17,6 +17,7 @@
         "filp/whoops": "~1.0",
         "predis/predis": "~1.0",
         "rastor/amazon-s3-php-class": "0.5.1",
+        "league/url": "^3.3",
         "boomers/ip": "dev-master",
         "boomers/cs-models": "dev-master",
         "boomers/cs-mail": "dev-master",
@@ -26,8 +27,7 @@
         "boomers/cs-billing": "dev-master",
         "boomers/seller": "dev-master",
         "boomers/cs-icloud": "dev-master",
-        "boomers/cs-queue": "dev-master",
-        "league/url": "^3.3"
+        "boomers/cs-queue": "dev-master"
     },
     "autoload": {
         "psr-4": {
