@@ -40,7 +40,7 @@ function get(array $arr, $key, $default = null)
 
 function validatePhoneNumber($value)
 {
-    return preg_match('#^[\+]?[0-9]{3,13}$#', $value);
+    return preg_match('#^[\+]?[0-9]{3,18}$#', $value);
 }
 
 function goBack() {   
