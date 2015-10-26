@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "44e4501d37b87d306eb8a1365d2f2aba",
-    "content-hash": "6697d3f16d830610dd42501cc19fd402",
+    "hash": "037067acce32d51dee95bebdc8db4bcc",
+    "content-hash": "4f23fc604f854bea0c34fa002cafed92",
     "packages": [
         {
             "name": "boomers/cs-billing",
@@ -40,7 +40,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-devices.git",
-                "reference": "bc879e7943fb5a120ca3c9cf277f3a0ec0599b6f"
+                "reference": "b4e86a76e9875e0e8111f9e434243e116f06be36"
             },
             "require": {
                 "boomers/cs-mail": "dev-master",
@@ -64,7 +64,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2015-10-05 07:33:23"
+            "time": "2015-10-26 09:00:54"
         },
         {
             "name": "boomers/cs-icloud",
@@ -125,7 +125,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-models.git",
-                "reference": "b8161ceb327d89b6b6072c965eb3171854e98e67"
+                "reference": "6c88603103bbd732e813f6ceccf708e2ec941116"
             },
             "require": {
                 "php": ">=5.4.0"
@@ -139,7 +139,7 @@
                     "CS\\Models\\": "src/"
                 }
             },
-            "time": "2015-10-07 09:00:03"
+            "time": "2015-10-23 09:25:13"
         },
         {
             "name": "boomers/cs-queue",
@@ -189,7 +189,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-users.git",
-                "reference": "a47a23105a62bc342a8df3ad5c93f27cf4bb073e"
+                "reference": "c8838d8331691cd1aaee3c889cbf1d1505537e61"
             },
             "require": {
                 "boomers/cs-mail": "dev-master",
@@ -213,7 +213,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2015-10-16 13:32:29"
+            "time": "2015-10-22 11:10:30"
         },
         {
             "name": "boomers/ip",
