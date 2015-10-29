@@ -35,4 +35,96 @@
         </div>
     </form>
     {* /if *}
+    
+    <style>
+        .support-links .title {
+            padding: 30px 0px 24px;
+            font-size: 20px;
+            line-height: 20px;
+            font-weight: 500;
+        }
+        .support-links .title > i {
+            margin-right: 9px;
+        }
+        .support-links ul {
+            padding-left: 2px;
+            list-style: none;
+        }
+        .support-links ul li {
+          position: relative;
+          padding-left: 19px;
+          padding-bottom: 10px;
+        }
+        .support-links ul li:before {
+          content: "";
+          position: absolute;
+          left: 0;
+          top: .35em;
+          width: 10px;
+          height: 10px;
+          margin-top: 0;
+          border: 1px solid #ffba60;
+          border-radius: 5px;
+        }
+        
+        .support-links ul li:last-child {
+            padding-bottom: 0px;
+        }    
+        
+        .support-links ul li a {
+            font-size: 14px;
+            line-height: 1.2em;
+            color: #16a89e;
+            text-decoration: underline;
+        }
+        .support-links ul li a:hover {
+            text-decoration: none;
+        }
+        
+        .m-icons {
+            display: inline-block;
+            background: url('/static/ico/m_icons.png') no-repeat;
+        }
+        
+        .m-icons.i-ios {
+            background-position: -1px -1px;
+            width: 15px;
+            height: 18px;
+        }
+        
+        .m-icons.i-android {
+            background-position: -18px -1px;
+            width: 17px;
+            height: 19px;
+        }
+    </style>
+    
+    <div class="row support-links">
+        <section id="ios" class="col-lg-7 col-md-7 col-sm-7">
+            <div class="title"><i class="m-icons i-ios"></i>IOS</div>
+            <ul>
+                <li><a href="/instructions/installing-ios">Installation Guide</a></li>
+                <li><a href="/instructions/activate-location-ios.html">How to activate location</a></li>
+                <li><a href="/instructions/activate-findmyiphone.html">How to activate "Find My iPhone</a></li>
+                <li><a href="/instructions/detect-ios-jailbreak.html">Check jailbreak</a></li>
+                <li><a href="/instructions/hide-cydia-icon.html">Hide Cydia</a></li>
+                <li><a href="/instructions/uninstall-pumpic-ios.html">How to uninstall Pumpic</a></li>
+                <li>Jailbreak guides: <a href="http://www.redmondpie.com/jailbreak-ios-8.4-using-taig-v2.2-on-iphone-ipad-how-to-tutorial/" target="_blank" rel="nofollow">iOS 8.1-8.4</a> (Windows), <br /><a href="http://www.redmondpie.com/jailbreak-ios-8.4-with-taig-for-mac-os-x-how-to-tutorial/" target="_blank" rel="nofollow">iOS 8.1-8.4</a> (Mac), <a href="http://www.redmondpie.com/how-to-jailbreak-ios-8.1-using-pangu-for-mac-guide/" target="_blank" rel="nofollow">iOS 8.0-8.1</a>, <a href="http://evasi0n.com/" target="_blank" rel="nofollow">iOS 7</a>, <a href="http://www.redmondpie.com/jailbreak-ios-6.1.3-6.1.4-6.1.5-untethered-on-all-devices-with-p0sixspwn-tutorial/" target="_blank" rel="nofollow">iOS 6</a></li>
+            </ul>
+        </section>
+        <section id="android" class="col-lg-5 col-md-5 col-sm-5">
+            <div class="title"><i class="m-icons i-android"></i>Android</div>
+            <ul>
+                <li><a href="/instructions/installing-android">Installation guide</a></li>
+                <li><a href="/instructions/activate-location-android.html">How to activate location</a></li>
+                <li><a href="/instructions/keylogger-activation.html">How to enable keylogger</a></li>
+                <li><a href="/instructions/rooting-android">Root Instructions</a></li>
+                <li><a href="/instructions/granting-superuser-rights">Granting Superuser rights</a></li>
+                <li><a href="/instructions/install-xposed.html">How to install Xposed</a></li>
+                <li><a href="/instructions/uninstall-pumpic-android.html">How to uninstall Pumpic</a></li>
+            </ul>
+        </section>
+    </div>
+    
+    
 </div>
