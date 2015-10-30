@@ -7,6 +7,14 @@
     <h1 class="text-center">{$title}</h1>
     <div class="container-max">
         <div class="row">
+            {if !$supportMode && !$hasPackage}
+            <div class="col-lg-12">
+                <p class="bg-warning" style="padding: 10px;">
+                    No subscription is assigned to this device. <a href="{$di['router']->getRouteUrl('billing')}#active">Manage subscriptions</a>
+                </p>
+            </div>
+            {/if}
+            
             <div class="col-lg-12">
                 {insert "inc.cp.messages.htm"}
             </div>
@@ -34,6 +42,51 @@
                                 </div>
                             </div>
                         </form>
+                        <script>
+                            
+
+                            var $phone = $("input[name='phone']");
+                            var $min_mask = 3, $max_mask = 20;
+                            var $symbols_after_mask = '', $symbols_before_mask = '+', $def_mask = '';
+                            
+                            for(var i = 1; i <= $max_mask; i ++) {
+                                $def_mask += '9';
+                            } 
+                                
+                            $phone.mask($symbols_before_mask+$def_mask+$symbols_after_mask, {
+                                autoclear: false,
+                                dataName: 'mask_phone',
+//                                completed:function(){ 
+//                                    alert("You typed the following: "+this.val()); 
+//                                }
+                            });
+                            
+                            $phone.on('blur.mask', function() {
+                                var _input = $(this).mask();
+                                if(_input.length > 0) {
+                                    if(_input.length <= $min_mask) { 
+                                        alert('Failed to add number. There must be more than 3 digits.')
+                                    } 
+                                    else if(_input.length > $min_mask && _input.length <= $max_mask) {
+                                        $(this).val( $symbols_before_mask+_input+$symbols_after_mask );
+                                        
+//                                        $def_mask = '';
+//                                        for(var i = 1; i<=_input.length; i++) {
+//                                            $def_mask += '9';
+//                                        }
+//                                        $(this).mask($symbols_before_mask+$def_mask+$symbols_after_mask);
+                                    }   
+                                }
+                                
+                                console.log( $(this).mask());
+                            });
+                            
+//                            $phone.on('keypress.mask', function() {
+//                                var _input = $(this).mask();
+//                            });
+                            
+
+                        </script>
                     </div>
                     {if $hasPackage && ($data.blockSMSActive || $data.isOutgoingSmsLimitationsAvailable)}
                         {if $data.blockSMSActive}
