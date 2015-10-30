@@ -207,7 +207,7 @@
                                 </td>
                             {/if}
 
-                            {if $device.last_sync}
+                            {if $device.last_sync && $device.license_id}
                                 <td class="timestamp-value" data-timestamp-value="{$device.last_sync}" data-time-format="lll"></td>
                             {else}
                                 <td>-</td>
