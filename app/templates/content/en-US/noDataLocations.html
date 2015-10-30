@@ -6,7 +6,7 @@
 
 <h3>Location tracking may be unavailable for some more reasons:</h3>
 <ul>
-    <li>The use of the mobile network to track location is forbidden by the settings</li>
+    {if $di.currentDevice.os != 'android'}<li>The use of the mobile network to track location is forbidden by the settings</li>{/if}
     <li>Inaccuracy of location tracking (the area of uncertainty is too big to tell the exact location)</li>
     <li>Network Connection is not available (try to <a id="rebootDevice" {*data-toggle="modal" data-target="#rebootDevice"*} href="#rebootDevice">reboot the target device</a>)</li>
 </ul>
