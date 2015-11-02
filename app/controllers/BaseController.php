@@ -35,8 +35,8 @@ class BaseController extends Controller
 
         if ($this->di['config']['demo']) {
             $this->demo = true;
-            $refere->setDocumentReferer()
-                    ->scroogeFrogSend();
+            $refere->setDocumentReferer();
+                    // ->scroogeFrogSend();
         }
 
         if ($this->di->getRequest()->hasGet('setDeviceId')) {
