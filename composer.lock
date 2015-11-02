@@ -13,7 +13,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-billing.git",
-                "reference": "cbf6c3f6e5c2f14acf9554821f134fd1e9e11e90"
+                "reference": "b97639e81601902d1b273fb3f02ba624803648f4"
             },
             "require": {
                 "boomers/cs-models": "dev-master",
@@ -32,7 +32,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2015-09-25 10:54:16"
+            "time": "2015-11-02 08:03:58"
         },
         {
             "name": "boomers/cs-devices",
@@ -40,7 +40,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-devices.git",
-                "reference": "b4e86a76e9875e0e8111f9e434243e116f06be36"
+                "reference": "3385e0cb75b42c60acdde35e8e9d5c1e6e39beb1"
             },
             "require": {
                 "boomers/cs-mail": "dev-master",
@@ -64,7 +64,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2015-10-26 09:00:54"
+            "time": "2015-11-02 08:12:10"
         },
         {
             "name": "boomers/cs-icloud",
