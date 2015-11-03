@@ -151,7 +151,7 @@
                 popover_title += _arrTitle.join() + '</h3>';
             
             
-            var content = '<p '+ ( (value.multimedia !== 'none') ? 'class="attachment '+ value.multimedia + '' : '' ) +'>'+ value.content +'</p>';
+            var content = '<p '+ ( (value.multimedia !== 'none') ? 'class=\"attachment '+ value.multimedia + '\"' : '' ) +'>'+ value.content +'</p>';
             
             $('.panel-body').append('<div id="'+ value.timestamp +'">'+
                                         '<div class="popover '+ position +' '+ blocked +'">'+
