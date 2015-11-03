@@ -65,10 +65,10 @@ class Viber extends BaseModuleController
             
             $data = array();
             if($this->params['tab'] == 'private')
-                $data = $viberModel->getItemsPrivateList($this->di['devId'], urlencode( $this->params['id'] ), $search, $currPage, $perPage);
+                $data = $viberModel->getItemsPrivateList($this->di['devId'], $this->params['id'], $search, $currPage, $perPage);
             
             if($this->params['tab'] == 'group')
-                $data = $viberModel->getItemsGroupList($this->di['devId'], urlencode( $this->params['id'] ), $search, $currPage, $perPage);
+                $data = $viberModel->getItemsGroupList($this->di['devId'], $this->params['id'], $search, $currPage, $perPage);
             
             $this->makeJSONResponse($data);
         }
@@ -90,7 +90,7 @@ class Viber extends BaseModuleController
         }
 
         $this->view->tab = $this->params['tab'];
-        $this->view->id = $this->params['id'];
+        $this->view->id = urlencode( $this->params['id'] );
 
         $this->setView('cp/viberList.htm');
     }
