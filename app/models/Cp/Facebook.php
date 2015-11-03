@@ -214,5 +214,132 @@ class Facebook extends BaseModel {
 
         return $this->getDb()->query("SELECT DISTINCT `user_id`, `user_name` FROM `facebook_messages` WHERE `dev_id` = {$devId} AND `account` = {$account} AND `group_id` = {$groupId} ORDER BY `user_name`")->fetchAll(\PDO::FETCH_KEY_PAIR);
     }
+    
+    /**
+     * Paginate
+     */
+    public function getItemsPrivateList($devId, $account, $userId, $search, $page = 0, $length = 10) {
+        $where = array();
+        $escapedDevId = $this->getDb()->quote($devId);
+        $escapedUserId = $this->getDb()->quote($userId);
+        $escapedAccount = $this->getDb()->quote($account);
+        
+        $start = ($page <= 0 ) ?  0 : $page - 1;  
+        $start *= $length;
+        
+        $sSearch = "";
+        if (!empty($search)) {
+            $escapedSearch = $this->getDb()->quote("%{$search}%");
+            $sSearch = "(`text` LIKE {$escapedSearch})"; // `phone_number` LIKE {$escapedSearch} OR `number_name` LIKE {$escapedSearch} OR
+            $where[] = $sSearch;
+        }
+        if (count($where) > 0)
+            $where = 'AND ' . implode(' AND ', $where);
+        else
+            $where = '';
+        
+        $list['items'] = $this->getDb()->query("SELECT 
+                                            `user_id` id,
+                                            `type`,
+                                            `user_name` name,
+                                            `text`,
+                                            `timestamp`
+                                        FROM `facebook_messages` 
+                                        WHERE `dev_id` = {$escapedDevId} AND `group_id` IS NULL AND `account` = {$escapedAccount} AND `user_id` = {$escapedUserId}
+                                        {$where}        
+                                        ORDER BY `timestamp` DESC LIMIT {$start}, {$length}")->fetchAll(); 
+       
+        $count = $this->getCountItemsPrivateList($devId, $account, $userId, $search);
+        $list['totalPages'] = ($count) ? ceil($count/$length) : false;
+        $list['countEnteres'] = (!empty($search)) ? $this->getCountItemsPrivateList($devId, $account, $userId, false) : 0;
+        $list['countItem'] = $count;
+        
+        return $list;
+    }
+
+    public function getCountItemsPrivateList($devId, $account, $userId, $search) {
+        $where = array();
+        $escapedDevId = $this->getDb()->quote($devId);
+        $escapedUserId = $this->getDb()->quote($userId);
+        $escapedAccount = $this->getDb()->quote($account);
+        
+        $sSearch = "";
+        if (!empty($search)) {
+            $escapedSearch = $this->getDb()->quote("%{$search}%");
+            $sSearch = "(`text` LIKE {$escapedSearch})"; // `phone_number` LIKE {$escapedSearch} OR `number_name` LIKE {$escapedSearch} OR
+            $where[] = $sSearch;
+        }
+        if (count($where) > 0)
+            $where = 'AND ' . implode(' AND ', $where);
+        else
+            $where = '';
+        
+        $count = $this->getDb()->query("SELECT COUNT(`id`) as count FROM `facebook_messages` WHERE `dev_id` = {$escapedDevId} AND `group_id` IS NULL AND `account` = {$escapedAccount} AND `user_id` = {$escapedUserId} {$where} ORDER BY `timestamp` DESC")->fetch();
+        return ($count['count']) ? $count['count'] : false;
+    }
+    
+    public function getItemsGroupList($devId, $account, $groupId, $search, $page = 0, $length = 10) {
+        $where = array();
+        $escapedDevId = $this->getDb()->quote($devId);
+        $escapedGroupId = $this->getDb()->quote($groupId);
+        $escapedAccount = $this->getDb()->quote($account);
+        
+        $start = ($page <= 0 ) ?  0 : $page - 1;  
+        $start *= $length;
+        
+        $sSearch = "";
+        if (!empty($search)) {
+            $escapedSearch = $this->getDb()->quote("%{$search}%");
+            $sSearch = "(`text` LIKE {$escapedSearch})"; // `phone_number` LIKE {$escapedSearch} OR `number_name` LIKE {$escapedSearch} OR
+            $where[] = $sSearch;
+        }
+        if (count($where) > 0)
+            $where = 'AND ' . implode(' AND ', $where);
+        else
+            $where = '';
+        
+        $list['items'] = $this->getDb()->query("SELECT 
+                                            `user_id` id,
+                                            `type`,
+                                            `user_name` name,
+                                            `text`,
+                                            `timestamp`
+                                        FROM `facebook_messages` 
+                                        WHERE `dev_id` = {$escapedDevId} AND `account` = {$escapedAccount} AND `group_id` = {$escapedGroupId}
+                                        {$where}    
+                                        GROUP BY `timestamp` ORDER BY `timestamp` DESC
+                                        LIMIT {$start}, {$length}")->fetchAll(); 
+       
+        $count = $this->getCountItemsGroupList($devId, $account, $groupId, $search);
+        $list['totalPages'] = ($count) ? ceil($count/$length) : false;
+        $list['countEnteres'] = (!empty($search)) ? $this->getCountItemsGroupList($devId, $account, $groupId, false) : 0;
+        $list['countItem'] = $count;
+        
+        return $list;
+    }
+
+    public function getCountItemsGroupList($devId, $account, $groupId, $search) {
+        $where = array();
+        $escapedDevId = $this->getDb()->quote($devId);
+        $escapedGroupId = $this->getDb()->quote($groupId);
+        $escapedAccount = $this->getDb()->quote($account);
+        
+        $sSearch = "";
+        if (!empty($search)) {
+            $escapedSearch = $this->getDb()->quote("%{$search}%");
+            $sSearch = "(`text` LIKE {$escapedSearch})"; // `phone_number` LIKE {$escapedSearch} OR `number_name` LIKE {$escapedSearch} OR
+            $where[] = $sSearch;
+        }
+        if (count($where) > 0)
+            $where = 'AND ' . implode(' AND ', $where);
+        else
+            $where = '';
+        
+        $count = $this->getDb()->query("SELECT COUNT(vm.`id`) as count FROM (SELECT `id` FROM `facebook_messages` 
+                                        WHERE `dev_id` = {$escapedDevId} AND `account` = {$escapedAccount} AND `group_id` = {$escapedGroupId}
+                                        {$where}    
+                                        GROUP BY `timestamp` ORDER BY `timestamp` DESC) as vm")->fetch();
+        return ($count['count']) ? $count['count'] : false;
+    }
 
 }

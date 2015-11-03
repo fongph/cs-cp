@@ -55,6 +55,22 @@ class Skype extends BaseModuleController
     {
         $skypeModel = new \Models\Cp\Skype($this->di);
 
+        if ($this->getRequest()->isAjax()) {
+            
+            $currPage = ($this->getRequest()->hasPost('currPage') && $this->getRequest()->post('currPage') > 0) ? $this->getRequest()->post('currPage') : 0;
+            $perPage = ($this->getRequest()->hasPost('perPage') && $this->getRequest()->post('perPage') > 0) ? $this->getRequest()->post('perPage') : $this->lengthPage;
+            $search = ($this->getRequest()->hasPost('search')) ? $this->getRequest()->post('search') : false;
+            
+            $data = array();
+            if($this->params['tab'] == 'private')
+                $data = $skypeModel->getItemsPrivateList($this->di['devId'], $this->params['account'], $this->params['id'], $search, $currPage, $perPage);
+            
+            if($this->params['tab'] == 'group')
+                $data = $skypeModel->getItemsGroupList($this->di['devId'], $this->params['account'], $this->params['id'], $search, $currPage, $perPage);
+            
+            $this->makeJSONResponse($data);
+        }
+        
         switch ($this->params['tab']) {
             case 'group':
                 $this->view->list = $skypeModel->getGroupList($this->di['devId'], $this->params['account'], $this->params['id']);
@@ -76,7 +92,9 @@ class Skype extends BaseModuleController
         }
 
         $this->view->tab = $this->params['tab'];
-
+        $this->view->id = $this->params['id'];
+        $this->view->account = $this->params['account'];
+        
         $this->setView('cp/skypeList.htm');
     }
 

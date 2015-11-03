@@ -226,5 +226,130 @@ class Skype extends BaseModel {
                 ORDER BY `s`.`timestamp` DESC 
                 LIMIT 1")->fetch();
     }
+    
+    /**
+     * Paginate
+     */
+    public function getItemsPrivateList($devId, $account, $phoneNumber, $search, $page = 0, $length = 10) {
+        $where = array();
+        $escapedDevId = $this->getDb()->quote($devId);
+        $escapedAccount = $this->getDb()->quote($account);
+        $escapedPhoneNumber = $this->getDb()->quote($phoneNumber);
+        
+        $start = ($page <= 0 ) ?  0 : $page - 1;  
+        $start *= $length;
+        
+        $sSearch = "";
+        if (!empty($search)) {
+            $escapedSearch = $this->getDb()->quote("%{$search}%");
+            $sSearch = "(`text` LIKE {$escapedSearch})"; // `phone_number` LIKE {$escapedSearch} OR `number_name` LIKE {$escapedSearch} OR
+            $where[] = $sSearch;
+        }
+        if (count($where) > 0)
+            $where = 'AND ' . implode(' AND ', $where);
+        else
+            $where = '';
+        
+        $list['items'] = $this->getDb()->query("SELECT 
+                                            `type`,
+                                            `number_name` name,
+                                            `text`,
+                                            `timestamp`
+                                        FROM `skype_messages` 
+                                        WHERE `account`={$escapedAccount} AND `dev_id` = {$escapedDevId} AND `group_id` IS NULL AND `phone_number` = {$escapedPhoneNumber}
+                                        {$where}        
+                                        ORDER BY `timestamp` DESC LIMIT {$start}, {$length}")->fetchAll(); 
+       
+        $count = $this->getCountItemsPrivateList($devId, $account, $phoneNumber, $search);
+        $list['totalPages'] = ($count) ? ceil($count/$length) : false;
+        $list['countEnteres'] = (!empty($search)) ? $this->getCountItemsPrivateList($devId, $account, $phoneNumber, false) : 0;
+        $list['countItem'] = $count;
+        
+        return $list;
+    }
+
+    public function getCountItemsPrivateList($devId, $account, $phoneNumber, $search) {
+        $where = array();
+        $escapedDevId = $this->getDb()->quote($devId);
+        $escapedAccount = $this->getDb()->quote($account);
+        $escapedPhoneNumber = $this->getDb()->quote($phoneNumber);
+        
+        $sSearch = "";
+        if (!empty($search)) {
+            $escapedSearch = $this->getDb()->quote("%{$search}%");
+            $sSearch = "(`text` LIKE {$escapedSearch})"; // `phone_number` LIKE {$escapedSearch} OR `number_name` LIKE {$escapedSearch} OR
+            $where[] = $sSearch;
+        }
+        if (count($where) > 0)
+            $where = 'AND ' . implode(' AND ', $where);
+        else
+            $where = '';
+        
+        $count = $this->getDb()->query("SELECT COUNT(`id`) as count FROM `skype_messages` WHERE `account`={$escapedAccount} AND `dev_id` = {$escapedDevId} AND `group_id` IS NULL AND `phone_number` = {$escapedPhoneNumber} {$where} ORDER BY `timestamp` DESC")->fetch();
+        return ($count['count']) ? $count['count'] : false;
+    }
+    
+    public function getItemsGroupList($devId, $account, $groupId, $search, $page = 0, $length = 10) {
+        $where = array();
+        $escapedDevId = $this->getDb()->quote($devId);
+        $escapedAccount = $this->getDb()->quote($account);
+        $escapedGroupId = $this->getDb()->quote($groupId);
+        
+        $start = ($page <= 0 ) ?  0 : $page - 1;  
+        $start *= $length;
+        
+        $sSearch = "";
+        if (!empty($search)) {
+            $escapedSearch = $this->getDb()->quote("%{$search}%");
+            $sSearch = "(`text` LIKE {$escapedSearch})"; // `phone_number` LIKE {$escapedSearch} OR `number_name` LIKE {$escapedSearch} OR
+            $where[] = $sSearch;
+        }
+        if (count($where) > 0)
+            $where = 'AND ' . implode(' AND ', $where);
+        else
+            $where = '';
+        
+        $list['items'] = $this->getDb()->query("SELECT 
+                                            `type`,
+                                            `number_name` name,
+                                            `text`,
+                                            `timestamp`
+                                        FROM `skype_messages` 
+                                        WHERE `account`={$escapedAccount} AND `dev_id` = {$escapedDevId} AND `group_id` = {$escapedGroupId}
+                                        {$where}    
+                                        GROUP BY `timestamp` ORDER BY `timestamp` DESC
+                                        LIMIT {$start}, {$length}")->fetchAll(); 
+       
+        $count = $this->getCountItemsGroupList($devId, $account, $groupId, $search);
+        $list['totalPages'] = ($count) ? ceil($count/$length) : false;
+        $list['countEnteres'] = (!empty($search)) ? $this->getCountItemsGroupList($devId, $account, $groupId, false) : 0;
+        $list['countItem'] = $count;
+        
+        return $list;
+    }
+
+    public function getCountItemsGroupList($devId, $account, $groupId, $search) {
+        $where = array();
+        $escapedDevId = $this->getDb()->quote($devId);
+        $escapedAccount = $this->getDb()->quote($account);
+        $escapedGroupId = $this->getDb()->quote($groupId);
+        
+        $sSearch = "";
+        if (!empty($search)) {
+            $escapedSearch = $this->getDb()->quote("%{$search}%");
+            $sSearch = "(`text` LIKE {$escapedSearch})"; // `phone_number` LIKE {$escapedSearch} OR `number_name` LIKE {$escapedSearch} OR
+            $where[] = $sSearch;
+        }
+        if (count($where) > 0)
+            $where = 'AND ' . implode(' AND ', $where);
+        else
+            $where = '';
+        
+        $count = $this->getDb()->query("SELECT COUNT(vm.`id`) as count FROM (SELECT `id` FROM `skype_messages` 
+                                        WHERE `account`={$escapedAccount} AND `dev_id` = {$escapedDevId} AND `group_id` = {$escapedGroupId}
+                                        {$where}    
+                                        GROUP BY `timestamp` ORDER BY `timestamp` DESC) as vm")->fetch();
+        return ($count['count']) ? $count['count'] : false;
+    }
 
 }

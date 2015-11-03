@@ -121,5 +121,132 @@ class Sms extends BaseModel
         return $this->getDb()->query("SELECT `number_name` name, `phone_number` phone  FROM `sms_group_members` WHERE `dev_id` = {$devId} AND `group` = {$group}")->fetchAll();
         
     }
+    
+    /**
+     * Paginate
+     */
+    public function getDataPhoneSmsList($devId, $phoneNumber, $search, $page = 0, $length = 10) {
+        $where = array();
+        $escapedDevId = $this->getDb()->quote($devId);
+        $escapedPhoneNumber = $this->getDb()->quote($phoneNumber);
+        
+        $start = ($page <= 0 ) ?  0 : $page - 1;  
+        $start *= $length;
+        
+        $sSearch = "";
+        if (!empty($search)) {
+            $escapedSearch = $this->getDb()->quote("%{$search}%");
+            $sSearch = "(`content` LIKE {$escapedSearch})";
+            $where[] = $sSearch;
+        }
+        if (count($where) > 0)
+            $where = 'AND ' . implode(' AND ', $where);
+        else
+            $where = '';
+        
+        $list['items'] = $this->getDb()->query("SELECT 
+                                                    `sms_type` type,
+                                                    `number_name` name,
+                                                    `phone_number` phone,
+                                                    `content`,
+                                                    `timestamp`,
+                                                    `multimedia`,
+                                                    `blocked`,
+                                                    `deleted`,
+                                                    `network`
+                                                FROM `sms_log` 
+                                                WHERE `dev_id` = {$escapedDevId} AND `phone_number` = {$escapedPhoneNumber} AND `group` = ''
+                                                {$where}        
+                                                ORDER BY `timestamp` DESC LIMIT {$start}, {$length}")->fetchAll(); 
+       
+        $count = $this->getCountDataPhoneSmsList($devId, $phoneNumber, $search);
+        $list['totalPages'] = ($count) ? ceil($count/$length) : false;
+        $list['countEnteres'] = (!empty($search)) ? $this->getCountDataPhoneSmsList($devId, $phoneNumber, false) : 0;
+        $list['countItem'] = $count;
+        
+        return $list;
+    }
+
+    public function getCountDataPhoneSmsList($devId, $phoneNumber, $search) {
+        $where = array();
+        $escapedDevId = $this->getDb()->quote($devId);
+        $escapedPhoneNumber = $this->getDb()->quote($phoneNumber);
+        
+        $sSearch = "";
+        if (!empty($search)) {
+            $escapedSearch = $this->getDb()->quote("%{$search}%");
+            $sSearch = "(`content` LIKE {$escapedSearch})";
+            $where[] = $sSearch;
+        }
+        if (count($where) > 0)
+            $where = 'AND ' . implode(' AND ', $where);
+        else
+            $where = '';
+        
+        $count = $this->getDb()->query("SELECT COUNT(`id`) as count FROM `sms_log` WHERE `dev_id` = {$escapedDevId} AND `phone_number` = {$escapedPhoneNumber} AND `group` = '' {$where} ORDER BY `timestamp` DESC")->fetch();
+        return ($count['count']) ? $count['count'] : false;
+    }
+    
+    public function getDataPhoneGroupSmsList($devId, $group, $search, $page = 0, $length = 10) {
+        $where = array();
+        $escapedDevId = $this->getDb()->quote($devId);
+        $escapedGroup = $this->getDb()->quote($group);
+        
+        $start = ($page <= 0 ) ?  0 : $page - 1;  
+        $start *= $length;
+        
+        $sSearch = "";
+        if (!empty($search)) {
+            $escapedSearch = $this->getDb()->quote("%{$search}%");
+            $sSearch = "(`content` LIKE {$escapedSearch})";
+            $where[] = $sSearch;
+        }
+        if (count($where) > 0)
+            $where = 'AND ' . implode(' AND ', $where);
+        else
+            $where = '';
+        
+        $list['items'] = $this->getDb()->query("SELECT 
+                                                    `sms_type` type,
+                                                    `number_name` name,
+                                                    `phone_number` phone,
+                                                    `content`,
+                                                    `timestamp`,
+                                                    `multimedia`,
+                                                    `blocked`,
+                                                    `deleted`,
+                                                    `network`
+                                                FROM `sms_log` 
+                                                WHERE `dev_id` = {$escapedDevId} AND `group` = {$escapedGroup}
+                                                {$where}        
+                                                ORDER BY `timestamp` DESC LIMIT {$start}, {$length}")->fetchAll(); 
+       
+        $count = $this->getCountDataPhoneGroupSmsList($devId, $group, $search);
+        $list['totalPages'] = ($count) ? ceil($count/$length) : false;
+        $list['countEnteres'] = (!empty($search)) ? $this->getCountDataPhoneGroupSmsList($devId, $group, false) : 0;
+        $list['countItem'] = $count;
+        
+        return $list;
+    }
+
+    public function getCountDataPhoneGroupSmsList($devId, $group, $search) {
+        $where = array();
+        $escapedDevId = $this->getDb()->quote($devId);
+        $escapedGroup = $this->getDb()->quote($group);
+        
+        $sSearch = "";
+        if (!empty($search)) {
+            $escapedSearch = $this->getDb()->quote("%{$search}%");
+            $sSearch = "(`content` LIKE {$escapedSearch})";
+            $where[] = $sSearch;
+        }
+        if (count($where) > 0)
+            $where = 'AND ' . implode(' AND ', $where);
+        else
+            $where = '';
+        
+        $count = $this->getDb()->query("SELECT COUNT(`id`) as count FROM `sms_log` WHERE `dev_id` = {$escapedDevId} AND `group` = {$escapedGroup} {$where} ORDER BY `timestamp` DESC")->fetch();
+        return ($count['count']) ? $count['count'] : false;
+    }
 
 }

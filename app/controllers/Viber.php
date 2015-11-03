@@ -57,6 +57,22 @@ class Viber extends BaseModuleController
     {
         $viberModel = new \Models\Cp\Viber($this->di);
 
+        if ($this->getRequest()->isAjax()) {
+            
+            $currPage = ($this->getRequest()->hasPost('currPage') && $this->getRequest()->post('currPage') > 0) ? $this->getRequest()->post('currPage') : 0;
+            $perPage = ($this->getRequest()->hasPost('perPage') && $this->getRequest()->post('perPage') > 0) ? $this->getRequest()->post('perPage') : $this->lengthPage;
+            $search = ($this->getRequest()->hasPost('search')) ? $this->getRequest()->post('search') : false;
+            
+            $data = array();
+            if($this->params['tab'] == 'private')
+                $data = $viberModel->getItemsPrivateList($this->di['devId'], urlencode( $this->params['id'] ), $search, $currPage, $perPage);
+            
+            if($this->params['tab'] == 'group')
+                $data = $viberModel->getItemsGroupList($this->di['devId'], urlencode( $this->params['id'] ), $search, $currPage, $perPage);
+            
+            $this->makeJSONResponse($data);
+        }
+        
         switch ($this->params['tab']) {
             case 'group':
                 $this->view->list = $viberModel->getGroupList($this->di['devId'], $this->params['id']);
@@ -74,6 +90,7 @@ class Viber extends BaseModuleController
         }
 
         $this->view->tab = $this->params['tab'];
+        $this->view->id = $this->params['id'];
 
         $this->setView('cp/viberList.htm');
     }
@@ -91,5 +108,6 @@ class Viber extends BaseModuleController
         $devicesLimitations = new Limitations($this->di['db']);
         return $devicesLimitations->isAllowed($this->di['devId'], Limitations::VIBER);
     }
+    
 
 }

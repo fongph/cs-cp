@@ -19,6 +19,61 @@ $.fn.tableScroll = function () {
     });
 };
 
+function isset(element) {
+    if(typeof element != 'undefined') {
+        return element;
+    } else {
+        return false;
+    }    
+}
+
+function getDateAJAX(perPage, page, url, search) {
+    if(!url)  { 
+        console.log('Error: set variable "url"'); return false; 
+    }
+    var $_result = {};
+    $.ajax({
+        type: 'POST',
+        url: url,
+        async: false,
+        data: { 'perPage': perPage, 'currPage': page, 'search': search },
+        dataType: 'json',
+        beforeSend: function() {
+            $('.panel-body').html('loading..');
+        },
+        success: function (result) { 
+            $_result = (result) ? result : false;
+        }   
+    });
+
+    return $_result;
+}
+
+function search() {
+    var _objSearch = $('.panel-heading .blockSearch');
+    
+    _objSearch.on( "keydown", function(event) {
+        if(event.which == 13) { 
+            _objSearch.find('.input-group-btn button').trigger('click');
+        }    
+    });
+    
+    _objSearch.find('.input-group-btn button').on('click', function() {
+        var _input = _objSearch.find('input');
+        if(!_input.val()) return false;
+
+        if(_input.attr('disabled')) {
+            _input.removeAttr('disabled');
+            if(_objSearch.find('.fa').hasClass('fa-times')) _objSearch.find('.fa').removeClass('fa-times').addClass('fa-search');
+            if(_input.val()) _input.val('');
+        } else {
+            _input.attr('disabled', 'disabled');
+            if(_objSearch.find('.fa').hasClass('fa-search')) _objSearch.find('.fa').removeClass('fa-search').addClass('fa-times');
+        }
+        $("select#panel_paginate_per_pages").trigger('change');
+    });
+}
+
 function clearCookie(name) {
     if($.cookie(name)) {
         $.removeCookie(name, { path: '/' });

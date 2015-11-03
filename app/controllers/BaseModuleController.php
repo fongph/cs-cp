@@ -44,7 +44,8 @@ abstract class BaseModuleController extends BaseController
 
             $this->postAction();
             $this->setView('cp/noPackage.htm');
-            $this->view->title = $this->di['t']->_('No Plan');
+            $this->view->title = $this->di['t']->_(isset($this->di['config']['modules'][$this->module]) ? $this->di['config']['modules'][$this->module] : 'No Subscription');
+            $this->view->titlePage = $this->di['t']->_('No Subscription');
             $this->response();
             die;
         }

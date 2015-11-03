@@ -250,4 +250,127 @@ class Whatsapp extends BaseModel {
                 ORDER BY `w`.`timestamp` DESC 
                 LIMIT 1")->fetch();
     }
+    
+    /**
+     * Paginate
+     */
+    public function getItemsPrivateList($devId, $phoneNumber, $search, $page = 0, $length = 10) {
+        $where = array();
+        $escapedDevId = $this->getDb()->quote($devId);
+        $escapedPhoneNumber = $this->getDb()->quote($phoneNumber);
+        
+        $start = ($page <= 0 ) ?  0 : $page - 1;  
+        $start *= $length;
+        
+        $sSearch = "";
+        if (!empty($search)) {
+            $escapedSearch = $this->getDb()->quote("%{$search}%");
+            $sSearch = "(`text` LIKE {$escapedSearch})"; // `phone_number` LIKE {$escapedSearch} OR `number_name` LIKE {$escapedSearch} OR
+            $where[] = $sSearch;
+        }
+        if (count($where) > 0)
+            $where = 'AND ' . implode(' AND ', $where);
+        else
+            $where = '';
+        
+        $list['items'] = $this->getDb()->query("SELECT 
+                                            `type`,
+                                            `number_name` name,
+                                            `phone_number` phone,
+                                            `text`,
+                                            `timestamp`
+                                        FROM `whatsapp_messages` 
+                                        WHERE `dev_id` = {$escapedDevId} AND `group_id` IS NULL AND `phone_number` = {$escapedPhoneNumber} 
+                                        {$where}        
+                                        ORDER BY `timestamp` DESC LIMIT {$start}, {$length}")->fetchAll(); 
+       
+        $count = $this->getCountItemsPrivateList($devId, $phoneNumber, $search);
+        $list['totalPages'] = ($count) ? ceil($count/$length) : false;
+        $list['countEnteres'] = (!empty($search)) ? $this->getCountItemsPrivateList($devId, $phoneNumber, false) : 0;
+        $list['countItem'] = $count;
+        
+        return $list;
+    }
+
+    public function getCountItemsPrivateList($devId, $phoneNumber, $search) {
+        $where = array();
+        $escapedDevId = $this->getDb()->quote($devId);
+        $escapedPhoneNumber = $this->getDb()->quote($phoneNumber);
+        
+        $sSearch = "";
+        if (!empty($search)) {
+            $escapedSearch = $this->getDb()->quote("%{$search}%");
+            $sSearch = "(`text` LIKE {$escapedSearch})"; // `phone_number` LIKE {$escapedSearch} OR `number_name` LIKE {$escapedSearch} OR
+            $where[] = $sSearch;
+        }
+        if (count($where) > 0)
+            $where = 'AND ' . implode(' AND ', $where);
+        else
+            $where = '';
+        
+        $count = $this->getDb()->query("SELECT COUNT(`id`) as count FROM `whatsapp_messages` WHERE `dev_id` = {$escapedDevId} AND `group_id` IS NULL AND `phone_number` = {$escapedPhoneNumber} {$where} ORDER BY `timestamp` DESC")->fetch();
+        return ($count['count']) ? $count['count'] : false;
+    }
+    
+    public function getItemsGroupList($devId, $groupId, $search, $page = 0, $length = 10) {
+        $where = array();
+        $escapedDevId = $this->getDb()->quote($devId);
+        $escapedGroupId = $this->getDb()->quote($groupId);
+        
+        $start = ($page <= 0 ) ?  0 : $page - 1;  
+        $start *= $length;
+        
+        $sSearch = "";
+        if (!empty($search)) {
+            $escapedSearch = $this->getDb()->quote("%{$search}%");
+            $sSearch = "(`text` LIKE {$escapedSearch})"; // `phone_number` LIKE {$escapedSearch} OR `number_name` LIKE {$escapedSearch} OR
+            $where[] = $sSearch;
+        }
+        if (count($where) > 0)
+            $where = 'AND ' . implode(' AND ', $where);
+        else
+            $where = '';
+        
+        $list['items'] = $this->getDb()->query("SELECT 
+                                            `type`,
+                                            `number_name` name,
+                                            `phone_number` phone,
+                                            `text`,
+                                            `timestamp`
+                                        FROM `whatsapp_messages` 
+                                        WHERE `dev_id` = {$escapedDevId} AND `group_id` = {$escapedGroupId} 
+                                        {$where}    
+                                        GROUP BY `timestamp` ORDER BY `timestamp` DESC
+                                        LIMIT {$start}, {$length}")->fetchAll(); 
+       
+        $count = $this->getCountItemsGroupList($devId, $groupId, $search);
+        $list['totalPages'] = ($count) ? ceil($count/$length) : false;
+        $list['countEnteres'] = (!empty($search)) ? $this->getCountItemsGroupList($devId, $groupId, false) : 0;
+        $list['countItem'] = $count;
+        
+        return $list;
+    }
+
+    public function getCountItemsGroupList($devId, $groupId, $search) {
+        $where = array();
+        $escapedDevId = $this->getDb()->quote($devId);
+        $escapedGroupId = $this->getDb()->quote($groupId);
+        
+        $sSearch = "";
+        if (!empty($search)) {
+            $escapedSearch = $this->getDb()->quote("%{$search}%");
+            $sSearch = "(`text` LIKE {$escapedSearch})"; // `phone_number` LIKE {$escapedSearch} OR `number_name` LIKE {$escapedSearch} OR
+            $where[] = $sSearch;
+        }
+        if (count($where) > 0)
+            $where = 'AND ' . implode(' AND ', $where);
+        else
+            $where = '';
+        
+        $count = $this->getDb()->query("SELECT COUNT(gm.`id`) as count FROM (SELECT `id` FROM `whatsapp_messages` 
+                                        WHERE `dev_id` = {$escapedDevId} AND `group_id` = {$escapedGroupId} 
+                                        {$where}    
+                                        GROUP BY `timestamp` ORDER BY `timestamp` DESC) as gm")->fetch();
+        return ($count['count']) ? $count['count'] : false;
+    }
 }

@@ -10,6 +10,7 @@ class Whatsapp extends BaseModuleController
 {
 
     protected $module = Modules::WHATSAPP;
+    protected $lengthPage = 5;
 
     protected function init()
     {
@@ -56,6 +57,22 @@ class Whatsapp extends BaseModuleController
     {
         $whatsappModel = new \Models\Cp\Whatsapp($this->di);
 
+        if ($this->getRequest()->isAjax()) {
+            
+            $currPage = ($this->getRequest()->hasPost('currPage') && $this->getRequest()->post('currPage') > 0) ? $this->getRequest()->post('currPage') : 0;
+            $perPage = ($this->getRequest()->hasPost('perPage') && $this->getRequest()->post('perPage') > 0) ? $this->getRequest()->post('perPage') : $this->lengthPage;
+            $search = ($this->getRequest()->hasPost('search')) ? $this->getRequest()->post('search') : false;
+            
+            $data = array();
+            if($this->params['tab'] == 'private')
+                $data = $whatsappModel->getItemsPrivateList($this->di['devId'], $this->params['id'], $search, $currPage, $perPage);
+            
+            if($this->params['tab'] == 'group')
+                $data = $whatsappModel->getItemsGroupList($this->di['devId'], $this->params['id'], $search, $currPage, $perPage);
+            
+            $this->makeJSONResponse($data);
+        }
+        
         switch ($this->params['tab']) {
             case 'group':
                 $this->view->list = $whatsappModel->getGroupList($this->di['devId'], $this->params['id']);
@@ -76,6 +93,7 @@ class Whatsapp extends BaseModuleController
         }
 
         $this->view->tab = $this->params['tab'];
+        $this->view->id = $this->params['id'];
 
         $this->setView('cp/whatsapp/list.htm');
     }

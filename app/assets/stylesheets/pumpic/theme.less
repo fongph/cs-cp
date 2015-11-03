@@ -772,3 +772,153 @@ a.list-group-item {
 .table-browser-history {
     display: inline-block;
 }
+
+/* ========= BLOCK PAGINATE LISTS ============= */
+#blockPaginateLists .panel-heading {
+    padding: 0px;
+}
+
+#blockPaginateLists .panel-heading .title {
+    display: block;
+    height: 34px;
+    padding-top: 6px;
+    margin: 8px 0px 8px 8px;
+    vertical-align: middle;
+}
+
+/* ============ search =============== */
+.blockSearch {
+    float: left;
+    margin: 8px 0 8px 8px;
+    width: 200px;
+    z-index: 10;
+    border-collapse: separate;
+    display: table;
+    position: relative;
+}
+
+.blockSearch > input::-moz-placeholder {
+    color: #999999;
+    opacity: 1;
+}
+
+.blockSearch > input {
+    background-color: #ffffff;
+    background-image: none;
+    border: 1px solid #999999;
+    border-radius: 4px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+    color: #464545;
+    display: block;
+    font-size: 14px;
+    height: 34px;
+    line-height: 1.42857;
+    padding: 6px 12px;
+    transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+    width: 100%;
+}
+.blockSearch > input {
+    box-shadow: none;
+}
+.blockSearch > input {
+    float: left;
+    margin-bottom: 0;
+    position: relative;
+    width: 100%;
+    z-index: 2;
+}
+
+.blockSearch > input {
+    font-family: inherit;
+    background: #777985 none repeat scroll 0 0;
+    border: 0 none;
+    color: #fff;
+}
+
+.blockSearch > input {
+    display: table-cell;
+    border-bottom-right-radius: 0;
+    border-top-right-radius: 0;
+}
+
+.blockSearch > input:focus {
+    background: #92939d none no-repeat;
+}
+
+.blockSearch .btn-default {
+    background: #777985 none repeat scroll 0 0;
+    border: 1px solid #777985;
+    z-index: auto;
+}
+
+/* ============ paginate panel============== */
+.blockPerPages {
+    overflow: hidden;
+    margin: 8px 8px 8px 0;
+    z-index: 9;
+}
+.blockPerPages #panel_paginate_per_pages {
+    background: #777985 none repeat scroll 0 0;
+    border: 0 none;
+    color: #f3f3f3;
+    float: right;
+    height: 34px;
+    width: auto;
+}
+
+#panel_paginate_per_pages > option {}
+.blockPerPages > label {
+    float: right;
+    line-height: 34px;
+    margin: 0 5px 0 0
+}
+
+
+.panel-pagination {
+    margin: 0px;
+    padding: 0px;
+}
+.panel-pagination li {
+    background-color: #f3f3f3;
+    border: 1px solid #999999;
+    list-style: none;
+    float: left;
+    position: relative;
+    margin-bottom: 0;
+    padding: 6px 12px;
+    text-align: center;
+    vertical-align: middle;
+    white-space: nowrap;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.panel-pagination li:hover, .panel-pagination li.disabled {
+    cursor: pointer;
+    background-color: #dadada;
+    border: 1px solid #7a7a7a;
+}
+.panel-pagination li a, .panel-pagination li:hover > a {
+    cursor: inherit;
+}
+
+.panel-pagination li.panel_previous,
+.panel-pagination li.previous {
+    border-bottom-right-radius: 0;
+    border-top-right-radius: 0;
+}
+
+.panel-pagination li.panel_next,
+.panel-pagination li.next {
+    border-left: 0px;
+    border-bottom-left-radius: 0;
+    border-top-left-radius: 0;
+}
+
+.panel-pagination li > a {
+    width: 100%;
+    height: 100%;
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 1.42857;
+    color: #303030;
+}
