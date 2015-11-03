@@ -50,7 +50,7 @@ class Sms extends BaseModuleController {
             $search = ($this->getRequest()->hasPost('search')) ? $this->getRequest()->post('search') : false;
             
             $data = array();
-            $data = $smsModel->getDataPhoneSmsList($this->di['devId'], urlencode( $this->params['phoneNumber'] ), $search, $currPage, $perPage);
+            $data = $smsModel->getDataPhoneSmsList($this->di['devId'], $this->params['phoneNumber'], $search, $currPage, $perPage);
             
             $this->makeJSONResponse($data);
         }
@@ -69,7 +69,7 @@ class Sms extends BaseModuleController {
 
         
         $this->view->tab = 'sms';
-        $this->view->id = $this->params['phoneNumber'];
+        $this->view->id = urlencode($this->params['phoneNumber']);
         
         $this->setView('cp/sms/list.htm');
     }
