@@ -375,23 +375,31 @@
     function clearMask() {
         $phone.off(".mask").removeData('mask_phone');
     }
+    
     function setMask() {
 
         $.mask.definitions['~'] = "[(+)|(0-9)]";    
         $phone.mask($symbols_before_mask+$def_mask+$symbols_after_mask, {
-            autoclear: true,
+            autoclear: false,
             dataName: 'mask_phone',
             placeholder:"",
-            clearOnLostFocus: true,
-            clearIfNotMatch: true
+            completed: false,
+            clearOnLostFocus: false,
+            clearIfNotMatch: false
         });
-
+        
         $phone.on('click.mask', function() { 
             if($(this).data('value').length > 0) {
                 $(this).attr( 'data-value', $(this).data('value').replace(/\ /g, '') );
             }
         });
-
+        
+        $phone.on('blur.mask', function() { 
+            var _input = $(this).mask();
+            if(_input.length > 0)
+                $("input[name='phone']").attr('data-value', (_input+$symbols_after_mask).replace(/\ /g, ''));
+        });
+        
         $phone.on('keypress.mask', function() {
             var _input = $(this).mask();
             if(_input.length > 0)
@@ -403,10 +411,11 @@
 //        });
     
     }
+    setMask();
     
     $(document).ready(function () {
         
-        setMask();
+        
         
         if ($('#first-visit-value').data('time') > 0) {
             $('#first-visit-value').html(moment.unix($('#first-visit-value').data('time')).format("LLL"));
