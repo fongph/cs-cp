@@ -150,8 +150,13 @@
         
         $("select#panel_paginate_per_pages").change(function () {
             /* get new no of items per page */
-            var newPerPage = parseInt($(this).val());    
-            var $_res = getDateAJAX(newPerPage, 0);
+            var $search = '', $url = '';
+            var newPerPage = parseInt($(this).val()); 
+            
+            if($('#blockPaginateLists').data('paginate-ajax'))
+               $url = $('#blockPaginateLists').data('paginate-ajax');
+            
+            var $_res = getDateAJAX(newPerPage, 0, $url, $search);
             
             if($('#panel_paginate').data('twbs-pagination'))
                 $('#panel_paginate').data('twbs-pagination').destroy();
@@ -173,7 +178,7 @@
                     onPageClick: function (event, page) { 
                         var pageData = $('#panel_paginate').data();
                         // console.log(newPerPage, page, $_res.countItem);
-                        var $data = getDateAJAX(newPerPage, page);
+                        var $data = getDateAJAX(newPerPage, page, $url, $search);
                         if($data) setDataItems($data.items, page - 1, newPerPage, $data.countItem);
                     }
                 });
