@@ -140,7 +140,7 @@
                 if(value.network > 0)
                     _arrTitle.push("<span class=\"label label-warning\" style=\"float: right;\">{$di['t']->_('iMessage')}</span>");
                       
-                if(value.multimedia !== 'none')      
+                if(value.multimedia !== 'none' && !value.network) 
                     _arrTitle.push("<span class=\"label label-warning\" style=\"float: right;\">{$di['t']->_('MMS')}</span>");
                 
                 if(value.blocked)
