@@ -37,7 +37,7 @@
                         <span class="label label-warning" style="float: right;">{$di['t']->_('iMessage')}</span>
                     {/if}
                     
-                    {if $item.multimedia !== 'none'}
+                    {if $item.multimedia !== 'none' && $item.network == 0}
                         <span class="label label-warning" style="float: right;">{$di['t']->_('MMS')}</span>
                     {/if}
                     
