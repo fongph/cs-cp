@@ -21,7 +21,7 @@
     </div>
     {/if}
 
-    <div class="dialog-messages-list">
+    {*<div class="dialog-messages-list">
         {foreach $list as $item}
         <div id="{$item.timestamp}">
             <div class="popover {if $item.id != $account}right{else}left{/if}">
@@ -37,10 +37,98 @@
             </div>
         </div>
         {/foreach}
+    </div>*}
+    
+    <div id="blockPaginateLists" class="panel panel-default" data-paginate-ajax="{$di.router->getRouteUrl('kik')}/{$account}/{$tab}/{$id}">
+        <div class="panel-heading">
+            <div class="row">
+                {* TITLE
+                <div class="col-xs-4">
+                    <span class="title"></span>
+                </div> *}
+                
+                <div class="col-xs-6">
+                    <div class="blockSearch">
+                        <input type="text" name="search" value="" />
+                        <span class="input-group-btn">
+                            <button class="btn btn-default">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="col-xs-6">
+                    <div class="blockPerPages">
+                        <select class="form-control" id="panel_paginate_per_pages">
+                            <option selected="selected">10</option>
+                            <option>25</option>
+                            <option>50</option>
+                            <option>100</option>
+                        </select>
+                        <label>Records per page:</label>
+                    </div> 
+                </div>
+            </div>
+            
+        </div>
+        <div class="panel-body text-center dialog-messages-list">
+        </div>
+        <div class="panel-footer">
+            <div class="row">
+                <div class="col-xs-7 text-left">
+                    <div class="panel_paginate_info" id="panel_paginate_info"></div>
+                </div>
+                <div class="col-xs-5 text-right">
+                    <div class="panel_paginate btn-group" id="panel_paginate"></div>
+                </div>
+            </div>
+        </div>
     </div>
+    
 </div>
 <script type="text/javascript">
-    $(document).ready(function() {
+    
+    function setDataItems( data, page, perPage, items, countEnteres ) {
+        if(!data.length) return false;
+        items = parseInt(items);
+        countEnteres = parseInt(countEnteres);
+
+        var _item = parseInt(page) * parseInt(perPage);
+        var to_item = (parseInt(page) + 1) * parseInt(perPage);
+        var _endPageItems = (to_item > items) ? items : to_item;
+
+        if($('#panel_paginate_info')) {
+            $('#panel_paginate_info').html( "Showing "+ ( (_item > 0) ? _item + 1 : 1 ) +" to "+ _endPageItems +" of "+ items +" entries" ); 
+            if(countEnteres > 0)
+                $('#panel_paginate_info').append( "&nbsp;(filtered from "+ countEnteres +" total entries)" );
+        }    
+
+        $('.panel-body').html('');
+        
+        $.each( data, function(key, value) {
+            var position = (value.type == 'in') ? 'right' : 'left';
+            var popover_title = (value.type == 'in') 
+                                    ? "<h3 class=\"popover-title\"><b>"+value.name+"</b> <span></span></h3>"
+                                    : "<h3 class=\"popover-title\"><span></span></h3>";
+            
+            $('.panel-body').append('<div id="'+ value.timestamp +'">'+
+                                        '<div class="popover '+ position +'">'+
+                                            '<div class="arrow"></div>'+
+                                             popover_title +   
+                                            '<div class="popover-content">'+
+                                                '<p>'+ value.text +'</p>'+
+                                            '</div>'+
+                                        '</div>'+
+                                    '</div>');
+            
+        });
+        
+        Init();
+
+    }
+
+    function Init() {
         var last = 0;
         $('.dialog-messages-list > div').each(function() {
             var timestamp = $(this).attr('id');
@@ -55,5 +143,53 @@
 
             last = moment.unix(timestamp).zone(0).format("LL");
         });
+    }
+    
+    $(document).ready(function() {
+        // Action Search
+        search();
+        
+        // Paginate
+        $("select#panel_paginate_per_pages").change(function () {
+            /*-- get new no of items per page --*/
+            var $search = '', $url = '';
+            if($('.panel-heading .blockSearch > input').length)
+                 $search = ($('.panel-heading .blockSearch > input').attr('disabled')) ? $('.panel-heading .blockSearch > input').val() : '';
+             
+            if($('#blockPaginateLists').data('paginate-ajax'))
+               $url = $('#blockPaginateLists').data('paginate-ajax');
+             
+            var newPerPage = parseInt($(this).val());    
+            var $_res = getDateAJAX(newPerPage, 0, $url, $search);
+            
+            if($('#panel_paginate').data('twbs-pagination'))
+                $('#panel_paginate').data('twbs-pagination').destroy();
+            
+            if($_res) {
+                
+                if(!$_res.items.length) $('.panel-body').html("No data available in lists");
+                // console.log( $_res );
+                setDataItems($_res.items, 0, newPerPage, $_res.countItem, $_res.countEnteres);
+                $('#panel_paginate').twbsPagination({ 
+                    totalPages: (isset($_res.totalPages)) ? $_res.totalPages : 1,
+                    startPage: 1,
+                    visiblePages: 0,
+                    displayFirst: false,
+                    displayLast: false,
+                    paginationClass: "panel-pagination clearfix",
+                    prev: '<i class="fa fa-arrow-left"></i>',
+                    next: '<i class="fa fa-arrow-right"></i>',
+                    prevClass: 'panel_previous',
+                    onPageClick: function (event, page) { 
+                        var pageData = $('#panel_paginate').data();
+                        // console.log(newPerPage, page, $_res.countItem);
+                        var $data = getDateAJAX(newPerPage, page, $url, $search);
+                        if($data) setDataItems($data.items, page - 1, newPerPage, $data.countItem, $data.countEnteres);
+                    }
+                });
+                
+            }
+            
+        }).change();
     });
 </script>

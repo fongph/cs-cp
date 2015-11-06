@@ -335,10 +335,10 @@ class Facebook extends BaseModel {
         else
             $where = '';
         
-        $count = $this->getDb()->query("SELECT COUNT(vm.`id`) as count FROM (SELECT `id` FROM `facebook_messages` 
+        $count = $this->getDb()->query("SELECT COUNT(fm.`id`) as count FROM (SELECT `id` FROM `facebook_messages` 
                                         WHERE `dev_id` = {$escapedDevId} AND `account` = {$escapedAccount} AND `group_id` = {$escapedGroupId}
                                         {$where}    
-                                        GROUP BY `timestamp` ORDER BY `timestamp` DESC) as vm")->fetch();
+                                        GROUP BY `timestamp` ORDER BY `timestamp` DESC) as fm")->fetch();
         return ($count['count']) ? $count['count'] : false;
     }
 

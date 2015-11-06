@@ -157,4 +157,92 @@ class Snapchat extends BaseModel
                 kgm.`group_id` = {$groupId}")->fetchAll(\PDO::FETCH_KEY_PAIR);
     }
 
+    
+    /**
+     * Paginate
+     */
+    public function getItemsList($devId, $account, $userid, $search, $page = 0, $length = 10) {
+        $where = array();
+        $escapedDevId = $this->getDb()->quote($devId);
+        $escapedUserId = $this->getDb()->quote($userid);
+        $escapedAccount = $this->getDb()->quote($account);
+        
+        $start = ($page <= 0 ) ?  0 : $page - 1;  
+        $start *= $length;
+        
+        $sSearch = "";
+        if (!empty($search)) {
+            $escapedSearch = $this->getDb()->quote("%{$search}%");
+            $sSearch = "(sm.`content` LIKE {$escapedSearch})";
+            $where[] = $sSearch;
+        }
+        if (count($where) > 0)
+            $where = 'AND ' . implode(' AND ', $where);
+        else
+            $where = '';
+        
+        $list['items'] = $this->getDb()->query("SELECT
+                                            sm.`type`,
+                                            su.`user_id`,
+                                            su.`nickname` name,
+                                            sm.`content`,
+                                            sm.`content_type`,
+                                            sm.`timestamp`
+                                        FROM `snapchat_messages` sm
+                                        INNER JOIN `snapchat_users` su ON su.`dev_id` = {$escapedDevId} AND su.`account_id` = {$escapedAccount} AND su.`user_id` = sm.`user_id`
+                                        WHERE 
+                                            sm.`dev_id` = {$escapedDevId} AND
+                                            sm.`account_id` = {$escapedAccount} AND
+                                            sm.`user_id` = {$escapedUserId}
+                                            {$where}    
+                                        ORDER BY sm.`timestamp` DESC LIMIT {$start}, {$length}")->fetchAll(); 
+       
+        foreach ($list['items'] as $key => $value) {
+            if ($value['content_type'] == 'image') {
+                $list['items'][$key]['image'] = $this->getImageUrl($devId, $account, $value['content']);
+                $list['items'][$key]['preview'] = $this->getPreviewUrl($devId, $account, $value['content']);
+            } elseif ($value['content_type'] == 'video') {
+                $list['items'][$key]['preview'] = $this->getPreviewUrl($devId, $account, $value['content']);
+                $list['items'][$key]['video'] = $this->getVideoUrl($devId, $account, $value['content']);
+            }
+        }                                
+                                        
+        $count = $this->getCountItemsList($devId, $account, $userid, $search);
+        $list['totalPages'] = ($count) ? ceil($count/$length) : false;
+        $list['countEnteres'] = (!empty($search)) ? $this->getCountItemsList($devId, $account, $userid, false) : 0;
+        $list['countItem'] = $count;
+        
+        return $list;
+    }
+
+    public function getCountItemsList($devId, $account, $userid, $search) {
+        $where = array();
+        $escapedDevId = $this->getDb()->quote($devId);
+        $escapedUserId = $this->getDb()->quote($userid);
+        $escapedAccount = $this->getDb()->quote($account);
+        
+        $sSearch = "";
+        if (!empty($search)) {
+            $escapedSearch = $this->getDb()->quote("%{$search}%");
+            $sSearch = "(sm.`content` LIKE {$escapedSearch})";
+            $where[] = $sSearch;
+        }
+        if (count($where) > 0)
+            $where = 'AND ' . implode(' AND ', $where);
+        else
+            $where = '';
+        
+        $count = $this->getDb()->query("SELECT
+                                            COUNT(sm.`id`) as count
+                                        FROM `snapchat_messages` sm
+                                        INNER JOIN `snapchat_users` su ON su.`dev_id` = {$escapedDevId} AND su.`account_id` = {$escapedAccount} AND su.`user_id` = sm.`user_id`
+                                        WHERE 
+                                            sm.`dev_id` = {$escapedDevId} AND
+                                            sm.`account_id` = {$escapedAccount} AND
+                                            sm.`user_id` = {$escapedUserId}
+                                            {$where}    
+                                        ORDER BY sm.`timestamp` DESC")->fetch();
+        return ($count['count']) ? $count['count'] : false;
+    }
+    
 }
