@@ -44,11 +44,16 @@
         </table>
     </div>
     
-    <div class="text-right">
-        <a href="{$di.config.registration}" class="btn btn-danger ga-action-click" ga-label="buy-subscription" ga-category="control-panel" ga-action="click-store-link">{$di.t->_('Buy Subscription')}</a>
+    <div class="row">
+        <div class="col-lg-6">
+            <p id="promo-info" class="text-info hidden"><span class="asterisk asterisk-info">*</span> Promo subscriptions become available only after assigning a paid subscription.</p>
+        </div>
+        <div class="col-lg-6">
+            <div class="text-right">
+                <a href="{$di.config.registration}" class="btn btn-danger ga-action-click" ga-label="buy-subscription" ga-category="control-panel" ga-action="click-store-link">{$di.t->_('Buy Subscription')}</a>
+            </div>
+        </div>
     </div>
-    
-    <p id="promo-info" class="text-info hidden"><span class="asterisk asterisk-info">*</span> Promo subscriptions become available only after assigning a paid subscription.</p>
     
     {if !$di->get('isWizardEnabled')}
         <a href="{$di.router->getRouteUrl('billingAddDevice')}" class="btn btn-success">{$di.t->_('Add Device')}</a>
