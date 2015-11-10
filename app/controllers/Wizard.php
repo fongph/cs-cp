@@ -225,7 +225,7 @@ class Wizard extends BaseController {
                                 $deviceRecord = new DeviceRecord($this->di->get('db'));
                                 $deviceRecord->setUserId($this->auth['id'])
                                     ->setUniqueId($device['SerialNumber'])
-                                    ->setName($device['DeviceName'])
+                                    ->setName(DeviceManager::remove4BytesCharacters($device['DeviceName']))
                                     ->setModel($device['MarketingName'])
                                     ->setOS(DeviceRecord::OS_ICLOUD)
                                     ->setOSVersion($device['ProductVersion']);

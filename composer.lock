@@ -13,7 +13,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-billing.git",
-                "reference": "ea69b4cbedd5fa27076013a7e9d646dd49185e5c"
+                "reference": "b778d8c1a065c6614021d41bd7b8081b9e3a8188"
             },
             "require": {
                 "boomers/cs-models": "dev-master",
@@ -32,7 +32,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2015-11-02 09:11:42"
+            "time": "2015-11-04 15:01:27"
         },
         {
             "name": "boomers/cs-devices",
@@ -40,7 +40,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-devices.git",
-                "reference": "2977f9149fa2cdf2c4a023ba05369347f11e9ba7"
+                "reference": "27012d309e4f684232d23e413d6ee4275c2c0c1a"
             },
             "require": {
                 "boomers/cs-mail": "dev-master",
@@ -64,7 +64,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2015-11-02 09:12:29"
+            "time": "2015-11-10 09:48:42"
         },
         {
             "name": "boomers/cs-icloud",
@@ -837,16 +837,16 @@
         },
         {
             "name": "rastor/jira-client",
-            "version": "0.3.4.8",
+            "version": "0.3.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/oRastor/jira-client.git",
-                "reference": "c561a80c7bcd0be282a17974fb9fec0d5ce9e68c"
+                "reference": "74724e274aba251d8dc0011c8f62199a31b9e5ee"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/oRastor/jira-client/zipball/c561a80c7bcd0be282a17974fb9fec0d5ce9e68c",
-                "reference": "c561a80c7bcd0be282a17974fb9fec0d5ce9e68c",
+                "url": "https://api.github.com/repos/oRastor/jira-client/zipball/74724e274aba251d8dc0011c8f62199a31b9e5ee",
+                "reference": "74724e274aba251d8dc0011c8f62199a31b9e5ee",
                 "shasum": ""
             },
             "require": {
@@ -875,7 +875,7 @@
                 "jira",
                 "rest"
             ],
-            "time": "2015-10-13 05:38:40"
+            "time": "2015-11-04 07:43:50"
         },
         {
             "name": "rastor/system",
