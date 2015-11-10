@@ -132,21 +132,25 @@
             
             var _arrTitle = new Array;
             
-                if(value.type == 'in')
+                if(value.type == 'in') {
                     _arrTitle.push('<b>'+ ( (value.name) ? value.name : value.phone ) +'</b> <span class="date"></span>');
-                else    
+                } else {
                     _arrTitle.push('<span class="date"></span>');
+                }
                         
-                if(value.network > 0)
+                if (value.network > 0) {
                     _arrTitle.push("<span class=\"label label-warning\" style=\"float: right;\">{$di['t']->_('iMessage')}</span>");
+                }
                       
-                if(value.multimedia !== 'none' && !value.network) 
+                if(value.multimedia != 'none' && value.network == 0) {
                     _arrTitle.push("<span class=\"label label-warning\" style=\"float: right;\">{$di['t']->_('MMS')}</span>");
+                }
                 
-                if(value.blocked)
+                if (value.blocked > 0) {
                     _arrTitle.push("<span class=\"label label-danger\" style=\"float: right;\">{$di['t']->_('Blocked')}</span>");
-                else
+                } else if (value.deleted > 0) {
                     _arrTitle.push("<span class=\"label label-warning\" style=\"float: right;\">{$di['t']->_('Deleted')}</span>");
+                }
                     
                 popover_title += _arrTitle.join() + '</h3>';
             
