@@ -152,7 +152,7 @@
                     _arrTitle.push("<span class=\"label label-warning\" style=\"float: right;\">{$di['t']->_('Deleted')}</span>");
                 }
                     
-                popover_title += _arrTitle.join() + '</h3>';
+                popover_title += _arrTitle.join(',') + '</h3>';
             
             
             var content = '<p '+ ( (value.multimedia !== 'none') ? 'class=\"attachment '+ value.multimedia + '\"' : '' ) +'>'+ value.content +'</p>';
