@@ -68,6 +68,7 @@ class Kik extends BaseModel {
 
         return $this->getDb()->query("SELECT
                                             km.`sender_id` id,
+                                            IF (km.`sender_id`=km.`account`, 'out', 'in') type,
                                             ku.`nickname` name,
                                             km.`text`,
                                             km.`timestamp`
