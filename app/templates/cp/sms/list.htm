@@ -5,7 +5,7 @@
 
     {if $isGroup}
     <div class="dialog-panel-top">
-        <p class="text-info">{$di.t->_('Messages with:')} 
+        <p class="text-info">{$di.t->_('Messages with:')}
             {foreach $members as $item last=$last}
                 {if strlen($item.name)}<b>{$item.name|e} ({$item.phone|e})</b>{else}<b>{$item.phone|e}</b>{/if}{if !$last}, {/if}
             {/foreach}
@@ -25,29 +25,29 @@
         <div id="{$item.timestamp}">
             <div class="popover {if $item.type == 'in'}right{else}left{/if}{if $item.blocked > 0} text-danger{/if}">
                 <div class="arrow"></div>
-                
+
                 <h3 class="popover-title">
                     {if $item.type == 'in'}
                     <b>{if strlen($item.name)}{$item.name|e}{else}{$item.phone|e}{/if}</b> <span class="date"></span>
                     {else}
                     <span class="date"></span>
                     {/if}
-                    
+
                     {if $item.network > 0}
                         <span class="label label-warning" style="float: right;">{$di['t']->_('iMessage')}</span>
                     {/if}
-                    
+
                     {if $item.multimedia !== 'none' && $item.network == 0}
                         <span class="label label-warning" style="float: right;">{$di['t']->_('MMS')}</span>
                     {/if}
-                    
+
                     {if $item.blocked}
                         <span class="label label-danger" style="float: right;">{$di['t']->_('Blocked')}</span>
                     {elseif $item.deleted}
                         <span class="label label-warning" style="float: right;">{$di['t']->_('Deleted')}</span>
                     {/if}
                 </h3>
-                
+
                 <div class="popover-content">
                     <p{if $item.multimedia !== 'none'} class="attachment {$item.multimedia}"{/if}>{$item.content|e}</p>
                 </div>
@@ -64,7 +64,7 @@
                 <div class="col-xs-4">
                     <span class="title"></span>
                 </div> *}
-                
+
                 <div class="col-xs-6">
                     <div class="blockSearch">
                         <input type="text" name="search" value="" />
@@ -75,7 +75,7 @@
                         </span>
                     </div>
                 </div>
-                
+
                 <div class="col-xs-6">
                     <div class="blockPerPages">
                         <select class="form-control" id="panel_paginate_per_pages">
@@ -85,10 +85,10 @@
                             <option>100</option>
                         </select>
                         <label>Records per page:</label>
-                    </div> 
+                    </div>
                 </div>
             </div>
-            
+
         </div>
         <div class="panel-body text-center dialog-messages-list">
         </div>
@@ -103,12 +103,19 @@
             </div>
         </div>
     </div>
-    
+
 </div>
 <script type="text/javascript">
+
+    function stripScripts(s) {
+        var $div = $('<div>').html(s);
+        $div.find('script').remove();
+        return $div.html();
+    }
+
     function setDataItems( data, page, perPage, items, countEnteres ) {
         if(!data.length) return false;
-        
+
         items = parseInt(items);
         countEnteres = parseInt(countEnteres);
 
@@ -117,62 +124,61 @@
         var _endPageItems = (to_item > items) ? items : to_item;
 
         if($('#panel_paginate_info')) {
-            $('#panel_paginate_info').html( "Showing "+ ( (_item > 0) ? _item + 1 : 1 ) +" to "+ _endPageItems +" of "+ items +" entries" ); 
+            $('#panel_paginate_info').html( "Showing "+ ( (_item > 0) ? _item + 1 : 1 ) +" to "+ _endPageItems +" of "+ items +" entries" );
             if(countEnteres > 0)
                 $('#panel_paginate_info').append( "&nbsp;(filtered from "+ countEnteres +" total entries)" );
-        }    
+        }
 
         $('.panel-body').html('');
-        
+
         $.each( data, function(key, value) {
             var position = (value.type == 'in') ? 'right' : 'left';
             var blocked = (value.blocked > 0) ? 'text-danger': '';
-            
+
             var popover_title = '<h3 class="popover-title">';
-            
+
             var _arrTitle = new Array;
-            
+
                 if(value.type == 'in') {
                     _arrTitle.push('<b>'+ ( (value.name) ? value.name : value.phone ) +'</b> <span class="date"></span>');
                 } else {
                     _arrTitle.push('<span class="date"></span>');
                 }
-                        
+
                 if (value.network > 0) {
                     _arrTitle.push("<span class=\"label label-warning\" style=\"float: right;\">{$di['t']->_('iMessage')}</span>");
                 }
-                      
+
                 if(value.multimedia != 'none' && value.network == 0) {
                     _arrTitle.push("<span class=\"label label-warning\" style=\"float: right;\">{$di['t']->_('MMS')}</span>");
                 }
-                
+
                 if (value.blocked > 0) {
                     _arrTitle.push("<span class=\"label label-danger\" style=\"float: right;\">{$di['t']->_('Blocked')}</span>");
                 } else if (value.deleted > 0) {
                     _arrTitle.push("<span class=\"label label-warning\" style=\"float: right;\">{$di['t']->_('Deleted')}</span>");
                 }
-                    
+
                 popover_title += _arrTitle.join('') + '</h3>';
-            
-            
-            var content = '<p '+ ( (value.multimedia !== 'none') ? 'class=\"attachment '+ value.multimedia + '\"' : '' ) +'>'+ value.content +'</p>';
-            
+
+            var content = '<p '+ ( (value.multimedia !== 'none') ? 'class=\"attachment '+ value.multimedia + '\"' : '' ) +'>'+ stripScripts(value.content) +'</p>';
+
             $('.panel-body').append('<div id="'+ value.timestamp +'">'+
                                         '<div class="popover '+ position +' '+ blocked +'">'+
                                             '<div class="arrow"></div>'+
-                                             popover_title +   
+                                             popover_title +
                                             '<div class="popover-content">'+
                                                 content +
                                             '</div>'+
                                         '</div>'+
                                     '</div>');
-            
+
         });
-        
+
         Init();
 
     }
-    
+
     function Init() {
         var last = 0;
         $('.dialog-messages-list > div').each(function() {
@@ -189,33 +195,33 @@
             last = moment.unix(timestamp){if isset($customUtcOffset)}.zone({$customUtcOffset}){/if}.format("LL");
         });
     }
-    
+
     $(document).ready(function() {
         // Action Search
         search();
-        
+
         // Paginate
         $("select#panel_paginate_per_pages").change(function () {
             /*-- get new no of items per page --*/
             var $search = '', $url = '';
             if($('.panel-heading .blockSearch > input').length)
                  $search = ($('.panel-heading .blockSearch > input').attr('disabled')) ? $('.panel-heading .blockSearch > input').val() : '';
-             
+
             if($('#blockPaginateLists').data('paginate-ajax'))
                $url = $('#blockPaginateLists').data('paginate-ajax');
-             
-            var newPerPage = parseInt($(this).val());    
+
+            var newPerPage = parseInt($(this).val());
             var $_res = getDateAJAX(newPerPage, 0, $url, $search);
-            
+
             if($('#panel_paginate').data('twbs-pagination'))
                 $('#panel_paginate').data('twbs-pagination').destroy();
-            
+
             if($_res) {
-                
+
                 if(!$_res.items.length) $('.panel-body').html("No data available in lists");
                 // console.log( $_res );
                 setDataItems($_res.items, 0, newPerPage, $_res.countItem, $_res.countEnteres);
-                $('#panel_paginate').twbsPagination({ 
+                $('#panel_paginate').twbsPagination({
                     totalPages: (isset($_res.totalPages)) ? $_res.totalPages : 1,
                     startPage: 1,
                     visiblePages: 0,
@@ -225,16 +231,16 @@
                     prev: '<i class="fa fa-arrow-left"></i>',
                     next: '<i class="fa fa-arrow-right"></i>',
                     prevClass: 'panel_previous',
-                    onPageClick: function (event, page) { 
+                    onPageClick: function (event, page) {
                         var pageData = $('#panel_paginate').data();
                         // console.log(newPerPage, page, $_res.countItem);
                         var $data = getDateAJAX(newPerPage, page, $url, $search);
                         if($data) setDataItems($data.items, page - 1, newPerPage, $data.countItem, $data.countEnteres);
                     }
                 });
-                
+
             }
-            
+
         }).change();
     });
 </script>
