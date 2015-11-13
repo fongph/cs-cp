@@ -79,9 +79,6 @@ $default = array(
             'instructions/uninstall-pumpic-android.html' => 'How to Uninstall Pumpic on Android',
         ),
         'auth' => array(
-            'instructions/activate-location-ios.html',
-            'instructions/activate-location-android.html',
-            'instructions/activate-findmyiphone.html',
             'instructions/keylogger-activation.html',
             'instructions/detect-ios-jailbreak.html',
             'instructions/hide-cydia-icon.html',
