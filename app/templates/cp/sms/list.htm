@@ -106,13 +106,6 @@
 
 </div>
 <script type="text/javascript">
-
-    function stripScripts(s) {
-        var $div = $('<div>').html(s);
-        $div.find('script').remove();
-        return $div.html();
-    }
-
     function setDataItems( data, page, perPage, items, countEnteres ) {
         if(!data.length) return false;
 
@@ -161,7 +154,7 @@
 
                 popover_title += _arrTitle.join('') + '</h3>';
 
-            var content = '<p '+ ( (value.multimedia !== 'none') ? 'class=\"attachment '+ value.multimedia + '\"' : '' ) +'>'+ stripScripts(value.content) +'</p>';
+            var content = '<p '+ ( (value.multimedia !== 'none') ? 'class=\"attachment '+ value.multimedia + '\"' : '' ) +'>'+ value.content +'</p>';
 
             $('.panel-body').append('<div id="'+ value.timestamp +'">'+
                                         '<div class="popover '+ position +' '+ blocked +'">'+

@@ -27,6 +27,17 @@ function isset(element) {
     }    
 }
 
+function json_escape(x) {
+    if (typeof x == 'object') {
+        for (var i in x) if (x.hasOwnProperty(i)) {
+            x[i] = json_escape(x[i]);
+        }
+    } else if (typeof x == 'string') {
+        x = _.escape(x);
+    }
+    return x;
+}
+
 function getDateAJAX(perPage, page, url, search) {
     if(!url)  { 
         console.log('Error: set variable "url"'); return false; 
@@ -46,7 +57,7 @@ function getDateAJAX(perPage, page, url, search) {
         }   
     });
 
-    return $_result;
+    return json_escape($_result);
 }
 
 function search() {
