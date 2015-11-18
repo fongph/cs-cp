@@ -43,6 +43,8 @@ class Wizard extends BaseController {
         parent::init();
         $this->logger = $this->di->get('logger');
         $this->view->title = null;
+        
+        CS\Users\UsersManager::registerListeners($this->di['db']);
     }
 
     public function packageAction()

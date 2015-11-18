@@ -285,7 +285,9 @@ $di->setShared('usersNotesProcessor', function() use ($di) {
     return new CS\Users\UsersNotes($di['db'], $authData['id']);
 });
 
-$di->setShared('eventManager', function() {
+$di->setShared('eventManager', function() use ($di) {
+    CS\Users\UsersManager::registerListeners($di['db']);
+    
     return \EventManager\EventManager::getInstance();
 });
 
