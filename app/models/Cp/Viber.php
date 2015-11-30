@@ -31,6 +31,12 @@ class Viber extends BaseModel {
         $timeFrom = $this->getDb()->quote($params['timeFrom']);
         $timeTo = $this->getDb()->quote($params['timeTo']);
 
+        if ($params['timeFrom'] > 0 && $params['timeTo'] > 0) {
+            $timeQuery = "e.`timestamp` >= {$timeFrom} AND e.`timestamp` <= {$timeTo}";
+        } else {
+            $timeQuery = "1";
+        }
+        
         $fromWhere = "FROM `viber_messages` vm
                             INNER JOIN (
                                 SELECT 
@@ -40,15 +46,13 @@ class Viber extends BaseModel {
                                 WHERE 
                                     `dev_id` = {$devId} AND 
                                     `group_id` IS NULL AND
-                                    `timestamp` >= {$timeFrom} AND
-                                    `timestamp` <= {$timeTo}
+                                    {$timeQuery}
                                 GROUP BY `phone_number`
                             ) vm2 ON vm.`phone_number` = vm2.`phone_number` AND vm.`timestamp` = vm2.`maxTimestamp`
                             WHERE 
                                 vm.`dev_id` = {$devId} AND
                                 vm.`group_id` IS NULL AND
-                                vm.`timestamp` >= {$timeFrom} AND
-                                vm.`timestamp` <= {$timeTo}
+                                {$timeQuery}
                             GROUP BY vm.`phone_number`";
 
         $query = "{$select} {$fromWhere}"
@@ -105,6 +109,12 @@ class Viber extends BaseModel {
         $timeFrom = $this->getDb()->quote($params['timeFrom']);
         $timeTo = $this->getDb()->quote($params['timeTo']);
 
+        if ($params['timeFrom'] > 0 && $params['timeTo'] > 0) {
+            $timeQuery = "e.`timestamp` >= {$timeFrom} AND e.`timestamp` <= {$timeTo}";
+        } else {
+            $timeQuery = "1";
+        }
+        
         $fromWhere = "FROM `viber_messages` vm
                 INNER JOIN (
                     SELECT 
@@ -114,15 +124,13 @@ class Viber extends BaseModel {
                     WHERE 
                         `dev_id` = {$devId} AND 
                         `group_id` IS NOT NULL AND
-                        `timestamp` >= {$timeFrom} AND
-                        `timestamp` <= {$timeTo}
+                        {$timeQuery}
                     GROUP BY `group_id`
                 ) vm2 ON vm.`group_id` = vm2.`group_id` AND vm.`timestamp` = vm2.`maxTimestamp`
                 WHERE 
                     vm.`dev_id` = {$devId} AND
                     vm.`group_id` IS NOT NULL AND
-                    vm.`timestamp` >= {$timeFrom} AND
-                    vm.`timestamp` <= {$timeTo}
+                    {$timeQuery}
                 GROUP BY vm.`group_id`";
 
 
@@ -180,7 +188,12 @@ class Viber extends BaseModel {
 
         $timeFrom = $this->getDb()->quote($params['timeFrom']);
         $timeTo = $this->getDb()->quote($params['timeTo']);
-        $fromWhere = "FROM `viber_calls` WHERE `dev_id` = {$devId} AND `timestamp` >= {$timeFrom} AND `timestamp` <= {$timeTo}";
+        
+        if ($params['timeFrom'] > 0 && $params['timeTo'] > 0) {
+            $fromWhere = "FROM `viber_calls` WHERE `dev_id` = {$devId} AND `timestamp` >= {$timeFrom} AND `timestamp` <= {$timeTo}";
+        } else {
+            $fromWhere = "FROM `viber_calls` WHERE `dev_id` = {$devId}";
+        }
 
         $query = "{$select} {$fromWhere}"
                 . ($search ? " AND ({$search})" : '')
