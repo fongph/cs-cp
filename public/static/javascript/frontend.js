@@ -12797,18 +12797,30 @@ function isset(element) {
     }    
 }
 
-function json_escape(x) {
-    if (typeof x == 'object') {
-        for (var i in x) if (x.hasOwnProperty(i)) {
-            x[i] = json_escape(x[i]);
+function html_escape(text) {
+    if (typeof text == 'object') {
+        for (var i in text) if (text.hasOwnProperty(i)) {
+            text[i] = html_escape(text[i]);
         }
-    } else if (typeof x == 'string') {
-        x = _.escape(x);
+    } else if (typeof text == 'string') {
+        text = _.escape(text);
     }
-    return x;
+    return text;
 }
 
-function getDateAJAX(perPage, page, url, search) {
+function html_strip(text) {
+
+    if (typeof text == 'object') {
+        for (var i in text) if (text.hasOwnProperty(i)) {
+            text[i] = html_strip(text[i]);
+        }
+    } else if (typeof text == 'string') {
+        text = String(text).stripHTML();
+    }
+    return text;
+}
+
+function getDateAJAX(perPage, page, url, search, doStrip) {
     if(!url)  { 
         console.log('Error: set variable "url"'); return false; 
     }
@@ -12827,7 +12839,11 @@ function getDateAJAX(perPage, page, url, search) {
         }   
     });
 
-    return json_escape($_result);
+    if (doStrip) {
+        return html_strip($_result);
+    } else {
+        return html_escape($_result);
+    }
 }
 
 function search() {
