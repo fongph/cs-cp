@@ -18,24 +18,22 @@
     {if !$paid}
         {insert "cp/updatePackage.html"}
     {elseif $hasRecords}
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-lg-6 col-md-6 col-sm-6 pull-right">
-                <div class="daterangepickerWrapper">
-                    <div id="reportrange" class="btn btn-default pull-right">
-                        <i class="fa fa-calendar fa-lg"></i>
-                        <span></span>
-                        <b class="caret"></b>
-                    </div>
+    <div class="row">
+        <div class="col-lg-6 col-md-6 col-sm-6 pull-right">
+            <div class="daterangepickerWrapper">
+                <div id="reportrange" class="btn btn-default pull-right">
+                    <i class="fa fa-calendar fa-lg"></i>
+                    <span></span>
+                    <b class="caret"></b>
                 </div>
             </div>
-            <div class="col-lg-6 col-md-6 col-sm-6 pull-left">
-                <ul class="nav nav-pills nav-pills-fix">
-                    <li><a href="#private" data-toggle="tab">{$di.t->_('Private Messages')}</a></li>
-                    <li><a href="#group" data-toggle="tab">{$di.t->_('Group Messages')}</a></li>
-                    <li><a href="#calls" data-toggle="tab">{$di.t->_('Calls')}</a></li>
-                </ul>
-            </div>
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-6 pull-left">
+            <ul class="nav nav-pills nav-pills-fix">
+                <li><a href="#private" data-toggle="tab">{$di.t->_('Private Messages')}</a></li>
+                <li><a href="#group" data-toggle="tab">{$di.t->_('Group Messages')}</a></li>
+                <li><a href="#calls" data-toggle="tab">{$di.t->_('Calls')}</a></li>
+            </ul>
         </div>
     </div>
 
@@ -84,64 +82,42 @@
     <script type="text/javascript">
         $(document).ready(function() {
             var typeTmpl = _.template('<i class="call-<%= type %> hidden-xs" title="<%= title %>"></i><span class="visible-xs"><%= title %></span>');
-
-            var startDate = moment().subtract('days', 29).startOf('day');
-
-            var selectRanges = {
-                "{$di.t->_('Today')}": [moment().startOf('day'), moment().endOf('day')],
-                "{$di.t->_('Yesterday')}": [moment().subtract('days', 1).startOf('day'), moment().subtract('days', 1).endOf('day')],
-                "{$di.t->_('Last 7 Days')}": [moment().subtract('days', 6).startOf('day'), moment().endOf('day')],
-                "{$di.t->_('Last 30 Days')}": [moment().subtract('days', 29).startOf('day'), moment().endOf('day')],
-                "{$di.t->_('This Month')}": [moment().startOf('month'), moment().endOf('month')],
-                "{$di.t->_('Last Month')}": [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')],
-                "{$di.t->_('All Time')}": [ moment([2010, 11, 31, 00, 00]), moment().endOf('day')]
-            };
-
             var viber = {
-                startDate: moment().subtract('days', 29).startOf('day'),
-                endDate: moment().endOf('day'),
+                startDate: null,
+                endDate: null,
                 currentTab: '',
                 privateTable: null,
                 groupTable: null,
                 callsTable: null,
                 privateMessageLinkTemplate: _.template('<a href="{$di.router->getRouteUrl("viberTab", ["tab"=>"private"])}/<%= id %>"><%= date %></a>'),
                 groupMessageLinkTemplate: _.template('<a href="{$di.router->getRouteUrl("viberTab", ["tab"=>"group"])}/<%= group %>"><%= date %></a>'),
-                setRange: function(start, end) {
-                    if (start.isValid() && end.isValid()) {
-                        this.startDate = start;
-                        this.endDate = end;
-                        $('#reportrange span').html(start.format('LL') + ' - ' + end.format('LL'));
-
-                        _.find(selectRanges, function(period, name) {
-                            if ((moment(period[0]).format('l') === start.format('l')) && (moment(period[0]).format('l') === start.format('l'))) {
-                                $('#reportrange span').html(name);
-                                return true;
-                            }
-                            return false;
-                        });
-
-                        var url = '';
-                        if (this.currentTab === 'private') {
-                            url = '{$di.config.domain}/cp/viber/private?';
-                        } else if (this.currentTab === 'group') {
-                            url = '{$di.config.domain}/cp/viber/group?';
-                        } else if (this.currentTab === 'calls') {
-                            url = '{$di.config.domain}/cp/viber/calls?';
-                        }
-
-                        return url + $.param({
-                            timeFrom: moment(start).unix(),
-                            timeTo: moment(end).unix()
-                        });
+                getRangeUrl: function(start, end) {
+                    if (start === null && end === null) {
+                        this.startDate = this.endDate = -1;
                     } else {
-                        return setRange(this.startDate, this.endDate);
+                        this.startDate = moment(start).unix();
+                        this.endDate = moment(end).unix();
                     }
+
+                    var url = '';
+                    if (this.currentTab === 'private') {
+                        url = '{$di.config.domain}/cp/viber/private?';
+                    } else if (this.currentTab === 'group') {
+                        url = '{$di.config.domain}/cp/viber/group?';
+                    } else if (this.currentTab === 'calls') {
+                        url = '{$di.config.domain}/cp/viber/calls?';
+                    }
+
+                    return url + $.param({
+                        timeFrom: this.startDate,
+                        timeTo: this.endDate
+                    });
                 },
                 initPrivate: function() {
                     var privateTable = $('#private-datatable').dataTable({
                         bProcessing: true,
                         bServerSide: true,
-                        sAjaxSource: this.setRange(this.startDate, this.endDate),
+                        sAjaxSource: this.getRangeUrl(),
                         bPaginate: true,
                         bFilter: false,
                         bSort: true,
@@ -193,7 +169,7 @@
                     var groupTable = $('#group-datatable').dataTable({
                         bProcessing: true,
                         bServerSide: true,
-                        sAjaxSource: this.setRange(this.startDate, this.endDate),
+                        sAjaxSource: this.getRangeUrl(),
                         bPaginate: true,
                         bFilter: false,
                         bSort: true,
@@ -243,7 +219,7 @@
                     var callsTable = $('#calls-datatable').dataTable({
                         bProcessing: true,
                         bServerSide: true,
-                        sAjaxSource: this.setRange(this.startDate, this.endDate),
+                        sAjaxSource: this.getRangeUrl(),
                         bPaginate: true,
                         bFilter: true,
                         bSort: true,
@@ -312,7 +288,7 @@
                         }
                     }
 
-                    this.reloadTable(this.setRange(this.startDate, this.endDate));
+                    this.reloadTable(this.getRangeUrl());
                 },
                 reloadTable: function(url) {
                     if (this.currentTab === 'private') {
@@ -344,30 +320,9 @@
             } else {
                 $('.nav-pills a[href=#private]').tab('show');
             }
-
-            $('#reportrange').daterangepicker({
-                ranges: selectRanges,
-                startDate: startDate,
-                endDate: moment().endOf('day'),
-                format: 'LL',
-                locale: {
-                    applyLabel: "{$di.t->_('Apply')}",
-                    cancelLabel: "{$di.t->_('Cancel')}",
-                    fromLabel: "{$di.t->_('From')}",
-                    toLabel: "{$di.t->_('To')}",
-                    customRangeLabel: "{$di.t->_('Custom Range')}",
-                    daysOfWeek: moment.langData()._weekdaysMin.slice(),
-                    monthNames: (function() {
-                        var res = [];
-                        for (var i = 0; i < 12; i++) {
-                            res.push(moment([0, i]).format('MMM'));
-                        }
-                        return res;
-                    })(),
-                    firstDay: moment.langData()._week.dow
-                }
-            }, function(from, to) {
-                viber.reloadTable(viber.setRange(from, to));
+            
+            $('#reportrange').timeRange(function(from, to) {
+                viber.reloadTable(viber.getRangeUrl(from, to));
             });
         });
     </script>

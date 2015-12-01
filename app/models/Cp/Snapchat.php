@@ -25,6 +25,12 @@ class Snapchat extends BaseModel
         $timeTo = $this->getDb()->quote($params['timeTo']);
         $account = $this->getDb()->quote($params['account']);
 
+        if ($params['timeFrom'] > 0 && $params['timeTo'] > 0) {
+            $timeQuery = "`timestamp` >= {$timeFrom} AND `timestamp` <= {$timeTo}";
+        } else {
+            $timeQuery = "1";
+        }
+        
         $select = "SELECT s.`id`, s.`content`, s.`content_type`, s.`timestamp`, s.`user_id`, (SELECT `nickname` FROM `snapchat_users` WHERE `dev_id` = {$devId} AND `account_id` = {$account} AND `user_id` = s.`user_id` LIMIT 1) name";
 
         $fromWhere = "FROM (SELECT
@@ -34,8 +40,7 @@ class Snapchat extends BaseModel
                         WHERE
                             `dev_id` = {$devId} AND
                             `account_id` = {$account} AND
-                            `timestamp` >= {$timeFrom} AND
-                            `timestamp` <= {$timeTo}
+                            {$timeQuery}
                         GROUP BY `user_id`) last
                         INNER JOIN `snapchat_messages` s ON s.`dev_id` = {$devId} AND s.`account_id` = {$account} AND s.`user_id` = last.`user_id` AND last.`max_time` = s.`timestamp`";
 
@@ -92,7 +97,7 @@ class Snapchat extends BaseModel
                                             sm.`account_id` = {$escapedAccount} AND
                                             sm.`user_id` = {$escapedUser}
                                         ORDER BY `timestamp` DESC")->fetchAll();
-                                            
+
         foreach ($messages as $key => $value) {
             if ($value['content_type'] == 'image') {
                 $messages[$key]['image'] = $this->getImageUrl($devId, $account, $value['content']);

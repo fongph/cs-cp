@@ -17,29 +17,28 @@
     {if !$paid}
         {insert "cp/updatePackage.html"}
     {elseif count($accountsList)}
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-lg-6 col-md-6 col-sm-6 form-horizontal">
-                <div class="form-group">
-                    <label for="account" class="col-sm-2 control-label">{$di.t->_('Account')}</label>
-                    <div class="col-sm-10">
-                        {include "scripts/select.htm" name="account" id="account" class="form-control" keys=$accountsList values=$accountsList selected=$account}
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="account" class="col-sm-2 control-label">{$di.t->_('Folder')}</label>
-                    <div class="col-sm-10">
-                        {include "scripts/select.htm" name="path" id="path" class="form-control" options=$pathsList}
-                    </div>
+    
+    <div class="row">
+        <div class="col-lg-6 col-md-6 col-sm-6 form-horizontal">
+            <div class="form-group">
+                <label for="account" class="col-sm-2 control-label">{$di.t->_('Account')}</label>
+                <div class="col-sm-10">
+                    {include "scripts/select.htm" name="account" id="account" class="form-control" keys=$accountsList values=$accountsList selected=$account}
                 </div>
             </div>
-            <div class="col-lg-6 col-md-6 col-sm-6">
-                <div class="daterangepickerWrapper">
-                    <div id="reportrange" class="btn btn-default pull-right">
-                        <i class="fa fa-calendar fa-lg"></i>
-                        <span></span>
-                        <b class="caret"></b>
-                    </div>
+            <div class="form-group">
+                <label for="account" class="col-sm-2 control-label">{$di.t->_('Folder')}</label>
+                <div class="col-sm-10">
+                    {include "scripts/select.htm" name="path" id="path" class="form-control" options=$pathsList}
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-6">
+            <div class="daterangepickerWrapper">
+                <div id="reportrange" class="btn btn-default pull-right">
+                    <i class="fa fa-calendar fa-lg"></i>
+                    <span></span>
+                    <b class="caret"></b>
                 </div>
             </div>
         </div>
@@ -58,54 +57,29 @@
     </div>
     <script>
         $(document).ready(function() {
-            var selectRanges = {
-                "{$di.t->_('Today')}": [moment().startOf('day'), moment().endOf('day')],
-                "{$di.t->_('Yesterday')}": [moment().subtract('days', 1).startOf('day'), moment().subtract('days', 1).endOf('day')],
-                "{$di.t->_('Last 7 Days')}": [moment().subtract('days', 6).startOf('day'), moment().endOf('day')],
-                "{$di.t->_('Last 30 Days')}": [moment().subtract('days', 29).startOf('day'), moment().endOf('day')],
-                "{$di.t->_('This Month')}": [moment().startOf('month'), moment().endOf('month')],
-                "{$di.t->_('Last Month')}": [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')],
-                "{$di.t->_('All Time')}": [ moment([2010, 11, 31, 00, 00]), moment().endOf('day')]
-            };
-
             var emails = {
-                startDate: moment().subtract('days', 29).startOf('day'),
-                endDate: moment().endOf('day'),
                 linkTemplate: _.template('<a href="{$di.router->getRouteUrl("emails")}/<%- account %>/<%- id %>"><%- date %></a>'),
                 table: null,
-                setRange: function(start, end) {
-                    this.range = [start, end];
-
-                    if (start.isValid() && start.isValid()) {
-                        this.startDate = start;
-                        this.endDate = end;
-                        $('#reportrange span').html(start.format('LL') + ' - ' + end.format('LL'));
-
-                        _.find(selectRanges, function(period, name) {
-                            if ((moment(period[0]).format('l') === start.format('l')) && (moment(period[0]).format('l') === start.format('l'))) {
-                                $('#reportrange span').html(name);
-                                return true;
-                            }
-                            return false;
-                        });
-
-                        var url = '{$di.config.domain}/cp/emails?';
-
-                        return url + $.param({
-                            account: $('#account').val(),
-                            path: $('#path').val(),
-                            timeFrom: moment(start).unix(),
-                            timeTo: moment(end).unix()
-                        });
+                getRangeUrl: function(start, end) {
+                    if (start && end && start.isValid() && start.isValid()) {
+                        start = moment(start).unix();
+                        end = moment(end).unix();
                     } else {
-                        return setRange(this.startDate, this.endDate);
+                        start = end = -1;
                     }
+                    
+                    return '{$di.router->getRouteUrl("emails")}?' + $.param({
+                        account: $('#account').val(),
+                        path: $('#path').val(),
+                        timeFrom: start,
+                        timeTo: end
+                    });
                 },
                 initTable: function() {
                     var table = $('#datatable').dataTable({
                         bProcessing: true,
                         bServerSide: true,
-                        sAjaxSource: this.setRange(this.startDate, this.endDate),
+                        sAjaxSource: this.getRangeUrl(),
                         bPaginate: true,
                         bFilter: false,
                         bSort: true,
@@ -159,7 +133,7 @@
             });
 
             $('#path').change(function() {
-                emails.reloadTable(emails.setRange(emails.startDate, emails.endDate));
+                emails.reloadTable(emails.getRangeUrl(emails.startDate, emails.endDate));
                 if ($(this).val() === 'sent') {
                     $('#datatable th:nth-child(2)').html("{$di.t->_('To')}");
                 } else {
@@ -167,29 +141,8 @@
                 }
             });
 
-            $('#reportrange').daterangepicker({
-                ranges: selectRanges,
-                startDate: emails.startDate,
-                endDate: moment().endOf('day'),
-                format: 'LL',
-                locale: {
-                    applyLabel: "{$di.t->_('Apply')}",
-                    cancelLabel: "{$di.t->_('Cancel')}",
-                    fromLabel: "{$di.t->_('From')}",
-                    toLabel: "{$di.t->_('To')}",
-                    customRangeLabel: "{$di.t->_('Custom Range')}",
-                    daysOfWeek: moment.langData()._weekdaysMin.slice(),
-                    monthNames: (function() {
-                        var res = [];
-                        for (var i = 0; i < 12; i++) {
-                            res.push(moment([0, i]).format('MMM'));
-                        }
-                        return res;
-                    })(),
-                    firstDay: moment.langData()._week.dow
-                }
-            }, function(from, to) {
-                emails.reloadTable(emails.setRange(from, to));
+            $('#reportrange').timeRange(function(from, to) {
+                emails.reloadTable(emails.getRangeUrl(from, to));
             });
         });
     </script>

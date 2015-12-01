@@ -27,9 +27,13 @@ class Calls extends BaseModel {
 
         $select = "SELECT `timestamp`, `call_type`, `phone_number`, `number_name`, `duration`";
 
-        $timeFrom = $this->getDb()->quote($params['timeFrom']);
-        $timeTo = $this->getDb()->quote($params['timeTo']);
-        $fromWhere = "FROM `call_log` WHERE `dev_id` = {$devId} AND `timestamp` >= {$timeFrom} AND `timestamp` <= {$timeTo}";
+        if ($params['timeFrom'] > 0 && $params['timeTo'] > 0) {
+            $timeFrom = $this->getDb()->quote($params['timeFrom']);
+            $timeTo = $this->getDb()->quote($params['timeTo']);
+            $fromWhere = "FROM `call_log` WHERE `dev_id` = {$devId} AND `timestamp` >= {$timeFrom} AND `timestamp` <= {$timeTo}";
+        } else {
+            $fromWhere = "FROM `call_log` WHERE `dev_id` = {$devId}";
+        }
 
         $query = "{$select} {$fromWhere}"
                 . ($search ? " AND ({$search})" : '')

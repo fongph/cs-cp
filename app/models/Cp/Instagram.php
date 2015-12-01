@@ -34,14 +34,19 @@ class Instagram extends BaseModel
             $page = 1;
         }
 
+        if ($dateFrom > 0 && $dateTo > 0) {
+            $timeQuery = "`timestamp` >= {$dateFrom} AND `timestamp` <= {$dateTo}";
+        } else {
+            $timeQuery = "1";
+        }
+        
         $records = $this->getDb()->query("SELECT COUNT(*) FROM `instagram_posts`
                         WHERE 
                             `dev_id` = {$devId} AND
                             `account_id` = {$accountId} AND
                             `author_id` = {$accountId} AND
                             `status` != 'none' AND
-                            `timestamp` >= {$dateFrom} AND
-                            `timestamp` <= {$dateTo}")->fetchColumn();
+                            {$timeQuery}")->fetchColumn();
 
         $pages = max(ceil($records / $recordsPerPage), 1);
 
@@ -65,8 +70,7 @@ class Instagram extends BaseModel
                         p.`account_id` = {$accountId} AND
                         p.`author_id` = {$accountId} AND
                         p.`status` != 'none' AND
-                        p.`timestamp` >= {$dateFrom} AND
-                        p.`timestamp` <= {$dateTo}
+                        {$timeQuery}
                     ORDER BY `timestamp` DESC
                     LIMIT {$start}, {$recordsPerPage}")->fetchAll();
 
@@ -88,14 +92,19 @@ class Instagram extends BaseModel
             $page = 1;
         }
 
+        if ($dateFrom > 0 && $dateTo > 0) {
+            $timeQuery = "`timestamp` >= {$dateFrom} AND `timestamp` <= {$dateTo}";
+        } else {
+            $timeQuery = "1";
+        }
+        
         $records = $this->getDb()->query("SELECT COUNT(*) FROM `instagram_posts`
                         WHERE 
                             `dev_id` = {$devId} AND
                             `account_id` = {$accountId} AND
                             `author_id` != {$accountId} AND
                             `status` != 'none' AND
-                            `timestamp` >= {$dateFrom} AND
-                            `timestamp` <= {$dateTo}")->fetchColumn();
+                            {$timeQuery}")->fetchColumn();
 
         $pages = max(ceil($records / $recordsPerPage), 1);
 
@@ -119,8 +128,7 @@ class Instagram extends BaseModel
                         p.`account_id` = {$accountId} AND
                         p.`author_id` != {$accountId} AND
                         p.`status` != 'none' AND
-                        p.`timestamp` >= {$dateFrom} AND
-                        p.`timestamp` <= {$dateTo}
+                        {$timeQuery}
                     ORDER BY `timestamp` DESC
                     LIMIT {$start}, {$recordsPerPage}")->fetchAll();
 
@@ -142,6 +150,12 @@ class Instagram extends BaseModel
             $page = 1;
         }
 
+        if ($dateFrom > 0 && $dateTo > 0) {
+            $timeQuery = "p.`timestamp` >= {$dateFrom} AND p.`timestamp` <= {$dateTo}";
+        } else {
+            $timeQuery = "1";
+        }
+        
         $records = $this->getDb()->query("SELECT COUNT(DISTINCT c.`post_id`) 
                         FROM `instagram_comments` c
                         INNER JOIN `instagram_posts` p ON p.`dev_id` = c.`dev_id` AND p.`account_id` = c.`account_id` AND p.`post_id` = c.`post_id`
@@ -150,8 +164,7 @@ class Instagram extends BaseModel
                             c.`account_id` = {$accountId} AND
                             c.`author_id` = {$accountId} AND
                             p.`status` != 'none' AND
-                            p.`timestamp` >= {$dateFrom} AND
-                            p.`timestamp` <= {$dateTo}")->fetchColumn();
+                            {$timeQuery}")->fetchColumn();
 
         $pages = max(ceil($records / $recordsPerPage), 1);
 
@@ -176,8 +189,7 @@ class Instagram extends BaseModel
                         c.`account_id` = {$accountId} AND
                         c.`author_id` = {$accountId} AND
                         p.`status` != 'none' AND
-                        p.`timestamp` >= {$dateFrom} AND
-                        p.`timestamp` <= {$dateTo}
+                        {$timeQuery}
                     GROUP BY p.`id`
                     ORDER BY `timestamp` DESC
                     LIMIT {$start}, {$recordsPerPage}")->fetchAll();
