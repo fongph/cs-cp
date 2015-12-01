@@ -94,13 +94,19 @@ class Emails extends BaseModel
         $timeTo = $this->getDb()->quote($params['timeTo']);
         $account = $this->getDb()->quote($params['account']);
 
+        
+        if ($params['timeFrom'] > 0 && $params['timeTo'] > 0) {
+            $timeQuery = "e.`timestamp` >= {$timeFrom} AND e.`timestamp` <= {$timeTo}";
+        } else {
+            $timeQuery = "1";
+        }
+        
         if ($params['path'] === self::PATH_ALL_KEY) {
             $fromWhere = "FROM `emails` e
                           WHERE
                                 e.`dev_id` = {$devId} AND
                                 e.`account` = {$account} AND
-                                e.`timestamp` >= {$timeFrom} AND
-                                e.`timestamp` <= {$timeTo}";
+                                $timeQuery";
         } else {
             $path = $this->getDb()->quote($params['path']);
 
@@ -109,8 +115,7 @@ class Emails extends BaseModel
                                 e.`dev_id` = {$devId} AND
                                 e.`account` = {$account} AND
                                 e.`parent` = {$path} AND
-                                e.`timestamp` >= {$timeFrom} AND
-                                e.`timestamp` <= {$timeTo}";
+                                $timeQuery";
         }
 
 

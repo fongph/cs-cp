@@ -24,71 +24,73 @@ class Facebook extends BaseModel {
 
         $select = "SELECT f.`id`, f.`name`, f.`text`, f.`timestamp`, f.`group`, f.`members`";
 
-        if (isset($params['timeFrom'], $params['timeTo'], $params['account'])) {
-            $timeFrom = $this->getDb()->quote($params['timeFrom']);
-            $timeTo = $this->getDb()->quote($params['timeTo']);
-            $account = $this->getDb()->quote($params['account']);
-            $fromWhere = "FROM
-                        ((SELECT 
-                                    fm.`user_id` id, 
-                                    fm.`user_name` name, 
-                                    LEFT(fm.`text`, 201) `text`,
-                                    fm.`timestamp`,
-                                    fm.`group_id` `group`,
-                                    1 members 
-                        FROM `facebook_messages` fm
-                        INNER JOIN (SELECT 
-                                MAX(`timestamp`) maxTimestamp,
-                                        `user_id`
-                                FROM `facebook_messages` 
-                                WHERE 
+        
+        $timeFrom = $this->getDb()->quote($params['timeFrom']);
+        $timeTo = $this->getDb()->quote($params['timeTo']);
+        $account = $this->getDb()->quote($params['account']);
+        
+        if ($params['timeFrom'] > 0 && $params['timeTo'] > 0) {
+            $timeQuery = "`timestamp` >= {$timeFrom} AND `timestamp` <= {$timeTo}";
+        } else {
+            $timeQuery = "1";
+        }
+        
+        $fromWhere = "FROM
+                    ((SELECT 
+                                fm.`user_id` id, 
+                                fm.`user_name` name, 
+                                LEFT(fm.`text`, 201) `text`,
+                                fm.`timestamp`,
+                                fm.`group_id` `group`,
+                                1 members 
+                    FROM `facebook_messages` fm
+                    INNER JOIN (SELECT 
+                            MAX(`timestamp`) maxTimestamp,
+                                    `user_id`
+                            FROM `facebook_messages` 
+                            WHERE 
+                                `dev_id` = {$devId} AND 
+                                `account` = {$account} AND
+                                `group_id` IS NULL AND
+                                {$timeQuery}
+                            GROUP BY `user_name`) fm2 ON fm.`user_id` = fm2.`user_id` AND fm.`timestamp` = fm2.`maxTimestamp`
+                    WHERE
+                            fm.`dev_id` = {$devId} AND
+                            fm.`account` = {$account} AND
+                            fm.`group_id` IS NULL AND
+                            {$timeQuery}
+                    GROUP BY 
+                            fm.`user_name` 
+                    ORDER BY  
+                            fm.`timestamp`) UNION 
+                    (SELECT 
+                            fm.`user_id`,
+                            fm.`user_name` name,
+                            LEFT(fm.`text`, 201) text,
+                            fm.`timestamp`,
+                            fm.`group_id` `group`, 
+                            (SELECT COUNT(DISTINCT `user_id`) FROM `facebook_messages` WHERE `dev_id` = {$devId} AND `account` = {$account} AND `group_id`=fm.`group_id` AND `timestamp` >= {$timeFrom} AND `timestamp` <= {$timeTo}) 
+                    FROM `facebook_messages` fm
+                    INNER JOIN (
+                            SELECT 
+                                    MAX(`timestamp`) maxTimestamp,
+                                    `group_id`
+                            FROM `facebook_messages` 
+                            WHERE 
                                     `dev_id` = {$devId} AND 
                                     `account` = {$account} AND
-                                    `group_id` IS NULL AND
-                                    `timestamp` >= {$timeFrom} AND
-                                    `timestamp` <= {$timeTo}
-                                GROUP BY `user_name`) fm2 ON fm.`user_id` = fm2.`user_id` AND fm.`timestamp` = fm2.`maxTimestamp`
-                        WHERE
-                                fm.`dev_id` = {$devId} AND
-                                fm.`account` = {$account} AND
-                                fm.`group_id` IS NULL AND
-                                fm.`timestamp` >= {$timeFrom} AND
-                                fm.`timestamp` <= {$timeTo}
-                        GROUP BY 
-                                fm.`user_name` 
-                        ORDER BY  
-                                fm.`timestamp`) UNION 
-                        (SELECT 
-                                fm.`user_id`,
-                                fm.`user_name` name,
-                                LEFT(fm.`text`, 201) text,
-                                fm.`timestamp`,
-                                fm.`group_id` `group`, 
-                                (SELECT COUNT(DISTINCT `user_id`) FROM `facebook_messages` WHERE `dev_id` = {$devId} AND `account` = {$account} AND `group_id`=fm.`group_id` AND `timestamp` >= {$timeFrom} AND `timestamp` <= {$timeTo}) 
-                        FROM `facebook_messages` fm
-                        INNER JOIN (
-                                SELECT 
-                                        MAX(`timestamp`) maxTimestamp,
-                                        `group_id`
-                                FROM `facebook_messages` 
-                                WHERE 
-                                        `dev_id` = {$devId} AND 
-                                        `account` = {$account} AND
-                                        `group_id` IS NOT NULL AND
-                                        `timestamp` >= {$timeFrom} AND
-                                        `timestamp` <= {$timeTo}
-                                GROUP BY `group_id`) fm2 ON fm.`group_id` = fm2.`group_id` AND fm.`timestamp` = fm2.`maxTimestamp`
-                        WHERE 
-                                fm.`dev_id` = {$devId} AND
-                                fm.`account` = {$account} AND
-                                fm.`group_id` IS NOT NULL AND
-                                fm.`timestamp` >= {$timeFrom} AND
-                                fm.`timestamp` <= {$timeTo}
-                        GROUP BY 
-                                fm.`group_id` 
-                        ORDER BY  
-                                fm.`timestamp` DESC)) f";
-        }
+                                    `group_id` IS NOT NULL AND
+                                    {$timeQuery}
+                            GROUP BY `group_id`) fm2 ON fm.`group_id` = fm2.`group_id` AND fm.`timestamp` = fm2.`maxTimestamp`
+                    WHERE 
+                            fm.`dev_id` = {$devId} AND
+                            fm.`account` = {$account} AND
+                            fm.`group_id` IS NOT NULL AND
+                            {$timeQuery}
+                    GROUP BY 
+                            fm.`group_id` 
+                    ORDER BY  
+                            fm.`timestamp` DESC)) f";
 
         $query = "{$select} {$fromWhere}"
                 . " ORDER BY {$sort} LIMIT {$params['start']}, {$params['length']}";
@@ -139,16 +141,17 @@ class Facebook extends BaseModel {
             $select = "SELECT `user_id` id, `user_name` name, `type`, `duration`, `timestamp`";
         }
 
-        if (isset($params['timeFrom'], $params['timeTo'], $params['account'])) {
-            $timeFrom = $this->getDb()->quote($params['timeFrom']);
-            $timeTo = $this->getDb()->quote($params['timeTo']);
-            $account = $this->getDb()->quote($params['account']);
-            $fromWhere = "FROM `facebook_calls` WHERE
-                    `dev_id` = {$devId} AND
-                    `account` = {$account} AND
-                    `timestamp` >= {$timeFrom} AND
-                    `timestamp` <= {$timeTo}";
+        $timeFrom = $this->getDb()->quote($params['timeFrom']);
+        $timeTo = $this->getDb()->quote($params['timeTo']);
+        $account = $this->getDb()->quote($params['account']);
+        
+        if ($params['timeFrom'] > 0 && $params['timeTo'] > 0) {
+            $timeQuery = "`timestamp` >= {$timeFrom} AND `timestamp` <= {$timeTo}";
+        } else {
+            $timeQuery = "1";
         }
+        
+        $fromWhere = "FROM `facebook_calls` WHERE `dev_id` = {$devId} AND `account` = {$account} AND {$timeQuery}";
 
 
         $query = "{$select} {$fromWhere}"

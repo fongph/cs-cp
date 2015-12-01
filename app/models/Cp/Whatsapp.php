@@ -27,30 +27,32 @@ class Whatsapp extends BaseModel {
 
         $select = "SELECT wm.`phone_number` id, wm.`number_name` name, LEFT(wm.`text`, 201) `text`, wm.`timestamp`";
 
-        if (isset($params['timeFrom'], $params['timeTo'])) {
-            $timeFrom = $this->getDb()->quote($params['timeFrom']);
-            $timeTo = $this->getDb()->quote($params['timeTo']);
-            
-            $fromWhere = "FROM `whatsapp_messages` wm
-                            INNER JOIN (
-                                SELECT 
-                                    MAX(`timestamp`) maxTimestamp,
-                                    `phone_number`
-                                FROM `whatsapp_messages` 
-                                WHERE 
-                                    `dev_id` = {$devId} AND 
-                                    `group_id` IS NULL AND
-                                    `timestamp` >= {$timeFrom} AND
-                                    `timestamp` <= {$timeTo}
-                                GROUP BY `phone_number`
-                            ) wm2 ON wm.`phone_number` = wm2.`phone_number` AND wm.`timestamp` = wm2.`maxTimestamp`
-                            WHERE 
-                                wm.`dev_id` = {$devId} AND
-                                wm.`group_id` IS NULL AND
-                                wm.`timestamp` >= {$timeFrom} AND
-                                wm.`timestamp` <= {$timeTo}
-                            GROUP BY wm.`phone_number`";
+        $timeFrom = $this->getDb()->quote($params['timeFrom']);
+        $timeTo = $this->getDb()->quote($params['timeTo']);
+        
+        if ($params['timeFrom'] > 0 && $params['timeTo'] > 0) {
+            $timeQuery = "`timestamp` >= {$timeFrom} AND `timestamp` <= {$timeTo}";
+        } else {
+            $timeQuery = "1";
         }
+            
+        $fromWhere = "FROM `whatsapp_messages` wm
+                        INNER JOIN (
+                            SELECT 
+                                MAX(`timestamp`) maxTimestamp,
+                                `phone_number`
+                            FROM `whatsapp_messages` 
+                            WHERE 
+                                `dev_id` = {$devId} AND 
+                                `group_id` IS NULL AND
+                                {$timeQuery}
+                            GROUP BY `phone_number`
+                        ) wm2 ON wm.`phone_number` = wm2.`phone_number` AND wm.`timestamp` = wm2.`maxTimestamp`
+                        WHERE 
+                            wm.`dev_id` = {$devId} AND
+                            wm.`group_id` IS NULL AND
+                            {$timeQuery}
+                        GROUP BY wm.`phone_number`";
 
         $query = "{$select} {$fromWhere}"
                 . ($search ? " AND ({$search})" : '')
@@ -99,30 +101,32 @@ class Whatsapp extends BaseModel {
 
         $select = "SELECT wm.`number_name` name, LEFT(wm.`text`, 201) text, wm.`timestamp`, wm.`group_id` `group`";
 
-        if (isset($params['timeFrom'], $params['timeTo'])) {
-            $timeFrom = $this->getDb()->quote($params['timeFrom']);
-            $timeTo = $this->getDb()->quote($params['timeTo']);
-
-            $fromWhere = "FROM `whatsapp_messages` wm
-                INNER JOIN (
-                    SELECT 
-                        MAX(`timestamp`) maxTimestamp,
-                        `group_id`
-                    FROM `whatsapp_messages` 
-                    WHERE 
-                        `dev_id` = {$devId} AND 
-                        `group_id` IS NOT NULL AND
-                        `timestamp` >= {$timeFrom} AND
-                        `timestamp` <= {$timeTo}
-                    GROUP BY `group_id`
-                ) wm2 ON wm.`group_id` = wm2.`group_id` AND wm.`timestamp` = wm2.`maxTimestamp`
-                WHERE 
-                    wm.`dev_id` = {$devId} AND
-                    wm.`group_id` IS NOT NULL AND
-                    wm.`timestamp` >= {$timeFrom} AND
-                    wm.`timestamp` <= {$timeTo}
-                GROUP BY wm.`group_id`";
+        $timeFrom = $this->getDb()->quote($params['timeFrom']);
+        $timeTo = $this->getDb()->quote($params['timeTo']);
+        
+        if ($params['timeFrom'] > 0 && $params['timeTo'] > 0) {
+            $timeQuery = "`timestamp` >= {$timeFrom} AND `timestamp` <= {$timeTo}";
+        } else {
+            $timeQuery = "1";
         }
+
+        $fromWhere = "FROM `whatsapp_messages` wm
+            INNER JOIN (
+                SELECT 
+                    MAX(`timestamp`) maxTimestamp,
+                    `group_id`
+                FROM `whatsapp_messages` 
+                WHERE 
+                    `dev_id` = {$devId} AND 
+                    `group_id` IS NOT NULL AND
+                    {$timeQuery}
+                GROUP BY `group_id`
+            ) wm2 ON wm.`group_id` = wm2.`group_id` AND wm.`timestamp` = wm2.`maxTimestamp`
+            WHERE 
+                wm.`dev_id` = {$devId} AND
+                wm.`group_id` IS NOT NULL AND
+                {$timeQuery}
+            GROUP BY wm.`group_id`";
 
         $query = "{$select} {$fromWhere}"
                 . ($search ? " AND ({$search})" : '')
@@ -172,13 +176,17 @@ class Whatsapp extends BaseModel {
         }
 
         $select = "SELECT `number_name` name, `type`, `duration`, `timestamp`";
-
+        
         $timeFrom = $this->getDb()->quote($params['timeFrom']);
         $timeTo = $this->getDb()->quote($params['timeTo']);
-        $fromWhere = "FROM `whatsapp_calls` WHERE
-                `dev_id` = {$devId} AND
-                `timestamp` >= {$timeFrom} AND
-                `timestamp` <= {$timeTo}";
+        
+        if ($params['timeFrom'] > 0 && $params['timeTo'] > 0) {
+            $timeQuery = "`timestamp` >= {$timeFrom} AND `timestamp` <= {$timeTo}";
+        } else {
+            $timeQuery = "1";
+        }
+        
+        $fromWhere = "FROM `whatsapp_calls` WHERE `dev_id` = {$devId} AND {$timeQuery}";
 
 
         $query = "{$select} {$fromWhere}"

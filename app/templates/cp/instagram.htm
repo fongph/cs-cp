@@ -119,46 +119,16 @@
                 });
 
                 var instagram = {
-                    selectRanges: {
-                        "{$di.t->_('Today')}": [moment().startOf('day'), moment().endOf('day')],
-                        "{$di.t->_('Yesterday')}": [moment().subtract('days', 1).startOf('day'), moment().subtract('days', 1).endOf('day')],
-                        "{$di.t->_('Last 7 Days')}": [moment().subtract('days', 6).startOf('day'), moment().endOf('day')],
-                        "{$di.t->_('Last 30 Days')}": [moment().subtract('days', 29).startOf('day'), moment().endOf('day')],
-                        "{$di.t->_('This Month')}": [moment().startOf('month'), moment().endOf('month')],
-                        "{$di.t->_('Last Month')}": [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')],
-                        "{$di.t->_('All Time')}": [ moment([2010, 11, 31, 00, 00]), moment().endOf('day')]
-                    },
                     noData: 'No data found!',
                     loading: 'Loading...',
                     statusText: _.template('Showing <%= from %> to <%= to %> of <%= total %> entries'),
                     postTemplate: _.template('<a href="{$di.router->getRouteUrl("instagram")}/<%= account %>/post/<%= post %>" class="item"><div class="date"><%= date %></div><% if (isVideo) { %><i class="fa fa-play"></i><% } %><img src="<%= image %>" class="blur-for-support" alt=""><div class="comments"><i class="fa fa-comment"></i> <%= comments %></div></a>'),
-                    startDate: moment().subtract('days', 29).startOf('day'),
-                    endDate: moment().endOf('day'),
+                    startDate: -1,
+                    endDate: -1,
                     page: 1,
                     last: null,
                     initRangePicker: function () {
-                        $('#reportrange').daterangepicker({
-                            ranges: this.selectRanges,
-                            startDate: this.startDate,
-                            endDate: this.endDate,
-                            format: 'LL',
-                            locale: {
-                                applyLabel: "{$di.t->_('Apply')}",
-                                cancelLabel: "{$di.t->_('Cancel')}",
-                                fromLabel: "{$di.t->_('From')}",
-                                toLabel: "{$di.t->_('To')}",
-                                customRangeLabel: "{$di.t->_('Custom Range')}",
-                                daysOfWeek: moment.langData()._weekdaysMin.slice(),
-                                monthNames: (function () {
-                                    var res = [];
-                                    for (var i = 0; i < 12; i++) {
-                                        res.push(moment([0, i]).format('MMM'));
-                                    }
-                                    return res;
-                                })(),
-                                firstDay: moment.langData()._week.dow
-                            }
-                        }, function (from, to) {
+                        $('#reportrange').timeRange(function(from, to) {
                             instagram.page = 1;
                             instagram.updateRange(from, to);
                         });
@@ -214,41 +184,22 @@
                         }
                     },
                     updateRange: function (start, end) {
-                        if (start && end && start.isValid() && end.isValid()) {
-                            $('#reportrange span').html(start.format('LL') + ' - ' + end.format('LL'));
-
-                            _.find(this.selectRanges, function (period, name) {
-                                if ((moment(period[0]).format('l') === start.format('l')) && (moment(period[0]).format('l') === start.format('l'))) {
-                                    $('#reportrange span').html(name);
-                                    return true;
-                                }
-                                return false;
-                            });
-
-                            this.last = {
-                                start: start,
-                                end: end
-                            };
-
-                            $('#contentData').html(this.loading);
-
-                            $.post("{$di.router->getRouteUrl('instagramTab', ['account' => $selectedAccount, 'tab' => $tab])}", {
-                                dateFrom: moment(start).unix(),
-                                dateTo: moment(end).unix(),
-                                page: instagram.page
-                            }, function (data) {
-                                instagram.showPosts(data);
-                            }, 'json');
-                        } else {
-                            return this.updateRange(this.startDate, this.endDate);
+                        if (start === null && end === null) {
+                            this.startDate = this.endDate = -1;
+                        } else if (start && end) {
+                            this.startDate = moment(start).unix();
+                            this.endDate = moment(end).unix();
                         }
-                    },
-                    update: function () {
-                        if (this.last !== null) {
-                            this.updateRange(this.last.start, this.last.end);
-                        } else {
-                            this.updateRange();
-                        }
+
+                        $('#contentData').html(this.loading);
+
+                        $.post("{$di.router->getRouteUrl('instagramTab', ['account' => $selectedAccount, 'tab' => $tab])}", {
+                            dateFrom: this.startDate,
+                            dateTo: this.endDate,
+                            page: instagram.page
+                        }, function (data) {
+                            instagram.showPosts(data);
+                        }, 'json');
                     },
                     init: function () {
                         this.initRangePicker();
@@ -256,17 +207,12 @@
 
                         $('#paginator-prev').click(function () {
                             instagram.page--;
-                            instagram.update();
+                            instagram.updateRange();
                         });
 
                         $('#paginator-next').click(function () {
                             instagram.page++;
-                            instagram.update();
-                        });
-
-                        $('#account').change(function () {
-                            instagram.page = 1;
-                            instagram.update();
+                            instagram.updateRange();
                         });
                     }
                 };

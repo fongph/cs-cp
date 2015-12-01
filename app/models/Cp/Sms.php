@@ -29,9 +29,13 @@ class Sms extends BaseModel
 
         $select = "SELECT `timestamp`, `sms_type` type, `phone_number` number, `number_name` name, LEFT(`content`, 201) `content`, `multimedia`, `group`, `blocked`, `deleted`";
 
-        $timeFrom = $this->getDb()->quote($params['timeFrom']);
-        $timeTo = $this->getDb()->quote($params['timeTo']);
-        $fromWhere = "FROM `sms_log` WHERE `dev_id` = {$devId} AND `timestamp` >= {$timeFrom} AND `timestamp` <= {$timeTo}";
+        if ($params['timeFrom'] > 0 && $params['timeTo'] > 0) {
+            $timeFrom = $this->getDb()->quote($params['timeFrom']);
+            $timeTo = $this->getDb()->quote($params['timeTo']);
+            $fromWhere = "FROM `sms_log` WHERE `dev_id` = {$devId} AND `timestamp` >= {$timeFrom} AND `timestamp` <= {$timeTo}";
+        } else {
+            $fromWhere = "FROM `sms_log` WHERE `dev_id` = {$devId}";
+        }
 
         $query = "{$select} {$fromWhere}"
                 . ($search ? " AND ({$search})" : '')

@@ -27,9 +27,13 @@ class BrowserHistory extends BaseModel {
 
         $select = "SELECT `timestamp`, `browser`, `title`, `url`, `url`";
 
-        $timeFrom = $this->getDb()->quote($params['timeFrom']);
-        $timeTo = $this->getDb()->quote($params['timeTo']);
-        $fromWhere = "FROM `browser_history` WHERE `dev_id` = {$devId} AND `timestamp` >= {$timeFrom} AND `timestamp` <= {$timeTo}";
+        if ($params['timeFrom'] > 0 && $params['timeTo'] > 0) {
+            $timeFrom = $this->getDb()->quote($params['timeFrom']);
+            $timeTo = $this->getDb()->quote($params['timeTo']);
+            $fromWhere = "FROM `browser_history` WHERE `dev_id` = {$devId} AND `timestamp` >= {$timeFrom} AND `timestamp` <= {$timeTo}";
+        } else {
+            $fromWhere = "FROM `browser_history` WHERE `dev_id` = {$devId}";
+        }
 
         $query = "{$select} {$fromWhere}"
                 . ($search ? " AND ({$search})" : '')
