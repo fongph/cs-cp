@@ -42266,6 +42266,8 @@ $.fn.dataTableExt.oApi.fnReloadAjax = function(oSettings, sNewSource, fnCallback
         },
 
         show: function(e) {
+            this.hideCalendars();
+            
             if (this.isShowing) return;
 
             // Create a click proxy that is private to this instance of datepicker, for unbinding
@@ -42301,11 +42303,12 @@ $.fn.dataTableExt.oApi.fnReloadAjax = function(oSettings, sNewSource, fnCallback
             if (!this.endDate) {
                 this.startDate = this.oldStartDate.clone();
                 this.endDate = this.oldEndDate.clone();
+            } else {
+                //if a new date range was selected, invoke the user callback function
+                if (!this.startDate.isSame(this.oldStartDate) || !this.endDate.isSame(this.oldEndDate)) {
+                    this.callback(this.startDate, this.endDate, this.chosenLabel);
+                }
             }
-
-            //if a new date range was selected, invoke the user callback function
-            if (!this.startDate.isSame(this.oldStartDate) || !this.endDate.isSame(this.oldEndDate))
-                this.callback(this.startDate, this.endDate, this.chosenLabel);
 
             //if picker is attached to a text input, update it
             this.updateElement();
@@ -49198,7 +49201,7 @@ String.prototype.stripHTML = function () {
             "All Time": [null, null]
         };
 
-        var allTimeRangeName = "All Time";
+        var allTimeRangeLabel = "All Time";
 
         var getMonthNames = function () {
             var res = [];
@@ -49217,19 +49220,13 @@ String.prototype.stripHTML = function () {
 
         var dateFormat = 'LL';
 
-        var updateLabel = function (start, end) {
-            if (start === null && end === null) {
-                el.find('span').html(allTimeRangeName);
+        var updateLabel = function (start, end, label) {
+            if (label === allTimeRangeLabel) {
+                el.find('span').html(allTimeRangeLabel);
+            } else if (label !== locale.customRangeLabel) {
+                el.find('span').html(label);
             } else {
                 el.find('span').html(start.format(dateFormat) + ' - ' + end.format(dateFormat));
-
-                _.find(ranges, function (period, name) {
-                    if ((moment(period[0]).format('l') === start.format('l')) && (moment(period[1]).format('l') === end.format('l'))) {
-                        el.find('span').html(name);
-                        return true;
-                    }
-                    return false;
-                });
             }
         };
 
@@ -49241,11 +49238,16 @@ String.prototype.stripHTML = function () {
             endDate: null,
             format: dateFormat,
             locale: locale
-        }, function (start, end) {
-            updateLabel(start, end);
-            selectCallback(start, end);
+        }, function (start, end, label) {
+            updateLabel(start, end, label);
+            
+            if (label === allTimeRangeLabel) {
+                selectCallback(null, null);
+            } else {
+                selectCallback(start, end);
+            }
         });
 
-        updateLabel(null, null);
+        updateLabel(null, null, allTimeRangeLabel);
     };
 })(jQuery);

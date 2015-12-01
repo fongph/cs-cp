@@ -12,7 +12,7 @@
             "All Time": [null, null]
         };
 
-        var allTimeRangeName = "All Time";
+        var allTimeRangeLabel = "All Time";
 
         var getMonthNames = function () {
             var res = [];
@@ -31,19 +31,13 @@
 
         var dateFormat = 'LL';
 
-        var updateLabel = function (start, end) {
-            if (start === null && end === null) {
-                el.find('span').html(allTimeRangeName);
+        var updateLabel = function (start, end, label) {
+            if (label === allTimeRangeLabel) {
+                el.find('span').html(allTimeRangeLabel);
+            } else if (label !== locale.customRangeLabel) {
+                el.find('span').html(label);
             } else {
                 el.find('span').html(start.format(dateFormat) + ' - ' + end.format(dateFormat));
-
-                _.find(ranges, function (period, name) {
-                    if ((moment(period[0]).format('l') === start.format('l')) && (moment(period[1]).format('l') === end.format('l'))) {
-                        el.find('span').html(name);
-                        return true;
-                    }
-                    return false;
-                });
             }
         };
 
@@ -55,11 +49,16 @@
             endDate: null,
             format: dateFormat,
             locale: locale
-        }, function (start, end) {
-            updateLabel(start, end);
-            selectCallback(start, end);
+        }, function (start, end, label) {
+            updateLabel(start, end, label);
+            
+            if (label === allTimeRangeLabel) {
+                selectCallback(null, null);
+            } else {
+                selectCallback(start, end);
+            }
         });
 
-        updateLabel(null, null);
+        updateLabel(null, null, allTimeRangeLabel);
     };
 })(jQuery);

@@ -32,7 +32,7 @@ class Viber extends BaseModel {
         $timeTo = $this->getDb()->quote($params['timeTo']);
 
         if ($params['timeFrom'] > 0 && $params['timeTo'] > 0) {
-            $timeQuery = "e.`timestamp` >= {$timeFrom} AND e.`timestamp` <= {$timeTo}";
+            $timeQuery = "`timestamp` >= {$timeFrom} AND `timestamp` <= {$timeTo}";
         } else {
             $timeQuery = "1";
         }
@@ -110,7 +110,7 @@ class Viber extends BaseModel {
         $timeTo = $this->getDb()->quote($params['timeTo']);
 
         if ($params['timeFrom'] > 0 && $params['timeTo'] > 0) {
-            $timeQuery = "e.`timestamp` >= {$timeFrom} AND e.`timestamp` <= {$timeTo}";
+            $timeQuery = "`timestamp` >= {$timeFrom} AND `timestamp` <= {$timeTo}";
         } else {
             $timeQuery = "1";
         }

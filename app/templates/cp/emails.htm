@@ -133,7 +133,7 @@
             });
 
             $('#path').change(function() {
-                emails.reloadTable(emails.setRange(emails.startDate, emails.endDate));
+                emails.reloadTable(emails.getRangeUrl(emails.startDate, emails.endDate));
                 if ($(this).val() === 'sent') {
                     $('#datatable th:nth-child(2)').html("{$di.t->_('To')}");
                 } else {
