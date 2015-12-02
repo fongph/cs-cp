@@ -49233,6 +49233,7 @@ String.prototype.stripHTML = function () {
         el.daterangepicker({
             showDropdowns: true,
             autoApply: true,
+            linkedCalendars: false,
             ranges: ranges,
             startDate: null,
             endDate: null,
