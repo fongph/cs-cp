@@ -27,22 +27,32 @@ function isset(element) {
     }
 }
 
-function json_escape(x) {
-    if (typeof x == 'object') {
-        for (var i in x)
-            if (x.hasOwnProperty(i)) {
-                x[i] = json_escape(x[i]);
-            }
-    } else if (typeof x == 'string') {
-        x = _.escape(x);
+function htmlEscape(text) {
+    if (typeof text == 'object') {
+        for (var i in text) if (text.hasOwnProperty(i)) {
+            text[i] = htmlEscape(text[i]);
+        }
+    } else if (typeof text == 'string') {
+        text = _.escape(text);
     }
-    return x;
+    return text;
 }
 
-function getDateAJAX(perPage, page, url, search) {
-    if (!url) {
-        console.log('Error: set variable "url"');
-        return false;
+function htmlStrip(text) {
+
+    if (typeof text == 'object') {
+        for (var i in text) if (text.hasOwnProperty(i)) {
+            text[i] = htmlStrip(text[i]);
+        }
+    } else if (typeof text == 'string') {
+        text = String(text).stripHTML();
+    }
+    return text;
+}
+
+function getDateAJAX(perPage, page, url, search, doStrip) {
+    if(!url)  { 
+        console.log('Error: set variable "url"'); return false; 
     }
     var $_result = {};
     $.ajax({
@@ -59,7 +69,11 @@ function getDateAJAX(perPage, page, url, search) {
         }
     });
 
-    return json_escape($_result);
+    if (doStrip) {
+        return htmlStrip($_result);
+    } else {
+        return htmlEscape($_result);
+    }
 }
 
 function search() {
