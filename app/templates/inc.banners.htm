@@ -143,13 +143,13 @@
     </div>
     <div class="banner-arrow"></div>
     <div class="button-holder">
-        <a href="{$di.config.registration}" class="btn banner-btn" id="demo-banner-button">Buy Now</a>
+        <a href="{$di.config.url.registration}" class="btn banner-btn" id="demo-banner-button">Buy Now</a>
     </div>
 </div>
 <script type="text/javascript">
     $(document).ready(function(){
         $('.demo-banner').on('click', function() {
-           window.location = '{$di.config.registration}';
+           window.location = '{$di.config.url.registration}';
            return false;
         });
         $('#demo-banner-button').on('click', function() {
@@ -337,19 +337,19 @@
     </div>
     <div class="banner-arrow"></div>
     <div class="button-holder">
-        <a href="{$di.config.registration}" class="btn banner-btn">Upgrade</a>
+        <a href="{$di.config.url.registration}" class="btn banner-btn">Upgrade</a>
     </div>
     {elseif $internalTrialLicenseDaysLeft == 1}
     <div class="banner-expire">Trial Expires <b>Today</b></div>
     <div class="banner-arrow"></div>
     <div class="button-holder">
-        <a href="{$di.config.registration}" class="btn banner-btn">Upgrade</a>
+        <a href="{$di.config.url.registration}" class="btn banner-btn">Upgrade</a>
     </div>
     {else}
     <div class="banner-expire">Trial has <b>EXPIRED</b></div>
     <div class="banner-arrow"></div>
     <div class="button-holder">
-        <a href="{$di.config.registration}" class="btn banner-btn">Buy Pumpic</a>
+        <a href="{$di.config.url.registration}" class="btn banner-btn">Buy Pumpic</a>
     </div>
     {/if}
 </div>

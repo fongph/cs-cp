@@ -1,29 +1,25 @@
 <?php
 
 $default['db'] = array(
-    'host' => 'localhost',
-    'username' => 'root',
-    'password' => '',
-    'dbname' => 'main'
+    'host' => '188.40.64.2',
+    'username' => 'dev_test',
+    'password' => 'hEcLTXHGWTpY',
+    'dbname' => 'main_test'
 );
 
-$default['dataDb'] = array(
-    'host' => 'localhost',
-    'username' => 'root',
-    'password' => '',
-    'dbname' => 'data'
-);
-
-$default['redis'] = array(
-    'database' => 1
+$default['dataDb'][1] = array(
+    'host' => '188.40.64.2',
+    'username' => 'dev_test',
+    'password' => 'hEcLTXHGWTpY',
+    'dbname' => 'data_test'
 );
 
 $default['domain'] = 'http://cp.cs:8080';
 $default['staticDomain'] = 'http://cp.cs:8080/static';
-$default['cookieDomain'] = '.cs';
 $default['supportEmail'] = 'b.orest@dizboard.com';
-$default['demoDomain'] = 'http://demo.cp.cs';
-$default['refundPolicyPage'] = '';
+
+$default['cookieDomain'] = null;
+$default['session']['cookieParams']['domain'] = $default['cookieDomain'];
 
 $default['fenom']['options'] = array(
     'force_compile' => true
