@@ -1,6 +1,7 @@
 /nbproject
 /vendor
 /tmp/*
+!/tmp/.gitkeep
 /logs/*
 /utils/result/*
 /bower_components
