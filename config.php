@@ -99,10 +99,10 @@ if ($build['environment'] == 'production') {
     } else {
         $default['domain'] = GlobalSettings::getControlPanelURL($build['site']);
         $default['staticDomain'] = GlobalSettings::getControlPanelStaticURL($build['site']);
-        $default['demoDomain'] = GlobalSettings::getDemoControlPanelURL($build['site']);
+        $default['url']['demo'] = GlobalSettings::getDemoControlPanelURL($build['site']);
     }
     
-    $default['registration'] = GlobalSettings::getRegistrationPageURL($build['site']);
+    $default['url']['registration'] = GlobalSettings::getRegistrationPageURL($build['site']);
     $default['cookieDomain'] = GlobalSettings::getCookieDomain($build['site']);
     $default['supportEmail'] = GlobalSettings::getSupportEmail($build['site']);
     
@@ -117,25 +117,15 @@ if ($build['environment'] == 'production') {
 
     $default['s3'] = GlobalSettings::getS3Config();
     $default['cloudFront'] = GlobalSettings::getCloudFrontConfig();
-    $default['registration'] = 'http://www.google.com/registration/';
+    $default['url']['demo'] = 'http://google.com/demo';
+    $default['url']['registration'] = 'http://google.com/registration';
+    $default['refundPolicyPage'] = 'http://google.com/refund-policy';
 
     if (file_exists(ROOT_PATH . 'development.config.php')) {
         require ROOT_PATH . 'development.config.php';
     }
 
     return $default;
-} else if ($build['environment'] == 'testing') { // not using now
-    return array_merge($default, array(
-        'db' => array(
-            'host' => 'localhost',
-            'username' => 'root',
-            'password' => '',
-            'dbname' => 'user_data_test',
-            'options' => array(
-                PDO::MYSQL_ATTR_INIT_COMMAND => 'set names latin1;',
-                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
-            )
-        )
-    ));
+} else if ($build['environment'] == 'testing') {
+    // not using now
 }
