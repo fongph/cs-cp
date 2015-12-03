@@ -22,6 +22,12 @@ class Kik extends BaseModel {
         $timeFrom = $this->getDb()->quote($params['timeFrom']);
         $timeTo = $this->getDb()->quote($params['timeTo']);
         $account = $this->getDb()->quote($params['account']);
+
+        if ($params['timeFrom'] > 0 && $params['timeTo'] > 0) {
+            $timeQuery = "`timestamp` >= {$timeFrom} AND `timestamp` <= {$timeTo}";
+        } else {
+            $timeQuery = "1";
+        }
         
         $select = "SELECT k.`id`, k.`text`, k.`timestamp`, k.`is_group`, k.`group_id`, IF(k.`is_group`, 'group', (SELECT `nickname` FROM `kik_users` WHERE `dev_id` = {$devId} AND `account_id` = {$account} AND `user_id` = k.`sender_id` LIMIT 1)) name";
 
@@ -32,8 +38,7 @@ class Kik extends BaseModel {
                         WHERE
                             `dev_id` = {$devId} AND
                             `account_id` = {$account} AND
-                            `timestamp` >= {$timeFrom} AND
-                            `timestamp` <= {$timeTo}
+                            {$timeQuery}
                         GROUP BY `group_id`) last
                         INNER JOIN `kik_messages` k ON k.`dev_id` = {$devId} AND k.`account_id` = {$account} AND k.`group_id` = last.`group_id` AND last.`max_time` = k.`timestamp`";
 

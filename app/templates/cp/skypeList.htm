@@ -171,7 +171,7 @@
                $url = $('#blockPaginateLists').data('paginate-ajax');
              
             var newPerPage = parseInt($(this).val());    
-            var $_res = getDateAJAX(newPerPage, 0, $url, $search);
+            var $_res = getDateAJAX(newPerPage, 0, $url, $search, true);
             
             if($('#panel_paginate').data('twbs-pagination'))
                 $('#panel_paginate').data('twbs-pagination').destroy();

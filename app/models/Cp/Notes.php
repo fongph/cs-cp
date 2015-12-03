@@ -28,12 +28,13 @@ class Notes extends BaseModel
         $timeTo = $this->getDb()->quote($params['timeTo']);
         $account = $this->getDb()->quote($params['account']);
 
-        $fromWhere = "FROM `notes`
-                      WHERE
-                            `dev_id` = {$devId} AND
-                            `timestamp` >= {$timeFrom} AND
-                            `timestamp` <= {$timeTo} AND
-                            `account` = {$account}";
+        if ($params['timeFrom'] > 0 && $params['timeTo'] > 0) {
+            $timeQuery = "`timestamp` >= {$timeFrom} AND `timestamp` <= {$timeTo}";
+        } else {
+            $timeQuery = "1";
+        }
+        
+        $fromWhere = "FROM `notes` WHERE `dev_id` = {$devId} AND `account` = {$account} AND {$timeQuery}";
 
         $query = "{$select} {$fromWhere}"
                 . " ORDER BY {$sort} LIMIT {$params['start']}, {$params['length']}";

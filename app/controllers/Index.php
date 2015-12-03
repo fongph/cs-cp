@@ -106,7 +106,8 @@ class Index extends BaseController
         }
 
         $this->setView('index/login.htm');
-        $this->view->title = $this->di['t']->_('LoginTitle');
+        $this->view->title = $this->di['t']->_('Pumpic Control Panel: Log in');
+        $this->view->descriptionMeta = 'Log in to Control Panel and access all Pumpic monitoring features. Protect your child online with Pumpic.com';
     }
 
     public function loginRedirect()

@@ -46,53 +46,32 @@
     </div>
     <script type="text/javascript">
         $(document).ready(function() {
-            var selectRanges = {
-                "{$di.t->_('Today')}": [moment().startOf('day'), moment().endOf('day')],
-                "{$di.t->_('Yesterday')}": [moment().subtract('days', 1).startOf('day'), moment().subtract('days', 1).endOf('day')],
-                "{$di.t->_('Last 7 Days')}": [moment().subtract('days', 6).startOf('day'), moment().endOf('day')],
-                "{$di.t->_('Last 30 Days')}": [moment().subtract('days', 29).startOf('day'), moment().endOf('day')],
-                "{$di.t->_('This Month')}": [moment().startOf('month'), moment().endOf('month')],
-                "{$di.t->_('Last Month')}": [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')],
-                "{$di.t->_('All Time')}": [ moment([2010, 11, 31, 00, 00]), moment().endOf('day')]
-            };
-
             var kik = {
-                startDate: moment().subtract('days', 29).startOf('day'),
-                endDate: moment().endOf('day'),
+                startDate: -1,
+                endDate: -1,
                 messageLinkTemplate: _.template('<a href="{$di.router->getRouteUrl("kik")}/<%= account %>/<%= tab %>/<%= id %>"><%= date %></a>'),
                 table: null,
-                setRange: function(start, end) {
-                    this.range = [start, end];
-
-                    if (start.isValid() && start.isValid()) {
-                        this.startDate = start;
-                        this.endDate = end;
-                        $('#reportrange span').html(start.format('LL') + ' - ' + end.format('LL'));
-
-                        _.find(selectRanges, function(period, name) {
-                            if ((moment(period[0]).format('l') === start.format('l')) && (moment(period[0]).format('l') === start.format('l'))) {
-                                $('#reportrange span').html(name);
-                                return true;
-                            }
-                            return false;
-                        });
-
-                        var url = '{$di.config.domain}/cp/kik?';
-
-                        return url + $.param({
-                            account: $('#account').val(),
-                            timeFrom: moment(start).unix(),
-                            timeTo: moment(end).unix()
-                        });
-                    } else {
-                        return setRange(this.startDate, this.endDate);
+                getRangeUrl: function(start, end) {
+                    if (start === null && end === null) {
+                        this.startDate = this.endDate = -1;
+                    } else if (start && end) {
+                        this.startDate = moment(start).unix();
+                        this.endDate = moment(end).unix();
                     }
+
+                    var url = '{$di.config.domain}/cp/kik?';
+
+                    return url + $.param({
+                        account: $('#account').val(),
+                        timeFrom: this.startDate,
+                        timeTo: this.endDate
+                    });
                 },
                 initTable: function() {
                     var table = $('#private-datatable').dataTable({
                         bProcessing: true,
                         bServerSide: true,
-                        sAjaxSource: this.setRange(this.startDate, this.endDate),
+                        sAjaxSource: this.getRangeUrl(),
                         bPaginate: true,
                         bFilter: false,
                         bSort: true,
@@ -165,32 +144,11 @@
             kik.initTable();
 
             $('#account').change(function() {
-                kik.reloadTable(kik.setRange(kik.startDate, kik.endDate));
+                kik.reloadTable(kik.getRangeUrl());
             });
 
-            $('#reportrange').daterangepicker({
-                ranges: selectRanges,
-                startDate: kik.startDate,
-                endDate: moment().endOf('day'),
-                format: 'LL',
-                locale: {
-                    applyLabel: "{$di.t->_('Apply')}",
-                    cancelLabel: "{$di.t->_('Cancel')}",
-                    fromLabel: "{$di.t->_('From')}",
-                    toLabel: "{$di.t->_('To')}",
-                    customRangeLabel: "{$di.t->_('Custom Range')}",
-                    daysOfWeek: moment.langData()._weekdaysMin.slice(),
-                    monthNames: (function() {
-                        var res = [];
-                        for (var i = 0; i < 12; i++) {
-                            res.push(moment([0, i]).format('MMM'));
-                        }
-                        return res;
-                    })(),
-                    firstDay: moment.langData()._week.dow
-                }
-            }, function(from, to) {
-                kik.reloadTable(kik.setRange(from, to));
+            $('#reportrange').timeRange(function(from, to) {
+                kik.reloadTable(kik.getRangeUrl(from, to));
             });
         });
     </script>

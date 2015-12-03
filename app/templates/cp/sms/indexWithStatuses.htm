@@ -36,40 +36,22 @@
             moment.lang('{$di.t->getLocale()}');
 
             var sms = {
-                startDate: moment().subtract('days', 29).startOf('day'),
-                endDate: moment().endOf('day'),
                 table: null,
-                typeTmpl: _.template('<i class="sms-<%= type %> hidden-xs" title="<%= title %>"></i><span class="visible-xs"><%= title %></span>'),
-                messageLinkTemplate: _.template('<a href="{$di.router->getRouteUrl("sms")}/<%= phone %>#<%= message %>"><%= date %></a>'),
-                groupMessageLinkTemplate: _.template('<a href="{$di.router->getRouteUrl("sms")}/group/<%= group %>#<%= message %>"><%= date %></a>'),
-                selectRanges: {
-                    "{$di.t->_('Today')}": [moment().startOf('day'), moment().endOf('day')],
-                    "{$di.t->_('Yesterday')}": [moment().subtract('days', 1).startOf('day'), moment().subtract('days', 1).endOf('day')],
-                    "{$di.t->_('Last 7 Days')}": [moment().subtract('days', 6).startOf('day'), moment().endOf('day')],
-                    "{$di.t->_('Last 30 Days')}": [moment().subtract('days', 29).startOf('day'), moment().endOf('day')],
-                    "{$di.t->_('This Month')}": [moment().startOf('month'), moment().endOf('month')],
-                    "{$di.t->_('Last Month')}": [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')],
-                    "{$di.t->_('All Time')}": [ moment([2010, 11, 31, 00, 00]), moment().endOf('day')]
-                },
-                setRange: function(start, end) {
-                    if (start.isValid() && start.isValid()) {
-                        $('#reportrange span').html(start.format('LL') + ' - ' + end.format('LL'));
-
-                        _.find(this.selectRanges, function(period, name) {
-                            if ((moment(period[0]).format('l') === start.format('l')) && (moment(period[0]).format('l') === start.format('l'))) {
-                                $('#reportrange span').html(name);
-                                return true;
-                            }
-                            return false;
-                        });
-
-                        return '{$di.router->getRouteUrl("sms")}?' + $.param({
-                            timeFrom: moment(start).unix(),
-                            timeTo: moment(end).unix()
-                        });
+                typeTmpl: _.template('<i class="sms-<%= type %> hidden-xs" title="<%- title %>"></i><span class="visible-xs"><%- title %></span>'),
+                messageLinkTemplate: _.template('<a href="{$di.router->getRouteUrl("sms")}/<%- phone %>#<%= message %>"><%- date %></a>'),
+                groupMessageLinkTemplate: _.template('<a href="{$di.router->getRouteUrl("sms")}/group/<%- group %>#<%- message %>"><%- date %></a>'),
+                getRangeUrl: function(start, end) {
+                    if (start && end && start.isValid() && start.isValid()) {
+                        start = moment(start).unix();
+                        end = moment(end).unix();
                     } else {
-                        return this.setRange(this.startDate, this.endDate);
+                        start = end = -1;
                     }
+                    
+                    return '{$di.router->getRouteUrl("sms")}?' + $.param({
+                        timeFrom: start,
+                        timeTo: end
+                    });
                 },
                 reloadTable: function(url) {
                     this.table.fnReloadAjax(url);
@@ -78,7 +60,7 @@
                     var table = $('#datatable').dataTable({
                         bProcessing: true,
                         bServerSide: true,
-                        sAjaxSource: this.setRange(this.startDate, this.endDate),
+                        sAjaxSource: this.getRangeUrl(),
                         bPaginate: true,
                         bFilter: true,
                         bSort: true,
@@ -193,29 +175,8 @@
                     this.initRangePicker();
                 },
                 initRangePicker: function() {
-                    $('#reportrange').daterangepicker({
-                        ranges: this.selectRanges,
-                        startDate: this.startDate,
-                        endDate: this.endDate,
-                        format: 'LL',
-                        locale: {
-                            applyLabel: "{$di.t->_('Apply')}",
-                            cancelLabel: "{$di.t->_('Cancel')}",
-                            fromLabel: "{$di.t->_('From')}",
-                            toLabel: "{$di.t->_('To')}",
-                            customRangeLabel: "{$di.t->_('Custom Range')}",
-                            daysOfWeek: moment.langData()._weekdaysMin.slice(),
-                            monthNames: (function() {
-                                var res = [];
-                                for (var i = 0; i < 12; i++) {
-                                    res.push(moment([0, i]).format('MMM'));
-                                }
-                                return res;
-                            })(),
-                            firstDay: moment.langData()._week.dow
-                        }
-                    }, function(from, to) {
-                        sms.reloadTable(sms.setRange(from, to));
+                    $('#reportrange').timeRange(function(from, to) {
+                        sms.reloadTable(sms.getRangeUrl(from, to));
                     });
                 }
             };
