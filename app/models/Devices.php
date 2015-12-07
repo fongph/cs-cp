@@ -29,7 +29,7 @@ class Devices extends \System\Model
 
     public function getCurrentDevId()
     {
-        $devId = $this->di->getRequest()->cookie('devId');
+        $devId = $this->di['session']['devId'];
         
         if ($devId === null || !isset($this->di['devicesList'][$devId])) {
             $devId = null;
@@ -47,7 +47,8 @@ class Devices extends \System\Model
 
     public function setCurrentDevId($devId)
     {
-        setcookie('devId', $devId, time() + 3600 * 24, '/', $this->di['config']['cookieDomain']);
+        $this->di['session']['devId'] = $devId;
+        //setcookie('devId', $devId, time() + 3600 * 24, '/', $this->di['config']['cookieDomain']);
     }
 
     /**
