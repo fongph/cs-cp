@@ -1,11 +1,13 @@
 /nbproject
 /vendor
 /tmp/*
+!/tmp/.gitkeep
 /logs/*
 /utils/result/*
 /bower_components
 /node_modules
 /.idea
+/compose/mysql-data
 composer.phar
 development.config.php
 build.php

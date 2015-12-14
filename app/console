@@ -1,0 +1,580 @@
+#!/usr/bin/env php
+<?php
+
+use Models\Modules;
+
+define('ROOT_PATH', dirname(__FILE__) . '/../');
+date_default_timezone_set('UTC');
+error_reporting(E_ALL);
+
+require ROOT_PATH . '/vendor/autoload.php';
+
+class Environment
+{
+    const GROUP_REGEX_KEY = '_regex';
+
+    public static function exportValue($name)
+    {
+        if (!isset($_ENV[$name])) {
+            return null;
+        }
+
+        return $_ENV[$name];
+    }
+
+    public static function exportArray(Array $settings)
+    {
+        $result = [];
+
+        if (isset($settings[self::GROUP_REGEX_KEY])) {
+            $regex = $settings[self::GROUP_REGEX_KEY];
+            unset($settings[self::GROUP_REGEX_KEY]);
+
+            return self::exportGroupArray($settings, $regex);
+        }
+
+        foreach ($settings as $key => $option) {
+            if (is_array($option)) {
+                $data = self::exportArray($option);
+            } else {
+                $data = self::exportValue($option);
+            }
+
+            $result[$key] = $data;
+        }
+
+        if (count($result) === 0) {
+            return null;
+        }
+
+        return $result;
+    }
+
+    public static function setArrayPathValue(&$array, $path = [], $value)
+    {
+        $key = array_shift($path);
+
+        if (!count($path)) {
+            $array[$key] = $value;
+
+            return;
+        }
+
+        if (!isset($array[$key]) || !is_array($array[$key])) {
+            $array[$key] = [];
+        }
+
+        self::setArrayPathValue($array[$key], $path, $value);
+    }
+
+    private static function exportGroupValue(&$result, $parameter, $settings, $regex, $path)
+    {
+        if (is_array($settings)) {
+            foreach ($settings as $key => $subSettings) {
+                $newPath = $path;
+                array_push($newPath, $parameter);
+                self::exportGroupValue($result, $key, $subSettings, $regex, $newPath);
+            }
+        } elseif (is_string($settings)) {
+            $parameterRegex = '/' . str_replace('{var}', "($regex)", $settings) . '/';
+            foreach ($_ENV as $key => $value) {
+                if (preg_match($parameterRegex, $key, $matches)) {
+                    if (count($matches) == 2) {
+                        $newPath = $path;
+                        array_unshift($newPath, $matches[1]);
+                        array_push($newPath, $parameter);
+                        self::setArrayPathValue($result, $newPath, $value);
+                    } else {
+                        die('invalid');
+                    }
+                }
+            }
+        } else {
+            die('invalid');
+        }
+    }
+
+    public static function exportGroupArray(Array $settings, $regex = '\d+')
+    {
+        $result = [];
+
+        foreach ($settings as $key => $value) {
+            self::exportGroupValue($result, $key, $value, $regex, []);
+        }
+
+        return $result;
+    }
+}
+
+function buildConfig($environment, $siteId, $demo)
+{
+    $config = [
+        'build'            => time(),
+        'environment'      => $environment,
+        'site'             => $siteId,
+        'demo'             => $demo,
+        'errorReporting'   => E_ALL ^ E_NOTICE ^ E_DEPRECATED,
+        'session'          => [
+            'rememberMeTime' => 2592000 // 30 days
+        ],
+        'logger'           => [
+            'stream' => [
+                'filename' => ROOT_PATH . 'logs/system.log'
+            ],
+            'mail'   => [
+                'from'    => 'b.orest@dizboard.com',
+                'to'      => 'b.orest@dizboard.com',
+                'subject' => 'Pumpic CP Logger'
+            ]
+        ],
+        'dbOptions'        => [
+            PDO::MYSQL_ATTR_INIT_COMMAND => 'set names utf8;',
+            PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
+        ],
+        'fenom'            => [
+            'templatesDir' => ROOT_PATH . 'app/templates/',
+            'compileDir'   => ROOT_PATH . 'tmp/',
+            'options'      => [
+                'force_include' => true
+            ]
+        ],
+        'locales'          => [
+            'en-US' => 'English'
+        ],
+        'modules'          => [
+            Modules::CALLS             => 'Calls',
+            Modules::SMS               => 'SMS',
+            Modules::LOCATIONS         => 'Locations',
+            Modules::BROWSER_BOOKMARKS => 'Bookmarks',
+            Modules::BROWSER_HISTORY   => 'Browser History',
+            Modules::NOTES             => 'Notes',
+            Modules::CALENDAR          => 'Calendar',
+            Modules::CONTACTS          => 'Contacts',
+            Modules::PHOTOS            => 'Photos',
+            Modules::VIDEOS            => 'Videos',
+            Modules::EMAILS            => 'Emails',
+            Modules::APPLICATIONS      => 'Applications',
+            Modules::VIBER             => 'Viber',
+            Modules::SKYPE             => 'Skype',
+            Modules::WHATSAPP          => 'Whatsapp',
+            Modules::FACEBOOK          => 'Facebook',
+            Modules::KIK               => 'Kik',
+            Modules::INSTAGRAM         => 'Instagram',
+            Modules::SNAPCHAT          => 'Snapchat',
+            Modules::VK                => 'VK Messages',
+            Modules::KEYLOGGER         => 'Keylogger',
+            Modules::SMS_COMMANDS      => 'SMS Commands',
+            Modules::SETTINGS          => 'Device Settings'
+        ],
+        'contents'         => [
+            'names' => [
+                'how-to-install/android-instructions.html'    => 'Android Installation Guide',
+                'how-to-install/blackberry-instructions.html' => 'BlackBerry Installation Guide',
+                'how-to-install/ios-instructions.html'        => 'iPhone Installation Guide',
+                'how-to-install/root-instructions.html'       => 'Root Instructions',
+                'instructions/activate-location-ios.html'     => 'How to Activate Location',
+                'instructions/activate-location-android.html' => 'How to Activate Location',
+                'instructions/activate-findmyiphone.html'     => 'Location Tracking Activation Guide',
+                'instructions/keylogger-activation.html'      => 'How to enable Keylogger',
+                'instructions/install-xposed.html'            => 'How to Install Xposed',
+                'instructions/detect-ios-jailbreak.html'      => 'Check Jailbreak',
+                'instructions/hide-cydia-icon.html'           => 'Hide Cydia',
+                'instructions/uninstall-pumpic-ios.html'      => 'How to Uninstall Pumpic on iOS',
+                'instructions/uninstall-pumpic-android.html'  => 'How to Uninstall Pumpic on Android',
+            ],
+            'auth'  => [
+                'instructions/activate-location-ios.html',
+                'instructions/activate-location-android.html',
+                'instructions/activate-findmyiphone.html',
+                'instructions/keylogger-activation.html',
+                'instructions/detect-ios-jailbreak.html',
+                'instructions/hide-cydia-icon.html',
+                'instructions/uninstall-pumpic-ios.html',
+                'instructions/uninstall-pumpic-android.html',
+            ]
+        ],
+        'bundlesNamespace' => 'first'
+    ];
+
+    $environmentConfig = Environment::exportArray([
+        'domain'           => 'DOMAIN',
+        'staticDomain'     => 'DOMAIN_STATIC',
+        'cookieDomain'     => 'DOMAIN_COOKIE',
+        'supportEmail'     => 'SUPPORT_EMAIL',
+        'secureConnection' => 'SECURE_CONNECTION',
+        'session'          => [
+            'cookieParams' => [
+                'domain' => 'DOMAIN_COOKIE'
+            ]
+        ],
+        'url'              => [
+            'registration' => 'URL_REGISTRATION',
+            'demo'         => 'URL_DEMO'
+        ],
+        's3'               => [
+            'key'    => 'S3_KEY',
+            'secret' => 'S3_SECRET',
+            'bucket' => 'S3_BUCKET',
+            'region' => 'S3_REGION'
+        ],
+        'cloudFront'       => [
+            'domain'    => 'CLOUD_FRONT_DOMAIN',
+            'keyPairId' => 'CLOUD_FRONT_KEY_PAIR_ID'
+        ],
+        'db'               => [
+            'host'     => 'DB_MAIN_HOST',
+            'dbname'   => 'DB_MAIN_DATABASE',
+            'username' => 'DB_MAIN_USER',
+            'password' => 'DB_MAIN_PASSWORD'
+        ],
+        'dataDb'           => [
+            '_regex'   => '\d+',
+            'host'     => 'DB_DATA_(\d+)_HOST',
+            'dbname'   => 'DB_DATA_(\d+)_DATABASE',
+            'username' => 'DB_DATA_(\d+)_USER',
+            'password' => 'DB_DATA_(\d+)_PASSWORD'
+        ]
+    ]);
+
+    $config = array_merge_recursive($config, $environmentConfig);
+
+    if ($config['environment'] == 'development') {
+        $config['errorReporting'] = E_ALL;
+
+        $config['fenom']['options'] = [
+            'force_compile' => true
+        ];
+    }
+
+    return $config;
+}
+
+function var_export_min($var, $return = false)
+{
+    if (is_array($var)) {
+        $toImplode = [];
+        foreach ($var as $key => $value) {
+            $toImplode[] = var_export($key, true) . '=>' . var_export_min($value, true);
+        }
+
+        $code = 'array(' . implode(',', $toImplode) . ')';
+
+        if ($return) {
+            return $code;
+        }
+
+        echo $code;
+    } else {
+        return var_export($var, $return);
+    }
+}
+
+use Symfony\Component\Console\Application,
+    Symfony\Component\Console\Input\InputInterface,
+    Symfony\Component\Console\Input\InputArgument,
+    Symfony\Component\Console\Input\InputOption,
+    Symfony\Component\Console\Output\OutputInterface;
+
+$console = new Application();
+
+$console->register('build')
+    ->setDefinition([
+        new InputArgument('site', InputArgument::REQUIRED, 'Site number')
+    ])
+    ->addOption(
+        'environment', 'e', InputOption::VALUE_REQUIRED, 'Application environment', 'development'
+    )
+    ->addOption(
+        'without-module', 'w', InputOption::VALUE_IS_ARRAY | InputOption::VALUE_REQUIRED,
+        'Modules that will not be included in the build', []
+    )
+    ->addOption(
+        'demo', 'd', InputOption::VALUE_REQUIRED, 'Is a demo version of application', 0
+    )
+    ->setDescription('Generate build.php file')
+    ->setCode(function (InputInterface $input, OutputInterface $output) {
+        $site = $input->getArgument('site');
+        $environment = $input->getOption('environment');
+        $withoutModules = $input->getOption('without-module');
+        $demo = $input->getOption('demo');
+
+        if ($site < 0 || $site > 255) {
+            $output->writeln("<error>Site must be between 0 and 255!</error>");
+
+            return;
+        }
+
+        if (!in_array($environment, ['development', 'production', 'testing', 'staging'])) {
+            $output->writeln("<error>Invalid environment value!</error>");
+
+            return;
+        }
+
+        $config = buildConfig($environment, $site, $demo);
+
+        foreach ($withoutModules as $value) {
+            if (isset($config['modules'][$value])) {
+                unset($config['modules'][$value]);
+            }
+        }
+
+        if (file_put_contents(ROOT_PATH . 'build.php', '<?php return ' . var_export_min($config, true) . ';',
+                LOCK_EX) == false
+        ) {
+            $output->writeln("<error>File write error!</error>");
+
+            return;
+        }
+
+        $output->writeln("Build created!");
+    });
+
+$console->register('load-demo-user')
+    ->setDescription('Export demo user data from db to file')
+    ->setCode(function (InputInterface $input, OutputInterface $output) {
+        if (!is_file(ROOT_PATH . 'build.php')) {
+            $output->writeln("<error>build.php file file not found!</error>");
+
+            return;
+        }
+
+        $config = include ROOT_PATH . 'build.php';
+
+        $di = new System\DI();
+        $di->set('config', $config);
+
+        require ROOT_PATH . 'bootstrap.php';
+
+        $usersManager = new CS\Users\UsersManager($di->get('db'));
+        try {
+            $userData = $usersManager->getUserDataById($di['config']['site'], $di['config']['demo']);
+        } catch (CS\Users\UserNotFoundException $e) {
+            $output->writeln("<error>Demo user not found!</error>");
+
+            return;
+        }
+
+        if (file_put_contents(ROOT_PATH . 'demoUserData.php', '<?php return ' . var_export_min($userData, true) . ';',
+                LOCK_EX) == false
+        ) {
+            $output->writeln("<error>File write error!</error>");
+
+            return;
+        }
+
+        $output->writeln('User data successfully exported to file!');
+    });
+
+$console->register('update-demo-user-data')
+    ->setDescription('Update demo user data time of devices')
+    ->setDefinition([
+        new InputArgument('days', InputArgument::REQUIRED, 'The number of days to increase')
+    ])
+    ->setCode(function (InputInterface $input, OutputInterface $output) {
+        $days = $input->getArgument('days');
+
+        if (!is_file(ROOT_PATH . 'build.php')) {
+            $output->writeln("<error>build.php file file not found!</error>");
+
+            return;
+        }
+
+        $config = include ROOT_PATH . 'build.php';
+
+        if ($config['demo'] == 0) {
+            $output->writeln("<error>Demo user id not defined for this build!</error>");
+
+            return;
+        }
+
+        $demoUserId = $config['demo'];
+
+        $di = new System\DI();
+        $di->set('config', $config);
+
+        require ROOT_PATH . 'bootstrap.php';
+
+        $logger = new Monolog\Logger('logger');
+        $logger->pushHandler(new Monolog\Handler\StreamHandler(ROOT_PATH . 'logs/demo.log', Monolog\Logger::INFO));
+
+        $userDevices = $di['db']->query("SELECT `id` FROM `devices` WHERE `user_id` = {$demoUserId}")->fetchAll(\PDO::FETCH_COLUMN);
+
+        /**
+         * @todo Update to use multiple data databases
+         */
+        $pdo = $di['dataDb'];
+
+        try {
+            $value = $days * 3600 * 24;
+            $devicesExpression = '`dev_id` IN (' . implode(',', $userDevices) . ')';
+
+            $pdo->beginTransaction();
+            $pdo->exec("UPDATE `applications_timelines` SET `start` = `start` + {$value}, `finish` = `finish` + {$value} WHERE {$devicesExpression}");
+            $pdo->exec("UPDATE `browser_history` SET `timestamp` = `timestamp` + {$value} WHERE {$devicesExpression}");
+            $pdo->exec("UPDATE `calendar_events` SET `start` = `start` + {$value}, `end` = `end` + {$value} WHERE {$devicesExpression}");
+            $pdo->exec("UPDATE `call_log` SET `timestamp` = `timestamp` + {$value} WHERE {$devicesExpression}");
+            $pdo->exec("UPDATE `emails` SET `timestamp` = `timestamp` + {$value} WHERE {$devicesExpression}");
+            $pdo->exec("UPDATE `facebook_calls` SET `timestamp` = `timestamp` + {$value} WHERE {$devicesExpression}");
+            $pdo->exec("UPDATE `facebook_messages` SET `timestamp` = `timestamp` + {$value} WHERE {$devicesExpression}");
+            $pdo->exec("UPDATE `geo_events` SET `timestamp` = `timestamp` + {$value} WHERE {$devicesExpression}");
+            $pdo->exec("UPDATE `instagram_comments` SET `timestamp` = `timestamp` + {$value} WHERE {$devicesExpression}");
+            $pdo->exec("UPDATE `instagram_posts` SET `timestamp` = `timestamp` + {$value} WHERE {$devicesExpression}");
+            $pdo->exec("UPDATE `keylogger` SET `timestamp` = `timestamp` + {$value} WHERE {$devicesExpression}");
+            $pdo->exec("UPDATE `kik_messages` SET `timestamp` = `timestamp` + {$value} WHERE {$devicesExpression}");
+            $pdo->exec("UPDATE `photos` SET `timestamp` = `timestamp` + {$value} WHERE {$devicesExpression}");
+            $pdo->exec("UPDATE `skype_calls` SET `timestamp` = `timestamp` + {$value} WHERE {$devicesExpression}");
+            $pdo->exec("UPDATE `skype_messages` SET `timestamp` = `timestamp` + {$value} WHERE {$devicesExpression}");
+            $pdo->exec("UPDATE `sms_log` SET `timestamp` = `timestamp` + {$value} WHERE {$devicesExpression}");
+            $pdo->exec("UPDATE `viber_calls` SET `timestamp` = `timestamp` + {$value} WHERE {$devicesExpression}");
+            $pdo->exec("UPDATE `viber_messages` SET `timestamp` = `timestamp` + {$value} WHERE {$devicesExpression}");
+            $pdo->exec("UPDATE `video` SET `timestamp` = `timestamp` + {$value} WHERE {$devicesExpression}");
+            $pdo->exec("UPDATE `vk_messages` SET `timestamp` = `timestamp` + {$value} WHERE {$devicesExpression}");
+            $pdo->exec("UPDATE `whatsapp_calls` SET `timestamp` = `timestamp` + {$value} WHERE {$devicesExpression}");
+            $pdo->exec("UPDATE `whatsapp_messages` SET `timestamp` = `timestamp` + {$value} WHERE {$devicesExpression}");
+            $pdo->exec("UPDATE `notes` SET `timestamp` = `timestamp` + {$value} WHERE {$devicesExpression}");
+            $pdo->exec("UPDATE `snapchat_messages` SET `timestamp` = `timestamp` + {$value} WHERE {$devicesExpression}");
+
+
+        } catch (\Exception $exception) {
+            $logger->addError(sprintf(
+                'Exception during updatting demo user data - %s: "%s" at %s line %s', get_class($exception),
+                $exception->getMessage(), $exception->getFile(), $exception->getLine()
+            ));
+            $pdo->rollBack();
+            $output->writeln("<error>Exception during updating demo user data</error>");
+
+            return;
+        }
+
+        $pdo->commit();
+
+        $message = date('r') . " - User data successfully updated by $days days!";
+
+        $logger->addInfo($message);
+        $output->writeln($message);
+    });
+
+$console->register('update-demo-user-devices-status')
+    ->setDescription('Update demo user devices last update time')
+    ->setCode(function (InputInterface $input, OutputInterface $output) {
+        if (!is_file(ROOT_PATH . 'build.php')) {
+            $output->writeln("<error>build.php file file not found!</error>");
+
+            return;
+        }
+
+        $config = include ROOT_PATH . 'build.php';
+
+        if ($config['demo'] == 0) {
+            $output->writeln("<error>Demo user id not defined for this build!</error>");
+
+            return;
+        }
+
+        $demoUserId = $config['demo'];
+
+        $di = new System\DI();
+        $di->set('config', $config);
+
+        require ROOT_PATH . 'bootstrap.php';
+
+        $logger = new Monolog\Logger('logger');
+        $logger->pushHandler(new Monolog\Handler\StreamHandler(ROOT_PATH . 'logs/demo.log', Monolog\Logger::INFO));
+
+        /**
+         * @todo Update to use multiple data databases
+         */
+        $pdo = $di['dataDb'];
+
+        try {
+            $pdo->beginTransaction();
+
+            $userDevices = $di['db']->query("SELECT `id`, `os` FROM `devices` WHERE `user_id` = {$demoUserId}")->fetchAll(\PDO::FETCH_ASSOC);
+
+            if (count($userDevices)) {
+                foreach ($userDevices as $device) {
+                    $time = time() - rand(0, 900);
+                    if ($device['os'] != 'icloud') {
+                        $di['db']->exec("UPDATE `devices` SET `last_visit` = {$time} WHERE `id` = {$device['id']}");
+                    } else {
+                        $di['db']->exec("UPDATE `devices_icloud` SET `last_backup` = {$time}, `last_sync` = {$time} WHERE `dev_id` = {$device['id']}");
+                    }
+                }
+            }
+        } catch (\Exception $exception) {
+            $logger->addError(sprintf(
+                'Exception during updatting demo user data - %s: "%s" at %s line %s', get_class($exception),
+                $exception->getMessage(), $exception->getFile(), $exception->getLine()
+            ));
+            $pdo->rollBack();
+            $output->writeln("<error>Exception during updating demo user data</error>");
+
+            return;
+        }
+
+        $pdo->commit();
+
+        $message = "User devices last update date successfully updated!";
+
+        $logger->addInfo($message);
+        $output->writeln($message);
+    });
+
+$console->register('add-user')
+    ->setDefinition([
+        new InputArgument('email', InputArgument::REQUIRED, 'User email'),
+        new InputArgument('password', InputArgument::REQUIRED, 'User password'),
+    ])
+    ->setDescription('Create new user')
+    ->setCode(function (InputInterface $input, OutputInterface $output) {
+        if (!is_file(ROOT_PATH . 'build.php')) {
+            $output->writeln("<error>build.php file file not found!</error>");
+
+            return;
+        }
+
+        $config = include ROOT_PATH . 'build.php';
+
+        $di = new System\DI();
+        $di->set('config', $config);
+
+        require ROOT_PATH . 'bootstrap.php';
+
+        $email = $input->getArgument('email');
+
+        $usersManager = new CS\Users\UsersManager($di->get('db'));
+        $usersManager->getUser()
+            ->setLogin($email)
+            ->setSiteId($di['config']['site'])
+            ->setPassword($usersManager->getPasswordHash($input->getArgument('password')))
+            ->save();
+
+        $output->writeln(sprintf('Record created for user <info>%s</info>', $email));
+    });
+
+$console->register('icloud-info')
+    ->setDefinition([
+        new InputArgument('email', InputArgument::REQUIRED, 'User email'),
+        new InputArgument('password', InputArgument::REQUIRED, 'User password'),
+    ])
+    ->setDescription('iCloud FMI info')
+    ->setCode(function (InputInterface $input, OutputInterface $output) {
+        $icloud = new \CS\ICloud\Locations\Sosumi($input->getArgument('email'), $input->getArgument('password'));
+
+        $output->writeln(print_r($icloud->devices, true));
+    });
+
+$console->register('icloud-backup-info')
+    ->setDefinition([
+        new InputArgument('email', InputArgument::REQUIRED, 'User email'),
+        new InputArgument('password', InputArgument::REQUIRED, 'User password'),
+    ])
+    ->setDescription('iCloud backup info')
+    ->setCode(function (InputInterface $input, OutputInterface $output) {
+        $backup = new \CS\ICloud\Backup($input->getArgument('email'), $input->getArgument('password'));
+
+        $output->writeln(print_r($backup->getDevices(), true));
+    });
+
+$console->run();

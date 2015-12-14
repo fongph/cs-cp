@@ -5,7 +5,7 @@ use Components\WizardRouter;
 use Models\Modules;
 
 $di->setShared('db', function() use ($config) {
-    $pdo = new \PDO("mysql:host={$config['db']['host']};dbname={$config['db']['dbname']}", $config['db']['username'], $config['db']['password'], $config['dbOptions']);
+    $pdo = new \PDO("mysql:host={$config['db']['host']};port=3306;dbname={$config['db']['dbname']}", $config['db']['username'], $config['db']['password'], $config['dbOptions']);
     if ($config['environment'] == 'development') {
         $pdo->exec("set profiling_history_size = 1000; set profiling = 1;");
     }
@@ -13,10 +13,12 @@ $di->setShared('db', function() use ($config) {
 });
 
 $di->setShared('dataDb', function() use ($di) {
-    if ($di['config']['environment'] == 'production') {
-        $dbConfig = GlobalSettings::getDeviceDatabaseConfig($di['devId']);
+    //$di['devId']
+    if (is_array($di['config']['dataDb'])) {
+        $dbNumber = 1;
+        $dbConfig = $di['config']['dataDb'][$dbNumber];
     } else {
-        $dbConfig = $di['config']['dataDb'];
+        $dbConfig = GlobalSettings::getShardDB($di['devId']);
     }
 
     $pdo = new \PDO("mysql:host={$dbConfig['host']};dbname={$dbConfig['dbname']}", $dbConfig['username'], $dbConfig['password'], $di['config']['dbOptions']);
@@ -184,8 +186,6 @@ $di->setShared('router', function() use($config, $di) {
 });
 
 $di->setShared('session', function () use ($di) {
-
-
     System\Session::setConfig($di['config']['session']);
     if ($di['config']['demo']) {
         System\Session::setSessionHandler(new System\Session\Handler\CookieSessionHandler($di['request']));
@@ -236,8 +236,12 @@ $di->setShared('t', function () use ($di) {
 });
 
 $di->setShared('S3', function () use ($di) {
-    $s3 = new \S3($di['config']['s3']['key'], $di['config']['s3']['secret']);
-    $s3->setSigningKey($di['config']['cloudFront']['keyPairId'], $di['config']['cloudFront']['privatKeyFilename']);
+    // temporary load from global settings
+    $config['s3'] = GlobalSettings::getS3Config();
+    $config['cloudFront'] = GlobalSettings::getCloudFrontConfig();
+
+    $s3 = new \S3($config['s3']['key'], $config['s3']['secret']);
+    $s3->setSigningKey($config['cloudFront']['keyPairId'], $config['cloudFront']['privatKeyFilename']);
 
     return $s3;
 });

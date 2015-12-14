@@ -65,7 +65,7 @@ class Index extends BaseController
     }
     
     public function loginAction()
-    {   
+    {
         $this->view->norobots = false;
         
         if ($this->di->getAuth()->hasIdentity()) {
@@ -94,7 +94,7 @@ class Index extends BaseController
                     }
                 } catch (\CS\Users\UserNotFoundException $e) {
                     $this->di['flashMessages']->add(FlashMessages::ERROR, $this->di['t']->_('Looks like that email address is not registered yet. Try to %1$sregister%2$s or retype again.', array(
-                                '<a href="' . $this->di['config']['registration'] . '">',
+                                '<a href="' . $this->di['config']['url']['registration'] . '">',
                                 '</a>'
                     )));
                 } catch (\CS\Users\InvalidPasswordException $e) {

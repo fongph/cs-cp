@@ -337,7 +337,7 @@ class Settings extends BaseModel
 
         $carrierParts = explode('_', $info['carrier']);
 
-        if (isset($carrierParts[0]) && strlen($carrierParts[0]) && ($carrierParts[0] != '(null)') && (strtolower($carrierParts[0]) != 'carrier')) {
+        if (isset($carrierParts[0]) && strlen($carrierParts[0]) && ($carrierParts[0] != '(null)' || strtolower($carrierParts[0]) != 'carrier')) {
             $info['carrier'] = $carrierParts[0];
         } else {
             $name = $this->getCarrierNameByCode($carrierParts[1]);

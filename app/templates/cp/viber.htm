@@ -83,8 +83,8 @@
         $(document).ready(function() {
             var typeTmpl = _.template('<i class="call-<%= type %> hidden-xs" title="<%= title %>"></i><span class="visible-xs"><%= title %></span>');
             var viber = {
-                startDate: null,
-                endDate: null,
+                startDate: -1,
+                endDate: -1,
                 currentTab: '',
                 privateTable: null,
                 groupTable: null,
@@ -94,7 +94,7 @@
                 getRangeUrl: function(start, end) {
                     if (start === null && end === null) {
                         this.startDate = this.endDate = -1;
-                    } else {
+                    } else if (start && end) {
                         this.startDate = moment(start).unix();
                         this.endDate = moment(end).unix();
                     }
