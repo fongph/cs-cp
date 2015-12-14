@@ -12296,6 +12296,19 @@ a.list-group-item-danger.active:focus {
     background: transparent;
     color: #16a89e;
   }
+  #header .menu ul.nav > li#free-trial-menu-link {
+    margin: 4px 6px 4px 3px;
+  }
+  #header .menu ul.nav > li#free-trial-menu-link a {
+    padding: 3px 8px 5px 30px;
+    border-radius: 3px;
+    background: url('/static/ico/fre-trial-icon.png') no-repeat 7px 3px #16a89e;
+    color: white;
+    font-weight: 400;
+  }
+  #header .menu ul.nav > li#free-trial-menu-link a:hover {
+    background-color: #14988f;
+  }
 }
 .cp-menu li i {
   background-image: url(../img/pumpic/menu-left-icons.png);

@@ -89,6 +89,8 @@ $default = array(
     'bundlesNamespace' => 'first'
 );
 
+$default['mainURL'] = GlobalSettings::getMainURL($build['site']);
+
 if ($build['environment'] == 'production') {
     $default['db'] = GlobalSettings::getMainDbConfig();
     $default['redis'] = GlobalSettings::getRedisConfig();

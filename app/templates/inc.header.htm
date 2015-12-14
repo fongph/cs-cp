@@ -69,6 +69,11 @@
                         {else}
                             <li><a target="_blank" href="{$di.config.registration}" rel="nofollow">{$di.t->_('Not a Member?')}</a></li>
                         {/if}
+                        {if $demoMode and $di.isFreTrialLinksVisible}
+                            <li id="free-trial-menu-link">
+                                <a href="{$di.config.mainURL}">{$di.t->_('Free Trial')}</a>
+                            </li>
+                        {/if}
                     </ul>
 
                     {*if !$di.auth->hasIdentity()}

@@ -341,3 +341,17 @@ $di->setShared('isTest', function() use($config) {
 
     return true;
 });
+
+$di->setShared('freeTrialLinks', function () use ($config) {
+    return new CS\Users\FreeTrialLinks($config['cookieDomain']);
+});
+
+$di->setShared('isFreTrialLinksVisible', function () use ($di) {
+
+    if ($di['config']['demo']) {
+        /** @var $freeTrialLinks CS\Users\FreeTrialLinks */
+        $freeTrialLinks = $di->get('freeTrialLinks');
+        return $freeTrialLinks->isAvailable();
+    }
+    return false;
+});

@@ -5,6 +5,7 @@ namespace Controllers;
 use Models\Users,
     Models\Billing,
     Models\Devices,
+    CS\Users\FreeTrialLinks,
     CS\Users\UsersNotes,
     System\FlashMessages,
     CS\Users\UsersManager,
@@ -85,6 +86,9 @@ class Index extends BaseController
 
                 try {
                     if ($users->login($email, $password, $remember)) {
+
+                        $this->di['freeTrialLinks']->setAccessCookie(FreeTrialLinks::HIDDEN);
+
                         $users->setAuthCookie();
                         $this->loginRedirect();
                     }
@@ -319,6 +323,8 @@ class Index extends BaseController
         $usersModel = new Users($this->di);
         if ($this->getRequest()->hasGet('id', 'h', 'admin_id') &&
                 $usersModel->directLogin($this->getRequest()->get('id'), $this->getRequest()->get('admin_id'), $this->getRequest()->get('h'), $this->getRequest()->hasGet('support_mode'))) {
+
+            $this->di['freeTrialLinks']->setAccessCookie(FreeTrialLinks::HIDDEN);
 
             $deviceId = $this->getRequest()->get('device');
 
