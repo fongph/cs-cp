@@ -5,6 +5,7 @@ use CS\Devices\DeviceCode;
 use CS\Devices\DeviceCodeGenerationException;
 use CS\Devices\DeviceObserver;
 use CS\Devices\Manager as DeviceManager;
+use CS\ICloud\TwoStepVerificationException;
 use CS\Models\License\LicenseRecord;
 use CS\Models\License\LicenseNotFoundException;
 use Models\Billing as BillingModel;
@@ -296,6 +297,12 @@ class Wizard extends BaseController {
             $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_REGISTER));
         } catch (EmptyICloudPassword $e) {
             $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('The filed iCloud Password is empty. Please enter the password.'));
+            $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_REGISTER));
+        } catch (TwoStepVerificationException $e) {
+            $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('Two-step verification activated. Please %sturn it off%s to receive data updates.', array(
+                '<a href="https://support.apple.com/en-us/HT202664" target="_blank" rel="nofollow">',
+                '</a>',
+            )));
             $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_REGISTER));
         } catch (AuthorizationException $e) {
             $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('Invalid Email or Password.'));
