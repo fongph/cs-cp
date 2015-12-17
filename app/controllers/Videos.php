@@ -33,10 +33,10 @@ class Videos extends BaseModuleController
             }
         } else {
             if ($this->getRequest()->hasGet('getThumb')) {
-                $url = $videosModel->getCDNAuthorizedUrl($this->di['devId'] . '/video/' . $this->getRequest()->get('getThumb'));
+                $url = $videosModel->getCDNAuthorizedUrl($this->di['devId'] . '/video/' . urlencode($this->getRequest()->get('getThumb')));
                 $this->redirect($url);
             } else if ($this->getRequest()->hasGet('getVideo')) {
-                $url = $videosModel->getCDNAuthorizedUrl($this->di['devId'] . '/video/' . $this->getRequest()->get('getVideo'));
+                $url = $videosModel->getCDNAuthorizedUrl($this->di['devId'] . '/video/' . urlencode($this->getRequest()->get('getVideo')));
                 $this->redirect($url);
             } else {
                 $this->processVideoRequests($videosModel, $this->di['router']->getRouteUrl('videos'));
