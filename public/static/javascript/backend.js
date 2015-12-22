@@ -48970,7 +48970,7 @@ $(document).ready(function() {
 
 $.fn.tableScroll = function () {
     var scrollStartPos = 0,
-            start = false;
+        start = false;
 
     $(this).on("touchstart", function (event) {
         if (event.originalEvent && event.originalEvent.touches && event.originalEvent.touches.length === 1) {
@@ -49021,8 +49021,8 @@ function htmlStrip(text) {
 }
 
 function getDateAJAX(perPage, page, url, search, doStrip) {
-    if(!url)  { 
-        console.log('Error: set variable "url"'); return false; 
+    if(!url)  {
+        console.log('Error: set variable "url"'); return false;
     }
     var $_result = {};
     $.ajax({
@@ -49044,6 +49044,28 @@ function getDateAJAX(perPage, page, url, search, doStrip) {
     } else {
         return htmlEscape($_result);
     }
+}
+
+function getDateAJAXWithoutStrip(perPage, page, url, search) {
+    if(!url)  {
+        console.log('Error: set variable "url"'); return false;
+    }
+    var $_result = {};
+    $.ajax({
+        type: 'POST',
+        url: url,
+        async: false,
+        data: {'perPage': perPage, 'currPage': page, 'search': search},
+        dataType: 'json',
+        beforeSend: function () {
+            $('.panel-body').html('loading..');
+        },
+        success: function (result) {
+            $_result = (result) ? result : false;
+        }
+    });
+
+    return $_result;
 }
 
 function search() {
@@ -49138,8 +49160,8 @@ function TrackEventGA(Category, Action, Label, Value) {
 $(document).ready(function () {
     $('.ga-action-click').on('click', function () {
         var _ga_action = ($(this).attr('ga-action')) ? $(this).attr('ga-action') : false,
-                _ga_category = ($(this).attr('ga-category')) ? $(this).attr('ga-category') : false,
-                _ga_label = ($(this).attr('ga-label')) ? $.trim($(this).attr('ga-label').toLowerCase()).replace(/\s/g, '-') : false;
+            _ga_category = ($(this).attr('ga-category')) ? $(this).attr('ga-category') : false,
+            _ga_label = ($(this).attr('ga-label')) ? $.trim($(this).attr('ga-label').toLowerCase()).replace(/\s/g, '-') : false;
 
         if (_ga_action && _ga_category && _ga_label) {
             TrackEventGA(_ga_category, _ga_action, _ga_label);
@@ -49255,7 +49277,7 @@ String.prototype.stripHTML = function () {
             locale: locale
         }, function (start, end, label) {
             updateLabel(start, end, label);
-            
+
             if (label === allTimeRangeLabel) {
                 selectCallback(null, null);
             } else {

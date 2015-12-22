@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "037067acce32d51dee95bebdc8db4bcc",
-    "content-hash": "4f23fc604f854bea0c34fa002cafed92",
+    "hash": "62e2d01f3c3d97e80bde16598ead764e",
+    "content-hash": "3157308ae9297f17d2d4657c4a69b3c1",
     "packages": [
         {
             "name": "boomers/cs-billing",
@@ -98,7 +98,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-mail.git",
-                "reference": "4cd724cbe87bef9a9b8fd8417423b0adbabeed7b"
+                "reference": "5ae5ae41ce72855bc8117567bd09e06153251e45"
             },
             "require": {
                 "guzzlehttp/guzzle": "~5.0",
@@ -117,7 +117,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2015-10-30 11:58:32"
+            "time": "2015-12-16 14:33:29"
         },
         {
             "name": "boomers/cs-models",
@@ -125,7 +125,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-models.git",
-                "reference": "b7b02c23e0232dc87464a73d13d764dda2bdab74"
+                "reference": "23a091ac425a478d6f1bab3ac8c8217472401e63"
             },
             "require": {
                 "php": ">=5.4.0"
@@ -139,7 +139,7 @@
                     "CS\\Models\\": "src/"
                 }
             },
-            "time": "2015-11-26 13:34:40"
+            "time": "2015-12-16 14:46:20"
         },
         {
             "name": "boomers/cs-queue",
@@ -170,7 +170,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-settings.git",
-                "reference": "05c209ba8962025b817886e3e9a8215b0beed906"
+                "reference": "87e21f0827b39d5a0521bcaa19f1a89052c86a2a"
             },
             "require": {
                 "php": ">=5.4.0"
@@ -181,7 +181,7 @@
                     "CS\\Settings\\": "src/"
                 }
             },
-            "time": "2015-10-28 07:11:02"
+            "time": "2015-12-21 14:59:58"
         },
         {
             "name": "boomers/cs-users",
@@ -189,7 +189,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-users.git",
-                "reference": "091cc252113d7f91dc88ab4d48c255cc316c86fe"
+                "reference": "aa4abb291544a2710fc1367e90f25243481742e0"
             },
             "require": {
                 "boomers/cs-mail": "dev-master",
@@ -213,7 +213,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2015-12-14 12:40:01"
+            "time": "2015-12-17 10:45:10"
         },
         {
             "name": "boomers/ip",
@@ -963,6 +963,72 @@
             ],
             "description": "A lightweight implementation of CommonJS Promises/A for PHP",
             "time": "2015-07-03 13:48:55"
+        },
+        {
+            "name": "sabre/vobject",
+            "version": "3.4.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/fruux/sabre-vobject.git",
+                "reference": "7b3690545451159fc608dfac6696110f6770ff5d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/fruux/sabre-vobject/zipball/7b3690545451159fc608dfac6696110f6770ff5d",
+                "reference": "7b3690545451159fc608dfac6696110f6770ff5d",
+                "shasum": ""
+            },
+            "require": {
+                "ext-mbstring": "*",
+                "php": ">=5.3.1"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "*",
+                "squizlabs/php_codesniffer": "*"
+            },
+            "bin": [
+                "bin/vobject",
+                "bin/generate_vcards"
+            ],
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.2.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Sabre\\VObject\\": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Evert Pot",
+                    "email": "me@evertpot.com",
+                    "homepage": "http://evertpot.com/",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Dominik Tobschall",
+                    "email": "dominik@fruux.com",
+                    "homepage": "http://tobschall.de/",
+                    "role": "Developer"
+                }
+            ],
+            "description": "The VObject library for PHP allows you to easily parse and manipulate iCalendar and vCard objects",
+            "homepage": "http://sabre.io/vobject/",
+            "keywords": [
+                "VObject",
+                "iCalendar",
+                "jCal",
+                "jCard",
+                "vCard"
+            ],
+            "time": "2015-09-04 15:17:58"
         },
         {
             "name": "symfony/console",

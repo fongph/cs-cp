@@ -7,7 +7,7 @@
     <div class="dialog-panel-top">
         <p class="text-info">{$di.t->_('Messages with:')}
             {foreach $members as $item last=$last}
-                {if strlen($item.name)}<b>{$item.name|e} ({$item.phone|e})</b>{else}<b>{$item.phone|e}</b>{/if}{if !$last}, {/if}
+            {if strlen($item.name)}<b>{$item.name|e} ({$item.phone|e})</b>{else}<b>{$item.phone|e}</b>{/if}{if !$last}, {/if}
             {/foreach}
         </p>
         <a class="btn btn-default" href="{$di.router->getRouteUrl('sms')}">{$di['t']->_('Back to SMS log')}</a>
@@ -19,51 +19,9 @@
     </div>
     {/if}
 
-    {*
-    <div class="dialog-messages-list">
-        {foreach $list as $item}
-        <div id="{$item.timestamp}">
-            <div class="popover {if $item.type == 'in'}right{else}left{/if}{if $item.blocked > 0} text-danger{/if}">
-                <div class="arrow"></div>
-
-                <h3 class="popover-title">
-                    {if $item.type == 'in'}
-                    <b>{if strlen($item.name)}{$item.name|e}{else}{$item.phone|e}{/if}</b> <span class="date"></span>
-                    {else}
-                    <span class="date"></span>
-                    {/if}
-
-                    {if $item.network > 0}
-                        <span class="label label-warning" style="float: right;">{$di['t']->_('iMessage')}</span>
-                    {/if}
-
-                    {if $item.multimedia !== 'none' && $item.network == 0}
-                        <span class="label label-warning" style="float: right;">{$di['t']->_('MMS')}</span>
-                    {/if}
-
-                    {if $item.blocked}
-                        <span class="label label-danger" style="float: right;">{$di['t']->_('Blocked')}</span>
-                    {elseif $item.deleted}
-                        <span class="label label-warning" style="float: right;">{$di['t']->_('Deleted')}</span>
-                    {/if}
-                </h3>
-
-                <div class="popover-content">
-                    <p{if $item.multimedia !== 'none'} class="attachment {$item.multimedia}"{/if}>{$item.content|e}</p>
-                </div>
-            </div>
-        </div>
-        {/foreach}
-    </div>
-    *}
-
     <div id="blockPaginateLists" class="panel panel-default" data-paginate-ajax="{$di.config.domain}/cp/{$tab}/{$id}">
         <div class="panel-heading">
             <div class="row">
-                {* TITLE
-                <div class="col-xs-4">
-                    <span class="title"></span>
-                </div> *}
 
                 <div class="col-xs-6">
                     <div class="blockSearch">
@@ -132,108 +90,165 @@
 
             var _arrTitle = new Array;
 
-                if(value.type == 'in') {
-                    _arrTitle.push('<b>'+ ( (value.name) ? value.name : value.phone ) +'</b> <span class="date"></span>');
+            if(value.type == 'in') {
+                _arrTitle.push('<b>'+ ( (value.name) ? _.escape(value.name) : _.escape(value.phone)) +'</b> <span class="date"></span>');
+            } else {
+                _arrTitle.push('<span class="date"></span>');
+            }
+
+            if (value.network > 0) {
+                _arrTitle.push("<span class=\"label label-warning\" style=\"float: right;\">{$di['t']->_('iMessage')}</span>");
+            }
+
+            if(value.multimedia != 'none' && value.network == 0) {
+                _arrTitle.push("<span class=\"label label-warning\" style=\"float: right;\">{$di['t']->_('MMS')}</span>");
+            }
+
+            if (value.blocked > 0) {
+                _arrTitle.push("<span class=\"label label-danger\" style=\"float: right;\">{$di['t']->_('Blocked')}</span>");
+            } else if (value.deleted > 0) {
+                _arrTitle.push("<span class=\"label label-warning\" style=\"float: right;\">{$di['t']->_('Deleted')}</span>");
+            }
+
+            popover_title += _arrTitle.join('') + '</h3>';
+
+            if (value.multimedia == 'vcard' && typeof value.card != 'undefined') {
+                var $card = $('<div class="vcard"><div class="data"></div></div>');
+                if (typeof value.card.photo != 'undefined') {
+                    $card.prepend('<div class="photo"><img src="' + value.card.photo + '" alt="" class="blur-for-support" /></div>');
                 } else {
-                    _arrTitle.push('<span class="date"></span>');
+                    $card.prepend('<div class="photo empty"></div>');
                 }
 
-                if (value.network > 0) {
-                    _arrTitle.push("<span class=\"label label-warning\" style=\"float: right;\">{$di['t']->_('iMessage')}</span>");
+                for (key in value.card.params) {
+                    if (typeof value.card.params[key] == 'object') {
+                        $card.find('.data').append('<div><b>' + key + ':</b> <span>' + value.card.params[key].join(', ') + '</span></div>');
+                    } else {
+                        $card.find('.data').append('<div><b>' + key + ':</b> <span>' + value.card.params[key] + '</span></div>');
+                    }
                 }
 
-                if(value.multimedia != 'none' && value.network == 0) {
-                    _arrTitle.push("<span class=\"label label-warning\" style=\"float: right;\">{$di['t']->_('MMS')}</span>");
-                }
+                var wrappedContent = $('<div/>').append($card).html();
+            } else if (value.multimedia == 'image' && typeof value.image != 'undefined') {
+                var wrappedContent = '<a class="dialog-item-photo" href="' + value.image + '"><img src="' + value.thumbnail + '" class="blur-for-support" alt="" /></a>';
+            } else if (value.multimedia == 'location') {
+                var content = _.escape(value.content);
+                var wrappedContent = content.replace(/\[location\](.+?)\[\/location\]/g, function(match) {
+                    var match = match.replace(/\[/g, '<').replace(/\]/g, '>');
+                    var $location = $($.parseXML(match));
+                    var latitude = $location.find('latitude').text();
+                    var longitude = $location.find('longitude').text();
 
-                if (value.blocked > 0) {
-                    _arrTitle.push("<span class=\"label label-danger\" style=\"float: right;\">{$di['t']->_('Blocked')}</span>");
-                } else if (value.deleted > 0) {
-                    _arrTitle.push("<span class=\"label label-warning\" style=\"float: right;\">{$di['t']->_('Deleted')}</span>");
-                }
+                    return '<a class="dialog-item-map" href="https://www.google.com/maps/embed/v1/place?q=' + latitude + ',' + longitude + '&key=AIzaSyACASzYX7N75YbvFU0z0BwGDzxbWyj8TQ8" target="_blank"><img src="http://maps.googleapis.com/maps/api/staticmap?center=' + latitude + ',' + longitude + '&zoom=15&size=150x150&markers=color:red%7C' + latitude + ',' + longitude + '&sensor=false" alt="" /></a>';
+                });
+            } else if (value.multimedia != 'none' && value.multimedia != 'text') {
+                var wrappedContent = '<p '+ ( (value.multimedia !== 'none') ? 'class=\"attachment '+ value.multimedia + '\"' : '' ) +'>'+ value.content +'</p>';
+            } else {
+                var wrappedContent = _.escape(value.content);
+            }
 
-                popover_title += _arrTitle.join('') + '</h3>';
-
-            var content = '<p '+ ( (value.multimedia !== 'none') ? 'class=\"attachment '+ value.multimedia + '\"' : '' ) +'>'+ value.content +'</p>';
+            wrappedContent = wrappedContent.replace(/([^>])\n/g, '$1<br/>');
 
             $('.panel-body').append('<div id="'+ value.timestamp +'">'+
-                                        '<div class="popover '+ position +' '+ blocked +'">'+
-                                            '<div class="arrow"></div>'+
-                                             popover_title +
-                                            '<div class="popover-content">'+
-                                                content +
-                                            '</div>'+
-                                        '</div>'+
-                                    '</div>');
+                    '<div class="popover '+ position +' '+ blocked +'">'+
+                    '<div class="arrow"></div>'+
+                    popover_title +
+                    '<div class="popover-content">'+
+                    wrappedContent +
+                    '</div>'+
+                    '</div>'+
+                    '</div>');
 
         });
 
-        Init();
+        {if $supportMode}
+            $(".dialog-item-photo").on('click', function(e){
+                e.preventDefault();
+                alert('Not allowed on support mode!');
+            });
+            {else}
+            $(".dialog-item-photo").colorbox({
+                fixed: true,
+                rel: 'dialog',
+                maxWidth: '90%',
+                maxHeight: '90%'
+            });
+            {/if}
 
-    }
-
-    function Init() {
-        var last = 0;
-        $('.dialog-messages-list > div').each(function() {
-            var timestamp = $(this).attr('id');
-
-            var date = moment.unix(timestamp){if isset($customUtcOffset)}.zone({$customUtcOffset}){/if}.format("LL");
-            if (date !== last) {
-                $(this).before('<div class="date-title">' + date + '</div>');
-            }
-
-            var date = moment.unix(timestamp){if isset($customUtcOffset)}.zone({$customUtcOffset}){/if}.format("LLL");
-            $(this).find('.popover-title span.date').html(date);
-
-            last = moment.unix(timestamp){if isset($customUtcOffset)}.zone({$customUtcOffset}){/if}.format("LL");
-        });
-    }
-
-    $(document).ready(function() {
-        // Action Search
-        search();
-
-        // Paginate
-        $("select#panel_paginate_per_pages").change(function () {
-            /*-- get new no of items per page --*/
-            var $search = '', $url = '';
-            if($('.panel-heading .blockSearch > input').length)
-                 $search = ($('.panel-heading .blockSearch > input').attr('disabled')) ? $('.panel-heading .blockSearch > input').val() : '';
-
-            if($('#blockPaginateLists').data('paginate-ajax'))
-               $url = $('#blockPaginateLists').data('paginate-ajax');
-
-            var newPerPage = parseInt($(this).val());
-            var $_res = getDateAJAX(newPerPage, 0, $url, $search);
-
-            if($('#panel_paginate').data('twbs-pagination'))
-                $('#panel_paginate').data('twbs-pagination').destroy();
-
-            if($_res) {
-
-                if(!$_res.items.length) $('.panel-body').html("No data available in lists");
-                // console.log( $_res );
-                setDataItems($_res.items, 0, newPerPage, $_res.countItem, $_res.countEnteres);
-                $('#panel_paginate').twbsPagination({
-                    totalPages: (isset($_res.totalPages)) ? $_res.totalPages : 1,
-                    startPage: 1,
-                    visiblePages: 0,
-                    displayFirst: false,
-                    displayLast: false,
-                    paginationClass: "panel-pagination clearfix",
-                    prev: '<i class="fa fa-arrow-left"></i>',
-                    next: '<i class="fa fa-arrow-right"></i>',
-                    prevClass: 'panel_previous',
-                    onPageClick: function (event, page) {
-                        var pageData = $('#panel_paginate').data();
-                        // console.log(newPerPage, page, $_res.countItem);
-                        var $data = getDateAJAX(newPerPage, page, $url, $search);
-                        if($data) setDataItems($data.items, page - 1, newPerPage, $data.countItem, $data.countEnteres);
-                    }
+                $(".dialog-item-map").colorbox({
+                    iframe: true,
+                    fixed: true,
+                    rel: 'dialog',
+                    width:"90%",
+                    height:"90%"
                 });
 
+                Init();
+
             }
 
-        }).change();
-    });
+            function Init() {
+                var last = 0;
+                $('.dialog-messages-list > div').each(function() {
+                    var timestamp = $(this).attr('id');
+
+                    var date = moment.unix(timestamp){if isset($customUtcOffset)}.zone({$customUtcOffset}){/if}.format("LL");
+                        if (date !== last) {
+                            $(this).before('<div class="date-title">' + date + '</div>');
+                        }
+
+                        var date = moment.unix(timestamp){if isset($customUtcOffset)}.zone({$customUtcOffset}){/if}.format("LLL");
+                            $(this).find('.popover-title span.date').html(date);
+
+                            last = moment.unix(timestamp){if isset($customUtcOffset)}.zone({$customUtcOffset}){/if}.format("LL");
+                            });
+                            }
+
+                            $(document).ready(function() {
+                                // Action Search
+                                search();
+
+                                // Paginate
+                                $("select#panel_paginate_per_pages").change(function () {
+                                    /*-- get new no of items per page --*/
+                                    var $search = '', $url = '';
+                                    if($('.panel-heading .blockSearch > input').length)
+                                        $search = ($('.panel-heading .blockSearch > input').attr('disabled')) ? $('.panel-heading .blockSearch > input').val() : '';
+
+                                    if($('#blockPaginateLists').data('paginate-ajax'))
+                                        $url = $('#blockPaginateLists').data('paginate-ajax');
+
+                                    var newPerPage = parseInt($(this).val());
+                                    var $_res = getDateAJAXWithoutStrip(newPerPage, 0, $url, $search);
+
+                                    if($('#panel_paginate').data('twbs-pagination'))
+                                        $('#panel_paginate').data('twbs-pagination').destroy();
+
+                                    if($_res) {
+
+                                        if(!$_res.items.length) $('.panel-body').html("No data available in lists");
+                                        // console.log( $_res );
+                                        setDataItems($_res.items, 0, newPerPage, $_res.countItem, $_res.countEnteres);
+                                        $('#panel_paginate').twbsPagination({
+                                            totalPages: (isset($_res.totalPages)) ? $_res.totalPages : 1,
+                                            startPage: 1,
+                                            visiblePages: 0,
+                                            displayFirst: false,
+                                            displayLast: false,
+                                            paginationClass: "panel-pagination clearfix",
+                                            prev: '<i class="fa fa-arrow-left"></i>',
+                                            next: '<i class="fa fa-arrow-right"></i>',
+                                            prevClass: 'panel_previous',
+                                            onPageClick: function (event, page) {
+                                                var pageData = $('#panel_paginate').data();
+                                                // console.log(newPerPage, page, $_res.countItem);
+                                                var $data = getDateAJAXWithoutStrip(newPerPage, page, $url, $search);
+                                                if($data) setDataItems($data.items, page - 1, newPerPage, $data.countItem, $data.countEnteres);
+                                            }
+                                        });
+
+                                    }
+
+                                }).change();
+                            });
 </script>
