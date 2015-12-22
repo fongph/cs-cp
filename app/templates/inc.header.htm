@@ -15,6 +15,11 @@
 {/if}
 <div id="header" class="navbar-default">
     <div class="container">
+        {if !$di.config.demo}
+        <div class="monitoring-app-links-container-wide min-width-768-inline-block">
+            {insert 'inc.monitoring.app.links.htm'}
+        </div>
+        {/if}
         <div class="logo-holder">
             {if $di.config.demo}
                 <a href="{if !goBack()}{$di.config.domain}{else}{goBack()}{/if}" class="logo"></a>

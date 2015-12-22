@@ -266,3 +266,34 @@
     border: none;
     outline: none;
 }
+
+.max-width-767-inline-block, .min-width-768-inline-block {
+    display: none;
+}
+@media (max-width: 767px) {
+    .max-width-767-inline-block {
+        display: inline-block;
+    }
+}
+@media (min-width: 768px) {
+    .min-width-768-inline-block {
+        display: inline-block;
+    }
+}
+.monitoring-app-links-container-mobile {
+    text-align: center;
+    margin-bottom: -6px;
+    .cp-app-link {
+        display: inline-block;
+    }
+}
+#header .monitoring-app-links-container-wide {
+    float: right;
+    padding-top: 7px;
+    a.cp-app-link a.cp-app-link {
+        display: inline-block;
+        img {
+            display: inline-block;
+        }
+    }
+}
