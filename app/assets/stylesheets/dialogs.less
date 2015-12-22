@@ -1,115 +1,159 @@
 // Dialog pages like sms, fb, skype...
 
 .dialog-messages-list {
-    border: 1px solid #e1e1e8;
-    background-color: #f7f7f9;
-    padding: 10px 2px;
+  border: 1px solid #e1e1e8;
+  background-color: #f7f7f9;
+  padding: 10px 2px;
 
-    & > div {
-        overflow: hidden;
+  & > div {
+    overflow: hidden;
+  }
+
+  .popover {
+    position: relative;
+    display: block;
+    margin: 15px 0;
+    max-width: 100%;
+    width: 85%;
+
+    .popover-content {
+      word-break: break-all;
     }
 
-    .popover {
-        position: relative;
-        display: block;
-        margin: 15px 0;
-        max-width: 100%;
-        width: 85%;
+    &.left {
+      float: right;
+      margin-right: 10px;
 
-        .popover-content {
-            word-break: break-all;
+      .popover-title {
+        background: @dialog-message-out-title-bg;
+        color: @dialog-message-out-title-link-color;
+
+        a {
+          color: @dialog-message-out-title-link-color;
+          text-decoration: underline;
+          font-weight: 700;
+
+          &:hover {
+            text-decoration: none;
+          }
         }
 
-        &.left {
-            float: right;
-            margin-right: 10px;
-
-            .popover-title {
-                background: @dialog-message-out-title-bg;
-                color: @dialog-message-out-title-link-color;
-
-                a {
-                    color: @dialog-message-out-title-link-color;
-                    text-decoration: underline;
-                    font-weight: 700;
-
-                    &:hover {
-                        text-decoration: none;
-                    }
-                }
-                
-                .label {
-                    margin-right: 5px;
-                }
-            }
+        .label {
+          margin-right: 5px;
         }
-
-        &.right {
-            margin-left: 10px;
-
-            .popover-title {
-                background: @dialog-message-in-title-bg;
-                color: @dialog-message-out-title-text-color;
-
-                a {
-                    color: @dialog-message-in-title-link-color;
-                    text-decoration: underline;
-                    font-weight: 700;
-
-                    &:hover {
-                        text-decoration: none;
-                    }
-                }
-                
-                .label {
-                    margin-right: 5px;
-                }
-            }
-        }
+      }
     }
 
-    .date-title {
-        font-size: 20px;
-        text-align: center;
-        border-bottom: 1px solid #ccc;
-        padding: 5px 0;
-        margin: 5px 0;
+    &.right {
+      margin-left: 10px;
+
+      .popover-title {
+        background: @dialog-message-in-title-bg;
+        color: @dialog-message-out-title-text-color;
+
+        a {
+          color: @dialog-message-in-title-link-color;
+          text-decoration: underline;
+          font-weight: 700;
+
+          &:hover {
+            text-decoration: none;
+          }
+        }
+
+        .label {
+          margin-right: 5px;
+        }
+      }
     }
+  }
+
+  .date-title {
+    font-size: 20px;
+    text-align: center;
+    border-bottom: 1px solid #ccc;
+    padding: 5px 0;
+    margin: 5px 0;
+  }
+
+  .vcard {
+    overflow: hidden;
+
+    .photo {
+      float: left;
+      margin-right: 15px;
+
+      &.empty {
+        width: 58px;
+        height: 58px;
+        background: url(../img/vcard.png);
+      }
+
+      img {
+        width: 58px;
+        height: 58px;
+        border-radius: 36px;
+      }
+    }
+
+    .data {
+      float: left;
+    }
+  }
+
+  .dialog-item-photo img {
+    border-radius: 6px;
+  }
+
+  .dialog-item-map {
+    display: block;
+    position: relative;
+    width: 150px;
+    height: 150px;
+
+    img {
+      border-radius: 6px;
+    }
+  }
 }
 
 .dialog-panel-top {
-    margin-bottom: 10px;
-    vertical-align: bottom;
+  margin-bottom: 10px;
+  vertical-align: bottom;
 
-    .text-info a {
-        font-weight: bold;
-        color: @state-info-text;
-    }
+  .text-info a {
+    font-weight: bold;
+    color: @state-info-text;
+  }
 }
 
-p.attachment {
-    min-height: 20px;
-    padding-left: 25px;
-    background-repeat: no-repeat;
-    background-position: 0 2px;
-    
-    &.text {
-        background-image: url(../img/attachment-text.png);
-    }
-    
-    &.image {
-        background-image: url(../img/attachment-image.png);
-    }
-    
-    &.audio {
-        background-image: url(../img/attachment-audio.png);
-    }
-    
-    &.video {
-        background-image: url(../img/attachment-video.png);
-    }
-  
-    &.vcard {
-        background-image: url(../img/attachment-vcard.png);
-    }
+p.attachment, div.attachment {
+  height: 21px;
+  padding-left: 25px;
+  background-repeat: no-repeat;
+  background-position: 0 2px;
+
+  &.text {
+    background-image: url(../img/attachment-text.png);
+  }
+
+  &.image {
+    background-image: url(../img/attachment-image.png);
+  }
+
+  &.audio {
+    background-image: url(../img/attachment-audio.png);
+  }
+
+  &.video {
+    background-image: url(../img/attachment-video.png);
+  }
+
+  &.vcard {
+    background-image: url(../img/attachment-vcard.png);
+  }
+
+  &.location {
+    background-image: url(../img/attachment-location.png);
+  }
 }

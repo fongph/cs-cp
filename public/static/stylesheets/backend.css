@@ -8502,6 +8502,38 @@ body > .cp-menu {
   padding: 5px 0;
   margin: 5px 0;
 }
+.dialog-messages-list .vcard {
+  overflow: hidden;
+}
+.dialog-messages-list .vcard .photo {
+  float: left;
+  margin-right: 15px;
+}
+.dialog-messages-list .vcard .photo.empty {
+  width: 58px;
+  height: 58px;
+  background: url(../img/vcard.png);
+}
+.dialog-messages-list .vcard .photo img {
+  width: 58px;
+  height: 58px;
+  border-radius: 36px;
+}
+.dialog-messages-list .vcard .data {
+  float: left;
+}
+.dialog-messages-list .dialog-item-photo img {
+  border-radius: 6px;
+}
+.dialog-messages-list .dialog-item-map {
+  display: block;
+  position: relative;
+  width: 150px;
+  height: 150px;
+}
+.dialog-messages-list .dialog-item-map img {
+  border-radius: 6px;
+}
 .dialog-panel-top {
   margin-bottom: 10px;
   vertical-align: bottom;
@@ -8510,26 +8542,36 @@ body > .cp-menu {
   font-weight: bold;
   color: #32a2c6;
 }
-p.attachment {
-  min-height: 20px;
+p.attachment,
+div.attachment {
+  height: 21px;
   padding-left: 25px;
   background-repeat: no-repeat;
   background-position: 0 2px;
 }
-p.attachment.text {
+p.attachment.text,
+div.attachment.text {
   background-image: url(../img/attachment-text.png);
 }
-p.attachment.image {
+p.attachment.image,
+div.attachment.image {
   background-image: url(../img/attachment-image.png);
 }
-p.attachment.audio {
+p.attachment.audio,
+div.attachment.audio {
   background-image: url(../img/attachment-audio.png);
 }
-p.attachment.video {
+p.attachment.video,
+div.attachment.video {
   background-image: url(../img/attachment-video.png);
 }
-p.attachment.vcard {
+p.attachment.vcard,
+div.attachment.vcard {
   background-image: url(../img/attachment-vcard.png);
+}
+p.attachment.location,
+div.attachment.location {
+  background-image: url(../img/attachment-location.png);
 }
 /* video player */
 .jp-no-solution span {

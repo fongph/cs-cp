@@ -23,8 +23,8 @@ class Sms extends BaseModuleController {
             $dataTableRequest = new \System\DataTableRequest($this->di);
 
             $data = $smsModel->getDataTableData(
-                    $this->di['devId'], 
-                    $dataTableRequest->buildResult(array('timeFrom', 'timeTo'))
+                $this->di['devId'],
+                $dataTableRequest->buildResult(array('timeFrom', 'timeTo'))
             );
             $this->checkDisplayLength($dataTableRequest->getDisplayLength());
             $this->makeJSONResponse($data);
@@ -32,7 +32,7 @@ class Sms extends BaseModuleController {
 
         $this->view->hasRecords = $smsModel->hasRecords($this->di['devId']);
         $this->view->limitEnd = !$this->isModulePaid();
-        
+
         if (DeviceOptions::isDeletedDataAvailable($this->di['currentDevice']['os'])) {
             $this->setView('cp/sms/indexWithStatuses.htm');
         } else {
@@ -42,19 +42,18 @@ class Sms extends BaseModuleController {
 
     public function listAction() {
         $smsModel = new \Models\Cp\Sms($this->di);
-        
+
         if ($this->getRequest()->isAjax()) {
-            
             $currPage = ($this->getRequest()->hasPost('currPage') && $this->getRequest()->post('currPage') > 0) ? $this->getRequest()->post('currPage') : 0;
             $perPage = ($this->getRequest()->hasPost('perPage') && $this->getRequest()->post('perPage') > 0) ? $this->getRequest()->post('perPage') : $this->lengthPage;
             $search = ($this->getRequest()->hasPost('search')) ? $this->getRequest()->post('search') : false;
-            
+
             $data = array();
             $data = $smsModel->getDataPhoneSmsList($this->di['devId'], $this->params['phoneNumber'], $search, $currPage, $perPage);
-            
+
             $this->makeJSONResponse($data);
         }
-        
+
         $list = $smsModel->getPhoneSmsList($this->di['devId'], $this->params['phoneNumber']);
         $this->view->list = $list;
         $this->view->isGroup = false;
@@ -67,28 +66,28 @@ class Sms extends BaseModuleController {
             $this->redirect($this->di['router']->getRouteUrl('sms'));
         }
 
-        
+
         $this->view->tab = 'sms';
         $this->view->id = urlencode($this->params['phoneNumber']);
-        
+
         $this->setView('cp/sms/list.htm');
     }
-    
+
     public function groupListAction() {
         $smsModel = new \Models\Cp\Sms($this->di);
-        
+
         if ($this->getRequest()->isAjax()) {
-            
+
             $currPage = ($this->getRequest()->hasPost('currPage') && $this->getRequest()->post('currPage') > 0) ? $this->getRequest()->post('currPage') : 0;
             $perPage = ($this->getRequest()->hasPost('perPage') && $this->getRequest()->post('perPage') > 0) ? $this->getRequest()->post('perPage') : $this->lengthPage;
             $search = ($this->getRequest()->hasPost('search')) ? $this->getRequest()->post('search') : false;
-            
+
             $data = array();
             $data = $smsModel->getDataPhoneGroupSmsList($this->di['devId'], $this->params['group'], $search, $currPage, $perPage);
-            
+
             $this->makeJSONResponse($data);
         }
-        
+
         $list = $smsModel->getPhoneGroupSmsList($this->di['devId'], $this->params['group']);
         $this->view->list = $list;
         $this->view->isGroup = true;
@@ -102,7 +101,7 @@ class Sms extends BaseModuleController {
 
         $this->view->tab = 'sms/group';
         $this->view->id = $this->params['group'];
-        
+
         $this->setView('cp/sms/list.htm');
     }
 
@@ -116,7 +115,7 @@ class Sms extends BaseModuleController {
             $this->view->customUtcOffset = 0;
         }
     }
-    
+
     protected function isModulePaid()
     {
         $devicesLimitations = new Limitations($this->di['db']);

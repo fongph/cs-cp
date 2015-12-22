@@ -52,7 +52,7 @@
             locale: locale
         }, function (start, end, label) {
             updateLabel(start, end, label);
-            
+
             if (label === allTimeRangeLabel) {
                 selectCallback(null, null);
             } else {

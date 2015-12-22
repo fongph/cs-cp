@@ -27,7 +27,8 @@
         "boomers/cs-billing": "dev-master",
         "boomers/seller": "dev-master",
         "boomers/cs-icloud": "dev-master",
-        "boomers/cs-queue": "dev-master"
+        "boomers/cs-queue": "dev-master",
+        "sabre/vobject": "^3.4"
     },
     "autoload": {
         "psr-4": {
