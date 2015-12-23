@@ -185,6 +185,12 @@ class Wizard extends BaseController {
 
                     foreach ($devices as &$device) {
                         if ($device['SerialNumber'] === $_POST['devHash']) {
+
+                            if (in_array($device['backupUDID'], $this->di['config']['abuseDevicesHashList'])) {
+                                if ($this->getICloudLicense()->getProduct()->getGroup() == 'trial') {
+                                    $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_REGISTER));
+                                }
+                            }
                             
                             if($device['added']) {
                                 if(!$device['active']){
@@ -355,7 +361,7 @@ class Wizard extends BaseController {
         if ($this->di['config']['environment'] == 'production') {
             $dbConfig =  GlobalSettings::getDeviceDatabaseConfig($devId);
             
-        } else $dbConfig = $this->di['config']['dataDb'];
+        } else $dbConfig = $this->di['config']['dataDb'][1];
 
         return new \PDO("mysql:host={$dbConfig['host']};dbname={$dbConfig['dbname']}", $dbConfig['username'], $dbConfig['password'], array(
             \PDO::MYSQL_ATTR_INIT_COMMAND => 'set names utf8;',
