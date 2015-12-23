@@ -1,21 +1,4 @@
 <style>
-     #breadcrumbs {
-        color: #fff;
-        background: #4d4f5b;
-        padding: 10px 15px;
-        margin: 10px 0px;
-        border-radius: 5px;
-        -moz-border-radius: 5px;
-        -webkit-border-radius: 5px;
-    }
-    #breadcrumbs > a {
-        color: #fff;
-    }
-    
-    #breadcrumbs > span {
-        color: #ccc;
-    }
-    
     #block-discount {
         background: #fff;
         border-radius: 5px;
@@ -23,58 +6,33 @@
         -moz-border-radius: 5px;
         padding: 20px;
     }
-    #block-discount label {
-        color: red;
-    }
-    #block-discount .box-buttons {
-        margin: 0 auto;
-    }
-    #block-discount .box-buttons > a.btn {
-        width: 33.3333%;
-        display: inline-block;
-        overflow: hidden;
-    }
-    
+
     #feadback {
         width: 100%;
         height: 150px;
         margin: 0px 0px 10px;
     }
-    
-    dd {
-        padding-left: 20px;
-    }
 </style>
 <div>
-    <div id="breadcrumbs">
-        <a href="{$di.router->getRouteUrl('billing')}">Subscriptions</a> /
-        <a href="{$di.router->getRouteUrl('billingLicense', ['id' => $license.id])}">Subscription details</a> /
-        <span>{$title}</span>
-    </div>
-    
+    <ol class="breadcrumb">
+        <li><a href="{$di.router->getRouteUrl('billing')}">Subscriptions</a></li>
+        <li><a href="{$di.router->getRouteUrl('billingLicense', ['id' => $license.id])}">Subscription details</a></li>
+        <li class="active">{$title}</li>
+    </ol>
+
     {insert "inc.flashMessages.htm"}
 
-    <form id="form-cancellation" action="{$di.router->getRouteUrl('billingCancellation')}" method="post">
-        <input type="hidden" name="license_id" value="{$license.id}" />
-        
+    <form action="" method="post">
         <div id="block-discount">
             <p>If it's not too much trouble, please leave your feedback why you want to cancel Pumpic subscription auto-renewal.</p>
             <section>
                 <textarea id="feadback" name="feadback"></textarea>
             </section>
             <div class='box-buttons text-center'>
-                
-                <button class='btn btn-danger' name="changed" value="1">I’ve changed my mind</button>
-                <button class='btn btn-default' name="confirm" value="1">I confirm cancellation</button>
-                
+                {*<a href="{$di.router->getRouteUrl('billingLicense', ['id' => $license.id])}" class="btn btn-danger">I’ve changed my mind</a>*}
+                <button name="cancel" class="btn btn-danger">I’ve changed my mind</button>
+                <button name="confirm" class="btn btn-default">I confirm cancellation</button>
             </div>
         </div>
     </form>
-    
-    <script type="text/javascript">
-        $(document).ready(function () {
-            
-        });
-    </script>
-    
 </div>
