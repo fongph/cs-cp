@@ -14,7 +14,7 @@
     </div>
 </div>
 
-<div class="table-container">
+<div class="table-container dialogs-table">
     <table class="dataTable" id="private-datatable" aria-describedby="datatables_info">
         <thead>
             <tr role="row">
@@ -117,25 +117,18 @@
                             mData: null,
                             sWidth: '180px',
                             fnRender: function(obj, value) {
-                                if (obj.aData.group !== null) {
-                                    return facebook.messageLinkTemplate({
-                                        account: encodeURIComponent($('#account').val()),
-                                        tab: 'group',
-                                        id: encodeURIComponent(obj.aData.group),
-                                        date: moment(obj.aData.timestamp * 1000).zone(0).format('lll')
-                                    });
-                                }
-
-                                return facebook.messageLinkTemplate({
-                                    account: encodeURIComponent($('#account').val()),
-                                    tab: 'private',
-                                    id: encodeURIComponent(obj.aData.id),
-                                    date: moment(obj.aData.timestamp * 1000).zone(0).format('lll')
-                                });
-
-                                return moment(value * 1000).format('lll');
+                                return moment(obj.aData.timestamp * 1000).format('lll');
                             }
                         }],
+                    fnRowCallback: function(nRow, data) {
+                        $(nRow).on('click', function() {
+                            if (data.group !== null) {
+                                window.location = '{$di.router->getRouteUrl("facebook")}/' + encodeURIComponent($('#account').val()) + '/group/' + encodeURIComponent(data.group);
+                            } else {
+                                window.location = '{$di.router->getRouteUrl("facebook")}/' + encodeURIComponent($('#account').val()) + '/private/' + encodeURIComponent(data.id);
+                            }
+                        });
+                    },
                     fnDrawCallback: function() {
                         facebook.table = table;
                         $(this).find('tbody').tableScroll();

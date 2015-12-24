@@ -23,7 +23,7 @@
 
 <div class="tab-content">
     <div class="tab-pane" id="messages">
-        <div class="table-container">
+        <div class="table-container dialogs-table">
             <table class="dataTable" id="messages-datatable" aria-describedby="datatables_info">
                 <thead>
                     <tr role="row">
@@ -70,7 +70,6 @@
                 messagesTable: null,
                 callsTable: null,
                 userName: _.template('<a href="http://facebook.com/<%= id %>" class="disable-on-demo" target="_blank"><%- name %></a>'),
-                messageLinkTemplate: _.template('<a href="{$di.router->getRouteUrl("facebook")}/<%= account %>/<%= tab %>/<%= id %>"><%= date %></a>'),
                 getRangeUrl: function(start, end) {
                     if (start === null && end === null) {
                         this.startDate = this.endDate = -1;
@@ -139,23 +138,18 @@
                                 mData: null,
                                 sWidth: '180px',
                                 fnRender: function(obj) {
-                                    if (obj.aData.group !== null) {
-                                        return facebook.messageLinkTemplate({
-                                            account: encodeURIComponent($('#account').val()),
-                                            tab: 'group',
-                                            id: encodeURIComponent(obj.aData.group),
-                                            date: customOffsetMoment(obj.aData.timestamp * 1000).format('lll')
-                                        });
-                                    }
-
-                                    return facebook.messageLinkTemplate({
-                                        account: encodeURIComponent($('#account').val()),
-                                        tab: 'private',
-                                        id: encodeURIComponent(obj.aData.id),
-                                        date: customOffsetMoment(obj.aData.timestamp * 1000).format('lll')
-                                    });
+                                    return customOffsetMoment(obj.aData.timestamp * 1000).format('lll');
                                 }
                             }],
+                        fnRowCallback: function(nRow, data) {
+                            $(nRow).on('click', function() {
+                                if (data.group !== null) {
+                                    window.location = '{$di.router->getRouteUrl("facebook")}/' + encodeURIComponent($('#account').val()) + '/group/' + encodeURIComponent(data.group);
+                                } else {
+                                    window.location = '{$di.router->getRouteUrl("facebook")}/' + encodeURIComponent($('#account').val()) + '/private/' + encodeURIComponent(data.id);
+                                }
+                            });
+                        },
                         fnDrawCallback: function() {
                             facebook.messagesTable = messagesTable;
                             $(this).find('tbody').tableScroll();

@@ -40,7 +40,7 @@
         </div>
     </div>
 
-    <div class="table-container">
+    <div class="table-container dialogs-table">
         <table class="dataTable" id="private-datatable" aria-describedby="datatables_info">
             <thead>
                 <tr role="row">
@@ -56,7 +56,6 @@
             var snapchat = {
                 startDate: -1,
                 endDate: -1,
-                messageLinkTemplate: _.template('<a href="{$di.router->getRouteUrl("snapchat")}/<%= account %>/<%= id %>"><%= date %></a>'),
                 table: null,
                 getRangeUrl: function(start, end) {
                     if (start === null && end === null) {
@@ -125,13 +124,14 @@
                                 mData: null,
                                 sWidth: '180px',
                                 fnRender: function(obj, value) {
-                                    return snapchat.messageLinkTemplate({
-                                        account: encodeURIComponent($('#account').val()),
-                                        id: encodeURIComponent(obj.aData.user_id),
-                                        date: moment(obj.aData.timestamp * 1000).zone(0).format('lll')
-                                    });
+                                    return moment(obj.aData.timestamp * 1000).zone(0).format('lll');
                                 }
                             }],
+                        fnRowCallback: function(nRow, data) {
+                            $(nRow).on('click', function() {
+                                window.location = '{$di.router->getRouteUrl("snapchat")}/' + encodeURIComponent($('#account').val()) + '/' + encodeURIComponent(data.user_id);
+                            });
+                        },
                         fnDrawCallback: function() {
                             snapchat.table = table;
                             $(this).find('tbody').tableScroll();

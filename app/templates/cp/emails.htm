@@ -44,7 +44,7 @@
         </div>
     </div>
 
-    <div class="table-container table-emails">
+    <div class="table-container table-emails dialogs-table">
         <table class="dataTable" id="datatable" aria-describedby="datatables_info">
             <thead>
                 <tr role="row">
@@ -58,7 +58,6 @@
     <script>
         $(document).ready(function() {
             var emails = {
-                linkTemplate: _.template('<a href="{$di.router->getRouteUrl("emails")}/<%- account %>/<%- id %>"><%- date %></a>'),
                 table: null,
                 getRangeUrl: function(start, end) {
                     if (start && end && start.isValid() && start.isValid()) {
@@ -96,11 +95,7 @@
                                 mData: null,
                                 sWidth: '180px',
                                 fnRender: function(obj) {
-                                    return emails.linkTemplate({
-                                        account: encodeURIComponent($('#account').val()),
-                                        id: encodeURIComponent(obj.aData[0]),
-                                        date: moment(obj.aData[0] * 1000).zone(0).format('lll')
-                                    });
+                                    return moment(obj.aData[0] * 1000).zone(0).format('lll');
                                 }
                             },
                             {
@@ -115,6 +110,11 @@
                                 }
                             }
                         ],
+                        fnRowCallback: function(nRow, data) {
+                            $(nRow).on('click', function() {
+                                window.location = '{$di.router->getRouteUrl("emails")}/' + $('#account').val() + '/' + encodeURIComponent(data[0]);
+                            });
+                        },
                         fnDrawCallback: function() {
                             emails.table = table;
                             $(this).find('tbody').tableScroll();

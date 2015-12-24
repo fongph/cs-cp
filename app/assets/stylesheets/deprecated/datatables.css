@@ -300,3 +300,7 @@ div.dataTables_processing {
         display: block !important;
     }
 }
+
+.table-container.dialogs-table tbody tr {
+    cursor: pointer;
+}
