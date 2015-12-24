@@ -170,7 +170,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-settings.git",
-                "reference": "87e21f0827b39d5a0521bcaa19f1a89052c86a2a"
+                "reference": "1578e9c0c87bc14b09e8cc1a146ef0edcd16b6d7"
             },
             "require": {
                 "php": ">=5.4.0"
@@ -181,7 +181,7 @@
                     "CS\\Settings\\": "src/"
                 }
             },
-            "time": "2015-12-21 14:59:58"
+            "time": "2015-12-22 14:51:57"
         },
         {
             "name": "boomers/cs-users",
@@ -189,7 +189,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-users.git",
-                "reference": "aa4abb291544a2710fc1367e90f25243481742e0"
+                "reference": "acf6ffd6434cc203c66e6e5f26a036529401d64a"
             },
             "require": {
                 "boomers/cs-mail": "dev-master",
@@ -213,7 +213,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2015-12-17 10:45:10"
+            "time": "2015-12-23 10:59:14"
         },
         {
             "name": "boomers/ip",

@@ -1,0 +1,53 @@
+<style>
+    #block-discount {
+        background: #fff;
+        border-radius: 5px;
+        -webkit-border-radius: 5px;
+        -moz-border-radius: 5px;
+        padding: 20px;
+    }
+    #block-discount label {
+        color: red;
+    }
+
+    #block-discount a.btn {
+        display: inline-block;
+        overflow: hidden;
+        width: 100%;
+    }
+
+    @media (max-width: 768px) {
+        #block-discount a.btn:first-child {
+            margin-bottom: 10px;
+        }
+    }
+</style>
+<div>
+    <ol class="breadcrumb">
+        <li><a href="{$di.router->getRouteUrl('billing')}">Subscriptions</a></li>
+        <li><a href="{$di.router->getRouteUrl('billingLicense', ['id' => $license.id])}">Subscription details</a></li>
+        <li class="active">{$title}</li>
+    </ol>
+
+    {insert "inc.flashMessages.htm"}
+
+    <div id="block-discount">
+        <label>Please Wait! We are so sorry to see you go...</label>
+        <p>What if we offer you a <b>50% DISCOUNT</b> on all future payments onto this subscription.</p>
+        <div class="row">
+            <div class="col-md-offset-3 col-sm-offset-2 col-md-3 col-sm-4">
+                <a href="{$di.router->getRouteUrl('billingLicenseDisable', ['id' => $license.id])}?ignore-offer" class="btn btn-danger">
+                    Disable auto-renewal
+                    <br /><i>"plan will be valid until expire"</i>
+                </a>
+            </div>
+            <div class="col-md-3 col-sm-4">
+                <a href="{$di.router->getRouteUrl('billingLicenseDiscountOffer', ['id' => $license.id])}?confirm" class="btn btn-default" style="height: 54px;">
+                    Continue with 50% discount<br />
+                    {*<br /><i>"only ${$priceWithDiscount} instead of ${$price}"</i>*}
+                </a>
+            </div>
+        </div>
+    </div>
+
+</div>
