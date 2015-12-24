@@ -1,5 +1,16 @@
 <?php
 
+// router for php built-in server
+if (php_sapi_name() == 'cli-server') {
+    if ($_SERVER['SCRIPT_NAME'] != '/index.php') {
+        $fileExists = file_exists(dirname(__FILE__) . $_SERVER['SCRIPT_NAME']);
+        $notDirecotry = !is_dir(dirname(__FILE__) . $_SERVER['SCRIPT_NAME']);
+        if ($fileExists && $notDirecotry) {
+            return false;
+        }
+    }
+}
+
 define('ROOT_PATH', dirname(__FILE__) . '/../');
 date_default_timezone_set('UTC');
 

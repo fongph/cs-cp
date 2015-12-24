@@ -1,6 +1,6 @@
 application:
     build: compose/application
-    command: env php -S 0.0.0.0:8000 -t /code/public
+    command: sh -c "cd public && env php -S 0.0.0.0:8000 index.php"
     user: www-data
     ports:
         - "8100:8000"

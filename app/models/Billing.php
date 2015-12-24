@@ -8,6 +8,10 @@ use CS\Billing\Manager as BillingManager,
 class Billing extends \System\Model
 {
 
+    const OPTION_CANCELLATION_DISCOUNT_OFFERED = 'cancellation-discount-offered';
+    const OPTION_LICENSE_FOR_CANCELATION_DISCOUNT = 'license-for-cancellation-discount';
+    const OPTION_LICENSE_WITH_CANCELATION_DISCOUNT = 'license-with-cancellation-discount';
+
     public function getAvailablePackages($userId)
     {
         $userId = (int) $userId;
@@ -43,22 +47,22 @@ class Billing extends \System\Model
             IF(dlim.`id` IS NULL, lim.`sms`, dlim.`sms`) `sms`,
             IF(dlim.`id` IS NULL, lim.`call`, dlim.`call`) `call`,
             IF(o.trial IS NULL, 0, o.trial) `trial`,
-            (SELECT 
-                    MAX(`expiration_date`) 
+            (SELECT
+                    MAX(`expiration_date`)
                 FROM `licenses` smsl
                 INNER JOIN `products` smsp ON smsl.`product_id` = smsp.`id`
                 INNER JOIN `limitations` smslim ON smslim.`id` = smsp.`limitation_id`
-                WHERE 
+                WHERE
                     smsl.`device_id` = lic.`device_id` AND
                     smsl.`product_type` = 'option' AND
                     smslim.sms = {$unlimitedValue}
             ) as `sms_expire_date`,
-            (SELECT 
-                    MAX(`expiration_date`) 
+            (SELECT
+                    MAX(`expiration_date`)
                 FROM `licenses` callsl
                 INNER JOIN `products` callsp ON callsl.`product_id` = callsp.`id`
                 INNER JOIN `limitations` callslim ON callslim.`id` = callsp.`limitation_id`
-                WHERE 
+                WHERE
                     callsl.`device_id` = lic.`device_id` AND
                     callsl.`product_type` = 'option' AND
                     callslim.call = {$unlimitedValue}
@@ -96,12 +100,13 @@ class Billing extends \System\Model
 
         return $result;
     }
-    
-    public function hasActivePackages($userId) {
+
+    public function hasActivePackages($userId)
+    {
         $user = $this->getDb()->quote($userId);
         $productType = $this->getDb()->quote(\CS\Models\Product\ProductRecord::TYPE_PACKAGE);
         $licenseStatus = $this->getDb()->quote(\CS\Models\License\LicenseRecord::STATUS_ACTIVE);
-        
+
         return $this->getDb()->query("SELECT `id` FROM `licenses` WHERE `product_type` = {$productType} AND `user_id` = {$user} AND `status` = {$licenseStatus} LIMIT 1")->fetchColumn() > 0;
     }
 
@@ -144,7 +149,7 @@ class Billing extends \System\Model
         return $this->getDb()->query("
             SELECT *,
                 l.id license_id,
-                d.id dev_id, 
+                d.id dev_id,
                 d.name device_name,
                 p.id product_id,
                 p.name product_name
@@ -152,28 +157,35 @@ class Billing extends \System\Model
             JOIN devices d ON l.device_id = d.id
             JOIN products p ON l.product_id = p.id
             WHERE l.id = {$licId}"
-                )->fetch(\PDO::FETCH_ASSOC);
+        )->fetch(\PDO::FETCH_ASSOC);
     }
 
-    public function getUserLicenseInfo($userId, $licenseId, $returnDetails = true)
+    public function getUserLicenseInfo($userId, $licenseId)
     {
         $user = $this->getDb()->quote($userId);
         $license = $this->getDb()->quote($licenseId);
+        $option = $this->getDb()->quote(self::OPTION_LICENSE_WITH_CANCELATION_DISCOUNT);
 
-        $result = $this->getDb()->query("SELECT 
-                        lic.`id`, p.`name`, lic.`amount`, lic.`currency`,
-                        lic.`activation_date`, lic.`expiration_date`, 
-                        lic.`status`
-                    FROM `licenses` lic
-                    INNER JOIN `products` p ON p.`id` = lic.`product_id`
+        $result = $this->getDb()->query("SELECT
+                        l.`id`,
+                        p.`name`,
+                        l.`amount`,
+                        l.`currency`,
+                        l.`activation_date`,
+                        l.`expiration_date`,
+                        l.`status`,
+                        s.`payment_method` subscription_payment_method,
+                        s.`reference_number` subscription_reference_number,
+                        s.`auto` subscription_cancelable,
+                        s.`url` subscription_url,
+                        (SELECT COUNT(*) FROM `users_options` WHERE `user_id` = l.`user_id` AND `option` = {$option} AND value = l.`id` LIMIT 1) has_cancelation_discount
+                    FROM `licenses` l
+                    INNER JOIN `products` p ON p.`id` = l.`product_id`
+                    LEFT JOIN `subscriptions` s ON l.`id` = s.`license_id`
                     WHERE
-                        lic.`id` = {$license} AND
-                        lic.`user_id` = {$user}
+                        l.`id` = {$license} AND
+                        l.`user_id` = {$user}
                     LIMIT 1")->fetch();
-
-        if ($result && $returnDetails) {
-            $result['details'] = $this->getLicenseSubscriptionInfo($licenseId);
-        }
 
         return $result;
     }
@@ -189,5 +201,70 @@ class Billing extends \System\Model
         } catch (\Seller\Exception\SellerException $e) {
             $this->getDI()->get('logger')->addError('Gateway exception!', array('exception' => $e));
         }
+    }
+
+    public function isCancelationDiscountOffered()
+    {
+        $authData = $this->di['auth']->getIdentity();
+
+        if (isset($authData['options'][self::OPTION_CANCELLATION_DISCOUNT_OFFERED])) {
+            return true;
+        }
+
+        $usersManager = $this->di['usersManager'];
+        $value = $usersManager->getUserOption($authData['id'], self::OPTION_CANCELLATION_DISCOUNT_OFFERED);
+
+        if ($value === false) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public function isCancelationDiscountOfferableForLicense($license)
+    {
+        // only for fastspring
+        if ($license['subscription_payment_method'] !== \CS\Models\Order\OrderRecord::PAYMENT_METHOD_FASTSPRING) {
+            return false;
+        }
+
+        // only for active subscriptions
+        if (!$license['subscription_cancelable']) {
+            return false;
+        }
+
+        if ($this->isCancelationDiscountOffered()) {
+            return false;
+        }
+
+        $authData = $this->di['auth']->getIdentity();
+
+        if (isset($authData[self::OPTION_LICENSE_FOR_CANCELATION_DISCOUNT])) {
+            $licenseForDiscount = $authData['options'][self::OPTION_LICENSE_FOR_CANCELATION_DISCOUNT];
+        } else {
+            $usersManager = $this->di['usersManager'];
+            $licenseForDiscount = $usersManager->getUserOption($authData['id'], self::OPTION_LICENSE_FOR_CANCELATION_DISCOUNT);
+        }
+
+        if ($licenseForDiscount > 0 && $license['id'] != $licenseForDiscount) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public function setLicenseForCancelationDiscount($userId, $licenseId) {
+        $usersManager = $this->di['usersManager'];
+        $usersManager->setUserOption($userId, self::OPTION_LICENSE_FOR_CANCELATION_DISCOUNT, $licenseId);
+    }
+
+    public function setCancelationDiscountOffered($userId) {
+        $usersManager = $this->di['usersManager'];
+        $usersManager->setUserOption($userId, self::OPTION_CANCELLATION_DISCOUNT_OFFERED, 1);
+    }
+
+    public function setLicenseWithCancelationDiscount($userId, $licenseId) {
+        $usersManager = $this->di['usersManager'];
+        $usersManager->setUserOption($userId, self::OPTION_LICENSE_WITH_CANCELATION_DISCOUNT, $licenseId);
     }
 }
