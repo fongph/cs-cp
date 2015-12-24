@@ -7930,6 +7930,23 @@ button.close {
   border: none;
   outline: none;
 }
+.monitoring-app-links-container-mobile {
+  text-align: center;
+  margin-bottom: -6px;
+}
+.monitoring-app-links-container-mobile .cp-app-link {
+  display: inline-block;
+}
+#header .monitoring-app-links-container-wide {
+  float: right;
+  padding-top: 7px;
+}
+#header .monitoring-app-links-container-wide a.cp-app-link a.cp-app-link {
+  display: inline-block;
+}
+#header .monitoring-app-links-container-wide a.cp-app-link a.cp-app-link img {
+  display: inline-block;
+}
 /**
     @todo: replace html colors to variables
 */
