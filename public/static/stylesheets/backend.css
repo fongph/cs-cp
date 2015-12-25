@@ -7852,6 +7852,7 @@ button.close {
 .box-header-info label {
   width: auto;
   max-width: auto;
+  display: inline;
 }
 .box-header-info a {
   text-decoration: underline !important;
