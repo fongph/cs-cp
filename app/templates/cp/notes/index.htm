@@ -39,7 +39,7 @@
             </div>
         </div>
 
-    <div class="table-container">
+    <div class="table-container dialogs-table">
         <table class="dataTable" id="datatable" aria-describedby="datatables_info">
             <thead>
                 <tr role="row">
@@ -54,7 +54,6 @@
             var notes = {
                 startDate: -1,
                 endDate: -1,
-                linkTemplate: _.template('<a href="{$di.router->getRouteUrl("notes")}/<%= account %>/<%= time %>"><%= date %></a>'),
                 table: null,
                 getRangeUrl: function(start, end) {
                     if (start === null && end === null) {
@@ -93,11 +92,7 @@
                                 mData: null,
                                 sWidth: '180px',
                                 fnRender: function(obj) {
-                                    return notes.linkTemplate({
-                                        account: encodeURIComponent($('#account').val()),
-                                        time: obj.aData[0],
-                                        date: moment(obj.aData[0] * 1000){if isset($customUtcOffset)}.zone({$customUtcOffset}){/if}.format('lll')
-                                    });
+                                    return moment(obj.aData[0] * 1000){if isset($customUtcOffset)}.zone({$customUtcOffset}){/if}.format('lll');
                                 }
                             },
                             {
@@ -106,6 +101,11 @@
                                 }
                             }
                         ],
+                        fnRowCallback: function(nRow, data) {
+                            $(nRow).on('click', function() {
+                                window.location = '{$di.router->getRouteUrl("notes")}/' + encodeURIComponent($('#account').val()) + '/' + encodeURIComponent(data[0]);
+                            });
+                        },
                         fnDrawCallback: function() {
                             notes.table = table;
                             $(this).find('tbody').tableScroll();

@@ -17,7 +17,7 @@
         </div>
     </div>
 
-    <div class="table-container">
+    <div class="table-container dialogs-table">
         <table class="dataTable" id="datatable" aria-describedby="datatables_info">
             <thead>
             <tr role="row">
@@ -38,8 +38,6 @@
             var sms = {
                 table: null,
                 typeTmpl: _.template('<i class="sms-<%= type %> hidden-xs" title="<%- title %>"></i><span class="visible-xs"><%- title %></span>'),
-                messageLinkTemplate: _.template('<a href="{$di.router->getRouteUrl("sms")}/<%- phone %>#<%= message %>"><%- date %></a>'),
-                groupMessageLinkTemplate: _.template('<a href="{$di.router->getRouteUrl("sms")}/group/<%- group %>#<%- message %>"><%- date %></a>'),
                 getRangeUrl: function(start, end) {
                     if (start && end && start.isValid() && start.isValid()) {
                         start = moment(start).unix();
@@ -49,9 +47,9 @@
                     }
 
                     return '{$di.router->getRouteUrl("sms")}?' + $.param({
-                                timeFrom: start,
-                                timeTo: end
-                            });
+                        timeFrom: start,
+                        timeTo: end
+                    });
                 },
                 reloadTable: function(url) {
                     this.table.fnReloadAjax(url);
@@ -78,19 +76,7 @@
                             sWidth: '180px',
                             mData: 'timestamp',
                             mRender: function(value, type, data) {
-                                if (data.group.length) {
-                                    return sms.groupMessageLinkTemplate({
-                                        date: moment(value * 1000){if isset($customUtcOffset)}.zone({$customUtcOffset}){/if}.format('lll'),
-                                            group: encodeURIComponent(data.group),
-                                            message: encodeURIComponent(data.timestamp)
-                                    });
-                                    } else {
-                                        return sms.messageLinkTemplate({
-                                            date: moment(value * 1000){if isset($customUtcOffset)}.zone({$customUtcOffset}){/if}.format('lll'),
-                                                phone: encodeURIComponent(data.number),
-                                                message: encodeURIComponent(data.timestamp)
-                                        });
-                                        }
+                                        return moment(value * 1000){if isset($customUtcOffset)}.zone({$customUtcOffset}){/if}.format('lll');
                                     }
                                 },
                                 {
@@ -172,6 +158,15 @@
                                 }
                                 }
                                 ],
+                                fnRowCallback: function(nRow, data) {
+                                    $(nRow).on('click', function() {
+                                        if (data.group.length) {
+                                            window.location = '{$di.router->getRouteUrl("sms")}/group/' + encodeURIComponent(data.group) + '#' + encodeURIComponent(data.timestamp);
+                                        } else {
+                                            window.location = '{$di.router->getRouteUrl("sms")}/' + encodeURIComponent(data.number) + '#' + encodeURIComponent(data.timestamp);
+                                        }
+                                    });
+                                },
                                 fnDrawCallback: function() {
                                     sms.table = table;
                                     $(this).find('tbody').tableScroll();
