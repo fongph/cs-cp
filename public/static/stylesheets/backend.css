@@ -9837,6 +9837,9 @@ div.dataTables_processing {
     display: block !important;
   }
 }
+.table-container.dialogs-table tbody tr {
+  cursor: pointer;
+}
 [class*="cal-cell"] {
   float: left;
   margin-left: 0;

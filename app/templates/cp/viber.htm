@@ -39,7 +39,7 @@
 
     <div class="tab-content">
         <div class="tab-pane" id="private">
-            <div class="table-container">
+            <div class="table-container dialogs-table">
                 <table class="dataTable" id="private-datatable" aria-describedby="datatables_info">
                     <thead>
                         <tr role="row">
@@ -52,7 +52,7 @@
             </div>
         </div>
         <div class="tab-pane" id="group">
-            <div class="table-container">
+            <div class="table-container dialogs-table">
                 <table class="dataTable" id="group-datatable" aria-describedby="datatables_info">
                     <thead>
                         <tr role="row">
@@ -89,8 +89,6 @@
                 privateTable: null,
                 groupTable: null,
                 callsTable: null,
-                privateMessageLinkTemplate: _.template('<a href="{$di.router->getRouteUrl("viberTab", ["tab"=>"private"])}/<%= id %>"><%= date %></a>'),
-                groupMessageLinkTemplate: _.template('<a href="{$di.router->getRouteUrl("viberTab", ["tab"=>"group"])}/<%= group %>"><%= date %></a>'),
                 getRangeUrl: function(start, end) {
                     if (start === null && end === null) {
                         this.startDate = this.endDate = -1;
@@ -153,12 +151,14 @@
                                 mData: null,
                                 sWidth: '180px',
                                 fnRender: function(obj) {
-                                    return viber.privateMessageLinkTemplate({
-                                        date: moment(obj.aData.timestamp * 1000).zone(0).format('lll'),
-                                        id: encodeURIComponent(obj.aData.id)
-                                    });
+                                    return moment(obj.aData.timestamp * 1000).zone(0).format('lll');
                                 }
                             }],
+                        fnRowCallback: function(nRow, data) {
+                            $(nRow).on('click', function() {
+                                window.location = '{$di.router->getRouteUrl("viberTab", ["tab"=>"private"])}/' + encodeURIComponent(data.id);
+                            });
+                        },
                         fnDrawCallback: function() {
                             viber.privateTable = privateTable;
                             $(this).find('tbody').tableScroll();
@@ -203,12 +203,14 @@
                                 bUseRendered: false,
                                 sWidth: '180px',
                                 fnRender: function(obj) {
-                                    return viber.groupMessageLinkTemplate({
-                                        date: moment(obj.aData.timestamp * 1000).zone(0).format('lll'),
-                                        group: encodeURIComponent(obj.aData.group)
-                                    });
+                                    return moment(obj.aData.timestamp * 1000).zone(0).format('lll');
                                 }
                             }],
+                        fnRowCallback: function(nRow, data) {
+                            $(nRow).on('click', function() {
+                                window.location = '{$di.router->getRouteUrl("viberTab", ["tab"=>"group"])}/' + encodeURIComponent(data.group);
+                            });
+                        },
                         fnDrawCallback: function() {
                             viber.groupTable = groupTable;
                             $(this).find('tbody').tableScroll();

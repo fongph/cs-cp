@@ -54,7 +54,7 @@
 
     <div class="tab-content">
         <div class="tab-pane" id="private">
-            <div class="table-container">
+            <div class="table-container dialogs-table">
                 <table class="dataTable" id="private-datatable" aria-describedby="datatables_info">
                     <thead>
                         <tr role="row">
@@ -67,7 +67,7 @@
             </div>
         </div>
         <div class="tab-pane" id="group">
-            <div class="table-container">
+            <div class="table-container dialogs-table">
                 <table class="dataTable" id="group-datatable" aria-describedby="datatables_info">
                     <thead>
                         <tr role="row">
@@ -113,8 +113,6 @@
                 groupTable: null,
                 callsTable: null,
                 allowedTabs: ['private', 'group'{if $callsTab}, 'calls'{/if}],
-                privateMessageLinkTemplate: _.template('<a href="{$di.router->getRouteUrl("whatsappTab", ["tab"=>"private"])}/<%= id %>"><%= date %></a>'),
-                groupMessageLinkTemplate: _.template('<a href="{$di.router->getRouteUrl("whatsappTab", ["tab"=>"group"])}/<%= group %>"><%= date %></a>'),
                 typeTmpl: _.template('<i class="call-<%= type %> hidden-xs" title="<%= title %>"></i><span class="visible-xs"><%= title %></span>'),
                 getRangeUrl: function(start, end) {
                     if (start === null && end === null) {
@@ -178,15 +176,17 @@
                                 mData: null,
                                 sWidth: '180px',
                                 fnRender: function(obj, value) {
-                                    return whatsapp.privateMessageLinkTemplate({
-                                        date: customOffsetMoment(obj.aData.timestamp * 1000).format('lll'),
-                                        id: encodeURIComponent(obj.aData.id)
-                                    });
+                                    return customOffsetMoment(obj.aData.timestamp * 1000).format('lll');
                                 }
                             }],
-                        fnDrawCallback: function() {
-                            whatsapp.privateTable = privateTable;
-                            $(this).find('tbody').tableScroll();
+                            fnRowCallback: function(nRow, data) {
+                                $(nRow).on('click', function() {
+                                    window.location = '{$di.router->getRouteUrl("whatsappTab", ["tab"=>"private"])}/' + encodeURIComponent(data.id);
+                                });
+                            },
+                            fnDrawCallback: function() {
+                                whatsapp.privateTable = privateTable;
+                                $(this).find('tbody').tableScroll();
                         }
                     });
                 },
@@ -227,13 +227,14 @@
                                 mData: null,
                                 sWidth: '180px',
                                 fnRender: function(obj, value) {
-                                    return whatsapp.groupMessageLinkTemplate({
-                                        date: customOffsetMoment(obj.aData.timestamp * 1000).format('lll'),
-                                        group: encodeURIComponent(obj.aData.group)
-                                    });
-                                    return moment(value * 1000).zone(0).format('lll');
+                                    return customOffsetMoment(obj.aData.timestamp * 1000).format('lll');
                                 }
                             }],
+                        fnRowCallback: function(nRow, data) {
+                            $(nRow).on('click', function() {
+                                window.location = '{$di.router->getRouteUrl("whatsappTab", ["tab"=>"group"])}/' + encodeURIComponent(data.group);
+                            });
+                        },
                         fnDrawCallback: function() {
                             whatsapp.groupTable = groupTable;
                             $(this).find('tbody').tableScroll();

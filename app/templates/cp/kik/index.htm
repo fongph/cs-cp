@@ -33,7 +33,7 @@
         </div>
     </div>
 
-    <div class="table-container">
+    <div class="table-container dialogs-table">
         <table class="dataTable" id="private-datatable" aria-describedby="datatables_info">
             <thead>
                 <tr role="row">
@@ -49,7 +49,6 @@
             var kik = {
                 startDate: -1,
                 endDate: -1,
-                messageLinkTemplate: _.template('<a href="{$di.router->getRouteUrl("kik")}/<%= account %>/<%= tab %>/<%= id %>"><%= date %></a>'),
                 table: null,
                 getRangeUrl: function(start, end) {
                     if (start === null && end === null) {
@@ -111,25 +110,18 @@
                                 mData: null,
                                 sWidth: '180px',
                                 fnRender: function(obj, value) {
-                                    if (obj.aData.is_group > 0) {
-                                        return kik.messageLinkTemplate({
-                                            account: encodeURIComponent($('#account').val()),
-                                            tab: 'group',
-                                            id: encodeURIComponent(obj.aData.group_id),
-                                            date: moment(obj.aData.timestamp * 1000).zone(0).format('lll')
-                                        });
-                                    }
-
-                                    return kik.messageLinkTemplate({
-                                        account: encodeURIComponent($('#account').val()),
-                                        tab: 'private',
-                                        id: encodeURIComponent(obj.aData.group_id),
-                                        date: moment(obj.aData.timestamp * 1000).zone(0).format('lll')
-                                    });
-
-                                    return moment(value * 1000).format('lll');
+                                    return moment(obj.aData.timestamp * 1000).zone(0).format('lll');
                                 }
                             }],
+                        fnRowCallback: function(nRow, data) {
+                            $(nRow).on('click', function() {
+                                if (data.is_group > 0) {
+                                    window.location = '{$di.router->getRouteUrl("kik")}/' + encodeURIComponent($('#account').val()) + '/group/' + encodeURIComponent(data.group_id);
+                                } else {
+                                    window.location = '{$di.router->getRouteUrl("kik")}/' + encodeURIComponent($('#account').val()) + '/private/' + encodeURIComponent(data.group_id);
+                                }
+                            });
+                        },
                         fnDrawCallback: function() {
                             kik.table = table;
                             $(this).find('tbody').tableScroll();
