@@ -348,7 +348,7 @@ class Facebook extends BaseModel {
                 
                 if ($item['sticker'] > 0) {
                     $facebookMessage['sticker'] = $item['sticker'];
-                } elseif ($item['latitude'] > 0 && $item['longitude'] > 0) {
+                } elseif (is_numeric($item['latitude']) && is_numeric($item['longitude'])) {
                     $facebookMessage['location'] = [
                         'latitude' => $item['latitude'],
                         'longitude' => $item['longitude']
