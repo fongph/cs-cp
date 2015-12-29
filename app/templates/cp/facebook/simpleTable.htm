@@ -132,6 +132,10 @@
                     fnDrawCallback: function() {
                         facebook.table = table;
                         $(this).find('tbody').tableScroll();
+
+                        $(this).find('td a').click(function(e) {
+                            e.stopPropagation();
+                        });
                     }
                 });
             },
