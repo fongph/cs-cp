@@ -8549,6 +8549,7 @@ div.attachment {
   padding-left: 25px;
   background-repeat: no-repeat;
   background-position: 0 2px;
+  margin-bottom: 2px;
 }
 p.attachment.text,
 div.attachment.text {
