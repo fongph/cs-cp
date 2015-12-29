@@ -161,7 +161,7 @@
 
         });
 
-        {if $supportMode}
+            {if $supportMode}
             $(".dialog-item-photo").on('click', function(e){
                 e.preventDefault();
                 alert('Not allowed on support mode!');
@@ -175,15 +175,15 @@
             });
             {/if}
 
-                $(".dialog-item-map").colorbox({
-                    iframe: true,
-                    fixed: true,
-                    rel: 'dialog',
-                    width:"90%",
-                    height:"90%"
-                });
+            $(".dialog-item-map").colorbox({
+                iframe: true,
+                fixed: true,
+                rel: 'dialog',
+                width:"90%",
+                height:"90%"
+            });
 
-                Init();
+            Init();
 
             }
 

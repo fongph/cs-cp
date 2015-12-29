@@ -20,26 +20,6 @@
         <a class="btn btn-default" href="{$di.config.domain}/cp/facebook">{$di.t->_('Back to Facebook log')}</a>
     </div>
     {/if}
-
-    {*
-    <div class="dialog-messages-list">
-        {foreach $list as $item}
-        <div id="{$item.timestamp}">
-            <div class="popover {if $item.type == 'in'}right{else}left{/if}">
-                <div class="arrow"></div>
-                {if $item.type == 'in'}
-                <h3 class="popover-title"><a href="http://facebook.com/{$item.id}" class="disable-on-demo" target="_blank">{$item.name|e}</a> <span></span></h3>
-                {else}
-                <h3 class="popover-title"><span></span></h3>
-                {/if}
-                <div class="popover-content">
-                    <p>{$item.text|e}</p>
-                </div>
-            </div>
-        </div>
-        {/foreach}
-    </div>
-    *}
     
     <div id="blockPaginateLists" class="panel panel-default" data-paginate-ajax="{$di.router->getRouteUrl('facebook')}/{$account}/{$tab}/{$id}">
         <div class="panel-heading">
@@ -114,18 +94,81 @@
                                     ? "<h3 class='popover-title'><a href='http://facebook.com/"+value.id+"' class='disable-on-demo' target='_blank'>"+value.name+"</a> <span></span></h3>"
                                     : "<h3 class=\"popover-title\"><span></span></h3>";
             
+            var content = '<p>' + value.text + '</p>';
+            if (typeof value.sticker != 'undefined') {
+                content = '<p><img src="{$di.config.staticDomain}/img/fb-stickers/' + value.sticker + '.png" alt="" /></p>';
+            } else if (typeof value.location != 'undefined') {
+                content = '<a class="dialog-item-map" href="https://www.google.com/maps/embed/v1/place?q=' + value.location.latitude + ',' + value.location.longitude + '&key=AIzaSyACASzYX7N75YbvFU0z0BwGDzxbWyj8TQ8" target="_blank"><img src="http://maps.googleapis.com/maps/api/staticmap?center=' + value.location.latitude + ',' + value.location.longitude + '&zoom=15&size=150x150&markers=color:red%7C' + value.location.latitude + ',' + value.location.longitude + '&sensor=false" alt="" /></a>';
+            } else if (value.attachments.length) {
+                var attachments = '';
+                for (key in value.attachments) {
+                    if (value.attachments[key].mime_type.indexOf('image/') == 0) {
+                        switch(value.attachments[key].status) {
+                            case 'none':
+                                attachments += '<img src="{$di.config.staticDomain}/img/fb-image-none.png" class="attachment-item blur-for-support" alt="" />';
+                                break;
+                                
+                            case 'uploaded':
+                                if (typeof value.attachments[key].media != 'undefined') {
+                                    attachments += '<a class="dialog-item-photo" href="' + value.attachments[key].media + '"><img src="' + value.attachments[key].thumbnail + '" class="blur-for-support attachment-item" alt="" /></a>';
+                                } else {
+                                    attachments += '<div class="attachment other">' + value.attachments[key].filename + '</div>';
+                                }
+                                break;
+                                
+                            case 'failed':
+                                attachments += '<img src="{$di.config.staticDomain}/img/fb-image-failed.png" class="attachment-item blur-for-support" alt="" />';
+                                break;
+                                
+                            default:
+                                break;
+                        }
+                    } else if (value.attachments[key].mime_type.indexOf('video/') == 0) {
+                        attachments += '<div class="attachment video">' + value.attachments[key].filename + '</div>';
+                    } else if (value.attachments[key].mime_type.indexOf('audio/') == 0) {
+                        attachments += '<div class="attachment audio">' + value.attachments[key].filename + '</div>';
+                    } else {
+                        attachments += '<div class="attachment other">' + value.attachments[key].filename + '</div>';
+                    }
+                }
+                
+                content = attachments + '<p>' + value.text + '</p>';
+            }
+            
             $('.panel-body').append('<div id="'+ value.timestamp +'">'+
                                         '<div class="popover '+ position +'">'+
                                             '<div class="arrow"></div>'+
                                              popover_title +   
                                             '<div class="popover-content">'+
-                                                '<p>'+ value.text +'</p>'+
+                                                content +
                                             '</div>'+
                                         '</div>'+
                                     '</div>');
             
         });
         
+        {if $supportMode}
+        $(".dialog-item-photo").on('click', function(e){
+            e.preventDefault();
+            alert('Not allowed on support mode!');
+        });
+        {else}
+        $(".dialog-item-photo").colorbox({
+            fixed: true,
+            rel: 'dialog',
+            maxWidth: '90%',
+            maxHeight: '90%'
+        });
+        {/if}
+
+        $(".dialog-item-map").colorbox({
+            iframe: true,
+            fixed: true,
+            rel: 'dialog',
+            width:"90%",
+            height:"90%"
+        });
+
         Init();
 
     }

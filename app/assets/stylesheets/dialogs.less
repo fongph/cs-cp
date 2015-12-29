@@ -126,12 +126,12 @@
     color: @state-info-text;
   }
 }
-
 p.attachment, div.attachment {
   height: 21px;
   padding-left: 25px;
   background-repeat: no-repeat;
   background-position: 0 2px;
+  margin-bottom: 2px;
 
   &.text {
     background-image: url(../img/attachment-text.png);
@@ -156,4 +156,11 @@ p.attachment, div.attachment {
   &.location {
     background-image: url(../img/attachment-location.png);
   }
+  
+  &.other {
+    background-image: url(../img/attachment-other.png);
+  }
+}
+.attachment-item {
+    margin: 0 5px 5px;
 }

@@ -124,14 +124,33 @@
                             {
                                 mData: "text",
                                 fnRender: function(obj, value) {
+                                    var content = '';
                                     if (_.isString(value)) {
                                         if (value.length > 200) {
-                                            return value.substr(0, 200) + '...';
+                                            content = value.substr(0, 200) + '...';
+                                        } else {
+                                            content = value;
                                         }
-
-                                        return _.escape(value);
+                                        var content = _.escape(content);
                                     }
-                                    return '';
+                                    
+                                    if (obj.aData.sticker > 0) {
+                                        return '<div class="attachment image"><div>';
+                                    } else if (obj.aData.location > 0) {
+                                        return '<div class="attachment location"><div>';
+                                    } else if (obj.aData.attachment != null) {
+                                        if (obj.aData.attachment.indexOf('image/') == 0) {
+                                            return '<div class="attachment image">' + content + '<div>';
+                                        } else if (obj.aData.attachment.indexOf('video/') == 0) {
+                                            return '<div class="attachment video">' + content + '<div>';
+                                        } else if (obj.aData.attachment.indexOf('audio/') == 0) {
+                                            return '<div class="attachment audio">' + content + '<div>';
+                                        } else {
+                                            return '<div class="attachment other">' + content + '<div>';
+                                        }
+                                    } else {
+                                        return content;
+                                    }
                                 }
                             },
                             {

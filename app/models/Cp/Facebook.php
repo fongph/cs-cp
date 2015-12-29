@@ -4,6 +4,14 @@ namespace Models\Cp;
 
 class Facebook extends BaseModel {
 
+    private static $_authLifeTime = 3600;
+    
+    public function getCDNAuthorizedUrl($uri)
+    {
+        $s3 = $this->di->get('S3');
+        return $s3->getSignedCannedURL($this->di['config']['cloudFront']['domain'] . $uri, self::$_authLifeTime);
+    }
+    
     public function getMessagesDataTableData($devId, $params = array()) {
         if (!$devId)
             return null;
@@ -22,7 +30,7 @@ class Facebook extends BaseModel {
             }
         }
 
-        $select = "SELECT f.`id`, f.`name`, f.`text`, f.`timestamp`, f.`group`, f.`members`";
+        $select = "SELECT f.`id`, f.`name`, f.`text`, f.`timestamp`, f.`group`, f.`members`, f.`sticker`, f.location, (SELECT `mime_type` FROM `facebook_attachment` WHERE message_id = f.message_id LIMIT 1) attachment";
 
         
         $timeFrom = $this->getDb()->quote($params['timeFrom']);
@@ -36,10 +44,13 @@ class Facebook extends BaseModel {
         }
         
         $fromWhere = "FROM
-                    ((SELECT 
+                    ((SELECT
+                                fm.`id` message_id,
                                 fm.`user_id` id, 
                                 fm.`user_name` name, 
                                 LEFT(fm.`text`, 201) `text`,
+                                fm.`sticker`,
+                                fm.`latitude` location,
                                 fm.`timestamp`,
                                 fm.`group_id` `group`,
                                 1 members 
@@ -64,9 +75,12 @@ class Facebook extends BaseModel {
                     ORDER BY  
                             fm.`timestamp`) UNION 
                     (SELECT 
-                            fm.`user_id`,
+                            fm.`id` message_id,
+                            fm.`user_id` id,
                             fm.`user_name` name,
                             LEFT(fm.`text`, 201) text,
+                            fm.`sticker`,
+                            fm.`latitude` location,
                             fm.`timestamp`,
                             fm.`group_id` `group`, 
                             (SELECT COUNT(DISTINCT `user_id`) FROM `facebook_messages` WHERE `dev_id` = {$devId} AND `account` = {$account} AND `group_id`=fm.`group_id` AND `timestamp` >= {$timeFrom} AND `timestamp` <= {$timeTo}) 
@@ -241,17 +255,34 @@ class Facebook extends BaseModel {
         else
             $where = '';
         
-        $list['items'] = $this->getDb()->query("SELECT 
-                                            `user_id` id,
-                                            `type`,
-                                            `user_name` name,
-                                            `text`,
-                                            `timestamp`
-                                        FROM `facebook_messages` 
-                                        WHERE `dev_id` = {$escapedDevId} AND `group_id` IS NULL AND `account` = {$escapedAccount} AND `user_id` = {$escapedUserId}
-                                        {$where}        
-                                        ORDER BY `timestamp` DESC LIMIT {$start}, {$length}")->fetchAll(); 
-       
+        $messages = $this->getDb()->query("
+                                        SELECT
+                                            fm.*,
+                                            fa.`attachment_id`,
+                                            fa.`mime_type`, 
+                                            fa.`filename`, 
+                                            fa.`media`, 
+                                            fa.`thumbnail`, 
+                                            fa.`status`
+                                        FROM (
+                                            SELECT
+                                                `id` record_id,
+                                                `user_id` id,
+                                                `type`,
+                                                `user_name` name,
+                                                `text`,
+                                                `timestamp`
+                                            FROM `facebook_messages`
+                                            WHERE 
+                                                `dev_id` = {$escapedDevId} AND `group_id` IS NULL AND `account` = {$escapedAccount} AND `user_id` = {$escapedUserId}
+                                                {$where}    
+                                            ORDER BY `timestamp` DESC
+                                            LIMIT {$start}, {$length}
+                                        ) fm
+                                        LEFT JOIN `facebook_attachment` fa ON fa.`message_id` = fm.`message_id`")->fetchAll();
+          
+        $list['items'] = $this->wrapMessagesData($messages);
+                                        
         $count = $this->getCountItemsPrivateList($devId, $account, $userId, $search);
         $list['totalPages'] = ($count) ? ceil($count/$length) : false;
         $list['countEnteres'] = (!empty($search)) ? $this->getCountItemsPrivateList($devId, $account, $userId, false) : 0;
@@ -281,6 +312,60 @@ class Facebook extends BaseModel {
         return ($count['count']) ? $count['count'] : false;
     }
     
+    private function wrapMessagesData($data) {
+        $result = [];
+        
+        $last = null;
+        foreach ($data as $item) {
+            if ($item['attachment_id'] > 0) {
+                $attachment = [
+                    'mime_type' => $item['mime_type'],
+                    'status' => $item['status'],
+                    'filename' => $item['filename']
+                ];
+                
+                $isImage = strpos($item['mime_type'], 'image/') === 0;
+                if ($attachment['status'] == 'uploaded' && $isImage && strlen($item['media'])) {
+                    $attachment['media'] = $this->getCDNAuthorizedUrl($item['media']);
+                    $attachment['thumbnail'] = $this->getCDNAuthorizedUrl($item['thumbnail']);
+                }
+            } else {
+                $attachment = null;
+            }
+            
+            if ($last != $item['message_id']) {
+                $facebookMessage = [
+                    'id' => $item['id'],
+                    'type' => $item['type'],
+                    'name' => $item['name'],
+                    'text' => $item['text'],
+                    'timestamp' => $item['timestamp'],
+                    'attachments' => []
+                ];
+                
+                if ($item['sticker'] > 0) {
+                    $facebookMessage['sticker'] = $item['sticker'];
+                } elseif ($item['latitude'] > 0 && $item['longitude'] > 0) {
+                    $facebookMessage['location'] = [
+                        'latitude' => $item['latitude'],
+                        'longitude' => $item['longitude']
+                    ];
+                }
+                
+                if ($attachment) {
+                    array_push($facebookMessage['attachments'], $attachment);                    
+                }
+                
+                array_push($result, $facebookMessage);
+                $last = $item['message_id'];
+            } else {
+                array_push($result[count($result) - 1]['attachments'], $attachment);
+            }
+        }
+        
+        return $result;
+    }
+    
     public function getItemsGroupList($devId, $account, $groupId, $search, $page = 0, $length = 10) {
         $where = array();
         $escapedDevId = $this->getDb()->quote($devId);
@@ -301,18 +386,37 @@ class Facebook extends BaseModel {
         else
             $where = '';
         
-        $list['items'] = $this->getDb()->query("SELECT 
-                                            `user_id` id,
-                                            `type`,
-                                            `user_name` name,
-                                            `text`,
-                                            `timestamp`
-                                        FROM `facebook_messages` 
-                                        WHERE `dev_id` = {$escapedDevId} AND `account` = {$escapedAccount} AND `group_id` = {$escapedGroupId}
-                                        {$where}    
-                                        GROUP BY `timestamp` ORDER BY `timestamp` DESC
-                                        LIMIT {$start}, {$length}")->fetchAll(); 
-       
+        $messages = $this->getDb()->query("
+                                        SELECT
+                                            fm.*,
+                                            fa.`attachment_id`,
+                                            fa.`mime_type`, 
+                                            fa.`filename`, 
+                                            fa.`media`, 
+                                            fa.`thumbnail`, 
+                                            fa.`status`
+                                        FROM (
+                                            SELECT
+                                                `id` message_id,
+                                                `user_id` id,
+                                                `type`,
+                                                `user_name` name,
+                                                `text`,
+                                                `timestamp`,
+                                                `sticker`,
+                                                `latitude`,
+                                                `longitude`
+                                            FROM `facebook_messages` 
+                                            WHERE
+                                                `dev_id` = {$escapedDevId} AND `account` = {$escapedAccount} AND `group_id` = {$escapedGroupId}
+                                                {$where}    
+                                            ORDER BY `timestamp` DESC
+                                            LIMIT {$start}, {$length}
+                                        ) fm
+                                        LEFT JOIN `facebook_attachment` fa ON fa.`message_id` = fm.`message_id`")->fetchAll();
+          
+        $list['items'] = $this->wrapMessagesData($messages);
+                                            
         $count = $this->getCountItemsGroupList($devId, $account, $groupId, $search);
         $list['totalPages'] = ($count) ? ceil($count/$length) : false;
         $list['countEnteres'] = (!empty($search)) ? $this->getCountItemsGroupList($devId, $account, $groupId, false) : 0;
