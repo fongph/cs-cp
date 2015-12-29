@@ -147,7 +147,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-queue.git",
-                "reference": "c3850a6366c278218ef7cdeeef1ab815d5163efb"
+                "reference": "46faeca754e16fbc42026f4e219718d60b0e5959"
             },
             "require": {
                 "boomers/cs-models": "dev-master",
@@ -162,7 +162,7 @@
                     "CS\\Queue\\": "src/"
                 }
             },
-            "time": "2015-11-27 10:03:34"
+            "time": "2015-12-24 12:30:18"
         },
         {
             "name": "boomers/cs-settings",
@@ -170,7 +170,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-settings.git",
-                "reference": "1578e9c0c87bc14b09e8cc1a146ef0edcd16b6d7"
+                "reference": "e81a0d7b29ce4299b1d01e1227ed4c4d1fde4f69"
             },
             "require": {
                 "php": ">=5.4.0"
@@ -181,7 +181,7 @@
                     "CS\\Settings\\": "src/"
                 }
             },
-            "time": "2015-12-22 14:51:57"
+            "time": "2015-12-29 15:14:18"
         },
         {
             "name": "boomers/cs-users",
@@ -189,7 +189,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-users.git",
-                "reference": "acf6ffd6434cc203c66e6e5f26a036529401d64a"
+                "reference": "4efd7677cb6af9bd5614b2812440b6c2e0e14373"
             },
             "require": {
                 "boomers/cs-mail": "dev-master",
@@ -213,7 +213,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2015-12-23 10:59:14"
+            "time": "2015-12-24 12:26:42"
         },
         {
             "name": "boomers/ip",
@@ -1032,16 +1032,16 @@
         },
         {
             "name": "symfony/console",
-            "version": "v2.8.0",
+            "version": "v2.8.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "d232bfc100dfd32b18ccbcab4bcc8f28697b7e41"
+                "reference": "2e06a5ccb19dcf9b89f1c6a677a39a8df773635a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/d232bfc100dfd32b18ccbcab4bcc8f28697b7e41",
-                "reference": "d232bfc100dfd32b18ccbcab4bcc8f28697b7e41",
+                "url": "https://api.github.com/repos/symfony/console/zipball/2e06a5ccb19dcf9b89f1c6a677a39a8df773635a",
+                "reference": "2e06a5ccb19dcf9b89f1c6a677a39a8df773635a",
                 "shasum": ""
             },
             "require": {
@@ -1088,24 +1088,27 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "time": "2015-11-30 12:35:10"
+            "time": "2015-12-22 10:25:57"
         },
         {
             "name": "symfony/polyfill-mbstring",
-            "version": "v1.0.0",
+            "version": "v1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-mbstring.git",
-                "reference": "0b6a8940385311a24e060ec1fe35680e17c74497"
+                "reference": "49ff736bd5d41f45240cec77b44967d76e0c3d25"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/0b6a8940385311a24e060ec1fe35680e17c74497",
-                "reference": "0b6a8940385311a24e060ec1fe35680e17c74497",
+                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/49ff736bd5d41f45240cec77b44967d76e0c3d25",
+                "reference": "49ff736bd5d41f45240cec77b44967d76e0c3d25",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3"
+            },
+            "suggest": {
+                "ext-mbstring": "For best performance"
             },
             "type": "library",
             "extra": {
@@ -1144,7 +1147,7 @@
                 "portable",
                 "shim"
             ],
-            "time": "2015-11-04 20:28:58"
+            "time": "2015-11-20 09:19:13"
         },
         {
             "name": "true/punycode",
