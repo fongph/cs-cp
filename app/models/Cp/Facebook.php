@@ -266,12 +266,15 @@ class Facebook extends BaseModel {
                                             fa.`status`
                                         FROM (
                                             SELECT
-                                                `id` record_id,
+                                                `id` message_id,
                                                 `user_id` id,
                                                 `type`,
                                                 `user_name` name,
                                                 `text`,
-                                                `timestamp`
+                                                `timestamp`,
+                                                `sticker`,
+                                                `latitude`,
+                                                `longitude`
                                             FROM `facebook_messages`
                                             WHERE 
                                                 `dev_id` = {$escapedDevId} AND `group_id` IS NULL AND `account` = {$escapedAccount} AND `user_id` = {$escapedUserId}
