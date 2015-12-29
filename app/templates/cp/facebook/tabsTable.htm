@@ -172,6 +172,10 @@
                         fnDrawCallback: function() {
                             facebook.messagesTable = messagesTable;
                             $(this).find('tbody').tableScroll();
+
+                            $(this).find('td a').click(function(e) {
+                                e.stopPropagation();
+                            });
                         }
                     });
                 },
