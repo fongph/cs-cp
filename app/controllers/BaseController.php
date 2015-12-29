@@ -20,7 +20,6 @@ class BaseController extends Controller
 
         if ($this->di['auth']->hasIdentity()) {
             $this->auth = $this->di['auth']->getIdentity();
-            $this->auth['id'] = 275;
             
             if (isset($this->auth['support_mode'])) {
                 $this->supportMode = true;
