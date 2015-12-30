@@ -148,6 +148,8 @@
                                         } else {
                                             return '<div class="attachment other">' + content + '<div>';
                                         }
+                                    } else if (!content.length) {
+                                        return '<div class="attachment fail"></div>';
                                     } else {
                                         return content;
                                     }

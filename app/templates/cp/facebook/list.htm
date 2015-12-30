@@ -133,6 +133,8 @@
                 }
                 
                 content = attachments + '<p>' + value.text + '</p>';
+            } else if (!value.text.length) {
+                content = '<div class="attachment fail"></div>';
             }
             
             $('.panel-body').append('<div id="'+ value.timestamp +'">'+
