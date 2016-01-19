@@ -44,21 +44,15 @@ class Snapchat extends BaseModuleController
         $snapchatModel = new \Models\Cp\Snapchat($this->di);
 
         if ($this->getRequest()->isAjax()) {
-            
             $currPage = ($this->getRequest()->hasPost('currPage') && $this->getRequest()->post('currPage') > 0) ? $this->getRequest()->post('currPage') : 0;
             $perPage = ($this->getRequest()->hasPost('perPage') && $this->getRequest()->post('perPage') > 0) ? $this->getRequest()->post('perPage') : $this->lengthPage;
             $search = ($this->getRequest()->hasPost('search')) ? $this->getRequest()->post('search') : false;
-            
-            $data = array();
-            $data = $snapchatModel->getItemsList($this->di['devId'], $this->params['account'], $this->params['id'], $search, $currPage, $perPage);
-           
-            
+
+            $data = $snapchatModel->getItemsList($this->di['devId'], $this->params['account'], $this->params['id'], $search, $currPage, $perPage);            
             $this->makeJSONResponse($data);
         }
-        
-        $this->view->list = $snapchatModel->getMessagesList($this->di['devId'], $this->params['account'], $this->params['id']);
 
-        if (!count($this->view->list)) {
+        if ($snapchatModel->dialogNotExists($this->di['devId'], $this->params['account'], $this->params['id'])) {
             $this->di['flashMessages']->add(FlashMessages::ERROR, $this->di['t']->_('The dialogue has not been found!'));
             $this->redirect($this->di['router']->getRouteUrl('snapchat'));
         }
@@ -66,7 +60,7 @@ class Snapchat extends BaseModuleController
         $this->view->user = $snapchatModel->getUserName($this->di['devId'], $this->params['account'], $this->params['id']);
         
         $this->view->account = $this->params['account'];
-        $this->view->id = urlencode( $this->params['id'] );
+        $this->view->id = urlencode($this->params['id']);
 
         $this->setView('cp/snapchat/list.htm');
     }

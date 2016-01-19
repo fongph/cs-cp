@@ -70,18 +70,25 @@ class Facebook extends BaseModuleController
             $this->makeJSONResponse($data);
         }
         
+        $dialogueExists = false;
+        
         switch ($this->params['tab']) {
             case 'group':
-                $this->view->list = $facebookModel->getGroupList($this->di['devId'], $this->params['account'], $this->params['id']);
+                $dialogueExists = $facebookModel->isGroupDialogueExists($this->di['devId'], $this->params['account'], $this->params['id']);
                 $this->view->users = $facebookModel->getGroupUsers($this->di['devId'], $this->params['account'], $this->params['id']);
                 break;
 
             case 'private':
-                $this->view->list = $facebookModel->getPrivateList($this->di['devId'], $this->params['account'], $this->params['id']);
+                $accountName = $facebookModel->getAccountName($this->di['devId'], $this->params['account'], $this->params['id']);
+                if ($accountName !== false) {
+                    $this->view->accountName = $accountName;
+                    $this->view->accountId = $this->params['id'];
+                    $dialogueExists = true;
+                }
                 break;
         }
 
-        if (!count($this->view->list)) {
+        if (!$dialogueExists) {
             $this->di['flashMessages']->add(FlashMessages::ERROR, $this->di['t']->_('The dialogue has not been found!'));
             $this->redirect($this->di['router']->getRouteUrl('facebook'));
         }

@@ -66,24 +66,18 @@ class Kik extends BaseModel {
         return $this->getDb()->query("SELECT `account_id`, `nickname` FROM `kik_users` WHERE `dev_id` = {$devId} AND `account_id` = `user_id`")->fetchAll(\PDO::FETCH_KEY_PAIR);
     }
 
-    public function getMessagesList($devId, $account, $group) {
+    public function isDialogueExists($devId, $account, $group) {
         $devId = $this->getDb()->quote($devId);
         $account = $this->getDb()->quote($account);
         $group = $this->getDb()->quote($group);
 
         return $this->getDb()->query("SELECT
-                                            km.`sender_id` id,
-                                            IF(km.`sender_id`=km.`account_id`, 'out', 'in') type,
-                                            ku.`nickname` name,
-                                            km.`text`,
-                                            km.`timestamp`
-                                        FROM `kik_messages` km
-                                        INNER JOIN `kik_users` ku ON ku.`dev_id` = {$devId} AND ku.`account_id` = {$account} AND ku.`user_id` = km.`sender_id`
+                                            `id`
+                                        FROM `kik_messages`
                                         WHERE 
-                                            km.`dev_id` = {$devId} AND
-                                            km.`account_id` = {$account} AND
-                                            km.`group_id` = {$group}
-                                        ORDER BY `timestamp` DESC")->fetchAll();
+                                            `dev_id` = {$devId} AND
+                                            `account_id` = {$account} AND
+                                            `group_id` = {$group}")->fetchColumn() !== false;
     }
 
     public function getUserName($devId, $account, $userId) {

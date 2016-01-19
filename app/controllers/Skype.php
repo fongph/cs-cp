@@ -2,8 +2,9 @@
 
 namespace Controllers;
 
-use Models\Modules,
-    CS\Devices\Limitations;
+use Models\Modules;
+use CS\Devices\Limitations;
+use System\FlashMessages;
 
 class Skype extends BaseModuleController
 {
@@ -71,14 +72,20 @@ class Skype extends BaseModuleController
             $this->makeJSONResponse($data);
         }
         
+        $dialogueExists = false;
+        
         switch ($this->params['tab']) {
             case 'group':
-                $this->view->list = $skypeModel->getGroupList($this->di['devId'], $this->params['account'], $this->params['id']);
+                $dialogueExists = $skypeModel->isGroupDialogueExists($this->di['devId'], $this->params['account'], $this->params['id']);
                 $this->view->users = $skypeModel->getGroupUsers($this->di['devId'], $this->params['account'], $this->params['id']);
                 break;
 
             case 'private':
-                $this->view->list = $skypeModel->getPrivateList($this->di['devId'], $this->params['account'], $this->params['id']);
+                $accountName = $skypeModel->getAccountName($this->di['devId'], $this->params['account'], $this->params['id']);
+                if ($accountName !== false) {
+                    $this->view->accountName = $accountName;
+                    $dialogueExists = true;
+                }
                 break;
 
             default:
@@ -86,7 +93,7 @@ class Skype extends BaseModuleController
                 break;
         }
 
-        if (!count($this->view->list)) {
+        if (!$dialogueExists) {
             $this->di['flashMessages']->add(FlashMessages::ERROR, $this->di['t']->_('The dialogue has not been found!'));
             $this->redirect($this->di['router']->getRouteUrl('skype'));
         }

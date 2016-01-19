@@ -59,10 +59,10 @@ class Kik extends BaseModuleController
             
             $this->makeJSONResponse($data);
         }
+
+        $dialogueExists = $kikModel->isDialogueExists($this->di['devId'], $this->params['account'], $this->params['id']);
         
-        $this->view->list = $kikModel->getMessagesList($this->di['devId'], $this->params['account'], $this->params['id']);
-        
-        if (!count($this->view->list)) {
+        if (!$dialogueExists) {
             $this->di['flashMessages']->add(FlashMessages::ERROR, $this->di['t']->_('The dialogue has not been found!'));
             $this->redirect($this->di['router']->getRouteUrl('kik'));
         }

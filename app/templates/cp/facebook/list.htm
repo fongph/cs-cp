@@ -5,12 +5,12 @@
 
     {if $tab=='private'}
     <div class="dialog-panel-top">
-        <p class="text-info">{$di.t->_('Messages with')} <a href="http://facebook.com/{$list[0].id}" class="disable-on-demo" target="_blank">{$list[0].name|e}</a></p>
+        <p class="text-info">{$di.t->_('Messages with')} <a href="http://facebook.com/{$accountId|e}" class="disable-on-demo" target="_blank">{$accountName|e}</a></p>
         <a class="btn btn-default" href="{$di.config.domain}/cp/facebook">{$di.t->_('Back to Facebook log')}</a>
     </div>
     {elseif $tab=='group'}
     <div class="dialog-panel-top">
-        <p class="text-info">{$di.t->_('Messages with')} 
+        <p class="text-info">{$di.t->_('Messages with')}
             {foreach $users as $userId => $name last=$last}
                 {if strlen($name)}
                 <a href="http://facebook.com/{$userId}" class="disable-on-demo" target="_blank">{$name|e}</a>{if !$last}, {/if}
@@ -24,11 +24,6 @@
     <div id="blockPaginateLists" class="panel panel-default" data-paginate-ajax="{$di.router->getRouteUrl('facebook')}/{$account}/{$tab}/{$id}">
         <div class="panel-heading">
             <div class="row">
-                {* TITLE
-                <div class="col-xs-4">
-                    <span class="title"></span>
-                </div> *}
-                
                 <div class="col-xs-6">
                     <div class="blockSearch">
                         <input type="text" name="search" value="" />

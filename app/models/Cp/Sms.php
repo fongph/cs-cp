@@ -81,49 +81,19 @@ class Sms extends BaseModel
         return $this->getDb()->query("SELECT `timestamp` FROM `sms_log` WHERE `dev_id` = {$devId} GROUP BY `timestamp` ORDER BY `timestamp` DESC LIMIT 1")->fetch();
     }
 
-    public function getPhoneSmsList($devId, $phoneNumber)
+    public function getNumberName($devId, $phoneNumber)
     {
         $devId = $this->getDb()->quote($devId);
         $phoneNumber = $this->getDb()->quote($phoneNumber);
 
         return $this->getDb()->query("SELECT
-                                        `sms_type` type,
-                                        `number_name` name,
-                                        `phone_number` phone,
-                                        `content`,
-                                        `timestamp`,
-                                        `multimedia`,
-                                        `blocked`,
-                                        `deleted`,
-                                        `network`
-                                    FROM `sms_log` WHERE
-                                        `dev_id` = {$devId} AND
-                                        `phone_number` = {$phoneNumber} AND
-                                        `group` = ''
-                                    ORDER BY
-                                        `timestamp` DESC")->fetchAll();
-    }
-
-    public function getPhoneGroupSmsList($devId, $group)
-    {
-        $devId = $this->getDb()->quote($devId);
-        $group = $this->getDb()->quote($group);
-
-        return $this->getDb()->query("SELECT
-                                        `sms_type` type,
-                                        `number_name` name,
-                                        `phone_number` phone,
-                                        `content`,
-                                        `timestamp`,
-                                        `multimedia`,
-                                        `blocked`,
-                                        `deleted`,
-                                        `network`
-                                    FROM `sms_log` WHERE
-                                        `dev_id` = {$devId} AND
-                                        `group` = {$group}
-                                    ORDER BY
-                                        `timestamp` DESC")->fetchAll();
+                                            `number_name`
+                                        FROM `sms_log` WHERE
+                                            `dev_id` = {$devId} AND
+                                            `phone_number` = {$phoneNumber} AND
+                                            `group` = '' 
+                                        ORDER BY `timestamp` DESC
+                                        LIMIT 1")->fetchColumn();
     }
 
     public function getGroupMembers($devId, $group)

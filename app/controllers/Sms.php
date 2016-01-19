@@ -54,18 +54,16 @@ class Sms extends BaseModuleController {
             $this->makeJSONResponse($data);
         }
 
-        $list = $smsModel->getPhoneSmsList($this->di['devId'], $this->params['phoneNumber']);
-        $this->view->list = $list;
+        $name = $smsModel->getNumberName($this->di['devId'], $this->params['phoneNumber']);
         $this->view->isGroup = false;
 
-        if (count($list)) {
-            $this->view->userName = $list[0]['name'];
+        if ($name !== false) {
+            $this->view->userName = $name;
             $this->view->userPhone = $this->params['phoneNumber'];
         } else {
             $this->di['flashMessages']->add(FlashMessages::ERROR, $this->di['t']->_('The dialogue has not been found!'));
             $this->redirect($this->di['router']->getRouteUrl('sms'));
         }
-
 
         $this->view->tab = 'sms';
         $this->view->id = urlencode($this->params['phoneNumber']);
@@ -88,12 +86,11 @@ class Sms extends BaseModuleController {
             $this->makeJSONResponse($data);
         }
 
-        $list = $smsModel->getPhoneGroupSmsList($this->di['devId'], $this->params['group']);
-        $this->view->list = $list;
+        $members = $smsModel->getGroupMembers($this->di['devId'], $this->params['group']);
         $this->view->isGroup = true;
 
-        if (count($list)) {
-            $this->view->members = $smsModel->getGroupMembers($this->di['devId'], $this->params['group']);
+        if (count($members)) {
+            $this->view->members = $members;
         } else {
             $this->di['flashMessages']->add(FlashMessages::ERROR, $this->di['t']->_('The dialogue has not been found!'));
             $this->redirect($this->di['router']->getRouteUrl('sms'));

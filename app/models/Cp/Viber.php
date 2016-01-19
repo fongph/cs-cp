@@ -219,30 +219,18 @@ class Viber extends BaseModel {
         return $result;
     }
 
-    public function getPrivateList($devId, $phoneNumber) {
+    public function getNumberName($devId, $phoneNumber) {
         $devId = $this->getDb()->quote($devId);
         $phoneNumber = $this->getDb()->quote($phoneNumber);
 
-        return $this->getDb()->query("SELECT 
-                                            `type`,
-                                            `number_name` name,
-                                            `phone_number` phone,
-                                            `text`,
-                                            `timestamp`
-                                        FROM `viber_messages` WHERE `dev_id` = {$devId} AND `group_id` IS NULL AND `phone_number` = {$phoneNumber} ORDER BY `timestamp` DESC")->fetchAll();
+        return $this->getDb()->query("SELECT `number_name` FROM `viber_messages` WHERE `dev_id` = {$devId} AND `group_id` IS NULL AND `phone_number` = {$phoneNumber} ORDER BY `timestamp` DESC LIMIT 1")->fetchColumn();
     }
 
-    public function getGroupList($devId, $groupId) {
+    public function isGroupDialogueExists($devId, $groupId) {
         $devId = $this->getDb()->quote($devId);
         $groupId = $this->getDb()->quote($groupId);
 
-        return $this->getDb()->query("SELECT 
-                                            `type`,
-                                            `number_name` name,
-                                            `phone_number` phone,
-                                            `text`,
-                                            `timestamp`
-                                        FROM `viber_messages` WHERE `dev_id` = {$devId} AND `group_id` = {$groupId} GROUP BY `timestamp` ORDER BY `timestamp` DESC")->fetchAll();
+        return $this->getDb()->query("SELECT `id` FROM `viber_messages` WHERE `dev_id` = {$devId} AND `group_id` = {$groupId}")->fetchColumn() !== false;
     }
 
     public function getGroupUsers($devId, $groupId) {

@@ -196,32 +196,20 @@ class Facebook extends BaseModel {
         return array_unique(array_merge($accounts, $callsAccounts));
     }
 
-    public function getPrivateList($devId, $account, $userId) {
+    public function getAccountName($devId, $account, $userId) {
         $devId = $this->getDb()->quote($devId);
         $account = $this->getDb()->quote($account);
         $userId = $this->getDb()->quote($userId);
 
-        return $this->getDb()->query("SELECT
-                                            `user_id` id,
-                                            `type`,
-                                            `user_name` name,
-                                            `text`,
-                                            `timestamp`
-                                        FROM `facebook_messages` WHERE `dev_id` = {$devId} AND `group_id` IS NULL AND `account` = {$account} AND `user_id` = {$userId} ORDER BY `timestamp` DESC")->fetchAll();
+        return $this->getDb()->query("SELECT `user_name` FROM `facebook_messages` WHERE `dev_id` = {$devId} AND `group_id` IS NULL AND `account` = {$account} AND `user_id` = {$userId} ORDER BY `timestamp` DESC LIMIT 1")->fetchColumn();
     }
 
-    public function getGroupList($devId, $account, $groupId) {
+    public function isGroupDialogueExists($devId, $account, $groupId) {
         $devId = $this->getDb()->quote($devId);
         $account = $this->getDb()->quote($account);
         $groupId = $this->getDb()->quote($groupId);
 
-        return $this->getDb()->query("SELECT
-                                            `user_id` id,
-                                            `type` type,
-                                            `user_name` name,
-                                            `text`,
-                                            `timestamp`
-                                        FROM `facebook_messages` WHERE `dev_id` = {$devId} AND `account` = {$account} AND `group_id` = {$groupId} GROUP BY `timestamp` ORDER BY `timestamp` DESC")->fetchAll();
+        return $this->getDb()->query("SELECT `id` FROM `facebook_messages` WHERE `dev_id` = {$devId} AND `account` = {$account} AND `group_id` = {$groupId} LIMIT 1")->fetchColumn() !== false;
     }
 
     public function getGroupUsers($devId, $account, $groupId) {

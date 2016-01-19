@@ -5,7 +5,7 @@
 
     {if $tab=='private'}
     <div class="dialog-panel-top">
-        <p class="text-info">{$di.t->_('Messages with')} <b>{$list[0].name|e}</b></p>
+        <p class="text-info">{$di.t->_('Messages with')} <b>{$numberName|e}</b></p>
         <a class="btn btn-default" href="{$di.config.domain}/cp/whatsapp#private">{$di.t->_('Back to Whatsapp log')}</a>
     </div>
     {elseif $tab=='group'}

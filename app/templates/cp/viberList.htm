@@ -5,7 +5,7 @@
 
     {if $tab=='private'}
     <div class="dialog-panel-top">
-        <p class="text-info">{$di.t->_('Messages with')} <b>{if strlen($list[0].name)}{$list[0].name|e}{else}{$list[0].phone|e}{/if}</b></p>
+        <p class="text-info">{$di.t->_('Messages with')} <b>{if strlen($numberName)}{$numberName|e}{else}{$phoneNumber|e}{/if}</b></p>
         <a class="btn btn-default" href="{$di.config.domain}/cp/viber#private">{$di.t->_('Back to Viber log')}</a>
     </div>
     {elseif $tab=='group'}
@@ -18,26 +18,6 @@
         <a class="btn btn-default" href="{$di.config.domain}/cp/viber#group">{$di.t->_('Back to Viber log')}</a>
     </div>
     {/if}
-
-    {*
-    <div class="dialog-messages-list">
-        {foreach $list as $item}
-        <div id="{$item.timestamp}">
-            <div class="popover {if $item.type == 'in'}right{else}left{/if}">
-                <div class="arrow"></div>
-                {if $item.type == 'in'}
-                <h3 class="popover-title"><b>{if strlen($item.name)}{$item.name|e}{else}{$item.phone|e}{/if}</b> <span></span></h3>
-                {else}
-                <h3 class="popover-title"><span></span></h3>
-                {/if}
-                <div class="popover-content">
-                    <p>{$item.text|e}</p>
-                </div>
-            </div>
-        </div>
-        {/foreach}
-    </div>
-    *}
     
     <div id="blockPaginateLists" class="panel panel-default" data-paginate-ajax="{$di.router->getRouteUrl('viber')}/{$tab}/{$id}">
         <div class="panel-heading">

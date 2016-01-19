@@ -77,38 +77,21 @@ class Snapchat extends BaseModel
         return $data;
     }
 
-    public function getMessagesList($devId, $account, $user)
-    {
+    public function dialogNotExists($devId, $account, $user) {
         $escapedDevId = $this->getDb()->quote($devId);
         $escapedAccount = $this->getDb()->quote($account);
         $escapedUser = $this->getDb()->quote($user);
 
-        $messages = $this->getDb()->query("SELECT
-                                            sm.`type`,
-                                            su.`user_id`,
-                                            su.`nickname` name,
-                                            sm.`content`,
-                                            sm.`content_type`,
-                                            sm.`timestamp`
+        $result = $this->getDb()->query("SELECT
+                                            sm.`dev_id`
                                         FROM `snapchat_messages` sm
-                                        INNER JOIN `snapchat_users` su ON su.`dev_id` = {$escapedDevId} AND su.`account_id` = {$escapedAccount} AND su.`user_id` = sm.`user_id`
                                         WHERE 
                                             sm.`dev_id` = {$escapedDevId} AND
                                             sm.`account_id` = {$escapedAccount} AND
                                             sm.`user_id` = {$escapedUser}
-                                        ORDER BY `timestamp` DESC")->fetchAll();
-
-        foreach ($messages as $key => $value) {
-            if ($value['content_type'] == 'image') {
-                $messages[$key]['image'] = $this->getImageUrl($devId, $account, $value['content']);
-                $messages[$key]['preview'] = $this->getPreviewUrl($devId, $account, $value['content']);
-            } elseif ($value['content_type'] == 'video') {
-                $messages[$key]['preview'] = $this->getPreviewUrl($devId, $account, $value['content']);
-                $messages[$key]['video'] = $this->getVideoUrl($devId, $account, $value['content']);
-            }
-        }
-
-        return $messages;
+                                        LIMIT 1")->fetchColumn();
+                                            
+        return $result === false;
     }
 
     private function getImageUrl($devId, $account, $filename)

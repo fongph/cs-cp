@@ -5,7 +5,7 @@
 
     {if $tab=='private'}
     <div class="dialog-panel-top">
-        <p class="text-info">{$di.t->_('Messages with')} <b>{$list[0].name|e}</b></p>
+        <p class="text-info">{$di.t->_('Messages with')} <b>{$accountName|e}</b></p>
         <a class="btn btn-default" href="{$di.config.domain}/cp/skype">{$di.t->_('Back to Skype log')}</a>
     </div>
     {elseif $tab=='group'}

@@ -73,18 +73,25 @@ class Viber extends BaseModuleController
             $this->makeJSONResponse($data);
         }
         
+        $dialogueExists = false;
+        
         switch ($this->params['tab']) {
             case 'group':
-                $this->view->list = $viberModel->getGroupList($this->di['devId'], $this->params['id']);
+                $dialogueExists = $viberModel->isGroupDialogueExists($this->di['devId'], $this->params['id']);
                 $this->view->users = $viberModel->getGroupUsers($this->di['devId'], $this->params['id']);
                 break;
 
             case 'private':
-                $this->view->list = $viberModel->getPrivateList($this->di['devId'], $this->params['id']);
+                $numberName = $viberModel->getNumberName($this->di['devId'], $this->params['id']);
+                if ($numberName !== false) {
+                    $this->view->numberName = $numberName;
+                    $this->view->phoneNumber = $this->params['id'];
+                    $dialogueExists = true;
+                }
                 break;
         }
 
-        if (!count($this->view->list)) {
+        if (!$dialogueExists) {
             $this->di['flashMessages']->add(FlashMessages::ERROR, $this->di['t']->_('The dialogue has not been found!'));
             $this->redirect($this->di['router']->getRouteUrl('viber'));
         }
