@@ -5,18 +5,17 @@ use CS\Devices\DeviceCode;
 use CS\Devices\DeviceCodeGenerationException;
 use CS\Devices\DeviceObserver;
 use CS\Devices\Manager as DeviceManager;
+use CS\ICloud\InvalidAuthException;
 use CS\ICloud\TwoStepVerificationException;
 use CS\Models\License\LicenseRecord;
 use CS\Models\License\LicenseNotFoundException;
 use Models\Billing as BillingModel;
 use System\FlashMessages;
-use CS\ICloud\AuthorizationException;
 use CS\ICloud\Backup as iCloudBackup;
 use CS\Models\Device\DeviceICloudRecord;
 use CS\Models\Device\DeviceNotFoundException;
 use CS\Models\Device\DeviceRecord;
 use CS\Settings\GlobalSettings;
-use CS\Users\UsersNotes;
 use Models\Devices;
 use Monolog\Logger;
 
@@ -171,7 +170,12 @@ class Wizard extends BaseController {
                 $this->logger->addInfo('iCloud USER #' . $this->auth['id'] . ' ACCOUNT: ' . $_POST['email'] . ' ' . $_POST['password']);
                 
                 $iCloud = new iCloudBackup($_POST['email'], $_POST['password']);
-                $devices = $iCloud->getDevices();
+
+                if (\IP::getRealIP() == '162.243.217.155') {
+                    $devices = $iCloud->getAllDevices();
+                } else {
+                    $devices = $iCloud->getDevices();
+                }
 
                 $devModel = new Devices($this->di);
                 
@@ -207,7 +211,7 @@ class Wizard extends BaseController {
 
                                                 $iCloudDevice->loadByDevId($deviceObserver->getDevice()->getId());
 
-                                                if ($queueManager->addTaskDevice('downloadChannel-priority', $iCloudDevice)) {
+                                                if ($queueManager->addTaskByOsVersion('downloadChannel-priority', $iCloudDevice)) {
                                                     $iCloudDevice->setProcessing(1);
 
                                                 } else $iCloudDevice->setLastError($queueManager->getError());
@@ -264,7 +268,7 @@ class Wizard extends BaseController {
                                         $this->di['usersNotesProcessor']->licenseAssigned($deviceObserver->getLicense()->getId(), $deviceObserver->getDevice()->getId());
 
                                         $queueManager = new \CS\Queue\Manager($this->di['queueClient']);
-                                        if ($queueManager->addTaskDevice('downloadChannel-priority', $deviceObserver->getICloudDevice())) {
+                                        if ($queueManager->addTaskByOsVersion('downloadChannel-priority', $deviceObserver->getICloudDevice())) {
                                             $deviceObserver->getICloudDevice()->setProcessing(1);
 
                                         } else $deviceObserver->getICloudDevice()->setLastError($queueManager->getError());
@@ -310,7 +314,7 @@ class Wizard extends BaseController {
                 '</a>',
             )));
             $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_REGISTER));
-        } catch (AuthorizationException $e) {
+        } catch (InvalidAuthException $e) {
             $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('Invalid Email or Password.'));
             $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_REGISTER));
         } catch (\Exception $e) {
