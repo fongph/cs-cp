@@ -147,6 +147,7 @@
                         bInfo: true,
                         bAutoWidth: false,
                         bSortMulti: false,
+                        bRetrieve: true,
                         iDisplayLength: {$authData.records_per_page},
                         aaSorting: [[2, 'desc']],
                         oLanguage: {
@@ -178,15 +179,16 @@
                                 fnRender: function(obj, value) {
                                     return customOffsetMoment(obj.aData.timestamp * 1000).format('lll');
                                 }
-                            }],
-                            fnRowCallback: function(nRow, data) {
-                                $(nRow).on('click', function() {
-                                    window.location = '{$di.router->getRouteUrl("whatsappTab", ["tab"=>"private"])}/' + encodeURIComponent(data.id);
-                                });
-                            },
-                            fnDrawCallback: function() {
-                                whatsapp.privateTable = privateTable;
-                                $(this).find('tbody').tableScroll();
+                            }
+                        ],
+                        fnRowCallback: function(nRow, data) {
+                            $(nRow).on('click', function() {
+                                window.location = '{$di.router->getRouteUrl("whatsappTab", ["tab"=>"private"])}/' + encodeURIComponent(data.id);
+                            });
+                        },
+                        fnDrawCallback: function() {
+                            whatsapp.privateTable = privateTable;
+                            $(this).find('tbody').tableScroll();
                         }
                     });
                 },
@@ -201,6 +203,7 @@
                         bInfo: true,
                         bAutoWidth: false,
                         bSortMulti: false,
+                        bRetrieve: true,
                         iDisplayLength: {$authData.records_per_page},
                         aaSorting: [[2, 'desc']],
                         oLanguage: {
@@ -235,8 +238,12 @@
                                 window.location = '{$di.router->getRouteUrl("whatsappTab", ["tab"=>"group"])}/' + encodeURIComponent(data.group);
                             });
                         },
+                        fnInitComplete: function() {
+                            
+                        },
                         fnDrawCallback: function() {
                             whatsapp.groupTable = groupTable;
+                            console.log('draw complete');
                             $(this).find('tbody').tableScroll();
                         }
                     });
@@ -252,6 +259,7 @@
                         bInfo: true,
                         bAutoWidth: false,
                         bSortMulti: false,
+                        bRetrieve: true,
                         iDisplayLength: {$authData.records_per_page},
                         aaSorting: [[3, 'desc']],
                         oLanguage: {
