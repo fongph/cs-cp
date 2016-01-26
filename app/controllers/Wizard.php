@@ -10,7 +10,7 @@ use CS\Models\License\LicenseRecord;
 use CS\Models\License\LicenseNotFoundException;
 use Models\Billing as BillingModel;
 use System\FlashMessages;
-use CS\ICloud\AuthorizationException;
+use CS\ICloud\InvalidAuthException;
 use CS\ICloud\Backup as iCloudBackup;
 use CS\Models\Device\DeviceICloudRecord;
 use CS\Models\Device\DeviceNotFoundException;
@@ -310,7 +310,7 @@ class Wizard extends BaseController {
                 '</a>',
             )));
             $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_REGISTER));
-        } catch (AuthorizationException $e) {
+        } catch (InvalidAuthException $e) {
             $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('Invalid Email or Password.'));
             $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_REGISTER));
         } catch (\Exception $e) {
