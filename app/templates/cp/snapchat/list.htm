@@ -100,13 +100,14 @@
             var position = (value.type == 'in') ? 'right' : 'left';
             var content = "";
             
-            if (value.content_type == 'text')
+            if (value.content_type == 'text') {
                 content = "<p>"+value.content+"</p>";
-            else if (value.content_type == 'image')
-                content = "<a href=\""+value.image+"\" class=\"item image\"><img src=\""+value.preview+"\" class=\"blur-for-support\" alt=\"\" /></a>";
-            else if (value.content_type == 'video')
-                content = "<a href=\""+value.preview+"\" class=\"item video\" data-video=\""+value.video+"\"><img src=\""+value.preview+"\" class=\"blur-for-support\" alt=\"\" /><i class=\"fa fa-play\"></i></a>";
-            
+            } else if (value.content_type == 'image') {
+                content = "<p><a href=\""+value.image+"\" class=\"item image\"><img src=\""+value.preview+"\" class=\"blur-for-support\" alt=\"\" /></a></p>";
+            } else if (value.content_type == 'video') {
+                content = "<p><a href=\""+value.preview+"\" class=\"item video\" data-video=\""+value.video+"\"><img src=\""+value.preview+"\" class=\"blur-for-support\" alt=\"\" /><i class=\"fa fa-play\"></i></a></p>";
+                content += "<small>If you cannot play the video, you can <a href=" + value.download + ">download it</a>.</small>";
+            }
             var popover_title = (value.type == 'out') 
                                     ? "<h3 class=\"popover-title\"><span></span></h3>"
                                     : "<h3 class=\"popover-title\"><b>"+ ((value.name.length) ? value.name : value.user_id ) +"</b> <span></span></h3>";
@@ -115,8 +116,8 @@
                                         '<div class="popover '+ position +'">'+
                                             '<div class="arrow"></div>'+
                                              popover_title +   
-                                            '<div class="popover-content">'+
-                                                '<p>'+ content +'</p>'+
+                                            '<div class="popover-content">' +
+                                                content +
                                             '</div>'+
                                         '</div>'+
                                     '</div>');

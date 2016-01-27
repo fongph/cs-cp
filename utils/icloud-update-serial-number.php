@@ -1,5 +1,12 @@
 <?php
 
+var_dump('9e3156b537de1cea17a389fd1c9faaa8cb870701');
+var_dump(sha1('CameraRollDomain-Media/DCIM/100APPLE/IMG_0004.JPG'));
+var_dump(sha1('HomeDomain-Library/SMS/sms.db'));
+
+
+die; 
+
 set_time_limit(0);
 
 require __DIR__ . '/../vendor/autoload.php';
@@ -11,9 +18,26 @@ $di->set('config', $config);
 require __DIR__ . '/../bootstrap.php';
 
 $data = array(
-    'apple_id' => 'willy.dixie007@icloud.com',
-    'apple_password' => 'WillyDixie17'
+    'apple_id' => 'Michaeltcaraballo@icloud.com',
+    'apple_password' => 'Il1kepie1'
 );
+
+$cloudClient = new \CS\ICloud\CloudClient($data['apple_id'], $data['apple_password']);
+
+$account = new \CS\ICloud\CloudKit\CkAccount($cloudClient);
+
+foreach ($account->getDevices() as $value) {
+    var_dump($value->getDeviceName());
+    var_dump($value->getMarketingName());
+    var_dump($value->getSerialNumber());
+    var_dump($value->getProductType());
+    var_dump($value->getProductVersion());
+    //var_dump($value->getLastSnapshot());
+    var_dump($value->getLastCommitted());
+    echo '---------------------------------' . PHP_EOL;
+}
+
+die;
 
 $db = $di['db'];
 

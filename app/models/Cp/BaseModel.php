@@ -24,4 +24,21 @@ class BaseModel extends \System\Model
         return $s3->getSignedCannedURL($this->di['config']['cloudFront']['domain'] . $uri, self::$_authLifeTime);
     }
 
+    public function getDownloadUrl($uri, $filename)
+    {
+        $extendedUri = $uri . '?response-content-disposition=' . rawurlencode('attachment; filename=' . $filename);
+
+        $config = \CS\Settings\GlobalSettings::getCloudFrontConfig();
+
+        $client = \Aws\CloudFront\CloudFrontClient::factory(array(
+                    'key_pair_id' => $config['keyPairId'],
+                    'private_key' => $config['privatKeyFilename'],
+        ));
+
+        return $client->getSignedUrl(array(
+                    'url' => $config['domain'] . $extendedUri,
+                    'expires' => time() + $filename,
+        ));
+    }
+
 }

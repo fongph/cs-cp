@@ -108,6 +108,11 @@ class Snapchat extends BaseModel
     {
         return $this->getCDNAuthorizedUrl(urlencode($devId) . '/snapchat/' . urlencode($account) . '/video/' . urlencode($filename) . '.mp4');
     }
+    
+    private function getVideoDownloadUrl($devId, $account, $filename)
+    {
+        return $this->getDownloadUrl(urlencode($devId) . '/snapchat/' . urlencode($account) . '/video/' . urlencode($filename) . '.mp4', urlencode($filename) . '.mp4');
+    }
 
     public function getUserName($devId, $account, $userId)
     {
@@ -192,6 +197,7 @@ class Snapchat extends BaseModel
             } elseif ($value['content_type'] == 'video') {
                 $list['items'][$key]['preview'] = $this->getPreviewUrl($devId, $account, $value['content']);
                 $list['items'][$key]['video'] = $this->getVideoUrl($devId, $account, $value['content']);
+                $list['items'][$key]['download'] = $this->getVideoDownloadUrl($devId, $account, $value['content']);
             }
         }                                
                                         
