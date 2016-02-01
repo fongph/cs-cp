@@ -106,7 +106,7 @@
                 content = "<p><a href=\""+value.image+"\" class=\"item image\"><img src=\""+value.preview+"\" class=\"blur-for-support\" alt=\"\" /></a></p>";
             } else if (value.content_type == 'video') {
                 content = "<p><a href=\""+value.preview+"\" class=\"item video\" data-video=\""+value.video+"\"><img src=\""+value.preview+"\" class=\"blur-for-support\" alt=\"\" /><i class=\"fa fa-play\"></i></a></p>";
-                content += "<small>If you cannot play the video, you can <a href=" + value.download + ">download it</a>.</small>";
+                content += "<small>If you cannot play the video, you can <a href=\"" + value.download + "\" class=\"disable-on-demo\">download it</a>.</small>";
             }
             var popover_title = (value.type == 'out') 
                                     ? "<h3 class=\"popover-title\"><span></span></h3>"

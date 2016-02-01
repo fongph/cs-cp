@@ -38,6 +38,10 @@ class Videos extends BaseModuleController
             } else if ($this->getRequest()->hasGet('getVideo')) {
                 $url = $videosModel->getCDNAuthorizedUrl($this->di['devId'] . '/video/' . urlencode($this->getRequest()->get('getVideo')));
                 $this->redirect($url);
+            } else if ($this->getRequest()->hasGet('downloadVideo')) {
+                $path = $this->getRequest()->get('downloadVideo');
+                $url = $videosModel->getDownloadUrl($this->di['devId'] . '/video/' . $path, pathinfo($path, PATHINFO_FILENAME) . '.mp4');
+                $this->redirect($url);
             } else {
                 $this->processVideoRequests($videosModel, $this->di['router']->getRouteUrl('videos'));
             }

@@ -26,19 +26,12 @@ class BaseModel extends \System\Model
 
     public function getDownloadUrl($uri, $filename)
     {
-        $extendedUri = $uri . '?response-content-disposition=' . rawurlencode('attachment; filename=' . $filename);
-
-        $config = \CS\Settings\GlobalSettings::getCloudFrontConfig();
-
-        $client = \Aws\CloudFront\CloudFrontClient::factory(array(
-                    'key_pair_id' => $config['keyPairId'],
-                    'private_key' => $config['privatKeyFilename'],
-        ));
-
-        return $client->getSignedUrl(array(
-                    'url' => $config['domain'] . $extendedUri,
-                    'expires' => time() + $filename,
-        ));
+        $config = \CS\Settings\GlobalSettings::getS3Config();
+        
+        $s3 = \Aws\S3\S3Client::factory($config);
+        return $s3->getObjectUrl($config['bucket'], $uri, time() + self::$_authLifeTime, [
+            'ResponseContentDisposition' => 'attachment; filename=' . $filename
+        ]);
     }
 
 }

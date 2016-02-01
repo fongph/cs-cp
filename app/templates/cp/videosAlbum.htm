@@ -124,6 +124,7 @@
                     {$di.t->_('To play the media you will need to either update your browser to a recent version or update your %1$sFlash plugin%2$s.', ['<a href="http://get.adobe.com/flashplayer/" target="_blank">', '</a>'])}
                 </div>
             </div>
+            <p class="text-center" style="margin: 10px 0 0px;">If you cannot play the video, you can <a href="" id="videoDownloadLink" class="disable-on-demo">download it</a>.</p>
         </div>
     </div>
     
@@ -147,12 +148,14 @@
                             {/if}
                         </div>
                         <div class="buttons">
-                            {if !$item.deleted}
-                            {if !$item.requested && !$item.is_full}
-                            <a href="?requestVideo={$item.filepath|e}" class="btn btn-xs btn-primary pull-right">{$di.t->_('Request video')}</a>
-                            {elseif $item.requested}
-                            <a href="?cancelRequest={$item.filepath|e}" class="btn btn-xs btn-danger pull-right">{$di.t->_('Cancel')}</a>
-                            {/if}
+                            {if $item.is_full}
+                                <a href="{$di.router->getRouteUrl('videos')}?downloadVideo={$item.album|e}/{$item.filename|e}" class="btn btn-xs btn-success pull-right disable-on-demo">{$di.t->_('Download')}</a>
+                            {elseif !$item.deleted}
+                                {if !$item.requested && !$item.is_full}
+                                    <a href="{$di.router->getRouteUrl('videos')}?requestVideo={$item.filepath}" class="btn btn-xs btn-primary pull-right">{$di.t->_('Request video')}</a>
+                                {elseif $item.requested}
+                                    <a href="{$di.router->getRouteUrl('videos')}?cancelRequest={$item.filepath}" class="btn btn-xs btn-danger pull-right">{$di.t->_('Cancel')}</a>
+                                {/if}
                             {/if}
                         </div>
                     </div>
@@ -179,6 +182,8 @@
                         $('#player').jPlayer("setMedia", {
                             m4v: "{$di.router->getRouteUrl('videos')}?getVideo=" + $(this).attr('data-path')
                         }).jPlayer("play");
+                        
+                        $('#videoDownloadLink').attr('href', "{$di.router->getRouteUrl('videos')}?downloadVideo=" + $(this).attr('data-path'));
 
                         $('#playerContainer').show();
                         window.scrollTo(0, $('#playerContainer').offset().top);
