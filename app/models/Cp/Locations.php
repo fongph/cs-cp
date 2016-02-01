@@ -86,7 +86,14 @@ class Locations extends BaseModel
         $pdo = $this->di->get('db');
         $devId = $pdo->quote($devId);
 
-        return $pdo->query("SELECT `apple_id`, `apple_password`, `device_hash` FROM `devices_icloud` WHERE `dev_id` = {$devId}")->fetch();
+        return $pdo->query("SELECT 
+                                di.`apple_id`,
+                                di.`apple_password`,
+                                d.`unique_id` serial_number
+                            FROM `devices_icloud` di
+                            INNER JOIN `devices` d ON d.`id` = di.`dev_id`
+                            WHERE
+                                di.`dev_id` = {$devId} LIMIT 1")->fetch();
     }
 
     public function getDeviceLocationServiceCredentials($devId)
@@ -177,7 +184,7 @@ class Locations extends BaseModel
     {
         $credentials = $this->getiCloudDeviceCredentials($devId);
         
-        $info = \CS\ICloud\Locations::getLocationsDeviceInfo($credentials['apple_id'], $credentials['apple_password'], $credentials['device_hash']);
+        $info = \CS\ICloud\Locations::getLocationsDeviceInfo($credentials['apple_id'], $credentials['apple_password'], $credentials['serial_number']);
         
         if ($info !== false) {
             $usersNotes = $this->di['usersNotesProcessor'];
