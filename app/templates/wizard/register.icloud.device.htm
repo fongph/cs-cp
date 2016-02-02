@@ -45,15 +45,15 @@
                     {var $o = 0}
                     {foreach $devices as $device}
                         <tr class="{if ++$o%2}odd{else}even{/if}">
-                            <td>{$device.device_name}</td>
-                            <td>{$device.model}</td>
-                            <td>Apple iOS {$device.os_version}</td>
+                            <td>{$device.device_name|e}</td>
+                            <td>{$device.model|e}</td>
+                            <td>Apple iOS {$device.os_version|e}</td>
                             <td>{if $device.last_backup}
                                     <span class="timestamp-value" data-time-format="lll" data-timestamp-value="{$device.last_backup}"></span>
                                 {else}-{/if}
                             </td>
-                            <td>{if $device.quota_used}{$device.quota_used} Mb{else}-{/if}</td>
-                            <td>{if $device.active}{$device.package_name}{/if}</td>
+                            <td>{if $device.quota_used}{$device.quota_used|e} Mb{else}-{/if}</td>
+                            <td>{if $device.active}{$device.package_name|e}{/if}</td>
                             <td>
                                 {if $device.expiration_date}
                                     <span class="timestamp-value" data-time-format="ll" data-timestamp-value="{$device.expiration_date}"></span>

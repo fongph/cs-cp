@@ -31,8 +31,8 @@
                 {var $o = 0}
                 {foreach $availabledevices as $id => $device}
                     <tr class="{if ++$o%2}odd{else}even{/if}">
-                        <td>{$device.device_name}</td>
-                        <td>{$device.model}</td>
+                        <td>{$device.device_name|e}</td>
+                        <td>{$device.model|e}</td>
                         <td>
                             {if $device.os == 'icloud' || $device.os == 'ios'}
                                 Apple iOS
@@ -41,7 +41,7 @@
                             {else}
                                 {$di.t->_('Unknown')}
                             {/if}
-                            {if $device.os != 'unknown' && $device.os_version}{$device.os_version}{/if}
+                            {if $device.os != 'unknown' && $device.os_version|e}{$device.os_version|e}{/if}
                             {if $device.os == 'android'}
                                 {if $device.root_access}
                                     <div class="label label-success">{$di.t->_('Rooted with Root Access')}</div>
@@ -56,7 +56,7 @@
                         </td>
                         {*<td>
                             {if $device.active}
-                                {$device.package_name}
+                                {$device.package_name|e}
                             {else}
                                 {$di.t->_('No plan')}
                             {/if}
