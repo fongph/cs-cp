@@ -293,7 +293,6 @@ class Profile extends BaseController
 
                     //todo check auth count
                     $iCloud = new ICloudBackup($iCloudRecord->getAppleId(), $this->getRequest()->post('newPassword'));
-                    $iCloud->authenticate(); //or throw exception
 
                     $iCloudRecord->setApplePassword($this->getRequest()->post('newPassword'));
                     if($iCloudRecord->getLastError() == DeviceICloudRecord::ERROR_AUTHENTICATION)
@@ -315,7 +314,7 @@ class Profile extends BaseController
             $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('Device Not Found'));
             $this->redirect($this->di->getRouter()->getRouteUri('profile'));
             
-        } catch (AuthorizationException $e) {
+        } catch (\CS\ICloud\InvalidAuthException $e) {
             $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_("Oops, the iCloud password didn't work. Please try again"));
             $this->ajaxResponse(false, array(
                 'location' => $this->di->getRouter()->getRouteUri('profileICloudPasswordReset')."?deviceId={$this->getRequest()->get('deviceId')}"
