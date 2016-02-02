@@ -208,7 +208,7 @@
                                     var lnk = '{$di.router->getRouteUrl('billingLicense')}'.replace(':id', data.id);
                                     // console.log( data );
                                     var _detailes = (!billing.validateFreePackage(data.p_id) && !parseInt(data.trial)) ? '<br/>' + '<a href="' + lnk + '" class="btn btn-info btn-xs">{$di.t->_('Details')}</a>' : '';
-                                    return data.name + _detailes;
+                                    return _.escape(data.name) + _detailes;
                                 }
                             },
                             {
@@ -264,7 +264,7 @@
                                         }
                                     }
                                     
-                                    return data.device;
+                                    return _.escape(data.device);
                                 }
                             },
                             {
