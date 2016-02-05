@@ -74,14 +74,14 @@ $default = array(
             'instructions/keylogger-activation.html' => 'How to enable Keylogger',
             'instructions/install-xposed.html' => 'How to Install Xposed',
             'instructions/detect-ios-jailbreak.html' => 'Check Jailbreak',
-            'instructions/hide-cydia-icon.html' => 'Hide Cydia',
+            'instructions/hide-unhide-cydia-icon.html' => 'Hide/Unhide Cydia',
             'instructions/uninstall-pumpic-ios.html' => 'How to Uninstall Pumpic on iOS',
             'instructions/uninstall-pumpic-android.html' => 'How to Uninstall Pumpic on Android',
         ),
         'auth' => array(
             'instructions/keylogger-activation.html',
             'instructions/detect-ios-jailbreak.html',
-            'instructions/hide-cydia-icon.html',
+            'instructions/hide-unhide-cydia-icon.html',
             'instructions/uninstall-pumpic-ios.html',
             'instructions/uninstall-pumpic-android.html',
         )
