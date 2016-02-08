@@ -100,13 +100,13 @@
                             },
                             {
                                 mRender: function(value) {
-                                    return _.escape(value);
+                                    return escapeAndTruncate(value);
                                 }
                             },
                             {
                                 bSortable: false,
                                 mRender: function(value) {
-                                    return _.escape(value);
+                                    return escapeAndTruncate(value);
                                 }
                             }
                         ],

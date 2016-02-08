@@ -124,15 +124,7 @@
                             {
                                 mData: "text",
                                 fnRender: function(obj, value) {
-                                    var content = '';
-                                    if (_.isString(value)) {
-                                        if (value.length > 200) {
-                                            content = value.substr(0, 200) + '...';
-                                        } else {
-                                            content = value;
-                                        }
-                                        var content = _.escape(content);
-                                    }
+                                    var content = escapeAndTruncate(value);
                                     
                                     if (obj.aData.sticker > 0) {
                                         return '<div class="attachment image"><div>';
@@ -204,7 +196,7 @@
                                     if (obj.aData.members > 1) {
                                         return '<b>{$di.t->_('Group')}</b>';
                                     } else {
-                                        return obj.aData.name;
+                                        return escapeAndTruncate(obj.aData.name);
                                     }
                                 }
                             },

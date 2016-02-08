@@ -89,21 +89,14 @@
                                     if (obj.aData.is_group > 0) {
                                         return '<b>Group</b>';
                                     } else {
-                                        return _.escape(obj.aData.name);
+                                        return escapeAndTruncate(obj.aData.name);
                                     }
                                 }
                             },
                             {
                                 mData: "text",
                                 fnRender: function(obj, value) {
-                                    if (_.isString(value)) {
-                                        if (value.length > 200) {
-                                            return value.substr(0, 200) + '...';
-                                        }
-
-                                        return _.escape(value);
-                                    }
-                                    return '';
+                                    return escapeAndTruncate(value);
                                 }
                             },
                             {

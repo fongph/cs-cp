@@ -49223,6 +49223,27 @@ localAsUtc = function (m) {
 String.prototype.stripHTML = function () {
     return this.replace(/(<([^>]+)>)/ig, "");
 };
+
+// two parameters: string, max length
+escapeAndTruncate = function () {
+    var maxLength = 200;
+    
+    if (!arguments.length || !_.isString(arguments[0])) {
+        return '';
+    }
+    
+    var value = arguments[0];
+    
+    if (arguments.length > 1) {
+        maxLength = arguments.length;
+    }
+    
+    if (value.length > maxLength) {
+        value.substr(0, maxLength) + '...';
+    }
+    
+    return _.escape(value);
+};
 (function ($) {
     $.fn.timeRange = function (selectCallback) {
         var el = this;
