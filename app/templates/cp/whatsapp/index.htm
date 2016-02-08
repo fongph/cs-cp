@@ -157,20 +157,13 @@
                             {
                                 mData: "name",
                                 fnRender: function(obj, value) {
-                                    return _.escape(value);
+                                    return escapeAndTruncate(value);
                                 }
                             },
                             {
                                 mData: "text",
                                 fnRender: function(obj, value) {
-                                    if (_.isString(value)) {
-                                        if (value.length > 200) {
-                                            return value.substr(0, 200) + '...';
-                                        }
-
-                                        return _.escape(value);
-                                    }
-                                    return '';
+                                    return escapeAndTruncate(value);
                                 }
                             },
                             {
@@ -213,17 +206,13 @@
                             {
                                 mData: "name",
                                 fnRender: function(obj, value) {
-                                    return _.escape(value);
+                                    return escapeAndTruncate(value);
                                 }
                             },
                             {
                                 mData: "text",
                                 fnRender: function(obj, value) {
-                                    if (value.length > 200) {
-                                        return value.substr(0, 200) + '...';
-                                    }
-
-                                    return _.escape(value);
+                                    return escapeAndTruncate(value);
                                 }
                             },
                             {
@@ -269,7 +258,7 @@
                             {
                                 mData: "name",
                                 fnRender: function(obj, value) {
-                                    return _.escape(value);
+                                    return escapeAndTruncate(value);
                                 }
                             },
                             {

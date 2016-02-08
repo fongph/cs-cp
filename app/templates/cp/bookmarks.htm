@@ -71,12 +71,12 @@
                         aoColumns: [
                             {
                                 mRender: function(value) {
-                                    return _.escape(value);
+                                    return escapeAndTruncate(value);
                                 }
                             },
                             {
                                 mRender: function(value) {
-                                    return _.escape(value);
+                                    return escapeAndTruncate(value);
                                 }
                             },
                             {

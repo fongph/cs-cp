@@ -97,7 +97,7 @@
                             },
                             {
                                 fnRender: function(obj) {
-                                    return _.escape(obj.aData[1]);
+                                    return escapeAndTruncate(obj.aData[1]);
                                 }
                             }
                         ],

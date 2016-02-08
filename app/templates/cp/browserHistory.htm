@@ -133,7 +133,7 @@
                             {
                                 mData: 'title',
                                 mRender: function(value) {
-                                    return _.escape(value);
+                                    return escapeAndTruncate(value);
                                 }
                             },
                             {
@@ -146,7 +146,7 @@
                             {
                                 mData: 'browser',
                                 mRender: function(value) {
-                                    return _.escape(value);
+                                    return escapeAndTruncate(value);
                                 }
                             }
                             {if $isDeviceBlockSiteAvailable}

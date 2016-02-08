@@ -102,7 +102,7 @@
                                 {
                                     mData: 'number',
                                             mRender: function(value) {
-                                    return _.escape(value);
+                                    return escapeAndTruncate(value);
                                 }
                                 },
                                 {
@@ -112,22 +112,14 @@
                                         return '<b>{$di['t']->_('Group')}</b>';
                                     }
 
-                                    return _.escape(value);
+                                    return escapeAndTruncate(value);
                                 }
                                 },
                                 {
                                     mData: 'content',
                                             bSortable: false,
                                         mRender: function(value, type, data) {
-                                    var content = '';
-                                    if (_.isString(value)) {
-                                        if (value.length > 200) {
-                                            content = value.substr(0, 200) + '...';
-                                        } else {
-                                            content = value;
-                                        }
-                                        var content = _.escape(content);
-                                    }
+                                    return escapeAndTruncate(value);
 
                                     if (data.multimedia != 'none') {
                                         if (data.multimedia == 'text') {

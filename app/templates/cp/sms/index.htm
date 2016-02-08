@@ -104,33 +104,25 @@
                                 },
                                 {
                                     mData: 'number',
-                                            mRender: function(value) {
-                                    return _.escape(value);
+                                    mRender: function(value) {
+                                    return escapeAndTruncate(value);
                                 }
                                 },
                                 {
                                     mData: 'name',
-                                            mRender: function(value, type, data) {
+                                    mRender: function(value, type, data) {
                                     if (data.group.length) {
                                         return '<b>{$di['t']->_('Group')}</b>';
                                     }
 
-                                    return _.escape(value);
+                                    return escapeAndTruncate(value);
                                 }
                                 },
                                 {
                                     mData: 'content',
                                             bSortable: false,
                                         mRender: function(value, type, data) {
-                                    var content = '';
-                                    if (_.isString(value)) {
-                                        if (value.length > 200) {
-                                            content = value.substr(0, 200) + '...';
-                                        } else {
-                                            content = value;
-                                        }
-                                        var content = _.escape(content);
-                                    }
+                                    var content = escapeAndTruncate(value);
 
                                     if (data.multimedia != 'none') {
                                         if (data.multimedia == 'text') {

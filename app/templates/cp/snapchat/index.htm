@@ -93,7 +93,7 @@
                                 mData: "name",
                                 fnRender: function(obj, value) {
                                     if (value.length) {
-                                        return _.escape(value);
+                                        return escapeAndTruncate(value);
                                     }
                                     
                                     return obj.aData.user_id;
@@ -104,17 +104,7 @@
                                 fnRender: function(obj, value) {
 
                                     if (obj.aData.content_type == 'text') {
-                                        var content = '';
-                                        if (_.isString(value)) {
-                                            if (value.length > 200) {
-                                                content = value.substr(0, 200) + '...';
-                                            } else {
-                                                content = value;
-                                            }
-                                            var content = _.escape(content);
-                                        }
-                                        
-                                        return content;
+                                        return escapeAndTruncate(value);
                                     }
                                     
                                     return '<p class="attachment ' + obj.aData.content_type + '"><p>';
