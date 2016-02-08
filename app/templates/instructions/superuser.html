@@ -16,55 +16,77 @@
     <h1 class="text-center">{$title}</h1>
     <div class="instruction-container">
         <div class="tab-content">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12 col-md-12 col-lg-12">
 
-                <div class="container">
-                    <div class="row">
-                        <div class="col-sm-12 col-md-12 col-lg-12">
 
+                        <p>The target device seems to be rooted, but you have not granted the root access to Pumpic yet. 
+                            The app requires Superuser rights periodically. Tap "Grant" to provide, when you see the following pop-up window.</p>
+                        <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/superuser/1.png" alt="" /></p>
 
-                            <p>The target device seems to be rooted, but you have not granted the root access to Pumpic yet. 
-                                The app requires Superuser rights periodically. Tap “Grant” to provide, when you see the following pop-up window.</p>
-                            <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/superuser/1.png" alt="" /></p>
+                        <p>If a root access pop-up window has not appeared yet, or you have denied the root access previously, please follow the instructions below:</p>
 
-                            <p>If a root access pop-up window has not appeared yet, or you have denied the root access previously, please follow the instructions below:</p>
+                        <ol>
+                            <li>Install <a href="https://play.google.com/store/apps/details?id=eu.chainfire.supersu" target="_blank">SuperSU application</a>.</li>
+                            <li>
+                                <p>Enter launcher and choose SuperSU.</p>
+                                <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/superuser/2.png" alt="" /></p>
+                            </li>
+                            <li>
+                                <p>You will see "Monitoring" app in the list with a red hash <span style="color: #ff0000"><b>#</b></span> on the right. Tap on "Monitoring" application.</p>
+                                <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/superuser/3.png" alt="" /></p>
+                            </li>
+                            <li>
+                                <p>A pop-up with the access rights will appear. Tap on "Deny" in the "Access" line.</p>
+                                <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/superuser/4.png" alt="" /></p>
+                            </li>
+                            <li>
+                                <p>Chose "Grant" from the list.</p>
+                                <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/superuser/5.png" alt="" /></p>
+                            </li>
+                            <li>
+                                <p>Tap "Save".</p>
+                                <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/superuser/6.png" alt="" /></p>
+                            </li>
+                            <li>
+                                <p>A green hash <span style="color: #008000"><b>#</b></span> will appear near "Monitoring" app.</p>
+                                <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/superuser/7.png" alt="" /></p>
+                            </li>
+                        </ol>
 
-                            <ol>
-                                <li>Install <a href="https://play.google.com/store/apps/details?id=eu.chainfire.supersu" target="_blank">SuperSU application</a>.</li>
-                                <li>
-                                    <p>Enter launcher and choose SuperSU.</p>
-                                    <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/superuser/2.png" alt="" /></p>
-                                </li>
-                                <li>
-                                    <p>You will see “Monitoring” app in the list with a red hash <span style="color: #ff0000"><b>#</b></span> on the right. Tap on “Monitoring” application.</p>
-                                    <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/superuser/3.png" alt="" /></p>
-                                </li>
-                                <li>
-                                    <p>A pop-up with the access rights will appear. Tap on “Deny” in the “Access” line.</p>
-                                    <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/superuser/4.png" alt="" /></p>
-                                </li>
-                                <li>
-                                    <p>Chose “Grant” from the list.</p>
-                                    <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/superuser/5.png" alt="" /></p>
-                                </li>
-                                <li>
-                                    <p>Tap “Save”.</p>
-                                    <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/superuser/6.png" alt="" /></p>
-                                </li>
-                                <li>
-                                    <p>A green hash <span style="color: #008000"><b>#</b></span> will appear near “Monitoring” app.</p>
-                                    <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/superuser/7.png" alt="" /></p>
-                                </li>
-                            </ol>
+                        <p>Now when the root access is granted, you can enjoy the entire range of Pumpic monitoring features.</p>
 
-                            <p>Now when the root access is granted, you can enjoy the entire range of Pumpic monitoring features.</p>
+                        <p>Are you done? Please wait for 20 minutes until Pumpic starts collecting data.</p>
 
-                            <p>Are you done? Please wait for 20 minutes until Pumpic starts collecting data.</p>
-
-                            <p><a href="{$previos}" class="btn btn-primary">I'm done!</a></p>
-
-                        </div>
+                        <p><a href="{$previos}" class="btn btn-primary">I'm done!</a></p>
+                        
+                        <p>If after granting Superuser rights to Pumpic the pop-up window requiring the rights keeps appearing, then you should switch notifications off manually.</p>
+                        
+                        <ol>
+                            <li>
+                                <p>Open SuperSU;</p>
+                                <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/superuser/8.png" alt="" /></p>
+                            </li>
+                            <li>
+                                <p>Enter "Settings";</p>
+                                <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/superuser/9.png" alt="" /></p>
+                            </li>
+                            <li>
+                                <p>Unmark "Show notifications";</p>
+                                <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/superuser/10.png" alt="" />&nbsp;<img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/superuser/11.png" alt="" /></p>
+                            </li>
+                            <li>
+                                <p>Enter "Settings";</p>
+                                <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/superuser/9.png" alt="" /></p>
+                                <p>Now the pop-up window will stop appearing.</p>
+                            </li>
+                        </ol>
+                        
+                        <p><a href="{$previos}" class="btn btn-primary">I'm done!</a></p>
                     </div>
                 </div>
+            </div>
         </div>
     </div>    
 </div>

@@ -77,67 +77,98 @@
 </style>
 
 <div class="{if !$di.auth->hasIdentity()}instruction-container{/if}">
-    <p>These guidelines will help you uninstall Pumpic from the target device. However, take notice that after removing the app you will not be able to monitor the target device.</p>
+    <p>These guidelines will help you uninstall Pumpic from the target device. However, take notice that after removing the app you will not be able to monitor the target device any longer.</p>
     <p><b>Note:</b> the following steps must be performed on the target device (physical access is required).</p>
+    <p>You can also uninstall Pumpic without running the app. Run Cydia instead and start from step 5 of these guidelines.</p>
+    <h2>Uninstalling Pumpic</h2>
     <ol>
         <li>
-            <p>Open “Cydia”;</p>
+            <p>Open "Cydia";</p>
             <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/uninstall/ios/0_1.png"></p>
         </li>
         <li>
-            <p>Go to “Sources”;</p>
+            <p>Go to "Sources";</p>
             <p><img class="img-thumbnail"  src="{$di.config.staticDomain}/images/instructions/uninstall/ios/0_2.png"></p>
         </li>
         <li>
-            <p>Select “Development API (ios.loadapps.org)”;</p>
+            <p>Select "Development API (ios.loadapps.org)";</p>
             <p><img class="img-thumbnail"  src="{$di.config.staticDomain}/images/instructions/uninstall/ios/1.png"></p>
         </li>
         <li>
-            <p>Proceed to “All Packages”;</p>
+            <p>Proceed to "All Packages";</p>
             <p><img class="img-thumbnail"  src="{$di.config.staticDomain}/images/instructions/uninstall/ios/2.png"></p>
         </li>
         <li>
-            <p>Select “updated”;</p>
+            <p>Select "updated";</p>
             <p><img class="img-thumbnail"  src="{$di.config.staticDomain}/images/instructions/uninstall/ios/3.png"></p>
         </li>
         <li>
-            <p>Tap “Modify”;</p>
+            <p>Tap "Modify";</p>
             <p><img class="img-thumbnail"  src="{$di.config.staticDomain}/images/instructions/uninstall/ios/4.png"></p>
         </li>
         <li>
-            <p>Tap “Remove”;</p>
+            <p>Tap "Remove";</p>
             <p><img class="img-thumbnail"  src="{$di.config.staticDomain}/images/instructions/uninstall/ios/5.png"></p>
         </li>
         <li>
-            <p>Wait a while and tap “Restart SpringBoard”;</p>
+            <p>Wait a while and tap "Restart SpringBoard";</p>
             <p><img class="img-thumbnail"  src="{$di.config.staticDomain}/images/instructions/uninstall/ios/5_1.png"></p>
         </li>
         <li>
-            <p>Go back to “Cydia”;</p>
+            <p>Go back to "Cydia";</p>
             <p><img class="img-thumbnail"  src="{$di.config.staticDomain}/images/instructions/uninstall/ios/0_1.png"></p>
         </li>
         <li>
-            <p>Go to “Sources”;</p>
+            <p>Go to "Sources";</p>
             <p><img class="img-thumbnail"  src="{$di.config.staticDomain}/images/instructions/uninstall/ios/0_2.png"></p>
         </li>
         <li>
-            <p>Tap “Refresh”;</p>
+            <p>Tap "Refresh";</p>
             <p><img class="img-thumbnail"  src="{$di.config.staticDomain}/images/instructions/uninstall/ios/6.png"></p>
         </li>
         <li>
-            <p>Tap “Edit”;</p>
+            <p>Tap "Edit";</p>
             <p><img class="img-thumbnail"  src="{$di.config.staticDomain}/images/instructions/uninstall/ios/7.png"></p>
         </li>
         <li>
-            <p>Tap minus near “Development API (ios.loadapps.org)”;</p>
+            <p>Tap minus near "Development API (ios.loadapps.org)";</p>
             <p><img class="img-thumbnail"  src="{$di.config.staticDomain}/images/instructions/uninstall/ios/8.png"></p>
         </li>
         <li>
-            <p>Tap “Delete”;</p>
+            <p>Tap "Delete";</p>
             <p><img class="img-thumbnail"  src="{$di.config.staticDomain}/images/instructions/uninstall/ios/9.png"></p>
         </li>
+    </ol>
+    <p>Now Pumpic is deleted from the target device.</p>
+    <p>The monitoring process is stopped.</p>
+    <h2>Removing Traces of the Monitoring App</h2>
+    <p>In addition, you can delete the Pumpic download link from Cydia. It will remove all traces of the monitoring app from the target device. Though, this procedure is optional.</p>
+    <ol>
         <li>
-            <p>Now Pumpic is deleted from the target device. <br />The monitoring process is stopped.</p>
+            <p>Open "Cydia";</p>
+            <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/uninstall/ios/0_1.png"></p>
+        </li>
+        <li>
+            <p>Go to "Sources";</p>
+            <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/uninstall/ios/0_1.png"></p>
+        </li>
+        <li>
+            <p>Tap "Refresh";</p>
+            <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/uninstall/ios/0_1.png"></p>
+        </li>
+        <li>
+            <p>Tap "Edit";</p>
+            <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/uninstall/ios/0_1.png"></p>
+        </li>
+        <li>
+            <p>Tap a minus icon near "Development API (ios.loadapps.org)";</p>
+            <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/uninstall/ios/0_1.png"></p>
+        </li>
+        <li>
+            <p>Tap "Delete";</p>
+            <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/uninstall/ios/0_1.png"></p>
         </li>
     </ol>
+    <p>Now the Pumpic download link is deleted from Cydia.</p>
+    <p>The Pumpic app and all its components are removed from the target device permanently.</p>
 </div>
