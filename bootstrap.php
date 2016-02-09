@@ -175,7 +175,7 @@ $di->setShared('router', function() use($config, $di) {
 
 $di->setShared('session', function () use ($di) {
     $sessionSettings = $di['config']['session'];
-    if (!strpos($di['config']['domain'], 'https://')) {
+    if (strpos($di['config']['domain'], 'https://') === false) {
         $sessionSettings['cookieParams']['secure'] = false;
     }
     
