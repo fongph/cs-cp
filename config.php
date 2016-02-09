@@ -10,7 +10,11 @@ $default = array(
     'demo' => $build['demo'],
     'errorReporting' => E_ALL ^ E_NOTICE ^ E_DEPRECATED,
     'session' => array(
-        'rememberMeTime' => 2592000 // 30 days
+        'rememberMeTime' => 2592000, // 30 days
+        'cookieParams' => array(
+            'secure' => false,
+            'httpOnly' => true
+        )
     ),
     'logger' => array(
         'stream' => array(

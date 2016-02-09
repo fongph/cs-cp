@@ -174,7 +174,12 @@ $di->setShared('router', function() use($config, $di) {
 });
 
 $di->setShared('session', function () use ($di) {
-    System\Session::setConfig($di['config']['session']);
+    $sessionSettings = $di['config']['session'];
+    if (!strpos($di['config']['domain'], 'https://')) {
+        $sessionSettings['cookieParams']['secure'] = false;
+    }
+    
+    System\Session::setConfig($sessionSettings);
     if ($di['config']['demo']) {
         System\Session::setSessionHandler(new System\Session\Handler\CookieSessionHandler($di['request']));
     } else if ($di['config']['environment'] == 'production') {
