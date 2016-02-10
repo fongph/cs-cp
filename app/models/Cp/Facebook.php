@@ -20,7 +20,7 @@ class Facebook extends BaseModel {
 
         $sort = '`timestamp` ASC';
         if (count($params['sortColumns'])) {
-            $columns = ['f.`user_name`', 'f.`text`', 'f.`timestamp`'];
+            $columns = ['f.`name`', 'f.`text`', 'f.`timestamp`'];
 
             $sort = '';
             foreach ($params['sortColumns'] as $column => $direction) {
