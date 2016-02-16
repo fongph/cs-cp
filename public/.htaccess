@@ -9,12 +9,11 @@ RewriteRule ^(.*)$ https://cp.pumpic.com/$1 [R=301,L]
 
 RewriteRule ^how-to-install/ios-instructions\.html$ http://pumpic\.com/store\.html [L,R=301]
 RewriteRule ^how-to-install/android-instructions\.html$ http://pumpic\.com/store\.html [L,R=301]
-
 RewriteRule ^how-to-install/root-instructions\.html$ http://pumpic\.com/store\.html [L,R=301]
 RewriteRule ^how-to-install/blackberry-instructions\.html$ http://pumpic\.com/store\.html [L,R=301]
-
 RewriteRule ^rooting-android$ https://cp.pumpic.com/instructions/rooting-android [L,R=301]
 RewriteRule ^superuser$ https://cp.pumpic.com/instructions/granting-superuser-rights [L,R=301]
+RewriteRule ^instructions/hide-cydia-icon.html$ https://cp.pumpic.com/instructions/hide-unhide-cydia-icon.html [L,R=301]
 
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
