@@ -69,7 +69,7 @@
                 currentTab: '',
                 messagesTable: null,
                 callsTable: null,
-                userName: _.template('<a href="http://facebook.com/<%= id %>" class="disable-on-demo" target="_blank"><%- name %></a>'),
+                userName: _.template('<div class="external-resource"><div class="name"><%- name %></div><a href="http://facebook.com/<%= id %>" class="disable-on-demo" target="_blank"><i class="fa fa-external-link-square"></i></a></div>'),
                 getRangeUrl: function(start, end) {
                     if (start === null && end === null) {
                         this.startDate = this.endDate = -1;
@@ -112,7 +112,7 @@
                                 bUseRendered: false,
                                 fnRender: function(obj) {
                                     if (obj.aData.members > 1) {
-                                        return '<b>Group</b>';
+                                        return '<div class="external-resource"><div class="name">Group</div></div>';
                                     } else {
                                         return facebook.userName({
                                             id: obj.aData.id,
@@ -194,9 +194,12 @@
                                 bUseRendered: false,
                                 fnRender: function(obj) {
                                     if (obj.aData.members > 1) {
-                                        return '<b>{$di.t->_('Group')}</b>';
+                                        return '<div class="external-resource"><div class="name">Group</div></div>';
                                     } else {
-                                        return escapeAndTruncate(obj.aData.name);
+                                        return facebook.userName({
+                                            id: obj.aData.id,
+                                            name: obj.aData.name
+                                        });
                                     }
                                 }
                             },

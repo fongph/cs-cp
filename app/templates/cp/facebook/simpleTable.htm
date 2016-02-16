@@ -40,7 +40,7 @@
         var facebook = {
             startDate: moment().subtract('days', 29).startOf('day'),
             endDate: moment().endOf('day'),
-            userName: _.template('<a href="http://facebook.com/<%= id %>" class="disable-on-demo" target="_blank"><%- name %></a>'),
+            userName: _.template('<div class="external-resource"><div class="name"><%- name %></div><a href="http://facebook.com/<%= id %>" class="disable-on-demo" target="_blank"><i class="fa fa-external-link-square"></i></a></div>'),
             messageLinkTemplate: _.template('<a href="{$di.router->getRouteUrl("facebook")}/<%= account %>/<%= tab %>/<%= id %>"><%= date %></a>'),
             table: null,
             setRange: function(start, end) {

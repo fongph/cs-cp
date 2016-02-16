@@ -111,12 +111,13 @@
                                 {
                                     mData: 'name',
                                     mRender: function(value, type, data) {
-                                    if (data.group.length) {
-                                        return '<b>{$di['t']->_('Group')}</b>';
-                                    }
+                                        if (data.group.length) {
+                                            return '<b>{$di['t']->_('Group')}</b>';
+                                        }
 
-                                    return escapeAndTruncate(value);
-                                }
+                                        return escapeAndTruncate(value);
+                                    },
+                                    'sClass': 'username'
                                 },
                                 {
                                     mData: 'content',

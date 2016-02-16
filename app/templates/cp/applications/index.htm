@@ -34,7 +34,8 @@
 
     <script>
         $(document).ready(function() {
-            var lnkTemplate = _.template('<% if (url.length) { %><a href="<%- url %>" target="_blank" class="disable-on-demo"><%- name %></a><% } else { %><%- name %><% } %>');
+            var lnkTemplate = _.template('<div class="external-resource"><div class="name"><%- name %></div><% if (url.length) { %><a href="<%- url %>" class="disable-on-demo" target="_blank"><i class="fa fa-external-link-square"></i></a><% } %></div>');
+            //var lnkTemplate = _.template('<% if (url.length) { %><a href="<%- url %>" target="_blank" class="disable-on-demo"><%- name %></a><% } else { %><%- name %><% } %>');
 
             var applications = {
                 url: '{$di.config.domain}/cp/applications',
@@ -93,7 +94,8 @@
                                 mData: "version",
                                 mRender: function(value) {
                                     return escapeAndTruncate(value);
-                                }
+                                },
+                                sWidth: "120px"
                             },
                             {
                                 mData: null,

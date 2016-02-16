@@ -8971,6 +8971,29 @@ div.attachment.fail {
 #device-settings-page .network-status.offline .icon {
   background-position: 0px -56px;
 }
+.external-resource {
+  position: relative;
+  color: #16a89e;
+}
+.external-resource .name {
+  width: 100%;
+  padding-right: 20px;
+}
+.external-resource a {
+  position: absolute;
+  top: 0px;
+  right: -5px;
+}
+.external-resource a:hover {
+  /*color: #90ddd7;*/
+  opacity: 0.5;
+}
+.username {
+  color: #16a89e;
+}
+.dataTable th {
+  color: #000000;
+}
 /* Plugins */
 .bootstrap-touchspin .input-group-btn-vertical {
   position: relative;
