@@ -148,11 +148,11 @@
                         $(this).find('tbody').tableScroll();
 
                         $(this).find('td a').click(function(e) {
-                            if ($(this).is('.disable-on-demo')) {
+                            e.stopPropagation();
+                            if (typeof disabledOnDemoAlert === 'function') {
                                 disabledOnDemoAlert();
                                 e.preventDefault();
                             }
-                            e.stopPropagation();
                         });
                     }
                 });
