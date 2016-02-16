@@ -91,7 +91,7 @@
                             bUseRendered: false,
                             fnRender: function(obj) {
                                 if (obj.aData.members > 1) {
-                                    return '<b>Group</b>';
+                                    return '<div class="external-resource"><div class="name">Group</div></div>';
                                 } else {
                                     return facebook.userName({
                                         id: obj.aData.id,
@@ -147,6 +147,10 @@
                         $(this).find('tbody').tableScroll();
 
                         $(this).find('td a').click(function(e) {
+                            if ($(this).is('.disable-on-demo')) {
+                                disabledOnDemoAlert();
+                                e.preventDefault();
+                            }
                             e.stopPropagation();
                         });
                     }
