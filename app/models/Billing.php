@@ -157,7 +157,7 @@ class Billing extends \System\Model
             JOIN devices d ON l.device_id = d.id
             JOIN products p ON l.product_id = p.id
             WHERE l.id = {$licId}"
-        )->fetch(\PDO::FETCH_ASSOC);
+                )->fetch(\PDO::FETCH_ASSOC);
     }
 
     public function getUserLicenseInfo($userId, $licenseId)
@@ -171,6 +171,7 @@ class Billing extends \System\Model
                         p.`name`,
                         l.`amount`,
                         l.`currency`,
+                        l.`price`,
                         l.`activation_date`,
                         l.`expiration_date`,
                         l.`status`,
@@ -186,6 +187,11 @@ class Billing extends \System\Model
                         l.`id` = {$license} AND
                         l.`user_id` = {$user}
                     LIMIT 1")->fetch();
+
+        if ($result !== false) {
+            $halfPriceValue = round($result['price'] / 2, 2);
+            $result['price_with_cancelation_discount'] = number_format($halfPriceValue, 2, '.', '');
+        }
 
         return $result;
     }
@@ -253,18 +259,22 @@ class Billing extends \System\Model
         return true;
     }
 
-    public function setLicenseForCancelationDiscount($userId, $licenseId) {
+    public function setLicenseForCancelationDiscount($userId, $licenseId)
+    {
         $usersManager = $this->di['usersManager'];
         $usersManager->setUserOption($userId, self::OPTION_LICENSE_FOR_CANCELATION_DISCOUNT, $licenseId);
     }
 
-    public function setCancelationDiscountOffered($userId) {
+    public function setCancelationDiscountOffered($userId)
+    {
         $usersManager = $this->di['usersManager'];
         $usersManager->setUserOption($userId, self::OPTION_CANCELLATION_DISCOUNT_OFFERED, 1);
     }
 
-    public function setLicenseWithCancelationDiscount($userId, $licenseId) {
+    public function setLicenseWithCancelationDiscount($userId, $licenseId)
+    {
         $usersManager = $this->di['usersManager'];
         $usersManager->setUserOption($userId, self::OPTION_LICENSE_WITH_CANCELATION_DISCOUNT, $licenseId);
     }
+
 }

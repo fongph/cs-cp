@@ -17,7 +17,11 @@
         <dt>{$di.t->_('Subscription plan')}</dt>
         <dd>{$license.name}</dd>
         <dt>{$di.t->_('Price')}</dt>
-        <dd>{$license.amount} {$license.currency} {if $license.has_cancelation_discount}<span>(50% OFF)</span>{/if}</dd>
+        {if $license.has_cancelation_discount}
+        <dd><s>{$license.price} USD</s> {$license.price_with_cancelation_discount} USD <span>(50% OFF)</span></dd>
+        {else}
+        <dd>{$license.price} USD</dd>
+        {/if}
         <dt>{$di.t->_('Date of purchase')}</dt>
         <dd data-time="{$license.activation_date}">-</dd>
         <dt>{$di.t->_('Expiration date')}</dt>
