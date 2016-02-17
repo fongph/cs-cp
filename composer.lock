@@ -193,7 +193,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-models.git",
-                "reference": "dd29e071d669e1e59470995b0b59c9faee5e8cc2"
+                "reference": "04b7f4a5780308f8c50c8597b285c7503d6f43fe"
             },
             "require": {
                 "php": ">=5.4.0"
@@ -207,7 +207,7 @@
                     "CS\\Models\\": "src/"
                 }
             },
-            "time": "2016-01-26 13:05:16"
+            "time": "2016-02-12 13:46:46"
         },
         {
             "name": "boomers/cs-queue",
@@ -215,7 +215,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-queue.git",
-                "reference": "00530ec2cc5dc57df956e04771079b584f86a338"
+                "reference": "8e4beec2979904d44922225fd45afce7017736b5"
             },
             "require": {
                 "boomers/cs-models": "dev-master",
@@ -230,7 +230,7 @@
                     "CS\\Queue\\": "src/"
                 }
             },
-            "time": "2016-01-26 13:08:07"
+            "time": "2016-02-03 07:29:54"
         },
         {
             "name": "boomers/cs-settings",
@@ -1584,12 +1584,12 @@
             "version": "v2.2.6",
             "source": {
                 "type": "git",
-                "url": "https://github.com/videlalvaro/php-amqplib.git",
+                "url": "https://github.com/php-amqplib/php-amqplib.git",
                 "reference": "6ef2ca9a45bb9fb20872f824f4c7c1518315bd3f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/videlalvaro/php-amqplib/zipball/6ef2ca9a45bb9fb20872f824f4c7c1518315bd3f",
+                "url": "https://api.github.com/repos/php-amqplib/php-amqplib/zipball/6ef2ca9a45bb9fb20872f824f4c7c1518315bd3f",
                 "reference": "6ef2ca9a45bb9fb20872f824f4c7c1518315bd3f",
                 "shasum": ""
             },
