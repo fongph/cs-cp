@@ -422,7 +422,7 @@
         }
         
         if ($('#last-visit-value').data('time') > 0) {
-            $('#last-visit-value').html(moment.unix($('#last-visit-value').data('time')).zone(0).format("LLL"));
+            $('#last-visit-value').html(moment.unix($('#last-visit-value').data('time')).format("LLL"));
         }
 
         $("body").tooltip({ selector: '[data-toggle=tooltip]' });

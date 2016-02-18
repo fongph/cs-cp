@@ -7948,6 +7948,22 @@ button.close {
 #header .monitoring-app-links-container-wide a.cp-app-link a.cp-app-link img {
   display: inline-block;
 }
+.bordered-container {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  text-align: center;
+  padding: 20px 30px;
+  margin-top: 15px;
+}
+.bordered-container .row {
+  margin: 10px 0;
+}
+.bordered-container p:last-child {
+  margin-bottom: 0;
+}
+.bordered-container.left {
+  text-align: left;
+}
 /**
     @todo: replace html colors to variables
 */

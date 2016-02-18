@@ -275,6 +275,7 @@
         display: inline-block;
     }
 }
+
 #header .monitoring-app-links-container-wide {
     float: right;
     padding-top: 7px;
@@ -283,5 +284,25 @@
         img {
             display: inline-block;
         }
+    }
+}
+
+.bordered-container {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    text-align: center;
+    padding: 20px 30px;
+    margin-top: 15px;
+
+    .row {
+        margin: 10px 0;
+    }
+
+    p:last-child {
+        margin-bottom: 0;
+    }
+    
+    &.left {
+        text-align: left;
     }
 }

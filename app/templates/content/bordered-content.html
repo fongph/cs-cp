@@ -9,7 +9,7 @@
 <script type="text/javascript">
     $(document).ready(function () {
         var link = {if isset($link)}'{$link}'{else}document.referrer{/if};
-        $('.bordered-container.left, .done-button-container').append('<p class="text-{if isset($alignButton)}{$alignButton}{else}center{/if}"><a href="' + link + '" class="btn btn-primary">{$di.t->_("I\'m done!")}</a></p>');
+        $('.bordered-container.left, .done-button-container').append('<p class="text-left"><a href="' + link + '" class="btn btn-primary">{$di.t->_("I\'m done!")}</a></p>');
         
     });
 </script>

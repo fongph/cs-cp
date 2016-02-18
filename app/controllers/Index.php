@@ -41,11 +41,6 @@ class Index extends BaseController
             $this->setView($path);
             $this->view->title = $this->di['t']->_($this->di['config']['contents']['names'][$this->params['uri']]);
             
-            if(in_array($this->params['uri'], ['instructions/activate-location-ios.html', 
-                'instructions/activate-location-android.html', 'instructions/install-xposed.html'])) {
-                $this->view->alignButton = 'left';
-            }
-            
             if(in_array($this->params['uri'], ['instructions/keylogger-activation.html'])) {
                 $this->setLayout('content/instructions-keylogger-content.html');
             } else
