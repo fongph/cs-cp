@@ -135,7 +135,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-icloud.git",
-                "reference": "f750ab03c61dd9a56bf702728f9e6c7fcef97cdb"
+                "reference": "025d6f3863e6c3b9c496e8d372c68f648192de6e"
             },
             "require": {
                 "guzzlehttp/guzzle": "~5.0",
@@ -158,7 +158,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2016-02-17 10:14:37"
+            "time": "2016-02-22 13:09:11"
         },
         {
             "name": "boomers/cs-mail",
@@ -916,16 +916,16 @@
         },
         {
             "name": "ramsey/uuid",
-            "version": "3.1.0",
+            "version": "3.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ramsey/uuid.git",
-                "reference": "3cc2dd253e296ce05f99635b2f633048adfbaa96"
+                "reference": "adee1ba4a6885ed800021a98dd69ae2394d695ec"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ramsey/uuid/zipball/3cc2dd253e296ce05f99635b2f633048adfbaa96",
-                "reference": "3cc2dd253e296ce05f99635b2f633048adfbaa96",
+                "url": "https://api.github.com/repos/ramsey/uuid/zipball/adee1ba4a6885ed800021a98dd69ae2394d695ec",
+                "reference": "adee1ba4a6885ed800021a98dd69ae2394d695ec",
                 "shasum": ""
             },
             "require": {
@@ -939,11 +939,12 @@
                 "ircmaxell/random-lib": "^1.1",
                 "jakub-onderka/php-parallel-lint": "^0.9.0",
                 "moontoast/math": "^1.1",
-                "phpunit/phpunit": "^4.7",
+                "phpunit/phpunit": "^4.7|^5.0",
                 "satooshi/php-coveralls": "^0.6.1",
                 "squizlabs/php_codesniffer": "^2.3"
             },
             "suggest": {
+                "ext-libsodium": "Provides the PECL libsodium extension for use with the SodiumRandomGenerator",
                 "ext-uuid": "Provides the PECL UUID extension for use with the PeclUuidTimeGenerator and PeclUuidRandomGenerator",
                 "ircmaxell/random-lib": "Provides RandomLib for use with the RandomLibAdapter",
                 "moontoast/math": "Provides support for converting UUID to 128-bit integer (in string form).",
@@ -982,7 +983,7 @@
                 "identifier",
                 "uuid"
             ],
-            "time": "2015-12-17 15:21:44"
+            "time": "2016-02-17 23:32:34"
         },
         {
             "name": "rastor/amazon-s3-php-class",
@@ -1070,16 +1071,16 @@
         },
         {
             "name": "rastor/jira-client",
-            "version": "0.3.5",
+            "version": "0.3.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/oRastor/jira-client.git",
-                "reference": "74724e274aba251d8dc0011c8f62199a31b9e5ee"
+                "reference": "7e0ea8bd30702bc21d69b6d7f0cbc7add5a55efc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/oRastor/jira-client/zipball/74724e274aba251d8dc0011c8f62199a31b9e5ee",
-                "reference": "74724e274aba251d8dc0011c8f62199a31b9e5ee",
+                "url": "https://api.github.com/repos/oRastor/jira-client/zipball/7e0ea8bd30702bc21d69b6d7f0cbc7add5a55efc",
+                "reference": "7e0ea8bd30702bc21d69b6d7f0cbc7add5a55efc",
                 "shasum": ""
             },
             "require": {
@@ -1108,7 +1109,7 @@
                 "jira",
                 "rest"
             ],
-            "time": "2015-11-04 07:43:50"
+            "time": "2016-02-21 15:53:00"
         },
         {
             "name": "rastor/protobuf-php",
