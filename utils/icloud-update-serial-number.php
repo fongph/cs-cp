@@ -1,5 +1,20 @@
 <?php
 
+require '../vendor/autoload.php';
+
+/*$api = new \Boomers\ReincubateCloudApi\Api(192700, 1453310573);
+
+$account = $api->login('brent@euroaddikts.com', 'Marybaby4');
+
+var_dump($account->getDevices());
+die;*/
+
+$iCloud = new \CS\ICloud\Backup('brent@euroaddikts.com', 'Marybaby4');
+
+var_dump($iCloud->getAllDevices());
+
+die; 
+
 var_dump('9e3156b537de1cea17a389fd1c9faaa8cb870701');
 var_dump(sha1('CameraRollDomain-Media/DCIM/100APPLE/IMG_0004.JPG'));
 var_dump(sha1('HomeDomain-Library/SMS/sms.db'));
