@@ -14,7 +14,7 @@ class Applications extends BaseModel
         $search = '';
         if (!empty($params['search'])) {
             $searched = $this->getDb()->quote('%' . $params['search'] . '%');
-            $search = "`name` LIKE {$searched}";
+            $search = "`app_name` LIKE {$searched}";
         }
 
         $sort = '`timestamp` ASC';
