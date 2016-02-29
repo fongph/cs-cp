@@ -9,6 +9,11 @@
         <br />At this time, you can contact us via Live Chat.
         <br />If you have any questions outside of working hours, please fill in the contact form or send us an email at support@pumpic.com
         <br />Please note that our Tech Department works from Monday through Friday.</p>
+    
+    {if strlen($additionalMessage)}
+    <div class="text-center">{$additionalMessage}</div>
+    {/if}
+    
     <form role="form" method="post">
         {*<div class="form-group">
             <label for="name">{$di.t->_('Name')}</label>

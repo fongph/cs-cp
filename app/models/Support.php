@@ -16,6 +16,8 @@ class Support extends \System\Model
         3 => 'Website feedback'
     );
 
+    const OPTION_SUPPORT_ADDITIONL_MESSAGE = 'cp-support-additional-message';
+
     public function getTypesList()
     {
         $result = self::$types;
@@ -50,13 +52,15 @@ class Support extends \System\Model
         return $number;
     }
 
-    public function getUserAgentInfoAll() {
-        $info = get_browser(); $result = array();
+    public function getUserAgentInfoAll()
+    {
+        $info = get_browser();
+        $result = array();
         if (isset($info->browser, $info->version)) {
             $result['browser'] = $info->browser;
             $result['browser_version'] = $info->version;
         }
-        
+
         if (isset($info->platform)) {
             $result['platform'] = $info->platform;
             if (isset($info->platform_version)) {
@@ -66,16 +70,15 @@ class Support extends \System\Model
 
         if (isset($info->ismobiledevice))
             $result['ismobiledevice'] = $info->ismobiledevice;
-        
+
         if (isset($info->istablet))
             $result['istablet'] = $info->istablet;
-        
-        if(isset($_COOKIE['_screen']))
+
+        if (isset($_COOKIE['_screen']))
             $result['_screen'] = $_COOKIE['_screen'];
-        
+
         return $result;
     }
-
 
     public function getUserAgentInfo()
     {
@@ -107,6 +110,12 @@ class Support extends \System\Model
     {
         $this->getDb()->exec("UPDATE `options` SET `value` = `value` + 1 WHERE `name` = 'ticketNumber'");
         return $this->getDb()->query("SELECT `value` FROM `options` WHERE `name` = 'ticketNumber'")->fetchColumn();
+    }
+
+    public function getAdditionalMessage()
+    {
+        $name = $this->getDb()->quote(self::OPTION_SUPPORT_ADDITIONL_MESSAGE);
+        return $this->getDb()->query("SELECT `value` FROM `options` WHERE `name` = {$name}")->fetchColumn();
     }
 
 }

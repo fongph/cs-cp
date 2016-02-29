@@ -195,6 +195,7 @@ class Index extends BaseController
             }
         }
 
+        $this->view->additionalMessage = $supportModel->getAdditionalMessage();
         $this->view->types = $supportModel->getTypesList();
         $this->view->refundPolicyUrl = \CS\Settings\GlobalSettings::getRefundPolicyPageURL($this->di['config']['site']);
         $this->setView('index/support.htm');
