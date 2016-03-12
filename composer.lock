@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "479b9ac8f9073b5dca2ba13890e76ca5",
-    "content-hash": "a3e5ff53dae955224a3d7493acb276f9",
+    "hash": "64d51f55eed2e6beb91e7177e2bda65f",
+    "content-hash": "9e7aa28257395da6ae471d2cd2537375",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
@@ -103,7 +103,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-devices.git",
-                "reference": "172814ff783cbd9926250457cea900718f078fe4"
+                "reference": "779f7fcf02cc587d45e013af8252b620c40deb0d"
             },
             "require": {
                 "boomers/cs-mail": "dev-master",
@@ -127,7 +127,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2016-02-01 10:56:52"
+            "time": "2016-03-12 10:00:59"
         },
         {
             "name": "boomers/cs-icloud",
@@ -330,16 +330,16 @@
         },
         {
             "name": "fenom/fenom",
-            "version": "2.8.0",
+            "version": "2.8.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fenom-template/fenom.git",
-                "reference": "e2a3087dfae28d16112a81ce480012e27163bbd7"
+                "reference": "d52aaa57a202e8990ce07897142f5f0ec961b5bd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fenom-template/fenom/zipball/e2a3087dfae28d16112a81ce480012e27163bbd7",
-                "reference": "e2a3087dfae28d16112a81ce480012e27163bbd7",
+                "url": "https://api.github.com/repos/fenom-template/fenom/zipball/d52aaa57a202e8990ce07897142f5f0ec961b5bd",
+                "reference": "d52aaa57a202e8990ce07897142f5f0ec961b5bd",
                 "shasum": ""
             },
             "require": {
@@ -376,7 +376,7 @@
                 "templater",
                 "templating"
             ],
-            "time": "2015-08-13 12:04:17"
+            "time": "2016-02-23 10:21:43"
         },
         {
             "name": "filp/whoops",
@@ -746,16 +746,16 @@
         },
         {
             "name": "monolog/monolog",
-            "version": "1.17.2",
+            "version": "1.18.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Seldaek/monolog.git",
-                "reference": "bee7f0dc9c3e0b69a6039697533dca1e845c8c24"
+                "reference": "e19b764b5c855580e8ffa7e615f72c10fd2f99cc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/bee7f0dc9c3e0b69a6039697533dca1e845c8c24",
-                "reference": "bee7f0dc9c3e0b69a6039697533dca1e845c8c24",
+                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/e19b764b5c855580e8ffa7e615f72c10fd2f99cc",
+                "reference": "e19b764b5c855580e8ffa7e615f72c10fd2f99cc",
                 "shasum": ""
             },
             "require": {
@@ -784,6 +784,7 @@
                 "ext-amqp": "Allow sending log messages to an AMQP server (1.0+ required)",
                 "ext-mongo": "Allow sending log messages to a MongoDB server",
                 "graylog2/gelf-php": "Allow sending log messages to a GrayLog2 server",
+                "mongodb/mongodb": "Allow sending log messages to a MongoDB server via PHP Driver",
                 "php-console/php-console": "Allow sending log messages to Google Chrome",
                 "raven/raven": "Allow sending log messages to a Sentry server",
                 "rollbar/rollbar": "Allow sending log messages to Rollbar",
@@ -793,7 +794,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.16.x-dev"
+                    "dev-master": "2.0.x-dev"
                 }
             },
             "autoload": {
@@ -819,7 +820,7 @@
                 "logging",
                 "psr-3"
             ],
-            "time": "2015-10-14 12:51:02"
+            "time": "2016-03-01 18:00:40"
         },
         {
             "name": "predis/predis",
@@ -1071,16 +1072,16 @@
         },
         {
             "name": "rastor/jira-client",
-            "version": "0.3.6",
+            "version": "0.3.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/oRastor/jira-client.git",
-                "reference": "7e0ea8bd30702bc21d69b6d7f0cbc7add5a55efc"
+                "reference": "eb47df01ac3c196d1dbc33a565837051108528f0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/oRastor/jira-client/zipball/7e0ea8bd30702bc21d69b6d7f0cbc7add5a55efc",
-                "reference": "7e0ea8bd30702bc21d69b6d7f0cbc7add5a55efc",
+                "url": "https://api.github.com/repos/oRastor/jira-client/zipball/eb47df01ac3c196d1dbc33a565837051108528f0",
+                "reference": "eb47df01ac3c196d1dbc33a565837051108528f0",
                 "shasum": ""
             },
             "require": {
@@ -1109,7 +1110,7 @@
                 "jira",
                 "rest"
             ],
-            "time": "2016-02-21 15:53:00"
+            "time": "2016-03-01 05:21:12"
         },
         {
             "name": "rastor/protobuf-php",
@@ -1203,16 +1204,16 @@
         },
         {
             "name": "react/promise",
-            "version": "v2.2.1",
+            "version": "v2.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/reactphp/promise.git",
-                "reference": "3b6fca09c7d56321057fa8867c8dbe1abf648627"
+                "reference": "3aacad8bf10c7d83e6fa2089d413529888c2bedf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/reactphp/promise/zipball/3b6fca09c7d56321057fa8867c8dbe1abf648627",
-                "reference": "3b6fca09c7d56321057fa8867c8dbe1abf648627",
+                "url": "https://api.github.com/repos/reactphp/promise/zipball/3aacad8bf10c7d83e6fa2089d413529888c2bedf",
+                "reference": "3aacad8bf10c7d83e6fa2089d413529888c2bedf",
                 "shasum": ""
             },
             "require": {
@@ -1243,7 +1244,7 @@
                 }
             ],
             "description": "A lightweight implementation of CommonJS Promises/A for PHP",
-            "time": "2015-07-03 13:48:55"
+            "time": "2016-02-26 19:09:02"
         },
         {
             "name": "rodneyrehm/plist",
@@ -1357,16 +1358,16 @@
         },
         {
             "name": "symfony/console",
-            "version": "v2.8.2",
+            "version": "v2.8.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "d0239fb42f98dd02e7d342f793c5d2cdee0c478d"
+                "reference": "56cc5caf051189720b8de974e4746090aaa10d44"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/d0239fb42f98dd02e7d342f793c5d2cdee0c478d",
-                "reference": "d0239fb42f98dd02e7d342f793c5d2cdee0c478d",
+                "url": "https://api.github.com/repos/symfony/console/zipball/56cc5caf051189720b8de974e4746090aaa10d44",
+                "reference": "56cc5caf051189720b8de974e4746090aaa10d44",
                 "shasum": ""
             },
             "require": {
@@ -1413,20 +1414,20 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "time": "2016-01-14 08:33:16"
+            "time": "2016-02-28 16:20:50"
         },
         {
             "name": "symfony/event-dispatcher",
-            "version": "v2.8.2",
+            "version": "v2.8.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/event-dispatcher.git",
-                "reference": "ee278f7c851533e58ca307f66305ccb9188aceda"
+                "reference": "78c468665c9568c3faaa9c416a7134308f2d85c3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/event-dispatcher/zipball/ee278f7c851533e58ca307f66305ccb9188aceda",
-                "reference": "ee278f7c851533e58ca307f66305ccb9188aceda",
+                "url": "https://api.github.com/repos/symfony/event-dispatcher/zipball/78c468665c9568c3faaa9c416a7134308f2d85c3",
+                "reference": "78c468665c9568c3faaa9c416a7134308f2d85c3",
                 "shasum": ""
             },
             "require": {
@@ -1473,11 +1474,11 @@
             ],
             "description": "Symfony EventDispatcher Component",
             "homepage": "https://symfony.com",
-            "time": "2016-01-13 10:28:07"
+            "time": "2016-01-27 05:14:19"
         },
         {
             "name": "symfony/polyfill-mbstring",
-            "version": "v1.1.0",
+            "version": "v1.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-mbstring.git",

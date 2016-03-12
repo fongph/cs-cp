@@ -250,7 +250,7 @@
                                 bUseRendered: false,
                                 sWidth: '180px',
                                 fnRender: function(obj) {
-                                    if (obj.aData.group !== null) {
+                                    if (obj.aData.members > 1) {
                                         return skype.messageLinkTemplate({
                                             account: encodeURIComponent($('#account').val()),
                                             tab: 'conference',

@@ -199,7 +199,7 @@ class Skype extends BaseModel
         $account = $this->getDb()->quote($account);
         $groupId = $this->getDb()->quote($groupId);
 
-        return $this->getDb()->query("SELECT `phone_number`, `number_name` FROM `skype_messages` WHERE `account`={$account} AND `dev_id` = {$devId} AND `group_id` = {$groupId} ORDER BY `number_name`")->fetchAll(\PDO::FETCH_KEY_PAIR);
+        return $this->getDb()->query("SELECT `phone_number`, `number_name` FROM `skype_messages` WHERE `account`={$account} AND `dev_id` = {$devId} AND `group_id` = {$groupId} AND `phone_number` != {$account} ORDER BY `number_name`")->fetchAll(\PDO::FETCH_KEY_PAIR);
     }
 
     public function getConferenceUsers($devId, $account, $groupId)

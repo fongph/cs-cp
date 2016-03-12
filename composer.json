@@ -3,8 +3,44 @@
     "type": "project",
     "repositories": [
         {
-            "type": "composer",
-            "url": "http://composer:KWWf-n[V8LUJP}rJY=Cgm5M@85.10.241.183:3131"
+            "type": "git",
+            "url": "git@bitbucket.org:boomersweb/cs-settings.git"
+        },
+        {
+            "type": "git",
+            "url": "git@bitbucket.org:boomersweb/cs-queue.git"
+        },
+        {
+            "type": "git",
+            "url": "git@bitbucket.org:boomersweb/cs-models.git"
+        },
+        {
+            "type": "git",
+            "url": "git@bitbucket.org:boomersweb/cs-mail.git"
+        },
+        {
+            "type": "git",
+            "url": "git@bitbucket.org:boomersweb/cs-devices.git"
+        },
+        {
+            "type": "git",
+            "url": "git@bitbucket.org:boomersweb/cs-icloud.git"
+        },
+        {
+            "type": "git",
+            "url": "git@bitbucket.org:boomersweb/cs-users.git"
+        },
+        {
+            "type": "git",
+            "url": "git@bitbucket.org:boomersweb/cs-billing.git"
+        },
+        {
+            "type": "git",
+            "url": "git@bitbucket.org:boomersweb/seller.git"
+        },
+        {
+            "type": "git",
+            "url": "git@bitbucket.org:boomersweb/ip.git"
         }
     ],
     "require": {
