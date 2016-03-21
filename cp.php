@@ -317,7 +317,7 @@ $console->register('icloud-backup-info')
     ->setCode(function (InputInterface $input, OutputInterface $output) {
         $backup = new \CS\ICloud\Backup($input->getArgument('email'), $input->getArgument('password'));
 
-        $output->writeln(print_r($backup->getDevices(), true));
+        $output->writeln(print_r($backup->getAllDevices(), true));
     });
 
 $console->run();

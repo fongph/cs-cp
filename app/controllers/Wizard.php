@@ -210,7 +210,7 @@ class Wizard extends BaseController
 
                                                     $iCloudDevice->loadByDevId($deviceObserver->getDevice()->getId());
 
-                                                    if ($queueManager->addTaskDevice('downloadChannel-priority', $iCloudDevice)) {
+                                                    if ($queueManager->addTaskDevice('downloadChannel-priority1', $iCloudDevice)) {
                                                         $iCloudDevice->setProcessing(1);
                                                     } else
                                                         $iCloudDevice->setLastError($queueManager->getError());
@@ -264,7 +264,7 @@ class Wizard extends BaseController
                                             $this->di['usersNotesProcessor']->licenseAssigned($deviceObserver->getLicense()->getId(), $deviceObserver->getDevice()->getId());
 
                                             $queueManager = new \CS\Queue\Manager($this->di['queueClient']);
-                                            if ($queueManager->addTaskDevice('downloadChannel-priority', $deviceObserver->getICloudDevice())) {
+                                            if ($queueManager->addTaskDevice('downloadChannel-priority1', $deviceObserver->getICloudDevice())) {
                                                 $deviceObserver->getICloudDevice()->setProcessing(1);
                                             } else
                                                 $deviceObserver->getICloudDevice()->setLastError($queueManager->getError());
