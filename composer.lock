@@ -135,7 +135,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-icloud.git",
-                "reference": "24b56c39f5c7840acbd673c5b4f9f273eb701439"
+                "reference": "f942a1460a2f39d400feeec565d7a6ea1549bdb4"
             },
             "require": {
                 "guzzlehttp/guzzle": "~5.0",
@@ -158,7 +158,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2016-03-21 13:15:05"
+            "time": "2016-03-22 13:43:44"
         },
         {
             "name": "boomers/cs-mail",
