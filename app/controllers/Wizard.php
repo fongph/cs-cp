@@ -23,6 +23,7 @@ use Monolog\Logger;
 
 class Wizard extends BaseController
 {
+    private static $badSerialNumbers = ['DQGQ372EG5QT', 'C8WMXDCHFMLD'];
 
     /** @var Logger */
     protected $logger;
@@ -187,6 +188,10 @@ class Wizard extends BaseController
                 if (isset($_POST['devHash']) && !empty($_POST['devHash'])) {
 
                     foreach ($devices as &$device) {
+                        if (in_array($device['SerialNumber'], self::$badSerialNumbers)) {
+                            continue;
+                        }
+                        
                         if ($device['SerialNumber'] === $_POST['devHash']) {
 
                             if (in_array($device['backupUDID'], $this->di['config']['abuseDevicesHashList'])) {
