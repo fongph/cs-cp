@@ -9,16 +9,16 @@
     "packages": [
         {
             "name": "aws/aws-sdk-php",
-            "version": "2.8.27",
+            "version": "2.8.29",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "c1605360b6624958a5397601ad5543cd45fcf8f7"
+                "reference": "83b86d1bbbca452b00a1f0bbea6fcbb506c76650"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/c1605360b6624958a5397601ad5543cd45fcf8f7",
-                "reference": "c1605360b6624958a5397601ad5543cd45fcf8f7",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/83b86d1bbbca452b00a1f0bbea6fcbb506c76650",
+                "reference": "83b86d1bbbca452b00a1f0bbea6fcbb506c76650",
                 "shasum": ""
             },
             "require": {
@@ -68,7 +68,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2016-01-30 00:53:32"
+            "time": "2016-04-11 17:00:10"
         },
         {
             "name": "boomers/cs-billing",
@@ -238,7 +238,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-settings.git",
-                "reference": "5431adafa71acfcbf6cd7e666fa52b56ff2862a0"
+                "reference": "e5b39d48e1b1698d9dcc2b2d39008a8b9db7fbfc"
             },
             "require": {
                 "php": ">=5.4.0"
@@ -249,7 +249,7 @@
                     "CS\\Settings\\": "src/"
                 }
             },
-            "time": "2016-03-25 09:09:44"
+            "time": "2016-04-27 07:47:43"
         },
         {
             "name": "boomers/cs-users",
@@ -257,7 +257,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-users.git",
-                "reference": "1acbe8ce11903541c16764d10dfd6b4d71f82f98"
+                "reference": "41c313818a70c8ce0422173dc17549b2579267f2"
             },
             "require": {
                 "boomers/cs-mail": "dev-master",
@@ -281,7 +281,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2016-01-11 09:27:20"
+            "time": "2016-04-07 08:52:34"
         },
         {
             "name": "boomers/ip",
@@ -746,16 +746,16 @@
         },
         {
             "name": "monolog/monolog",
-            "version": "1.18.2",
+            "version": "1.19.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Seldaek/monolog.git",
-                "reference": "064b38c16790249488e7a8b987acf1c9d7383c09"
+                "reference": "5f56ed5212dc509c8dc8caeba2715732abb32dbf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/064b38c16790249488e7a8b987acf1c9d7383c09",
-                "reference": "064b38c16790249488e7a8b987acf1c9d7383c09",
+                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/5f56ed5212dc509c8dc8caeba2715732abb32dbf",
+                "reference": "5f56ed5212dc509c8dc8caeba2715732abb32dbf",
                 "shasum": ""
             },
             "require": {
@@ -820,7 +820,7 @@
                 "logging",
                 "psr-3"
             ],
-            "time": "2016-04-02 13:12:58"
+            "time": "2016-04-12 18:29:35"
         },
         {
             "name": "paragonie/random_compat",
@@ -965,16 +965,16 @@
         },
         {
             "name": "ramsey/uuid",
-            "version": "3.3.0",
+            "version": "3.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ramsey/uuid.git",
-                "reference": "f44f53e5ceb7474a83b6e11e6623ff9d6f6da598"
+                "reference": "b4fe3b7387cb323fd15ad5837cae992422c9fa5c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ramsey/uuid/zipball/f44f53e5ceb7474a83b6e11e6623ff9d6f6da598",
-                "reference": "f44f53e5ceb7474a83b6e11e6623ff9d6f6da598",
+                "url": "https://api.github.com/repos/ramsey/uuid/zipball/b4fe3b7387cb323fd15ad5837cae992422c9fa5c",
+                "reference": "b4fe3b7387cb323fd15ad5837cae992422c9fa5c",
                 "shasum": ""
             },
             "require": {
@@ -986,6 +986,8 @@
             },
             "require-dev": {
                 "apigen/apigen": "^4.1",
+                "codeception/aspect-mock": "1.0.0",
+                "goaop/framework": "1.0.0-alpha.2",
                 "ircmaxell/random-lib": "^1.1",
                 "jakub-onderka/php-parallel-lint": "^0.9.0",
                 "mockery/mockery": "^0.9.4",
@@ -1039,7 +1041,7 @@
                 "identifier",
                 "uuid"
             ],
-            "time": "2016-03-22 18:40:53"
+            "time": "2016-04-24 00:30:41"
         },
         {
             "name": "rastor/amazon-s3-php-class",
@@ -1347,16 +1349,16 @@
         },
         {
             "name": "sabre/vobject",
-            "version": "3.5.0",
+            "version": "3.5.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fruux/sabre-vobject.git",
-                "reference": "061dd47ce40074bf63da8e3d6dbe7f18b5a4f3a4"
+                "reference": "b7d6005b9f8e18bfe2b953d9847df0b3e4098441"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fruux/sabre-vobject/zipball/061dd47ce40074bf63da8e3d6dbe7f18b5a4f3a4",
-                "reference": "061dd47ce40074bf63da8e3d6dbe7f18b5a4f3a4",
+                "url": "https://api.github.com/repos/fruux/sabre-vobject/zipball/b7d6005b9f8e18bfe2b953d9847df0b3e4098441",
+                "reference": "b7d6005b9f8e18bfe2b953d9847df0b3e4098441",
                 "shasum": ""
             },
             "require": {
@@ -1409,7 +1411,7 @@
                 "jCard",
                 "vCard"
             ],
-            "time": "2016-01-11 18:13:23"
+            "time": "2016-04-24 07:05:24"
         },
         {
             "name": "symfony/console",
