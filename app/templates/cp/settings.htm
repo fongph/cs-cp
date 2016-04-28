@@ -175,45 +175,51 @@
                         </form>
                     </div>
                     {if $hasPackage}
-                    <div class="panel-body inline-data-noicon">
-                        <div class="title">{$di.t->_('Device Status')}</div>
-                        <div class="data">
-                            {if $di.currentDevice.os == 'icloud'}
-                                <span>
-                                {if isset($iCloudRecord) && $iCloudRecord->getId()}
-                                {if $iCloudRecord->getProcessing()}
-                                {$di.t->_('Awaiting New Data Upload')}
-                                {elseif $iCloudRecord->getLastError() == 1}
-                                {$di.t->_('iCloud Authorization Error. Please %schange the password%s', ['<a href="' ~ $di->getRouter()->getRouteUri("profileICloudPasswordReset") ~ '?deviceId=' ~ $di['devId'] ~ '">', '</a>'])}
-                                {elseif $iCloudRecord->getLastError() && $iCloudRecord->getLastError() < 100}
-                                {$di.t->_('New Data Upload Error. Please contact Customer %sSupport%s', ['<a href="mailto:support@pumpic.com">', '</a>'])}
-                                {else}
-                                    {$di.t->_('Awaiting iCloud Backup')}
-                                {/if}
-                                {/if}
-                                </span>
-                            {else}
-                                {if $di.currentDevice.online}
-                                    {if $di.currentDevice.network == 'wifi'}
-                                        <div class="network-status wifi">
-                                            <div class="icon"></div>
-                                            <div class="name">WiFi</div>
-                                        </div>
+                        <div class="panel-body inline-data-noicon">
+                            <div class="title">{$di.t->_('Device Status')}</div>
+                            <div class="data">
+                                {if $di.currentDevice.os == 'icloud'}
+                                    <span>
+                                    {if isset($iCloudRecord) && $iCloudRecord->getId()}
+                                    {if $iCloudRecord->getProcessing()}
+                                    {$di.t->_('Awaiting New Data Upload')}
+                                    {elseif $iCloudRecord->getLastError() == 1}
+                                    {$di.t->_('iCloud Authorization Error. Please %schange the password%s', ['<a href="' ~ $di->getRouter()->getRouteUri("profileICloudPasswordReset") ~ '?deviceId=' ~ $di['devId'] ~ '">', '</a>'])}
+                                    {elseif $iCloudRecord->getLastError() && $iCloudRecord->getLastError() < 100}
+                                    {$di.t->_('New Data Upload Error. Please contact Customer %sSupport%s', ['<a href="mailto:support@pumpic.com">', '</a>'])}
                                     {else}
-                                        <div class="network-status mobile">
+                                        {$di.t->_('Awaiting iCloud Backup')}
+                                    {/if}
+                                    {/if}
+                                    </span>
+                                {else}
+                                    {if $di.currentDevice.online}
+                                        {if $di.currentDevice.network == 'wifi'}
+                                            <div class="network-status wifi">
+                                                <div class="icon"></div>
+                                                <div class="name">WiFi</div>
+                                            </div>
+                                        {else}
+                                            <div class="network-status mobile">
+                                                <div class="icon"></div>
+                                                <div class="name">Mobile Network</div>
+                                            </div>
+                                        {/if}
+                                    {else}
+                                        <div class="network-status offline">
                                             <div class="icon"></div>
-                                            <div class="name">Mobile Network</div>
+                                            <div class="name">Offline</div>
                                         </div>
                                     {/if}
-                                {else}
-                                    <div class="network-status offline">
-                                        <div class="icon"></div>
-                                        <div class="name">Offline</div>
-                                    </div>
                                 {/if}
-                            {/if}
+                            </div>
                         </div>
-                    </div>
+                        {if $di.currentDevice.os == 'icloud'}
+                        <div class="panel-body inline-data-noicon text-center">
+                            <a href="?check-new-backup" class="btn btn-primary{if $di.currentDevice.processing} disabled{/if}">Update data</a>
+                            {if $di.currentDevice.processing}<p class="text-info" style="padding-top: 10px;">Backup data is downloading and will be available shortly! Please, wait.</p>{/if}
+                        </div>
+                        {/if}
                     {/if}
                     {if $hasPackage && $currentDevice.os != 'icloud'}
                     <div class="panel-body inline-data-noicon">

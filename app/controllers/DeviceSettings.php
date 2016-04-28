@@ -181,6 +181,9 @@ class DeviceSettings extends BaseModuleController
             $this->view->currentDevice = $this->di->get('currentDevice');
             $this->setView('cp/settings-delete.htm');
             return;
+        } else if ($this->getRequest()->hasGet('check-new-backup')) {
+            $this->checkNewBackup();
+            $this->redirect($this->di['router']->getRouteUrl('settings'));
         }
 
         $this->view->currentDevice = $this->di->get('currentDevice');
@@ -253,6 +256,87 @@ class DeviceSettings extends BaseModuleController
         } catch (\Exception $e) {
             $this->getDI()->getFlashMessages()->add(FlashMessages::ERROR, "Error during operation!");
             $this->getDI()->get('logger')->addError('Error during deleting device!', array('exception' => $e));
+        }
+    }
+
+    public function checkNewBackup()
+    {
+        $this->checkDemo($this->di['router']->getRouteUrl('settings'));
+
+        $device = $this->di->get('currentDevice');
+
+        if ($device['processing']) {
+            $this->di->getFlashMessages()->add(FlashMessages::INFO, $this->di['t']->_('Backup data is downloading and will be available shortly! Please, wait.'));
+            return;
+        }
+
+        $deviceiCloudRecord = new \CS\Models\Device\DeviceICloudRecord($this->di['db']);
+        $deviceiCloudRecord->loadByDevId($this->di['devId']);
+
+        try {
+            $backup = new \CS\ICloud\Backup($deviceiCloudRecord->getAppleId(), $deviceiCloudRecord->getApplePassword());
+            $devices = $backup->getAllDevices();
+
+            $deviceBackupData = null;
+            foreach ($devices as $value) {
+                if ($value['SerialNumber'] == $device['unique_id']) {
+                    $deviceBackupData = $value;
+                }
+            }
+            
+            $defaultBackupNotFoundMessage = "Device backup not found. Make sure backup is enabled on the device and upload it manually.";
+
+            if ($deviceBackupData === null) {
+                $deviceiCloudRecord->setLastError(\CS\Models\Device\DeviceICloudRecord::ERROR_DEVICE_NOT_FOUND_ON_ICLOUD)->save();
+                $this->di['flashMessages']->add(FlashMessages::ERROR, $defaultBackupNotFoundMessage);
+                return;
+            }
+
+            $lastCommited = $deviceBackupData['Committed'] > 0 ? 1 : 0;
+
+            if ($deviceBackupData['SnapshotID'] == 1 && !$lastCommited) {
+                $deviceiCloudRecord->setProcessing(\CS\Models\Device\DeviceICloudRecord::PROCESS_FIRST_COMMIT)
+                        ->setLastError(\CS\Models\Device\DeviceICloudRecord::ERROR_NONE)
+                        ->setLastCommited(0)
+                        ->setLastSync(time())
+                        ->save();
+
+                $this->di['flashMessages']->add(FlashMessages::ERROR, $defaultBackupNotFoundMessage);
+                return;
+            }
+            
+            if (strtotime($deviceBackupData['LastModified']) <= $deviceiCloudRecord->getLastBackup()) {
+                $this->di->getFlashMessages()->add(FlashMessages::INFO, $this->di['t']->_('New backups not found, try again later.'));
+                return;
+            }
+
+            $deviceiCloudRecord->setProcessing(\CS\Models\Device\DeviceICloudRecord::PROCESS_IMPORT)
+                    ->setLastCommited($lastCommited)
+                    ->setProcessingStartTime(time())
+                    ->save();
+
+            $queueManager = new \CS\Queue\Manager($this->di['queueClient']);
+
+            if (!$queueManager->addTaskDevice('downloadChannel-priority', $deviceiCloudRecord)) {
+                throw new Exception("Error during add to queue");
+            }
+
+            $this->di->getFlashMessages()->add(FlashMessages::SUCCESS, $this->di['t']->_('We found new data for this device. Backup is queued for download.'));
+            $this->di['usersNotesProcessor']->iCloudForceBackup($deviceiCloudRecord->getDevId());
+        } catch (\CS\ICloud\AuthorizationException $e) {
+            $deviceiCloudRecord->setLastError(\CS\Models\Device\DeviceICloudRecord::ERROR_AUTHENTICATION)->save();
+            $this->di['flashMessages']->add(FlashMessages::ERROR, $this->di['t']->_('iCloud Authorization Error. Please %schange the password%s', array(
+                        '<a href="' . $this->getDI()->getRouter()->getRouteUri('profileICloudPasswordReset') . '">',
+                        '</a>'
+            )));
+        } catch (\CS\ICloud\TwoStepVerificationException $e) {
+            $this->di['flashMessages']->add(FlashMessages::ERROR, "This Apple ID is protected with a two-step verification. Please turn it off and try again. Follow the link to learn more: https://support.apple.com/en-us/HT202664");
+        } catch (Exception $e) {
+            $this->di['flashMessages']->add(FlashMessages::ERROR, $this->di['t']->_('New Data Upload Error. Please contact Customer %sSupport%s', array(
+                        '<a href="mailto:support@pumpic.com">',
+                        '</a>'
+            )));
+            $this->getDI()->get('logger')->addError('Error during new backup request!', array('exception' => $e));
         }
     }
 
