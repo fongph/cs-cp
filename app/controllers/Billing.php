@@ -302,10 +302,8 @@ class Billing extends BaseController
             if ($this->getRequest()->hasPost('cancel')) {
                 $confirmed = false;
             } else {
-                $this->di['usersNotesProcessor']->licenseSubscriptionAutoRebillTaskAdded($license['id']);
-
                 try {
-                    $this->di['billingManager']->cancelLicenseSubscription($license['id']);
+                    $billingModel->disableLicenseAutorebill($this->params['id']);
 
                     if (strlen($feedback)) {
                         $userManager = $this->di['usersManager'];
@@ -354,14 +352,13 @@ class Billing extends BaseController
         $license = $billingModel->getUserLicenseInfo($this->auth['id'], $this->params['id']);
 
         if ($license == false) {
-            $this->di->getFlashMessages()->add(FlashMessages::ERROR, "Plan was not found!");
+            $this->di->getFlashMessages()->add(FlashMessages::ERROR, "Subscription was not found!");
             $this->redirect($this->di->getRouter()->getRouteUrl('billing'));
         }
 
-        $this->di['usersNotesProcessor']->licenseSubscriptionAutoRebillTaskAdded($this->params['id']);
-
         try {
-            $this->di['billingManager']->unCancelLicenseSubscription($this->params['id']);
+            $billingModel->enableLicenseAutorebill($this->params['id']);
+            
             $this->getDI()->getFlashMessages()->add(FlashMessages::SUCCESS, "Subscription auto-renew successfully disabled!");
         } catch (\CS\Billing\Exceptions\RecordNotFoundException $e) {
             $this->getDI()->get('logger')->addInfo('Subscription not found!', array('exception' => $e));

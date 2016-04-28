@@ -276,5 +276,35 @@ class Billing extends \System\Model
         $usersManager = $this->di['usersManager'];
         $usersManager->setUserOption($userId, self::OPTION_LICENSE_WITH_CANCELATION_DISCOUNT, $licenseId);
     }
+    
+    public function enableLicenseAutorebill($licenseId) {
+        $billingManager = $this->di['billingManager'];
+        
+        $subscriptionRecord = $billingManager->getLicenseSubscription($licenseId);
+                
+        $subscriptionIterator = $billingManager->getSubscriptionsIterator($subscriptionRecord->getReferenceNumber(), $subscriptionRecord->getPaymentMethod());
+        
+        foreach ($subscriptionIterator as $subscriptionRecord) {
+            $licenseRecord = $subscriptionRecord->getLicense();
+            
+            $this->di['usersNotesProcessor']->licenseSubscriptionAutoRebillTaskAdded($licenseRecord->getId());
+            $this->di['billingManager']->unCancelLicenseSubscription($licenseRecord->getId());
+        }
+    }
+    
+    public function disableLicenseAutorebill($licenseId) {
+        $billingManager = $this->di['billingManager'];
+        
+        $subscriptionRecord = $billingManager->getLicenseSubscription($licenseId);
+                
+        $subscriptionIterator = $billingManager->getSubscriptionsIterator($subscriptionRecord->getReferenceNumber(), $subscriptionRecord->getPaymentMethod());
+        
+        foreach ($subscriptionIterator as $subscriptionRecord) {
+            $licenseRecord = $subscriptionRecord->getLicense();
+            
+            $this->di['usersNotesProcessor']->licenseSubscriptionAutoRebillTaskAdded($licenseRecord->getId());
+            $this->di['billingManager']->cancelLicenseSubscription($licenseRecord->getId());
+        }
+    }
 
 }
