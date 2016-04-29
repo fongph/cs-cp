@@ -210,7 +210,7 @@ class Profile extends BaseController
                 if ($newLicenseRecord->getStatus() !== $newLicenseRecord::STATUS_AVAILABLE || $newLicenseRecord->getUserId() !== $this->auth['id'])
                     throw new LicenseNotFoundException;
 
-                if ($this->getDeviceRecord()->getOS() == DeviceRecord::OS_ICLOUD && $newLicenseRecord->getProduct()->getGroup() != 'premium' && $newLicenseRecord->getProduct()->getGroup() != 'trial') {
+                if ($this->getDeviceRecord()->getOS() == DeviceRecord::OS_ICLOUD && $newLicenseRecord->getProduct()->getGroup() != 'premium' && $newLicenseRecord->getProduct()->getGroup() != 'premium-double' && $newLicenseRecord->getProduct()->getGroup() != 'trial') {
                     $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('iCloud solution is available for Premium Subscription only'));
                     
                     if($this->getRequest()->hasGet('oldLicenseId')){

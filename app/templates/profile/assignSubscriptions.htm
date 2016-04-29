@@ -9,7 +9,7 @@
             <div class="button-holder">
                 {foreach $packages as $package}
                     <div class="row">
-                        {if $deviceRecord->getOs() === 'icloud' && $package.product_group !== 'premium' && $package.product_group !== 'trial'}
+                        {if $deviceRecord->getOs() === 'icloud' && $package.product_group !== 'premium' && $package.product_group !== 'premium-double' && $package.product_group !== 'trial'}
                             <button class="btn btn-primary button-relative" disabled>
                                 {$package.name}<span class="license-lifetime" data-time-format="ll" data-timestamp-value="{$package.expiration_date}"></span>
                                 <span class="asterisk asterisk-info button-asterisk">*</span>

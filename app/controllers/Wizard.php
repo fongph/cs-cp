@@ -63,7 +63,7 @@ class Wizard extends BaseController
     {
         $this->view->license = $license = $this->getLicense();
         $this->view->product = $product = $license->getProduct();
-        $this->view->iCloudAvailable = ($product->getGroup() == 'premium' || $product->getGroup() == 'trial');
+        $this->view->iCloudAvailable = ($product->getGroup() == 'premium' || $product->getGroup() == 'trial' || $product->getGroup() == 'premium-double');
         $this->view->title = $this->di->getTranslator()->_('Select a Platform');
         $this->setView('wizard/platform.htm');
     }
@@ -420,7 +420,7 @@ class Wizard extends BaseController
         $license = $this->getLicense($mastBeAvailable);
 
         try {
-            if ($license->getProduct()->getGroup() !== 'premium' && $license->getProduct()->getGroup() !== 'trial')
+            if ($license->getProduct()->getGroup() !== 'premium' && $license->getProduct()->getGroup() !== 'trial' && $license->getProduct()->getGroup() !== 'premium-double')
                 throw new \Exception;
         } catch (\Exception $e) {
             $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('iCloud solution is available for Premium Subscription only. It allows you to monitor iPhones, iPads and iPods Touch without jailbreak.'));
