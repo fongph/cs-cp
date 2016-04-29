@@ -189,7 +189,7 @@ class Billing extends \System\Model
                     LIMIT 1")->fetch();
 
         if ($result !== false) {
-            $halfPriceValue = round($result['price'] / 2, 2);
+            $halfPriceValue = round($result['price'] * 0.8, 2);
             $result['price_with_cancelation_discount'] = number_format($halfPriceValue, 2, '.', '');
         }
 

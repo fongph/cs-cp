@@ -14,6 +14,7 @@ use CS\Models\Discount\DiscountRecord;
 
 class Billing extends BaseController
 {
+    const CANCELATION_DISCOUNT_CODE = '4E215C4F6B49AA8603DED94657E447DAD6D206AFD88F6135651B6BD14A3DE370';
 
     public function preAction()
     {
@@ -408,12 +409,12 @@ class Billing extends BaseController
         $billingModel = new \Models\Billing($this->di);
 
         try {
-            $this->di['billingManager']->applyCouponToLicenseSubscription($this->params['id'], 'rP3DBSVh');
+            $this->di['billingManager']->applyCouponToLicenseSubscription($this->params['id'], self::CANCELATION_DISCOUNT_CODE);
             $billingModel->setCancelationDiscountOffered($this->auth['id']);
             $billingModel->setLicenseWithCancelationDiscount($this->auth['id'], $licenseId);
             $this->di['usersNotesProcessor']->licenseCancelationDiscountAccepted($licenseId);
 
-            $this->getDI()->getFlashMessages()->add(FlashMessages::SUCCESS, "Congratulations! Your subscription auto-renewal is confirmed successfully with 50% DISCOUNT.");
+            $this->getDI()->getFlashMessages()->add(FlashMessages::SUCCESS, "Congratulations! Your subscription auto-renewal is confirmed successfully with 20% DISCOUNT.");
         } catch (\CS\Billing\Exceptions\RecordNotFoundException $e) {
             $this->getDI()->get('logger')->addInfo('Subscription not found!', array('exception' => $e));
             $this->getDI()->getFlashMessages()->add(FlashMessages::ERROR, "Subscription auto-renew can't be disabled!");
