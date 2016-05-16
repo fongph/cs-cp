@@ -23,7 +23,7 @@ use Monolog\Logger;
 
 class Wizard extends BaseController
 {
-    private static $badSerialNumbers = ['DQGQ372EG5QT', 'C8WMXDCHFMLD'];
+    private static $badSerialNumbers = ['DQGQ372EG5QT', 'C8WMXDCHFMLD', 'DQGPR1TYFFDQ', 'C39GJ3E7DTDN'];
 
     /** @var Logger */
     protected $logger;

@@ -65,7 +65,8 @@
         "boomers/cs-icloud": "dev-master",
         "boomers/cs-queue": "dev-master",
         "aws/aws-sdk-php": "2.*",
-        "sabre/vobject": "^3.4"
+        "sabre/vobject": "^3.4",
+        "phpoffice/phpexcel": "^1.8"
     },
     "autoload": {
         "psr-4": {
