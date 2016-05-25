@@ -9,6 +9,7 @@
 /.idea
 /compose/mysql-data
 composer.phar
+docker-compose.yml
 development.config.php
 build.php
 demoUserData.php
