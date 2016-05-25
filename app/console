@@ -318,7 +318,7 @@ $console->register('build')
                 unset($config['modules'][$value]);
             }
         }
-
+        
         if (file_put_contents(ROOT_PATH . 'build.php', '<?php return ' . var_export_min($config, true) . ';',
                 LOCK_EX) == false
         ) {
