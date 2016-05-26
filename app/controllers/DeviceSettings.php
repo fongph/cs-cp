@@ -330,6 +330,7 @@ class DeviceSettings extends BaseModuleController
                         '</a>'
             )));
         } catch (\CS\ICloud\TwoStepVerificationException $e) {
+            $deviceiCloudRecord->setLastError(\CS\Models\Device\DeviceICloudRecord::ERROR_TWO_STEP_VERIFICATION)->save();
             $this->di['flashMessages']->add(FlashMessages::ERROR, "This Apple ID is protected with a two-step verification. Please turn it off and try again. Follow the link to learn more: https://support.apple.com/en-us/HT202664");
         } catch (Exception $e) {
             $this->di['flashMessages']->add(FlashMessages::ERROR, $this->di['t']->_('New Data Upload Error. Please contact Customer %sSupport%s', array(
