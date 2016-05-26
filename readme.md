@@ -11,6 +11,11 @@
  - создать файл ***development.config.php*** по принципу ***development.config.php.sample***
  - выполнить генерацию билда ```app/console build 0 -e development```
 
+ ## Установка development версии в контейнере **BETA**
+ - создать файл ***docker-compose.yml*** по принципу ***docker-compose.sample.yml*** и изменить нужные настройки
+ - выполнить генерацию билда из контейнера ```docker-compose run application php app/console build 1```
+ - запустить веб сервер в контейнере ```docker-compose up -d```
+
 ## Активизация демо версии
  - выполняем генерацию билда с параметром ```-d``` и предаем id пользователя которым будем выполнять автоматическую авторизацию ```app/console build 0 -d 100```
  - выгружаем данные авторизации пользователя ```app/console load-demo-user```. Команда создает файл demoUserData.php в корне и пишет туда данные авторизации нашего пользователя.
