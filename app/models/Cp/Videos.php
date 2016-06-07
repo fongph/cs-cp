@@ -20,7 +20,7 @@ class Videos extends BaseModel {
         $escapedDevId = $this->getDb()->quote($devId);
         $count = intval($count);
 
-        $list = $this->getDb()->query("SELECT `timestamp`, `parent` album, `filepath`, `filename`, `is_full`, `requested`, `deleted` FROM `video` WHERE `dev_id` = {$escapedDevId} ORDER BY `timestamp` DESC LIMIT {$count}")->fetchAll();
+        $list = $this->getDb()->query("SELECT `timestamp`, `parent` album, `filepath`, `filename`, `is_full`, `requested`, `deleted` FROM `video` WHERE `dev_id` = {$escapedDevId} AND `status` = 'saved' ORDER BY `timestamp` DESC LIMIT {$count}")->fetchAll();
 
         foreach ($list as $key => $value) {
             $list[$key]['thumbUrl'] = $this->getCDNAuthorizedUrl(urlencode($devId) . '/video/' . urlencode($value['album']) . '/' . urlencode($value['filename']) . '.jpg');
@@ -32,7 +32,7 @@ class Videos extends BaseModel {
     public function getCameraVideos($devId) {
         $escapedDevId = $this->getDb()->quote($devId);
 
-        $list = $this->getDb()->query("SELECT `timestamp`, `parent` album, `filepath`, `filename`, `is_full`, `requested`, `deleted` FROM `video` WHERE `dev_id` = {$escapedDevId} AND `filepath` LIKE '%dcim/%' ORDER BY `timestamp` DESC")->fetchAll();
+        $list = $this->getDb()->query("SELECT `timestamp`, `parent` album, `filepath`, `filename`, `is_full`, `requested`, `deleted` FROM `video` WHERE `dev_id` = {$escapedDevId} AND `status` = 'saved' AND `filepath` LIKE '%dcim/%' ORDER BY `timestamp` DESC")->fetchAll();
 
         foreach ($list as $key => $value) {
             $list[$key]['thumbUrl'] = $this->getCDNAuthorizedUrl(urlencode($devId) . '/video/' . urlencode($value['album']) . '/' . urlencode($value['filename']) . '.jpg');
@@ -44,7 +44,7 @@ class Videos extends BaseModel {
     public function getNoCameraVideos($devId) {
         $escapedDevId = $this->getDb()->quote($devId);
 
-        $list = $this->getDb()->query("SELECT `timestamp`, `parent` album, `filepath`, `filename`, `is_full`, `requested`, `deleted` FROM `video` WHERE `dev_id` = {$escapedDevId} AND `filepath` NOT LIKE '%dcim/%' ORDER BY `timestamp` DESC")->fetchAll();
+        $list = $this->getDb()->query("SELECT `timestamp`, `parent` album, `filepath`, `filename`, `is_full`, `requested`, `deleted` FROM `video` WHERE `dev_id` = {$escapedDevId} AND `status` = 'saved' AND `filepath` NOT LIKE '%dcim/%' ORDER BY `timestamp` DESC")->fetchAll();
 
         foreach ($list as $key => $value) {
             $list[$key]['thumbUrl'] = $this->getCDNAuthorizedUrl(urlencode($devId) . '/video/' . urlencode($value['album']) . '/' . urlencode($value['filename']) . '.jpg');
@@ -56,7 +56,7 @@ class Videos extends BaseModel {
     public function getFirstCameraVideo($devId) {
         $escapedDevId = $this->getDb()->quote($devId);
 
-        if (($value = $this->getDb()->query("SELECT `timestamp`, `parent` album, `filepath`, `filename`, `is_full`, `requested`, `deleted` FROM `video` WHERE `dev_id` = {$escapedDevId} AND `filepath` LIKE '%dcim/%' ORDER BY `timestamp` DESC LIMIT 1")->fetch()) === false) {
+        if (($value = $this->getDb()->query("SELECT `timestamp`, `parent` album, `filepath`, `filename`, `is_full`, `requested`, `deleted` FROM `video` WHERE `dev_id` = {$escapedDevId} AND `status` = 'saved' AND `filepath` LIKE '%dcim/%' ORDER BY `timestamp` DESC LIMIT 1")->fetch()) === false) {
             return false;
         }
 
@@ -67,7 +67,7 @@ class Videos extends BaseModel {
     public function getFirstNoCameraVideo($devId) {
         $escapedDevId = $this->getDb()->quote($devId);
 
-        if (($value = $this->getDb()->query("SELECT `timestamp`, `parent` album, `filepath`, `filename`, `is_full`, `requested`, `deleted` FROM `video` WHERE `dev_id` = {$escapedDevId} AND `filepath` NOT LIKE '%dcim/%' ORDER BY `timestamp` DESC LIMIT 1")->fetch()) === false) {
+        if (($value = $this->getDb()->query("SELECT `timestamp`, `parent` album, `filepath`, `filename`, `is_full`, `requested`, `deleted` FROM `video` WHERE `dev_id` = {$escapedDevId} AND `status` = 'saved' AND `filepath` NOT LIKE '%dcim/%' ORDER BY `timestamp` DESC LIMIT 1")->fetch()) === false) {
             return false;
         }
 
@@ -79,7 +79,7 @@ class Videos extends BaseModel {
         $devId = $this->getDb()->quote($devId);
         $filepath = $this->getDb()->quote($filepath);
 
-        return $this->getDb()->query("SELECT `is_full`, `requested`, `deleted` FROM `video` WHERE `dev_id` = {$devId} AND `filepath` = {$filepath} LIMIT 1")->fetch();
+        return $this->getDb()->query("SELECT `is_full`, `requested`, `deleted` FROM `video` WHERE `dev_id` = {$devId} AND `filepath` = {$filepath} AND `status` = 'saved' LIMIT 1")->fetch();
     }
 
     public function setVideoRequested($devId, $filepath) {
