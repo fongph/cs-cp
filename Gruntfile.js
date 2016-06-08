@@ -4,9 +4,9 @@ module.exports = function (grunt) {
         concat: {
             frontend: {
                 src: [
-                    './bower_components/jquery/dist/jquery.js',
+                    './node_modules/jquery/dist/jquery.js',
                     './app/assets/javascript/deprecated/jquery.cookie.js',
-                    './bower_components/bootstrap/dist/js/bootstrap.js', // @TODO: replace for include files from "js" directory
+                    './node_modules/bootstrap/dist/js/bootstrap.js', // @TODO: replace for include files from "js" directory
                     './app/assets/javascript/main.js',
                     './app/assets/javascript/frontend.js'
                 ],
@@ -14,16 +14,16 @@ module.exports = function (grunt) {
             },
             backend: {
                 src: [
-                    './bower_components/jquery/dist/jquery.js',
-                    './bower_components/bootstrap/dist/js/bootstrap.js', // @TODO: replace for include files from "js" directory
-                    './bower_components/moment/moment.js',
-                    './bower_components/moment/min/locales.js',
-                    './bower_components/underscore/underscore.js',
-                    './bower_components/jquery.maskedinput/src/jquery.maskedinput.js',
-                    './bower_components/bootstrap-touchspin/src/jquery.bootstrap-touchspin.js',
-                    './bower_components/bootstrap-switch/dist/js/bootstrap-switch.js',
-                    './bower_components/bootstrap-datepicker/js/bootstrap-datepicker.js',
-                    './bower_components/jquery-colorbox/jquery.colorbox.js',
+                    './node_modules/jquery/dist/jquery.js',
+                    './node_modules/bootstrap/dist/js/bootstrap.js', // @TODO: replace for include files from "js" directory
+                    './node_modules/moment/moment.js',
+                    './node_modules/moment/min/locales.js',
+                    './node_modules/underscore/underscore.js',
+                    './node_modules/jquery.maskedinput/src/jquery.maskedinput.js',
+                    './node_modules/bootstrap-touchspin/src/jquery.bootstrap-touchspin.js',
+                    './node_modules/bootstrap-switch/dist/js/bootstrap-switch.js',
+                    './node_modules/bootstrap-datepicker/js/bootstrap-datepicker.js',
+                    './node_modules/jquery-colorbox/jquery.colorbox.js',
                     './app/assets/javascript/deprecated/bootstrap-datepaginator.js',
                     './app/assets/javascript/deprecated/jquery.dataTables.js',
                     './app/assets/javascript/deprecated/daterangepicker.js',
