@@ -40,7 +40,8 @@ class Billing extends \System\Model
 
         $unlimitedValue = $this->getDb()->quote(\CS\Models\Limitation\LimitationRecord::UNLIMITED_VALUE);
 
-        $select = "SELECT lic.`id`, p.`name`, p.`id` as p_id, lic.`amount`, lic.`currency`,
+        $select = "SELECT 
+            lic.`id`, p.`name`, p.`id` as p_id, lic.`price`, lic.`price_regular`,
             lic.`activation_date`, lic.`expiration_date`, lic.`status`,
             d.`id` `deviceId`,
             d.`name` `device`,
@@ -172,6 +173,7 @@ class Billing extends \System\Model
                         l.`amount`,
                         l.`currency`,
                         l.`price`,
+                        l.`price_regular`,
                         l.`activation_date`,
                         l.`expiration_date`,
                         l.`status`,
@@ -189,8 +191,8 @@ class Billing extends \System\Model
                     LIMIT 1")->fetch();
 
         if ($result !== false) {
-            $halfPriceValue = round($result['price'] * 0.8, 2);
-            $result['price_with_cancelation_discount'] = number_format($halfPriceValue, 2, '.', '');
+            $withDiscount = round($result['price_regular'] * 0.8, 2);
+            $result['price_with_cancelation_discount'] = number_format($withDiscount, 2, '.', '');
         }
 
         return $result;
