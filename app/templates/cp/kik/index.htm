@@ -45,6 +45,15 @@
         </table>
     </div>
     <script type="text/javascript">
+        
+        function customOffsetMoment(input, format, locale, strict) {
+            var m = moment(input, format, locale, strict);
+            {if isset($customTimezoneOffset)}
+            m.zone({$customTimezoneOffset});
+            {/if}
+            return m;
+        }
+        
         $(document).ready(function() {
             var kik = {
                 startDate: -1,
@@ -104,7 +113,7 @@
                                 mData: null,
                                 sWidth: '180px',
                                 fnRender: function(obj, value) {
-                                    return moment(obj.aData.timestamp * 1000).zone(0).format('lll');
+                                    return customOffsetMoment(obj.aData.timestamp * 1000).format('lll');
                                 }
                             }],
                         fnRowCallback: function(nRow, data) {
