@@ -5,12 +5,28 @@
         -webkit-border-radius: 5px;
         -moz-border-radius: 5px;
         padding: 20px;
+        max-width: 580px;
+        margin: 0 auto;
+    }
+
+    .box-buttons{
+        text-align: right;
+        margin: 1px 3px 0 0px;
     }
 
     #feadback {
         width: 100%;
         height: 150px;
         margin: 0px 0px 10px;
+        border: 1px solid #e2e3ea;
+    }
+
+    .button-discount{
+        padding: 9px 19px;
+        border-radius: 3px;
+        font-size: 14px;
+        font-weight: 400;
+        margin: 10px 0px 0 0px;
     }
 </style>
 <div>
@@ -28,10 +44,10 @@
             <section>
                 <textarea id="feadback" name="feadback"></textarea>
             </section>
-            <div class='box-buttons text-center'>
+            <div class='box-buttons'>
                 {*<a href="{$di.router->getRouteUrl('billingLicense', ['id' => $license.id])}" class="btn btn-danger">I’ve changed my mind</a>*}
-                <button name="cancel" class="btn btn-danger">I’ve changed my mind</button>
-                <button name="confirm" class="btn btn-default">I confirm cancellation</button>
+                <button name="cancel" class="btn btn-danger button-discount">I’ve changed my mind</button>
+                <button name="confirm" class="btn btn-default button-discount">I confirm cancellation</button>
             </div>
         </div>
     </form>

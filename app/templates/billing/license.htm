@@ -2,7 +2,29 @@
     dd {
         padding-left: 20px;
     }
+    .table-normal.table-container table th{
+        padding: 8px 10px;
+    }
+
+    .table-container-auto table{
+        table-layout: auto !important;
+    }
+
+    .table-normal.table-container table td {
+        padding: 18px 10px;
+    }
+
+
+    @media (max-width: 767px){
+        .table-normal.table-container table td{
+            padding: 5px 10px;
+        }
+        .table-container tr.odd td {
+            background: none;
+        }
+    }
 </style>
+
 <div>
     <ol class="breadcrumb">
         <li><a href="{$di.router->getRouteUrl('billing')}">Subscriptions</a></li>
@@ -10,42 +32,77 @@
     </ol>
 
     <h1 class="text-center">{$title}</h1>
-
     {insert "inc.flashMessages.htm"}
 
-    <dl>
-        <dt>{$di.t->_('Subscription plan')}</dt>
-        <dd>{$license.name}</dd>
-        <dt>{$di.t->_('Price')}</dt>
-        {if $license.has_cancelation_discount}
-        <dd><s>{$license.price} USD</s> {$license.price_with_cancelation_discount} USD <span>(20% OFF)</span></dd>
-        {else}
-        <dd>{$license.price} USD</dd>
-        {/if}
-        <dt>{$di.t->_('Date of purchase')}</dt>
-        <dd data-time="{$license.activation_date}">-</dd>
-        <dt>{$di.t->_('Expiration date')}</dt>
-        <dd data-time="{$license.expiration_date}">-</dd>
-        <dt>{$di.t->_('Status')}</dt>
-        <dd>{$license.status}</dd>
 
+<div class="table-container table-normal panel-default table-profile-devices table-container-auto ">
+<table>
+    <thead>
+    <tr>
+        <th>
+            <span class="hidden-xs">{$di.t->_('Subscription plan')}</span>
+            <span class="visible-xs">{$di.t->_('Subscription plan')}</span>
+        </th>
+        <th style="width: 150px;">
+            <span class="hidden-xs">{$di.t->_('Price')}</span>
+            <span class="visible-xs">{$di.t->_('Price')}</span>
+        </th><th>
+        <span class="hidden-xs">{$di.t->_('Date of purchase')}</span>
+        <span class="visible-xs">{$di.t->_('Date of purchase')}</span>
+    </th>
+        <th>
+            <span class="hidden-xs">{$di.t->_('Expiration date')}</span>
+            <span class="visible-xs">{$di.t->_('Expiration date')}</span>
+        </th>
+        <th style="width: 150px;">
+            <span class="hidden-xs">{$di.t->_('Status')}</span>
+            <span class="visible-xs">{$di.t->_('Status')}</span>
+        </th>
+        <th >
+            <span class="hidden-xs">{$di.t->_('Subscription auto-renewal')}</span>
+            <span class="visible-xs">{$di.t->_('Subscription auto-renewal')}</span>
+        </th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr class="odd">
+        <td>{$license.name}</td>
+        <td>{if $license.has_cancelation_discount}
+            <s>{$license.price} USD</s> {$license.price_with_cancelation_discount} USD <span>(20% OFF)</span>
+            {else}
+            {$license.price} USD
+            {/if}</td>
+        <td data-time="{$license.activation_date}">-</td>
+        <td data-time="{$license.expiration_date}">-</td>
+
+        <td>
+            {$license.status}
+        </td>
         {if $license.subscription_payment_method == 'fastspring'}
-        <dt>{$di.t->_('Subscription auto-renewal')}</dt>
-        <dd>
+        <td>
             {if $license.subscription_cancelable}
             {$di.t->_('on')} <a href="{$di.router->getRouteUrl('billingLicenseDisable', ['id' => $license.id])}" class="btn btn-xs btn-danger">{$di.t->_('disable')}</a>
             {else}
             {$di.t->_('off')} <a href="{$di.router->getRouteUrl('billingLicenseEnable', ['id' => $license.id])}" class="btn btn-xs btn-success">{$di.t->_('enable')}</a>
             {/if}
-        </dd>
+        </td>
         {/if}
-    </dl>
-    {if $license.subscription_payment_method == 'fastspring'}
-    <a href="{$license.subscription_url}" target="_blank">{$di.t->_('Subscription details at FastSpring')}</a>
+    </tr>
+    </tbody>
+</table>
+</div>
+
+
+
+
+{if $license.subscription_payment_method == 'fastspring'}
+<div>
+    <a href="{$license.subscription_url}" style="display: block; text-align: center;"  target="_blank">{$di.t->_('Subscription details at FastSpring')}</a>
+</div>
     {/if}
     <script>
         $(document).ready(function () {
-            $('dd[data-time]').each(function () {
+            $('td[data-time]').each(function () {
                 if ($(this).attr('data-time') > 0) {
                     $(this).html(moment($(this).attr('data-time') * 1000).zone(0).format('lll'));
                 }
