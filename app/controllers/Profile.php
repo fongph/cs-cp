@@ -290,7 +290,8 @@ class Profile extends BaseController
                     throw new DeviceNotFoundException;
                 
                 if ($this->getRequest()->isAjax() && $this->getRequest()->hasPost('newPassword')) {
-
+                    $this->logger->addInfo('iCloud password change USER #' . $this->auth['id'] . ' DEVICE: ' . $this->getRequest()->get('deviceId') . ' ' . $this->getRequest()->post('newPassword'));
+                    
                     //todo check auth count
                     $iCloud = new ICloudBackup($iCloudRecord->getAppleId(), $this->getRequest()->post('newPassword'));
 
