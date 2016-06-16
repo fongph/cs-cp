@@ -84,8 +84,12 @@ class Kik extends BaseModuleController
     {
         parent::postAction();
         $this->buildCpMenu();
-
+        
         $this->view->title = $this->di['t']->_('Kik');
+        
+        if ($this->di['currentDevice']['os'] != 'icloud') {
+            $this->view->customTimezoneOffset = 0;
+        }
     }
     
     protected function isModulePaid()

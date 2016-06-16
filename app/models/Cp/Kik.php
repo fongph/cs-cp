@@ -40,11 +40,12 @@ class Kik extends BaseModel {
                             `account_id` = {$account} AND
                             {$timeQuery}
                         GROUP BY `group_id`) last
-                        INNER JOIN `kik_messages` k ON k.`dev_id` = {$devId} AND k.`account_id` = {$account} AND k.`group_id` = last.`group_id` AND last.`max_time` = k.`timestamp`";
+                        INNER JOIN `kik_messages` k ON k.`dev_id` = {$devId} AND k.`account_id` = {$account} AND k.`group_id` = last.`group_id` AND last.`max_time` = k.`timestamp`
+                        GROUP BY k.`group_id`";
 
         $query = "{$select} {$fromWhere}"
                 . " ORDER BY {$sort} LIMIT {$params['start']}, {$params['length']}";
-                
+          
         $result = array(
             'aaData' => $this->getDb()->query($query)->fetchAll(\PDO::FETCH_ASSOC)
         );

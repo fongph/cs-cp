@@ -33,7 +33,8 @@
             <thead>
                 <tr role="row">
                     <th>{$di.t->_('Plan')}</th>
-                    <th>{$di.t->_('Price')}</th>
+                    <th>{$di.t->_('First Period Price')}</th>
+                    <th>{$di.t->_('Regular Period Price')}</th>
                     <th>{$di.t->_('Date of purchase')}</th>
                     <th>{$di.t->_('Expiration date')}</th>
                     <th>{$di.t->_('Status')}</th>
@@ -206,16 +207,25 @@
                                 mRender: function() {
                                     var data = arguments[2];
                                     var lnk = '{$di.router->getRouteUrl('billingLicense')}'.replace(':id', data.id);
-                                    // console.log( data );
                                     var _detailes = (!billing.validateFreePackage(data.p_id) && !parseInt(data.trial)) ? '<br/>' + '<a href="' + lnk + '" class="btn btn-info btn-xs">{$di.t->_('Details')}</a>' : '';
                                     return _.escape(data.name) + _detailes;
                                 }
                             },
                             {
-                                mData: 'amount',
-                                mRender: function() {
+                                mData: 'price',
+                                mRender: function(value) {
+                                    return value + ' USD';
+                                }
+                            },
+                            {
+                                mData: 'price_regular',
+                                mRender: function(value) {
+                                    if (value > 0) {
+                                        return value + ' USD';
+                                    }
+                                    
                                     var data = arguments[2];
-                                    return data.amount + ' ' + data.currency;
+                                    return data.price + ' USD';
                                 }
                             },
                             {
