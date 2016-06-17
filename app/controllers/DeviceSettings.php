@@ -305,7 +305,8 @@ class DeviceSettings extends BaseModuleController
                 return;
             }
             
-            if (strtotime($deviceBackupData['LastModified']) <= $deviceiCloudRecord->getLastBackup()) {
+            $isNew = strtotime($deviceBackupData['LastModified']) > $deviceiCloudRecord->getLastBackup();
+            if (!$isNew && $deviceiCloudRecord->getLastError() == 0) {
                 $this->di->getFlashMessages()->add(FlashMessages::INFO, $this->di['t']->_('New backups not found, try again later.'));
                 return;
             }
@@ -321,7 +322,11 @@ class DeviceSettings extends BaseModuleController
                 throw new Exception("Error during add to queue");
             }
 
-            $this->di->getFlashMessages()->add(FlashMessages::SUCCESS, $this->di['t']->_('We found new data for this device. Backup is queued for download.'));
+            if ($isNew) {
+                $this->di->getFlashMessages()->add(FlashMessages::SUCCESS, $this->di['t']->_('We found new data for this device. Backup is queued for download.'));
+            } else {
+                $this->di->getFlashMessages()->add(FlashMessages::SUCCESS, $this->di['t']->_('We found new data for this device. Backup is queued for download.'));
+            }
             $this->di['usersNotesProcessor']->iCloudForceBackup($deviceiCloudRecord->getDevId());
         } catch (\CS\ICloud\AuthorizationException $e) {
             $deviceiCloudRecord->setLastError(\CS\Models\Device\DeviceICloudRecord::ERROR_AUTHENTICATION)->save();
