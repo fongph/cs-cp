@@ -86,8 +86,6 @@
             });
             
             moment.lang('{$di.t->getLocale()}');
-
-            console.log()
             var billing = {
                 {if $di->get('isWizardEnabled')}
                     url: '{$di->getRouter()->getRouteUrl('billing')}',
@@ -192,7 +190,6 @@
                             $("#promo-info").addClass('hidden');
                             $.getJSON(sSource, aoData, function (json) {
                                 fnCallback(json);
-                                console.log(json);
                             });
                         },
 
