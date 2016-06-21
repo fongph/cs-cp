@@ -10,14 +10,23 @@
         table-layout: auto !important;
     }
 
+    .table-container table{
+        border-bottom: 0;
+    }
+
     .table-normal.table-container table td {
         padding: 18px 10px;
     }
 
 
     @media (max-width: 767px){
+
+        .table-container th:last-child, .table-container td:last-child {
+            border-bottom: 0 !important;
+        }
         .table-normal.table-container table td{
             padding: 5px 10px;
+            margin: 0 0 5px 0px;
         }
         .table-container tr.odd td {
             background: none;
@@ -44,9 +53,14 @@
             <span class="visible-xs">{$di.t->_('Subscription plan')}</span>
         </th>
         <th style="width: 150px;">
-            <span class="hidden-xs">{$di.t->_('Price')}</span>
-            <span class="visible-xs">{$di.t->_('Price')}</span>
-        </th><th>
+            <span class="hidden-xs">{$di.t->_('First Period Price')}</span>
+            <span class="visible-xs">{$di.t->_('First Period Price')}</span>
+        </th>
+        <th style="width: 145px !important;">
+            <span class="hidden-xs">{$di.t->_('Regular Period Price')}</span>
+            <span class="visible-xs">{$di.t->_('Regular Period Price')}</span>
+        </th>
+        <th>
         <span class="hidden-xs">{$di.t->_('Date of purchase')}</span>
         <span class="visible-xs">{$di.t->_('Date of purchase')}</span>
     </th>
@@ -58,7 +72,7 @@
             <span class="hidden-xs">{$di.t->_('Status')}</span>
             <span class="visible-xs">{$di.t->_('Status')}</span>
         </th>
-        <th >
+        <th style="width: 145px !important;">
             <span class="hidden-xs">{$di.t->_('Subscription auto-renewal')}</span>
             <span class="visible-xs">{$di.t->_('Subscription auto-renewal')}</span>
         </th>
@@ -67,11 +81,15 @@
     <tbody>
     <tr class="odd">
         <td>{$license.name}</td>
+        <td>{$license.price} USD </td>
         <td>{if $license.has_cancelation_discount}
-            <s>{$license.price} USD</s> {$license.price_with_cancelation_discount} USD <span>(20% OFF)</span>
+            <s style="color: grey;"> {$license.price_regular} USD</s>  <br> {$license.price_with_cancelation_discount} USD <span>(20% OFF)</span>
             {else}
-            {$license.price} USD
-            {/if}</td>
+            {$license.price_regular} USD
+            {/if}
+        </td>
+
+
         <td data-time="{$license.activation_date}">-</td>
         <td data-time="{$license.expiration_date}">-</td>
 
