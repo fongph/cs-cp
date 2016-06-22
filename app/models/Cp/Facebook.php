@@ -108,7 +108,7 @@ class Facebook extends BaseModel {
 
         $query = "{$select} {$fromWhere}"
                 . " ORDER BY {$sort} LIMIT {$params['start']}, {$params['length']}";
-
+                
         $result = array(
             'aaData' => $this->getDb()->query($query)->fetchAll(\PDO::FETCH_ASSOC)
         );
@@ -400,7 +400,8 @@ class Facebook extends BaseModel {
                                             FROM `facebook_messages` 
                                             WHERE
                                                 `dev_id` = {$escapedDevId} AND `account` = {$escapedAccount} AND `group_id` = {$escapedGroupId}
-                                                {$where}    
+                                                {$where}
+                                            GROUP BY `timestamp`
                                             ORDER BY `timestamp` DESC
                                             LIMIT {$start}, {$length}
                                         ) fm
