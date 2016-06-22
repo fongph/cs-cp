@@ -79,10 +79,9 @@
             <div class="col-md-6 col-sm-6">
                 <a href="{$di.router->getRouteUrl('billingLicenseDiscountOffer', ['id' => $license.id])}?confirm" class="btn btn-danger btn-discount">
                     Continue with 20% discount<br />
-                    <i>"${$license.price_with_cancelation_discount} instead of ${$license.price}"</i>
+                    <i>"${$license.price_regular} instead of ${$license.price}"</i>
                 </a>
             </div>
         </div>
     </div>
-
 </div>
