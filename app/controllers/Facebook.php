@@ -104,6 +104,10 @@ class Facebook extends BaseModuleController
     {
         parent::postAction();
         $this->buildCpMenu();
+        
+        if($this->di['currentDevice']['os'] != 'icloud'){
+            $this->view->customUtcOffset = 0;
+        }
 
         $this->view->title = $this->di['t']->_('Facebook');
     }
