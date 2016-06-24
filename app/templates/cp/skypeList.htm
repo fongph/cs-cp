@@ -41,7 +41,7 @@
     </div>
     *}
     
-    <div id="blockPaginateLists" class="panel panel-default" data-paginate-ajax="{$di.router->getRouteUrl('skype')}/{$account}/{$tab}/{$id}">
+    <div id="blockPaginateLists" class="panel panel-default" data-paginate-ajax="{$di.router->getRouteUrl('skype')}/{$account|escape:'url'}/{$tab}/{$id}">
         <div class="panel-heading">
             <div class="row">
                 {* TITLE
@@ -166,6 +166,8 @@
             var $search = '', $url = '';
             if($('.panel-heading .blockSearch > input').length)
                  $search = ($('.panel-heading .blockSearch > input').attr('disabled')) ? $('.panel-heading .blockSearch > input').val() : '';
+             
+             
              
             if($('#blockPaginateLists').data('paginate-ajax'))
                $url = $('#blockPaginateLists').data('paginate-ajax');
