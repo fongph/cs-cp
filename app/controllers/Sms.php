@@ -33,11 +33,7 @@ class Sms extends BaseModuleController {
         $this->view->hasRecords = $smsModel->hasRecords($this->di['devId']);
         $this->view->limitEnd = !$this->isModulePaid();
 
-        if (DeviceOptions::isDeletedDataAvailable($this->di['currentDevice']['os'])) {
-            $this->setView('cp/sms/indexWithStatuses.htm');
-        } else {
-            $this->setView('cp/sms/index.htm');
-        }
+        $this->setView('cp/sms/indexWithStatuses.htm');
     }
 
     public function listAction() {
