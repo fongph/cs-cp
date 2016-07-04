@@ -23,8 +23,6 @@ use Monolog\Logger;
 
 class Wizard extends BaseController
 {
-    private static $badSerialNumbers = ['DQGQ372EG5QT', 'C8WMXDCHFMLD', 'DQGPR1TYFFDQ', 'F2LR2GD9GRWQ'];
-
     /** @var Logger */
     protected $logger;
 
@@ -188,16 +186,24 @@ class Wizard extends BaseController
                 if (isset($_POST['devHash']) && !empty($_POST['devHash'])) {
 
                     foreach ($devices as &$device) {
-                        if (in_array($device['SerialNumber'], self::$badSerialNumbers)) {
-                            continue;
-                        }
-                        
                         if ($device['SerialNumber'] === $_POST['devHash']) {
-
-                            if (in_array($device['backupUDID'], $this->di['config']['abuseDevicesHashList'])) {
-                                if ($this->getICloudLicense()->getProduct()->getGroup() == 'trial') {
-                                    $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_REGISTER));
-                                }
+                            if ($this->getICloudLicense()->getProduct()->getGroup() == 'trial' &&
+                                    $devModel->existsOnOtherUsers($this->auth['id'], $device['SerialNumber'])) {
+                                
+                                $storeUrl = $this->di['config']['url']['registration'];
+                                $supportUrl = $this->di->getRouter()->getRouteUrl('support');
+                                
+                                $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('This device can not be added to free trial subscription because it is linked with another account. Please, log in to your primary account or purchase a subscription plan in the %1$sStore%2$s. If you think an error has occurred, please, contact %3$sSupport%4$s', [
+                                    '<a href="' . $storeUrl . '">',
+                                    '</a>',
+                                    '<a href="' . $supportUrl . '">',
+                                    '</a>'
+                                ]));
+                                
+                                $accounts = $devModel->getUsersWithDevice($this->auth['id'], $device['SerialNumber']);
+                                $this->di['usersNotesProcessor']->deviceDuplicated($device['SerialNumber'], $accounts);
+                                                                
+                                $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_REGISTER));
                             }
 
                             if ($device['added']) {
