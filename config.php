@@ -90,10 +90,7 @@ $default = array(
             'instructions/uninstall-pumpic-android.html',
         )
     ),
-    'bundlesNamespace' => 'first',
-    'abuseDevicesHashList' => array(
-        'a4dc8cb627540aed208e329920725a686e43c5f3'
-    ),
+    'bundlesNamespace' => 'first'
 );
 
 $default['mainURL'] = GlobalSettings::getMainURL($build['site']);
