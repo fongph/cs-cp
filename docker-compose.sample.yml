@@ -2,12 +2,14 @@ version: '2'
 services:
     application:
         build: compose/application
-        command: sh -c "cd public && env php -S 0.0.0.0:8000 index.php"
+        command: sh -c "cd public && env php -d xdebug.idekey=$$XDEBUG_KEY -d xdebug.remote_host=$$XDEBUG_HOST -S 0.0.0.0:8000 index.php"
         user: www-data
         ports:
             - "8100:8000"
+            - "8101:9000"
         volumes:
             - .:/code
+            - ~/.ssh:/home/www-data/.ssh
         environment:
             - DOMAIN=http://localhost:8100
             - DOMAIN_STATIC=http://localhost:8100/static
@@ -30,3 +32,5 @@ services:
             - DB_DATA_1_DATABASE=data_test
             - DB_DATA_1_USER=dev_test
             - DB_DATA_1_PASSWORD=hEcLTXHGWTpY
+            - XDEBUG_KEY=netbeans-xdebug
+            - XDEBUG_HOST=localhost
