@@ -331,7 +331,7 @@ class DeviceSettings extends BaseModuleController
         } catch (\CS\ICloud\AuthorizationException $e) {
             $deviceiCloudRecord->setLastError(\CS\Models\Device\DeviceICloudRecord::ERROR_AUTHENTICATION)->save();
             $this->di['flashMessages']->add(FlashMessages::ERROR, $this->di['t']->_('iCloud Authorization Error. Please %schange the password%s', array(
-                        '<a href="' . $this->getDI()->getRouter()->getRouteUri('profileICloudPasswordReset') . '">',
+                        '<a href="' . $this->getDI()->getRouter()->getRouteUri('profileICloudPasswordReset') . '/'. $this->di["devId"].'">',
                         '</a>'
             )));
         } catch (\CS\ICloud\TwoStepVerificationException $e) {

@@ -278,12 +278,9 @@ class Profile extends BaseController
     {
         $this->checkDemo($this->di['router']->getRouteUrl('profile'));
         $this->checkSupportMode();
-        
         try {
-            if($this->getRequest()->hasGet('deviceId')){
-
                 $iCloudRecord = new DeviceICloudRecord($this->di->get('db'));
-                $iCloudRecord->loadByDevId($this->getRequest()->get('deviceId'));
+                $iCloudRecord->loadByDevId(($this->params['devId']));
                 
                 $deviceRecord = $iCloudRecord->getDeviceRecord();
                 if($deviceRecord->getUserId() !== $this->auth['id'] || $deviceRecord->getDeleted())
@@ -291,7 +288,7 @@ class Profile extends BaseController
                 
                 if ($this->getRequest()->isAjax() && $this->getRequest()->hasPost('newPassword')) {
                     $logger = $this->di->get('logger');
-                    $logger->addInfo('iCloud password change USER #' . $this->auth['id'] . ' DEVICE: ' . $this->getRequest()->get('deviceId') . ' ' . $this->getRequest()->post('newPassword'));
+                    $logger->addInfo('iCloud password change USER #' . $this->auth['id'] . ' DEVICE: ' . $this->params['devId'] . ' ' . $this->getRequest()->post('newPassword'));
                     
                     //todo check auth count
                     $iCloud = new ICloudBackup($iCloudRecord->getAppleId(), $this->getRequest()->post('newPassword'));
@@ -309,17 +306,27 @@ class Profile extends BaseController
                 $this->view->title = $this->di->getTranslator()->_('Change iCloud Password');
                 $this->view->iCloud = $iCloudRecord;
                 $this->setView('profile/changeICloudPassword.htm');
-                
-            } else throw new DeviceNotFoundException;
-            
         } catch (DeviceNotFoundException $e){
             $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('Device Not Found'));
             $this->redirect($this->di->getRouter()->getRouteUri('profile'));
-            
         } catch (\CS\ICloud\InvalidAuthException $e) {
             $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_("Oops, the iCloud password didn't work. Please try again"));
             $this->ajaxResponse(false, array(
-                'location' => $this->di->getRouter()->getRouteUri('profileICloudPasswordReset')."?deviceId={$this->getRequest()->get('deviceId')}"
+                'location' => $this->di->getRouter()->getRouteUri('profileICloudPasswordReset')."/{$this->params['devId']}"
+            ));
+        } catch (\CS\ICloud\TwoStepVerificationException $e){
+            $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_("Two-step verification is enabled for this account.
+             Please, turn it off if you want to refresh iCloud password in the Pumpic system and keep receiving data updates."));
+            $this->ajaxResponse(false, array(
+                'location' => $this->di->getRouter()->getRouteUri('profileICloudPasswordReset')."/{$this->params['devId']}"
+            ));
+        } catch (Exception $e) {
+            $this->di['flashMessages']->add(FlashMessages::ERROR, $this->di['t']->_('Something went wrong.  Please contact our support team at %support@pumpic.com%', array(
+                '<a href="mailto:support@pumpic.com">',
+                '</a>'
+            )));
+            $this->ajaxResponse(false, array(
+                'location' => $this->di->getRouter()->getRouteUri('profileICloudPasswordReset')."/{$this->params['devId']}"
             ));
         }
     }
