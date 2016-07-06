@@ -192,7 +192,7 @@
                                     {if $device.processing}
                                         {$di.t->_('Awaiting New Data Upload')}
                                     {elseif $device.last_error == 1}
-                                        {$di.t->_('iCloud Authorization Error. Please %schange the password%s', ['<a href="' ~ $di->getRouter()->getRouteUri("profileICloudPasswordReset") ~ '?deviceId=' ~ $device.device_id ~ '">', '</a>'])}
+                                        {$di.t->_('iCloud Authorization Error. Please %supdate the password in our system%s', ['<a href="' ~ $di->getRouter()->getRouteUri("profileICloudPasswordReset") ~ '?deviceId=' ~ $device.device_id ~ '">', '</a>'])}
                                     {elseif $device.last_error == 6}
                                         {$di.t->_('Two-step verification activated. Please %sturn it off%s to receive data updates.', [
                                             '<a href="https://support.apple.com/en-us/HT202664" target="_blank" rel="nofollow">',
