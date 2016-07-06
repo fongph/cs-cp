@@ -193,7 +193,7 @@ class Wizard extends BaseController
                                 $storeUrl = $this->di['config']['url']['registration'];
                                 $supportUrl = $this->di->getRouter()->getRouteUrl('support');
                                 
-                                $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('This device can not be added to free trial subscription because it is linked with another account. Please, log in to your primary account or purchase a subscription plan in the %1$sStore%2$s. If you think an error has occurred, please, contact %3$sSupport%4$s', [
+                                $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('This device can not be added to free trial subscription because it is linked with another account. Please, log in to your primary account or purchase a subscription plan in the %1$sStore%2$s. If you think an error has occurred, please, contact %3$sSupport%4$s.', [
                                     '<a href="' . $storeUrl . '">',
                                     '</a>',
                                     '<a href="' . $supportUrl . '">',

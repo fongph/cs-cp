@@ -13,7 +13,7 @@
 
  ## Установка development версии в контейнере **BETA**
  - создать файл ***docker-compose.yml*** по принципу ***docker-compose.sample.yml*** и изменить нужные настройки
- - выполнить генерацию билда из контейнера ```docker-compose run application php app/console build 1```
+ - выполнить генерацию билда docker-compose run application php app/console build 1из контейнера ```docker-compose run application php app/console build 1```
  - запустить веб сервер в контейнере ```docker-compose up -d```
 
 ## Активизация демо версии

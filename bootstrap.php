@@ -62,7 +62,7 @@ $di->setShared('router', function() use($config, $di) {
     $router->add('unlockAccount', new \System\Router\Route('/unlockAccount', array('controller' => 'Index', 'action' => 'unlockAccount', 'public' => true)));
     $router->add('support', new \System\Router\Route('/support', array('controller' => 'Index', 'action' => 'support')));
     $router->add('profile', new \System\Router\Route('/profile', array('controller' => 'Profile', 'action' => 'index')));
-    $router->add('profileICloudPasswordReset', new \System\Router\Route('/profile/iCloudPassword', array('controller' => 'Profile', 'action' => 'changeICloudPassword')));
+    $router->add('profileICloudPasswordReset', new \System\Router\Regex('/profile/iCloudPassword/:devId', array('controller' => 'Profile', 'action' => 'changeICloudPassword'),  array('deviceId' => '.+')));
     $router->add('profileAssignChoice', new \System\Router\Route('/profile/assign/subscriptions', array('controller' => 'Profile', 'action' => 'assignChoice')));
     $router->add('profileUpgradeConfirm', new \System\Router\Route('/profile/assign/confirm', array('controller' => 'Profile', 'action' => 'upgradeConfirm')));
     $router->add('profileAssignProcess', new \System\Router\Route('/profile/assign/process', array('controller' => 'Profile', 'action' => 'assignProcess')));
