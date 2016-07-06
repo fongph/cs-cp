@@ -365,13 +365,8 @@ class Locations extends BaseModuleController
             } catch (LocationsService\Exceptions\AuthorizationException $e) {
                 $data = array(
                     'success' => false,
-<<<<<<< HEAD
                     'message' => $this->di['t']->_('iCloud Authorization Error. Please %1$supdate the password in our system%2$s and try again.', array(
                         '<a href="/profile/iCloudPassword?deviceId=' . $this->di['devId'] . '">',
-=======
-                    'message' => $this->di['t']->_('iCloud Authorization Error. Please %1$schange the password%2$s and try again.', array(
-                        '<a href="/profile/iCloudPassword/' . $this->di['devId'] . '">',
->>>>>>> da26f4e9f6e39dfb87fb881930a56f43f3d6a075
                         '</a>'
                     ))
                 );
