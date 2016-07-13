@@ -184,7 +184,7 @@
                                     {if $iCloudRecord->getProcessing()}
                                     {$di.t->_('Awaiting New Data Upload')}
                                     {elseif $iCloudRecord->getLastError() == 1}
-                                    {$di.t->_('iCloud Authorization Error. Please %schange the password%s', ['<a href="' ~ $di->getRouter()->getRouteUri("profileICloudPasswordReset", ['devId' => $di['devId']]) ~ '">', '</a>'])}
+                                    {$di.t->_('iCloud Authorization Error. Please %supdate the password in our system%s.', ['<a href="' ~ $di->getRouter()->getRouteUri("profileICloudPasswordReset", ['devId' => $di['devId']]) ~ '">', '</a>'])}
                                     {elseif $iCloudRecord->getLastError() == 6}
                                     {$di.t->_('This Apple ID is protected with a two-step verification. Please turn it off and try again. Follow the link to learn more: %s', ['<a href="https://support.apple.com/en-us/HT202664">https://support.apple.com/en-us/HT202664</a>'])}
                                     {elseif $iCloudRecord->getLastError() && $iCloudRecord->getLastError() < 100}
