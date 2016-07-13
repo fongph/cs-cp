@@ -338,7 +338,19 @@
 
                         ">!</span>
                             {/if}
-                            {$currentDevice.app_version}</div>
+                            {if $currentDevice.os == 'android' }
+                                {if $currentDevice.app_second_version}
+                                    {$currentDevice.app_second_version}
+                                {elseif $currentDevice.app_version == 23}
+                                    20
+                                {else}
+                                {$currentDevice.app_version}
+                                {/if}
+                            {else}
+                             {$currentDevice.app_version}
+                            {/if}
+
+                        </div>
                     </div>
                 </div>
                 {/if}
