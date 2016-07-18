@@ -8,6 +8,7 @@
     }
 
     #loading {
+        display: none;
         text-align: center;
     }
     
@@ -20,11 +21,13 @@
         display: none;
     }
 
-    #geo-fences-holder {
+    #geo-fences-holder, #geo-fences-report {
         text-align: center;
         padding-top: 10px;
     }
-
+    #geo-fences-report a{
+        margin-top: 10px;
+    }
     .scrollFix {
         line-height: 1.35;
         overflow: hidden;
@@ -40,10 +43,11 @@
             text-align: right;
         }
 
-        #geo-fences-holder {
+        #geo-fences-holder, #geo-fences-report {
             text-align: right;
             padding: 0;
         }
+
     }
 </style>
 <div>
@@ -77,6 +81,59 @@
         {/if}
         
         {insert "inc.cp.messages.htm"}
+
+        {if $di.currentDevice.os=='icloud'}
+        <div id="no-data">
+            <div data-type="fmi-disabled">
+              <div class="alert alert-danger" role="alert">
+                    <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+                    <p class="text-danger">{$di.t->_('Find My iPhone service is currently disabled. Please activate it to continue tracking the target iOS device.')}</p>
+                    <div class="">
+                      <a href="{$di.router->getRouteUrl('content', ['uri' => 'instructions/activate-findmyiphone.html'])}" class="btn btn-primary" style="color:#fff;">{$di.t->_('Activate Find My iPhone')}</a>
+                    </div>
+              </div>
+            </div>
+            <div data-type="location-disabled">
+                <div class="alert alert-danger" role="alert">
+                    <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+                    <p class="text-danger">{$di.t->_('Location Services is disabled. Please turn it on and continue tracking the target iOS device.')}</p>
+                    <div class=""><a href="{$di.router->getRouteUrl('content', ['uri' => 'instructions/activate-location-ios.html'])}" class="btn btn-primary" style="color:#fff;">{$di.t->_('Activate Location Services')}</a></div>
+                </div>
+            </div>
+            <div data-type="no-location-data">
+                <div class="alert alert-danger" role="alert">
+                    <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+                    <p class="text-danger">{$di.t->_('Location for the target device wasn\'t tracked yet. Please make sure whether it is connected to the Internet and try again.')}</p>
+                    <a href="" class="btn btn-primary" style="color:#fff;" id="track-again">{$di.t->_('Try again')}</a>
+
+                </div>
+            </div>
+            
+            <div data-type="undefined">
+                <div class="alert alert-danger" role="alert">
+                    <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+                    <p class="text-warning">{$di.t->_('Undefined error! Please %1$scontact support%2$s!', ['<a href="' ~ $di->getRouter()->getRouteUrl('support') ~ '">', '</a>'])}</p>
+
+                </div>
+            </div>
+
+            <div class="alert alert-danger"  id="message_undefined" role="alert">
+                <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+                <div class="message text-danger"></div>
+            </div>
+        </div>
+        
+        <div id="loading">
+            <div class="progress progress-striped active">
+                <div class="progress-bar" style="width: 100%"></div>
+            </div>
+            <p class="text-center" style="margin-top: 5px;">{$di.t->_('Tracking device location... Please stand by!')}</p>
+        </div>
+
+        <div id="button-holder" class="text-center" style="margin-bottom: 10px;">
+            <button class="btn btn-primary  disable-on-demo" id="track">{$di.t->_('Request Current Location')}</button>
+        </div>
+        {/if}
         
         {if $startTime > 0 || $hasZones}
         <div style="margin-bottom: 10px;">
@@ -112,8 +169,9 @@
                 </div>
             </div>
 
+            
             <div class="row" id="slider-holder">
-                <div class="col-sm-10">
+                <div class="{if $di.currentDevice.os == 'icloud'}col-sm-12{else}col-sm-10{/if}">
                     <div class="row">
                         <div class="col-sm-6"><label for="slider">{$di.t->_('Accuracy:')} <span class="text-primary" id="amount">480ft</span>&nbsp;</label></div>
                         <div class="col-sm-6" id="allDataBlock">{$di.t->_('Now you see %1$s of %2$s', ['<span class="text-primary" id="percents"></span>', '<a href="" id="all-data">' ~ $di.t->_('all data') ~ '</a>'])}</div>
@@ -122,6 +180,7 @@
                         <input type="text" id="slider" style="width: 100%;" />
                     </div>
                 </div>
+                {if $di.currentDevice.os != 'icloud'}
                 <div class="col-sm-2" id="geo-fences-holder">
                     <div class="checkbox">
                         <label>
@@ -130,17 +189,12 @@
                     </div>
                     <a href="{$di.router->getRouteUrl('locationsZones')}" class="btn btn-danger">{$di.t->_('Geo-fences')}</a>
                 </div>
+                <div class="col-sm-12" id="geo-fences-report">
+                    <a href="{$di.router->getRouteUrl('locationsExport')}" class="btn btn-primary">{$di.t->_('Geo-fences Report')}</a>
+                </div>
+                {/if}
             </div>
-        </div>
-        
-        <div id="no-data">
-            {$di.t->_('No data for this date')}
-        </div>
 
-        <div id="loading">
-            <div class="progress progress-striped active">
-                <div class="progress-bar" style="width: 100%"></div>
-            </div>
         </div>
         
         <script type="text/javascript">
@@ -459,6 +513,7 @@
                             $("#allDataBlock").show();
                         }
                     },
+
                     loadData: function (dayStart) {
                         var self = this;
                         
@@ -470,6 +525,45 @@
                             self.updateData();
                         });
                     },
+                    loadTrackData: function (hasZones, hasData, dayStart, zoneContent) {
+                        var self = this;
+
+                        return $.getJSON("{$di.router->getRouteUrl('locations')}?currentLocation", function (data) {
+                            if (data.success) {
+                                self.data = data;
+                                self.load( hasZones, hasData, dayStart, zoneContent);
+                                $("#data-holder").show();
+
+                                $('#paginator').datepaginator({
+                                    selectedDate: dayStart,
+                                    selectedDateFormat: 'MM-DD-YYYY',
+                                    showOffDays: false,
+                                    showStartOfWeek: false,
+                                    onSelectedDateChanged: function (event, date) {
+                                        self.loadData(localAsUtc(date.startOf('day')));
+                                    }
+                                });
+                                
+                                $("#paginator").show();
+                            } else {
+                                if (data.type !== undefined) {
+                                    $('#flash-messages-container').empty();
+                                    $("#no-data > div[data-type=" + data.type + "]").clone().appendTo('#flash-messages-container');
+                                } else if (data.message !== undefined) {
+                                    $('#flash-messages-container').empty();
+                                    $("#no-data > #message_undefined > .message").html(data.message);
+                                    $("#no-data > #message_undefined").clone().appendTo('#flash-messages-container');
+                                } else {
+                                    $('#flash-messages-container').empty();
+                                    $("#no-data > div[data-type=undefined]").clone().appendTo('#flash-messages-container');
+                                }
+                                $("#paginator").show();
+                                $("#data-holder").show();
+                            }
+                        }).error(function() {
+                            $("#no-data > div[data-type=undefined]").clone().appendTo('#flash-messages-container');
+                        });
+                    },
                     load: function (hasZones, hasData, dayStart, zoneContent) {
                         var self = this;
 
@@ -478,6 +572,8 @@
                             $("#loading").hide();
                             self.updateMapBounds();
                         };
+
+
 
                         if (hasZones) {
                             var deferred = this.loadZones(zoneContent);
@@ -495,11 +591,35 @@
                             deferred.complete(onComplete);
                         }
                     },
+                    loadTrack: function (hasZones, hasData, dayStart, zoneContent) {
+                        var self = this;
+
+                        $("#loading").show();
+                        $("#data-holder").hide();
+                        $("#paginator").hide();
+                        $("#track").addClass('disable').attr('disabled', 'disabled');
+
+                        var onComplete = function () {
+                            $("#loading").hide();
+                            $("#track").removeClass('disable').removeAttr('disabled');
+                        };
+
+                        var deferred = self.loadTrackData( hasZones, hasData, dayStart, zoneContent);
+                        deferred.complete(onComplete);
+
+                    },
                     init: function (hasZones, hasData, dayStart, zoneContent) {
                         var self = this;
-                        
                         this.load(hasZones, hasData, dayStart, zoneContent);
-                        
+
+                        {if !$di.config.demo}
+                        $("#track, #track-again").click(function(e){
+                            e.preventDefault();
+
+                            self.loadTrack(hasZones, hasData, dayStart, zoneContent);
+                        });
+                        {/if}
+
                         var updateValue = function(value) {
                             if (value >= 3000) {
                                 $("#amount").html('3000+ ft');
@@ -563,10 +683,7 @@
                         };
                     }
                 };
-            });
-        </script>
-        <script type="text/javascript">
-            $(document).ready(function(){
+                
                 var zoneInfoWindowContent = function(data) {
                     var $content = $('<div class="zone-info"> ' +
                             '<div><a href="" class="zone-name" style="font-size: 15px; font-weight: bold;"></a></div>' +
@@ -635,5 +752,5 @@
             {/if}    
        {/if}
     </div>
-    <script src="https://maps.googleapis.com/maps/api/js?v=3.9"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.9&key=AIzaSyBQTOwjhvjk4I2-dI9JaueqNoNAi2vF6FI"></script>
 </div>

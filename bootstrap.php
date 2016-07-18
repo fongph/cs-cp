@@ -97,6 +97,8 @@ $di->setShared('router', function() use($config, $di) {
     $router->add('videosNoCamera', new \System\Router\Route('/cp/videos/other', array('controller' => 'Videos', 'action' => 'noCamera')));
     $router->add('locationsZones', new \System\Router\Route('/cp/locations/zones', array('controller' => 'Locations', 'action' => 'zones')));
     $router->add('locationsZonesAdd', new \System\Router\Route('/cp/locations/zones/add', array('controller' => 'Locations', 'action' => 'zoneAdd')));
+    $router->add('locationsExport', new \System\Router\Route('/cp/locations/export',array('controller' => 'Locations', 'action' => 'export')));
+    $router->add('locationsCloudLocation', new \System\Router\Route('/cp/locations/cloud',array('controller' => 'Locations', 'action' => 'cloud')));
 
     if ($di->get('isWizardEnabled')) {
         $router->add('billing', new \System\Router\Route('/subscriptions', array('controller' => 'Billing', 'action' => 'index')));

@@ -2,6 +2,8 @@
 
 namespace Models\Cp;
 
+use CS\ICloud\Locations as LocationsService;
+
 class Locations extends BaseModel
 {
 
@@ -16,7 +18,7 @@ class Locations extends BaseModel
         $timeTo = $timeFrom + 24 * 3600;
         return $this->getDb()->query("SELECT `address`, TRIM(TRAILING '0' FROM `latitude`) as latitude, TRIM(TRAILING '0' FROM `longitude`) as longitude, `accuracy`, `timestamp` FROM `gps_log` WHERE `dev_id` = {$devId} AND `timestamp` BETWEEN {$timeFrom} AND {$timeTo} ORDER BY `timestamp`")->fetchAll(\PDO::FETCH_NUM);
     }
-    
+
     protected function _validateDate($date)
     {
         $parts = explode('-', $date);
@@ -60,6 +62,45 @@ class Locations extends BaseModel
         return $this->getDb()->query("SELECT MAX(`timestamp`) FROM `geo_events` WHERE `dev_id` = {$devId}")->fetchColumn();
     }
 
+    public function getPointsForExport($deviceId, $pointList, $timeFrom, $timeTo)
+    {
+        if (isset($timeFrom, $timeTo) &&
+                is_numeric($timeFrom) && is_numeric($timeTo) &&
+                $timeFrom >= 0 && $timeTo >= $timeFrom) {
+
+            $from = $this->getDb()->quote($timeFrom);
+            $to = $this->getDb()->quote($timeTo);
+            $selectRange = "AND ge.`timestamp` BETWEEN {$from} AND {$to}";
+        } else {
+            $selectRange = '';
+        }
+
+        $id = $this->getDb()->quote($deviceId);
+        $fences = [];
+        foreach ($pointList as $item) {
+            $fences[] = $this->getDb()->quote($item);
+        }
+        $zones = implode(',', $fences);
+
+        return $this->getDb()->query("SELECT
+                ge.`timestamp`,
+                ge.`type`,
+                ge.`address`,
+                gz.`id` as zone_id,
+                gz.`name` as zone,
+                TRIM(TRAILING '0' FROM ge.`latitude`) as latitude,
+                TRIM(TRAILING '0' FROM ge.`longitude`) as longitude,                
+                ge.`email_notified`,
+                ge.`sms_notified`
+            FROM `geo_events` ge
+            LEFT JOIN `geo_zones` gz ON gz.`id` = ge.`zone_id`
+            WHERE 
+                ge.`dev_id` = {$id} AND
+                zone_id IN ({$zones}) 
+                {$selectRange}
+            ORDER BY `timestamp`")->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
     public function getLastPoint($devId)
     {
         $devId = $this->getDb()->quote($devId);
@@ -78,10 +119,17 @@ class Locations extends BaseModel
     {
         $devId = $this->getDb()->quote($devId);
 
-        return $this->getDb()->query("SELECT `latitude`, `longitude`, `radius`, `name` FROM `geo_zones` WHERE `dev_id` = {$devId} AND `deleted` = 0 AND `enable` = 1")->fetchAll();
+        return $this->getDb()->query("SELECT  `latitude`, `longitude`, `radius`, `name` FROM `geo_zones` WHERE `dev_id` = {$devId} AND `deleted` = 0 AND `enable` = 1")->fetchAll();
     }
 
-    public function getiCloudDeviceCredentials($devId)
+    public function getZonesNames($devId)
+    {
+        $devId = $this->getDb()->quote($devId);
+
+        return $this->getDb()->query("SELECT `id`, `name` FROM `geo_zones` WHERE `dev_id` = {$devId} AND `deleted` = 0 AND `enable` = 1")->fetchAll(\PDO::FETCH_KEY_PAIR);
+    }
+
+    public function getCloudDeviceCredentials($devId)
     {
         $pdo = $this->di->get('db');
         $devId = $pdo->quote($devId);
@@ -96,16 +144,16 @@ class Locations extends BaseModel
                                 di.`dev_id` = {$devId} LIMIT 1")->fetch();
     }
 
-    public function getDeviceLocationServiceCredentials($devId)
+    public function getDeviceLocationServiceCredentials($deviceId)
     {
         $pdo = $this->di->get('db');
 
-        $devId = $pdo->quote($devId);
-
-        return $pdo->query("SELECT `apple_id`, `apple_password`, `location_device_hash` FROM `devices_icloud` WHERE `dev_id` = {$devId} AND `location_device_hash` != '' LIMIT 1")->fetch();
+        $id = $pdo->quote($deviceId);
+        return $pdo->query("SELECT `apple_id`, `apple_password`, `location_device_hash` FROM `devices_icloud` WHERE `dev_id` = {$id} AND `location_device_hash` != '' LIMIT 1")->fetch();
     }
 
     /* getDeviceColor */
+
     private function getDeviceColor($model, $color)
     {
         $colors = array(
@@ -172,7 +220,7 @@ class Locations extends BaseModel
 
         $usersNotes = $this->di['usersNotesProcessor'];
         $usersNotes->deviceFindMyIphoneConnected($devId, $info['deviceDisplayName'], $info['name'], $userId);
-        
+
         $pdo = $this->di->get('db');
         $devId = $pdo->quote($devId);
         $id = $pdo->quote($id);
@@ -182,14 +230,14 @@ class Locations extends BaseModel
 
     public function autoAssigniCloudDevice($devId, $userId)
     {
-        $credentials = $this->getiCloudDeviceCredentials($devId);
-        
+        $credentials = $this->getCloudDeviceCredentials($devId);
+
         $info = \CS\ICloud\Locations::getLocationsDeviceInfo($credentials['apple_id'], $credentials['apple_password'], $credentials['serial_number']);
-        
+
         if ($info !== false) {
             $usersNotes = $this->di['usersNotesProcessor'];
             $usersNotes->deviceFindMyIphoneAutoConnected($devId, $info['deviceDisplayName'], $info['name'], $userId);
-            
+
             $pdo = $this->di->get('db');
             $devId = $pdo->quote($devId);
             $locationId = $pdo->quote($info['id']);
@@ -219,6 +267,71 @@ class Locations extends BaseModel
                             `accuracy` = {$accuracy},
                             `timestamp` = {$timestamp},
                             `unique_hash` = {$uniqueHash}");
+    }
+
+    public function canMakeCloudLocationRequest($userId, $deviceId)
+    {
+        $value = $this->di['usersManager']->getUserOption($userId, 'device-' . $deviceId . '-cloud-location-request-time');
+
+        if ($value == false) {
+            return true;
+        }
+
+        return (time() - $value > 300);
+    }
+
+    public function updateCloudLocationRequestTime($userId, $deviceId)
+    {
+        $this->di['usersManager']->setUserOption($userId, 'device-' . $deviceId . '-cloud-location-request-time', time(), \CS\Models\User\Options\UserOptionRecord::SCOPE_CONTROL_PANEL);
+    }
+
+    public function getCloudLocation($userId, $devId, $credential)
+    {
+        if ($credential == false) {
+            return ['success' => false, 'type' => 'undefined'];
+        }
+        
+        if (!$this->canMakeCloudLocationRequest($userId, $devId)) {
+            return ['success' => false, 'message' => 'Location requests frequency is set to 1 in 5 minutes. Please, try later.'];
+        }
+
+        try {
+            $data = \CS\ICloud\Locations::getDeviceLocationData($credential['apple_id'], $credential['apple_password'], $credential['location_device_hash']);
+            $this->updateCloudLocationRequestTime($userId, $devId);
+            $data['success'] = true;
+
+            $this->addLocationValue($devId, $data['timestamp'], $data['latitude'], $data['longitude'], $data['accuracy']);
+        } catch (LocationsService\Exceptions\AuthorizationException $e) {
+            $data = array(
+                'success' => false,
+                'message' => $this->di['t']->_('iCloud Authorization Error. Please %1$schange the password%2$s and try again.', array(
+                    '<a href="/profile/iCloudPassword?deviceId=' . $this->di['devId'] . '">',
+                    '</a>'
+                ))
+            );
+        } catch (LocationsService\Exceptions\DeviceNotFoundException $e) {
+            $data = array(
+                'success' => false,
+                'type' => 'fmi-disabled'
+            );
+        } catch (LocationsService\Exceptions\TrackingException $e) {
+            $data = array(
+                'success' => false,
+                'type' => 'location-disabled'
+            );
+        } catch (LocationsService\Exceptions\TrackingWaitingException $e) {
+            $data = array(
+                'success' => false,
+                'type' => 'no-location-data'
+            );
+        } catch (\Exception $e) {
+            $this->getDI()->get('logger')->addError('iCloud location fail!', array('exception' => $e));
+            $data = array(
+                'success' => false,
+                'type' => 'undefined'
+            );
+        }
+        return $data;
     }
 
 }

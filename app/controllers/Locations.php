@@ -22,41 +22,30 @@ class Locations extends BaseModuleController
 
     public function indexAction()
     {
-        
-        if ($this->getRequest()->hasGet('rebootDevice')) {
-            $settingsModel = new \Models\Cp\Settings($this->di);
-            
-            $this->checkDemo($this->di['router']->getRouteUrl('locations'));
+        $locations = new \Models\Cp\Locations($this->di);
 
-            $settingsModel->setRebootDevice($this->di['devId']);
-
-            $this->di['flashMessages']->add(FlashMessages::SUCCESS, $this->di['t']->_('Request to reboot device has been successfully sent!'));
-
-            $this->redirect($this->di['router']->getRouteUrl('locations'));
-        }
-        
         if ($this->di['currentDevice']['os'] == 'icloud') {
-            $this->icloud();
-        } else {
-            $locations = new \Models\Cp\Locations($this->di);
+            $this->iCloud($locations);
+        }
+
+        if (($this->di['currentDevice']['os'] === 'android' && $this->di['currentDevice']['app_version'] > 6) ||
+                ($this->di['currentDevice']['os'] === 'ios' && $this->di['currentDevice']['app_version'] > 5)) {
+
             $settingsModel = new \Models\Cp\Settings($this->di);
             $settings = $settingsModel->getDeviceSettings($this->di['devId']);
-            
-            if (($this->di['currentDevice']['os'] === 'android' && $this->di['currentDevice']['app_version'] > 6) ||
-                ($this->di['currentDevice']['os'] === 'ios' && $this->di['currentDevice']['app_version'] > 5)) {
-                $this->view->serviceLocation = $settings['location_service_enabled'];
-            } 
-            
-            if ($this->getRequest()->isAjax()) {
-                $this->makeJSONResponse($locations->getDayPoints($this->di['devId'], $this->getRequest()->get('dayStart', 0)));
-            }
-
-            $this->view->startTime = $locations->getLastPointTimestamp($this->di['devId']);
-            $this->view->hasZones = $locations->hasZones($this->di['devId']);      
-            
-            $this->setView('cp/locations/index.htm');
-            
+            $this->view->serviceLocation = $settings['location_service_enabled'];
         }
+
+        if ($this->getRequest()->isAjax() && $this->getRequest()->hasGet('dayStart')) {
+            $data = $locations->getDayPoints($this->di['devId'], $this->getRequest()->get('dayStart', 0));
+
+            $this->makeJSONResponse($data);
+        }
+
+        $this->view->startTime = $locations->getLastPointTimestamp($this->di['devId']);
+        $this->view->hasZones = $locations->hasZones($this->di['devId']);
+
+        $this->setView('cp/locations/index.htm');
     }
 
     public function setupAction()
@@ -83,65 +72,94 @@ class Locations extends BaseModuleController
         $this->setView('cp/locations/icloudSetup.htm');
     }
 
-    public function icloud()
+    public function exportAction()
     {
-        if ($this->di['currentDevice']['os'] !== 'icloud') {
-            $this->redirect($this->di['router']->getRouteUrl('locations'));
-        }
-
         $locations = new \Models\Cp\Locations($this->di);
 
-        if (($credential = $locations->getDeviceLocationServiceCredentials($this->di['devId'])) === false) {
-            return $this->setupInit();
+        $zones = $locations->getZonesNames($this->di['devId']);
+
+        if (count($zones) == 0) {
+            $this->di->getFlashMessages()->add(FlashMessages::INFO, $this->di['t']->_('No zones for report!'));
+            $this->redirect($this->di->getRouter()->getRouteUrl('locations'));
         }
 
-        $this->view->lastPoint = $locations->getLastPoint($this->di['devId']);
+        if ($this->getRequest()->isPost()) {
+            $zonesList = $this->getRequest()->post('zones');
+            $timeFrom = $this->getRequest()->post('timeFrom');
+            $timeTo = $this->getRequest()->post('timeTo');
 
-        if ($this->getRequest()->isAjax()) {
-            try {
-                $data = LocationsService::getDeviceLocationData($credential['apple_id'], $credential['apple_password'], $credential['location_device_hash']);
-                $data['success'] = true;
-
-                $locations->addLocationValue($this->di['devId'], $data['timestamp'], $data['latitude'], $data['longitude'], $data['accuracy']);
-            } catch (LocationsService\Exceptions\AuthorizationException $e) {
-                $data = array(
-                    'success' => false,
-                    'message' => $this->di['t']->_('iCloud Authorization Error. Please %1$schange the password%2$s and try again.', array(
-                        '<a href="/profile/iCloudPassword?deviceId=' . $this->di['devId'] . '">',
-                        '</a>'
-                    ))
-                );
-            } catch (LocationsService\Exceptions\DeviceNotFoundException $e) {
-                $data = array(
-                    'success' => false,
-                    'type' => 'fmi-disabled'
-                );
-            } catch (LocationsService\Exceptions\TrackingException $e) {
-                $data = array(
-                    'success' => false,
-                    'type' => 'location-disabled'
-                );
-            } catch (LocationsService\Exceptions\TrackingWaitingException $e) {
-                $data = array(
-                    'success' => false,
-                    'type' => 'no-location-data'
-                );
-            } catch (LocationsService\Exceptions\LocationsException $e) {
-                $this->getDI()->get('logger')->addError('iCloud location fail!', array('exception' => $e));
-                $data = array(
-                    'success' => false,
-                    'type' => 'undefined'
-                );
+            if (empty($zonesList) || !is_array($zonesList)) {
+                $this->di->getFlashMessages()->add(FlashMessages::INFO, $this->di['t']->_('At least one zone must be selected!'));
+            } else {
+                $result = $locations->getPointsForExport($this->di['devId'], $zonesList, $timeFrom, $timeTo);
+                $this->createExcelReport($result);
             }
+        }
 
+        $this->view->zonesList = $zones;
+        $this->setView('cp/locations/export.htm');
+    }
+
+    public function createExcelReport(array $result)
+    {
+        $objPHPExcel = new \PHPExcel();
+
+        $objPHPExcel->setActiveSheetIndex(0);
+        $activeSheet = $objPHPExcel->getActiveSheet();
+        $activeSheet->setCellValue('A1', 'Geo-fences Name');
+        $activeSheet->setCellValue('B1', 'Date');
+        $activeSheet->setCellValue('C1', 'Location');
+        $activeSheet->setCellValue('D1', 'Type');
+        $activeSheet->setCellValue('E1', 'Address');
+        //$activeSheet->setCellValue('F1', 'Sms notification');
+        $activeSheet->setCellValue('G1', 'E-mail notification');
+
+        $rowStart = 2;
+        $i = 0;
+        foreach ($result as $item) {
+            $rowNext = $rowStart + $i;
+            $googleMapsLink = 'http://maps.google.com/maps?q=' . $item['latitude'] . ',' . $item['longitude'];
+            $dateTime = date("F j, Y - g:i a", $item['timestamp']);
+            $activeSheet->setCellValue('A' . $rowNext, $item['zone']);
+            $activeSheet->setCellValue('B' . $rowNext, $dateTime);
+            $activeSheet->setCellValue('C' . $rowNext, $googleMapsLink);
+            $activeSheet->setCellValue('D' . $rowNext, $item['type']);
+            $activeSheet->setCellValue('E' . $rowNext, $item['address']);
+            //$activeSheet->setCellValue('F' . $rowNext, $item['sms_notified']);
+            $activeSheet->setCellValue('G' . $rowNext, $item['email_notified']);
+
+            $i++;
+        }
+
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="report.xlsx"');
+        header('Cache-Control: max-age=0');
+
+        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        $objWriter->save('php://output');
+        die;
+    }
+
+    private function iCloud(\Models\Cp\Locations $locations)
+    {
+        $credential = $locations->getDeviceLocationServiceCredentials($this->di['devId']);
+
+        if ($this->getRequest()->isAjax() && $this->getRequest()->hasGet('currentLocation')) {
+            $data = $locations->getCloudLocation($this->auth['id'], $this->di['devId'], $credential);
             $this->makeJSONResponse($data);
         }
 
-        $this->setView('cp/locations/icloudIndex.htm');
+        if ($credential === false) {
+            $this->redirect($this->di->getRouter()->getRouteUrl('locationsSetup', array('step' => 'init')));
+        }
     }
 
     public function zonesAction()
     {
+        if ($this->di['currentDevice']['os'] == 'icloud') {
+            $this->redirect($this->di['router']->getRouteUrl('locations'));
+        }
+
         $zonesModel = new Zones($this->di);
 
         if ($this->getRequest()->isAjax()) {
@@ -168,6 +186,10 @@ class Locations extends BaseModuleController
 
     public function zoneAddAction()
     {
+        if ($this->di['currentDevice']['os'] == 'icloud') {
+            $this->redirect($this->di['router']->getRouteUrl('locations'));
+        }
+
         $zonesModel = new Zones($this->di);
 
         if ($zonesModel->getDeviceZonesCount($this->di['devId']) >= Zones::$countLimit) {
@@ -223,6 +245,10 @@ class Locations extends BaseModuleController
 
     public function zoneEditAction()
     {
+        if ($this->di['currentDevice']['os'] == 'icloud') {
+            $this->redirect($this->di['router']->getRouteUrl('locations'));
+        }
+
         $zonesModel = new Zones($this->di);
 
         if (($data = $zonesModel->getDeviceZone($this->di['devId'], $this->params['id'])) === false) {
@@ -280,7 +306,7 @@ class Locations extends BaseModuleController
 
         $this->setView('cp/locations/zone.htm');
     }
-    
+
     private function setupInit()
     {
         if ($this->getRequest()->isAjax()) {
@@ -331,7 +357,7 @@ class Locations extends BaseModuleController
 
         if ($this->getRequest()->isAjax()) {
             try {
-                $credentials = $locations->getiCloudDeviceCredentials($this->di['devId']);
+                $credentials = $locations->getCloudDeviceCredentials($this->di['devId']);
 
                 if ($this->getRequest()->hasPost('id')) {
                     $locations->assigniCloudDevice($this->di['devId'], $credentials['apple_id'], $credentials['apple_password'], $this->getRequest()->post('id'), $this->auth['id']);
