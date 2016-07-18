@@ -103,7 +103,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-devices.git",
-                "reference": "68978e3b57ea1a866487f962bdade89166696d59"
+                "reference": "5a83d520163b120f65546bc1bfdb2467d81d71a1"
             },
             "require": {
                 "boomers/cs-mail": "dev-master",
@@ -127,7 +127,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2016-06-14 13:11:14"
+            "time": "2016-07-13 12:24:44"
         },
         {
             "name": "boomers/cs-icloud",
@@ -238,7 +238,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-settings.git",
-                "reference": "ef79b1ca91b354d7f8dfb443bed69a074c26e0c6"
+                "reference": "f24ca6fc760b5ac0a38b9c9917f15a701a2c3778"
             },
             "require": {
                 "php": ">=5.4.0"
@@ -249,7 +249,7 @@
                     "CS\\Settings\\": "src/"
                 }
             },
-            "time": "2016-07-04 07:10:10"
+            "time": "2016-07-18 11:49:53"
         },
         {
             "name": "boomers/cs-users",
@@ -257,7 +257,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-users.git",
-                "reference": "41c313818a70c8ce0422173dc17549b2579267f2"
+                "reference": "29cb0b847a8e1ff02a24ea15d5405b0cf0201591"
             },
             "require": {
                 "boomers/cs-mail": "dev-master",
@@ -281,7 +281,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2016-04-07 08:52:34"
+            "time": "2016-07-05 13:36:35"
         },
         {
             "name": "boomers/ip",
@@ -1188,16 +1188,16 @@
         },
         {
             "name": "rastor/jira-client",
-            "version": "0.3.9",
+            "version": "0.3.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/oRastor/jira-client.git",
-                "reference": "c9a6c1e587b83b89068ea64509a94df91cd02a25"
+                "reference": "b63cee8e7f1fc9e413576b4f07b6480239d5228e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/oRastor/jira-client/zipball/c9a6c1e587b83b89068ea64509a94df91cd02a25",
-                "reference": "c9a6c1e587b83b89068ea64509a94df91cd02a25",
+                "url": "https://api.github.com/repos/oRastor/jira-client/zipball/b63cee8e7f1fc9e413576b4f07b6480239d5228e",
+                "reference": "b63cee8e7f1fc9e413576b4f07b6480239d5228e",
                 "shasum": ""
             },
             "require": {
@@ -1226,7 +1226,7 @@
                 "jira",
                 "rest"
             ],
-            "time": "2016-04-19 18:53:42"
+            "time": "2016-07-13 14:29:51"
         },
         {
             "name": "rastor/protobuf-php",
