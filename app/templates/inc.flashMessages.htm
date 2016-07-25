@@ -1,3 +1,4 @@
+<div id="flash-messages-container">
 {if count($di.flashMessages->hasData())}
     {foreach $di.flashMessages->getData() as $message}
     <div class="{$message.styles.block}" a="2">
@@ -7,3 +8,4 @@
     </div>
     {/foreach}
 {/if}
+</div>

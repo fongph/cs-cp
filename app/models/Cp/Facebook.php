@@ -61,13 +61,13 @@ class Facebook extends BaseModel {
                             FROM `facebook_messages` 
                             WHERE 
                                 `dev_id` = {$devId} AND 
-                                `account` = {$account} AND
+                                `account_id` = {$account} AND
                                 `group_id` IS NULL AND
                                 {$timeQuery}
                             GROUP BY `user_name`) fm2 ON fm.`user_id` = fm2.`user_id` AND fm.`timestamp` = fm2.`maxTimestamp`
                     WHERE
                             fm.`dev_id` = {$devId} AND
-                            fm.`account` = {$account} AND
+                            fm.`account_id` = {$account} AND
                             fm.`group_id` IS NULL AND
                             {$timeQuery}
                     GROUP BY 
@@ -83,7 +83,7 @@ class Facebook extends BaseModel {
                             fm.`latitude` location,
                             fm.`timestamp`,
                             fm.`group_id` `group`, 
-                            (SELECT COUNT(DISTINCT `user_id`) FROM `facebook_messages` WHERE `dev_id` = {$devId} AND `account` = {$account} AND `group_id`=fm.`group_id` AND `timestamp` >= {$timeFrom} AND `timestamp` <= {$timeTo}) 
+                            (SELECT COUNT(DISTINCT `user_id`) FROM `facebook_messages` WHERE `dev_id` = {$devId} AND `account_id` = {$account} AND `group_id`=fm.`group_id` AND `timestamp` >= {$timeFrom} AND `timestamp` <= {$timeTo}) 
                     FROM `facebook_messages` fm
                     INNER JOIN (
                             SELECT 
@@ -92,13 +92,13 @@ class Facebook extends BaseModel {
                             FROM `facebook_messages` 
                             WHERE 
                                     `dev_id` = {$devId} AND 
-                                    `account` = {$account} AND
+                                    `account_id` = {$account} AND
                                     `group_id` IS NOT NULL AND
                                     {$timeQuery}
                             GROUP BY `group_id`) fm2 ON fm.`group_id` = fm2.`group_id` AND fm.`timestamp` = fm2.`maxTimestamp`
                     WHERE 
                             fm.`dev_id` = {$devId} AND
-                            fm.`account` = {$account} AND
+                            fm.`account_id` = {$account} AND
                             fm.`group_id` IS NOT NULL AND
                             {$timeQuery}
                     GROUP BY 
@@ -165,7 +165,7 @@ class Facebook extends BaseModel {
             $timeQuery = "1";
         }
         
-        $fromWhere = "FROM `facebook_calls` WHERE `dev_id` = {$devId} AND `account` = {$account} AND {$timeQuery}";
+        $fromWhere = "FROM `facebook_calls` WHERE `dev_id` = {$devId} AND `account_id` = {$account} AND {$timeQuery}";
 
 
         $query = "{$select} {$fromWhere}"
@@ -190,10 +190,14 @@ class Facebook extends BaseModel {
     public function getAccountsList($devId) {
         $devId = $this->getDb()->quote($devId);
 
-        $accounts =  $this->getDb()->query("SELECT DISTINCT `account` FROM `facebook_messages` WHERE `dev_id` = {$devId}")->fetchAll(\PDO::FETCH_COLUMN);
-        $callsAccounts =  $this->getDb()->query("SELECT DISTINCT `account` FROM `facebook_calls` WHERE `dev_id` = {$devId}")->fetchAll(\PDO::FETCH_COLUMN);
+        $accounts =  $this->getDb()->query("
+                            (SELECT DISTINCT `account_id`, `account` FROM `facebook_messages` WHERE `dev_id` = {$devId} AND account_id IS NOT NULL) 
+                            UNION 
+                            (SELECT DISTINCT `account_id`, `account` FROM `facebook_calls` WHERE `dev_id` = {$devId} AND account_id IS NOT NULL) 
+                            ORDER BY `account`
+                        ")->fetchAll(\PDO::FETCH_KEY_PAIR);
         
-        return array_unique(array_merge($accounts, $callsAccounts));
+        return $accounts;
     }
 
     public function getAccountName($devId, $account, $userId) {
@@ -201,7 +205,7 @@ class Facebook extends BaseModel {
         $account = $this->getDb()->quote($account);
         $userId = $this->getDb()->quote($userId);
 
-        return $this->getDb()->query("SELECT `user_name` FROM `facebook_messages` WHERE `dev_id` = {$devId} AND `group_id` IS NULL AND `account` = {$account} AND `user_id` = {$userId} ORDER BY `timestamp` DESC LIMIT 1")->fetchColumn();
+        return $this->getDb()->query("SELECT `user_name` FROM `facebook_messages` WHERE `dev_id` = {$devId} AND `group_id` IS NULL AND `account_id` = {$account} AND `user_id` = {$userId} ORDER BY `timestamp` DESC LIMIT 1")->fetchColumn();
     }
 
     public function isGroupDialogueExists($devId, $account, $groupId) {
@@ -209,7 +213,7 @@ class Facebook extends BaseModel {
         $account = $this->getDb()->quote($account);
         $groupId = $this->getDb()->quote($groupId);
 
-        return $this->getDb()->query("SELECT `id` FROM `facebook_messages` WHERE `dev_id` = {$devId} AND `account` = {$account} AND `group_id` = {$groupId} LIMIT 1")->fetchColumn() !== false;
+        return $this->getDb()->query("SELECT `id` FROM `facebook_messages` WHERE `dev_id` = {$devId} AND `account_id` = {$account} AND `group_id` = {$groupId} LIMIT 1")->fetchColumn() !== false;
     }
 
     public function getGroupUsers($devId, $account, $groupId) {
@@ -217,7 +221,7 @@ class Facebook extends BaseModel {
         $account = $this->getDb()->quote($account);
         $groupId = $this->getDb()->quote($groupId);
 
-        return $this->getDb()->query("SELECT DISTINCT `user_id`, `user_name` FROM `facebook_messages` WHERE `dev_id` = {$devId} AND `account` = {$account} AND `group_id` = {$groupId} ORDER BY `user_name`")->fetchAll(\PDO::FETCH_KEY_PAIR);
+        return $this->getDb()->query("SELECT DISTINCT `user_id`, `user_name` FROM `facebook_messages` WHERE `dev_id` = {$devId} AND `account_id` = {$account} AND `group_id` = {$groupId} ORDER BY `user_name`")->fetchAll(\PDO::FETCH_KEY_PAIR);
     }
     
     /**
@@ -265,7 +269,7 @@ class Facebook extends BaseModel {
                                                 `longitude`
                                             FROM `facebook_messages`
                                             WHERE 
-                                                `dev_id` = {$escapedDevId} AND `group_id` IS NULL AND `account` = {$escapedAccount} AND `user_id` = {$escapedUserId}
+                                                `dev_id` = {$escapedDevId} AND `group_id` IS NULL AND `account_id` = {$escapedAccount} AND `user_id` = {$escapedUserId}
                                                 {$where}    
                                             ORDER BY `timestamp` DESC
                                             LIMIT {$start}, {$length}
@@ -399,7 +403,7 @@ class Facebook extends BaseModel {
                                                 `longitude`
                                             FROM `facebook_messages` 
                                             WHERE
-                                                `dev_id` = {$escapedDevId} AND `account` = {$escapedAccount} AND `group_id` = {$escapedGroupId}
+                                                `dev_id` = {$escapedDevId} AND `account_id` = {$escapedAccount} AND `group_id` = {$escapedGroupId}
                                                 {$where}
                                             GROUP BY `timestamp`
                                             ORDER BY `timestamp` DESC

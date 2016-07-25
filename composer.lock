@@ -238,7 +238,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-settings.git",
-                "reference": "4ce8b689230a2a7ccbf2bacb874ea7a1a4123a14"
+                "reference": "f24ca6fc760b5ac0a38b9c9917f15a701a2c3778"
             },
             "require": {
                 "php": ">=5.4.0"
@@ -249,7 +249,7 @@
                     "CS\\Settings\\": "src/"
                 }
             },
-            "time": "2016-07-12 14:19:16"
+            "time": "2016-07-18 11:49:53"
         },
         {
             "name": "boomers/cs-users",
@@ -1188,16 +1188,16 @@
         },
         {
             "name": "rastor/jira-client",
-            "version": "0.3.10",
+            "version": "0.3.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/oRastor/jira-client.git",
-                "reference": "a196e28cc22d7d7ad5c49deb86e031a91cdbae81"
+                "reference": "b63cee8e7f1fc9e413576b4f07b6480239d5228e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/oRastor/jira-client/zipball/a196e28cc22d7d7ad5c49deb86e031a91cdbae81",
-                "reference": "a196e28cc22d7d7ad5c49deb86e031a91cdbae81",
+                "url": "https://api.github.com/repos/oRastor/jira-client/zipball/b63cee8e7f1fc9e413576b4f07b6480239d5228e",
+                "reference": "b63cee8e7f1fc9e413576b4f07b6480239d5228e",
                 "shasum": ""
             },
             "require": {
@@ -1226,7 +1226,7 @@
                 "jira",
                 "rest"
             ],
-            "time": "2016-07-12 12:46:25"
+            "time": "2016-07-13 14:29:51"
         },
         {
             "name": "rastor/protobuf-php",

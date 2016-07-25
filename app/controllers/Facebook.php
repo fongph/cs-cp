@@ -39,9 +39,9 @@ class Facebook extends BaseModuleController
                 $this->makeJSONResponse($data);
             }
         }
-
-        $this->view->callsTab = ($this->di['currentDevice']['os'] === 'android' && $this->di['currentDevice']['app_version'] >= 9) ||
-                ($this->di['currentDevice']['os'] === 'ios' && $this->di['currentDevice']['app_version'] >= 7);
+        
+        $this->view->showUpdateBlock = ($this->di['currentDevice']['os'] === 'android' && $this->di['currentDevice']['app_version'] < 22) || 
+                ($this->di['currentDevice']['os'] === 'ios' && $this->di['currentDevice']['app_version'] < 20);
         
         if ($this->view->paid) {
             $this->view->accounts = $facebookModel->getAccountsList($this->di['devId']);
