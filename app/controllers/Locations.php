@@ -111,8 +111,7 @@ class Locations extends BaseModuleController
         $activeSheet->setCellValue('C1', 'Location');
         $activeSheet->setCellValue('D1', 'Type');
         $activeSheet->setCellValue('E1', 'Address');
-        //$activeSheet->setCellValue('F1', 'Sms notification');
-        $activeSheet->setCellValue('G1', 'E-mail notification');
+        $activeSheet->setCellValue('F1', 'E-mail notification');
 
         $rowStart = 2;
         $i = 0;
@@ -125,8 +124,7 @@ class Locations extends BaseModuleController
             $activeSheet->setCellValue('C' . $rowNext, $googleMapsLink);
             $activeSheet->setCellValue('D' . $rowNext, $item['type']);
             $activeSheet->setCellValue('E' . $rowNext, $item['address']);
-            //$activeSheet->setCellValue('F' . $rowNext, $item['sms_notified']);
-            $activeSheet->setCellValue('G' . $rowNext, $item['email_notified']);
+            $activeSheet->setCellValue('F' . $rowNext, $item['email_notified']);
 
             $i++;
         }
@@ -438,6 +436,10 @@ class Locations extends BaseModuleController
         }
 
         $this->view->title = $this->di['t']->_('Locations');
+        
+        if ($this->di['currentDevice']['os'] != 'icloud') {
+            $this->view->customTimezoneOffset = 0;
+        }
     }
 
     protected function isModulePaid()

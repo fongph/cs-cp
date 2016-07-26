@@ -198,6 +198,15 @@
         </div>
         
         <script type="text/javascript">
+            function customOffsetMoment(input, format, locale, strict) {
+                var m = moment(input, format, locale, strict);
+                {if isset($customTimezoneOffset)}
+                m.zone({$customTimezoneOffset});
+                {/if}
+                return m;
+            }
+            
+            
             $(document).ready(function () {
                 locations = {
                     map: null,
@@ -258,7 +267,7 @@
                                         sWidth: '100px',
                                         bUseRendered: false,
                                         fnRender: function(row) {
-                                            return moment.utc(row.aData.timestamp * 1000).format("LT");
+                                            return customOffsetMoment(row.aData.timestamp * 1000).format("LT");
                                         }
                                     },
                                     {
@@ -475,7 +484,7 @@
                             }
 
                             google.maps.event.addListener(marker, 'click', function() {
-                                var content = '<b>' + moment.unix(value.timestamp).utcOffset(0).format("LT") + '</b>';
+                                var content = '<b>' + customOffsetMoment(value.timestamp * 1000).format("LT") + '</b>';
                                 if (value.address) {
                                     content = content + ' - ' + value.address;
                                 }
@@ -721,9 +730,9 @@
                 };
             
                 {if $startTime > 0}
-                locations.init({if $hasZones}true{else}false{/if}, true, moment.unix({$startTime}).utcOffset(0).startOf('day'), zoneInfoWindowContent);
+                locations.init({if $hasZones}true{else}false{/if}, true, customOffsetMoment({$startTime} * 1000).startOf('day'), zoneInfoWindowContent);
                 {else}
-                locations.init({if $hasZones}true{else}false{/if}, false, moment().utcOffset(0).startOf('day'), zoneInfoWindowContent);
+                locations.init({if $hasZones}true{else}false{/if}, false, customOffsetMoment(moment()).startOf('day'), zoneInfoWindowContent);
                 {/if}
             });
         </script>
