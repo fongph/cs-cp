@@ -5,12 +5,14 @@ namespace Controllers;
 use Models\Users,
     Models\Billing,
     Models\Devices,
+    Models\Modules,
     CS\Users\FreeTrialLinks,
     CS\Users\UsersNotes,
     System\FlashMessages,
     CS\Users\UsersManager,
     Components\WizardRouter,
     CS\Devices\Manager as DeviceManager;
+
 
 class Index extends BaseController
 {
@@ -41,6 +43,10 @@ class Index extends BaseController
             $this->setView($path);
             $this->view->title = $this->di['t']->_($this->di['config']['contents']['names'][$this->params['uri']]);
             
+            if(in_array($this->params['uri'], ['instructions/prepare-ios-device-without-jailbreak.html'])){
+                $this->view->link = $this->di->getRouter()->getRouteUrl(Modules::CALLS);
+                $this->view->startMonitoring = true;
+            }
             if(in_array($this->params['uri'], ['instructions/keylogger-activation.html'])) {
                 $this->setLayout('content/instructions-keylogger-content.html');
             } else
@@ -395,6 +401,13 @@ class Index extends BaseController
         $this->setView('instructions/wizardIcloud.html');
         $this->view->title = $this->di['t']->_('iOS iCloud Installation Guide');
         $this->view->title_page = $this->di['t']->_('iOS iCloud Installation Guide for Support');
+    }
+
+    public function prepareIosDeviceWithoutJailbreakAction()
+    {
+        $this->setView('instructions/prepare-ios-device-without-jailbreak.html');
+        $this->view->title = $this->di['t']->_('Prepare iOS Device without Jailbreak');
+
     }
     
 }

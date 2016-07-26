@@ -169,7 +169,6 @@ $di->setShared('router', function() use($config, $di) {
     $router->add('wizard-ios', new \System\Router\Regex('/instructions/wizard-ios', array('controller' => 'Index', 'action' => 'wizardIos', 'public' => true)));
     $router->add('wizard-icloud', new \System\Router\Regex('/instructions/wizard-icloud', array('controller' => 'Index', 'action' => 'wizardIcloud', 'public' => true)));
 
-
     return $router;
 });
 

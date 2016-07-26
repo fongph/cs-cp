@@ -83,5 +83,4 @@ class Instructions extends BaseController {
         } else $this ->error404 ();
         
     }
-    
 }
