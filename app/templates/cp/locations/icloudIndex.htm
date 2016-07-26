@@ -58,7 +58,7 @@
     }
 </style>
 <div>
-    <h1 class="text-center">{$title}</h1>
+    <h1 class="text-center">2{$title}</h1>
 
     <div class="container-max">
         {insert "inc.cp.messages.htm"}
@@ -192,6 +192,9 @@
                         $("#data-holder").show();
                         this.updateMapBounds();
                     },
+                    addMessage: function () {
+                        $('#container-max').
+                    },
                     loadData: function () {
                         var self = this;
                         
@@ -200,15 +203,19 @@
                                 self.showData(data);
                             } else {
                                 $("#no-data > div").hide();
+                                
+                                console.log($("#no-data > div[data-type=" + data.type + "]"));
+                                
                                 if (data.type !== undefined) {
-                                    $("#no-data > div[data-type=" + data.type + "]").show();
+                                    console.log($("#no-data > div[data-type=" + data.type + "]"));
+                                    $("#no-data > div[data-type=" + data.type + "]").prependTo('#container-max');
                                 } else if (data.message !== undefined) {
-                                    $("#no-data > .message").html(data.message).show();
+                                    $("#no-data > .message").html(data.message).prependTo('#container-max');
                                 } else {
-                                    $("#no-data > div[data-type=undefined]").show();
+                                    $("#no-data > div[data-type=undefined]").prependTo('#container-max');
                                 }
-                                $("#no-data").show();
-                                $("#button-holder").hide();
+                                //$("#no-data").show();
+                                //$("#button-holder").hide();
                             }
                         }).error(function() {
                             $("#no-data > div").hide();
@@ -230,7 +237,7 @@
                         };
 
                         var deferred = self.loadData();
-                        deferred.complete(onComplete);
+
                     },
                     init: function () {
                         var self = this;
@@ -245,6 +252,11 @@
                 
                 locations.init();
                 
+                $("#no-data .close").click(function(e) {
+                    e.stopPropagation();
+                    $(this).parent().hide();
+                }});
+                
                 {if $lastPoint !== false}
                     locations.showData({
                         timestamp: {$lastPoint.timestamp},
@@ -256,5 +268,5 @@
             });
         </script>
     </div>
-    <script src="https://maps.googleapis.com/maps/api/js?v=3.9"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.9&key=AIzaSyBQTOwjhvjk4I2-dI9JaueqNoNAi2vF6FI"></script>
 </div>

@@ -93,7 +93,7 @@
             if (typeof value.sticker != 'undefined') {
                 content = '<p><img src="{$di.config.staticDomain}/img/fb-stickers/' + value.sticker + '.png" alt="" /></p>';
             } else if (typeof value.location != 'undefined') {
-                content = '<a class="dialog-item-map" href="https://www.google.com/maps/embed/v1/place?q=' + value.location.latitude + ',' + value.location.longitude + '&key=AIzaSyACASzYX7N75YbvFU0z0BwGDzxbWyj8TQ8" target="_blank"><img src="http://maps.googleapis.com/maps/api/staticmap?center=' + value.location.latitude + ',' + value.location.longitude + '&zoom=15&size=150x150&markers=color:red%7C' + value.location.latitude + ',' + value.location.longitude + '&sensor=false" alt="" /></a>';
+                content = '<a class="dialog-item-map" href="https://www.google.com/maps/embed/v1/place?q=' + value.location.latitude + ',' + value.location.longitude + '&key=AIzaSyBQTOwjhvjk4I2-dI9JaueqNoNAi2vF6FI" target="_blank"><img src="http://maps.googleapis.com/maps/api/staticmap?center=' + value.location.latitude + ',' + value.location.longitude + '&key=AIzaSyBQTOwjhvjk4I2-dI9JaueqNoNAi2vF6FI&zoom=15&size=150x150&markers=color:red%7C' + value.location.latitude + ',' + value.location.longitude + '&sensor=false" alt="" /></a>';
             } else if (value.attachments.length) {
                 var attachments = '';
                 for (key in value.attachments) {

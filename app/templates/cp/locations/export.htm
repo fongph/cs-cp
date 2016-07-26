@@ -1,0 +1,120 @@
+<style>
+
+
+    /*.checkbox input[type="checkbox"] {*/
+    /*position: relative;*/
+    /*margin-left: 0;*/
+    /*}*/
+
+</style>
+<h1 class="text-center">{$title}</h1>
+
+<div class="container-fluid">
+    {insert "inc.cp.messages.htm"}
+
+    <ol class="breadcrumb">
+        <li><a href="{$di.router->getRouteUrl('locations')}">{$di.t->_('View locations')}</a></li>
+        <li class="active">{$di.t->_('Geo-fences Report')}</li>
+
+    </ol>
+
+
+    <div class="panel panel-default">
+        <div class="panel-body">
+
+            <form method="POST"  id="exportForm" role="form" action="{$di.router->getRouteUrl('export')}">
+                <div class="form-group">
+                    <label>Choose Geo-zones</label>
+                    <div style="margin-left: 10px;">
+                        {foreach $zonesList as $id => $fence}
+                        <div class="checkbox">
+                            <label for="zone{$id}">
+                                <input id="zone{$id}" type="checkbox" name="zones[]" data-name="check" value="{$id}" />
+                                {$fence}
+                            </label>
+                        </div>
+                        {/foreach}
+                    </div>
+                    <a href="#" id="check"  data-check="check" >Check all</a>
+                </div>
+                <div class="form-group clearfix">
+                    <label>Choose interval</label>
+                    <div>
+                        <div id="reportrange" class="btn btn-default pull-left">
+                            <i class="fa fa-calendar fa-lg"></i>
+                            <span></span>
+                            <b class="caret"></b>
+                            <input type="text" class="hidden" name="timeFrom" value="default">
+                            <input type="text" class="hidden" name="timeTo" value="default">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <button  id="exportReport" class="btn btn-primary" >Export Geo-fences</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var geo = {
+                getRangeUrl: function (start, end) {
+                    if (start && end && start.isValid() && start.isValid()) {
+                        start = moment(start).unix();
+                        end = moment(end).unix();
+                    } else {
+                        start = end = -1;
+                    }
+                    var params = {
+                        timeFrom: start, 
+                        timeTo: end
+                    };
+                    return params;
+
+
+                },
+                init: function () {
+
+                    var self = this;
+                    self.initRangePicker();
+                    self.checkAll();
+
+                    $('#check').click(function (e) {
+                        e.preventDefault();
+                        var checkbox = this;
+                        if ($(this).attr('data-check') == 'check') {
+                            self.checkAll();
+                        }
+                        else {
+                            self.uncheckAll();
+                        }
+                    });
+
+                },
+                initRangePicker: function () {
+                    $('#reportrange').timeRange(function (from, to) {
+                        var range = geo.getRangeUrl(from, to);
+
+                        $('#reportrange > input[name=timeFrom]').val(range.timeFrom);
+                        $('#reportrange > input[name=timeTo]').val(range.timeTo);
+                    });
+                },
+                checkAll: function () {
+                    $('input[data-name=check]').prop("checked", true);
+                    $('#check').html('Uncheck all');
+                    $('#check').attr('data-check', 'uncheck');
+                },
+                uncheckAll: function () {
+
+                    $('input[data-name=check]').prop("checked", false);
+                    $('#check').html('Check all');
+                    $('#check').attr('data-check', 'check');
+                }
+            };
+
+            geo.init();
+        });
+    </script>
+
+</div>
