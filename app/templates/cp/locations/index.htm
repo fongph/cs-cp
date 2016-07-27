@@ -189,9 +189,11 @@
                     </div>
                     <a href="{$di.router->getRouteUrl('locationsZones')}" class="btn btn-danger">{$di.t->_('Geo-fences')}</a>
                 </div>
+                {if $exportEnabled}
                 <div class="col-sm-12" id="geo-fences-report">
                     <a href="{$di.router->getRouteUrl('locationsExport')}" class="btn btn-primary">{$di.t->_('Geo-fences Report')}</a>
                 </div>
+                {/if}
                 {/if}
             </div>
 

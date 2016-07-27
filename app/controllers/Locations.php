@@ -18,6 +18,8 @@ class Locations extends BaseModuleController
     {
         parent::init();
         $this->initCP();
+        
+        $this->exportEnabled = ($this->auth['id'] == 317);
     }
 
     public function indexAction()
@@ -44,6 +46,7 @@ class Locations extends BaseModuleController
 
         $this->view->startTime = $locations->getLastPointTimestamp($this->di['devId']);
         $this->view->hasZones = $locations->hasZones($this->di['devId']);
+        $this->view->exportEnabled = $this->exportEnabled;
 
         $this->setView('cp/locations/index.htm');
     }
@@ -74,6 +77,10 @@ class Locations extends BaseModuleController
 
     public function exportAction()
     {
+        if (!$this->exportEnabled) {
+            $this->redirect($this->di['router']->getRouteUrl('locations'));
+        }
+        
         $locations = new \Models\Cp\Locations($this->di);
 
         $zones = $locations->getZonesNames($this->di['devId']);
