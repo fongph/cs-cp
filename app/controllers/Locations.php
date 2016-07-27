@@ -19,7 +19,7 @@ class Locations extends BaseModuleController
         parent::init();
         $this->initCP();
         
-        $this->exportEnabled = ($this->auth['id'] == 316);
+        $this->exportEnabled = ($this->auth['id'] == 317);
     }
 
     public function indexAction()
