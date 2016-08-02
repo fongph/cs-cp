@@ -120,21 +120,20 @@
                                     mData: 'content',
                                     bSortable: false,
                                     mRender: function(value, type, data) {
-                                    
-                                    var content = escapeAndTruncate(value);
+                                        var content = escapeAndTruncate(value);
 
-                                    if (data.multimedia != 'none') {
-                                        if (data.multimedia == 'text') {
-                                            return content;
-                                        } else if (data.multimedia == 'location') {
-                                            return '<div class="attachment ' + data.multimedia + '"><div>';
+                                        if (data.multimedia != 'none') {
+                                            if (data.multimedia == 'text') {
+                                                return content;
+                                            } else if (data.multimedia == 'location') {
+                                                return '<div class="attachment ' + data.multimedia + '"><div>';
+                                            } else {
+                                                return '<div class="attachment ' + data.multimedia + '">' + content + '<div>';
+                                            }
                                         } else {
-                                            return '<div class="attachment ' + data.multimedia + '">' + content + '<div>';
+                                            return content;
                                         }
-                                    } else {
-                                        return content;
                                     }
-                                }
                                 },
                                 {
                                     bUseRendered: false,

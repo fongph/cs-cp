@@ -139,7 +139,7 @@
                     var latitude = $location.find('latitude').text();
                     var longitude = $location.find('longitude').text();
 
-                    return '<a class="dialog-item-map" href="https://www.google.com/maps/embed/v1/place?q=' + latitude + ',' + longitude + '&key=AIzaSyBQTOwjhvjk4I2-dI9JaueqNoNAi2vF6FI" target="_blank"><img src="http://maps.googleapis.com/maps/api/staticmap?center=' + latitude + ',' + longitude + '&key=AIzaSyACASzYX7N75YbvFU0z0BwGDzxbWyj8TQ8&zoom=15&size=150x150&markers=color:red%7C' + latitude + ',' + longitude + '&sensor=false" alt="" /></a>';
+                    return '<a class="dialog-item-map" href="https://www.google.com/maps/embed/v1/place?q=' + latitude + ',' + longitude + '&key=AIzaSyBQTOwjhvjk4I2-dI9JaueqNoNAi2vF6FI" target="_blank"><img src="http://maps.googleapis.com/maps/api/staticmap?center=' + latitude + ',' + longitude + '&zoom=15&size=150x150&markers=color:red%7C' + latitude + ',' + longitude + '&sensor=false" alt="" /></a>';
                 });
             } else if (value.multimedia != 'none' && value.multimedia != 'text') {
                 var wrappedContent = '<p '+ ( (value.multimedia !== 'none') ? 'class=\"attachment '+ value.multimedia + '\"' : '' ) +'>'+ value.content +'</p>';
