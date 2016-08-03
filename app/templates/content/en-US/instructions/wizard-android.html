@@ -17,10 +17,6 @@
         padding: 20px 30px;
     }
 </style>
-<div class="col-lg-12 col-md-12 col-sm-12">
-    
-    <h1 class="text-center">{$title_page}</h1>
-    <div class="instruction-container">
         <p>
             New clients receive an email with a link to CP after they make a purchase. 
             After logging in to CP they navigate right to the installation wizard, where they can set up their 
@@ -39,12 +35,12 @@
         <h3>3. Assign new device</h3>
         <p>Clients go through the instruction steps to prepare their devices for Pumpic installation.</p>
         <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/wizard/android/l3.png" alt="" /></p>
-        <p>Existing clients, who used Pumpic before, will see their previously added devices. For example, they have used Pumpic app and their subscription has expired. By tapping on “Assign Subscription” a client will move right to step 5. In case if they have removed application from the target device, they will have to follow <a href="/instructions/installing-android">reinstallation instructions</a>.</p>
+        <p>Existing clients, who used Pumpic before, will see their previously added devices. For example, they have used Pumpic app and their subscription has expired. By tapping on “Assign Subscription” a client will move right to step 5. In case if they have removed application from the target device, they will have to follow <a href="/instructions/installing-android.html">reinstallation instructions</a>.</p>
         <p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/wizard/android/l4.png" alt="" /></p>
         
         <h4>Installation Instructions</h4>
         <p><b>Pumpic works on regular and rooted phones and tablets. Supported OS versions: 2.2 - 5.1.</b></p>
-        <p><b>Rooting allows monitoring of social networks and emails, activates SMS blocking feature. Find out how to <a href="/instructions/rooting-android">root device</a>.</b></p>
+        <p><b>Rooting allows monitoring of social networks and emails, activates SMS blocking feature. Find out how to <a href="/instructions/rooting-android.html">root device</a>.</b></p>
 
         <ol>
             {insert "wizard/android/setup.instruction.list.all.htm"}
@@ -73,6 +69,3 @@
                     {$di.t->_('Start Monitoring')}
                 </button>
             </form> *}
-    </div>
-    
-</div>

@@ -159,18 +159,7 @@ $di->setShared('router', function() use($config, $di) {
     $router->add('instagramPost', new \System\Router\Regex('/cp/instagram/:account/post/:post', array('controller' => 'Instagram', 'action' => 'view'), array('account' => '[0-9]+', 'post' => '[0-9]+')));
 
     $router->add('directLogin', new \System\Router\Route('/admin/login', array('controller' => 'Index', 'action' => 'directLogin', 'public' => true)));
-
-    // instructions
-    $router->add('rooting-android', new \System\Router\Regex('/instructions/rooting-android', array('controller' => 'Index', 'action' => 'rootingAndroid')));
-    $router->add('granting-superuser-rights', new \System\Router\Regex('/instructions/granting-superuser-rights', array('controller' => 'Index', 'action' => 'superuser')));
- // @TODO delete this line//    $router->add('installing-android', new \System\Router\Regex('/instructions/installing-android', array('controller' => 'Index', 'action' => 'installingAndroid', 'public' => true)));
-    $router->add('installing-ios', new \System\Router\Regex('/instructions/installing-ios', array('controller' => 'Index', 'action' => 'installingIos', 'public' => true)));
-    $router->add('activate-location', new \System\Router\Regex('/instructions/activate-location', array('controller' => 'Instructions', 'action' => 'activateLocation')));
-    $router->add('activate-keylogger', new \System\Router\Regex('/instructions/activate-keylogger', array('controller' => 'Instructions', 'action' => 'keyloggerActivation')));
-    $router->add('wizard-android', new \System\Router\Regex('/instructions/wizard-android', array('controller' => 'Index', 'action' => 'wizardAndroid', 'public' => true)));
-    $router->add('wizard-ios', new \System\Router\Regex('/instructions/wizard-ios', array('controller' => 'Index', 'action' => 'wizardIos', 'public' => true)));
-    $router->add('wizard-icloud', new \System\Router\Regex('/instructions/wizard-icloud', array('controller' => 'Index', 'action' => 'wizardIcloud', 'public' => true)));
-
+    
     return $router;
 });
 

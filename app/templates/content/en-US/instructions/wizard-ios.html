@@ -1,0 +1,99 @@
+<style>
+    html, body, .wrapper {
+        height: auto;
+    }
+    .add-code-block-phone {
+        position: relative;
+    }
+    .add-code-block-phone .ios-value {
+        left: 19px;
+        position: absolute;
+        top: 279px;
+    }
+    #insctructions-content {
+        position: relative;
+        display: block;
+    }
+    
+    #activate-device {
+        display: inline-block;
+    }
+    .instruction-container {
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        margin-top: 15px;
+        padding: 20px 30px;
+    }
+</style>
+
+<p>
+    New clients receive an email with a link to CP after they make a purchase.
+    After logging in to CP they navigate right to the installation wizard, where they can set up
+    their devices and start monitoring.
+</p>
+<p class="text-center"><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/wizard/android/1.png" alt="" /></p>
+
+<h3>1. Select a Subscription Plan</h3>
+<p class="text-left">A client will see this step if only they have more than one subscription. If they have only one subscription, they proceed to step 2.</p>
+<p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/wizard/ios/1.png" alt="" /></p>
+
+<h3>2. Select a Platform</h3>
+<p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/wizard/ios/2.png" alt="" /></p>
+
+<h3>3. Assign new device</h3>
+<p class="text-left">Clients go through the instruction steps to prepare their devices for Pumpic installation.</p>
+<p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/wizard/ios/3.1.png" alt="" /></p>
+<p>Existing clients, who used Pumpic before, will see their previously added devices. For example, they have used Pumpic app and their subscription has expired. By tapping on “Assign Subscription” a client will move right to step 5. In case if they have removed application from the target device, they will have to follow <a href="http://cp.pumpic.com/instructions/installing-ios.html">reinstallation instructions</a>.</p>
+<p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/wizard/ios/3.2.png" alt="" /></p>
+
+<h4 class="text-center">{$di.t->_('Installation Instructions')}</h4>
+
+<p class="text-center">
+    Pumpic works on jailbroken iPhones, iPads and iPods Touch. <b>Supported OS versions: 6.0-8.4</b>
+    Find out how to jailbreak your iOS device using the following links:
+    <a href="http://www.redmondpie.com/jailbreak-ios-8.4-using-taig-v2.2-on-iphone-ipad-how-to-tutorial/" target="_blank" rel="nofollow">iOS 8.1-8.4 (Windows)</a>,
+    <a href="http://www.redmondpie.com/jailbreak-ios-8.4-with-taig-for-mac-os-x-how-to-tutorial/" target="_blank" rel="nofollow">iOS 8.1-8.4 (Mac)</a>,
+    <a href="http://www.redmondpie.com/how-to-jailbreak-ios-8.1-using-pangu-for-mac-guide/" target="_blank" rel="nofollow">iOS 8.0-8.1</a>,
+    <a href="http://evasi0n.com/" target="_blank" rel="nofollow">iOS 7</a>,
+    <a href="http://www.redmondpie.com/jailbreak-ios-6.1.3-6.1.4-6.1.5-untethered-on-all-devices-with-p0sixspwn-tutorial/" target="_blank" rel="nofollow">iOS 6</a>.
+    <br /><b>Find out if device is <a href="/instructions/detect-ios-jailbreak.html" target="_blank" rel="nofollow">jailbroken</a></b>.
+</p>
+<p class="text-center"><b>If the target device is NOT jailbroken, use <a href="{$di->getRouter()->getRouteUrl('wizardSetup', ['platform'=>'icloud'])}">iCloud solution</a> setup instructions.</b></p>
+<p class="text-center"><b>You can <a href="/instructions/hide-unhide-cydia-icon.html" target="_blank" rel="nofollow">hide Cydia icon</a> after installing application.</b></p>
+
+
+<ol>
+    {insert "wizard/ios/setup.instruction.list.all.htm"}
+</ol>
+
+<p>Now click "Next" to proceed to the next step and complete the installation.</p>
+<p>
+    <span class="btn btn-primary anchor" data-href="#activate-device">
+        {$di.t->_('Next')}
+    </span>
+</p>
+
+{*insert "wizard/setup.instruction.ios.htm"*}
+{* <ol>
+    {insert "wizard/ios/setup.instruction.list.all.htm"}
+</ol> *}
+
+<h3 id="activate-device">4. Activate Device</h3>
+<p>Clients must enter generated PIN code on their devices within 15 minutes.</p>
+<p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/wizard/ios/4.png" alt="" /></p>
+<ol>
+    {insert "wizard/ios/register.app.instruction.list.all.htm"}
+</ol>
+
+<h3>5. Complete Installation</h3>
+<p>Clients have successfully assigned the target devices to their Subscription Plans. Now they can optionally set name to the tracked devices.</p>
+<p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/wizard/ios/5.png" alt="" /></p>
+<p>Additionally all users will receive an email with the confirmation regarding adding of a new device.</p>
+<p class="text-center"><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/wizard/ios/6.png" alt="" /></p>
+
+{*<form method="post" action="http://pumpic.com/store.html">
+        <button type="submit" name="code" class="btn btn-primary">
+            {$di.t->_('Start Monitoring')}
+        </button>
+    </form> *}
+

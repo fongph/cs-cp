@@ -21,9 +21,9 @@ class Index extends BaseController
     {
         if (isset($this->di['config']['contents']['names'][$this->params['uri']]) && !$this->demo) {
             
-            
             if ($this->auth === null && in_array($this->params['uri'], $this->di['config']['contents']['auth'])) {
-                $this->error404();
+
+                $this->loginRedirect();
             } else if (in_array($this->params['uri'], ['instructions/uninstall-pumpic-ios.html', 
                                                 'instructions/uninstall-pumpic-android.html'])) {
                 $this->instructionUninstall();
@@ -46,6 +46,24 @@ class Index extends BaseController
             if(in_array($this->params['uri'], ['instructions/prepare-ios-device-without-jailbreak.html'])){
                 $this->view->link = $this->di->getRouter()->getRouteUrl(Modules::CALLS);
                 $this->view->startMonitoring = true;
+            }
+            if(in_array($this->params['uri'], ['instructions/installing-android.html',
+                                                'instructions/installing-ios.html'])) {
+                $this->setLayout('content/bordered-content.html');
+                $this->view->startMonitoring = true;
+                $this->view->link = $this->di->getRouter()->getRouteUrl('cp');
+            }
+            if(in_array($this->params['uri'], ['instructions/rooting-android.html',
+                                                    'instructions/granting-superuser-rights.html'])) {
+                $this->setLayout('content/bordered-content.html');
+                $this->view->previos = $this->view->link = $this->pagePrev();
+
+            }
+            if(in_array($this->params['uri'], ['instructions/wizard-android.html']) ) {
+                $this->view->code = 4544;
+            }  
+            if(in_array($this->params['uri'], ['instructions/wizard-ios.html']) ) {
+                $this->view->code = 2629;
             }
             if(in_array($this->params['uri'], ['instructions/keylogger-activation.html'])) {
                 $this->setLayout('content/instructions-keylogger-content.html');
@@ -342,23 +360,6 @@ class Index extends BaseController
         $this->error404();
     }
 
-    /**
-     * Instructions
-     */
-    public function rootingAndroidAction()
-    {
-        $this->setView('instructions/root-android-instructions.html');
-        $this->view->title = $this->di['t']->_('Rooting Android');
-        $this->view->previos = $this->pagePrev();
-    }
-
-    public function superuserAction()
-    {
-        $this->setView('instructions/superuser.html');
-        $this->view->title = $this->di['t']->_('Granting Superuser Rights');
-        $this->view->previos = $this->pagePrev();
-    }
-
     public function pagePrev()
     {
         $previous = $this->di['config']['domain']; // "javascript:history.go(-1)";
@@ -366,48 +367,6 @@ class Index extends BaseController
             $previous = $_SERVER['HTTP_REFERER'];
         }
         return $previous;
-    }
-
-    public function installingAndroidAction()
-    {
-        $this->setView('instructions/installingAndroid.html');
-        $this->view->title = $this->di['t']->_('Android Installation Guide');
-    }
-
-    public function installingIosAction()
-    {
-        $this->setView('instructions/installingIos.html');
-        $this->view->title = $this->di['t']->_('iOS Installation Guide');
-    }
-
-    public function wizardAndroidAction()
-    {
-        $this->setView('instructions/wizardAndroid.html');
-        $this->view->title = $this->di['t']->_('Android Installation Guide');
-        $this->view->title_page = $this->di['t']->_('Android Installation Guide for Support');
-        $this->view->code = 4544;
-    }
-
-    public function wizardIosAction()
-    {
-        $this->setView('instructions/wizardIos.html');
-        $this->view->title = $this->di['t']->_('iOS Installation Guide');
-        $this->view->title_page = $this->di['t']->_('iOS Installation Guide for Support');
-        $this->view->code = 2629;
-    }
-
-    public function wizardIcloudAction()
-    {
-        $this->setView('instructions/wizardIcloud.html');
-        $this->view->title = $this->di['t']->_('iOS iCloud Installation Guide');
-        $this->view->title_page = $this->di['t']->_('iOS iCloud Installation Guide for Support');
-    }
-
-    public function prepareIosDeviceWithoutJailbreakAction()
-    {
-        $this->setView('instructions/prepare-ios-device-without-jailbreak.html');
-        $this->view->title = $this->di['t']->_('Prepare iOS Device without Jailbreak');
-
     }
     
 }

@@ -1,9 +1,9 @@
 User-agent:*
 Disallow: /lostPassword
 Disallow: /registration.html
-Disallow: /instructions/granting-superuser-rights
-Disallow: /instructions/rooting-android
-Disallow: /instructions/wizard-android
-Disallow: /instructions/wizard-ios
+Disallow: /instructions/granting-superuser-rights.html
+Disallow: /instructions/rooting-android.html
+Disallow: /instructions/wizard-android.html
+Disallow: /instructions/wizard-ios.html
 Disallow: /instructions/wizard-icloud
 Disallow: /instructions/keylogger-activation

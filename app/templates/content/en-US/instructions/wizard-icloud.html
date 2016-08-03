@@ -1,0 +1,47 @@
+<style>
+    html, body, .wrapper {
+        height: auto;
+    }
+    .instruction-container {
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        margin-top: 15px;
+        padding: 20px 30px;
+    }
+</style>
+
+<p>
+    New clients receive an email with a link to CP after they make a purchase.
+    After logging in to CP they navigate right to the installation wizard, where they can set up
+    their devices and start monitoring.
+</p>
+<p class="text-center"><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/wizard/android/1.png" alt="" /></p>
+
+<h3>1. Select a Subscription Plan</h3>
+<p class="text-left">A client will see this step if only they have more than one subscription. If they have only one subscription, they proceed to step 2.</p>
+<p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/wizard/icloud/1.png" alt="" /></p>
+
+<h3>2. Select a Platform</h3>
+<p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/wizard/icloud/2.png" alt="" /></p>
+
+<h3>3. Assign new device</h3>
+<p>Clients go through the instruction steps to prepare their devices for Pumpic installation.</p>
+<p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/wizard/icloud/3.png" alt="" /></p>
+{insert "wizard/icloud/setup.instruction.htm"}
+<p>
+    <span class="btn btn-primary anchor" data-href="#activate-device">
+        {$di.t->_('Next')}
+    </span>
+</p>
+<h3 id="activate-device">4. Activate Device</h3>
+<p>Clients must enter the Apple ID and the password of the target device.</p>
+<p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/wizard/icloud/4.1.png" alt="" /></p>
+<p>On the next step they will see list of devices with backups available for monitoring.</p>
+<p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/wizard/icloud/4.2.png" alt="" /></p>
+
+<h3>5. Complete Installation</h3>
+<p>Clients have successfully assigned the target devices to their Subscription Plans. Now they can optionally set name to the tracked devices.</p>
+<p><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/wizard/icloud/5.png" alt="" /></p>
+<p>Additionally all users will receive an email with the confirmation regarding adding of a new device.</p>
+<p class="text-center"><img class="img-thumbnail" src="{$di.config.staticDomain}/images/instructions/wizard/icloud/6.png" alt="" /></p>
+

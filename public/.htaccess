@@ -14,6 +14,14 @@ RewriteRule ^how-to-install/blackberry-instructions\.html$ http://pumpic\.com/st
 RewriteRule ^rooting-android$ https://cp.pumpic.com/instructions/rooting-android [L,R=301]
 RewriteRule ^superuser$ https://cp.pumpic.com/instructions/granting-superuser-rights [L,R=301]
 RewriteRule ^instructions/hide-cydia-icon.html$ https://cp.pumpic.com/instructions/hide-unhide-cydia-icon.html [L,R=301]
+RewriteRule ^instructions/installing-android$ https://cp.pumpic.com/instructions/installing-android.html [L,R=301]
+RewriteRule ^instructions/installing-ios$ https://cp.pumpic.com/instructions/installing-ios.html [L,R=301]
+RewriteRule ^instructions/wizard-android$ https://cp.pumpic.com/instructions/wizard-android.html [L,R=301]
+RewriteRule ^instructions/wizard-ios$ https://cp.pumpic.com/instructions/wizard-ios.html [L,R=301]
+RewriteRule ^instructions/wizard-icloud$ https://cp.pumpic.com/instructions/wizard-icloud.html [L,R=301]
+RewriteRule ^instructions/rooting-android$ https://cp.pumpic.com/instructions/rooting-android.html [L,R=301]
+RewriteRule ^instructions/granting-superuser-rights$ https://cp.pumpic.com/instructions/granting-superuser-rights.html [L,R=301]
+
 
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d

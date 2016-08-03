@@ -105,7 +105,7 @@ $di['router']->execute($requestUri, function($route) use ($di) {
 
         if (!(isset($route->target['public']) || $di->getAuth()->hasIdentity())) {
 
-            $di->getFlashMessages()->add(System\FlashMessages::ERROR, "Access denied!");
+            $di->getFlashMessages()->add(System\FlashMessages::ERROR, "Access denied! Please, log in to your Control Panel account to view the page.");
 
             if ($di->get('isWizardEnabled')) {
 
