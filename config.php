@@ -82,6 +82,7 @@ $default = array(
             'instructions/uninstall-pumpic-ios.html' => 'How to Uninstall Pumpic on iOS',
             'instructions/uninstall-pumpic-android.html' => 'How to Uninstall Pumpic on Android',
             'instructions/prepare-ios-device-without-jailbreak.html' => 'Prepare iOS Device without Jailbreak',
+            'instructions/installing-android.html' => 'Android Installation Guide',
         ),
         'auth' => array(
             'instructions/keylogger-activation.html',
@@ -89,7 +90,8 @@ $default = array(
             'instructions/hide-unhide-cydia-icon.html',
             'instructions/uninstall-pumpic-ios.html',
             'instructions/uninstall-pumpic-android.html',
-            'instructions/prepare-ios-device-without-jailbreak.html'
+            'instructions/prepare-ios-device-without-jailbreak.html',
+            'instructions/installing-android.html'
         )
     ),
     'bundlesNamespace' => 'first'

