@@ -276,8 +276,8 @@ class Locations extends BaseModel
         if ($value == false) {
             return true;
         }
-
-        return (time() - $value > 300);
+        // can make cloud location request once in 1 minute
+        return (time() - $value > 60);
     }
 
     public function updateCloudLocationRequestTime($userId, $deviceId)
@@ -292,7 +292,7 @@ class Locations extends BaseModel
         }
         
         if (!$this->canMakeCloudLocationRequest($userId, $devId)) {
-            return ['success' => false, 'message' => 'Location requests frequency is set to 1 in 5 minutes. Please, try later.'];
+            return ['success' => false, 'message' => 'You can request the location update once in a minute. Please, try again a bit later.'];
         }
 
         try {
