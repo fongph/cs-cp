@@ -22,8 +22,11 @@ class Index extends BaseController
         if (isset($this->di['config']['contents']['names'][$this->params['uri']]) && !$this->demo) {
             
             if ($this->auth === null && in_array($this->params['uri'], $this->di['config']['contents']['auth'])) {
+                
+                $this->di->getFlashMessages()->add(\System\FlashMessages::ERROR, "Access denied! Please, log in to your Control Panel account to view the page.");
 
-                $this->loginRedirect();
+                $this->redirect($this->di->getRouter()->getRouteUrl('main').'?redirect='.$this->params['uri']);
+
             } else if (in_array($this->params['uri'], ['instructions/uninstall-pumpic-ios.html', 
                                                 'instructions/uninstall-pumpic-android.html'])) {
                 $this->instructionUninstall();
