@@ -310,7 +310,7 @@ class Profile extends BaseController
             $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('Device Not Found'));
             $this->redirect($this->di->getRouter()->getRouteUri('profile'));
         } catch (\CS\ICloud\InvalidAuthException $e) {
-            $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_("Oops, the iCloud password didn't work. Please try again"));
+            $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_("The password you have entered doesn’t match Apple ID. Check the entry and try again."));
             $this->ajaxResponse(false, array(
                 'location' => $this->di->getRouter()->getRouteUri('profileICloudPasswordReset')."/{$this->params['devId']}"
             ));
