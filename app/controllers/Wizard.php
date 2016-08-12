@@ -255,7 +255,7 @@ class Wizard extends BaseController
                                         ->setAppleId($_POST['email'])
                                         ->setApplePassword($_POST['password'])
                                         ->setDeviceHash($device['backupUDID'])
-                                        ->setLastBackup(strtotime($device['LastModified']))
+                                        ->setLastBackup(0)
                                         ->setLastCommited($device['Committed'] > 0 ? 1 : 0)
                                         ->setQuotaUsed($device['QuotaUsedMb']);
 
