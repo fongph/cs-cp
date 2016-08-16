@@ -93,7 +93,7 @@ class Billing extends BaseController
                                 ->setName($device['DeviceName'])
                                 ->setModel($device['MarketingName'])
                                 ->setOsVer($device['ProductVersion'])
-                                ->setLastBackup($device['LastModified'])
+                                ->setLastBackup(0)
                                 ->setQuotaUsed($device['QuotaUsed'])
                                 ->setAfterSave(function() use ($devicesManager, $device) {
                                     $this->di['flashMessages']->add(FlashMessages::SUCCESS, $this->di['t']->_(
