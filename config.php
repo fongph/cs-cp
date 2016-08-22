@@ -88,7 +88,7 @@ $default = array(
             'instructions/wizard-icloud.html' => 'iOS iCloud  Installation Guide for Support',
         ),
         'auth' => array(
-            'instructions/activate-location-icloud.html' => 'How to activate location with iCloud Monitoring',
+            'instructions/activate-location-icloud.html',
             'instructions/activate-location-ios.html',
             'instructions/activate-findmyiphone.html',
             'instructions/keylogger-activation.html',
