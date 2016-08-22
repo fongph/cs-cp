@@ -2,18 +2,18 @@
     <h1 class="text-center">{$title}</h1>
 
     {insert "inc.flashMessages.htm"}
-    
+
     {* if !isset($success) *}
     <p class="text-center">{$di.t->_('Contact us with any question you may have!')}</p>
     <p class="text-center">Pumpic Customer Support works daily: 10 am - 10 pm EST (11 am - 11 pm EDT).
         <br />At this time, you can contact us via Live Chat.
         <br />If you have any questions outside of working hours, please fill in the contact form or send us an email at support@pumpic.com
         <br />Please note that our Tech Department works from Monday through Friday.</p>
-    
+
     {if strlen($additionalMessage)}
     <div class="text-center">{$additionalMessage}</div>
     {/if}
-    
+
     <form role="form" method="post">
         {*<div class="form-group">
             <label for="name">{$di.t->_('Name')}</label>
@@ -40,7 +40,7 @@
         </div>
     </form>
     {* /if *}
-    
+
     <style>
         .support-info {
             padding-top: 15px;
@@ -74,11 +74,11 @@
           border: 1px solid #ffba60;
           border-radius: 5px;
         }
-        
+
         .support-links ul li:last-child {
             padding-bottom: 0px;
-        }    
-        
+        }
+
         .support-links ul li a {
             font-size: 14px;
             line-height: 1.2em;
@@ -88,25 +88,25 @@
         .support-links ul li a:hover {
             text-decoration: none;
         }
-        
+
         .m-icons {
             display: inline-block;
             background: url('/static/ico/m_icons.png') no-repeat;
         }
-        
+
         .m-icons.i-ios {
             background-position: -1px -1px;
             width: 15px;
             height: 18px;
         }
-        
+
         .m-icons.i-android {
             background-position: -18px -1px;
             width: 17px;
             height: 19px;
         }
     </style>
-    
+
     <p class="support-info text-center">Please consider our useful links below before sending your request. You may find the answer to your question there.</p>
     <div class="row support-links">
         <section id="ios" class="col-lg-7 col-md-7 col-sm-7">
@@ -114,8 +114,9 @@
             <ul>
                 <li><a href="/instructions/installing-ios.html">Installation Guide</a></li>
                 <li><a href="/instructions/prepare-ios-device-without-jailbreak.html">Prepare iOS Device without Jailbreak</a></li>
-                <li><a href="/instructions/activate-location-ios.html">How to activate location</a></li>
-                <li><a href="/instructions/activate-findmyiphone.html">How to activate "Find My iPhone"</a></li>
+                <!-- <li><a href="/instructions/activate-location-ios.html">How to activate location</a></li> -->
+                <!-- <li><a href="/instructions/activate-findmyiphone.html">How to activate "Find My iPhone"</a></li> -->
+                <li><a href="/instructions/activate-location-icloud.html">How to activate location with iCloud Monitoring</a></li>
                 <li><a href="/instructions/detect-ios-jailbreak.html">Check jailbreak</a></li>
                 <li><a href="/instructions/hide-unhide-cydia-icon.html">Hide/Unhide Cydia</a></li>
                 <li><a href="/instructions/uninstall-pumpic-ios.html">How to uninstall Pumpic</a></li>
@@ -135,6 +136,6 @@
             </ul>
         </section>
     </div>
-    
-    
+
+
 </div>
