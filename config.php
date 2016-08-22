@@ -68,6 +68,7 @@ $default = array(
     ),
     'contents' => array(
         'names' => array(
+            'instructions/activate-location-icloud.html' => 'How to activate location with iCloud Monitoring',
             'instructions/activate-location-ios.html' => 'How to Activate Location',
             'instructions/activate-location-android.html'   => 'How to Activate Location',
             'instructions/activate-findmyiphone.html' => 'Location Tracking Activation Guide',
@@ -87,6 +88,7 @@ $default = array(
             'instructions/wizard-icloud.html' => 'iOS iCloud  Installation Guide for Support',
         ),
         'auth' => array(
+            'instructions/activate-location-icloud.html' => 'How to activate location with iCloud Monitoring',
             'instructions/activate-location-ios.html',
             'instructions/activate-findmyiphone.html',
             'instructions/keylogger-activation.html',
@@ -104,8 +106,8 @@ $default = array(
             'instructions/wizard-android.html',
             'instructions/wizard-ios.html',
             'instructions/wizard-icloud.html',
-            
-            
+
+
 
         )
     ),
@@ -126,13 +128,13 @@ if ($build['environment'] == 'production') {
         $default['staticDomain'] = GlobalSettings::getControlPanelStaticURL($build['site']);
         $default['url']['demo'] = GlobalSettings::getDemoControlPanelURL($build['site']);
     }
-    
+
     $default['url']['registration'] = GlobalSettings::getRegistrationPageURL($build['site']);
     $default['cookieDomain'] = GlobalSettings::getCookieDomain($build['site']);
     $default['supportEmail'] = GlobalSettings::getSupportEmail($build['site']);
-    
+
     $default['session']['cookieParams']['domain'] = $default['cookieDomain'];
-  
+
     $default['s3'] = GlobalSettings::getS3Config();
     $default['cloudFront'] = GlobalSettings::getCloudFrontConfig();
 
