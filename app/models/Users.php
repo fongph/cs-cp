@@ -2,7 +2,8 @@
 
 namespace Models;
 
-use System\Model,
+use IP,
+    System\Model,
     System\Session,
     CS\Users\UsersManager,
     CS\Models\User\UserRecord,
@@ -36,8 +37,13 @@ class Users extends Model
     {
         $usersManager = new UsersManager($this->getDb());
         $usersManager->setSender($this->di['mailSender']);
+        $userAgent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '';
+        $ip = IP::getRealIP();
+        $environment = array('from' =>'ControlPanel',
+            'userAgent' => $userAgent,
+            'ip' => $ip);
 
-        $data = $usersManager->login($this->di['config']['site'], $email, $password);
+        $data = $usersManager->login($this->di['config']['site'], $email, $password, '', $environment);
 
         $this->di['auth']->setIdentity($data);
 
