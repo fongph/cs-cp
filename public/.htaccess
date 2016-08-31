@@ -21,8 +21,7 @@ RewriteRule ^instructions/wizard-ios$ https://cp.pumpic.com/instructions/wizard-
 RewriteRule ^instructions/wizard-icloud$ https://cp.pumpic.com/instructions/wizard-icloud.html [L,R=301]
 RewriteRule ^instructions/rooting-android$ https://cp.pumpic.com/instructions/rooting-android.html [L,R=301]
 RewriteRule ^instructions/granting-superuser-rights$ https://cp.pumpic.com/instructions/granting-superuser-rights.html [L,R=301]
-RewriteRule ^instructions/activate-findmyiphone$ https://cp.pumpic.com/instructions/activate-location-icloud.html [L,R=301]
-RewriteRule ^/instructions/activate-location-ios$ https://cp.pumpic.com/instructions/activate-location-icloud.html [L,R=301]
+RewriteRule ^instructions/activate-findmyiphone\.html$ https://cp.pumpic.com/instructions/activate-location-icloud.html [L,R=301]
 
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
