@@ -282,11 +282,8 @@
             "license": [
                 "MIT"
             ],
-<<<<<<< HEAD
             "time": "2016-08-31 11:47:17"
-=======
-            "time": "2016-08-29 08:17:37"
->>>>>>> origin/master
+
         },
         {
             "name": "boomers/ip",
