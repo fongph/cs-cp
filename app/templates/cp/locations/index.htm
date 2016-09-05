@@ -84,20 +84,11 @@
 
         {if $di.currentDevice.os=='icloud'}
         <div id="no-data">
-            <div data-type="fmi-disabled">
-              <div class="alert alert-danger" role="alert">
-                    <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
-                    <p class="text-danger">{$di.t->_('Find My iPhone service is currently disabled. Please activate it to continue tracking the target iOS device.')}</p>
-                    <div class="">
-                      <a href="{$di.router->getRouteUrl('content', ['uri' => 'instructions/activate-findmyiphone.html'])}" class="btn btn-primary" style="color:#fff;">{$di.t->_('Activate Find My iPhone')}</a>
-                    </div>
-              </div>
-            </div>
             <div data-type="location-disabled">
                 <div class="alert alert-danger" role="alert">
                     <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
                     <p class="text-danger">{$di.t->_('Location Services is disabled. Please turn it on and continue tracking the target iOS device.')}</p>
-                    <div class=""><a href="{$di.router->getRouteUrl('content', ['uri' => 'instructions/activate-location-ios.html'])}" class="btn btn-primary" style="color:#fff;">{$di.t->_('Activate Location Services')}</a></div>
+                    <div class=""><a href="{$di.router->getRouteUrl('content', ['uri' => 'instructions/activate-location-icloud.html'])}" class="btn btn-primary" style="color:#fff;">{$di.t->_('Activate Location Services')}</a></div>
                 </div>
             </div>
             <div data-type="no-location-data">
