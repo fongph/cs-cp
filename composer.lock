@@ -166,7 +166,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-mail.git",
-                "reference": "63d61d648473beef42f197b7af616f05e5e13024"
+                "reference": "76b6f65218ecf3468ab90fd231999fa8e2809bed"
             },
             "require": {
                 "guzzlehttp/guzzle": "~5.0",
@@ -185,7 +185,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2016-08-12 07:34:10"
+            "time": "2016-08-31 06:30:15"
         },
         {
             "name": "boomers/cs-models",
@@ -193,7 +193,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-models.git",
-                "reference": "a91397674211113e3dd1281d0d0cf7e39fde8e6b"
+                "reference": "016a8f92b76ea6859d3a9e997c7e640d7caa4b30"
             },
             "require": {
                 "php": ">=5.4.0"
@@ -207,7 +207,7 @@
                     "CS\\Models\\": "src/"
                 }
             },
-            "time": "2016-07-25 06:28:27"
+            "time": "2016-08-29 08:08:24"
         },
         {
             "name": "boomers/cs-queue",
@@ -238,7 +238,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-settings.git",
-                "reference": "f24ca6fc760b5ac0a38b9c9917f15a701a2c3778"
+                "reference": "aa6fe3520381b18240139f4dd310aa8612da76b8"
             },
             "require": {
                 "php": ">=5.4.0"
@@ -249,7 +249,7 @@
                     "CS\\Settings\\": "src/"
                 }
             },
-            "time": "2016-07-18 11:49:53"
+            "time": "2016-08-30 12:42:36"
         },
         {
             "name": "boomers/cs-users",
@@ -257,7 +257,8 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-users.git",
-                "reference": "6f47eb824ad367fb4449811bbb664158ae699edd"
+                "reference": "c6688dfb78487b45caef8264b37612707a531faf"
+
             },
             "require": {
                 "boomers/cs-mail": "dev-master",
@@ -281,7 +282,8 @@
             "license": [
                 "MIT"
             ],
-            "time": "2016-08-22 07:15:49"
+            "time": "2016-08-31 11:47:17"
+
         },
         {
             "name": "boomers/ip",
@@ -330,16 +332,16 @@
         },
         {
             "name": "fenom/fenom",
-            "version": "2.11.1",
+            "version": "2.11.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fenom-template/fenom.git",
-                "reference": "7fffa19fa901315f06d9a0e4ddce2681bddfa826"
+                "reference": "cd4f68808859141ca773bb8d68b71094c9c08b45"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fenom-template/fenom/zipball/7fffa19fa901315f06d9a0e4ddce2681bddfa826",
-                "reference": "7fffa19fa901315f06d9a0e4ddce2681bddfa826",
+                "url": "https://api.github.com/repos/fenom-template/fenom/zipball/cd4f68808859141ca773bb8d68b71094c9c08b45",
+                "reference": "cd4f68808859141ca773bb8d68b71094c9c08b45",
                 "shasum": ""
             },
             "require": {
@@ -376,7 +378,7 @@
                 "templater",
                 "templating"
             ],
-            "time": "2016-06-10 12:53:16"
+            "time": "2016-08-27 19:30:34"
         },
         {
             "name": "filp/whoops",
