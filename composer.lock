@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "740da1c7e4d95fe7a29261ee7b53943e",
-    "content-hash": "e35769f7e003af8eb032e312ab806c3d",
+    "hash": "c40c1e6fb0de50772b45f53243f3c913",
+    "content-hash": "44b5cdb5d0a5f9df46940e5761a00f96",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
@@ -1699,29 +1699,30 @@
         },
         {
             "name": "symfony/options-resolver",
-            "version": "v3.1.4",
+            "version": "v2.3.42",
+            "target-dir": "Symfony/Component/OptionsResolver",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/options-resolver.git",
-                "reference": "30605874d99af0cde6c41fd39e18546330c38100"
+                "reference": "abbded2c8f191a5529075af308c6eaecc54195b3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/options-resolver/zipball/30605874d99af0cde6c41fd39e18546330c38100",
-                "reference": "30605874d99af0cde6c41fd39e18546330c38100",
+                "url": "https://api.github.com/repos/symfony/options-resolver/zipball/abbded2c8f191a5529075af308c6eaecc54195b3",
+                "reference": "abbded2c8f191a5529075af308c6eaecc54195b3",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.5.9"
+                "php": ">=5.3.3"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.1-dev"
+                    "dev-master": "2.3-dev"
                 }
             },
             "autoload": {
-                "psr-4": {
+                "psr-0": {
                     "Symfony\\Component\\OptionsResolver\\": ""
                 },
                 "exclude-from-classmap": [
@@ -1749,7 +1750,7 @@
                 "configuration",
                 "options"
             ],
-            "time": "2016-05-12 15:59:27"
+            "time": "2016-05-06 20:13:08"
         },
         {
             "name": "symfony/polyfill-mbstring",
