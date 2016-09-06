@@ -312,7 +312,7 @@ class Locations extends BaseModel
         } catch (LocationsService\Exceptions\DeviceNotFoundException $e) {
             $data = array(
                 'success' => false,
-                'type' => 'fmi-disabled'
+                'type' => 'location-disabled'
             );
         } catch (LocationsService\Exceptions\TrackingException $e) {
             $data = array(
