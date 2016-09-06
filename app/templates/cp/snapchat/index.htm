@@ -18,7 +18,7 @@
         {insert "cp/updatePackage.html"}
     {elseif count($accounts)}
 
-    {if $di.currentDevice.os=='android' && (!$di.currentDevice.rooted || !$di.currentDevice.android_xposed_installed || !$di.currentDevice.rootAccess)}
+    {if $di.currentDevice.os=='android' && (!$di.currentDevice.rooted || !$di.currentDevice.rootAccess)}
     <div class="bg-warning" style="padding: 10px 10px 1px;">
         {insert "cp/snapchat/inc.androidMessages.htm"}
     </div>
