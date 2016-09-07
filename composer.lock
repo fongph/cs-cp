@@ -166,7 +166,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-mail.git",
-                "reference": "7f9036dc030f67591e9ec11f5b12f0ccafce4a44"
+                "reference": "d4c002507fa6cc369ea569715f6157149dd9dc95"
             },
             "require": {
                 "guzzlehttp/guzzle": "~5.0",
@@ -184,7 +184,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2016-09-05 06:49:30"
+            "time": "2016-09-07 06:21:47"
         },
         {
             "name": "boomers/cs-models",
@@ -256,7 +256,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-users.git",
-                "reference": "c6688dfb78487b45caef8264b37612707a531faf"
+                "reference": "172dadfe6d1253d202472a9ab930679c9c7df5d4"
             },
             "require": {
                 "boomers/cs-mail": "dev-master",
@@ -280,7 +280,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2016-08-31 11:47:17"
+            "time": "2016-09-06 07:50:25"
         },
         {
             "name": "boomers/ip",
@@ -1579,16 +1579,16 @@
         },
         {
             "name": "symfony/console",
-            "version": "v2.8.10",
+            "version": "v2.8.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "bac1eb5869c1848a173852aee61df960e3a49197"
+                "reference": "3d3e4fa5f0614c8e45220e5de80332322e33bd90"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/bac1eb5869c1848a173852aee61df960e3a49197",
-                "reference": "bac1eb5869c1848a173852aee61df960e3a49197",
+                "url": "https://api.github.com/repos/symfony/console/zipball/3d3e4fa5f0614c8e45220e5de80332322e33bd90",
+                "reference": "3d3e4fa5f0614c8e45220e5de80332322e33bd90",
                 "shasum": ""
             },
             "require": {
@@ -1635,11 +1635,11 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "time": "2016-08-19 06:48:01"
+            "time": "2016-09-06 10:55:00"
         },
         {
             "name": "symfony/event-dispatcher",
-            "version": "v2.8.10",
+            "version": "v2.8.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/event-dispatcher.git",
