@@ -256,6 +256,16 @@
                         <label for="recordsList">{$di.t->_('Records per page on table')}</label>
                         {include "scripts/select.htm" name="recordsPerPage" id="recordsList" class="form-control" keys=$recordsPerPageList values=$recordsPerPageList selected=$recordsPerPage}
                     </div>
+                    <div class="checkbox">
+                        <label for="outgoingSmsLimitation">
+                            <input id="outgoingSmsLimitation" type="checkbox" name="subscribes[system]"{if $subscribes.system} checked{/if} />{$di.t->_('Receive account status emails')}
+                        </label>
+                    </div>
+                    <div class="checkbox">
+                        <label for="outgoingSmsLimitation1">
+                            <input id="outgoingSmsLimitation1" type="checkbox" name="subscribes[monitoring]"{if $subscribes.monitoring} checked{/if} />{$di.t->_('Receive monitoring notification emails')}
+                        </label>
+                    </div>
                     <button type="submit" name="settings" class="btn btn-primary">{$di.t->_('Update')}</button>
                 </form>
             </div>

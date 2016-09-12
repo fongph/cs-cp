@@ -23,18 +23,17 @@ use Models\Devices,
     CS\Models\Device\DeviceNotFoundException,
     CS\ICloud\Backup as ICloudBackup;
 
-class Profile extends BaseController
-{
+class Profile extends BaseController {
 
     private $deviceRecord, $oldLicenseRecord, $newLicenseRecord;
-    
+
     public function indexAction()
     {
-        
+
         if ($this->getRequest()->isPost()) {
             $this->checkDemo($this->di['router']->getRouteUrl('profile'));
             $this->checkSupportMode();
-            
+
             if ($this->getRequest()->post('settings') !== null) {
                 $this->processSettings();
             } else if ($this->getRequest()->post('changePassword') !== null) {
@@ -47,31 +46,34 @@ class Profile extends BaseController
         if ($this->di->get('isWizardEnabled')) {
             $deviceManager = new Devices($this->di);
             $this->view->availabledevices = $deviceManager->getUserDevices($this->auth['id']);
-        } else
+        } else {
             $this->view->availabledevices = false;
+        }
 
         $this->view->title = $this->di->getTranslator()->_('Your Profile');
         $this->view->recordsPerPage = $this->auth['records_per_page'];
         $this->view->recordsPerPageList = $usersModel->getRecordsPerPageList();
+        $this->view->subscribes = $usersModel->getSubscribes($this->auth['id']);
+
         $this->setView('profile/index.htm');
     }
-    
+
     public function assignChoiceAction()
     {
         $this->checkDemo($this->di['router']->getRouteUrl('profile'));
         $this->checkSupportMode();
-        
+
         $billingModel = new Billing($this->di);
-        
+
         $this->view->deviceRecord = $this->getDeviceRecord();
-        if($this->getRequest()->get('oldLicenseId')) {
+        if ($this->getRequest()->get('oldLicenseId')) {
             $this->view->title = $this->di->getTranslator()->_('Upgrade Subscription');
             $this->view->oldLicenseRecord = $this->getOldLicenseRecord();
         } else {
             $this->view->title = $this->di->getTranslator()->_('Assign Subscription');
             $this->view->oldLicenseRecord = false;
         }
-       
+
         $this->view->packages = $billingModel->getAvailablePackages($this->auth['id']);
         $this->setView('profile/assignSubscriptions.htm');
     }
@@ -80,67 +82,66 @@ class Profile extends BaseController
     {
         $this->checkDemo($this->di['router']->getRouteUrl('profile'));
         $this->checkSupportMode();
-        
+
         $this->view->deviceRecord = $this->getDeviceRecord();
         $this->view->licenseRecord = $this->getNewLicenseRecord();
         $this->view->oldLicenseRecord = $this->getOldLicenseRecord();
         $this->view->title = $this->di->getTranslator()->_('Upgrade Subscription');
         $this->setView('profile/confirmUpgrade.htm');
     }
-    
+
     public function assignProcessAction()
     {
         $this->checkDemo($this->di['router']->getRouteUrl('profile'));
         $this->checkSupportMode();
-        
+
         if ($this->getRequest()->isPost()) {
             try {
                 /** @var \CS\Users\UsersNotes $userNotes */
                 $userNotes = $this->di->get('usersNotesProcessor');
                 $deviceObserver = new DeviceObserver($this->di->get('logger'));
                 $deviceObserver
-                    ->setMainDb($this->di->get('db'))
-                    ->setDevice($this->getDeviceRecord())
-                    ->setLicense($this->getNewLicenseRecord());
+                        ->setMainDb($this->di->get('db'))
+                        ->setDevice($this->getDeviceRecord())
+                        ->setLicense($this->getNewLicenseRecord());
 
                 if ($this->getRequest()->hasGet('oldLicenseId')) {
                     $oldLicenseId = $this->getOldLicenseRecord()->getId();
-                    
+
                     $deviceObserver
-                        ->setBeforeSave(function() {
-                            $this->di['devicesManager']->closeDeviceLicenses($this->getDeviceRecord()->getId(), false);
-                            return true;
-                        })->setAfterSave(function() use ($deviceObserver, $userNotes, $oldLicenseId) {
-                            $userNotes->licenseUpgraded($deviceObserver->getDevice()->getId(), $oldLicenseId, $deviceObserver->getLicense()->getId());
-                            $this->di->getFlashMessages()->add(FlashMessages::SUCCESS, $this->di->getTranslator()->_('Subscription has been upgraded'));
-                            
-                            $eventManager = \EventManager\EventManager::getInstance();
-                            $eventManager->emit('license-assigned', array(
-                                'userId' => $deviceObserver->getLicense()->getUserId(),
-                                'deviceId' => $deviceObserver->getDevice()->getId(),
-                                'licenseId' => $deviceObserver->getLicense()->getId()
-                            ));
-                        });
-                } else {
-                    $deviceObserver->setAfterSave(function() use($deviceObserver, $userNotes) {
-                        $userNotes->licenseAssigned($deviceObserver->getLicense()->getId(), $deviceObserver->getDevice()->getId());
-                        if($this->getDeviceRecord()->getOS() === DeviceRecord::OS_ICLOUD){
-                            $queueManage = new QueueManager($this->di->get('queueClient'));
-                            $queueManage->addTaskDevice('downloadChannel-priority', $this->getDeviceRecord()->getICloudDevice());
-                        }
-                        
+                            ->setBeforeSave(function() {
+                                $this->di['devicesManager']->closeDeviceLicenses($this->getDeviceRecord()->getId(), false);
+                                return true;
+                            })->setAfterSave(function() use ($deviceObserver, $userNotes, $oldLicenseId) {
+                        $userNotes->licenseUpgraded($deviceObserver->getDevice()->getId(), $oldLicenseId, $deviceObserver->getLicense()->getId());
+                        $this->di->getFlashMessages()->add(FlashMessages::SUCCESS, $this->di->getTranslator()->_('Subscription has been upgraded'));
+
                         $eventManager = \EventManager\EventManager::getInstance();
                         $eventManager->emit('license-assigned', array(
                             'userId' => $deviceObserver->getLicense()->getUserId(),
                             'deviceId' => $deviceObserver->getDevice()->getId(),
                             'licenseId' => $deviceObserver->getLicense()->getId()
                         ));
-                        
+                    });
+                } else {
+                    $deviceObserver->setAfterSave(function() use($deviceObserver, $userNotes) {
+                        $userNotes->licenseAssigned($deviceObserver->getLicense()->getId(), $deviceObserver->getDevice()->getId());
+                        if ($this->getDeviceRecord()->getOS() === DeviceRecord::OS_ICLOUD) {
+                            $queueManage = new QueueManager($this->di->get('queueClient'));
+                            $queueManage->addTaskDevice('downloadChannel-priority', $this->getDeviceRecord()->getICloudDevice());
+                        }
+
+                        $eventManager = \EventManager\EventManager::getInstance();
+                        $eventManager->emit('license-assigned', array(
+                            'userId' => $deviceObserver->getLicense()->getUserId(),
+                            'deviceId' => $deviceObserver->getDevice()->getId(),
+                            'licenseId' => $deviceObserver->getLicense()->getId()
+                        ));
+
                         $this->di->getFlashMessages()->add(FlashMessages::SUCCESS, $this->di->getTranslator()->_('Subscription has been assigned to your device'));
                     });
                 }
                 $deviceObserver->assignLicenseToDevice();
-                
             } catch (InvalidLimitationsCountException $e) {
                 $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('Device already has subscription'));
             } catch (\Exception $e) {
@@ -155,9 +156,9 @@ class Profile extends BaseController
 
     private function getDeviceRecord()
     {
-        if(is_null($this->deviceRecord)){
+        if (is_null($this->deviceRecord)) {
             try {
-                if(is_null($this->getRequest()->get('deviceId')))
+                if (is_null($this->getRequest()->get('deviceId')))
                     throw new DeviceNotFoundException;
 
                 $deviceRecord = new DeviceRecord($this->di->get('db'));
@@ -166,7 +167,6 @@ class Profile extends BaseController
                     throw new DeviceNotFoundException;
 
                 $this->deviceRecord = $deviceRecord;
-
             } catch (DeviceNotFoundException $e) {
                 $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('Device Not Found'));
                 $this->redirect($this->di->getRouter()->getRouteUri('profile'));
@@ -178,9 +178,9 @@ class Profile extends BaseController
 
     private function getOldLicenseRecord()
     {
-        if(is_null($this->oldLicenseRecord)) {
+        if (is_null($this->oldLicenseRecord)) {
             try {
-                if(is_null($this->getRequest()->get('oldLicenseId')))
+                if (is_null($this->getRequest()->get('oldLicenseId')))
                     throw new LicenseNotFoundException;
 
                 $oldLicenseRecord = new LicenseRecord($this->di->get('db'));
@@ -189,7 +189,6 @@ class Profile extends BaseController
                     throw new LicenseNotFoundException;
 
                 $this->oldLicenseRecord = $oldLicenseRecord;
-
             } catch (LicenseNotFoundException $e) {
                 $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('Subscription Not Found'));
                 $this->redirect($this->di->getRouter()->getRouteUri('profile'));
@@ -200,9 +199,9 @@ class Profile extends BaseController
 
     private function getNewLicenseRecord()
     {
-        if(is_null($this->newLicenseRecord)){
+        if (is_null($this->newLicenseRecord)) {
             try {
-                if(is_null($this->getRequest()->get('licenseId')))
+                if (is_null($this->getRequest()->get('licenseId')))
                     throw new LicenseNotFoundException;
 
                 $newLicenseRecord = new LicenseRecord($this->di->get('db'));
@@ -212,15 +211,14 @@ class Profile extends BaseController
 
                 if ($this->getDeviceRecord()->getOS() == DeviceRecord::OS_ICLOUD && $newLicenseRecord->getProduct()->getGroup() != 'premium' && $newLicenseRecord->getProduct()->getGroup() != 'premium-double' && $newLicenseRecord->getProduct()->getGroup() != 'trial') {
                     $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('iCloud solution is available for Premium Subscription only'));
-                    
-                    if($this->getRequest()->hasGet('oldLicenseId')){
+
+                    if ($this->getRequest()->hasGet('oldLicenseId')) {
                         $this->redirect("{$this->di->getRouter()->getRouteUri('profileAssignChoice')}?deviceId={$this->getDeviceRecord()->getId()}&oldLicenseId={$this->getOldLicenseRecord()->getId()}");
-                    
-                    } else $this->redirect("{$this->di->getRouter()->getRouteUri('profileAssignChoice')}?deviceId={$this->getDeviceRecord()->getId()}");
+                    } else
+                        $this->redirect("{$this->di->getRouter()->getRouteUri('profileAssignChoice')}?deviceId={$this->getDeviceRecord()->getId()}");
                 }
 
                 $this->newLicenseRecord = $newLicenseRecord;
-
             } catch (LicenseNotFoundException $e) {
                 $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('Subscription Not Found'));
                 $this->redirect($this->di->getRouter()->getRouteUri('profile'));
@@ -229,12 +227,17 @@ class Profile extends BaseController
         return $this->newLicenseRecord;
     }
 
-    
     private function processSettings()
     {
         $usersModel = new \Models\Users($this->di);
 
-        $settings = array();
+        $settings = array(
+            'subscribes' => []
+        );
+
+        if ($this->getRequest()->hasPost('subscribes')) {
+            $settings['subscribes'] = array_keys($this->getRequest()->post('subscribes'));
+        }
 
         if ($this->getRequest()->post('locale') !== null) {
             $settings['locale'] = $this->getRequest()->post('locale');
@@ -260,7 +263,7 @@ class Profile extends BaseController
                 $usersManager->updatePassword(
                         $this->auth['id'], $this->getRequest()->post('oldPassword'), $this->getRequest()->post('newPassword'), $this->getRequest()->post('newPassword2')
                 );
-                
+
                 $this->di->get('usersNotesProcessor')->accountCustomPasswordSaved();
 
                 $this->di['flashMessages']->add(FlashMessages::SUCCESS, $this->di['t']->_('Your password has been successfully changed!'));
@@ -279,56 +282,88 @@ class Profile extends BaseController
         $this->checkDemo($this->di['router']->getRouteUrl('profile'));
         $this->checkSupportMode();
         try {
-                $iCloudRecord = new DeviceICloudRecord($this->di->get('db'));
-                $iCloudRecord->loadByDevId(($this->params['devId']));
-                
-                $deviceRecord = $iCloudRecord->getDeviceRecord();
-                if($deviceRecord->getUserId() !== $this->auth['id'] || $deviceRecord->getDeleted())
-                    throw new DeviceNotFoundException;
-                
-                if ($this->getRequest()->isAjax() && $this->getRequest()->hasPost('newPassword')) {
-                    $logger = $this->di->get('logger');
-                    $logger->addInfo('iCloud password change USER #' . $this->auth['id'] . ' DEVICE: ' . $this->params['devId'] . ' ' . $this->getRequest()->post('newPassword'));
-                    
-                    //todo check auth count
-                    $iCloud = new ICloudBackup($iCloudRecord->getAppleId(), $this->getRequest()->post('newPassword'));
+            $iCloudRecord = new DeviceICloudRecord($this->di->get('db'));
+            $iCloudRecord->loadByDevId($this->params['devId']);
 
-                    $iCloudRecord->setApplePassword($this->getRequest()->post('newPassword'));
-                    if($iCloudRecord->getLastError() == DeviceICloudRecord::ERROR_AUTHENTICATION)
-                        $iCloudRecord->setLastError(DeviceICloudRecord::ERROR_NONE);
-                    $iCloudRecord->save();
+            $deviceRecord = $iCloudRecord->getDeviceRecord();
+            if ($deviceRecord->getUserId() !== $this->auth['id'] || $deviceRecord->getDeleted())
+                throw new DeviceNotFoundException;
 
-                    $this->di->getFlashMessages()->add(FlashMessages::SUCCESS, $this->di->getTranslator()->_('You have successfully updated the iCloud password. A new iCloud backup will be uploaded shortly'));
-                    $this->ajaxResponse(true, array(
-                        'location' => $this->di->getRouter()->getRouteUri('profile')
-                    ));
-                }
-                $this->view->title = $this->di->getTranslator()->_('Change iCloud Password');
-                $this->view->iCloud = $iCloudRecord;
-                $this->setView('profile/changeICloudPassword.htm');
-        } catch (DeviceNotFoundException $e){
+            if ($this->getRequest()->isAjax() && $this->getRequest()->hasPost('newPassword')) {
+                $logger = $this->di->get('logger');
+                $logger->addInfo('iCloud password change USER #' . $this->auth['id'] . ' DEVICE: ' . $this->params['devId'] . ' ' . $this->getRequest()->post('newPassword'));
+
+                //todo check auth count
+                $iCloud = new ICloudBackup($iCloudRecord->getAppleId(), $this->getRequest()->post('newPassword'));
+
+                $iCloudRecord->setApplePassword($this->getRequest()->post('newPassword'));
+                if ($iCloudRecord->getLastError() == DeviceICloudRecord::ERROR_AUTHENTICATION)
+                    $iCloudRecord->setLastError(DeviceICloudRecord::ERROR_NONE);
+                $iCloudRecord->save();
+
+                $this->di->getFlashMessages()->add(FlashMessages::SUCCESS, $this->di->getTranslator()->_('You have successfully updated the iCloud password. A new iCloud backup will be uploaded shortly'));
+                $this->ajaxResponse(true, array(
+                    'location' => $this->di->getRouter()->getRouteUri('profile')
+                ));
+            }
+            $this->view->title = $this->di->getTranslator()->_('Change iCloud Password');
+            $this->view->iCloud = $iCloudRecord;
+            $this->setView('profile/changeICloudPassword.htm');
+        } catch (DeviceNotFoundException $e) {
             $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('Device Not Found'));
             $this->redirect($this->di->getRouter()->getRouteUri('profile'));
         } catch (\CS\ICloud\InvalidAuthException $e) {
             $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_("The password you have entered doesn’t match Apple ID. Check the entry and try again."));
             $this->ajaxResponse(false, array(
-                'location' => $this->di->getRouter()->getRouteUri('profileICloudPasswordReset')."/{$this->params['devId']}"
+                'location' => $this->di->getRouter()->getRouteUri('profileICloudPasswordReset') . "/{$this->params['devId']}"
             ));
-        } catch (\CS\ICloud\TwoStepVerificationException $e){
+        } catch (\CS\ICloud\TwoStepVerificationException $e) {
             $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_("Two-step verification is enabled for this account.
              Please, turn it off if you want to refresh iCloud password in the Pumpic system and keep receiving data updates."));
             $this->ajaxResponse(false, array(
-                'location' => $this->di->getRouter()->getRouteUri('profileICloudPasswordReset')."/{$this->params['devId']}"
+                'location' => $this->di->getRouter()->getRouteUri('profileICloudPasswordReset') . "/{$this->params['devId']}"
             ));
         } catch (Exception $e) {
             $this->di['flashMessages']->add(FlashMessages::ERROR, $this->di['t']->_('Something went wrong.  Please contact our support team at %support@pumpic.com%', array(
-                '<a href="mailto:support@pumpic.com">',
-                '</a>'
+                        '<a href="mailto:support@pumpic.com">',
+                        '</a>'
             )));
             $this->ajaxResponse(false, array(
-                'location' => $this->di->getRouter()->getRouteUri('profileICloudPasswordReset')."/{$this->params['devId']}"
+                'location' => $this->di->getRouter()->getRouteUri('profileICloudPasswordReset') . "/{$this->params['devId']}"
             ));
         }
+    }
+
+    public function mailUnsubscribeAction()
+    {
+        $usersModel = new \Models\Users($this->di);
+
+        if (!in_array($this->params['type'], $usersModel->getMailTypes())) {
+            $this->error404();
+        }
+
+        if (!$this->getDI()->getAuth()->hasIdentity()) {
+            if ($this->params['type'] == 'system') {
+                $this->getDI()->getFlashMessages()->add(FlashMessages::ERROR, "You are about to unsubscribe from account status emails. Please, enter your login and password to confirm that you no longer want to receive them.");
+            } elseif ($this->params['type'] == 'monitoring') {
+                $this->getDI()->getFlashMessages()->add(FlashMessages::ERROR, "You are about to unsubscribe from monitoring notification emails. Please, enter your login and password to confirm that you no longer want to receive them.");
+            }
+
+            $this->redirect($this->getDI()->getRouter()->getRouteUrl('main') . '?redirect=' . rawurlencode($this->getDI()->getRequest()->uri()));
+        }
+
+        $optionKey = 'mail-type-' . $this->params['type'] . '-unsubscribed';
+
+        $usersManager = $this->di['usersManager'];
+        $usersManager->setUserOption($this->auth['id'], $optionKey, 1, \CS\Models\User\Options\UserOptionRecord::SCOPE_MAILING);
+
+        if ($this->params['type'] == 'system') {
+            $this->getDI()->getFlashMessages()->add(FlashMessages::SUCCESS, "You have been unsubscribed. If you opt to receive account status emails again, you can reactivate subscription on this page.");
+        } elseif ($this->params['type'] == 'monitoring') {
+            $this->getDI()->getFlashMessages()->add(FlashMessages::SUCCESS, "You have been unsubscribed. If you opt to receive monitoring notification emails again, you can reactivate subscription on this page.");
+        }
+
+        $this->redirect($this->di['router']->getRouteUrl('profile'));
     }
 
     public function ajaxResponse($status, $data = null)
@@ -338,5 +373,5 @@ class Profile extends BaseController
             'data' => $data,
         ));
     }
-    
+
 }
