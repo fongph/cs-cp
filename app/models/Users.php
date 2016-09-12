@@ -9,8 +9,7 @@ use IP,
     CS\Models\User\UserRecord,
     CS\Settings\GlobalSettings;
 
-class Users extends Model
-{
+class Users extends Model {
 
     protected $recordsPerPageList = array(10, 25, 50, 100);
 
@@ -39,7 +38,7 @@ class Users extends Model
         $usersManager->setSender($this->di['mailSender']);
         $userAgent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '';
         $ip = IP::getRealIP();
-        $environment = array('from' =>'ControlPanel',
+        $environment = array('from' => 'ControlPanel',
             'userAgent' => $userAgent,
             'ip' => $ip);
 
@@ -58,7 +57,7 @@ class Users extends Model
     }
 
     public function setSettings($data)
-    {
+    {   
         $auth = $this->di['auth']->getIdentity();
 
         $userRecord = $this->getUserRecord()
@@ -80,6 +79,8 @@ class Users extends Model
 
         $userRecord->save();
 
+        $this->setSubscribes($auth['id'], $data['subscribes']);
+        
         $this->reLogin();
 
         return true;
@@ -100,7 +101,7 @@ class Users extends Model
     public function directLogin($userId, $adminId, $hash, $supportMode = false)
     {
         $usersManager = $this->getUsersManager();
-        
+
         try {
             $data = $usersManager->getDirectLoginUserData(
                     $this->di['config']['site'], $userId, $adminId, $supportMode, $hash, GlobalSettings::getDirectLoginSalt($this->di['config']['site'])
@@ -112,7 +113,7 @@ class Users extends Model
 
         $this->di['auth']->setIdentity($data);
         $this->setLocale($data['locale'], false);
-        
+
         return true;
     }
 
@@ -132,17 +133,17 @@ class Users extends Model
     public function reLogin()
     {
         $data = $this->di['auth']->getIdentity();
-        
+
         $mergeData = array();
-        
+
         if (isset($data['admin_id'])) {
             $mergeData['admin_id'] = $data['admin_id'];
         }
-        
+
         if (isset($data['support_mode'])) {
             $mergeData['support_mode'] = $data['support_mode'];
         }
-        
+
         return $this->loginById($data['id'], $mergeData);
     }
 
@@ -155,6 +156,49 @@ class Users extends Model
     public function getRecordsPerPageList()
     {
         return $this->recordsPerPageList;
+    }
+
+    public function getMailTypes()
+    {
+        return ['system', 'monitoring'];
+    }
+
+    public function getSubscribes($userId)
+    {
+        $usersManager = $this->di['usersManager'];
+        $options = $usersManager->getUserOptions($userId, \CS\Models\User\Options\UserOptionRecord::SCOPE_MAILING);
+        
+        $statuses = [];
+        
+        $types = $this->getMailTypes();
+        foreach ($types as $type) {
+            $optionKey = 'mail-type-' . $type . '-unsubscribed';
+            
+            if (isset($options[$optionKey])) {
+                $statuses[$type] = ($options[$optionKey] == 0);
+            } else {
+                $statuses[$type] = true;
+            }
+        }
+        
+        return $statuses;
+    }
+    
+    private function setSubscribes($userId, $active) {
+        $usersManager = $this->di['usersManager'];
+        
+        var_dump($active);
+        
+        $types = $this->getMailTypes();
+        foreach ($types as $type) {
+            $value = 1;
+            if (in_array($type, $active)) {
+                $value = 0;
+            }
+            
+            $optionKey = 'mail-type-' . $type . '-unsubscribed';
+            $usersManager->setUserOption($userId, $optionKey, $value, \CS\Models\User\Options\UserOptionRecord::SCOPE_MAILING);
+        }
     }
 
     public function setLocale($value, $update = true)
@@ -174,7 +218,7 @@ class Users extends Model
 
     public function addSystemNote($user_id, $message)
     {
-        $user_id = (int)$user_id;
+        $user_id = (int) $user_id;
         $message = $this->getDb()->quote($message);
 
         return $this->getDb()->exec("
@@ -182,9 +226,10 @@ class Users extends Model
             SET user_id = {$user_id},
                 content = {$message}");
     }
-    
-    public function setAuthCookie() {
+
+    public function setAuthCookie()
+    {
         setcookie('s', 1, time() + 3600 * 6, '/', $this->di['config']['cookieDomain']);
     }
-    
+
 }

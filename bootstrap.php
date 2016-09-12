@@ -158,6 +158,8 @@ $di->setShared('router', function() use($config, $di) {
     $router->add('locationsSetup', new \System\Router\Regex('/cp/locations/setup/:step', array('controller' => 'Locations', 'action' => 'setup'), array('step' => 'init|locationActivation|deviceConnection')));
     $router->add('instagramTab', new \System\Router\Regex('/cp/instagram/:account/:tab', array('controller' => 'Instagram', 'action' => 'tab'), array('account' => '[0-9]+', 'tab' => 'own|friends|commented')));
     $router->add('instagramPost', new \System\Router\Regex('/cp/instagram/:account/post/:post', array('controller' => 'Instagram', 'action' => 'view'), array('account' => '[0-9]+', 'post' => '[0-9]+')));
+    
+    $router->add('profileMailUnsibscribe', new \System\Router\Regex('/profile/unsubscribe/:type', array('controller' => 'Profile', 'action' => 'mailUnsubscribe', 'public' => true), array('type' => '[^/]+')));
 
     $router->add('directLogin', new \System\Router\Route('/admin/login', array('controller' => 'Index', 'action' => 'directLogin', 'public' => true)));
     
