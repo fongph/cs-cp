@@ -295,17 +295,23 @@
                             {/if}
                         </div>
                     </div>
+                    {if $data.info.sim_id !== null}
                     <div class="panel-body inline-data">
                         <div class="icon"><span class="icon-carrier"></span></div>
                         <div class="title">{$di.t->_('Carrier')}</div>
                         <div class="data">
-                            {if $data.info.carrier}
-                            {$data.info.carrier}
+                            {if $data.info.sim_id == ''}
+                                <span style="color: #d2d2d2">No Sim</span>
                             {else}
-                            <span style="color: #d2d2d2">N/A</span>
+                                {if $data.info.carrier}
+                                {$data.info.carrier}
+                                {else}
+                                <span style="color: #d2d2d2">N/A</span>
+                                {/if}
                             {/if}
                         </div>
                     </div>
+                    {/if}
                 </div>
                 {/if}
                 {if $hasPackage && $currentDevice.os != 'icloud'}
