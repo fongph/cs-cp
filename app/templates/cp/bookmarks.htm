@@ -114,6 +114,7 @@
         }
         {if $di.currentDevice.os=='icloud'}
             {include "content/{$di.t->getLocale()}/noDataICloud.html"
+            isModule = false
             moduleId = $di.t->_('bookmarks')
             moduleName = $di.t->_('Bookmarks')
             }

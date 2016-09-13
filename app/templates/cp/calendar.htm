@@ -73,6 +73,7 @@
         }
         {if $di.currentDevice.os=='icloud'}
             {include "content/{$di.t->getLocale()}/noDataICloud.html"
+            isModule = false
             moduleId = 'calendar'
             moduleName = $di.t->_('Calendar')
             }

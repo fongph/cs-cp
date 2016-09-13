@@ -184,6 +184,7 @@
             }
             {if $di.currentDevice.os=='icloud'}
                 {include "content/{$di.t->getLocale()}/noDataICloud.html"
+                isModule = false
                 moduleId = $moduleId
                 moduleName = $di.t->_('Photos')
                 }
