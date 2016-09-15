@@ -183,7 +183,11 @@
     moduleName = $di.t->_('SMS')
     }
     {if $di.currentDevice.os=='icloud'}
-    {include "content/{$di.t->getLocale()}/noDataICloud.html"}
+        {include "content/{$di.t->getLocale()}/noDataICloud.html"
+        isModule = false
+        moduleId = 'sms'
+        moduleName = $di.t->_('SMS')
+        }
     {else}
     {include "content/{$di.t->getLocale()}/noData.html"}
     {/if}

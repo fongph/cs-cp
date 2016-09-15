@@ -156,11 +156,19 @@
             {include "content/{$di.t->getLocale()}/noDataTitle.html"
                 moduleName = $di.t->_('Kik')
             }
-            {*<h3>{$di.t->_('Waiting for messages... Why can the data be unavailable?')}</h3>*}
-            {include "content/{$di.t->getLocale()}/noData.html"
-                applicationId = 'kik'
-                applicationName = $di.t->_('Kik')
-            }
+
+            {if $di.currentDevice.os=='icloud'}
+                {include "content/{$di.t->getLocale()}/noDataICloud.html"
+                isModule = true
+                moduleId = 'kik'
+                moduleName = $di.t->_('Kik')
+                }
+            {else}
+                {include "content/{$di.t->getLocale()}/noData.html"
+                    applicationId = 'kik'
+                    applicationName = $di.t->_('Kik')
+                }
+            {/if}
         {/if}
     {/if}
 </div>

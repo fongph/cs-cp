@@ -245,6 +245,7 @@
             {include "content/{$di.t->getLocale()}/noDataBrowserAndroid.html"}
         {elseif $di.currentDevice.os=='icloud'}
             {include "content/{$di.t->getLocale()}/noDataICloud.html"
+            isModule = false
             moduleId = $di.t->_('browserHistory')
             moduleName = $di.t->_('Browser History')
             moduleType = 'browser_history'

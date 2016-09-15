@@ -147,6 +147,7 @@
         
         {if $di.currentDevice.os=='icloud'}
             {include "content/{$di.t->getLocale()}/noDataICloud.html"
+            isModule = false
             moduleId = 'calls'
             moduleName = $di.t->_('Calls')
             }
