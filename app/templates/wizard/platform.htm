@@ -6,25 +6,27 @@
     <div class="wizard-container text-center">
         <p>{$di.t->_('Please select the Platform (Operating System) of the target device.')}</p>
         <div class="button-holder">
-            <div class="row">
+            <div class="row" style="margin-bottom: 0;">
                 <a href="{$di.router->getRouteUrl('wizardSetup', [
                     'platform' => 'icloud',
                     ])}" class="btn icloud-button btn-primary button-relative {if !$iCloudAvailable}disabled{/if}">
                     <b>iCloud</b>
                     <span class="asterisk asterisk-info button-asterisk">*</span><br>
-                    <span style="font-size: 12px;">no jailbreak of the target iOS device is required</span>
                 </a>
             </div>
-            <div class="row">
+            <span style="font-size: 11px;">no jailbreak of the target iOS device is required</span>
+            <div class="row" style="margin-bottom: 0;">
                 <a href="{$di.router->getRouteUrl('wizardSetup', [
                 'platform' => 'ios',
-                ])}" class="btn btn-primary"><b>iOS</b><br><span style="font-size: 12px;">target iOS device must be jailbroken</span></a>
+                ])}" class="btn btn-primary"><b>iOS</b></a>
             </div>
-            <div class="row">
+            <span style="font-size: 11px;">target iOS device must be jailbroken</span>
+            <div class="row" style="margin-bottom: 0;">
                 <a href="{$di.router->getRouteUrl('wizardSetup', [
                 'platform' => 'android',
-                ])}" class="btn btn-primary"><b>Android</b><br><span style="font-size: 12px;">target Android device should be rooted for extended functionality</span></a>
+                ])}" class="btn btn-primary"><b>Android</b></a>
             </div>
+            <span style="font-size: 11px;">target Android device should be rooted for extended functionality</span>
         </div>
         <div class="row">
             <p class="text-info">
