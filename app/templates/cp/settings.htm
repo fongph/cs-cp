@@ -219,7 +219,7 @@
                         {if $di.currentDevice.os == 'icloud'}
                         <div class="panel-body inline-data-noicon text-center">
                             <a href="?check-new-backup" class="btn btn-primary{if $di.currentDevice.processing} disabled{/if}">Update data</a>
-                            {if $di.currentDevice.processing}<p class="text-info" style="padding-top: 10px;">Backup data is downloading and will be available shortly! Please, wait.</p>{/if}
+                            {if $di.currentDevice.processing}<p class="text-info" style="padding-top: 10px;">The first backup of the device was not finished. Please, back up the target device manualy.</p>{/if}
                         </div>
                         {/if}
                     {/if}
