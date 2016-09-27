@@ -222,11 +222,7 @@
                                 mData: 'price_regular',
                                 mRender: function(value) {
                                     var data = arguments[2];
-                                    if (value > 0) {
-                                        return value + ' ' + data.currency;
-                                    }
-
-                                    return data.price + ' ' + data.currency;
+                                    return value + ' ' + data.currency;
                                 }
                             },
                             {
