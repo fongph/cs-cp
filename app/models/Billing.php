@@ -21,7 +21,12 @@ class Billing extends \System\Model
                 lic.`id` license_id,
                 p.`name`,
                 p.`group` product_group,
-                lic.`expiration_date`
+                lic.`expiration_date`,
+                CASE WHEN p.`group` LIKE '%icloud%' THEN 'icloud'
+                WHEN p.`group` LIKE '%jailbreak%' THEN 'ios'
+                WHEN p.`group` LIKE '%android%' THEN 'android'
+                ELSE 'no'   
+                END AS 'platform'
             FROM `licenses` lic
             INNER JOIN `products` p ON lic.`product_id` = p.`id`
             WHERE  lic.`user_id` = {$userId}
@@ -67,7 +72,12 @@ class Billing extends \System\Model
                     callsl.`device_id` = lic.`device_id` AND
                     callsl.`product_type` = 'option' AND
                     callslim.call = {$unlimitedValue}
-            ) as `calls_expire_date`";
+            ) as `calls_expire_date`,
+                CASE WHEN p.`group` LIKE '%icloud%' THEN 'icloud'
+                        WHEN p.`group` LIKE '%jailbreak%' THEN 'ios'
+                          WHEN p.`group` LIKE '%android%' THEN 'android'
+                          ELSE 'no' 
+                        END AS 'platform'";
 
         $fromWhere = "FROM `licenses` lic
                             INNER JOIN `products` p ON lic.`product_id` = p.`id`

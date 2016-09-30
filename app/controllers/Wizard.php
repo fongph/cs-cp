@@ -53,6 +53,7 @@ class Wizard extends BaseController
     {
         $billingModel = new BillingModel($this->di);
         $this->view->packages = $billingModel->getAvailablePackages($this->auth['id']);
+
         $this->view->title = $this->di->getTranslator()->_('Select a Subscription Plan');
         $this->setView('wizard/package.htm');
     }
@@ -61,8 +62,17 @@ class Wizard extends BaseController
     {
         $this->view->license = $license = $this->getLicense();
         $this->view->product = $product = $license->getProduct();
-        $this->view->iCloudAvailable = ($product->getGroup() == 'premium' || $product->getGroup() == 'trial' || $product->getGroup() == 'premium-double');
-        $this->view->title = $this->di->getTranslator()->_('Select a Platform');
+        $this->view->iCloudAvailable = ($product->getGroup() == 'premium' || $product->getGroup() == 'ios-icloud' || $product->getGroup() == 'ios-icloud-double' || $product->getGroup() == 'trial' || $product->getGroup() == 'premium-double');
+        $this->view->jailbreakAvailable = true;
+        $this->view->androidAvailable = true;
+
+        if ($product->getNamespace() == 'second'){
+            $this->view->iCloudAvailable = ($product->getGroup() == 'ios-icloud' || $product->getGroup() == 'ios-icloud-double' || $product->getGroup() == 'trial');
+            $this->view->jailbreakAvailable = ( $product->getGroup() == 'ios-jailbreak' || $product->getGroup() == 'ios-jailbreak-double' || $product->getGroup() == 'trial');
+            $this->view->androidAvailable = ($product->getGroup() == 'android-basic' || $product->getGroup() == 'android-basic-double' || $product->getGroup() == 'android-premium'|| $product->getGroup() == 'android-premium-double' || $product->getGroup() == 'trial');
+
+        }
+         $this->view->title = $this->di->getTranslator()->_('Select a Platform');
         $this->setView('wizard/platform.htm');
     }
 
@@ -412,9 +422,11 @@ class Wizard extends BaseController
         if (is_null($platform)) {
             $platform = $this->getParam('platform');
             if (!in_array($platform, array('android', 'ios', 'icloud'))) {
-                $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('Invalid Platform'));
+                if ($platform != 'no'){
+                    $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('Invalid Platform'));
+                }
                 $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_PLATFORM, array(
-                            'platform' => false
+                    'platform' => false
                 )));
             }
         }
@@ -426,8 +438,9 @@ class Wizard extends BaseController
         $license = $this->getLicense($mastBeAvailable);
 
         try {
-            if ($license->getProduct()->getGroup() !== 'premium' && $license->getProduct()->getGroup() !== 'trial' && $license->getProduct()->getGroup() !== 'premium-double')
-                throw new \Exception;
+            if (($license->getProduct()->getGroup() !== 'ios-icloud' && $license->getProduct()->getGroup() !== 'trial' &&
+                $license->getProduct()->getGroup() !== 'os-icloud-double' && $license->getProduct()->getGroup() !== 'premium' && $license->getProduct()->getGroup() !== 'premium-double'))
+            throw new \Exception;
         } catch (\Exception $e) {
             $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('iCloud solution is available for Premium Subscription only. It allows you to monitor iPhones, iPads and iPods Touch without jailbreak.'));
             $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_PACKAGE));

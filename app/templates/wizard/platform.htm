@@ -18,13 +18,13 @@
             <div class="row" style="margin-bottom: 0;">
                 <a href="{$di.router->getRouteUrl('wizardSetup', [
                 'platform' => 'ios',
-                ])}" class="btn btn-primary"><b>iOS</b></a>
+                ])}" class="btn btn-primary {if !$jailbreakAvailable}disabled{/if}"><b>iOS</b></a>
             </div>
             <span style="font-size: 11px;">target iOS device must be jailbroken</span>
             <div class="row" style="margin-bottom: 0;">
                 <a href="{$di.router->getRouteUrl('wizardSetup', [
                 'platform' => 'android',
-                ])}" class="btn btn-primary"><b>Android</b></a>
+                ])}" class="btn btn-primary {if !$androidAvailable}disabled{/if}"><b>Android</b></a>
             </div>
             <span style="font-size: 11px;">target Android device should be rooted for extended functionality</span>
         </div>

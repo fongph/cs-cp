@@ -54,7 +54,7 @@ class WizardRouter implements RouteInterface {
         switch($name){
             case self::STEP_PACKAGE: return true;
 
-            case self::STEP_PLATFORM: return self::$currentStep != self::STEP_FINISH && (isset($this->params['licenseId']));
+           case self::STEP_PLATFORM: return self::$currentStep != self::STEP_FINISH && (isset($this->params['licenseId']));
             
             case self::STEP_SETUP: return self::$currentStep != self::STEP_FINISH && (isset($this->params['licenseId'], $this->params['platform']));
             
