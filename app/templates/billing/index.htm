@@ -212,20 +212,17 @@
                                 }
                             },
                             {
-                                mData: 'price',
+                                mData: 'amount',
                                 mRender: function(value) {
-                                    return value + ' USD';
+                                    var data = arguments[2];
+                                    return value + ' ' + data.currency;
                                 }
                             },
                             {
                                 mData: 'price_regular',
                                 mRender: function(value) {
-                                    if (value > 0) {
-                                        return value + ' USD';
-                                    }
-                                    
                                     var data = arguments[2];
-                                    return data.price + ' USD';
+                                    return value + ' ' + data.currency;
                                 }
                             },
                             {
