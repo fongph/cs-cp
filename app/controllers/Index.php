@@ -153,10 +153,13 @@ class Index extends BaseController
             $billing = new Billing($this->di);
             $packages = $billing->getAvailablePackages($this->di->getAuth()->getIdentity()['id']);
 
-//            if (count($packages) == 1) {
-//                $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_PLATFORM, array('licenseId' => $packages[0]['license_id'])));
-//            } else
-                if (count($packages)) {
+            if (count($packages) == 1) {
+                if ($packages[0]['platform'] != 'no') {
+                    $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_SETUP, array('licenseId' => $packages[0]['license_id'], 'platform' => $packages[0]['platform'])));
+                } else {
+                    $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_PLATFORM, array('licenseId' => $packages[0]['license_id'])));
+                }
+            }elseif (count($packages)) {
                 $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_PACKAGE));
             } else {
                 $this->redirect($this->di->getRouter()->getRouteUrl('profile'));

@@ -62,7 +62,7 @@ class Wizard extends BaseController
     {
         $this->view->license = $license = $this->getLicense();
         $this->view->product = $product = $license->getProduct();
-        $this->view->iCloudAvailable = ($product->getGroup() == 'premium' || $product->getGroup() == 'ios-icloud' || $product->getGroup() == 'ios-icloud-double' || $product->getGroup() == 'trial' || $product->getGroup() == 'premium-double');
+        $this->view->iCloudAvailable = ($product->getGroup() == 'premium' || $product->getGroup() == 'trial' || $product->getGroup() == 'premium-double');
         $this->view->jailbreakAvailable = true;
         $this->view->androidAvailable = true;
 
