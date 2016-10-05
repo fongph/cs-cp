@@ -112,7 +112,7 @@
                 unlimitValue: '{$unlimitedValue}',
                 limitsTmpl: _.template('Calls: <b><%= call %></b><hr/> SMS: <b><%= sms %></b>'),
                 {if $di->get('isWizardEnabled')}
-                    deviceTmpl: _.template('<a class="btn btn-success btn-xs" href="{$di.router->getRouteUrl('wizardPlatform')}?licenseId=<%= id %>"><i class="fa fa-plug"></i> {$di.t->_('Assign Device')}</a>'),
+                    deviceTmpl: _.template('<a class="btn btn-success btn-xs" href="{$di.router->getRouteUrl('wizardSetup')}?licenseId=<%= id %>&platform=<%= platform %>"><i class="fa fa-plug"></i> {$di.t->_('Assign Device')}</a>'),
                 {else}
                     deviceTmpl: _.template('<a class="btn btn-success btn-xs" href="{$di.router->getRouteUrl('billingAssignDevice')}?license=<%= id %>"><i class="fa fa-plug"></i> {$di.t->_('Assign Device')}</a>'),
                 {/if}
@@ -264,7 +264,8 @@
                                     if (data.device == null) {
                                         if (data.status == 'available') {
                                             return billing.deviceTmpl({
-                                                id: data.id
+                                                id: data.id,
+                                                platform: data.platform
                                             });
                                         } else {
                                             return '-';

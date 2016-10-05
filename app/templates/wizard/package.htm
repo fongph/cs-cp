@@ -7,8 +7,8 @@
             <div class="button-holder">
                 {foreach $packages as $package}
                     <div class="row">
-                        <a href="{$di.router->getRouteUrl('wizardPlatform', ['licenseId' => $package.license_id])}" class="btn btn-primary">
-                            {$package.name}<span data-timestamp-value="{$package.expiration_date}" data-time-format="ll"></span>
+                        <a href="{$di.router->getRouteUrl('wizardSetup', ['licenseId' => $package.license_id, 'platform' => $package.platform])}" class="btn btn-primary">
+                            {$package.name}<span data-timestamp-value="{$package.expiration_date}" data-time-format="ll" data-product-group="{$package.product_group}" data-platform="{$package.platform}"></span>
                         </a>
                     </div>
                 {/foreach}
