@@ -3,11 +3,11 @@
     <div class="container">
         <div class="box-info">
             {if !empty($di.devicesList)}
-                {if $di.devicesList[$di.devId].os == 'android'}
-                    <label>This is <b>Android</b> and <b>iPhone (with jailbreak)</b> DEMO mode</label>
-                {else}
+                {if $di.devicesList[$di.devId].os == 'icloud'}
                     <label>This is <b>iPhone (without jailbreak)</b> DEMO mode</label>
-                {/if}
+                {else}
+                    <label>This is <b>Android</b> and <b>iPhone (with jailbreak)</b> DEMO mode</label>
+            {/if}
             {/if}
         </div>
     </div>
@@ -38,12 +38,12 @@
         {if $di.config.demo}
         <ul class="box-header-info">
             {if !empty($di.devicesList)}
-                {if $di.devicesList[$di.devId].os == 'android'}
-                    <li><label class="color-gold">This is <b>Android</b> and <b>iPhone (with jailbreak)</b> DEMO mode</label></li>
-                    <li><a href="{$di.router->getRouteUrl('setDevice', ['devId'=>126])}" class="color-gray">Switch to <b>iPhone (without jailbreak)</b></a></li>
-                {else}
+                {if $di.devicesList[$di.devId].os == 'icloud'}
                     <li><label class="color-gold">This is <b>iPhone (without jailbreak)</b> DEMO mode</label></li>
                     <li><a href="{$di.router->getRouteUrl('setDevice', ['devId'=>125])}" class="color-gray">Switch to <b>Android</b> and <b>iPhone (with jailbreak)</b></a></li>
+                {else}
+                    <li><label class="color-gold">This is <b>Android</b> and <b>iPhone (with jailbreak)</b> DEMO mode</label></li>
+                    <li><a href="{$di.router->getRouteUrl('setDevice', ['devId'=>126])}" class="color-gray">Switch to <b>iPhone (without jailbreak)</b></a></li>
                 {/if}
             {/if}
         </ul>
