@@ -31,12 +31,11 @@ class Index extends BaseController
                                                 'instructions/uninstall-pumpic-android.html'])) {
                 $this->instructionUninstall();
             }
-            
-            if(in_array($this->params['uri'], ['instructions/activate-location-android.html', 
+
+            if(in_array($this->params['uri'], ['instructions/activate-location-android.html',
                                                 'instructions/activate-location-ios.html'])) {
-                $this->view->link = $this->di['router']->getRouteUrl('activate-location').'?activate=1';
-            } 
-            else if(in_array($this->params['uri'], ['instructions/keylogger-activation.html']) 
+                $this->view->link = $this->pagePrev();
+            } else if(in_array($this->params['uri'], ['instructions/keylogger-activation.html'])
                     and $this->getRequest()->hasGet('activate')) {
                 $this->view->link = $this->di['router']->getRouteUrl('activate-keylogger').'?activate=1';
             }
