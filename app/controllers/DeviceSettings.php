@@ -265,8 +265,11 @@ class DeviceSettings extends BaseModuleController
 
         $device = $this->di->get('currentDevice');
 
-        if ($device['processing']) {
-            $this->di->getFlashMessages()->add(FlashMessages::INFO, $this->di['t']->_('The first backup of the device was not finished. Please, back up the target device manualy.'));
+        if ($device['processing'] == 1) {
+            $this->di->getFlashMessages()->add(FlashMessages::INFO, $this->di['t']->_('Backup data is downloading and will be available shortly! Please, wait.'));
+            return;
+        } elseif ($device['processing'] == 2) {
+            $this->di->getFlashMessages()->add(FlashMessages::INFO, $this->di['t']->_('No backups found on the device. Please, back up the target device manually.'));
             return;
         }
 
