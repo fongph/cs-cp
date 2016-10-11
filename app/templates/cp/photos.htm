@@ -166,6 +166,7 @@
         });
     </script>
     {else}
+    <!--- IF NO PHOTOS AND PAID SUBSCRIPTION-->
     
         {if $di.currentDevice.os == 'icloud'
             && !is_null($di.deviceModules->getModuleParams($moduleId))
