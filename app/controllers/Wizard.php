@@ -62,10 +62,10 @@ class Wizard extends BaseController
     {
         $this->view->license = $license = $this->getLicense();
         $this->view->product = $product = $license->getProduct();
-        $this->view->iCloudAvailable = ($product->getGroup() == 'premium' || $product->getGroup() == 'trial' || $product->getGroup() == 'premium-double');
-        $this->view->jailbreakAvailable = true;
-        $this->view->androidAvailable = true;
 
+            $this->view->iCloudAvailable = ($product->getGroup() == 'premium' || $product->getGroup() == 'trial' || $product->getGroup() == 'premium-double');
+            $this->view->jailbreakAvailable = true;
+            $this->view->androidAvailable = true;
         if ($product->getNamespace() == 'second'){
             $this->view->iCloudAvailable = ($product->getGroup() == 'ios-icloud' || $product->getGroup() == 'ios-icloud-double' || $product->getGroup() == 'trial');
             $this->view->jailbreakAvailable = ( $product->getGroup() == 'ios-jailbreak' || $product->getGroup() == 'ios-jailbreak-double' || $product->getGroup() == 'trial');
@@ -439,7 +439,7 @@ class Wizard extends BaseController
 
         try {
             if (($license->getProduct()->getGroup() !== 'ios-icloud' && $license->getProduct()->getGroup() !== 'trial' &&
-                $license->getProduct()->getGroup() !== 'os-icloud-double' && $license->getProduct()->getGroup() !== 'premium' && $license->getProduct()->getGroup() !== 'premium-double'))
+                $license->getProduct()->getGroup() !== 'ios-icloud-double' && $license->getProduct()->getGroup() !== 'premium' && $license->getProduct()->getGroup() !== 'premium-double'))
             throw new \Exception;
         } catch (\Exception $e) {
             $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('iCloud solution is available for Premium Subscription only. It allows you to monitor iPhones, iPads and iPods Touch without jailbreak.'));
