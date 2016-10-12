@@ -178,28 +178,30 @@
             }      
                 
         {else}
-    <!-- IF OS_VERSION <9 FOR CURRENT DEVICE -->
-            {if $di.currentDevice.os_version < 9}
-    
                 {include "content/{$di.t->getLocale()}/noDataTitle.html"
                     moduleName = $di.t->_('Photos')
                 }
                 {if $di.currentDevice.os=='icloud'}
-                    {include "content/{$di.t->getLocale()}/noDataICloud.html"
-                    isModule = false
-                    moduleId = $moduleId
-                    moduleName = $di.t->_('Photos')
-                    }
+                    <!-- IF OS_VERSION <9 FOR CURRENT DEVICE -->
+                        {if $di.currentDevice.os_version < 9}
+                            {include "content/{$di.t->getLocale()}/noDataICloud.html"
+                            isModule = false
+                            moduleId = $moduleId
+                            moduleName = $di.t->_('Photos')
+                            }
+                        <!-- END OS_VERSION < 9 -->
+                        <!-- IF OS_VERSION >= 9 FOR CURRENT DEVICE -->
+                        {else}
+                                {include "content/{$di.t->getLocale()}/noDataICloudPostNineVersion.html"
+                                isModule = false
+                                moduleId = $moduleId
+                                moduleName = $di.t->_('Photos')
+                                }
+                        {/if}
+                        <!-- END OS_VERSION >= 9 -->
                 {else}
                     {include "content/{$di.t->getLocale()}/noData.html"}
                 {/if}
-            {/if}
-    <!-- END OS_VERSION < 9 -->
-    <!-- IF OS_VERSION >= 9 FOR CURRENT DEVICE -->
-                {if $di.currentDevice.os_version >= 9}
-                    {var_dump('NO DATA ICLOUD >= 9')}
-                {/if}
-    <!-- END OS_VERSION >= 9 -->
          {/if}   
     {/if}
 </div>
