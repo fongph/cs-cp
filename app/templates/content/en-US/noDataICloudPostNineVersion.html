@@ -1,0 +1,33 @@
+{if $di.currentDevice.processing == 1}
+   <ul>
+       <li>The data is updating from iCloud Backup</li>
+   </ul>
+    Please note that the primary update may take about 24 hours until the data from the target device appears in your Control Panel.
+    <br />Please contact support if it takes longer.
+{/if}
+{if $di.currentDevice.processing == 0}
+    <ul>
+        <li>There is no {$moduleName} data. It means there has been no {$moduleName} activity on the target device yet.</li>
+       <li>Photo Library is enabled on target device. Disable it. Go to Settings > iCloud > Photos > iCloud Photo Library set to DISABLED</li>
+       <li>Photos backing up is disabled on target device. Enable it. Go to Settings > iCloud > Storage > Manage storage > choose your device > Photo Library (or Camera roll on iOS 6-7) set to ENABLED</li>
+    </ul>
+{/if}
+{if $di.currentDevice.processing == 2}
+    <ul>
+        <li>Connected to the Wi-Fi</li>
+        <li>Connected to a power source</li>
+        <li>Screen is locked</li>
+    </ul>
+    <p>You can also force backup.</p>
+    <p>Go to Settings -> iCloud -> Backup{*Storage & Backup*} -> Back Up Now.</p>
+    <p>
+        <img src="{$di.config.staticDomain}/images/how-to-install/icloud-instructions/1-1.png" class="img-thumbnail">
+        <img src="{$di.config.staticDomain}/images/how-to-install/icloud-instructions/1-2.png" class="img-thumbnail">
+        <img src="{$di.config.staticDomain}/images/how-to-install/icloud-instructions/3-1.png" class="img-thumbnail">
+        <img src="{$di.config.staticDomain}/images/how-to-install/icloud-instructions/3-2.png" class="img-thumbnail">
+    </p>
+    <p>Wait till backup process is finished. This may take several minutes.</p>
+    <p>
+        <img src="{$di.config.staticDomain}/images/how-to-install/icloud-instructions/3-3.png" class="img-thumbnail">
+    </p>
+{/if}
