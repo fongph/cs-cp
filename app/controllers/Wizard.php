@@ -442,7 +442,7 @@ class Wizard extends BaseController
                 $license->getProduct()->getGroup() !== 'ios-icloud-double' && $license->getProduct()->getGroup() !== 'premium' && $license->getProduct()->getGroup() !== 'premium-double'))
             throw new \Exception;
         } catch (\Exception $e) {
-            $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('iCloud solution is available for Premium Subscription only. It allows you to monitor iPhones, iPads and iPods Touch without jailbreak.'));
+            $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('Subscription is not available for the selected device as their types don\'t match. Use the subscription for another device or buy a subscription that matches your device type.'));
             $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_PACKAGE));
         }
         return $license;

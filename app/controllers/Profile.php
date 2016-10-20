@@ -67,13 +67,17 @@ class Profile extends BaseController {
 
         $this->view->deviceRecord = $this->getDeviceRecord();
         if ($this->getRequest()->get('oldLicenseId')) {
-            $this->view->title = $this->di->getTranslator()->_('Upgrade Subscription');
+            $this->view->title = $this->di->getTranslator()->_('Re-Assign Subscription');
             $this->view->oldLicenseRecord = $this->getOldLicenseRecord();
         } else {
             $this->view->title = $this->di->getTranslator()->_('Assign Subscription');
             $this->view->oldLicenseRecord = false;
         }
-
+        $this->view->avilable = array(
+            'icloud' => array('premium','premium-double', 'trial', 'ios-icloud', 'ios-icloud-double'),
+            'ios' => array('premium','premium-double', 'basic','basic-double', 'trial', 'ios-jailbreak', 'ios-jailbreak-double'),
+            'android' => array('premium','premium-double', 'basic','basic-double', 'trial', 'android-basic', 'android-basic-double', 'android-premium', 'android-premium-double')
+        );
         $this->view->packages = $billingModel->getAvailablePackages($this->auth['id']);
         $this->setView('profile/assignSubscriptions.htm');
     }
@@ -86,7 +90,7 @@ class Profile extends BaseController {
         $this->view->deviceRecord = $this->getDeviceRecord();
         $this->view->licenseRecord = $this->getNewLicenseRecord();
         $this->view->oldLicenseRecord = $this->getOldLicenseRecord();
-        $this->view->title = $this->di->getTranslator()->_('Upgrade Subscription');
+        $this->view->title = $this->di->getTranslator()->_('Re-Assign Subscription');
         $this->setView('profile/confirmUpgrade.htm');
     }
 

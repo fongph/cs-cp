@@ -9,7 +9,10 @@
             <div class="button-holder">
                 {foreach $packages as $package}
                     <div class="row">
-                        {if $deviceRecord->getOs() === 'icloud' && $package.product_group !== 'premium' && $package.product_group !== 'premium-double' && $package.product_group !== 'trial'}
+                        {if ($deviceRecord->getOs() === 'icloud' && !in_array($package.product_group, $avilable.icloud))
+                        || ($deviceRecord->getOs() === 'ios' && !in_array($package.product_group, $avilable.ios))
+                        || ($deviceRecord->getOs() === 'android' && !in_array($package.product_group, $avilable.android))
+                        }
                             <button class="btn btn-primary button-relative" disabled>
                                 {$package.name}<span class="license-lifetime" data-time-format="ll" data-timestamp-value="{$package.expiration_date}"></span>
                                 <span class="asterisk asterisk-info button-asterisk">*</span>
@@ -31,7 +34,7 @@
             <div class="row">
                 <p class="text-info">
                     <span class="asterisk asterisk-info">*</span>
-                    iCloud is available for Premium Subscription only. It allows you to monitor iPhones, iPads and iPods Touch without jailbreak.
+                    Subscription is not available for the selected device as their types don't match. Use the subscription for another device or buy a subscription that matches your device type.
                 </p>
             </div>
             <script type="text/javascript">
