@@ -64,7 +64,7 @@
     }
     .cel-btn .btn {
         width: 100%;
-        max-width: 150px;
+        max-width: 155px;
     }
     .cel-icon {
         padding: 0;
@@ -149,7 +149,8 @@
                             <span class="hidden-xs"><nobr>{$di.t->_('Last Synchronization')}</nobr></span>
                             <span class="visible-xs">{$di.t->_('Last Sync')}</span>
                         </th>
-                        <th>&nbsp;</th>
+                        <th style="width: 185px;"><span class="hidden-xs"><nobr>{$di.t->_('Actions')}</nobr></span>
+                            <span class="visible-xs">{$di.t->_('Actions')}</span></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -218,9 +219,9 @@
                             {/if}
                             <td class="text-center cel-btn">
                                 {if $device.active}
-                                    <a title="{$di.t->_('Upgrade Subscription')}" href="{$di.router->getRouteUrl('profileAssignChoice')}?deviceId={$device.device_id}&oldLicenseId={$device.license_id}" class="btn btn-{if $device.active}primary{else}success{/if} btn-xs">
+                                    <a title="{$di.t->_('Re-Assign Subscription')}" href="{$di.router->getRouteUrl('profileAssignChoice')}?deviceId={$device.device_id}&oldLicenseId={$device.license_id}" class="btn btn-{if $device.active}primary{else}success{/if} btn-xs">
                                         <i class="fa fa-plug"></i>
-                                        {$di.t->_('Upgrade %sSubscription%s', ['<span class="hidden-1199">', '</span>'])}
+                                        {$di.t->_('Re-Assign %sSubscription%s', ['<span class="hidden-1199">', '</span>'])}
                                     </a>
                                 {else}
                                     <a title="{$di.t->_('Assign Subscription')}" href="{$di.router->getRouteUrl('profileAssignChoice')}?deviceId={$device.device_id}" class="btn btn-{if $device.active}primary{else}success{/if} btn-xs">

@@ -32,7 +32,6 @@ class Photos extends BaseModuleController
             $this->di['flashMessages']->add(FlashMessages::SUCCESS, $this->di['t']->_('The changes have been successfully updated!'));
             $this->redirect($this->di['router']->getRouteUrl('photos'));
         }
-
         if ($this->view->paid) {
             $settingsModel = new \Models\Cp\Settings($this->di);
             $this->view->network = $settingsModel->getNetwork($this->di['devId'], 'photos');
