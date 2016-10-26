@@ -14,6 +14,13 @@
     .logo {
         background: url(../img/pumpic/logo.png) no-repeat;
     }
+    .logo-demo {
+        width: 220px;
+        height: 44px;
+        background: url(../img/pumpic/logo-demo.png) no-repeat;
+        -webkit-background-size: contain;
+        background-size: contain;
+    }
     
     .logo-holder {
         padding-top: 10px;
@@ -48,5 +55,11 @@
         a:hover {
             background-color: #14988f;
         }
+    }
+}
+@media all and (max-width: 360px) {
+    #header .logo-demo {
+        width: 195px;
+        background: url(../img/pumpic/logo-demo_sm.png) 0 2px no-repeat;
     }
 }

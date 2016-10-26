@@ -1,15 +1,15 @@
 {if $di.config.demo}
 <div id="header-info" class="only-mobile">
     <div class="container">
-        <div class="box-info">
-            {if !empty($di.devicesList)}
-                {if $di.devicesList[$di.devId].os == 'icloud'}
-                    <label>This is <b>iPhone (without jailbreak)</b> DEMO mode</label>
-                {else}
-                    <label>This is <b>Android</b> and <b>iPhone (with jailbreak)</b> DEMO mode</label>
-            {/if}
-            {/if}
-        </div>
+        <!--<div class="box-info">-->
+            <!--{if !empty($di.devicesList)}-->
+                <!--{if $di.devicesList[$di.devId].os == 'icloud'}-->
+                    <!--<label>This is <b>iPhone (without jailbreak)</b> DEMO mode</label>-->
+                <!--{else}-->
+                    <!--<label>This is <b>Android</b> and <b>iPhone (with jailbreak)</b> DEMO mode</label>-->
+            <!--{/if}-->
+            <!--{/if}-->
+        <!--</div>-->
     </div>
 </div>
 {/if}
@@ -23,7 +23,7 @@
 
         <div class="logo-holder">
             {if $di.config.demo}
-                <a href="{if !goBack()}{$di.config.domain}{else}{goBack()}{/if}" class="logo"></a>
+                <a href="{if !goBack()}{$di.config.domain}{else}{goBack()}{/if}" class="logo logo-demo"></a>
             {else}
             <a href="{$di.config.domain}" class="logo"></a>
             {/if}

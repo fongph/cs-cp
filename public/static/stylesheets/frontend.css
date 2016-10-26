@@ -7994,6 +7994,13 @@ body {
   width: 172px;
   height: 44px;
   background: url(../img/logo.png) no-repeat;
+  -webkit-background-size: contain;
+  background-size: contain;
+}
+#header .logo-demo {
+  width: 220px;
+  height: 44px;
+  background: url(../img/logo-demo.png) no-repeat;
 }
 #header .toggle-left,
 #header .toggle-right {
@@ -8181,6 +8188,11 @@ body {
     background: transparent;
     border: 0px;
     border-top: 1px solid #e7e7e7;
+  }
+}
+@media (max-width: 360px) {
+  #header .logo-demo {
+    width: 195px;
   }
 }
 /* Theme */
@@ -9003,6 +9015,13 @@ a.list-group-item-danger.active:focus {
 #header .logo {
   background: url(../img/pumpic/logo.png) no-repeat;
 }
+#header .logo-demo {
+  width: 220px;
+  height: 44px;
+  background: url(../img/pumpic/logo-demo.png) no-repeat;
+  -webkit-background-size: contain;
+  background-size: contain;
+}
 #header .logo-holder {
   padding-top: 10px;
 }
@@ -9032,6 +9051,12 @@ a.list-group-item-danger.active:focus {
   }
   #header .menu ul.nav > li#free-trial-menu-link a:hover {
     background-color: #14988f;
+  }
+}
+@media all and (max-width: 360px) {
+  #header .logo-demo {
+    width: 195px;
+    background: url(../img/pumpic/logo-demo_sm.png) 0 2px no-repeat;
   }
 }
 /*# sourceMappingURL=/static/stylesheets/css.map */

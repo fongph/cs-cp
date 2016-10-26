@@ -29,8 +29,14 @@ html, body {
         width: 172px;
         height: 44px;
         background: url(../img/logo.png) no-repeat;
+        -webkit-background-size: contain;
+        background-size: contain;
     }
-
+    .logo-demo {
+        width: 220px;
+        height: 44px;
+        background: url(../img/logo-demo.png) no-repeat;
+    }
     .toggle-left, .toggle-right {
         display: none;
     }
@@ -253,5 +259,10 @@ html, body {
         background: transparent;
         border: 0px;
         border-top: 1px solid #e7e7e7;
+    }
+}
+@media (max-width: 360px) {
+    #header .logo-demo {
+        width: 195px;
     }
 }
