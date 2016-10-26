@@ -139,21 +139,28 @@
         <ul>
             {if $di.devicesList[$di.devId].os == 'icloud'}
                 <li><i class="fa fa-cloud"></i> (6.0 - 10.0.2)</li>
-            {else}
+            {elseif $di.devicesList[$di.devId].os == 'android'}
                 <li><i class="fa fa-android"></i> (2.2 - 6.0.1)</li>
-                <li><i class="fa fa-apple"></i> (6.0 - 9.1)</li>
+            {elseif $di.devicesList[$di.devId].os == 'ios'}
+            <li><i class="fa fa-apple"></i> (6.0 - 9.1)</li>
             {/if}
         </ul>
     </div>
     <div class="banner-arrow"></div>
     <div class="button-holder">
-        <a href="{$di.config.url.registration}" class="btn banner-btn" id="demo-banner-button">Buy Now</a>
+        {if $di.devicesList[$di.devId].os == 'icloud'}
+        <a href="http://pumpic.com/store.html" class="btn banner-btn" id="demo-banner-button">Buy Now</a>
+        {elseif $di.devicesList[$di.devId].os == 'android'}
+        <a href="http://pumpic.com/store.html#android" class="btn banner-btn" id="demo-banner-button">Buy Now</a>
+        {elseif $di.devicesList[$di.devId].os == 'ios'}
+        <a href="http://pumpic.com/store.html#jailbreak" class="btn banner-btn" id="demo-banner-button">Buy Now</a>
+        {/if}
     </div>
 </div>
 <script type="text/javascript">
     $(document).ready(function(){
         $('.demo-banner').on('click', function() {
-           window.location = '{$di.config.url.registration}';
+           window.location = $('#demo-banner-button').attr(href);
            return false;
         });
         $('#demo-banner-button').on('click', function() {

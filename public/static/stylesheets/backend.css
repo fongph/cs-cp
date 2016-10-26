@@ -8457,6 +8457,85 @@ body > .cp-menu {
     margin: 0 10px 0 0;
   }
 }
+.filter_fe {
+  max-width: 525px;
+  width: 100%;
+  margin-top: 7px;
+  float: right;
+}
+.filter_list {
+  padding: 0;
+  width: 100%;
+  text-align: center;
+  margin: 0 auto;
+  font-size: 0;
+  border-radius: 4px;
+  overflow: hidden;
+}
+.filter_list li {
+  display: inline-block;
+  width: 33.333%;
+}
+.filter_list li:not(:last-child) {
+  border-right: 1px solid #474956;
+}
+.filter_item {
+  font-size: 14px;
+  text-align: center;
+  display: block;
+  width: 100%;
+  padding: 15px 0;
+  color: #c4c7da;
+  background-color: #60626F;
+  -webkit-transition: all 0.15s ease-in;
+  -moz-transition: all 0.15s ease-in;
+  -ms-transition: all 0.15s ease-in;
+  -o-transition: all 0.15s ease-in;
+  transition: all 0.15s ease-in;
+}
+.filter_item:hover {
+  background-color: #4c505c;
+  color: #f5ac43;
+  box-shadow: inset 1px 2px 10px rgba(0, 0, 0, 0.2);
+}
+.filter_item:active {
+  color: #f5ac43!important;
+}
+.filter_item:focus {
+  color: #f5ac43!important;
+}
+.filter-active {
+  background-color: #3d3f4a!important;
+  color: #f5ac43;
+  box-shadow: inset 1px 2px 10px rgba(0, 0, 0, 0.1);
+}
+.filter_icon {
+  font-size: 18px;
+  margin-right: 4px;
+}
+.filter_version {
+  font-size: 12px;
+}
+@media (max-width: 768px) {
+  .filter_fe {
+    max-width: 100%;
+    margin-top: 0;
+    float: none;
+    padding-bottom: 12px;
+  }
+}
+@media (max-width: 360px) {
+  .filter_fe {
+    max-width: 100%;
+    margin-top: 12px;
+  }
+  .filter_item {
+    padding: 6px 0;
+  }
+  .filter_icon {
+    display: block;
+  }
+}
 .dialog-messages-list {
   border: 1px solid #e1e1e8;
   background-color: #f7f7f9;
