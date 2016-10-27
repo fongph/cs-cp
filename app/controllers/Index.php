@@ -92,6 +92,14 @@ class Index extends BaseController
         if ($this->di->getAuth()->hasIdentity()) {
             $this->loginRedirect();
         }
+        //if user received email "unfinishedPurchaseNotification", that his buying not completed, but it not true
+        if ($this->getRequest()->get('alreadycompletedpurchase')){
+            $completedPurchaseUserEmail = $this->getRequest()->get('alreadycompletedpurchase');
+            if (filter_var($completedPurchaseUserEmail, FILTER_VALIDATE_EMAIL)) {
+                $users = new Users($this->di);
+                $users->addAlreadyCompletedPurchase($completedPurchaseUserEmail);
+            }
+        }
 
         if ($this->getRequest()->isPost()) {
             $email = $this->getRequest()->post('email', '');

@@ -227,6 +227,16 @@ class Users extends Model {
                 content = {$message}");
     }
 
+    public function addAlreadyCompletedPurchase($email)
+    {
+        $email = $this->getDb()->quote($email);
+
+        return $this->getDb()->exec("
+            INSERT IGNORE INTO users_with_unfinished_purchase
+            SET email = {$email},
+              reason = 'already-completed-purchase';");
+    }
+
     public function setAuthCookie()
     {
         setcookie('s', 1, time() + 3600 * 6, '/', $this->di['config']['cookieDomain']);
