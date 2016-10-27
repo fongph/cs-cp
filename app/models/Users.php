@@ -232,9 +232,26 @@ class Users extends Model {
         $email = $this->getDb()->quote($email);
 
         return $this->getDb()->exec("
-            INSERT IGNORE INTO users_with_unfinished_purchase
+            INSERT INTO users_with_unfinished_purchase
             SET email = {$email},
               reason = 'already-completed-purchase';");
+    }
+    public function updateAlreadyCompletedPurchase($email)
+    {
+        $email = $this->getDb()->quote($email);
+
+        return $this->getDb()->exec("
+            UPDATE users_with_unfinished_purchase
+            SET reason = 'already-completed-purchase'
+            WHERE email = {$email};");
+    }
+    public function alreadyCompletedPurchaseUserExist($email)
+    {
+        $email = $this->getDb()->quote($email);
+        
+        return $this->getDb()->query("
+           SELECT `reason` FROM users_with_unfinished_purchase
+            WHERE `email` = {$email}")->fetchAll(\PDO::FETCH_COLUMN);
     }
 
     public function setAuthCookie()

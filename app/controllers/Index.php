@@ -97,7 +97,12 @@ class Index extends BaseController
             $completedPurchaseUserEmail = $this->getRequest()->get('alreadycompletedpurchase');
             if (filter_var($completedPurchaseUserEmail, FILTER_VALIDATE_EMAIL)) {
                 $users = new Users($this->di);
-                $users->addAlreadyCompletedPurchase($completedPurchaseUserEmail);
+                if ($users->alreadyCompletedPurchaseUserExist($completedPurchaseUserEmail)){
+                    $users->updateAlreadyCompletedPurchase($completedPurchaseUserEmail);
+                } else {
+                    $users->addAlreadyCompletedPurchase($completedPurchaseUserEmail);
+                }
+           
             }
         }
 
