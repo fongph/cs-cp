@@ -18,7 +18,10 @@
     {insert "inc.cp.messages.htm"}
 
     {if $application.standard}
-    <p class="bg-warning" style="padding: 10px;">{$di.t->_('Be careful with changing settings for the applications below. This list might contain system apps, blocking of which may result in difficulties with using the target device.')}</p>
+    <div class="alert alert-warning" role="alert">
+        <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+        <p style="color:#303030;">{$di.t->_('Be careful with changing settings for the applications below. This list might contain system apps, blocking of which may result in difficulties with using the target device.')}</p>
+    </div>
     {/if}
     
     <a class="btn btn-default" href="{$di.config.domain}/cp/applications">{$di.t->_('Back to Applications list')}</a>

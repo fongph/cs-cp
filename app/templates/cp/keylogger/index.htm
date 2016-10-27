@@ -8,11 +8,13 @@
     {if isset($serviceKeylogger) && !$serviceKeylogger && $hasRecords && $di.currentDevice.os != 'ios'}
         
     {insert "inc.cp.messages.htm"}
-    
-        <p class="bg-warning" style="padding: 10px;">
-            Keylogger is currently disabled. 
-            If you want to view updated information, you need to <a href="{$di.router->getRouteUrl('content', ['uri' => 'instructions/keylogger-activation.html?activate=1'])}">activate Keylogger</a>.
-        </p>
+
+    <div class="alert alert-warning" role="alert">
+        <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+        <p style="color:#303030;">Keylogger is currently disabled.
+    If you want to view updated information, you need to <a href="{$di.router->getRouteUrl('content', ['uri' => 'instructions/keylogger-activation.html?activate=1'])}" style="color: #16a89e;font-weight: normal;">activate Keylogger</a>.</p>
+    </div>
+
         
     {/if}
     

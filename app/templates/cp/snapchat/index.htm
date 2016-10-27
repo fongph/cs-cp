@@ -19,8 +19,10 @@
     {elseif count($accounts)}
 
     {if $di.currentDevice.os=='android' && (!$di.currentDevice.rooted || !$di.currentDevice.rootAccess)}
-    <div class="bg-warning" style="padding: 10px 10px 1px;">
-        {insert "cp/snapchat/inc.androidMessages.htm"}
+
+    <div class="alert alert-warning" role="alert">
+        <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+        <p class="text-left" style="color:#303030;">{insert "cp/snapchat/inc.androidMessages.htm"}</p>
     </div>
     {/if}
 

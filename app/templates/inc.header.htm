@@ -1,15 +1,15 @@
 {if $di.config.demo}
 <div id="header-info" class="only-mobile">
     <div class="container">
-        <div class="box-info">
-            {if !empty($di.devicesList)}
-                {if $di.devicesList[$di.devId].os == 'icloud'}
-                    <label>This is <b>iPhone (without jailbreak)</b> DEMO mode</label>
-                {else}
-                    <label>This is <b>Android</b> and <b>iPhone (with jailbreak)</b> DEMO mode</label>
-            {/if}
-            {/if}
-        </div>
+        <!--<div class="box-info">-->
+            <!--{if !empty($di.devicesList)}-->
+                <!--{if $di.devicesList[$di.devId].os == 'icloud'}-->
+                    <!--<label>This is <b>iPhone (without jailbreak)</b> DEMO mode</label>-->
+                <!--{else}-->
+                    <!--<label>This is <b>Android</b> and <b>iPhone (with jailbreak)</b> DEMO mode</label>-->
+            <!--{/if}-->
+            <!--{/if}-->
+        <!--</div>-->
     </div>
 </div>
 {/if}
@@ -20,9 +20,10 @@
             {insert 'inc.monitoring.app.links.htm'}
         </div>
         {/if}
+
         <div class="logo-holder">
             {if $di.config.demo}
-                <a href="{if !goBack()}{$di.config.domain}{else}{goBack()}{/if}" class="logo"></a>
+                <a href="{if !goBack()}{$di.config.domain}{else}{goBack()}{/if}" class="logo logo-demo"></a>
             {else}
             <a href="{$di.config.domain}" class="logo"></a>
             {/if}
@@ -34,21 +35,6 @@
             </button>
         </div>
         {/if}
-        
-        {if $di.config.demo}
-        <ul class="box-header-info">
-            {if !empty($di.devicesList)}
-                {if $di.devicesList[$di.devId].os == 'icloud'}
-                    <li><label class="color-gold">This is <b>iPhone (without jailbreak)</b> DEMO mode</label></li>
-                    <li><a href="{$di.router->getRouteUrl('setDevice', ['devId'=>125])}" class="color-gray">Switch to <b>Android</b> and <b>iPhone (with jailbreak)</b></a></li>
-                {else}
-                    <li><label class="color-gold">This is <b>Android</b> and <b>iPhone (with jailbreak)</b> DEMO mode</label></li>
-                    <li><a href="{$di.router->getRouteUrl('setDevice', ['devId'=>126])}" class="color-gray">Switch to <b>iPhone (without jailbreak)</b></a></li>
-                {/if}
-            {/if}
-        </ul>
-        {/if}
-        
         <div class="toggle-right">
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
                 <span class="sr-only">{$di.t->_('Toggle navigation')}</span>
@@ -57,6 +43,29 @@
                 <span class="icon-bar"></span>
             </button>
         </div>
+
+        {if $di.config.demo}
+        <div class="filter_fe">
+            {if !empty($di.devicesList)}
+            <ul class="filter_list">
+                {if $di.devicesList[$di.devId].os == 'icloud'}
+                <li class="filter_item filter-active"><i class="fa fa-apple filter_icon"></i></i><b>iOS</b><span class="filter_version"> (iCloud)</span></li>
+                <li><a href="{$di.router->getRouteUrl('setDevice', ['devId'=>125])}" class="filter_item"><i class="fa fa-android filter_icon"></i><b>Android</b></a></li>
+                <li><a href="{$di.router->getRouteUrl('setDevice', ['devId'=>5059])}" class="filter_item"><i class="fa fa-apple filter_icon"></i></i><b>iOS</b><span class="filter_version"> (jailbreak)</span></a></li>
+                {elseif $di.devicesList[$di.devId].os == 'android'}
+                <li><a href="{$di.router->getRouteUrl('setDevice', ['devId'=>126])}" class="filter_item"><i class="fa fa-apple filter_icon"></i></i><b>iOS</b><span class="filter_version"> (iCloud)</span></a></li>
+                <li class="filter_item filter-active"><i class="fa fa-android filter_icon"></i><b>Android</b></li>
+                <li><a href="{$di.router->getRouteUrl('setDevice', ['devId'=>5059])}" class="filter_item"><i class="fa fa-apple filter_icon"></i></i><b>iOS</b><span class="filter_version"> (jailbreak)</span></a></li>
+                {elseif $di.devicesList[$di.devId].os == 'ios'}
+                <li><a href="{$di.router->getRouteUrl('setDevice', ['devId'=>126])}" class="filter_item"><i class="fa fa-apple filter_icon"></i></i><b>iOS</b><span class="filter_version"> (iCloud)</span></a></li>
+                <li><a href="{$di.router->getRouteUrl('setDevice', ['devId'=>125])}" class="filter_item"><i class="fa fa-android filter_icon"></i><b>Android</b></a></li>
+                <li class="filter_item filter-active"><i class="fa fa-apple filter_icon"></i></i><b>iOS</b><span class="filter_version"> (jailbreak)</span></li>
+                {/if}
+            </ul>
+            {/if}
+        </div>
+        {/if}
+
     </div>
 
     <div class="menu">
