@@ -33,13 +33,14 @@
             <thead>
                 <tr role="row">
                     <th>{$di.t->_('Plan')}</th>
-                    <th>{$di.t->_('First Period Price')}</th>
-                    <th>{$di.t->_('Regular Period Price')}</th>
+                    <!--<th>{$di.t->_('First Period Price')}</th>-->
+                    <!--<th>{$di.t->_('Regular Period Price')}</th>-->
                     <th>{$di.t->_('Date of purchase')}</th>
                     <th>{$di.t->_('Expiration date')}</th>
                     <th>{$di.t->_('Status')}</th>
                     <th>{$di.t->_('Device name')}</th>
                     <th>{$di.t->_('Limits')}</th>
+                    <th>{$di.t->_('Upgrade')}</th>
                 </tr>
             </thead>
         </table>
@@ -212,20 +213,6 @@
                                 }
                             },
                             {
-                                mData: 'amount',
-                                mRender: function(value) {
-                                    var data = arguments[2];
-                                    return value + ' ' + data.currency;
-                                }
-                            },
-                            {
-                                mData: 'price_regular',
-                                mRender: function(value) {
-                                    var data = arguments[2];
-                                    return value + ' ' + data.currency;
-                                }
-                            },
-                            {
                                 mData: 'activation_date',
                                 mRender: function(value) {
                                     if (value == 0) {
@@ -285,7 +272,32 @@
                                         sms: billing.getSmsValue(data.sms, data.deviceId, data.sms_expire_date)
                                     });
                                 }
-                            }
+                            },
+                            {
+                                mData: 'product_version',
+                                mRender: function(value) {
+                                    var data = arguments[2];
+                                    var text = '';
+                                    var link = '';
+                                    switch (value){
+                                        case 'basic' :
+                                            text = 'Upgrade to Premium';
+                                            link = 'upgrade-to-premium';
+                                            break;
+                                        case 'premium-1m' :
+                                            text = 'Upgrade to Yearly Plan';
+                                            link = 'upgrade-to-yearly-plan';
+                                            break;
+                                        default:
+                                            return '';
+                                    }
+                                    return '<a title="'+ text +'" href="subscriptions/'+ link +'/'+data.id+'" class="btn btn-primary btn-xs">'+
+                                        '<i class="fa fa-arrow-up"></i> '+
+                                        text +
+                                    '</a>'
+
+                                }
+                            },
                         ],
                         fnDrawCallback: function () {
                             billing.table = table;

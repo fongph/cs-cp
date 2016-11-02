@@ -40,7 +40,6 @@ class Billing extends BaseController
             $this->view->title = $this->di->getTranslator()->_('Subscriptions');
         } else
             $this->view->title = $this->di->getTranslator()->_('Payments & Devices');
-
         $this->view->unlimitedValue = \CS\Models\Limitation\LimitationRecord::UNLIMITED_VALUE;
         $this->view->buyUrl = GlobalSettings::getMainURL($this->di['config']['site']) . '/buy.html';
         $this->view->hasActivePackages = $billingModel->hasActivePackages($this->auth['id']);
@@ -428,5 +427,19 @@ class Billing extends BaseController
 
         $this->redirect($this->di->getRouter()->getRouteUrl('billingLicense', array('id' => $licenseId)));
     }
+
+    public function licenseUpgradePremium()
+    {
+        $billingModel = new \Models\Billing($this->di);
+        $license = $billingModel->getUserLicenseInfo($this->auth['id'], $this->params['id']);
+
+    }
+    public function licenseUpgradeYearly()
+    {
+        $billingModel = new \Models\Billing($this->di);
+        $license = $billingModel->getUserLicenseInfo($this->auth['id'], $this->params['id']);
+
+    }
+
 
 }

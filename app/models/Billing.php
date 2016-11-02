@@ -77,7 +77,12 @@ class Billing extends \System\Model
                         WHEN p.`group` LIKE '%jailbreak%' THEN 'ios'
                           WHEN p.`group` LIKE '%android%' THEN 'android'
                           ELSE 'no' 
-                        END AS 'platform'";
+                        END AS 'platform',
+                        p.code_fastspring,
+				        CASE WHEN p.`code_fastspring` LIKE 'pumpic-basic-%m-%' THEN 'basic'
+                       WHEN p.`code_fastspring` LIKE '%pumpic-%-1m-%' THEN 'premium-1m'
+                       ELSE '-' 
+                     END AS 'product_version'";
 
         $fromWhere = "FROM `licenses` lic
                             INNER JOIN `products` p ON lic.`product_id` = p.`id`
@@ -95,7 +100,7 @@ class Billing extends \System\Model
         }
 
         $query = "{$select} {$fromWhere}" . " LIMIT {$params['start']}, {$params['length']}";
-
+//        echo $query;
         $result = array(
             'aaData' => $this->getDb()->query($query)->fetchAll(\PDO::FETCH_ASSOC)
         );
