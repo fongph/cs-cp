@@ -138,11 +138,11 @@
         <span>Smartphone Monitoring App</span>
         <ul>
             {if $di.devicesList[$di.devId].os == 'icloud'}
-                <li><i class="fa fa-cloud"></i> (6.0 - 10.0.2)</li>
+                <li><i class="fa fa-apple"></i> <b>iOS</b> 6.0 - 10.0.2 (iCloud)</li>
             {elseif $di.devicesList[$di.devId].os == 'android'}
-                <li><i class="fa fa-android"></i> (2.2 - 6.0.1)</li>
+                <li><i class="fa fa-android"></i> <b>Android</b> 2.2 - 6.0.1</li>
             {elseif $di.devicesList[$di.devId].os == 'ios'}
-            <li><i class="fa fa-apple"></i> (6.0 - 9.1)</li>
+            <li><i class="fa fa-unlock-alt"></i> <b>iOS</b> 6.0 - 9.1 (jailbreak)</li>
             {/if}
         </ul>
     </div>
