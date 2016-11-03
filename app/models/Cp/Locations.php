@@ -305,7 +305,7 @@ class Locations extends BaseModel
             $data = array(
                 'success' => false,
                 'message' => $this->di['t']->_('iCloud Authorization Error. Please %1$schange the password%2$s and try again.', array(
-                    '<a href="/profile/iCloudPassword?deviceId=' . $this->di['devId'] . '">',
+                    '<a href="/profile/iCloudPassword/' . $this->di['devId'] . '">',
                     '</a>'
                 ))
             );
