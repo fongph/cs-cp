@@ -8192,7 +8192,7 @@ body {
 }
 @media (max-width: 360px) {
   #header .logo-demo {
-    width: 195px;
+    width: 191px;
   }
 }
 /* Components */
@@ -12591,7 +12591,7 @@ a.list-group-item-danger.active:focus {
 }
 @media all and (max-width: 360px) {
   #header .logo-demo {
-    width: 195px;
+    width: 191px;
   }
 }
 .cp-menu li i {
