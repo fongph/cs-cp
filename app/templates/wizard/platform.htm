@@ -7,26 +7,26 @@
         <p>{$di.t->_('Please select the Platform (Operating System) of the target device.')}</p>
         <div class="button-holder">
             <div class="row" style="margin-bottom: 0;">
-                <a href="{$di.router->getRouteUrl('wizardSetup', [
+                <a {if !$iCloudAvailable} href="javaScript:void(0);" {else}  href="{$di.router->getRouteUrl('wizardSetup', [
                     'platform' => 'icloud',
-                    ])}" class="btn icloud-button btn-primary button-relative {if !$iCloudAvailable}disabled{/if}">
+                    ])}" {/if} class="btn icloud-button btn-primary button-relative {if !$iCloudAvailable}disabled{/if}">
                     <b>iCloud</b>
                     {if !$iCloudAvailable}<span class="asterisk asterisk-info button-asterisk">*</span>{/if}<br>
                 </a>
             </div>
             <span style="font-size: 11px;">no jailbreak of the target iOS device is required</span>
             <div class="row" style="margin-bottom: 0;">
-                <a href="{$di.router->getRouteUrl('wizardSetup', [
+                <a {if !$jailbreakAvailable} href="javaScript:void(0);" {else} href="{$di.router->getRouteUrl('wizardSetup', [
                 'platform' => 'ios',
-                ])}" class="btn btn-primary {if !$jailbreakAvailable}disabled{/if}"><b>iOS</b>
+                ])}"{/if} class="btn btn-primary {if !$jailbreakAvailable}disabled{/if}"><b>iOS</b>
                     {if !$jailbreakAvailable}<span style="position: relative;left: 165px;" class="asterisk-info">*</span>{/if}<br>
                 </a>
             </div>
             <span style="font-size: 11px;">target iOS device must be jailbroken</span>
             <div class="row" style="margin-bottom: 0;">
-                <a href="{$di.router->getRouteUrl('wizardSetup', [
+                <a {if !$androidAvailable} href="javaScript:void(0);"  {else}  href="{$di.router->getRouteUrl('wizardSetup', [
                 'platform' => 'android',
-                ])}" class="btn btn-primary {if !$androidAvailable}disabled{/if}"><b>Android</b>
+                ])}" {/if} class="btn btn-primary {if !$androidAvailable}disabled{/if}"><b>Android</b>
                     {if !$androidAvailable}<span style="position: relative;left: 150px;" class="asterisk-info">*</span>{/if}<br>
                 </a>
             </div>

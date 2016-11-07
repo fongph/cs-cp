@@ -62,27 +62,32 @@ class Wizard extends BaseController
     {
         $this->view->license = $license = $this->getLicense();
         $this->view->product = $product = $license->getProduct();
-
+        if ($product->getNamespace() == 'first' || $product->getNamespace()== 'control-admin-creation') {
             $this->view->iCloudAvailable = ($product->getGroup() == 'premium' || $product->getGroup() == 'trial' || $product->getGroup() == 'premium-double');
             $this->view->jailbreakAvailable = true;
             $this->view->androidAvailable = true;
-        if ($product->getNamespace() == 'second'){
+        } elseif ($product->getNamespace() == 'second' || $product->getNamespace()== 'control-admin-creation'){
             $this->view->iCloudAvailable = ($product->getGroup() == 'ios-icloud' || $product->getGroup() == 'ios-icloud-double' || $product->getGroup() == 'trial');
             $this->view->jailbreakAvailable = ( $product->getGroup() == 'ios-jailbreak' || $product->getGroup() == 'ios-jailbreak-double' || $product->getGroup() == 'trial');
             $this->view->androidAvailable = ($product->getGroup() == 'android-basic' || $product->getGroup() == 'android-basic-double' || $product->getGroup() == 'android-premium'|| $product->getGroup() == 'android-premium-double' || $product->getGroup() == 'trial');
 
         }
+
          $this->view->title = $this->di->getTranslator()->_('Select a Platform');
         $this->setView('wizard/platform.htm');
     }
 
     public function setupAction()
     {
-        if ($this->getPlatform() !== 'icloud')
-            $license = $this->getLicense();
-        else
+        if ($this->getPlatform() == 'icloud') {
             $license = $this->getICloudLicense();
-
+        } elseif ($this->getPlatform() == 'ios'){
+            $license = $this->getIosLicense();
+        } elseif ($this->getPlatform() == 'android'){
+            $license = $this->getAndroidLicense();
+        } else {
+            $license = $this->getLicense();
+        }
         $deviceModel = new Devices($this->di);
         $devices = $deviceModel->getUserDevices($this->auth['id'], $this->getPlatform(), false);
 
@@ -143,6 +148,14 @@ class Wizard extends BaseController
 
     public function registerAppAction()
     {
+        if ($this->getPlatform() == 'ios'){
+            $licenseRecord = $this->getIosLicense();
+        } elseif ($this->getPlatform() == 'android'){
+            $licenseRecord = $this->getAndroidLicense();
+        } else {
+            $licenseRecord = $this->getLicense();
+        }
+
         if (isset($_POST['code'])) {
 
             $deviceCode = new DeviceCode($this->di->get('db'));
@@ -421,7 +434,7 @@ class Wizard extends BaseController
         static $platform;
         if (is_null($platform)) {
             $platform = $this->getParam('platform');
-            if (!in_array($platform, array('android', 'ios', 'icloud'))) {
+            if (!in_array($platform, array('android', 'ios', 'icloud')) ) {
                 if ($platform != 'no'){
                     $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('Invalid Platform'));
                 }
@@ -440,6 +453,34 @@ class Wizard extends BaseController
         try {
             if (($license->getProduct()->getGroup() !== 'ios-icloud' && $license->getProduct()->getGroup() !== 'trial' &&
                 $license->getProduct()->getGroup() !== 'ios-icloud-double' && $license->getProduct()->getGroup() !== 'premium' && $license->getProduct()->getGroup() !== 'premium-double'))
+            throw new \Exception;
+        } catch (\Exception $e) {
+            $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('Subscription is not available for the selected device as their types don\'t match. Use the subscription for another device or buy a subscription that matches your device type.'));
+            $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_PACKAGE));
+        }
+        return $license;
+    }
+    protected function getIosLicense($mastBeAvailable = true)
+    {
+        $license = $this->getLicense($mastBeAvailable);
+
+        try {
+            if (($license->getProduct()->getGroup() !== 'ios-jailbreak' && $license->getProduct()->getGroup() !== 'trial' &&
+                $license->getProduct()->getGroup() !== 'ios-jailbreak-double' && $license->getProduct()->getGroup() !== 'premium' && $license->getProduct()->getGroup() !== 'premium-double' && $license->getProduct()->getGroup() !== 'basic' && $license->getProduct()->getGroup() !== 'basic-double'))
+            throw new \Exception;
+        } catch (\Exception $e) {
+            $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('Subscription is not available for the selected device as their types don\'t match. Use the subscription for another device or buy a subscription that matches your device type.'));
+            $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_PACKAGE));
+        }
+        return $license;
+    }
+    protected function getAndroidLicense($mastBeAvailable = true)
+    {
+        $license = $this->getLicense($mastBeAvailable);
+
+        try {
+            if (($license->getProduct()->getGroup() !== 'android-basic' && $license->getProduct()->getGroup() !== 'android-premium' && $license->getProduct()->getGroup() !== 'trial' &&
+                $license->getProduct()->getGroup() !== 'android-basic-double' && $license->getProduct()->getGroup() !== 'android-premium-double' && $license->getProduct()->getGroup() !== 'premium' && $license->getProduct()->getGroup() !== 'premium-double' && $license->getProduct()->getGroup() !== 'basic' && $license->getProduct()->getGroup() !== 'basic-double'))
             throw new \Exception;
         } catch (\Exception $e) {
             $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('Subscription is not available for the selected device as their types don\'t match. Use the subscription for another device or buy a subscription that matches your device type.'));
@@ -480,6 +521,19 @@ class Wizard extends BaseController
         else
             return null;
     }
+//
+//    public function checkPlatformAssignSubscription($platform, $licenseGroup)
+//    {
+//        if (($platform == 'icloud' && $licenseGroup == 'ios-icloud') ||
+//            ($platform == 'ios' && $licenseGroup == 'ios-jailbreak') ||
+//            ($platform == 'android' && ($licenseGroup == 'android-basic'|| $licenseGroup == 'android-premium')) ||
+//            ($platform == 'no' && ($licenseGroup == 'basic'|| $licenseGroup == 'premium'))){
+//            return true;
+//        }
+//
+//        return false;
+//
+//    }
 
 }
 
