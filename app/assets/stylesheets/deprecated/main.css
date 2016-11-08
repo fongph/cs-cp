@@ -46,7 +46,11 @@
     height: 45px;
     overflow: hidden;
 }
-
+.fa.fa-apple.green,
+.fa.fa-android.green,
+.fa.fa-unlock-alt.green {
+    color:#16a89e!important;
+}
 .device-status .name {
     display: block;
     float: left;
