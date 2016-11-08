@@ -62,15 +62,15 @@ class Wizard extends BaseController
     {
         $this->view->license = $license = $this->getLicense();
         $this->view->product = $product = $license->getProduct();
-        if ($product->getNamespace() == 'first' || $product->getNamespace()== 'control-admin-creation') {
-            $this->view->iCloudAvailable = ($product->getGroup() == 'premium' || $product->getGroup() == 'trial' || $product->getGroup() == 'premium-double');
-            $this->view->jailbreakAvailable = true;
-            $this->view->androidAvailable = true;
-        } elseif ($product->getNamespace() == 'second' || $product->getNamespace()== 'control-admin-creation'){
+
+        if ($product->getNamespace() == 'second'|| ($product->getNamespace()== 'control-admin-creation' && $product->getGroup() != 'premium' && $product->getGroup() != 'basic')){
             $this->view->iCloudAvailable = ($product->getGroup() == 'ios-icloud' || $product->getGroup() == 'ios-icloud-double' || $product->getGroup() == 'trial');
             $this->view->jailbreakAvailable = ( $product->getGroup() == 'ios-jailbreak' || $product->getGroup() == 'ios-jailbreak-double' || $product->getGroup() == 'trial');
             $this->view->androidAvailable = ($product->getGroup() == 'android-basic' || $product->getGroup() == 'android-basic-double' || $product->getGroup() == 'android-premium'|| $product->getGroup() == 'android-premium-double' || $product->getGroup() == 'trial');
-
+        } else {
+            $this->view->iCloudAvailable = ($product->getGroup() == 'premium' || $product->getGroup() == 'trial' || $product->getGroup() == 'premium-double');
+            $this->view->jailbreakAvailable = true;
+            $this->view->androidAvailable = true;
         }
 
          $this->view->title = $this->di->getTranslator()->_('Select a Platform');
