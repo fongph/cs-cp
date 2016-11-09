@@ -84,6 +84,8 @@ class Wizard extends BaseController
         else
             $license = $this->getICloudLicense();
 
+        $this->checkPlatformAssignSubscription($this->getPlatform(),$license->getProduct()->getGroup());
+
         $deviceModel = new Devices($this->di);
         $devices = $deviceModel->getUserDevices($this->auth['id'], $this->getPlatform(), false);
 
@@ -144,6 +146,8 @@ class Wizard extends BaseController
 
     public function registerAppAction()
     {
+        $this->checkPlatformAssignSubscription($this->getPlatform(),$this->getLicense(false)->getProduct()->getGroup());
+        
         if (isset($_POST['code'])) {
 
             $deviceCode = new DeviceCode($this->di->get('db'));
@@ -509,19 +513,21 @@ class Wizard extends BaseController
         else
             return null;
     }
-//
-//    public function checkPlatformAssignSubscription($platform, $licenseGroup)
-//    {
-//        if (($platform == 'icloud' && $licenseGroup == 'ios-icloud') ||
-//            ($platform == 'ios' && $licenseGroup == 'ios-jailbreak') ||
-//            ($platform == 'android' && ($licenseGroup == 'android-basic'|| $licenseGroup == 'android-premium')) ||
-//            ($platform == 'no' && ($licenseGroup == 'basic'|| $licenseGroup == 'premium'))){
-//            return true;
-//        }
-//
-//        return false;
-//
-//    }
+
+    public function checkPlatformAssignSubscription($platform, $licenseGroup)
+    {
+        if (($platform == 'icloud' && in_array($licenseGroup, array('ios-icloud', 'ios-icloud-double','premium','premium-double'))) ||
+            ($platform == 'ios' && in_array($licenseGroup, array('ios-jailbreak', 'ios-jailbreak-double', 'basic','premium','basic-double','premium-double'))) ||
+            ($platform == 'android' && in_array($licenseGroup, array('android-basic','android-premium','android-basic-double','android-premium-double', 'basic','premium','basic-double','premium-double'))) ||
+            ($platform == 'no' && in_array($licenseGroup, array('basic','premium','basic-double','premium-double')))
+        ) {
+            return true;
+        }
+
+        $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('Subscription is not available for the selected device as their types don\'t match. Use the subscription for another device or buy a subscription that matches your device type.'));
+        $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_PACKAGE));
+
+    }
 
 }
 
