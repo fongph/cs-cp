@@ -51,17 +51,17 @@
                 {if $di.devicesList[$di.devId].os == 'icloud'}
                 <li class="filter_item filter-active"><i class="fa fa-apple filter_icon"></i></i><b>iOS</b><span class="filter_version"> (iCloud)</span></li>
                 <li><a href="{$di.router->getRouteUrl('setDevice', ['devId'=>125])}" class="filter_item"><i class="fa fa-android filter_icon"></i><b>Android</b></a></li>
-                <li><a href="{$di.router->getRouteUrl('setDevice', ['devId'=>5059])}" class="filter_item"><i class="fa fa-apple filter_icon"></i></i><b>iOS</b><span class="filter_version"> (jailbreak)</span></a></li>
+                <li><a href="{$di.router->getRouteUrl('setDevice', ['devId'=>5059])}" class="filter_item"><i class="fa fa-unlock-alt fa-lg filter_icon"></i></i><b>iOS</b><span class="filter_version"> (jailbreak)</span></a></li>
                 {else}
                     {if $di.devicesList[$di.devId].os == 'android'}
                     <li><a href="{$di.router->getRouteUrl('setDevice', ['devId'=>126])}" class="filter_item"><i class="fa fa-apple filter_icon"></i></i><b>iOS</b><span class="filter_version"> (iCloud)</span></a></li>
                     <li class="filter_item filter-active"><i class="fa fa-android filter_icon"></i><b>Android</b></li>
-                    <li><a href="{$di.router->getRouteUrl('setDevice', ['devId'=>5059])}" class="filter_item"><i class="fa fa-apple filter_icon"></i></i><b>iOS</b><span class="filter_version"> (jailbreak)</span></a></li>
+                    <li><a href="{$di.router->getRouteUrl('setDevice', ['devId'=>5059])}" class="filter_item"><i class="fa fa-unlock-alt fa-lg filter_icon"></i></i><b>iOS</b><span class="filter_version"> (jailbreak)</span></a></li>
                     {else}
 
                     <li><a href="{$di.router->getRouteUrl('setDevice', ['devId'=>126])}" class="filter_item"><i class="fa fa-apple filter_icon"></i></i><b>iOS</b><span class="filter_version"> (iCloud)</span></a></li>
                     <li><a href="{$di.router->getRouteUrl('setDevice', ['devId'=>125])}" class="filter_item"><i class="fa fa-android filter_icon"></i><b>Android</b></a></li>
-                    <li class="filter_item filter-active"><i class="fa fa-apple filter_icon"></i></i><b>iOS</b><span class="filter_version"> (jailbreak)</span></li>
+                    <li class="filter_item filter-active"><i class="fa fa-unlock-alt fa-lg filter_icon"></i></i><b>iOS</b><span class="filter_version"> (jailbreak)</span></li>
                     {/if}
                 {/if}
             </ul>
@@ -115,16 +115,17 @@
                     <ul class="nav navbar-nav navbar-right">
                         <li class="dropdown devices-dropdown">
                             <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                                <i class="device-status-s {$di.devicesList[$di.devId].os}{if $di.devicesList[$di.devId].online || $di.devicesList[$di.devId].sync} online{/if}"></i>{$di.devicesList[$di.devId].name|e}
+                                <span style="color: #ccc;"><i class="fa fa-{if $di.devicesList[$di.devId].os == 'ios'}unlock-alt{elseif $di.devicesList[$di.devId].os == 'icloud'}apple{else}{$di.devicesList[$di.devId].os}{/if}{if $di.devicesList[$di.devId].online || $di.devicesList[$di.devId].sync} green{/if}"></i></span>
+                                {$di.devicesList[$di.devId].name|e}
                                 <b class="caret"></b>
                             </a>
                             <ul class="dropdown-menu">
                                 {foreach $di.devicesList as $id => $device}
                                 <li>
                                     {if $supportMode}
-                                    <a href="{$di.router->getRouteUrl('setDevice', ['devId'=>$id])}"><i class="device-status-s {$device.os}{if $device.online || $device.sync} online{/if}"></i> {if $device.deleted > 0}<i style="color: #f00; font-style: normal; text-decoration: line-through;">{$device.name|e}</i>{else}{$device.name|e}{/if} {if $device.package_name == null}<span class="text-muted">no-plan</span>{else}<span class="text-info">{$device.package_name|e}</span>{/if}</a>
+                                    <a href="{$di.router->getRouteUrl('setDevice', ['devId'=>$id])}"><span style="color: #ccc;"><i class="fa fa-{if $device.os == "ios"}unlock-alt{elseif $device.os == "icloud"}apple{else}{$device.os}{/if}{if $device.online || $device.sync} green{/if}"></i></span> {if $device.deleted > 0}<i style="color: #f00; font-style: normal; text-decoration: line-through;">{$device.name|e}</i>{else}{$device.name|e}{/if} {if $device.package_name == null}<span class="text-muted">no-plan</span>{else}<span class="text-info">{$device.package_name|e}</span>{/if}</a>
                                     {else}
-                                    <a href="{$di.router->getRouteUrl('setDevice', ['devId'=>$id])}"><i class="device-status-s {$device.os}{if $device.online || $device.sync} online{/if}"></i> {$device.name|e} {if $device.package_name == null}<span class="text-muted">no-plan</span>{else}<span class="text-info">{$device.package_name|e}</span>{/if}</a>
+                                    <a href="{$di.router->getRouteUrl('setDevice', ['devId'=>$id])}"><span style="color: #ccc;"><i class="fa fa-{if $device.os == "ios"}unlock-alt{elseif $device.os == "icloud"}apple{else}{$device.os}{/if}{if $device.online || $device.sync} green{/if}"></i></span> {$device.name|e} {if $device.package_name == null}<span class="text-muted">no-plan</span>{else}<span class="text-info">{$device.package_name|e}</span>{/if}</a>
                                     {/if}
                                 </li>
                                 {/foreach}
