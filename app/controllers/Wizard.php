@@ -63,7 +63,7 @@ class Wizard extends BaseController
         $this->view->license = $license = $this->getLicense();
         $this->view->product = $product = $license->getProduct();
 
-        if ($product->getNamespace() == 'second'|| ($product->getNamespace()== 'control-admin-creation' && $product->getGroup() != 'premium' && $product->getGroup() != 'basic')){
+        if ($product->getNamespace() == 'second'|| ($product->getNamespace()== 'control-admin-creation' && $product->getGroup() != 'premium' && $product->getGroup() != 'premium-double' && $product->getGroup() != 'basic' && $product->getGroup() != 'basic-double')){
             $this->view->iCloudAvailable = ($product->getGroup() == 'ios-icloud' || $product->getGroup() == 'ios-icloud-double' || $product->getGroup() == 'trial');
             $this->view->jailbreakAvailable = ( $product->getGroup() == 'ios-jailbreak' || $product->getGroup() == 'ios-jailbreak-double' || $product->getGroup() == 'trial');
             $this->view->androidAvailable = ($product->getGroup() == 'android-basic' || $product->getGroup() == 'android-basic-double' || $product->getGroup() == 'android-premium'|| $product->getGroup() == 'android-premium-double' || $product->getGroup() == 'trial');
