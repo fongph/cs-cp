@@ -63,7 +63,7 @@ class Wizard extends BaseController
         $this->view->license = $license = $this->getLicense();
         $this->view->product = $product = $license->getProduct();
 
-        if ($product->getNamespace() == 'second'|| ($product->getNamespace()== 'control-admin-creation' && $product->getGroup() != 'premium' && $product->getGroup() != 'premium-double' && $product->getGroup() != 'basic' && $product->getGroup() != 'basic-double')){
+        if ($product->getNamespace() == 'second'|| ($product->getNamespace() == 'control-admin-creation' && $product->getGroup() != 'premium' && $product->getGroup() != 'premium-double' && $product->getGroup() != 'basic' && $product->getGroup() != 'basic-double')){
             $this->view->iCloudAvailable = ($product->getGroup() == 'ios-icloud' || $product->getGroup() == 'ios-icloud-double' || $product->getGroup() == 'trial');
             $this->view->jailbreakAvailable = ( $product->getGroup() == 'ios-jailbreak' || $product->getGroup() == 'ios-jailbreak-double' || $product->getGroup() == 'trial');
             $this->view->androidAvailable = ($product->getGroup() == 'android-basic' || $product->getGroup() == 'android-basic-double' || $product->getGroup() == 'android-premium'|| $product->getGroup() == 'android-premium-double' || $product->getGroup() == 'trial');
@@ -79,15 +79,11 @@ class Wizard extends BaseController
 
     public function setupAction()
     {
-        if ($this->getPlatform() == 'icloud') {
-            $license = $this->getICloudLicense();
-        } elseif ($this->getPlatform() == 'ios'){
-            $license = $this->getIosLicense();
-        } elseif ($this->getPlatform() == 'android'){
-            $license = $this->getAndroidLicense();
-        } else {
+        if ($this->getPlatform() !== 'icloud')
             $license = $this->getLicense();
-        }
+        else
+            $license = $this->getICloudLicense();
+
         $deviceModel = new Devices($this->di);
         $devices = $deviceModel->getUserDevices($this->auth['id'], $this->getPlatform(), false);
 
@@ -148,14 +144,6 @@ class Wizard extends BaseController
 
     public function registerAppAction()
     {
-        if ($this->getPlatform() == 'ios'){
-            $licenseRecord = $this->getIosLicense();
-        } elseif ($this->getPlatform() == 'android'){
-            $licenseRecord = $this->getAndroidLicense();
-        } else {
-            $licenseRecord = $this->getLicense();
-        }
-
         if (isset($_POST['code'])) {
 
             $deviceCode = new DeviceCode($this->di->get('db'));
@@ -446,7 +434,7 @@ class Wizard extends BaseController
         return $platform;
     }
 
-    protected function getICloudLicense($mastBeAvailable = true)
+    public function getICloudLicense($mastBeAvailable = true)
     {
         $license = $this->getLicense($mastBeAvailable);
 
@@ -460,7 +448,7 @@ class Wizard extends BaseController
         }
         return $license;
     }
-    protected function getIosLicense($mastBeAvailable = true)
+    public function getIosLicense($mastBeAvailable = true)
     {
         $license = $this->getLicense($mastBeAvailable);
 
@@ -474,7 +462,7 @@ class Wizard extends BaseController
         }
         return $license;
     }
-    protected function getAndroidLicense($mastBeAvailable = true)
+    public function getAndroidLicense($mastBeAvailable = true)
     {
         $license = $this->getLicense($mastBeAvailable);
 
