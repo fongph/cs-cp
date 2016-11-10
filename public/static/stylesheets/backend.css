@@ -7589,6 +7589,11 @@ button.close {
   height: 45px;
   overflow: hidden;
 }
+.fa.fa-apple.green,
+.fa.fa-android.green,
+.fa.fa-unlock-alt.green {
+  color: #16a89e!important;
+}
 .device-status .name {
   display: block;
   float: left;
@@ -7993,7 +7998,7 @@ body {
   display: block;
   width: 172px;
   height: 44px;
-  background: url(../img/logo.png) no-repeat;
+  background: url(../img/pumpic/logo.svg) no-repeat;
   -webkit-background-size: contain;
   background-size: contain;
 }
@@ -8192,7 +8197,7 @@ body {
 }
 @media (max-width: 360px) {
   #header .logo-demo {
-    width: 195px;
+    width: 191px;
   }
 }
 /* Components */
@@ -12551,13 +12556,10 @@ a.list-group-item-danger.active:focus {
   font-family: 'Open Sans', sans-serif;
   font-weight: 300;
 }
-#header .logo {
-  background: url(../img/pumpic/logo.png) no-repeat;
-}
 #header .logo-demo {
   width: 220px;
   height: 44px;
-  background: url(../img/pumpic/logo-demo.png) no-repeat;
+  background: url(../img/pumpic/logo-demo.svg) no-repeat;
   -webkit-background-size: contain;
   background-size: contain;
 }
@@ -12594,8 +12596,7 @@ a.list-group-item-danger.active:focus {
 }
 @media all and (max-width: 360px) {
   #header .logo-demo {
-    width: 195px;
-    background: url(../img/pumpic/logo-demo_sm.png) 0 2px no-repeat;
+    width: 191px;
   }
 }
 .cp-menu li i {

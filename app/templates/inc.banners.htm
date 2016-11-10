@@ -84,9 +84,9 @@
     .demo-banner .banner-btn:focus,
     .demo-banner .banner-btn:active {
         cursor: pointer;
-/*        color: white;
-        background-color: #d45b69;
-        text-decoration: none;*/
+        /*        color: white;
+                background-color: #d45b69;
+                text-decoration: none;*/
     }
 
     .demo-banner .button-holder {
@@ -132,36 +132,36 @@
     }
 </style>
 
-<div class="demo-banner">
-    <div class="banner-phone"></div>
-    <div class="banner-text">
-        <span>Smartphone Monitoring App</span>
-        <ul>
+    <div class="demo-banner">
+        <div class="banner-phone"></div>
+        <div class="banner-text">
+            <span>Smartphone Monitoring App</span>
+            <ul>
+                {if $di.devicesList[$di.devId].os == 'icloud'}
+                <li><i class="fa fa-apple"></i> <b>iOS</b> 6.0 - 10.1.1 (iCloud)</li>
+                {elseif $di.devicesList[$di.devId].os == 'android'}
+                <li><i class="fa fa-android"></i> <b>Android</b> 2.2 - 6.0.1</li>
+                {elseif $di.devicesList[$di.devId].os == 'ios'}
+                <li><i class="fa fa-unlock-alt"></i> <b>iOS</b> 6.0 - 9.1 (jailbreak)</li>
+                {/if}
+            </ul>
+        </div>
+        <div class="banner-arrow"></div>
+        <div class="button-holder">
             {if $di.devicesList[$di.devId].os == 'icloud'}
-                <li><i class="fa fa-cloud"></i> (6.0 - 10.0.2)</li>
+            <a href="http://pumpic.com/store.html" class="btn banner-btn" id="demo-banner-button">Buy Now</a>
             {elseif $di.devicesList[$di.devId].os == 'android'}
-                <li><i class="fa fa-android"></i> (2.2 - 6.0.1)</li>
+            <a href="http://pumpic.com/store.html#android" class="btn banner-btn" id="demo-banner-button">Buy Now</a>
             {elseif $di.devicesList[$di.devId].os == 'ios'}
-            <li><i class="fa fa-apple"></i> (6.0 - 9.1)</li>
+            <a href="http://pumpic.com/store.html#jailbreak" class="btn banner-btn" id="demo-banner-button">Buy Now</a>
             {/if}
-        </ul>
+        </div>
     </div>
-    <div class="banner-arrow"></div>
-    <div class="button-holder">
-        {if $di.devicesList[$di.devId].os == 'icloud'}
-        <a href="http://pumpic.com/store.html" class="btn banner-btn" id="demo-banner-button">Buy Now</a>
-        {elseif $di.devicesList[$di.devId].os == 'android'}
-        <a href="http://pumpic.com/store.html#android" class="btn banner-btn" id="demo-banner-button">Buy Now</a>
-        {elseif $di.devicesList[$di.devId].os == 'ios'}
-        <a href="http://pumpic.com/store.html#jailbreak" class="btn banner-btn" id="demo-banner-button">Buy Now</a>
-        {/if}
-    </div>
-</div>
 <script type="text/javascript">
     $(document).ready(function(){
         $('.demo-banner').on('click', function() {
-           window.location = $('#demo-banner-button').attr(href);
-           return false;
+            window.location = $('#demo-banner-button').attr(href);
+            return false;
         });
         $('#demo-banner-button').on('click', function() {
             ga('send', 'event', 'buy now', 'click', 'banner');
@@ -319,16 +319,16 @@
         .internal-trial-banner {
             height: 150px;
             background: url({$di.config.staticDomain}/img/trial-banner/bg-xs.png) 0 0 no-repeat #398fa7;
-    }
+        }
 
-    .internal-trial-banner .button-holder {
-        margin-top: 10px;
-        display: block;
-    }
+        .internal-trial-banner .button-holder {
+            margin-top: 10px;
+            display: block;
+        }
 
-    .internal-trial-banner .banner-expire {
-        margin: 0;
-    }
+        .internal-trial-banner .banner-expire {
+            margin: 0;
+        }
     }
 
     @media (max-width: 480px) {
@@ -367,7 +367,7 @@
 {/if}
 
 {if !$di.config.demo}
-    <div class="container monitoring-app-links-container-mobile visible-xs-inline-block">
-        {insert 'inc.monitoring.app.links.htm'}
-    </div>
+<div class="container monitoring-app-links-container-mobile visible-xs-inline-block">
+    {insert 'inc.monitoring.app.links.htm'}
+</div>
 {/if}
