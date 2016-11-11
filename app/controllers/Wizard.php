@@ -63,7 +63,7 @@ class Wizard extends BaseController
         $this->view->license = $license = $this->getLicense();
         $this->view->product = $product = $license->getProduct();
 
-        if ($product->getNamespace() == 'second'|| ($product->getNamespace() == 'control-admin-creation' && $product->getGroup() != 'premium' && $product->getGroup() != 'premium-double' && $product->getGroup() != 'basic' && $product->getGroup() != 'basic-double')){
+        if ($product->getNamespace() == 'second' || $product->getNamespace() == 'registration-trial' || ($product->getNamespace() == 'control-admin-creation' && $product->getGroup() != 'premium' && $product->getGroup() != 'premium-double' && $product->getGroup() != 'basic' && $product->getGroup() != 'basic-double')){
             $this->view->iCloudAvailable = ($product->getGroup() == 'ios-icloud' || $product->getGroup() == 'ios-icloud-double' || $product->getGroup() == 'trial');
             $this->view->jailbreakAvailable = ( $product->getGroup() == 'ios-jailbreak' || $product->getGroup() == 'ios-jailbreak-double' || $product->getGroup() == 'trial');
             $this->view->androidAvailable = ($product->getGroup() == 'android-basic' || $product->getGroup() == 'android-basic-double' || $product->getGroup() == 'android-premium'|| $product->getGroup() == 'android-premium-double' || $product->getGroup() == 'trial');
@@ -516,10 +516,10 @@ class Wizard extends BaseController
 
     public function checkPlatformAssignSubscription($platform, $licenseGroup)
     {
-        if (($platform == 'icloud' && in_array($licenseGroup, array('ios-icloud', 'ios-icloud-double','premium','premium-double'))) ||
-            ($platform == 'ios' && in_array($licenseGroup, array('ios-jailbreak', 'ios-jailbreak-double', 'basic','premium','basic-double','premium-double'))) ||
-            ($platform == 'android' && in_array($licenseGroup, array('android-basic','android-premium','android-basic-double','android-premium-double', 'basic','premium','basic-double','premium-double'))) ||
-            ($platform == 'no' && in_array($licenseGroup, array('basic','premium','basic-double','premium-double')))
+        if (($platform == 'icloud' && in_array($licenseGroup, array('ios-icloud', 'ios-icloud-double','premium','premium-double', 'trial'))) ||
+            ($platform == 'ios' && in_array($licenseGroup, array('ios-jailbreak', 'ios-jailbreak-double', 'basic','premium','basic-double','premium-double', 'trial'))) ||
+            ($platform == 'android' && in_array($licenseGroup, array('android-basic','android-premium','android-basic-double','android-premium-double', 'basic','premium','basic-double','premium-double', 'trial'))) ||
+            ($platform == 'no' && in_array($licenseGroup, array('basic','premium','basic-double','premium-double', 'trial')))
         ) {
             return true;
         }
