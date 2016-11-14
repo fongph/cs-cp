@@ -51,17 +51,17 @@
                 {if $di.devicesList[$di.devId].os == 'icloud'}
                 <li class="filter_item filter-active"><i class="fa fa-apple filter_icon"></i></i><b>iOS</b><span class="filter_version"> (iCloud)</span></li>
                 <li><a href="{$di.router->getRouteUrl('setDevice', ['devId'=>125])}" class="filter_item"><i class="fa fa-android filter_icon"></i><b>Android</b></a></li>
-                <li><a href="{$di.router->getRouteUrl('setDevice', ['devId'=>5059])}" class="filter_item"><i class="fa fa-unlock-alt fa-lg filter_icon"></i></i><b>iOS</b><span class="filter_version"> (jailbreak)</span></a></li>
+                <li><a href="{$di.router->getRouteUrl('setDevice', ['devId'=>5059])}" class="filter_item"><i class="fa fa-unlock-alt filter_icon"></i></i><b>iOS</b><span class="filter_version"> (jailbreak)</span></a></li>
                 {else}
                     {if $di.devicesList[$di.devId].os == 'android'}
                     <li><a href="{$di.router->getRouteUrl('setDevice', ['devId'=>126])}" class="filter_item"><i class="fa fa-apple filter_icon"></i></i><b>iOS</b><span class="filter_version"> (iCloud)</span></a></li>
                     <li class="filter_item filter-active"><i class="fa fa-android filter_icon"></i><b>Android</b></li>
-                    <li><a href="{$di.router->getRouteUrl('setDevice', ['devId'=>5059])}" class="filter_item"><i class="fa fa-unlock-alt fa-lg filter_icon"></i></i><b>iOS</b><span class="filter_version"> (jailbreak)</span></a></li>
+                    <li><a href="{$di.router->getRouteUrl('setDevice', ['devId'=>5059])}" class="filter_item"><i class="fa fa-unlock-alt filter_icon"></i></i><b>iOS</b><span class="filter_version"> (jailbreak)</span></a></li>
                     {else}
 
                     <li><a href="{$di.router->getRouteUrl('setDevice', ['devId'=>126])}" class="filter_item"><i class="fa fa-apple filter_icon"></i></i><b>iOS</b><span class="filter_version"> (iCloud)</span></a></li>
                     <li><a href="{$di.router->getRouteUrl('setDevice', ['devId'=>125])}" class="filter_item"><i class="fa fa-android filter_icon"></i><b>Android</b></a></li>
-                    <li class="filter_item filter-active"><i class="fa fa-unlock-alt fa-lg filter_icon"></i></i><b>iOS</b><span class="filter_version"> (jailbreak)</span></li>
+                    <li class="filter_item filter-active"><i class="fa fa-unlock-alt filter_icon"></i></i><b>iOS</b><span class="filter_version"> (jailbreak)</span></li>
                     {/if}
                 {/if}
             </ul>
