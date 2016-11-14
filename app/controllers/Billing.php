@@ -438,18 +438,19 @@ class Billing extends BaseController
         $newProduct = str_replace('basic', 'premium', $product);
         $newProductInfo = $billingModel->getProductInfo($newProduct);
         $this->view->newPrice = $newPrice = $newProductInfo['price_regular'];
+        $this->view->oldPrice = $price = $license['price'];
 
         $dateStart = $license['activation_date'];
         $dateEnd = $license['expiration_date'];
-        $this->view->oldPrice = $price = $license['price'];
         $today = time();
 
         $allPeriodDays = ceil(($dateEnd-$dateStart)/24/3600);
         $usedPeriodDays = floor(($today-$dateStart)/24/3600);
-
+        
         $saveSum = $price*(($allPeriodDays-$usedPeriodDays)/$allPeriodDays);
         $sumShouldToPay = $newPrice - $newPrice*($usedPeriodDays/$allPeriodDays);
         $sumToPay = round(($sumShouldToPay - $saveSum),2);
+
         $this->view->balance = round($saveSum, 2);
         $this->view->upgradePrice = $sumToPay;
         $this->view->oldName = $license['name'];
