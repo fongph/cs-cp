@@ -185,6 +185,7 @@ class Billing extends \System\Model
         $result = $this->getDb()->query("SELECT
                         l.`id`,
                         p.`name`,
+                        p.`code_fastspring`,
                         l.`amount`,
                         l.`currency`,
                         l.`price`,
@@ -322,6 +323,13 @@ class Billing extends \System\Model
             $this->di['usersNotesProcessor']->licenseSubscriptionAutoRebillTaskAdded($licenseRecord->getId());
             $this->di['billingManager']->cancelLicenseSubscription($licenseRecord->getId());
         }
+    }
+
+    public function getProductInfo($codeFastsping)
+    {
+        $codeFastsping = $this->getDb()->quote($codeFastsping);
+
+        return $this->getDb()->query("SELECT p.price_regular, p.name FROM products p WHERE p.code_fastspring={$codeFastsping}")->fetch();
     }
 
 }

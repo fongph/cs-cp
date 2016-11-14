@@ -432,8 +432,28 @@ class Billing extends BaseController
     {
         $billingModel = new \Models\Billing($this->di);
         $license = $billingModel->getUserLicenseInfo($this->auth['id'], $this->params['id']);
-        echo '<pre>';
-        var_dump($license);
+
+        $product = $license['code_fastspring'];
+
+        $newProduct = str_replace('basic', 'premium', $product);
+        $newProductInfo = $billingModel->getProductInfo($newProduct);
+        $this->view->newPrice = $newPrice = $newProductInfo['price_regular'];
+
+        $dateStart = $license['activation_date'];
+        $dateEnd = $license['expiration_date'];
+        $this->view->oldPrice = $price = $license['price'];
+        $today = time();
+
+        $allPeriodDays = ceil(($dateEnd-$dateStart)/24/3600);
+        $usedPeriodDays = floor(($today-$dateStart)/24/3600);
+
+        $saveSum = $price*(($allPeriodDays-$usedPeriodDays)/$allPeriodDays);
+        $sumShouldToPay = $newPrice - $newPrice*($usedPeriodDays/$allPeriodDays);
+        $sumToPay = round(($sumShouldToPay - $saveSum),2);
+        $this->view->balance = round($saveSum, 2);
+        $this->view->upgradePrice = $sumToPay;
+        $this->view->oldName = $license['name'];
+        $this->view->newName = $newProductInfo['name'];
         $this->view->title = $this->di->getTranslator()->_('Upgrade Subscription To Premium Plan');
         $this->setView('billing/upgradeLicense.htm');
     }
