@@ -110,8 +110,8 @@ $di->setShared('router', function() use($config, $di) {
         $router->add('billingLicenseDisable', new \System\Router\Regex('/subscriptions/license/:id/disable', array('controller' => 'Billing', 'action' => 'disableLicense'), array('id' => '[0-9]+')));
         $router->add('billingLicenseEnable', new \System\Router\Regex('/subscriptions/license/:id/enable', array('controller' => 'Billing', 'action' => 'enableLicense'), array('id' => '[0-9]+')));
         $router->add('billingLicenseDiscountOffer', new \System\Router\Regex('/subscriptions/license/:id/discount', array('controller' => 'Billing', 'action' => 'discountOfferLicense'), array('id' => '[0-9]+')));
-        $router->add('billingLicenseUpgradePremium', new \System\Router\Regex('/subscriptions/upgrade-to-premium/:id', array('controller' => 'Billing', 'action' => 'licenseUpgradePremium'), array('id' => '[0-9]+')));
-        $router->add('billingLicenseUpgradeYearly', new \System\Router\Regex('/subscriptions/upgrade-to-yearly-plan/:id', array('controller' => 'Billing', 'action' => 'licenseUpgradeYearly'), array('id' => '[0-9]+')));
+        $router->add('billingLicenseUpgradePremium', new \System\Router\Regex('/subscriptions/upgrade/:id/premium', array('controller' => 'Billing', 'action' => 'licenseUpgradePremium'), array('id' => '[0-9]+')));
+        $router->add('billingLicenseUpgradeYearly', new \System\Router\Regex('/subscriptions/upgrade/:id/yearly', array('controller' => 'Billing', 'action' => 'licenseUpgradeYearly'), array('id' => '[0-9]+')));
     } else {
         $router->add('billing', new \System\Router\Route('/billing', array('controller' => 'Billing', 'action' => 'index')));
         $router->add('billingAddDevice', new \System\Router\Route('/billing/addDevice', array('controller' => 'Billing', 'action' => 'addDevice')));

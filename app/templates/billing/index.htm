@@ -279,19 +279,22 @@
                                     var data = arguments[2];
                                     var text = '';
                                     var link = '';
+                                    var style = '';
                                     switch (value){
                                         case 'basic' :
                                             text = 'Upgrade to Premium';
-                                            link = 'upgrade-to-premium';
+                                            link = 'premium';
+
                                             break;
                                         case 'premium-1m' :
                                             text = 'Upgrade to Yearly Plan';
-                                            link = 'upgrade-to-yearly-plan';
+                                            link = 'yearly';
+                                            style = ' style="margin: -4px"';
                                             break;
                                         default:
                                             return '';
                                     }
-                                    return '<a title="'+ text +'" href="subscriptions/'+ link +'/'+data.id+'" class="btn btn-primary btn-xs">'+
+                                    return '<a title="'+ text +'" href="subscriptions/upgrade/'+data.id+'/'+ link +'" class="btn btn-primary btn-xs"'+style+'>'+
                                         '<i class="fa fa-arrow-up"></i> '+
                                         text +
                                     '</a>'

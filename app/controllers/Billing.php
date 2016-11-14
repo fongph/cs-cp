@@ -428,16 +428,23 @@ class Billing extends BaseController
         $this->redirect($this->di->getRouter()->getRouteUrl('billingLicense', array('id' => $licenseId)));
     }
 
-    public function licenseUpgradePremium()
+    public function licenseUpgradePremiumAction()
     {
         $billingModel = new \Models\Billing($this->di);
         $license = $billingModel->getUserLicenseInfo($this->auth['id'], $this->params['id']);
-
+        echo '<pre>';
+        var_dump($license);
+        $this->view->title = $this->di->getTranslator()->_('Upgrade Subscription To Premium Plan');
+        $this->setView('billing/upgradeLicense.htm');
     }
-    public function licenseUpgradeYearly()
+    public function licenseUpgradeYearlyAction()
     {
         $billingModel = new \Models\Billing($this->di);
         $license = $billingModel->getUserLicenseInfo($this->auth['id'], $this->params['id']);
+        echo '<pre>';
+        var_dump($license);
+        $this->view->title = $this->di->getTranslator()->_('Upgrade Subscription To Yearly Plan');
+        $this->setView('billing/upgradeLicense.htm');
 
     }
 
