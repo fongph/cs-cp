@@ -84,7 +84,9 @@
                             {if !$demoMode && !$supportMode}<li><a href="{$di.router->getRouteUrl('support')}">{$di.t->_('Support')}</a></li>{/if}
                             <li><a href="{$di.router->getRouteUrl('logout')}">{$di.t->_('Log out')}</a></li>
                         {else}
+                        {if !in_array($di.router->getRouteName(), ['main','lostPassword'])}
                             <li><a target="_blank" href="{$di.config.url.registration}" rel="nofollow">{$di.t->_('Not a Member?')}</a></li>
+                        {/if}
                         {/if}
                         {if $demoMode and $di.isFreTrialLinksVisible}
                             <li id="free-trial-menu-link">
