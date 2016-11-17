@@ -153,9 +153,15 @@ class Sms extends BaseModel
         foreach ($items as $key => $item) {
             if ($item['multimedia'] == 'vcard' && strlen($item['media_data'])) {
                 $items[$key]['card'] = $this->parseCard($item['media_data']);
+                unset($items[$key]['filename']);
             } else if ($item['multimedia'] == 'image' && isset($item['media_path'], $item['thumbnail_path'])) {
                 $items[$key]['image'] = $this->getCDNAuthorizedUrl($item['media_path']);
                 $items[$key]['thumbnail'] = $this->getCDNAuthorizedUrl($item['thumbnail_path']);
+                unset($items[$key]['filename']);
+            } elseif (isset($item['media_path'])) {
+                $items[$key]['downloadUrl'] = $this->getDownloadUrl($item['media_path'], $item['filename']);
+            } else {
+                unset($items[$key]['filename']);
             }
 
             unset($items[$key]['media_data']);
@@ -199,12 +205,13 @@ class Sms extends BaseModel
                                                     s.`blocked`,
                                                     s.`deleted`,
                                                     s.`network`,
+                                                    sm.`filename` filename,
                                                     sm.`data` media_data,
                                                     sm.`media` media_path,
                                                     sm.`thumbnail` thumbnail_path
                                                 FROM `sms_log` s
                                                 LEFT JOIN `sms_multimedia` sm ON s.`dev_id` = sm.`dev_id` AND s.`multimedia_id` = sm.`multimedia_id`
-                                                WHERE s.`dev_id` = {$escapedDevId} AND s.`phone_number` = {$escapedPhoneNumber} AND s.`group` = ''
+                                                WHERE s.`dev_id` = {$escapedDevId} AND s.`phone_number` = {$escapedPhoneNumber} AND s.`group` = '' AND (s.`content` != '' OR sm.`uploaded` > 0)
                                                 {$where}
                                                 ORDER BY s.`timestamp` DESC LIMIT {$start}, {$length}")->fetchAll();
 
@@ -248,12 +255,13 @@ class Sms extends BaseModel
                                                     s.`blocked`,
                                                     s.`deleted`,
                                                     s.`network`,
+                                                    sm.`filename` filename,
                                                     sm.`data` media_data,
                                                     sm.`media` media_path,
                                                     sm.`thumbnail` thumbnail_path
                                                 FROM `sms_log` s
                                                 LEFT JOIN `sms_multimedia` sm ON s.`dev_id` = sm.`dev_id` AND s.`multimedia_id` = sm.`multimedia_id`
-                                                WHERE s.`dev_id` = {$escapedDevId} AND s.`group` = {$escapedGroup}
+                                                WHERE s.`dev_id` = {$escapedDevId} AND s.`group` = {$escapedGroup} AND (s.`content` != '' OR sm.`uploaded` > 0)
                                                 {$where}
                                                 ORDER BY s.`timestamp` DESC LIMIT {$start}, {$length}")->fetchAll();
 

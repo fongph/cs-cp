@@ -26,6 +26,7 @@ class Sms extends BaseModuleController {
                 $this->di['devId'],
                 $dataTableRequest->buildResult(array('timeFrom', 'timeTo'))
             );
+            
             $this->checkDisplayLength($dataTableRequest->getDisplayLength());
             $this->makeJSONResponse($data);
         }
