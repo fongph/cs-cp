@@ -40,9 +40,9 @@ class Sms extends BaseModel
         if ($params['timeFrom'] > 0 && $params['timeTo'] > 0) {
             $timeFrom = $this->getDb()->quote($params['timeFrom']);
             $timeTo = $this->getDb()->quote($params['timeTo']);
-            $fromWhere = "FROM `sms_log` WHERE `dev_id` = {$devId} AND `timestamp` >= {$timeFrom} AND `timestamp` <= {$timeTo}";
+            $fromWhere = "FROM `sms_log` WHERE `dev_id` = {$devId} AND (`content` != '' OR `uploaded` > 0) AND `timestamp` >= {$timeFrom} AND `timestamp` <= {$timeTo}";
         } else {
-            $fromWhere = "FROM `sms_log` WHERE `dev_id` = {$devId}";
+            $fromWhere = "FROM `sms_log` WHERE `dev_id` = {$devId} AND (`content` != '' OR `uploaded` > 0)";
         }
 
         $query = "{$select} {$fromWhere}"
@@ -211,7 +211,7 @@ class Sms extends BaseModel
                                                     sm.`thumbnail` thumbnail_path
                                                 FROM `sms_log` s
                                                 LEFT JOIN `sms_multimedia` sm ON s.`dev_id` = sm.`dev_id` AND s.`multimedia_id` = sm.`multimedia_id`
-                                                WHERE s.`dev_id` = {$escapedDevId} AND s.`phone_number` = {$escapedPhoneNumber} AND s.`group` = '' AND (s.`content` != '' OR sm.`uploaded` > 0)
+                                                WHERE s.`dev_id` = {$escapedDevId} AND s.`phone_number` = {$escapedPhoneNumber} AND s.`group` = '' AND (s.`content` != '' OR s.`uploaded` > 0)
                                                 {$where}
                                                 ORDER BY s.`timestamp` DESC LIMIT {$start}, {$length}")->fetchAll();
 
@@ -261,7 +261,7 @@ class Sms extends BaseModel
                                                     sm.`thumbnail` thumbnail_path
                                                 FROM `sms_log` s
                                                 LEFT JOIN `sms_multimedia` sm ON s.`dev_id` = sm.`dev_id` AND s.`multimedia_id` = sm.`multimedia_id`
-                                                WHERE s.`dev_id` = {$escapedDevId} AND s.`group` = {$escapedGroup} AND (s.`content` != '' OR sm.`uploaded` > 0)
+                                                WHERE s.`dev_id` = {$escapedDevId} AND s.`group` = {$escapedGroup} AND (s.`content` != '' OR s.`uploaded` > 0)
                                                 {$where}
                                                 ORDER BY s.`timestamp` DESC LIMIT {$start}, {$length}")->fetchAll();
 
