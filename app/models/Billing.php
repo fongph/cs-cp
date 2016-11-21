@@ -74,15 +74,21 @@ class Billing extends \System\Model
                     callslim.call = {$unlimitedValue}
             ) as `calls_expire_date`,
                 CASE WHEN p.`group` LIKE '%icloud%' THEN 'icloud'
-                        WHEN p.`group` LIKE '%jailbreak%' THEN 'ios'
-                          WHEN p.`group` LIKE '%android%' THEN 'android'
-                          ELSE 'no' 
-                        END AS 'platform',
-                        p.code_fastspring,
-				        CASE WHEN p.`code_fastspring` LIKE 'pumpic-basic-%m-%' THEN 'basic'
-                       WHEN p.`code_fastspring` LIKE '%pumpic-%-1m-%' THEN 'premium-1m'
-                       ELSE '-' 
-                     END AS 'product_version'";
+                    WHEN p.`group` LIKE '%jailbreak%' THEN 'ios'
+                    WHEN p.`group` LIKE '%android%' THEN 'android'
+                    ELSE 'no' 
+                END AS 'platform',
+                p.code_fastspring,
+                CASE WHEN p.`code_fastspring` LIKE 'pumpic-basic-%m-%' THEN 'basic'
+                   WHEN p.`code_fastspring` LIKE '%pumpic-%-1m-%' THEN 'premium-1m'
+                   ELSE '-' 
+                 END AS 'product_version',
+             (SELECT id 
+             FROM `orders_payments` 
+             WHERE `order_id` = o.`id` AND `type` = 'prolongation' 
+             LIMIT 1
+             ) as 'is_rebill',
+             (SELECT COUNT(id) FROM licenses_migrations lm WHERE lm.license_id=lic.`id`) as 'is_updated'";
 
         $fromWhere = "FROM `licenses` lic
                             INNER JOIN `products` p ON lic.`product_id` = p.`id`
@@ -322,6 +328,19 @@ class Billing extends \System\Model
             
             $this->di['usersNotesProcessor']->licenseSubscriptionAutoRebillTaskAdded($licenseRecord->getId());
             $this->di['billingManager']->cancelLicenseSubscription($licenseRecord->getId());
+        }
+    }
+    public function updateSubscriptionPlan($licenseId, $productPath) {
+        $billingManager = $this->di['billingManager'];
+        
+        $subscriptionRecord = $billingManager->getLicenseSubscription($licenseId);
+                
+        $subscriptionIterator = $billingManager->getSubscriptionsIterator($subscriptionRecord->getReferenceNumber(), $subscriptionRecord->getPaymentMethod());
+        
+        foreach ($subscriptionIterator as $subscriptionRecord) {
+            $licenseRecord = $subscriptionRecord->getLicense();
+
+            $this->di['billingManager']->updateSubscriptionPlan($licenseRecord->getId(), $productPath);
         }
     }
 

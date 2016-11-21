@@ -33,8 +33,6 @@
             <thead>
                 <tr role="row">
                     <th>{$di.t->_('Plan')}</th>
-                    <!--<th>{$di.t->_('First Period Price')}</th>-->
-                    <!--<th>{$di.t->_('Regular Period Price')}</th>-->
                     <th>{$di.t->_('Date of purchase')}</th>
                     <th>{$di.t->_('Expiration date')}</th>
                     <th>{$di.t->_('Status')}</th>
@@ -277,28 +275,31 @@
                                 mData: 'product_version',
                                 mRender: function(value) {
                                     var data = arguments[2];
-                                    var text = '';
-                                    var link = '';
-                                    var style = '';
-                                    switch (value){
-                                        case 'basic' :
-                                            text = 'Upgrade to Premium';
-                                            link = 'premium';
-
-                                            break;
-                                        case 'premium-1m' :
-                                            text = 'Upgrade to Yearly Plan';
-                                            link = 'yearly';
-                                            style = ' style="margin: -4px"';
-                                            break;
-                                        default:
-                                            return '';
+                                    console.log(data.is_updated );
+                                    if (data.is_rebill !== null && data.is_updated == 0){
+                                        var text = '';
+                                        var link = '';
+                                        var style = '';
+                                        switch (value){
+                                            case 'basic' :
+                                                text = 'Upgrade to Premium';
+                                                link = 'premium';
+                                                break;
+                                            case 'premium-1m' :
+                                                text = 'Upgrade to Yearly Plan';
+                                                link = 'yearly';
+                                                style = ' style="margin: -4px"';
+                                                break;
+                                            default:
+                                                return '';
+                                        }
+                                        return '<a title="'+ text +'" href="subscriptions/upgrade/'+data.id+'/'+ link +'" class="btn btn-primary btn-xs"'+style+'>'+
+                                                '<i class="fa fa-arrow-up"></i> '+
+                                                text +
+                                                '</a>'
+                                    } else {
+                                        return '';
                                     }
-                                    return '<a title="'+ text +'" href="subscriptions/upgrade/'+data.id+'/'+ link +'" class="btn btn-primary btn-xs"'+style+'>'+
-                                        '<i class="fa fa-arrow-up"></i> '+
-                                        text +
-                                    '</a>'
-
                                 }
                             },
                         ],

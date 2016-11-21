@@ -23,15 +23,17 @@
 
         {insert "inc.flashMessages.htm"}
 
-        <h4>Please confirm your upgrade <b>{$oldName}</b> to <b style="color: #16a89e;">{$newName}</b></h4>
+        <h4>Please confirm your upgrade <b>{$countSubscription}{$oldName} Subscription{$double}</b> to <b style="color: #16a89e;">{$countSubscription}{$newName} Subscription{$double}</b></h4>
 
+        <form action="" method="post">
 
-        <ul class="list-group">
-            <li>Price for {$newName} - <b>{$newPrice} USD</b></li>
-            <li>Your current balance - <b>{$balance} USD</b></li>
-            <br>
-            <li class="option-expire">The price for upgrade - <b  style="color: #16a89e;">{$upgradePrice} USD</b></li>
-        </ul>
-        <button class="btn btn-default">Cancel</button> <button class="btn btn-primary">Confirm</button>
+            <ul class="list-group">
+                <li>Price for {$newName} - <b>{$newPrice} USD</b></li>
+                <li>Your current balance - <b>{$balance} USD</b></li>
+                <br>
+                <li class="option-expire">The price for upgrade - <b  style="color: #16a89e;">{$upgradePrice} USD</b></li>
+            </ul>
+            <button name="cancel" class="btn btn-default">Cancel</button> <button name="confirm" class="btn btn-primary">Confirm</button>
+        </form>
     </div>
 </div>
