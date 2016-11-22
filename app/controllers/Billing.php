@@ -476,14 +476,17 @@ class Billing extends BaseController
                 $this->redirect($this->di->getRouter()->getRouteUrl('billing'));
             } else {
                 $newProductInfo = $billingModel->getProductInfo($newProduct);
-                $sum = $this->calculatePremiumSum($license, $newProductInfo);
+
                 if (strripos($license['code_fastspring'], '-double') === false){
                     $this->view->double = '';
                     $this->view->countSubscription = '';
+                    $double = false;
                 } else {
                     $this->view->double = 's';
                     $this->view->countSubscription = '2 ';
+                    $double = true;
                 }
+                $sum = $this->calculatePremiumSum($license, $newProductInfo, $double);
                 $this->view->balance = round($sum['saveSum'], 2);
                 $this->view->upgradePrice = $sum['sumToPay'];
                 $this->view->oldName = $license['name'];
@@ -520,11 +523,7 @@ class Billing extends BaseController
                 } else {
                     try {
                         $billingModel->updateSubscriptionPlan($this->params['id'], $newProduct);
-
-                        if ($billingModel->isCancelationDiscountOfferableForLicense($license)) {
-                            $billingModel->setCancelationDiscountOffered($this->auth['id']);
-                        }
-
+                        
                         $this->getDI()->getFlashMessages()->add(FlashMessages::SUCCESS, "Subscription is successfully updated!");
                     } catch (\CS\Billing\Exceptions\RecordNotFoundException $e) {
                         $this->getDI()->get('logger')->addInfo('Subscription not found!', array('exception' => $e));
@@ -542,14 +541,17 @@ class Billing extends BaseController
             } else {
                 $newProductInfo = $billingModel->getProductInfo($newProduct);
 
-                $sum = $this->calculateYearlySum($license, $newProductInfo);
+
                  if (strripos($license['code_fastspring'], '-double') === false){
                      $this->view->double = '';
                      $this->view->countSubscription = '';
+                     $double = false;
                  } else {
                      $this->view->double = 's';
                      $this->view->countSubscription = '2 ';
+                     $double = true;
                  }
+                $sum = $this->calculateYearlySum($license, $newProductInfo, $double);
                 $this->view->balance = round($sum['saveSum'], 2);
                 $this->view->upgradePrice = $sum['sumToPay'];
                 $this->view->oldName = $license['name'];
@@ -563,11 +565,15 @@ class Billing extends BaseController
 
     }
 
-    public function calculatePremiumSum($license, $newProductInfo)
+    public function calculatePremiumSum($license, $newProductInfo, $double)
     {
 
         $this->view->newPrice = $newPrice = $newProductInfo['price_regular'];
-        $this->view->oldPrice = $price = $license['price'];
+        if ($double){
+            $this->view->oldPrice = $price = $license['price'] * 2;
+        } else {
+            $this->view->oldPrice = $price = $license['price'];
+        }
 
         $dateStart = $license['activation_date'];
         $dateEnd = $license['expiration_date'];
@@ -582,11 +588,15 @@ class Billing extends BaseController
         return compact('saveSum', 'sumToPay');
     }
 
-    public function calculateYearlySum($license, $newProductInfo)
+    public function calculateYearlySum($license, $newProductInfo, $double)
     {
 
         $this->view->newPrice = $newPrice = $newProductInfo['price_regular'];
-        $this->view->oldPrice = $price = $license['price'];
+        if ($double){
+            $this->view->oldPrice = $price = $license['price'] * 2;
+        } else {
+            $this->view->oldPrice = $price = $license['price'];
+        }
 
         $dateStart = $license['activation_date'];
         $dateEndOld = $license['expiration_date'];
