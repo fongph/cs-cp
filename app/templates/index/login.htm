@@ -66,10 +66,10 @@
     {insert "inc.flashMessages.htm"}
     <form role="form" method="post">
         <div class="form-group">
-            <input type="text" name="email" class="form-control input-login" id="email" value="{$di.request->post('email')}" placeholder="{$di.t->_('Email*')}">
+            <input type="text" autocomplete="new-password" name="email" class="form-control input-login" id="email" value="{$di.request->post('email')}" placeholder="{$di.t->_('Email*')}">
         </div>
         <div class="form-group">
-            <input type="password" name="password" class="form-control input-login" id="password" value="" placeholder="{$di.t->_('Password*')}" />
+            <input type="password" autocomplete="new-password" name="password" class="form-control input-login" id="password" value="" placeholder="{$di.t->_('Password*')}" />
         </div>
         <div class="checkbox">
             <label>
