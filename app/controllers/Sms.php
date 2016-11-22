@@ -33,6 +33,8 @@ class Sms extends BaseModuleController {
 
         $this->view->hasRecords = $smsModel->hasRecords($this->di['devId']);
         $this->view->limitEnd = !$this->isModulePaid();
+        $this->view->deviceId = $this->di['devId'];
+        $this->view->link = 'sms';
 
         $this->setView('cp/sms/indexWithStatuses.htm');
     }

@@ -30,7 +30,7 @@ class BaseModel extends \System\Model
         
         $s3 = \Aws\S3\S3Client::factory($config);
         return $s3->getObjectUrl($config['bucket'], $uri, time() + self::$_authLifeTime, [
-            'ResponseContentDisposition' => 'attachment; filename=' . $filename
+            'ResponseContentDisposition' => 'attachment; filename="' . $filename . '"'
         ]);
     }
 
