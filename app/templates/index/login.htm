@@ -1,4 +1,20 @@
 <style>
+    body {
+        color: #555555;
+    }
+    h1 {
+        margin-bottom: 30px;
+        font-size: 31px;
+    }
+    form {
+        margin: 0 auto;
+        width: 100%;
+        max-width: 370px;
+        text-align: center;
+    }
+    .checkbox {
+        text-align: left;
+    }
     .device-button, .device-button:active {
         display: inline-block;
         padding: 6px 12px;
@@ -33,33 +49,47 @@
     .device-button.blackberry {
         background-position: 0 -82px;
     }
+
+    .btn-lg {
+        width: 195px;
+        color: #fff;
+        padding: 13px 20px;
+        font-size: 24px;
+        line-height: 24px;
+        font-weight: lighter;
+        height: 51px;
+        margin: 0 auto;
+    }
 </style>
 <div class="login-form col-lg-6 col-md-8 col-lg-offset-3 col-md-offset-2">
     <h1 class="text-center">{$di.t->_('Login')}</h1>
     {insert "inc.flashMessages.htm"}
     <form role="form" method="post">
         <div class="form-group">
-            <label for="email">{$di.t->_('Email address')}</label>
-            <input type="text" name="email" class="form-control" id="email" value="{$di.request->post('email')}" placeholder="{$di.t->_('Email address')}">
+            <input type="text" name="email" class="form-control input-login" id="email" value="{$di.request->post('email')}" placeholder="{$di.t->_('Email*')}">
         </div>
         <div class="form-group">
-            <label for="password">{$di.t->_('Password')}</label>
-            <input type="password" name="password" class="form-control" id="password" value="" placeholder="{$di.t->_('Password')}" />
+            <input type="password" name="password" class="form-control input-login" id="password" value="" placeholder="{$di.t->_('Password*')}" />
         </div>
         <div class="checkbox">
             <label>
                 <input type="checkbox" name="remember" value="1">{$di.t->_('Remember me')}
             </label>
         </div>
-        <button type="submit" class="btn btn-primary">{$di.t->_('Log in')}</button>
-        <a href="{$di.router->getRouteUrl('lostPassword')}" class="btn btn-lnk">{$di['t']->_('Lost Password')}</a>
+        <div style="margin-top: 20px;">
+        <button type="submit" class="btn btn-primary btn-lg">{$di.t->_('Sign in')}</button>
+        </div>
+        <div style="margin-top: 10px;"><a href="{$di.router->getRouteUrl('lostPassword')}" class="btn btn-lnk">{$di['t']->_('Forgot Password?')}</a></div>
     </form>
 
-    <div class="panel panel-default" style="margin-top: 20px;">
-        <div class="panel-heading">{$di['t']->_('NOT A MEMBER YET?')}</div>
-        <div class="panel-body text-center">
-            <a href="{$di.config.url.demo}" class="btn btn-warning">{$di['t']->_('View Demo')}</a>
-            <a href="{$di.config.url.registration}" class="btn btn-danger">{$di['t']->_('Buy Now')}</a>
+    <div class="login-member">
+        <h2 class="login-member__headline">{$di['t']->_('Not a member yet?')}</h2>
+        <div class="login-member__links">
+            <a href="{$di.config.url.demo}" class="btn btn-warning ga-action-click" ga-category="cp" ga-action="click" ga-label="view demo">{$di['t']->_('View Demo')}</a>
+            <a href="{$di.config.url.registration}" class="btn btn-danger ga-action-click" ga-category="cp" ga-action="click" ga-label="buy now">{$di['t']->_('Buy Now')}</a>
         </div>
+    </div>
+    <div class="back-to">
+        <a href="http://pumpic.com/" class="back-to__link">back to Pumpic.com</a>
     </div>
 </div>

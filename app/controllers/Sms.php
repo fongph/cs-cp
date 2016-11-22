@@ -26,12 +26,15 @@ class Sms extends BaseModuleController {
                 $this->di['devId'],
                 $dataTableRequest->buildResult(array('timeFrom', 'timeTo'))
             );
+            
             $this->checkDisplayLength($dataTableRequest->getDisplayLength());
             $this->makeJSONResponse($data);
         }
 
         $this->view->hasRecords = $smsModel->hasRecords($this->di['devId']);
         $this->view->limitEnd = !$this->isModulePaid();
+        $this->view->deviceId = $this->di['devId'];
+        $this->view->link = 'sms';
 
         $this->setView('cp/sms/indexWithStatuses.htm');
     }

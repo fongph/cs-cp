@@ -8200,6 +8200,67 @@ body {
     width: 191px;
   }
 }
+@media (max-width: 320px) {
+  .wrapper {
+    width: 100%;
+    min-width: 100%;
+  }
+}
+.form-group .input-login {
+  border-radius: 0;
+  border: none;
+  height: 48px;
+  width: 100%;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  color: #9599b0;
+  padding: 17px 20px;
+  background: #fefefe;
+}
+.form-group .input-login:active,
+.form-group .input-login:focus {
+  box-shadow: 0 0 8px rgba(102, 175, 233, 0.6);
+}
+.login-member {
+  background: #efefef;
+  width: 100%;
+  max-width: 370px;
+  margin: 50px auto 0;
+}
+.login-member__headline {
+  text-align: center;
+  font-size: 26px;
+  line-height: 26px;
+  font-weight: 300;
+  padding: 14px 0;
+  margin: 0;
+}
+.login-member__links {
+  background: #e8e8e8;
+  padding: 18px 5px 0;
+  text-align: center;
+}
+.login-member__links .btn {
+  padding: 10px 12px;
+  margin-bottom: 18px;
+  width: 160px;
+  font-size: 24px;
+  font-weight: 300;
+}
+.back-to {
+  width: 100%;
+  max-width: 370px;
+  margin: 10px auto 0;
+  text-align: center;
+}
+.back-to__link {
+  color: #555555;
+}
+.back-to__link:active,
+.back-to__link:hover,
+.back-to__link:focus {
+  color: #555555;
+}
 /* Components */
 /*
 * Left menu inside cp
