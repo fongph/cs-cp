@@ -275,7 +275,7 @@
                                 mData: 'product_version',
                                 mRender: function(value) {
                                     var data = arguments[2];
-                                    if (data.is_rebill !== null && data.is_updated == 0){
+                                    if (data.is_rebill !== null && data.is_updated == 0 && data.status != 'inactive'){
                                         var text = '';
                                         var link = '';
                                         var style = '';

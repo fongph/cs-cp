@@ -433,14 +433,13 @@ class Billing extends BaseController
     {
         $billingModel = new \Models\Billing($this->di);
         $license = $billingModel->getUserLicenseInfo($this->auth['id'], $this->params['id']);
-
         if ($license == false) {
             $this->di->getFlashMessages()->add(FlashMessages::ERROR, "Subscription was not found!");
             $this->redirect($this->di->getRouter()->getRouteUrl('billing'));
         }
 
         if (strripos($license['code_fastspring'], '-basic-') === false){
-            $this->di->getFlashMessages()->add(FlashMessages::WARNING, "You can't upgrade this subscription");
+            $this->di->getFlashMessages()->add(FlashMessages::ERROR, "You can't upgrade this subscription");
             $this->redirect($this->di['router']->getRouteUrl('billing'));
         } else {
             $product = $license['code_fastspring'];
@@ -570,11 +569,16 @@ class Billing extends BaseController
 
         $this->view->newPrice = $newPrice = $newProductInfo['price_regular'];
         if ($double){
-            $this->view->oldPrice = $price = $license['price'] * 2;
+            $price = $license['price_regular'] * 2;
         } else {
-            $this->view->oldPrice = $price = $license['price'];
+            $price = $license['price_regular'];
         }
 
+        if ($license['has_cancelation_discount'] > 0){
+            $price =  round($price * 0.8, 2);
+        }
+
+        $this->view->oldPrice = $price;
         $dateStart = $license['activation_date'];
         $dateEnd = $license['expiration_date'];
         $today = time();
@@ -593,10 +597,16 @@ class Billing extends BaseController
 
         $this->view->newPrice = $newPrice = $newProductInfo['price_regular'];
         if ($double){
-            $this->view->oldPrice = $price = $license['price'] * 2;
+            $price = $license['price_regular'] * 2;
         } else {
-            $this->view->oldPrice = $price = $license['price'];
+            $price = $license['price_regular'];
         }
+
+        if ($license['has_cancelation_discount'] > 0){
+            $price =  round($price * 0.8, 2);
+        }
+
+        $this->view->oldPrice = $price;
 
         $dateStart = $license['activation_date'];
         $dateEndOld = $license['expiration_date'];
