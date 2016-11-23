@@ -24,7 +24,9 @@
         {insert "inc.flashMessages.htm"}
 
         <h4>Please confirm your upgrade <b>{$countSubscription}{$oldName} Subscription{$double}</b> to <b style="color: #16a89e;">{$countSubscription}{$newName} Subscription{$double}</b></h4>
-
+        {if $license.subscription_cancelable == false}
+            <p><b>Notice, that it includes enable auto-renewal.</b></p>
+       {/if}
         <form action="" method="post">
 
             <ul class="list-group">

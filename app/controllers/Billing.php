@@ -453,6 +453,10 @@ class Billing extends BaseController
                     $confirmed = false;
                 } else {
                     try {
+                        if ($license['subscription_cancelable'] == false){
+                            $billingModel->enableLicenseAutorebill($this->params['id']);
+                        }
+
                         $billingModel->updateSubscriptionPlan($this->params['id'], $newProduct);
 
                         if ($billingModel->isCancelationDiscountOfferableForLicense($license)) {
@@ -491,6 +495,7 @@ class Billing extends BaseController
                 $this->view->oldName = $license['name'];
                 $this->view->newName = $newProductInfo['name'];
                 $this->view->title = $this->di->getTranslator()->_('Upgrade Subscription To Premium Plan');
+                $this->view->license = $license;
                 $this->setView('billing/upgradeLicense.htm');
             }
         }
@@ -521,6 +526,10 @@ class Billing extends BaseController
                     $confirmed = false;
                 } else {
                     try {
+                        if ($license['subscription_cancelable'] == false){
+                            $billingModel->enableLicenseAutorebill($this->params['id']);
+                        }
+
                         $billingModel->updateSubscriptionPlan($this->params['id'], $newProduct);
                         
                         $this->getDI()->getFlashMessages()->add(FlashMessages::SUCCESS, "Subscription is successfully updated!");
@@ -555,6 +564,7 @@ class Billing extends BaseController
                 $this->view->upgradePrice = $sum['sumToPay'];
                 $this->view->oldName = $license['name'];
                 $this->view->newName = $newProductInfo['name'];
+                $this->view->license = $license;
                 $this->view->title = $this->di->getTranslator()->_('Upgrade Subscription To Premium Plan');
 
                 $this->setView('billing/upgradeLicense.htm');
