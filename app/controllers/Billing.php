@@ -437,8 +437,7 @@ class Billing extends BaseController
             $this->di->getFlashMessages()->add(FlashMessages::ERROR, "Subscription was not found!");
             $this->redirect($this->di->getRouter()->getRouteUrl('billing'));
         }
-
-        if (strripos($license['code_fastspring'], '-basic-') === false){
+        if ($license['status'] == 'inactive' || $license['is_rebill'] == null || $license['is_updated'] != 0 || strripos($license['code_fastspring'], '-basic-') === false){
             $this->di->getFlashMessages()->add(FlashMessages::ERROR, "You can't upgrade this subscription");
             $this->redirect($this->di['router']->getRouteUrl('billing'));
         } else {
@@ -511,8 +510,8 @@ class Billing extends BaseController
             $this->redirect($this->di->getRouter()->getRouteUrl('billing'));
         }
 
-        if (strripos($license['code_fastspring'], '-1m-') === false || strripos($license['code_fastspring'], '-basic-') !== false){
-            $this->di->getFlashMessages()->add(FlashMessages::WARNING, "You can't upgrade this subscription");
+        if ($license['status'] == 'inactive'|| $license['is_rebill'] == null || $license['is_updated'] != 0  || strripos($license['code_fastspring'], '-1m-') === false || strripos($license['code_fastspring'], '-basic-') !== false){
+            $this->di->getFlashMessages()->add(FlashMessages::ERROR, "You can't upgrade this subscription");
             $this->redirect($this->di['router']->getRouteUrl('billing'));
 
         } else {
@@ -544,7 +543,6 @@ class Billing extends BaseController
                         $this->getDI()->get('logger')->addError('Gateway exception!', array('exception' => $e));
                     }
                 }
-
                 $this->redirect($this->di->getRouter()->getRouteUrl('billing'));
             } else {
                 $newProductInfo = $billingModel->getProductInfo($newProduct);
