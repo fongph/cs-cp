@@ -192,7 +192,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-models.git",
-                "reference": "11b6d0bd0ed34ee8536285038a1c3b52377da5ba"
+                "reference": "bb55aac329eeab66ecfd71e486d134841c9d98f7"
             },
             "require": {
                 "php": ">=5.4.0"
@@ -206,7 +206,7 @@
                     "CS\\Models\\": "src/"
                 }
             },
-            "time": "2016-10-03 07:37:34"
+            "time": "2016-11-24 15:17:01"
         },
         {
             "name": "boomers/cs-queue",
@@ -307,7 +307,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/seller.git",
-                "reference": "83ee28bcc721be794e561892e2fb057ff125af23"
+                "reference": "03139c8bd19688587dca9104f0c6e8b08270a5c8"
             },
             "require": {
                 "guzzlehttp/guzzle": "~5.0",
@@ -325,7 +325,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2016-11-21 14:26:26"
+            "time": "2016-11-25 10:01:13"
         },
         {
             "name": "fenom/fenom",
@@ -1080,16 +1080,16 @@
         },
         {
             "name": "ramsey/uuid",
-            "version": "3.5.1",
+            "version": "3.5.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ramsey/uuid.git",
-                "reference": "a07797b986671b0dc823885a81d5e3516b931599"
+                "reference": "5677cfe02397dd6b58c861870dfaa5d9007d3954"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ramsey/uuid/zipball/a07797b986671b0dc823885a81d5e3516b931599",
-                "reference": "a07797b986671b0dc823885a81d5e3516b931599",
+                "url": "https://api.github.com/repos/ramsey/uuid/zipball/5677cfe02397dd6b58c861870dfaa5d9007d3954",
+                "reference": "5677cfe02397dd6b58c861870dfaa5d9007d3954",
                 "shasum": ""
             },
             "require": {
@@ -1102,11 +1102,13 @@
             "require-dev": {
                 "apigen/apigen": "^4.1",
                 "codeception/aspect-mock": "1.0.0",
+                "doctrine/annotations": "~1.2.0",
                 "goaop/framework": "1.0.0-alpha.2",
                 "ircmaxell/random-lib": "^1.1",
                 "jakub-onderka/php-parallel-lint": "^0.9.0",
                 "mockery/mockery": "^0.9.4",
                 "moontoast/math": "^1.1",
+                "php-mock/php-mock-phpunit": "^0.3|^1.1",
                 "phpunit/phpunit": "^4.7|>=5.0 <5.4",
                 "satooshi/php-coveralls": "^0.6.1",
                 "squizlabs/php_codesniffer": "^2.3"
@@ -1156,7 +1158,7 @@
                 "identifier",
                 "uuid"
             ],
-            "time": "2016-10-02 15:51:17"
+            "time": "2016-11-22 19:21:44"
         },
         {
             "name": "rastor/amazon-s3-php-class",
@@ -1244,16 +1246,16 @@
         },
         {
             "name": "rastor/jira-client",
-            "version": "0.3.11",
+            "version": "0.3.13",
             "source": {
                 "type": "git",
                 "url": "https://github.com/oRastor/jira-client.git",
-                "reference": "b63cee8e7f1fc9e413576b4f07b6480239d5228e"
+                "reference": "eda8e7bc615c979fd6b1f1dba08f9abf8dfb62d9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/oRastor/jira-client/zipball/b63cee8e7f1fc9e413576b4f07b6480239d5228e",
-                "reference": "b63cee8e7f1fc9e413576b4f07b6480239d5228e",
+                "url": "https://api.github.com/repos/oRastor/jira-client/zipball/eda8e7bc615c979fd6b1f1dba08f9abf8dfb62d9",
+                "reference": "eda8e7bc615c979fd6b1f1dba08f9abf8dfb62d9",
                 "shasum": ""
             },
             "require": {
@@ -1282,7 +1284,7 @@
                 "jira",
                 "rest"
             ],
-            "time": "2016-07-13 14:29:51"
+            "time": "2016-11-25 07:33:05"
         },
         {
             "name": "rastor/protobuf-php",
