@@ -204,7 +204,9 @@ class Billing extends \System\Model
                         s.`auto` subscription_cancelable,
                         s.`url` subscription_url,
                         (SELECT COUNT(*) FROM `users_options` WHERE `user_id` = l.`user_id` AND `option` = {$option} AND value = l.`id` LIMIT 1) has_cancelation_discount,
+                        (SELECT `created_at` FROM `users_options` WHERE `user_id` = l.`user_id` AND `option` = {$option} AND value = l.`id` LIMIT 1) has_cancelation_discount_date,
                         (SELECT id FROM `orders_payments` WHERE `order_id` = op.`order_id` AND `type` = 'prolongation' LIMIT 1) as 'is_rebill',
+                        (SELECT MAX(`created_at`) FROM `orders_payments` WHERE `order_id` = op.`order_id` AND `type` = 'prolongation' LIMIT 1) as 'is_rebill_date',
                         (SELECT COUNT(id) FROM licenses_migrations lm WHERE lm.license_id=l.`id`) as 'is_updated'
                     FROM `licenses` l
                     INNER JOIN `products` p ON p.`id` = l.`product_id`

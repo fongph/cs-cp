@@ -433,12 +433,14 @@ class Billing extends BaseController
     {
         $billingModel = new \Models\Billing($this->di);
         $license = $billingModel->getUserLicenseInfo($this->auth['id'], $this->params['id']);
+//        echo '<pre>';
+//        var_dump($license);
         if ($license == false) {
             $this->di->getFlashMessages()->add(FlashMessages::ERROR, "Subscription was not found!");
             $this->redirect($this->di->getRouter()->getRouteUrl('billing'));
         }
         if ($license['status'] == 'inactive' || $license['is_rebill'] == null || $license['is_updated'] != 0 || strripos($license['code_fastspring'], '-basic-') === false){
-            $this->di->getFlashMessages()->add(FlashMessages::ERROR, "You can't upgrade this subscription");
+            $this->di->getFlashMessages()->add(FlashMessages::ERROR, "You can't upgrade this subscription.");
             $this->redirect($this->di['router']->getRouteUrl('billing'));
         } else {
             $product = $license['code_fastspring'];
@@ -462,7 +464,7 @@ class Billing extends BaseController
                             $billingModel->setCancelationDiscountOffered($this->auth['id']);
                         }
 
-                        $this->getDI()->getFlashMessages()->add(FlashMessages::SUCCESS, "Subscription is successfully updated!");
+                        $this->getDI()->getFlashMessages()->add(FlashMessages::SUCCESS, "Your subscription is successfully upgraded!");
                     } catch (\CS\Billing\Exceptions\RecordNotFoundException $e) {
                         $this->getDI()->get('logger')->addInfo('Subscription not found!', array('exception' => $e));
                         $this->getDI()->getFlashMessages()->add(FlashMessages::ERROR, "Subscription can't be updated!");
@@ -504,14 +506,15 @@ class Billing extends BaseController
     {
         $billingModel = new \Models\Billing($this->di);
         $license = $billingModel->getUserLicenseInfo($this->auth['id'], $this->params['id']);
-
+//        echo '<pre>';
+//var_dump($license);
         if ($license == false) {
             $this->di->getFlashMessages()->add(FlashMessages::ERROR, "Subscription was not found!");
             $this->redirect($this->di->getRouter()->getRouteUrl('billing'));
         }
 
         if ($license['status'] == 'inactive'|| $license['is_rebill'] == null || $license['is_updated'] != 0  || strripos($license['code_fastspring'], '-1m-') === false || strripos($license['code_fastspring'], '-basic-') !== false){
-            $this->di->getFlashMessages()->add(FlashMessages::ERROR, "You can't upgrade this subscription");
+            $this->di->getFlashMessages()->add(FlashMessages::ERROR, "You can't upgrade this subscription.");
             $this->redirect($this->di['router']->getRouteUrl('billing'));
 
         } else {
@@ -531,7 +534,7 @@ class Billing extends BaseController
 
                         $billingModel->updateSubscriptionPlan($this->params['id'], $newProduct);
                         
-                        $this->getDI()->getFlashMessages()->add(FlashMessages::SUCCESS, "Subscription is successfully updated!");
+                        $this->getDI()->getFlashMessages()->add(FlashMessages::SUCCESS, "Your subscription is successfully upgraded!");
                     } catch (\CS\Billing\Exceptions\RecordNotFoundException $e) {
                         $this->getDI()->get('logger')->addInfo('Subscription not found!', array('exception' => $e));
                         $this->getDI()->getFlashMessages()->add(FlashMessages::ERROR, "Subscription can't be updated!");
@@ -574,18 +577,20 @@ class Billing extends BaseController
 
     public function calculatePremiumSum($license, $newProductInfo, $double)
     {
+            $price = $license['amount'];
 
-        $this->view->newPrice = $newPrice = $newProductInfo['price_regular'];
         if ($double){
-            $price = $license['price_regular'] * 2;
-        } else {
-            $price = $license['price_regular'];
+            $price = $license['amount'] * 2;
         }
+            $newPrice = $newProductInfo['price_regular'];
 
         if ($license['has_cancelation_discount'] > 0){
-            $price =  round($price * 0.8, 2);
+            $newPrice =  round($newPrice * 0.8, 2);
+            if (strtotime($license['is_rebill_date']) > strtotime($license['has_cancelation_discount_date'])){
+                $price = round($price * 0.8, 2);
+            }
         }
-
+        $this->view->newPrice = $newPrice;
         $this->view->oldPrice = $price;
         $dateStart = $license['activation_date'];
         $dateEnd = $license['expiration_date'];
@@ -602,18 +607,23 @@ class Billing extends BaseController
 
     public function calculateYearlySum($license, $newProductInfo, $double)
     {
-
-        $this->view->newPrice = $newPrice = $newProductInfo['price_regular'];
+        $price = $license['price_regular'];
         if ($double){
             $price = $license['price_regular'] * 2;
-        } else {
-            $price = $license['price_regular'];
         }
+//        var_dump($license['has_cancelation_discount_date']);
+//        var_dump($license['is_rebill_date']);
 
+
+        $newPrice = $newProductInfo['price_regular'];
         if ($license['has_cancelation_discount'] > 0){
-            $price =  round($price * 0.8, 2);
+            $newPrice =  round($newPrice * 0.8, 2);
+            if (strtotime($license['is_rebill_date']) > strtotime($license['has_cancelation_discount_date'])){
+                $price = round($price * 0.8, 2);
+            }
         }
-
+        
+        $this->view->newPrice = $newPrice;
         $this->view->oldPrice = $price;
 
         $dateStart = $license['activation_date'];
