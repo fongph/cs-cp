@@ -1,7 +1,0 @@
-{if !$di.currentDevice.rooted}
-  {include "content/{$di.t->getLocale()}/rootPhone.html"}
-{else}
-  {if !$di.currentDevice.rootAccess}
-      {include "content/{$di.t->getLocale()}/rootAccessPhone.html"}
-  {/if}
-{/if}
