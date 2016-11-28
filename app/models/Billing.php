@@ -74,10 +74,21 @@ class Billing extends \System\Model
                     callslim.call = {$unlimitedValue}
             ) as `calls_expire_date`,
                 CASE WHEN p.`group` LIKE '%icloud%' THEN 'icloud'
-                        WHEN p.`group` LIKE '%jailbreak%' THEN 'ios'
-                          WHEN p.`group` LIKE '%android%' THEN 'android'
-                          ELSE 'no' 
-                        END AS 'platform'";
+                    WHEN p.`group` LIKE '%jailbreak%' THEN 'ios'
+                    WHEN p.`group` LIKE '%android%' THEN 'android'
+                    ELSE 'no' 
+                END AS 'platform',
+                p.code_fastspring,
+                CASE WHEN p.`code_fastspring` LIKE 'pumpic-basic-%m-%' THEN 'basic'
+                   WHEN p.`code_fastspring` LIKE '%pumpic-%-1m-%' THEN 'premium-1m'
+                   ELSE '-' 
+                 END AS 'product_version',
+             (SELECT id 
+             FROM `orders_payments` 
+             WHERE `order_id` = o.`id` AND `type` = 'prolongation' 
+             LIMIT 1
+             ) as 'is_rebill',
+             (SELECT COUNT(id) FROM licenses_migrations lm WHERE lm.license_id=lic.`id`) as 'is_updated'";
 
         $fromWhere = "FROM `licenses` lic
                             INNER JOIN `products` p ON lic.`product_id` = p.`id`
@@ -95,7 +106,7 @@ class Billing extends \System\Model
         }
 
         $query = "{$select} {$fromWhere}" . " LIMIT {$params['start']}, {$params['length']}";
-
+//        echo $query;
         $result = array(
             'aaData' => $this->getDb()->query($query)->fetchAll(\PDO::FETCH_ASSOC)
         );
@@ -180,6 +191,7 @@ class Billing extends \System\Model
         $result = $this->getDb()->query("SELECT
                         l.`id`,
                         p.`name`,
+                        p.`code_fastspring`,
                         l.`amount`,
                         l.`currency`,
                         l.`price`,
@@ -191,9 +203,14 @@ class Billing extends \System\Model
                         s.`reference_number` subscription_reference_number,
                         s.`auto` subscription_cancelable,
                         s.`url` subscription_url,
-                        (SELECT COUNT(*) FROM `users_options` WHERE `user_id` = l.`user_id` AND `option` = {$option} AND value = l.`id` LIMIT 1) has_cancelation_discount
+                        (SELECT COUNT(*) FROM `users_options` WHERE `user_id` = l.`user_id` AND `option` = {$option} AND value = l.`id` LIMIT 1) has_cancelation_discount,
+                        (SELECT `created_at` FROM `users_options` WHERE `user_id` = l.`user_id` AND `option` = {$option} AND value = l.`id` LIMIT 1) has_cancelation_discount_date,
+                        (SELECT id FROM `orders_payments` WHERE `order_id` = op.`order_id` AND `type` = 'prolongation' LIMIT 1) as 'is_rebill',
+                        (SELECT MAX(`created_at`) FROM `orders_payments` WHERE `order_id` = op.`order_id` AND `type` = 'prolongation' LIMIT 1) as 'is_rebill_date',
+                        (SELECT COUNT(id) FROM licenses_migrations lm WHERE lm.license_id=l.`id`) as 'is_updated'
                     FROM `licenses` l
                     INNER JOIN `products` p ON p.`id` = l.`product_id`
+                    INNER JOIN `orders_products` op ON l.`order_product_id` = op.`id` 
                     LEFT JOIN `subscriptions` s ON l.`id` = s.`license_id`
                     WHERE
                         l.`id` = {$license} AND
@@ -317,6 +334,26 @@ class Billing extends \System\Model
             $this->di['usersNotesProcessor']->licenseSubscriptionAutoRebillTaskAdded($licenseRecord->getId());
             $this->di['billingManager']->cancelLicenseSubscription($licenseRecord->getId());
         }
+    }
+    public function updateSubscriptionPlan($licenseId, $productPath) {
+        $billingManager = $this->di['billingManager'];
+        
+        $subscriptionRecord = $billingManager->getLicenseSubscription($licenseId);
+                
+        $subscriptionIterator = $billingManager->getSubscriptionsIterator($subscriptionRecord->getReferenceNumber(), $subscriptionRecord->getPaymentMethod());
+        
+        foreach ($subscriptionIterator as $subscriptionRecord) {
+            $licenseRecord = $subscriptionRecord->getLicense();
+
+            $this->di['billingManager']->updateSubscriptionPlan($licenseRecord->getId(), $productPath);
+        }
+    }
+
+    public function getProductInfo($codeFastsping)
+    {
+        $codeFastsping = $this->getDb()->quote($codeFastsping);
+
+        return $this->getDb()->query("SELECT p.price_regular, p.name FROM products p WHERE p.code_fastspring={$codeFastsping}")->fetch();
     }
 
 }
