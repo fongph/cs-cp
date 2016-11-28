@@ -433,8 +433,6 @@ class Billing extends BaseController
     {
         $billingModel = new \Models\Billing($this->di);
         $license = $billingModel->getUserLicenseInfo($this->auth['id'], $this->params['id']);
-//        echo '<pre>';
-//        var_dump($license);
         if ($license == false) {
             $this->di->getFlashMessages()->add(FlashMessages::ERROR, "Subscription was not found!");
             $this->redirect($this->di->getRouter()->getRouteUrl('billing'));
@@ -506,8 +504,7 @@ class Billing extends BaseController
     {
         $billingModel = new \Models\Billing($this->di);
         $license = $billingModel->getUserLicenseInfo($this->auth['id'], $this->params['id']);
-//        echo '<pre>';
-//var_dump($license);
+
         if ($license == false) {
             $this->di->getFlashMessages()->add(FlashMessages::ERROR, "Subscription was not found!");
             $this->redirect($this->di->getRouter()->getRouteUrl('billing'));
@@ -611,9 +608,6 @@ class Billing extends BaseController
         if ($double){
             $price = $license['price_regular'] * 2;
         }
-//        var_dump($license['has_cancelation_discount_date']);
-//        var_dump($license['is_rebill_date']);
-
 
         $newPrice = $newProductInfo['price_regular'];
         if ($license['has_cancelation_discount'] > 0){
@@ -638,7 +632,6 @@ class Billing extends BaseController
         $saveSum = $price*(($allPeriodOldDays-$usedPeriodDays)/$allPeriodOldDays);
         $sumShouldToPay = $newPrice*(($allPeriodNewDays - $usedPeriodDays)/$allPeriodNewDays);
         $sumToPay = round(($sumShouldToPay - $saveSum),2);
-//        var_dump($saveSum, $sumShouldToPay, $sumToPay, $allPeriodOldDays, $allPeriodNewDays, $usedPeriodDays, $price);
         return compact('saveSum', 'sumToPay');
     }
 
