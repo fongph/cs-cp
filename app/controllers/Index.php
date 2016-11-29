@@ -160,7 +160,7 @@ class Index extends BaseController
 
             foreach ($devices as $device)
                 if ($device['active'])
-                    $this->redirect($this->di->getRouter()->getRouteUrl('cp'));
+                    $this->redirect($this->di->getRouter()->getRouteUrl('calls'));
 
             $billing = new Billing($this->di);
             $packages = $billing->getAvailablePackages($this->di->getAuth()->getIdentity()['id']);

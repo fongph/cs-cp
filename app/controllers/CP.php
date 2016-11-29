@@ -9,6 +9,7 @@ class CP extends BaseController {
     }
 
     public function mainAction() {
+//        $this->di['router']->getRouteUrl('calls');
         $this->redirect($this->di['router']->getRouteUrl('calls'));
     }
 
