@@ -40,7 +40,7 @@ class Billing extends BaseController
             $this->view->title = $this->di->getTranslator()->_('Subscriptions');
         } else
             $this->view->title = $this->di->getTranslator()->_('Payments & Devices');
-
+        
         $this->view->unlimitedValue = \CS\Models\Limitation\LimitationRecord::UNLIMITED_VALUE;
         $this->view->buyUrl = GlobalSettings::getMainURL($this->di['config']['site']) . '/buy.html';
         $this->view->hasActivePackages = $billingModel->hasActivePackages($this->auth['id']);
@@ -428,5 +428,213 @@ class Billing extends BaseController
 
         $this->redirect($this->di->getRouter()->getRouteUrl('billingLicense', array('id' => $licenseId)));
     }
+
+    public function licenseUpgradePremiumAction()
+    {
+        $billingModel = new \Models\Billing($this->di);
+        $license = $billingModel->getUserLicenseInfo($this->auth['id'], $this->params['id']);
+        if ($license == false) {
+            $this->di->getFlashMessages()->add(FlashMessages::ERROR, "Subscription was not found!");
+            $this->redirect($this->di->getRouter()->getRouteUrl('billing'));
+        }
+        if ($license['status'] == 'inactive' || $license['is_rebill'] == null || $license['is_updated'] != 0 || strripos($license['code_fastspring'], '-basic-') === false){
+            $this->di->getFlashMessages()->add(FlashMessages::ERROR, "You can't upgrade this subscription.");
+            $this->redirect($this->di['router']->getRouteUrl('billing'));
+        } else {
+            $product = $license['code_fastspring'];
+            $newProduct = str_replace('basic', 'premium', $product);
+           
+
+            if ($this->getRequest()->isPost()) {
+                $confirmed = true;
+
+                if ($this->getRequest()->hasPost('cancel')) {
+                    $confirmed = false;
+                } else {
+                    try {
+                        if ($license['subscription_cancelable'] == false){
+                            $billingModel->enableLicenseAutorebill($this->params['id']);
+                        }
+
+                        $billingModel->updateSubscriptionPlan($this->params['id'], $newProduct);
+
+                        if ($billingModel->isCancelationDiscountOfferableForLicense($license)) {
+                            $billingModel->setCancelationDiscountOffered($this->auth['id']);
+                        }
+
+                        $this->getDI()->getFlashMessages()->add(FlashMessages::SUCCESS, "Your subscription is successfully upgraded!");
+                    } catch (\CS\Billing\Exceptions\RecordNotFoundException $e) {
+                        $this->getDI()->get('logger')->addInfo('Subscription not found!', array('exception' => $e));
+                        $this->getDI()->getFlashMessages()->add(FlashMessages::ERROR, "Subscription can't be updated!");
+                    } catch (\CS\Billing\Exceptions\GatewayException $e) {
+                        $this->getDI()->getFlashMessages()->add(FlashMessages::ERROR, "Operation error! or Process error!");
+                        $this->getDI()->get('logger')->addWarning('Gateway request was not successfuly completed!', array('exception' => $e, 'gatewayResponse' => $e->getResponse()->getMessage()));
+                    } catch (\Seller\Exception\SellerException $e) {
+                        $this->getDI()->getFlashMessages()->add(FlashMessages::ERROR, "Error during operation!");
+                        $this->getDI()->get('logger')->addError('Gateway exception!', array('exception' => $e));
+                    }
+                }
+
+                $this->redirect($this->di->getRouter()->getRouteUrl('billing'));
+            } else {
+                $newProductInfo = $billingModel->getProductInfo($newProduct);
+
+                if (strripos($license['code_fastspring'], '-double') === false){
+                    $this->view->double = '';
+                    $this->view->countSubscription = '';
+                    $double = false;
+                } else {
+                    $this->view->double = 's';
+                    $this->view->countSubscription = '2 ';
+                    $double = true;
+                }
+                $sum = $this->calculatePremiumSum($license, $newProductInfo, $double);
+                $this->view->balance = round($sum['saveSum'], 2);
+                $this->view->upgradePrice = $sum['sumToPay'];
+                $this->view->oldName = $license['name'];
+                $this->view->newName = $newProductInfo['name'];
+                $this->view->title = $this->di->getTranslator()->_('Upgrade Subscription To Premium Plan');
+                $this->view->license = $license;
+                $this->setView('billing/upgradeLicense.htm');
+            }
+        }
+    }
+
+    public function licenseUpgradeYearlyAction()
+    {
+        $billingModel = new \Models\Billing($this->di);
+        $license = $billingModel->getUserLicenseInfo($this->auth['id'], $this->params['id']);
+
+        if ($license == false) {
+            $this->di->getFlashMessages()->add(FlashMessages::ERROR, "Subscription was not found!");
+            $this->redirect($this->di->getRouter()->getRouteUrl('billing'));
+        }
+
+        if ($license['status'] == 'inactive'|| $license['is_rebill'] == null || $license['is_updated'] != 0  || strripos($license['code_fastspring'], '-1m-') === false || strripos($license['code_fastspring'], '-basic-') !== false){
+            $this->di->getFlashMessages()->add(FlashMessages::ERROR, "You can't upgrade this subscription.");
+            $this->redirect($this->di['router']->getRouteUrl('billing'));
+
+        } else {
+            $product = $license['code_fastspring'];
+            $newProduct = str_replace('1m', '12m', $product);
+
+            if ($this->getRequest()->isPost()) {
+                $confirmed = true;
+
+                if ($this->getRequest()->hasPost('cancel')) {
+                    $confirmed = false;
+                } else {
+                    try {
+                        if ($license['subscription_cancelable'] == false){
+                            $billingModel->enableLicenseAutorebill($this->params['id']);
+                        }
+
+                        $billingModel->updateSubscriptionPlan($this->params['id'], $newProduct);
+                        
+                        $this->getDI()->getFlashMessages()->add(FlashMessages::SUCCESS, "Your subscription is successfully upgraded!");
+                    } catch (\CS\Billing\Exceptions\RecordNotFoundException $e) {
+                        $this->getDI()->get('logger')->addInfo('Subscription not found!', array('exception' => $e));
+                        $this->getDI()->getFlashMessages()->add(FlashMessages::ERROR, "Subscription can't be updated!");
+                    } catch (\CS\Billing\Exceptions\GatewayException $e) {
+                        $this->getDI()->getFlashMessages()->add(FlashMessages::ERROR, "Operation error! or Process error!");
+                        $this->getDI()->get('logger')->addWarning('Gateway request was not successfuly completed!', array('exception' => $e, 'gatewayResponse' => $e->getResponse()->getMessage()));
+                    } catch (\Seller\Exception\SellerException $e) {
+                        $this->getDI()->getFlashMessages()->add(FlashMessages::ERROR, "Error during operation!");
+                        $this->getDI()->get('logger')->addError('Gateway exception!', array('exception' => $e));
+                    }
+                }
+                $this->redirect($this->di->getRouter()->getRouteUrl('billing'));
+            } else {
+                $newProductInfo = $billingModel->getProductInfo($newProduct);
+
+
+                 if (strripos($license['code_fastspring'], '-double') === false){
+                     $this->view->double = '';
+                     $this->view->countSubscription = '';
+                     $double = false;
+                 } else {
+                     $this->view->double = 's';
+                     $this->view->countSubscription = '2 ';
+                     $double = true;
+                 }
+                $sum = $this->calculateYearlySum($license, $newProductInfo, $double);
+                $this->view->balance = round($sum['saveSum'], 2);
+                $this->view->upgradePrice = $sum['sumToPay'];
+                $this->view->oldName = $license['name'];
+                $this->view->newName = $newProductInfo['name'];
+                $this->view->license = $license;
+                $this->view->title = $this->di->getTranslator()->_('Upgrade Subscription To Premium Plan');
+
+                $this->setView('billing/upgradeLicense.htm');
+            }
+        }
+
+
+    }
+
+    public function calculatePremiumSum($license, $newProductInfo, $double)
+    {
+            $price = $license['amount'];
+
+        if ($double){
+            $price = $license['amount'] * 2;
+        }
+            $newPrice = $newProductInfo['price_regular'];
+
+        if ($license['has_cancelation_discount'] > 0){
+            $newPrice =  round($newPrice * 0.8, 2);
+            if (strtotime($license['is_rebill_date']) > strtotime($license['has_cancelation_discount_date'])){
+                $price = round($price * 0.8, 2);
+            }
+        }
+        $this->view->newPrice = $newPrice;
+        $this->view->oldPrice = $price;
+        $dateStart = $license['activation_date'];
+        $dateEnd = $license['expiration_date'];
+        $today = time();
+
+        $allPeriodDays = ceil(($dateEnd-$dateStart)/24/3600);
+        $usedPeriodDays = floor(($today-$dateStart)/24/3600);
+
+        $saveSum = $price*(($allPeriodDays-$usedPeriodDays)/$allPeriodDays);
+        $sumShouldToPay = $newPrice - $newPrice*($usedPeriodDays/$allPeriodDays);
+        $sumToPay = round(($sumShouldToPay - $saveSum),2);
+        return compact('saveSum', 'sumToPay');
+    }
+
+    public function calculateYearlySum($license, $newProductInfo, $double)
+    {
+        $price = $license['price_regular'];
+        if ($double){
+            $price = $license['price_regular'] * 2;
+        }
+
+        $newPrice = $newProductInfo['price_regular'];
+        if ($license['has_cancelation_discount'] > 0){
+            $newPrice =  round($newPrice * 0.8, 2);
+            if (strtotime($license['is_rebill_date']) > strtotime($license['has_cancelation_discount_date'])){
+                $price = round($price * 0.8, 2);
+            }
+        }
+        
+        $this->view->newPrice = $newPrice;
+        $this->view->oldPrice = $price;
+
+        $dateStart = $license['activation_date'];
+        $dateEndOld = $license['expiration_date'];
+        $dateEndNew = strtotime('+1 year', $dateStart);
+        $today = time();
+
+        $allPeriodOldDays = ceil(($dateEndOld-$dateStart)/24/3600);
+        $allPeriodNewDays =  ceil(($dateEndNew-$dateStart)/24/3600);
+        $usedPeriodDays = floor(($today-$dateStart)/24/3600);
+
+        $saveSum = $price*(($allPeriodOldDays-$usedPeriodDays)/$allPeriodOldDays);
+        $sumShouldToPay = $newPrice*(($allPeriodNewDays - $usedPeriodDays)/$allPeriodNewDays);
+        $sumToPay = round(($sumShouldToPay - $saveSum),2);
+        return compact('saveSum', 'sumToPay');
+    }
+
+
 
 }
