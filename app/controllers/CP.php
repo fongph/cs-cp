@@ -10,7 +10,10 @@ class CP extends BaseController {
 
     public function mainAction() {
 //        $this->di['router']->getRouteUrl('calls');
-        $this->redirect($this->di['router']->getRouteUrl('calls'));
+//        $this->setDeviceAction();
+        $calls = new Calls($this->di);
+        $calls->indexAction();
+//        $this->redirect($this->di['router']->getRouteUrl('calls'));
     }
 
     public function setDeviceAction() {

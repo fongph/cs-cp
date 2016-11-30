@@ -159,8 +159,11 @@ class Index extends BaseController
             $devices = $devicesManager->getUserActiveDevices($this->di->getAuth()->getIdentity()['id']);
 
             foreach ($devices as $device)
-                if ($device['active'])
-                    $this->redirect($this->di->getRouter()->getRouteUrl('calls'));
+                if ($device['active']){
+//                    $this->redirect($this->di->getRouter()->getRouteUrl('calls'));
+                        $cp = new CP($this->di);
+                        $cp->mainAction();
+                }
 
             $billing = new Billing($this->di);
             $packages = $billing->getAvailablePackages($this->di->getAuth()->getIdentity()['id']);
