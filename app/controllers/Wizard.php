@@ -28,7 +28,7 @@ class Wizard extends BaseController
 
     public function preAction()
     {
-        $this->checkDemo($this->di->getRouter()->getRouteUrl('cp'));
+        $this->checkDemo($this->di->getRouter()->getRouteUrl('calls'));
         $this->checkSupportMode();
     }
 
