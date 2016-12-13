@@ -2,6 +2,18 @@
     #all, #textareaAlert {
         padding-left: 20px;
     }
+    .modal-dialog {
+        background-color: #ffffff;
+        -webkit-border-radius: 4px;
+        -moz-border-radius: 4px;
+        border-radius: 4px;
+    }
+    .modal-header {
+        border-bottom: 1px solid #e7e7e7;
+    }
+    .modal-dialog .text-content {
+        padding: 20px;
+    }
 </style>
 <div id="device-settings-page">
     <h1 class="text-center">{$title}</h1>
@@ -18,6 +30,11 @@
             
             <div class="col-lg-12">
                 {insert "inc.cp.messages.htm"}
+                <div id="backup-message" class="alert" style="display: none;">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    <i class="fa fa-info-circle"></i>
+                    <span></span>
+                </div>
             </div>
 
             <div class="col-lg-6 col-md-6">
@@ -155,7 +172,7 @@
                     </div>
                     <div class="panel-body text-center">
                         <p class="text-danger">{$di.t->_('This action cannot be undone. Your subscription will be deactivated, and you will not be able to use it with any other device any longer. All the data will be deleted from your Control Panel immediately.')}</p>
-                        <a class="btn btn-danger" href="{$di['router']->getRouteUrl('settings')}?delete">{$di.t->_('Unassign Device')}</a>
+                        <a id="unassign-btn" class="btn btn-danger" href="{$di['router']->getRouteUrl('settings')}?delete">{$di.t->_('Unassign Device')}</a>
                     </div>
                 </div>
             </div>
@@ -170,7 +187,7 @@
                                     <input type="text" name="name" value="{$di.currentDevice.name|e}" class="form-control">
                                 </div>
                                 <div class="form-group col-xs-5 col-sm-2 col-md-4">
-                                    <button type="submit" class="btn btn-primary btn-block" name="deviceSettings">{$di.t->_('Update')}</button>
+                                    <button id="update-btn" type="submit" class="btn btn-primary btn-block" name="deviceSettings">{$di.t->_('Update')}</button>
                                 </div>
                             </div>
                         </form>
@@ -219,12 +236,18 @@
                         </div>
                         {if $di.currentDevice.os == 'icloud'}
                         <div class="panel-body inline-data-noicon text-center">
-                            <a href="?check-new-backup" class="btn btn-primary{if $di.currentDevice.processing == 1} disabled{/if}">Update data</a>
+                            <a href="#" id="modal-link" class="btn btn-primary{if $di.currentDevice.processing == 1} disabled{/if}" data-toggle="modal" data-target="#confirm-backup-modal">Download Latest Backup</a>
+                            <p style="font-size: 12px;margin-top: 5px;">Check if there is а new backup for the device</p>
                             {if $di.currentDevice.processing == 1}<p class="text-info" style="padding-top: 10px;">Downloading backup data now. It will be available shortly!</p>
                             {elseif $di.currentDevice.processing == 2}<p class="text-info" style="padding-top: 10px;">No backups found on the device. Please, back up the target device manually.</p>{/if}
                         </div>
                         {/if}
                     {/if}
+                    <div id="progress-bar-block" style="padding: 0 10px; display: none;">
+                        <div class="progress">
+                            <div id="backup-progress" class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
+                        </div>
+                    </div>
                     {if $hasPackage && $currentDevice.os != 'icloud'}
                     <div class="panel-body inline-data-noicon">
                         <div class="title">
@@ -390,6 +413,102 @@
         <p class="text-info"><span class="asterisk asterisk-info">*</span> {$di.t->_('Command activation will take up to 20 min. In case the target device has any additional software to track Calls or SMS, blocking may work improperly.')}</p>
     {/if}
 </div>
+<div class="modal fade bs-example-modal-md text-center" id="confirm-backup-modal" tabindex="-1" role="dialog" aria-labelledby="modal-label">
+    <div class="modal-dialog modal-md" role="document">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span></button>
+            <h4 class="modal-title" data-dismiss="modal" >Downloading Backup Data</h4>
+        </div>
+        <div class="text-content">
+            <p>You are about to check iCloud backup server for the latest data. If it is available, it will be downloaded and displayed in the Control Panel within 1 hour.</p>
+            <div class="button-group">
+                <a href="#" id="load-backup" class="btn btn-primary" data-dismiss="modal" >Check now</a>
+                <a href="#" class="btn btn-danger" data-dismiss="modal" aria-label="Close">Cancel</a>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(function() {
+        var bar = $('#backup-progress');
+        function enableProgressBar(progress, interval, data) {
+            var width = Math.round(bar.width() / bar.parent().width() * 100);
+            $('#backup-message').hide();
+            $('#unassign-btn').addClass('disabled');
+            $('#update-btn').addClass('disabled');
+            $('#modal-link').addClass('disabled');
+            bar.attr('aria-valuenow', width).css('width', width+'%');
+            var intervalID = setInterval(frame, interval);
+            bar.data('clock', intervalID);
+            function frame() {
+                if (width >= progress) {
+                    clearInterval(intervalID);
+                    if (width >= 100) {
+                        clearInterval(intervalID)
+                        bar.attr('aria-valuenow', 0).css('width', 0+'%');
+                        return progressSuccess(data);
+                    }
+                } else {
+                    width += 5;
+                    bar.attr('aria-valuenow', width).css('width', width+'%');
+                }
+            }
+        };
+
+        function progressSuccess(data) {
+            var statusBlock = $('#backup-message');
+            var progressBarBlock = $('#progress-bar-block');
+            statusBlock.addClass('alert-'+data['status'])
+                    .find('span').html(data['message']);
+            statusBlock.show();
+            progressBarBlock.hide();
+            console.log(data)
+            $('#unassign-btn').removeClass('disabled');
+            $('#update-btn').removeClass('disabled');
+            if(data.leaveDisabled !== 'true') {
+            $('#modal-link').removeClass('disabled');
+            }
+        };
+        $('#confirm-backup-modal').on('hidden.bs.modal', function () {
+            $('#modal-link').one('focus', function (e){
+                $(this).blur();
+            });
+        });
+        $('#load-backup').click(function (e) {
+            e.preventDefault();
+            $.ajax({
+                url: '?check-new-backup',
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                beforeSend: function () {
+                    $('#progress-bar-block').show();
+                    enableProgressBar(70, 300)
+                },
+                success: function (data) {
+                    console.log('AJAX_SUCCESS');
+                    var existingTimer = bar.data('clock');
+                    if (existingTimer){
+                        clearInterval(existingTimer);
+                    }
+                    enableProgressBar(100, 200, data)
+                },
+                error: function (data) {
+                    var errorMsg = {
+                        status: 'danger',
+                        message: 'Oops, something went wrong with your request. Check your Internet connection or try again later. If the problem recurs, please contact Customer <a href="mailto:support@pumpic.com">Support</a>. Error code: ' + data.status
+                    }
+                    console.log('AJAX_ERROR', data, data.status);
+                    var existingTimer = bar.data('clock');
+                    if (existingTimer){
+                        clearInterval(existingTimer);
+                    }
+                    progressSuccess(errorMsg)
+                }
+            });
+        })
+    });
+</script>
 <script>
     
     var $phone = $("input[name='phone']");
