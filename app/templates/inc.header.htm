@@ -77,7 +77,7 @@
                 <div class="navbar-inner">
                     <ul class="nav navbar-nav">
                         {if $di.auth->hasIdentity()}
-                            <li><a href="{$di.router->getRouteUrl('cp')}">{$di.t->_('Control Panel')}</a></li>
+                            <li><a href="{$di.router->getRouteUrl('calls')}">{$di.t->_('Control Panel')}</a></li>
                             <li><a href="{$di.router->getRouteUrl('profile')}" class="active">{$di.t->_('Profile')}</a></li>
                             {if !$supportMode}<li><a target="_blank" href="{$di.config.url.registration}">{$di.t->_('Store')}</a></li>{/if}
                             {if !$demoMode && !$supportMode}<li><a href="{$di.router->getRouteUrl('billing')}">{$di.t->_('Subscriptions')}</a></li>{/if}

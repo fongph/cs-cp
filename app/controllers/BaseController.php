@@ -110,7 +110,7 @@ class BaseController extends Controller
                 $this->di->getFlashMessages()->add(FlashMessages::INFO, $this->di['t']->_('Not available in support mode.'));
             }
 
-            $this->redirect($this->di->getRouter()->getRouteUrl('cp'));
+            $this->redirect($this->di->getRouter()->getRouteUrl('calls'));
         }
     }
 
@@ -130,6 +130,11 @@ class BaseController extends Controller
         $query->offsetUnset('setDeviceId');
 
         $this->redirect((string) $url);
+    }
+    public function redirectPermanently($url, $statusCode = 301)
+    {
+        header('Location: ' . $url, true, $statusCode);
+        die;
     }
 
 }

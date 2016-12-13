@@ -9,7 +9,7 @@ class CP extends BaseController {
     }
 
     public function mainAction() {
-        $this->redirect($this->di['router']->getRouteUrl('calls'));
+        $this->redirectPermanently($this->di['router']->getRouteUrl('calls'));
     }
 
     public function setDeviceAction() {
@@ -47,7 +47,7 @@ class CP extends BaseController {
             }, false);
         }
 
-        $this->redirect($this->di['router']->getRouteUrl('cp'));
+        $this->redirect($this->di['router']->getRouteUrl('calls'));
     }
 
 }

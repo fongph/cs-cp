@@ -53,7 +53,7 @@ class Index extends BaseController
                                                 'instructions/installing-ios.html'])) {
                 $this->setLayout('content/bordered-content.html');
                 $this->view->startMonitoring = true;
-                $this->view->link = $this->di->getRouter()->getRouteUrl('cp');
+                $this->view->link = $this->di->getRouter()->getRouteUrl('calls');
             }
             if(in_array($this->params['uri'], ['instructions/rooting-android.html',
                                                     'instructions/granting-superuser-rights.html'])) {
@@ -159,8 +159,11 @@ class Index extends BaseController
             $devices = $devicesManager->getUserActiveDevices($this->di->getAuth()->getIdentity()['id']);
 
             foreach ($devices as $device)
-                if ($device['active'])
-                    $this->redirect($this->di->getRouter()->getRouteUrl('cp'));
+                if ($device['active']){
+//                    instead redirect to cp/calls
+                        $cp = new CP($this->di);
+                        $cp->mainAction();
+                }
 
             $billing = new Billing($this->di);
             $packages = $billing->getAvailablePackages($this->di->getAuth()->getIdentity()['id']);
@@ -194,7 +197,7 @@ class Index extends BaseController
 
     public function supportAction()
     {
-        $this->checkDemo($this->di['router']->getRouteUrl('cp'));
+        $this->checkDemo($this->di['router']->getRouteUrl('calls'));
         $this->checkSupportMode();
 
         $this->view->title = $this->di['t']->_('Support');
@@ -370,7 +373,7 @@ class Index extends BaseController
             if ($deviceId !== null) {
                 $devicesModel = new \Models\Devices($this->di);
                 $devicesModel->setCurrentDevId($deviceId);
-                $this->redirect($this->di['router']->getRouteUrl('cp'));
+                $this->redirect($this->di['router']->getRouteUrl('calls'));
             } else {
                 $this->redirect($this->di['router']->getRouteUrl('main'));
             }
