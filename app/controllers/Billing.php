@@ -458,8 +458,19 @@ class Billing extends BaseController
 
                         $billingModel->updateSubscriptionPlan($this->params['id'], $newProduct);
 
-                        if ($billingModel->isCancelationDiscountOfferableForLicense($license)) {
-                            $billingModel->setCancelationDiscountOffered($this->auth['id']);
+                        if (substr($license['code_fastspring'], -7) === '-double'){
+                            $licensesToRemoveDiscount = $billingModel->getDoubleSubscriptions($license['order_product_id']);
+//                            var_dump($licensesToRemoveDiscount);die();
+                            foreach ($licensesToRemoveDiscount as $item) {
+                                $licenseToRemove = $billingModel->getUserLicenseInfo($this->auth['id'], $item['id']);
+                                if (!$billingModel->isCancelationDiscountOfferableForLicense($licenseToRemove)) {
+                                    $billingModel->removeLicenseDiscountPromotion($this->auth['id'], $licenseToRemove['id']);
+                                }
+                            }
+                        } else {
+                            if (!$billingModel->isCancelationDiscountOfferableForLicense($license)) {
+                                $billingModel->removeLicenseDiscountPromotion($this->auth['id'], $license['id']);
+                            }
                         }
 
                         $this->getDI()->getFlashMessages()->add(FlashMessages::SUCCESS, "Your subscription is successfully upgraded!");
@@ -521,8 +532,6 @@ class Billing extends BaseController
             $newProduct = str_replace('1m', '12m', $product);
 
             if ($this->getRequest()->isPost()) {
-                $confirmed = true;
-
                 if ($this->getRequest()->hasPost('cancel')) {
                     $confirmed = false;
                 } else {
@@ -532,7 +541,22 @@ class Billing extends BaseController
                         }
 
                         $billingModel->updateSubscriptionPlan($this->params['id'], $newProduct);
-                        
+
+                        if (substr($license['code_fastspring'], -7) === '-double'){
+                            $licensesToRemoveDiscount = $billingModel->getDoubleSubscriptions($license['order_product_id']);
+                            foreach ($licensesToRemoveDiscount as $item) {
+                                $licenseToRemove = $billingModel->getUserLicenseInfo($this->auth['id'], $item['id']);
+                                if (!$billingModel->isCancelationDiscountOfferableForLicense($licenseToRemove)) {
+                                    $billingModel->removeLicenseDiscountPromotion($this->auth['id'], $licenseToRemove['id']);
+                                }
+                            }
+                        } else {
+
+                            if (!$billingModel->isCancelationDiscountOfferableForLicense($license)) {
+                                $billingModel->removeLicenseDiscountPromotion($this->auth['id'], $license['id']);
+                            }
+                        }
+
                         $this->getDI()->getFlashMessages()->add(FlashMessages::SUCCESS, "Your subscription is successfully upgraded!");
                     } catch (\CS\Billing\Exceptions\RecordNotFoundException $e) {
                         $this->getDI()->get('logger')->addInfo('Subscription not found!', array('exception' => $e));
@@ -548,7 +572,6 @@ class Billing extends BaseController
                 $this->redirect($this->di->getRouter()->getRouteUrl('billing'));
             } else {
                 $newProductInfo = $billingModel->getProductInfo($newProduct);
-
 
                  if (strripos($license['code_fastspring'], '-double') === false){
                      $this->view->double = '';
@@ -573,8 +596,6 @@ class Billing extends BaseController
                 $this->setView('billing/upgradeLicense.htm');
             }
         }
-
-
     }
 
     public function calculatePremiumSum($license, $newProductInfo, $double)
