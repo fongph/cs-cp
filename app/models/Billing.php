@@ -203,6 +203,7 @@ class Billing extends \System\Model
                         s.`reference_number` subscription_reference_number,
                         s.`auto` subscription_cancelable,
                         s.`url` subscription_url,
+                        l.`order_product_id`,
                         (SELECT COUNT(*) FROM `users_options` WHERE `user_id` = l.`user_id` AND `option` = {$option} AND value = l.`id` LIMIT 1) has_cancelation_discount,
                         (SELECT `created_at` FROM `users_options` WHERE `user_id` = l.`user_id` AND `option` = {$option} AND value = l.`id` LIMIT 1) has_cancelation_discount_date,
                         (SELECT id FROM `orders_payments` WHERE `order_id` = op.`order_id` AND `type` = 'prolongation' LIMIT 1) as 'is_rebill',
@@ -305,7 +306,20 @@ class Billing extends \System\Model
         $usersManager = $this->di['usersManager'];
         $usersManager->setUserOption($userId, self::OPTION_LICENSE_WITH_CANCELATION_DISCOUNT, $licenseId);
     }
-    
+
+    public function removeLicenseDiscountPromotion($userId, $licenseId)
+    {
+        $userId = (int) $userId;
+        $licenseId = $this->getDb()->quote($licenseId);
+        return $this->getDb()->exec("DELETE FROM `users_options` WHERE `user_id` = {$userId} and `value` = {$licenseId}");
+    }
+
+    public function getDoubleSubscriptions($orderProductId)
+    {
+        $orderProductId = $this->getDb()->quote($orderProductId);
+        return $this->getDb()->query("SELECT `id` FROM `licenses` WHERE `order_product_id`= {$orderProductId}")->fetchAll();
+
+    }
     public function enableLicenseAutorebill($licenseId) {
         $billingManager = $this->di['billingManager'];
         
