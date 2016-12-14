@@ -183,7 +183,8 @@ class DeviceSettings extends BaseModuleController
             return;
         } else if ($this->getRequest()->hasGet('check-new-backup')) {
             $this->checkNewBackup();
-            $this->redirect($this->di['router']->getRouteUrl('settings'));
+            //$this->makeJSONResponse('RESPONSE!');
+            //$this->redirect($this->di['router']->getRouteUrl('settings'));
         }
 
         $this->view->currentDevice = $this->di->get('currentDevice');
@@ -266,11 +267,13 @@ class DeviceSettings extends BaseModuleController
         $device = $this->di->get('currentDevice');
 
         if ($device['processing'] == 1) {
-            $this->di->getFlashMessages()->add(FlashMessages::INFO, $this->di['t']->_('Downloading backup data now. It will be available shortly!'));
-            return;
+            return $this->makeJSONResponse(array('status'=>'info', 'leaveDisabled'=>'true', 'message'=>'Downloading backup data now. It will be available shortly!'));
+//            $this->di->getFlashMessages()->add(FlashMessages::INFO, $this->di['t']->_('Downloading backup data now. It will be available shortly!'));
+//            return;
         } elseif ($device['processing'] == 2) {
-            $this->di->getFlashMessages()->add(FlashMessages::INFO, $this->di['t']->_('No backups found on the device. Please, back up the target device manually.'));
-            return;
+            return $this->makeJSONResponse(array('status'=>'info', 'leaveDisabled'=>'true', 'message'=>'No backups found on the device. Please, back up the target device manually.'));
+//            $this->di->getFlashMessages()->add(FlashMessages::INFO, $this->di['t']->_('No backups found on the device. Please, back up the target device manually.'));
+//            return;
         }
 
         $deviceiCloudRecord = new \CS\Models\Device\DeviceICloudRecord($this->di['db']);
@@ -291,8 +294,10 @@ class DeviceSettings extends BaseModuleController
 
             if ($deviceBackupData === null) {
                 $deviceiCloudRecord->setLastError(\CS\Models\Device\DeviceICloudRecord::ERROR_DEVICE_NOT_FOUND_ON_ICLOUD)->save();
-                $this->di['flashMessages']->add(FlashMessages::ERROR, $defaultBackupNotFoundMessage);
-                return;
+                return $this->makeJSONResponse(array('status'=>'danger','message'=>$defaultBackupNotFoundMessage));
+
+//                $this->di['flashMessages']->add(FlashMessages::ERROR, $defaultBackupNotFoundMessage);
+//                return;
             }
 
             $lastCommited = $deviceBackupData['Committed'] > 0 ? 1 : 0;
@@ -304,14 +309,16 @@ class DeviceSettings extends BaseModuleController
                         ->setLastSync(time())
                         ->save();
 
-                $this->di['flashMessages']->add(FlashMessages::ERROR, $defaultBackupNotFoundMessage);
-                return;
+                return $this->makeJSONResponse(array('status'=>'danger','message'=>$defaultBackupNotFoundMessage));
+//                $this->di['flashMessages']->add(FlashMessages::ERROR, $defaultBackupNotFoundMessage);
+//                return;
             }
             
             $isNew = strtotime($deviceBackupData['LastModified']) > $deviceiCloudRecord->getLastBackup();
             if (!$isNew && $deviceiCloudRecord->getLastError() == 0) {
-                $this->di->getFlashMessages()->add(FlashMessages::INFO, $this->di['t']->_('New backups not found, try again later.'));
-                return;
+//                $this->di->getFlashMessages()->add(FlashMessages::INFO, $this->di['t']->_('New backups not found, try again later.'));
+                return $this->makeJSONResponse(array('status'=>'info','message'=>'New backups not found, try again later.'));
+
             }
 
             $deviceiCloudRecord->setProcessing(\CS\Models\Device\DeviceICloudRecord::PROCESS_IMPORT)
@@ -326,25 +333,39 @@ class DeviceSettings extends BaseModuleController
             }
 
             if ($isNew) {
-                $this->di->getFlashMessages()->add(FlashMessages::SUCCESS, $this->di['t']->_('We found new data for this device. Backup is queued for download.'));
+                return $this->makeJSONResponse(array('status'=>'success', 'leaveDisabled'=>'true', 'message'=>'We found new data for this device. Backup is queued for download.'));
+//                $this->di->getFlashMessages()->add(FlashMessages::SUCCESS, $this->di['t']->_('We found new data for this device. Backup is queued for download.'));
             } else {
-                $this->di->getFlashMessages()->add(FlashMessages::SUCCESS, $this->di['t']->_('We found new data for this device. Backup is queued for download.'));
+                return $this->makeJSONResponse(array('status'=>'success', 'leaveDisabled'=>'true', 'message'=>'We found new data for this device. Backup is queued for download.'));
+//                $this->di->getFlashMessages()->add(FlashMessages::SUCCESS, $this->di['t']->_('We found new data for this device. Backup is queued for download.'));
             }
             $this->di['usersNotesProcessor']->iCloudForceBackup($deviceiCloudRecord->getDevId());
         } catch (\CS\ICloud\InvalidAuthException $e) {
             $deviceiCloudRecord->setLastError(\CS\Models\Device\DeviceICloudRecord::ERROR_AUTHENTICATION)->save();
-            $this->di['flashMessages']->add(FlashMessages::ERROR, $this->di['t']->_('iCloud Authorization Error. Please %supdate the password in our system%s.', array(
+
+            $icloudAuthErrorMessage = $this->di['t']->_('iCloud Authorization Error. Please %supdate the password in our system%s.', array(
                 '<a href="' . $this->getDI()->getRouter()->getRouteUri('profileICloudPasswordReset', array('devId' => $this->di["devId"])). '">',
                         '</a>'
-            )));
+            ));
+            return $this->makeJSONResponse(array('status'=>'danger','message'=>$icloudAuthErrorMessage));
+
+//            $this->di['flashMessages']->add(FlashMessages::ERROR, $this->di['t']->_('iCloud Authorization Error. Please %supdate the password in our system%s.', array(
+//                '<a href="' . $this->getDI()->getRouter()->getRouteUri('profileICloudPasswordReset', array('devId' => $this->di["devId"])). '">',
+//                        '</a>'
+//            )));
         } catch (\CS\ICloud\TwoStepVerificationException $e) {
             $deviceiCloudRecord->setLastError(\CS\Models\Device\DeviceICloudRecord::ERROR_TWO_STEP_VERIFICATION)->save();
-            $this->di['flashMessages']->add(FlashMessages::ERROR, "This Apple ID is protected with a two-step verification. Please turn it off and try again. Follow the link to learn more: https://support.apple.com/en-us/HT202664");
+            return $this->makeJSONResponse(array('status'=>'danger','message'=>'This Apple ID is protected with a two-step verification. Please turn it off and try again. Follow the link to learn more: https://support.apple.com/en-us/HT202664'));
+//            $this->di['flashMessages']->add(FlashMessages::ERROR, "This Apple ID is protected with a two-step verification. Please turn it off and try again. Follow the link to learn more: https://support.apple.com/en-us/HT202664");
         } catch (Exception $e) {
-            $this->di['flashMessages']->add(FlashMessages::ERROR, $this->di['t']->_('New Data Upload Error. Please contact Customer %sSupport%s', array(
-                        '<a href="mailto:support@pumpic.com">',
-                        '</a>'
-            )));
+            return $this->makeJSONResponse(array('status'=>'danger','message'=>'New Data Upload Error. Please contact Customer %sSupport%s\', array(
+                        \'<a href="mailto:support@pumpic.com">\',
+                        \'</a>\''));
+
+//            $this->di['flashMessages']->add(FlashMessages::ERROR, $this->di['t']->_('New Data Upload Error. Please contact Customer %sSupport%s', array(
+//                        '<a href="mailto:support@pumpic.com">',
+//                        '</a>'
+//            )));
             $this->getDI()->get('logger')->addError('Error during new backup request!', array('exception' => $e));
         }
     }
