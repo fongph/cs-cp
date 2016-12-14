@@ -455,9 +455,7 @@ class Billing extends BaseController
                         if ($license['subscription_cancelable'] == false){
                             $billingModel->enableLicenseAutorebill($this->params['id']);
                         }
-
-                        $billingModel->updateSubscriptionPlan($this->params['id'], $newProduct);
-
+                        
                         if (substr($license['code_fastspring'], -7) === '-double'){
                             $licensesToRemoveDiscount = $billingModel->getDoubleSubscriptions($license['order_product_id']);
 //                            var_dump($licensesToRemoveDiscount);die();
@@ -472,7 +470,9 @@ class Billing extends BaseController
                                 $billingModel->removeLicenseDiscountPromotion($this->auth['id'], $license['id']);
                             }
                         }
-
+                        
+                        $billingModel->updateSubscriptionPlan($this->params['id'], $newProduct);
+                        
                         $this->getDI()->getFlashMessages()->add(FlashMessages::SUCCESS, "Your subscription is successfully upgraded!");
                     } catch (\CS\Billing\Exceptions\RecordNotFoundException $e) {
                         $this->getDI()->get('logger')->addInfo('Subscription not found!', array('exception' => $e));
@@ -539,9 +539,7 @@ class Billing extends BaseController
                         if ($license['subscription_cancelable'] == false){
                             $billingModel->enableLicenseAutorebill($this->params['id']);
                         }
-
-                        $billingModel->updateSubscriptionPlan($this->params['id'], $newProduct);
-
+                        
                         if (substr($license['code_fastspring'], -7) === '-double'){
                             $licensesToRemoveDiscount = $billingModel->getDoubleSubscriptions($license['order_product_id']);
                             foreach ($licensesToRemoveDiscount as $item) {
@@ -556,6 +554,8 @@ class Billing extends BaseController
                                 $billingModel->removeLicenseDiscountPromotion($this->auth['id'], $license['id']);
                             }
                         }
+                        
+                        $billingModel->updateSubscriptionPlan($this->params['id'], $newProduct);
 
                         $this->getDI()->getFlashMessages()->add(FlashMessages::SUCCESS, "Your subscription is successfully upgraded!");
                     } catch (\CS\Billing\Exceptions\RecordNotFoundException $e) {
