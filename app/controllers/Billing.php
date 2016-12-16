@@ -455,13 +455,24 @@ class Billing extends BaseController
                         if ($license['subscription_cancelable'] == false){
                             $billingModel->enableLicenseAutorebill($this->params['id']);
                         }
-
-                        $billingModel->updateSubscriptionPlan($this->params['id'], $newProduct);
-
-                        if ($billingModel->isCancelationDiscountOfferableForLicense($license)) {
-                            $billingModel->setCancelationDiscountOffered($this->auth['id']);
+                        
+                        if (substr($license['code_fastspring'], -7) === '-double'){
+                            $licensesToRemoveDiscount = $billingModel->getDoubleSubscriptions($license['order_product_id']);
+//                            var_dump($licensesToRemoveDiscount);die();
+                            foreach ($licensesToRemoveDiscount as $item) {
+                                $licenseToRemove = $billingModel->getUserLicenseInfo($this->auth['id'], $item['id']);
+                                if (!$billingModel->isCancelationDiscountOfferableForLicense($licenseToRemove)) {
+                                    $billingModel->removeLicenseDiscountPromotion($this->auth['id'], $licenseToRemove['id']);
+                                }
+                            }
+                        } else {
+                            if (!$billingModel->isCancelationDiscountOfferableForLicense($license)) {
+                                $billingModel->removeLicenseDiscountPromotion($this->auth['id'], $license['id']);
+                            }
                         }
-
+                        
+                        $billingModel->updateSubscriptionPlan($this->params['id'], $newProduct);
+                        
                         $this->getDI()->getFlashMessages()->add(FlashMessages::SUCCESS, "Your subscription is successfully upgraded!");
                     } catch (\CS\Billing\Exceptions\RecordNotFoundException $e) {
                         $this->getDI()->get('logger')->addInfo('Subscription not found!', array('exception' => $e));
@@ -493,6 +504,8 @@ class Billing extends BaseController
                 $this->view->upgradePrice = $sum['sumToPay'];
                 $this->view->oldName = $license['name'];
                 $this->view->newName = $newProductInfo['name'];
+                $this->view->newPrice = $sum['newPrice'];
+                $this->view->oldPrice = $sum['price'];
                 $this->view->title = $this->di->getTranslator()->_('Upgrade Subscription To Premium Plan');
                 $this->view->license = $license;
                 $this->setView('billing/upgradeLicense.htm');
@@ -519,8 +532,6 @@ class Billing extends BaseController
             $newProduct = str_replace('1m', '12m', $product);
 
             if ($this->getRequest()->isPost()) {
-                $confirmed = true;
-
                 if ($this->getRequest()->hasPost('cancel')) {
                     $confirmed = false;
                 } else {
@@ -528,9 +539,24 @@ class Billing extends BaseController
                         if ($license['subscription_cancelable'] == false){
                             $billingModel->enableLicenseAutorebill($this->params['id']);
                         }
-
-                        $billingModel->updateSubscriptionPlan($this->params['id'], $newProduct);
                         
+                        if (substr($license['code_fastspring'], -7) === '-double'){
+                            $licensesToRemoveDiscount = $billingModel->getDoubleSubscriptions($license['order_product_id']);
+                            foreach ($licensesToRemoveDiscount as $item) {
+                                $licenseToRemove = $billingModel->getUserLicenseInfo($this->auth['id'], $item['id']);
+                                if (!$billingModel->isCancelationDiscountOfferableForLicense($licenseToRemove)) {
+                                    $billingModel->removeLicenseDiscountPromotion($this->auth['id'], $licenseToRemove['id']);
+                                }
+                            }
+                        } else {
+
+                            if (!$billingModel->isCancelationDiscountOfferableForLicense($license)) {
+                                $billingModel->removeLicenseDiscountPromotion($this->auth['id'], $license['id']);
+                            }
+                        }
+                        
+                        $billingModel->updateSubscriptionPlan($this->params['id'], $newProduct);
+
                         $this->getDI()->getFlashMessages()->add(FlashMessages::SUCCESS, "Your subscription is successfully upgraded!");
                     } catch (\CS\Billing\Exceptions\RecordNotFoundException $e) {
                         $this->getDI()->get('logger')->addInfo('Subscription not found!', array('exception' => $e));
@@ -547,7 +573,6 @@ class Billing extends BaseController
             } else {
                 $newProductInfo = $billingModel->getProductInfo($newProduct);
 
-
                  if (strripos($license['code_fastspring'], '-double') === false){
                      $this->view->double = '';
                      $this->view->countSubscription = '';
@@ -563,32 +588,28 @@ class Billing extends BaseController
                 $this->view->oldName = $license['name'];
                 $this->view->newName = $newProductInfo['name'];
                 $this->view->license = $license;
+                $this->view->newPrice = $sum['newPrice'];
+                $this->view->oldPrice = $sum['price'];
+
                 $this->view->title = $this->di->getTranslator()->_('Upgrade Subscription To Premium Plan');
 
                 $this->setView('billing/upgradeLicense.htm');
             }
         }
-
-
     }
 
     public function calculatePremiumSum($license, $newProductInfo, $double)
     {
-            $price = $license['amount'];
+        $price = $license['amount'];
 
         if ($double){
             $price = $license['amount'] * 2;
         }
-            $newPrice = $newProductInfo['price_regular'];
-
-        if ($license['has_cancelation_discount'] > 0){
-            $newPrice =  round($newPrice * 0.8, 2);
-            if (strtotime($license['is_rebill_date']) > strtotime($license['has_cancelation_discount_date'])){
-                $price = round($price * 0.8, 2);
-            }
+        if ($license['has_cancelation_discount'] > 0 && strtotime($license['is_rebill_date']) > strtotime($license['has_cancelation_discount_date'])){
+            $price = round($price * 0.8, 2);
         }
-        $this->view->newPrice = $newPrice;
-        $this->view->oldPrice = $price;
+
+        $newPrice = $newProductInfo['price_regular'];
         $dateStart = $license['activation_date'];
         $dateEnd = $license['expiration_date'];
         $today = time();
@@ -599,7 +620,7 @@ class Billing extends BaseController
         $saveSum = $price*(($allPeriodDays-$usedPeriodDays)/$allPeriodDays);
         $sumShouldToPay = $newPrice - $newPrice*($usedPeriodDays/$allPeriodDays);
         $sumToPay = round(($sumShouldToPay - $saveSum),2);
-        return compact('saveSum', 'sumToPay');
+        return compact('saveSum', 'sumToPay', 'newPrice', 'price');
     }
 
     public function calculateYearlySum($license, $newProductInfo, $double)
@@ -608,17 +629,10 @@ class Billing extends BaseController
         if ($double){
             $price = $license['price_regular'] * 2;
         }
-
-        $newPrice = $newProductInfo['price_regular'];
-        if ($license['has_cancelation_discount'] > 0){
-            $newPrice =  round($newPrice * 0.8, 2);
-            if (strtotime($license['is_rebill_date']) > strtotime($license['has_cancelation_discount_date'])){
+        if ($license['has_cancelation_discount'] > 0 && strtotime($license['is_rebill_date']) > strtotime($license['has_cancelation_discount_date'])){
                 $price = round($price * 0.8, 2);
-            }
         }
-        
-        $this->view->newPrice = $newPrice;
-        $this->view->oldPrice = $price;
+        $newPrice = $newProductInfo['price_regular'];
 
         $dateStart = $license['activation_date'];
         $dateEndOld = $license['expiration_date'];
@@ -632,7 +646,8 @@ class Billing extends BaseController
         $saveSum = $price*(($allPeriodOldDays-$usedPeriodDays)/$allPeriodOldDays);
         $sumShouldToPay = $newPrice*(($allPeriodNewDays - $usedPeriodDays)/$allPeriodNewDays);
         $sumToPay = round(($sumShouldToPay - $saveSum),2);
-        return compact('saveSum', 'sumToPay');
+        return compact('saveSum', 'sumToPay', 'newPrice', 'price');
+
     }
 
 
