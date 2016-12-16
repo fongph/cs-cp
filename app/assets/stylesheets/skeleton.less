@@ -13,7 +13,35 @@ html, body {
     overflow-x: hidden;
     overflow-y: auto;
 }
+//snow in header animation
+@keyframes snow {
+    0% {
+        background-position: 0px 0px, 0px 0px, 0px 0px;
+    }
+    50% {
+        background-position: 500px 500px, 100px 200px, -100px 150px;
+    }
+    100% {
+        background-position: 500px 1000px, 200px 400px, -100px 300px;
+    }
+}
 
+.navbar-default {
+    z-index: 2;
+}
+#snow {
+    background:
+            url('http://www.wearewebstars.dk/codepen/img/s1.png'),
+            url('http://www.wearewebstars.dk/codepen/img//s2.png'),
+            url('http://www.wearewebstars.dk/codepen/img//s3.png');
+    height: 68px;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index:1;
+    animation: snow 10s linear infinite;
+}
 #header {
     background: transparent;
 
@@ -27,15 +55,15 @@ html, body {
     .logo {
         display: block;
         width: 172px;
-        height: 44px;
-        background: url(../img/pumpic/logo.svg) no-repeat;
+        height: 46px;
+        background: url(../img/pumpic/logo-ny.svg) no-repeat;
         -webkit-background-size: contain;
         background-size: contain;
     }
     .logo-demo {
         width: 220px;
-        height: 44px;
-        background: url(../img/logo-demo.png) no-repeat;
+        height: 46px;
+        background: url(../img/logo-demo-ny.svg) no-repeat;
     }
     .toggle-left, .toggle-right {
         display: none;

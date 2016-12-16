@@ -14,9 +14,10 @@
 </div>
 {/if}
 <div id="header" class="navbar-default">
-    <div class="container">
+    <div id="snow"></div>
+    <div class="container" style="position: relative;z-index: 4;">
         {if !$di.config.demo}
-        <div class="monitoring-app-links-container-wide visible-sm-inline-block visible-md-inline-block visible-lg-inline-block">
+        <div class="monitoring-app-links-container-wide visible-sm-inline-block visible-md-inline-block visible-lg-inline-block" style="font-size: 8px;">
             {insert 'inc.monitoring.app.links.htm'}
         </div>
         {/if}
@@ -70,7 +71,6 @@
         {/if}
 
     </div>
-
     <div class="menu">
         <div class="container">
             <div class="navbar-collapse collapse{*if $di.auth->hasIdentity()}left{else}center{/if*}">
