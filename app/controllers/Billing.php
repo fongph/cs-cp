@@ -446,7 +446,6 @@ class Billing extends BaseController
            
 
             if ($this->getRequest()->isPost()) {
-                $confirmed = true;
 
                 if ($this->getRequest()->hasPost('cancel')) {
                     $confirmed = false;
@@ -458,7 +457,6 @@ class Billing extends BaseController
                         
                         if (substr($license['code_fastspring'], -7) === '-double'){
                             $licensesToRemoveDiscount = $billingModel->getDoubleSubscriptions($license['order_product_id']);
-//                            var_dump($licensesToRemoveDiscount);die();
                             foreach ($licensesToRemoveDiscount as $item) {
                                 $licenseToRemove = $billingModel->getUserLicenseInfo($this->auth['id'], $item['id']);
                                 if (!$billingModel->isCancelationDiscountOfferableForLicense($licenseToRemove)) {
