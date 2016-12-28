@@ -328,7 +328,7 @@ class DeviceSettings extends BaseModuleController
 
             $queueManager = new \CS\Queue\Manager($this->di['queueClient']);
 
-            if (!$queueManager->addTaskDevice('downloadChannel-priority', $deviceiCloudRecord)) {
+            if (!$queueManager->addTaskDevice('downloadChannel', $deviceiCloudRecord)) {
                 throw new Exception("Error during add to queue");
             }
 
