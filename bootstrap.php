@@ -164,7 +164,10 @@ $di->setShared('router', function() use($config, $di) {
     $router->add('profileMailUnsibscribe', new \System\Router\Regex('/profile/unsubscribe/:type', array('controller' => 'Profile', 'action' => 'mailUnsubscribe', 'public' => true), array('type' => '[^/]+')));
 
     $router->add('directLogin', new \System\Router\Route('/admin/login', array('controller' => 'Index', 'action' => 'directLogin', 'public' => true)));
-    
+
+    $router->add('tos', new \System\Router\Route('/tos', array('controller' => 'Index', 'action' => 'tos')));
+    $router->add('policy', new \System\Router\Route('/policy', array('controller' => 'Index', 'action' => 'policy')));
+
     return $router;
 });
 

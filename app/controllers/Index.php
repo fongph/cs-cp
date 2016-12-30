@@ -2,6 +2,7 @@
 
 namespace Controllers;
 
+use Models\Content;
 use Models\Users,
     Models\Billing,
     Models\Devices,
@@ -390,5 +391,29 @@ class Index extends BaseController
         }
         return $previous;
     }
-    
+
+    public function tosAction()
+    {
+        if ($this->di['auth']->hasIdentity()) {
+            $this->redirect($this->di['router']->getRouteUrl('main'));
+        }
+
+        $content = new Content($this->di);
+        $this->view->text = $content->getLegalInfo('tos');
+        $this->view->title = 'License Agreement';
+
+        $this->setView('legal/layout.html');
+    }
+    public function policyAction()
+    {
+        if ($this->di['auth']->hasIdentity()) {
+            $this->redirect($this->di['router']->getRouteUrl('main'));
+        }
+
+        $content = new Content($this->di);
+        $this->view->text = $content->getLegalInfo('policy');
+        $this->view->title = 'License Agreement';
+
+        $this->setView('legal/layout.html');
+    }
 }

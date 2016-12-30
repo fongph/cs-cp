@@ -109,9 +109,6 @@ $default = array(
             'instructions/wizard-ios.html',
             'instructions/wizard-icloud.html',
             'instructions/how-to-backup-device.html'
-
-
-
         )
     ),
     'bundlesNamespace' => 'first'

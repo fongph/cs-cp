@@ -1,0 +1,31 @@
+<h1 class="text-center">{$title}</h1>
+
+{$text}
+
+<form action="" method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <label for="agreement"><input id="agreement" type="checkbox"> I agree to the Terms of Use</label>
+        <span></span>
+    </div>
+    <button class="btn btn-success" type="submit" disabled>Submit</button>
+</form>
+
+<script>
+    $('#agreement').change(function() {
+        if($(this).is(":checked")) {
+            $("button[type='submit']").removeAttr('disabled');
+        }
+        if (!$(this).is(":checked")) {
+            $("button[type='submit']").attr('disabled', '');
+        }
+    });
+    $( "form" ).submit(function( event ) {
+        if ( $( "input:first" ).val() === "on" ) {
+
+            return;
+        }
+        $( "span" ).text("You must check me!" ).show().fadeOut( 3000 );
+        event.preventDefault();
+    });
+
+</script>
