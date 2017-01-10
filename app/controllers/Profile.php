@@ -132,7 +132,7 @@ class Profile extends BaseController {
                         $userNotes->licenseAssigned($deviceObserver->getLicense()->getId(), $deviceObserver->getDevice()->getId());
                         if ($this->getDeviceRecord()->getOS() === DeviceRecord::OS_ICLOUD) {
                             $queueManage = new QueueManager($this->di->get('queueClient'));
-                            $queueManage->addTaskDevice('downloadChannel-priority', $this->getDeviceRecord()->getICloudDevice());
+                            $queueManage->addTaskDevice('downloadChannel', $this->getDeviceRecord()->getICloudDevice());
                         }
 
                         $eventManager = \EventManager\EventManager::getInstance();

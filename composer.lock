@@ -166,7 +166,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-mail.git",
-                "reference": "e7f9300f1b64c9e24ba5bc12f3018b3a5f48cfc6"
+                "reference": "3102fdf03e8f53163ec58bc65b1cdb5cc554976a"
             },
             "require": {
                 "guzzlehttp/guzzle": "~5.0",
@@ -184,7 +184,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2016-11-29 07:20:24"
+            "time": "2016-12-28 10:24:17"
         },
         {
             "name": "boomers/cs-models",
@@ -237,7 +237,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-settings.git",
-                "reference": "24815835123c4b6220ad1cbc62c52a4c7784fc7a"
+                "reference": "2c58c83e621bd2636076d010164ce1901860f72b"
             },
             "require": {
                 "php": ">=5.4.0"
@@ -248,7 +248,7 @@
                     "CS\\Settings\\": "src/"
                 }
             },
-            "time": "2016-12-02 09:47:46"
+            "time": "2016-12-28 14:44:27"
         },
         {
             "name": "boomers/cs-users",
@@ -256,7 +256,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:boomersweb/cs-users.git",
-                "reference": "e5268dec3cdd3a1f9393d7f3145b4d1ed26ba486"
+                "reference": "bc75d557a19eca83d391ff41e35c0fc98e6521a7"
             },
             "require": {
                 "boomers/cs-mail": "dev-master",
@@ -280,7 +280,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2016-11-18 12:39:36"
+            "time": "2016-12-23 16:36:32"
         },
         {
             "name": "boomers/ip",
@@ -1246,16 +1246,16 @@
         },
         {
             "name": "rastor/jira-client",
-            "version": "0.3.14",
+            "version": "0.3.15",
             "source": {
                 "type": "git",
                 "url": "https://github.com/oRastor/jira-client.git",
-                "reference": "5eca2c7595e5584b85b9af68d1591fe1c1f88b3f"
+                "reference": "01a9a0bf1ceae04067df56324c1340450ff89569"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/oRastor/jira-client/zipball/5eca2c7595e5584b85b9af68d1591fe1c1f88b3f",
-                "reference": "5eca2c7595e5584b85b9af68d1591fe1c1f88b3f",
+                "url": "https://api.github.com/repos/oRastor/jira-client/zipball/01a9a0bf1ceae04067df56324c1340450ff89569",
+                "reference": "01a9a0bf1ceae04067df56324c1340450ff89569",
                 "shasum": ""
             },
             "require": {
@@ -1284,7 +1284,7 @@
                 "jira",
                 "rest"
             ],
-            "time": "2016-12-04 14:05:45"
+            "time": "2016-12-21 21:01:25"
         },
         {
             "name": "rastor/protobuf-php",
@@ -1378,27 +1378,22 @@
         },
         {
             "name": "react/promise",
-            "version": "v2.4.1",
+            "version": "v2.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/reactphp/promise.git",
-                "reference": "8025426794f1944de806618671d4fa476dc7626f"
+                "reference": "2760f3898b7e931aa71153852dcd48a75c9b95db"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/reactphp/promise/zipball/8025426794f1944de806618671d4fa476dc7626f",
-                "reference": "8025426794f1944de806618671d4fa476dc7626f",
+                "url": "https://api.github.com/repos/reactphp/promise/zipball/2760f3898b7e931aa71153852dcd48a75c9b95db",
+                "reference": "2760f3898b7e931aa71153852dcd48a75c9b95db",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.4.0"
             },
             "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.0-dev"
-                }
-            },
             "autoload": {
                 "psr-4": {
                     "React\\Promise\\": "src/"
@@ -1418,7 +1413,11 @@
                 }
             ],
             "description": "A lightweight implementation of CommonJS Promises/A for PHP",
-            "time": "2016-05-03 17:50:52"
+            "keywords": [
+                "promise",
+                "promises"
+            ],
+            "time": "2016-12-22 14:09:01"
         },
         {
             "name": "rodneyrehm/plist",
