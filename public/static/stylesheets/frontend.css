@@ -9095,7 +9095,7 @@ a.list-group-item-danger.active:focus {
 #header .logo-demo {
   width: 220px;
   height: 46px;
-  background: url(../img/pumpic/logo-demo-ny.svg) no-repeat;
+  background: url(../img/pumpic/logo-demo.svg) no-repeat;
   -webkit-background-size: contain;
   background-size: contain;
 }
