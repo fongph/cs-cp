@@ -13,3 +13,4 @@ docker-compose.yml
 development.config.php
 build.php
 demoUserData.php
+logs/
