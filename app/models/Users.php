@@ -254,6 +254,15 @@ class Users extends Model {
             WHERE `email` = {$email}")->fetchAll(\PDO::FETCH_COLUMN);
     }
 
+    public function checkUserLegalAcceptance($userId, $name)
+    {
+        $userId = (int) $userId;
+        $option = $this->getDb()->quote('confirm-' . $name  . '-version-%');
+
+        return $this->getDb()->query("
+           SELECT `value` FROM users_options
+            WHERE `option` LIKE  {$option} AND `user_id` = {$userId}")->fetchColumn();
+    }
     public function setAuthCookie()
     {
         setcookie('s', 1, time() + 3600 * 6, '/', $this->di['config']['cookieDomain']);

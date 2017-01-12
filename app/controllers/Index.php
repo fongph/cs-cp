@@ -151,6 +151,18 @@ class Index extends BaseController
 
     public function loginRedirect()
     {
+        $users = new Users($this->di);
+        $acceptance = array('policy', 'tos');
+        foreach ($acceptance as $item) {
+            $userAcceptance = $users->checkUserLegalAcceptance($this->auth['id'], $item);
+//            var_dump($userAcceptance);
+//            die();
+            if ($userAcceptance === false){
+
+                $this->redirect($this->di->getRouter()->getRouteUrl($item));
+            }
+        }
+
         if ($this->di->get('isWizardEnabled')) {
 
             if ($this->getRequest()->get('redirect'))
@@ -395,15 +407,28 @@ class Index extends BaseController
     public function tosAction()
     {
         $content = new Content($this->di);
-        $this->view->text = $content->getLegalInfo('tos');
-        $this->view->title = 'License Agreement';
+        $legalInfo =  $content->getLegalInfo('tos');
 
+        if ($this->getRequest()->isPost()){
+            $content->saveUserAcceptance($this->auth['id'], $legalInfo['legal_id'], $legalInfo['id'], 'tos');
+            $this->loginRedirect();
+        }
+
+        $this->view->text = $legalInfo['text'];
+        $this->view->title = 'License Agreement';
         $this->setView('legal/layout.html');
     }
     public function policyAction()
     {
         $content = new Content($this->di);
-        $this->view->text = $content->getLegalInfo('policy');
+        $legalInfo =  $content->getLegalInfo('policy');
+
+        if ($this->getRequest()->isPost()){
+            $content->saveUserAcceptance($this->auth['id'], $legalInfo['legal_id'], $legalInfo['id'], 'policy');
+            $this->loginRedirect();
+        }
+
+        $this->view->text = $legalInfo['text'];
         $this->view->title = 'License Agreement';
 
         $this->setView('legal/layout.html');
