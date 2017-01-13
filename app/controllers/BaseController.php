@@ -31,6 +31,17 @@ class BaseController extends Controller
                 $usersModel = new \Models\Users($this->di);
                 $usersModel->setAuthCookie();
             }
+            if(!isset($this->auth['support_mode'])){
+                $users = new \Models\Users($this->di);
+
+                $acceptance = array('policy', 'tos');
+                foreach ($acceptance as $item) {
+                    $userAcceptance = $users->checkUserLegalAcceptance($this->auth['id'], $item);
+                    $currentPath = str_replace('/', '', $this->getRequest()->uri());
+                    if ($currentPath == $item) break;
+                    if ($userAcceptance == false) $this->redirect($this->di->getRouter()->getRouteUrl($item));
+                }
+            }
         }
 
         if ($this->di['config']['demo']) {
