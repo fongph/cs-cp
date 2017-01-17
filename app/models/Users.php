@@ -261,7 +261,7 @@ class Users extends Model {
 
         return $this->getDb()->query("
            SELECT `value` FROM users_options
-            WHERE `option` LIKE  {$option} AND `user_id` = {$userId}")->fetchColumn();
+            WHERE `option` LIKE  {$option} AND `user_id` = {$userId} AND `value` = 0")->fetchColumn();
     }
     public function setAuthCookie()
     {
