@@ -761,9 +761,11 @@
             });
         </script>
         {else}
+        {if $di.currentDevice.os!='icloud'}
             {include "content/{$di.t->getLocale()}/noDataTitle.html"
                 moduleName = $di.t->_('Locations')
             }
+        {/if}
             
             {if isset($serviceLocation) && !$serviceLocation && (!$hasZones || $startTime <= 0)}
             
@@ -778,10 +780,11 @@
                 {/if}
             
             {else}
-                {include "content/{$di.t->getLocale()}/noData.html"}
-                {include "content/{$di.t->getLocale()}/noDataLocations.html"}
-                <p>{$di.t->_('They will appear on map as soon as received from phone you are tracking. You can also add %1$sGeo-fences%2$s to monitor now.', ['<a href="' ~ $di.router->getRouteUrl('locationsZonesAdd') ~ '">','</a>'])}</p>
-                {if $di.currentDevice.os=='icloud'}
+                {if $di.currentDevice.os!='icloud'}
+                    {include "content/{$di.t->getLocale()}/noData.html"}
+                    {include "content/{$di.t->getLocale()}/noDataLocations.html"}
+                    <p>{$di.t->_('They will appear on map as soon as received from phone you are tracking. You can also add %1$sGeo-fences%2$s to monitor now.', ['<a href="' ~ $di.router->getRouteUrl('locationsZonesAdd') ~ '">','</a>'])}</p>
+                {else}
                 <script type="text/javascript">
                     $(document).ready(function(){
                         $('#track').click(function(){
