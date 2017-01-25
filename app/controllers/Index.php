@@ -403,7 +403,9 @@ class Index extends BaseController
         }
 
         $this->view->text = $legalInfo['text'];
-        $this->view->title = 'License Agreement';
+        $this->view->policyName = 'terms of service';
+        $this->view->accept = 'I accept Pumpic Legal Policies';
+        $this->view->title = 'Notification: Changes in Pumpic Legal Policy';
         $this->setView('legal/layout.html');
     }
     public function policyAction()
@@ -417,7 +419,9 @@ class Index extends BaseController
         }
 
         $this->view->text = $legalInfo['text'];
-        $this->view->title = 'License Agreement';
+        $this->view->policyName = 'privacy policy';
+        $this->view->title = 'Notification: Changes in Pumpic Legal Policy';
+        $this->view->accept = 'I agree to the updated Legal Policies';
 
         $this->setView('legal/layout.html');
     }

@@ -1,10 +1,17 @@
 <h1 class="text-center">{$title}</h1>
 
-{$text}
+<div style=" color: #303030;padding: 0 20px 20px;">
+     You are seeing this page because we have updated our Legal Policies. To continue using Pumpic service, you must accept new {$policyName}.<br>
+    Please, read it carefully as it contains important information regarding yours and ours rights and obligations.
+</div>
+<div class="panel panel-default" style="height: 500px;overflow: auto;padding: 0 20px;">
+    {$text}
+</div>
+
 
 <form action="" method="post" enctype="multipart/form-data">
     <div class="form-group">
-        <label for="agreement"><input id="agreement" type="checkbox"> I agree to the Terms of Use</label>
+        <label for="agreement"><input id="agreement" type="checkbox"> {$accept}</label>
         <span></span>
     </div>
     <button class="btn btn-success" type="submit" disabled>Submit</button>
