@@ -11,7 +11,6 @@
 
 <form action="" method="post" enctype="multipart/form-data">
     <div class="form-group">
-        <label for="agreement"><input id="agreement" type="checkbox"> {$accept}</label> <br>
         <label for="agreementUpdate"><input id="agreementUpdate" type="checkbox"> {$acceptUpdate}</label>
         <span></span>
     </div>
@@ -19,16 +18,8 @@
 </form>
 
 <script>
-    $('#agreement').change(function() {
-        if($(this).is(":checked") && $('#agreementUpdate').is(":checked")) {
-            $("button[type='submit']").removeAttr('disabled');
-        }
-        if (!$(this).is(":checked")) {
-            $("button[type='submit']").attr('disabled', '');
-        }
-    });
     $('#agreementUpdate').change(function() {
-        if($(this).is(":checked") && $('#agreement').is(":checked")) {
+        if($(this).is(":checked")) {
             $("button[type='submit']").removeAttr('disabled');
         }
         if (!$(this).is(":checked")) {
