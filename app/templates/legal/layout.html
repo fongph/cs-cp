@@ -1,17 +1,24 @@
 <h1 class="text-center">{$title}</h1>
 
-{$text}
+<div style=" color: #303030;padding: 0 20px 20px;">
+     You are seeing this page because we have updated our Legal Policies. To continue using Pumpic service, you must accept new {$policyName}.<br>
+    Please, read it carefully as it contains important information regarding yours and ours rights and obligations.
+</div>
+<div class="panel panel-default" style="height: 500px;overflow: auto;padding: 0 20px;">
+    {$text}
+</div>
+
 
 <form action="" method="post" enctype="multipart/form-data">
     <div class="form-group">
-        <label for="agreement"><input id="agreement" type="checkbox"> I agree to the Terms of Use</label>
+        <label for="agreementUpdate"><input id="agreementUpdate" type="checkbox"> {$acceptUpdate}</label>
         <span></span>
     </div>
     <button class="btn btn-success" type="submit" disabled>Submit</button>
 </form>
 
 <script>
-    $('#agreement').change(function() {
+    $('#agreementUpdate').change(function() {
         if($(this).is(":checked")) {
             $("button[type='submit']").removeAttr('disabled');
         }
@@ -20,11 +27,11 @@
         }
     });
     $( "form" ).submit(function( event ) {
-        if ( $( "input:first" ).val() === "on" ) {
-
+        if ( $( "input:first" ).val() === "on"  && $( "input:last" ).val() === "on" ) {
             return;
         }
-        $( "span" ).text("You must check me!" ).show().fadeOut( 3000 );
+        $( "span" ).text("You must check us!" ).show().fadeOut( 3000 );
+
         event.preventDefault();
     });
 
