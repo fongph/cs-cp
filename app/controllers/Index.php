@@ -405,6 +405,7 @@ class Index extends BaseController
         $this->view->text = $legalInfo['text'];
         $this->view->policyName = 'terms of service';
         $this->view->accept = 'I accept Pumpic Legal Policies';
+        $this->view->acceptUpdate = 'I agree to the updated Legal Policies';
         $this->view->title = 'Notification: Changes in Pumpic Legal Policy';
         $this->setView('legal/layout.html');
     }
@@ -421,7 +422,9 @@ class Index extends BaseController
         $this->view->text = $legalInfo['text'];
         $this->view->policyName = 'privacy policy';
         $this->view->title = 'Notification: Changes in Pumpic Legal Policy';
-        $this->view->accept = 'I agree to the updated Legal Policies';
+        $this->view->accept = 'I accept Pumpic Legal Policies';
+        $this->view->acceptUpdate = 'I agree to the updated Legal Policies';
+
 
         $this->setView('legal/layout.html');
     }

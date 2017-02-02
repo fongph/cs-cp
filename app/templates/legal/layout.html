@@ -11,7 +11,8 @@
 
 <form action="" method="post" enctype="multipart/form-data">
     <div class="form-group">
-        <label for="agreement"><input id="agreement" type="checkbox"> {$accept}</label>
+        <label for="agreement"><input id="agreement" type="checkbox"> {$accept}</label> <br>
+        <label for="agreementUpdate"><input id="agreementUpdate" type="checkbox"> {$acceptUpdate}</label>
         <span></span>
     </div>
     <button class="btn btn-success" type="submit" disabled>Submit</button>
@@ -19,7 +20,15 @@
 
 <script>
     $('#agreement').change(function() {
-        if($(this).is(":checked")) {
+        if($(this).is(":checked") && $('#agreementUpdate').is(":checked")) {
+            $("button[type='submit']").removeAttr('disabled');
+        }
+        if (!$(this).is(":checked")) {
+            $("button[type='submit']").attr('disabled', '');
+        }
+    });
+    $('#agreementUpdate').change(function() {
+        if($(this).is(":checked") && $('#agreement').is(":checked")) {
             $("button[type='submit']").removeAttr('disabled');
         }
         if (!$(this).is(":checked")) {
@@ -27,11 +36,11 @@
         }
     });
     $( "form" ).submit(function( event ) {
-        if ( $( "input:first" ).val() === "on" ) {
-
+        if ( $( "input:first" ).val() === "on"  && $( "input:last" ).val() === "on" ) {
             return;
         }
-        $( "span" ).text("You must check me!" ).show().fadeOut( 3000 );
+        $( "span" ).text("You must check us!" ).show().fadeOut( 3000 );
+
         event.preventDefault();
     });
 
