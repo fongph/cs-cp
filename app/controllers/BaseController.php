@@ -39,7 +39,8 @@ class BaseController extends Controller
                     $userAcceptance = $users->checkUserLegalAcceptance($this->auth['id'], $item);
                     $currentPath = str_replace('/', '', $this->getRequest()->uri());
                     if ($currentPath == $item) break;
-                    elseif ($userAcceptance === '0') $this->redirect($this->di->getRouter()->getRouteUrl($item));
+                    elseif ($currentPath == 'logout') continue;
+                    elseif ($userAcceptance === '0'|| $currentPath == 'logout') $this->redirect($this->di->getRouter()->getRouteUrl($item));
                 }
             }
         }
