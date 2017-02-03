@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "c515fec7f77c963a2af82d9037a67bd6",
-    "content-hash": "985854ca569bbf77c4b526c9afc05011",
+    "hash": "fac8df4126aabfddc9bf0515e422118b",
+    "content-hash": "3e4e447e97a1fcf78f621f901e71d427",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
@@ -75,8 +75,8 @@
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "git@bitbucket.org:boomersweb/cs-billing.git",
-                "reference": "a11eb260812478388876cb80fd5aaad538ceb8f3"
+                "url": "git@gitlab.dizboard.com:pumpic/cs-billing.git",
+                "reference": "1e9ca62ead5615d2c9aab9d8a54b5963f6cf3751"
             },
             "require": {
                 "boomers/cs-models": "dev-master",
@@ -95,14 +95,14 @@
             "license": [
                 "MIT"
             ],
-            "time": "2016-11-21 14:25:53"
+            "time": "2017-01-27 12:05:19"
         },
         {
             "name": "boomers/cs-devices",
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "git@bitbucket.org:boomersweb/cs-devices.git",
+                "url": "git@gitlab.dizboard.com:pumpic/cs-devices.git",
                 "reference": "c05c60409d7024a036443a61393ace2910f1dbcf"
             },
             "require": {
@@ -131,11 +131,11 @@
         },
         {
             "name": "boomers/cs-icloud",
-            "version": "dev-master",
+            "version": "dev-token",
             "source": {
                 "type": "git",
-                "url": "git@bitbucket.org:boomersweb/cs-icloud.git",
-                "reference": "c6a48784524745c489a1e5d438bebb5e5dc6c7ea"
+                "url": "git@gitlab.dizboard.com:pumpic/cs-icloud.git",
+                "reference": "f8e0b5a059dab0e032314c778b25f3ee24c70c6d"
             },
             "require": {
                 "guzzlehttp/guzzle": "~5.0",
@@ -152,21 +152,22 @@
                     "src/CloudKit/Api/CkProtobufMessages.php"
                 ],
                 "psr-4": {
-                    "CS\\ICloud\\": "src/"
+                    "CS\\ICloud\\": "src/",
+                    "AppleCloud\\": "src/Cloud"
                 }
             },
             "license": [
                 "MIT"
             ],
-            "time": "2016-07-25 14:29:31"
+            "time": "2017-02-02 14:26:31"
         },
         {
             "name": "boomers/cs-mail",
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "git@bitbucket.org:boomersweb/cs-mail.git",
-                "reference": "3102fdf03e8f53163ec58bc65b1cdb5cc554976a"
+                "url": "git@gitlab.dizboard.com:pumpic/cs-mail.git",
+                "reference": "2450cdf2d156b8e30a757262f5be53dedd057682"
             },
             "require": {
                 "guzzlehttp/guzzle": "~5.0",
@@ -184,15 +185,15 @@
             "license": [
                 "MIT"
             ],
-            "time": "2016-12-28 10:24:17"
+            "time": "2017-01-16 10:20:19"
         },
         {
             "name": "boomers/cs-models",
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "git@bitbucket.org:boomersweb/cs-models.git",
-                "reference": "bb55aac329eeab66ecfd71e486d134841c9d98f7"
+                "url": "git@gitlab.dizboard.com:pumpic/cs-models.git",
+                "reference": "9fea83ec3ce9bcab810f0c3d7ad7f3a33d6608f1"
             },
             "require": {
                 "php": ">=5.4.0"
@@ -206,14 +207,14 @@
                     "CS\\Models\\": "src/"
                 }
             },
-            "time": "2016-11-24 15:17:01"
+            "time": "2017-02-02 10:54:40"
         },
         {
             "name": "boomers/cs-queue",
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "git@bitbucket.org:boomersweb/cs-queue.git",
+                "url": "git@gitlab.dizboard.com:pumpic/cs-queue.git",
                 "reference": "44b57115227d54a59e9e3ee4d72dc7dc48011921"
             },
             "require": {
@@ -236,7 +237,7 @@
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "git@bitbucket.org:boomersweb/cs-settings.git",
+                "url": "git@gitlab.dizboard.com:pumpic/cs-settings.git",
                 "reference": "2c58c83e621bd2636076d010164ce1901860f72b"
             },
             "require": {
@@ -255,8 +256,8 @@
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "git@bitbucket.org:boomersweb/cs-users.git",
-                "reference": "bc75d557a19eca83d391ff41e35c0fc98e6521a7"
+                "url": "git@gitlab.dizboard.com:pumpic/cs-users.git",
+                "reference": "dbf4d1ffeda3f06819eae393f73980d5ec46be60"
             },
             "require": {
                 "boomers/cs-mail": "dev-master",
@@ -280,14 +281,14 @@
             "license": [
                 "MIT"
             ],
-            "time": "2016-12-23 16:36:32"
+            "time": "2017-01-16 15:21:53"
         },
         {
             "name": "boomers/ip",
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "git@bitbucket.org:boomersweb/ip.git",
+                "url": "git@gitlab.dizboard.com:pumpic/ip.git",
                 "reference": "e1dc30ca7f96a570f73127cfa09426330581ccf2"
             },
             "require": {
@@ -306,7 +307,7 @@
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "git@bitbucket.org:boomersweb/seller.git",
+                "url": "git@gitlab.dizboard.com:pumpic/seller.git",
                 "reference": "17d8d11d4009e12dc17f00780e04d3481eb3f638"
             },
             "require": {
@@ -1531,43 +1532,45 @@
         },
         {
             "name": "swarrot/swarrot",
-            "version": "v2.2.0",
+            "version": "v2.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/swarrot/swarrot.git",
-                "reference": "c7ea70c99eb6b0cd77910bb2a63d692d57f3d148"
+                "reference": "52d0ef764fdd0dc934cab1077822b6c3f08d8051"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/swarrot/swarrot/zipball/c7ea70c99eb6b0cd77910bb2a63d692d57f3d148",
-                "reference": "c7ea70c99eb6b0cd77910bb2a63d692d57f3d148",
+                "url": "https://api.github.com/repos/swarrot/swarrot/zipball/52d0ef764fdd0dc934cab1077822b6c3f08d8051",
+                "reference": "52d0ef764fdd0dc934cab1077822b6c3f08d8051",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.4",
-                "psr/log": "~1.0",
-                "symfony/options-resolver": "~2.3|~3.0"
+                "php": "^5.4 || ^7.0",
+                "psr/log": "^1.0",
+                "symfony/options-resolver": "^2.3 || ^3.0"
             },
             "require-dev": {
-                "doctrine/common": "~2.3",
-                "doctrine/dbal": "~2.2",
-                "php-amqplib/php-amqplib": "~2.1",
-                "phpunit/phpunit": "~4.7|~5.0"
+                "aws/aws-sdk-php": "^2.8",
+                "doctrine/common": "^2.3",
+                "doctrine/dbal": "^2.2",
+                "php-amqplib/php-amqplib": "^2.1",
+                "phpunit/phpunit": "^4.8.27 || ^5.0"
             },
             "suggest": {
+                "aws/aws-sdk-php": "^2.8",
                 "pecl-amqp": "*",
-                "php-amqplib/php-amqplib": "~2.1",
-                "symfony/console": "~2.4|~3.0"
+                "php-amqplib/php-amqplib": "^2.1",
+                "symfony/console": "^2.4 || ^3.0"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.3.x-dev"
+                    "dev-master": "2.4.x-dev"
                 }
             },
             "autoload": {
-                "psr-0": {
-                    "Swarrot": "src"
+                "psr-4": {
+                    "Swarrot\\": "src/Swarrot"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -1582,23 +1585,25 @@
             ],
             "description": "A simple lib to consume RabbitMQ queues",
             "keywords": [
+                "AMQP",
+                "queue",
                 "swarrot",
                 "worker"
             ],
-            "time": "2016-06-15 12:44:43"
+            "time": "2016-12-28 14:53:53"
         },
         {
             "name": "symfony/console",
-            "version": "v2.8.15",
+            "version": "v2.8.16",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "d5643cd095e5e37d31e004bb2606b5dd7e96602f"
+                "reference": "2e18b8903d9c498ba02e1dfa73f64d4894bb6912"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/d5643cd095e5e37d31e004bb2606b5dd7e96602f",
-                "reference": "d5643cd095e5e37d31e004bb2606b5dd7e96602f",
+                "url": "https://api.github.com/repos/symfony/console/zipball/2e18b8903d9c498ba02e1dfa73f64d4894bb6912",
+                "reference": "2e18b8903d9c498ba02e1dfa73f64d4894bb6912",
                 "shasum": ""
             },
             "require": {
@@ -1646,20 +1651,20 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "time": "2016-12-06 11:59:35"
+            "time": "2017-01-08 20:43:03"
         },
         {
             "name": "symfony/debug",
-            "version": "v2.8.15",
+            "version": "v2.8.16",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/debug.git",
-                "reference": "62a68f640456f6761d752c62d81631428ef0d8a1"
+                "reference": "567681e2c4e5431704e884e4be25a95fd900770f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/debug/zipball/62a68f640456f6761d752c62d81631428ef0d8a1",
-                "reference": "62a68f640456f6761d752c62d81631428ef0d8a1",
+                "url": "https://api.github.com/repos/symfony/debug/zipball/567681e2c4e5431704e884e4be25a95fd900770f",
+                "reference": "567681e2c4e5431704e884e4be25a95fd900770f",
                 "shasum": ""
             },
             "require": {
@@ -1703,20 +1708,20 @@
             ],
             "description": "Symfony Debug Component",
             "homepage": "https://symfony.com",
-            "time": "2016-11-15 12:53:17"
+            "time": "2017-01-02 20:30:24"
         },
         {
             "name": "symfony/event-dispatcher",
-            "version": "v2.8.15",
+            "version": "v2.8.16",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/event-dispatcher.git",
-                "reference": "25c576abd4e0f212e678fe8b2bd9a9a98c7ea934"
+                "reference": "74877977f90fb9c3e46378d5764217c55f32df34"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/event-dispatcher/zipball/25c576abd4e0f212e678fe8b2bd9a9a98c7ea934",
-                "reference": "25c576abd4e0f212e678fe8b2bd9a9a98c7ea934",
+                "url": "https://api.github.com/repos/symfony/event-dispatcher/zipball/74877977f90fb9c3e46378d5764217c55f32df34",
+                "reference": "74877977f90fb9c3e46378d5764217c55f32df34",
                 "shasum": ""
             },
             "require": {
@@ -1763,7 +1768,7 @@
             ],
             "description": "Symfony EventDispatcher Component",
             "homepage": "https://symfony.com",
-            "time": "2016-10-13 01:43:15"
+            "time": "2017-01-02 20:30:24"
         },
         {
             "name": "symfony/options-resolver",

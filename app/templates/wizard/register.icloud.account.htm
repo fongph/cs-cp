@@ -2,19 +2,50 @@
     {insert "wizard/inc.steps.breadcrumb.htm"}
     <h1 class="text-center">{$title}</h1>
     {insert "inc.flashMessages.htm"}
+    {if $twoFactorAuthentication}
+        {if $invalidVerificationCode}
+            <div class="alert alert-danger">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                <i class="fa fa-times-circle"></i>Verification Code you've entered is incorrect. Please, check it carefully and try again.
+            </div>
+        {else}
+            <div class="alert alert-danger">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                <i class="fa fa-times-circle"></i>Two-factor authentication is enabled on your account. To continue, you need to generate and enter the Verification Code. Please follow the guide below.
+            </div>
+        {/if}
+    {/if}
     <div class="wizard-container">
         <p>Please enter Apple ID of the target device and the password in the fields below.</p>
         <p><b>NOTE:</b> Pumpic does not store your password due to security reasons. To access backups, we use token based authentication.</p>
         <div class="row">
-            <div class="assign-icloud-form col-lg-4 col-md-4 col-sm-6 col-lg-offset-4 col-md-offset-4 col-sm-offset-3">
-                <form role="form" method="post" autocomplete="new-password">
+            <div class="assign-icloud-form col-md-6 col-sm-8 col-md-offset-3 col-sm-offset-2">
+                <form id="form-iCloud-pass" method="post" autocomplete="off" role="form">
                     <div class="form-group">
-                        <input type="text"  autocomplete="new-password" name="email" class="form-control" id="email" value="{$di.request->post('email')}" placeholder="{$di.t->_('iCloud Email')}">
+                        <label>Apple ID</label>
+                        <input class="form-control" type="text" name="email" {if $twoFactorAuthentication} value="{$.post.email}" {/if} />
                     </div>
                     <div class="form-group">
-                        <input type="password" autocomplete="new-password" name="password" class="form-control" id="password" value="" placeholder="{$di.t->_('iCloud Password')}" />
+                        <label>Password</label>
+                        <input class="form-control" type="password" name="password"{if $twoFactorAuthentication} value="{$.post.password}" {/if}/>
                     </div>
-                    <button type="submit" class="btn btn-primary pull-left">{$di.t->_('Next')}</button>
+                    {if $twoFactorAuthentication}
+                    <div class="form-group">
+                        <p>To generate Verification Code, you must:</p>
+                        <ul>
+                            <li>Go to Settings -&gt; iCloud</li>
+                            <li>Tap on your name in iCloud credentials and enter your iCloud password (if requested)</li>
+                            <li>On the next screen, tap on Password & Security and scroll to find Get Verification Code section</li>
+                            <li>Tap on Get Verification Code. You will be instantly shown a six-digit code</li>
+                            <li>Type the Verification Code in the form below</li>
+                        </ul>
+                    </div>
+                    <div class="form-group">
+                        <label>Verification Code</label>
+                        <input class="form-control" type="text" name="verificationCode">
+                    </div>
+                    {/if}
+                    <button class="btn btn-primary" type="submit">{$di->getTranslator()->_('Next')}</button>
                 </form>
             </div>
         </div>

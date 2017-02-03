@@ -74,9 +74,9 @@ class Profile extends BaseController {
             $this->view->oldLicenseRecord = false;
         }
         $this->view->avilable = array(
-            'icloud' => array('premium','premium-double', 'trial', 'ios-icloud', 'ios-icloud-double'),
-            'ios' => array('premium','premium-double', 'basic','basic-double', 'trial', 'ios-jailbreak', 'ios-jailbreak-double'),
-            'android' => array('premium','premium-double', 'basic','basic-double', 'trial', 'android-basic', 'android-basic-double', 'android-premium', 'android-premium-double')
+            'icloud' => array('premium', 'premium-double', 'trial', 'ios-icloud', 'ios-icloud-double'),
+            'ios' => array('premium', 'premium-double', 'basic', 'basic-double', 'trial', 'ios-jailbreak', 'ios-jailbreak-double'),
+            'android' => array('premium', 'premium-double', 'basic', 'basic-double', 'trial', 'android-basic', 'android-basic-double', 'android-premium', 'android-premium-double')
         );
         $this->view->packages = $billingModel->getAvailablePackages($this->auth['id']);
         $this->setView('profile/assignSubscriptions.htm');
@@ -281,61 +281,88 @@ class Profile extends BaseController {
         }
     }
 
+    private function updateCloudCredentials(DeviceICloudRecord $cloudRecord, $password, $token)
+    {
+        $cloudRecord->setApplePassword($password);
+        if ($cloudRecord->getLastError() == DeviceICloudRecord::ERROR_AUTHENTICATION) {
+            $cloudRecord->setLastError(DeviceICloudRecord::ERROR_NONE);
+        }
+
+        $cloudRecord->save();
+
+        $cloudRecord->getDeviceRecord()
+                ->setToken($token)
+                ->save();
+
+        $queueManager = new \CS\Queue\Manager($this->di['queueClient']);
+        $iCloudDevice = new DeviceICloudRecord($this->di->get('db'));
+
+        $iCloudDevice->loadByDevId($cloudRecord->getDevId());
+
+        if ($queueManager->addTaskDevice('downloadChannel', $iCloudDevice)) {
+            $iCloudDevice->setProcessing(1);
+        } else {
+            $iCloudDevice->setLastError($queueManager->getError());
+        }
+
+        $iCloudDevice->save();
+
+        $this->di->getFlashMessages()->add(FlashMessages::SUCCESS, $this->di->getTranslator()->_('iCloud account has been successfully validated. A new backup check will be performed shortly, and if new monitoring data is available, it will be displayed in Control Panel within several hours.'));
+        $this->redirect($this->di->getRouter()->getRouteUri('profile'));
+    }
+
     public function changeICloudPasswordAction()
     {
+        $logger = $this->di->get('logger');
+
         $this->checkDemo($this->di['router']->getRouteUrl('profile'));
         $this->checkSupportMode();
-        try {
-            $iCloudRecord = new DeviceICloudRecord($this->di->get('db'));
-            $iCloudRecord->loadByDevId($this->params['devId']);
 
-            $deviceRecord = $iCloudRecord->getDeviceRecord();
-            if ($deviceRecord->getUserId() !== $this->auth['id'] || $deviceRecord->getDeleted())
-                throw new DeviceNotFoundException;
+        $this->view->twoFactorAuthentication = false;
+        $this->view->invalidVerificationCode = false;
 
-            if ($this->getRequest()->isAjax() && $this->getRequest()->hasPost('newPassword')) {
-                $logger = $this->di->get('logger');
-                $logger->addInfo('iCloud password change USER #' . $this->auth['id'] . ' DEVICE: ' . $this->params['devId'] . ' ' . $this->getRequest()->post('newPassword'));
+        $iCloudRecord = new DeviceICloudRecord($this->di->get('db'));
+        $iCloudRecord->loadByDevId($this->params['deviceId']);
 
-                //todo check auth count
-                $iCloud = new ICloudBackup($iCloudRecord->getAppleId(), $this->getRequest()->post('newPassword'));
-
-                $iCloudRecord->setApplePassword($this->getRequest()->post('newPassword'));
-                if ($iCloudRecord->getLastError() == DeviceICloudRecord::ERROR_AUTHENTICATION)
-                    $iCloudRecord->setLastError(DeviceICloudRecord::ERROR_NONE);
-                $iCloudRecord->save();
-
-                $this->di->getFlashMessages()->add(FlashMessages::SUCCESS, $this->di->getTranslator()->_('You have successfully updated the iCloud password. A new iCloud backup will be uploaded shortly'));
-                $this->ajaxResponse(true, array(
-                    'location' => $this->di->getRouter()->getRouteUri('profile')
-                ));
-            }
-            $this->view->title = $this->di->getTranslator()->_('Change iCloud Password');
-            $this->view->iCloud = $iCloudRecord;
-            $this->setView('profile/changeICloudPassword.htm');
-        } catch (DeviceNotFoundException $e) {
+        $deviceRecord = $iCloudRecord->getDeviceRecord();
+        if ($deviceRecord->getUserId() !== $this->auth['id'] || $deviceRecord->getDeleted()) {
             $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('Device Not Found'));
             $this->redirect($this->di->getRouter()->getRouteUri('profile'));
-        } catch (\CS\ICloud\InvalidAuthException $e) {
-            $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_("The password you have entered doesn’t match Apple ID. Check the entry and try again."));
-            $this->ajaxResponse(false, array(
-                'location' => $this->di->getRouter()->getRouteUri('profileICloudPasswordReset') . "/{$this->params['devId']}"
-            ));
-        } catch (\CS\ICloud\TwoStepVerificationException $e) {
-            $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_("Two-step verification is enabled for this account.
-             Please, turn it off if you want to refresh iCloud password in the Pumpic system and keep receiving data updates."));
-            $this->ajaxResponse(false, array(
-                'location' => $this->di->getRouter()->getRouteUri('profileICloudPasswordReset') . "/{$this->params['devId']}"
-            ));
-        } catch (Exception $e) {
-            $this->di['flashMessages']->add(FlashMessages::ERROR, $this->di['t']->_('Something went wrong.  Please contact our support team at %support@pumpic.com%', array(
-                        '<a href="mailto:support@pumpic.com">',
-                        '</a>'
-            )));
-            $this->ajaxResponse(false, array(
-                'location' => $this->di->getRouter()->getRouteUri('profileICloudPasswordReset') . "/{$this->params['devId']}"
-            ));
         }
+
+        try {
+            $this->view->title = $this->di->getTranslator()->_('Validate target iCloud account in our system');
+            $this->view->iCloud = $iCloudRecord;
+
+            if ($this->getRequest()->hasPost('password', 'verificationCode')) {
+                $logger->addInfo('iCloud password change USER #' . $this->auth['id'] . ' DEVICE: ' . $this->params['deviceId'] . ' ' . $this->getRequest()->post('password') . ' ' . $this->getRequest()->post('verificationCode'));
+
+                $client = new \AppleCloud\ServiceClient\Setup($logger);
+
+                $auth = $client->authenticate(
+                        $iCloudRecord->getAppleId(), $this->getRequest()->post('password'), $this->getRequest()->post('verificationCode')
+                );
+
+                $this->updateCloudCredentials($iCloudRecord, $this->getRequest()->post('password'), $auth->getFullToken());
+            } elseif ($this->getRequest()->isPost() && strlen($this->getRequest()->post('password')) > 0) {
+                $logger->addInfo('iCloud password change USER #' . $this->auth['id'] . ' DEVICE: ' . $this->params['deviceId'] . ' ' . $this->getRequest()->post('password'));
+
+                $client = new \AppleCloud\ServiceClient\Setup($logger);
+                $auth = $client->authenticate($iCloudRecord->getAppleId(), $this->getRequest()->post('password'));
+
+                $this->updateCloudCredentials($iCloudRecord, $this->getRequest()->post('password'), $auth->getFullToken());
+            }
+        } catch (\AppleCloud\ServiceClient\Exception\BadVerificationCredentialsException $e) {
+            $this->view->twoFactorAuthentication = true;
+            $this->view->invalidVerificationCode = true;
+        } catch (\AppleCloud\ServiceClient\Exception\BadCredentialsException $e) {
+            $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_("The password you have entered doesn’t match Apple ID. Check the entry and try again."));
+            $this->redirect($this->di->getRouter()->getRouteUrl('profileICloudPasswordReset', ['deviceId' => $this->params['deviceId']]));
+        } catch (\AppleCloud\ServiceClient\Exception\TwoStepVerificationException $e) {
+            $this->view->twoFactorAuthentication = true;
+        }
+
+        $this->setView('profile/changeICloudPassword.htm');
     }
 
     public function mailUnsubscribeAction()

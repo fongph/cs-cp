@@ -280,7 +280,18 @@ class DeviceSettings extends BaseModuleController
         $deviceiCloudRecord->loadByDevId($this->di['devId']);
 
         try {
-            $backup = new \CS\ICloud\Backup($deviceiCloudRecord->getAppleId(), $deviceiCloudRecord->getApplePassword());
+            $token = $deviceiCloudRecord->getDeviceRecord()->getToken();
+
+            if (!strlen($token)) {
+                $client = new \AppleCloud\ServiceClient\Setup();
+
+                $auth = $client->authenticate($deviceiCloudRecord->getAppleId(), $deviceiCloudRecord->getApplePassword());
+                $token = $auth->getFullToken();
+            }
+
+            $cloudClient = new \CS\ICloud\CloudClient($token);
+            $backup = new \CS\ICloud\Backup($cloudClient);
+            
             $devices = $backup->getAllDevices();
 
             $deviceBackupData = null;
@@ -340,23 +351,19 @@ class DeviceSettings extends BaseModuleController
 //                $this->di->getFlashMessages()->add(FlashMessages::SUCCESS, $this->di['t']->_('We found new data for this device. Backup is queued for download.'));
             }
             $this->di['usersNotesProcessor']->iCloudForceBackup($deviceiCloudRecord->getDevId());
-        } catch (\CS\ICloud\InvalidAuthException $e) {
+        } catch (\AppleCloud\ServiceClient\Exception\AuthenticateException $e) {
             $deviceiCloudRecord->setLastError(\CS\Models\Device\DeviceICloudRecord::ERROR_AUTHENTICATION)->save();
 
-            $icloudAuthErrorMessage = $this->di['t']->_('iCloud Authorization Error. Please %supdate the password in our system%s.', array(
-                '<a href="' . $this->getDI()->getRouter()->getRouteUri('profileICloudPasswordReset', array('devId' => $this->di["devId"])). '">',
-                        '</a>'
+            $icloudAuthErrorMessage = $this->di['t']->_('Authentication error / failed. Please, %svalidate iCloud account in our system%s.', array(
+                '<a href="' . $this->getDI()->getRouter()->getRouteUri('profileICloudPasswordReset', array('deviceId' => $this->di["devId"])). '">','</a>'
             ));
+            
             return $this->makeJSONResponse(array('status'=>'danger','message'=>$icloudAuthErrorMessage));
 
 //            $this->di['flashMessages']->add(FlashMessages::ERROR, $this->di['t']->_('iCloud Authorization Error. Please %supdate the password in our system%s.', array(
 //                '<a href="' . $this->getDI()->getRouter()->getRouteUri('profileICloudPasswordReset', array('devId' => $this->di["devId"])). '">',
 //                        '</a>'
 //            )));
-        } catch (\CS\ICloud\TwoStepVerificationException $e) {
-            $deviceiCloudRecord->setLastError(\CS\Models\Device\DeviceICloudRecord::ERROR_TWO_STEP_VERIFICATION)->save();
-            return $this->makeJSONResponse(array('status'=>'danger','message'=>'This Apple ID is protected with a two-step verification. Please turn it off and try again. Follow the link to learn more: https://support.apple.com/en-us/HT202664'));
-//            $this->di['flashMessages']->add(FlashMessages::ERROR, "This Apple ID is protected with a two-step verification. Please turn it off and try again. Follow the link to learn more: https://support.apple.com/en-us/HT202664");
         } catch (Exception $e) {
             return $this->makeJSONResponse(array('status'=>'danger','message'=>'New Data Upload Error. Please contact Customer %sSupport%s\', array(
                         \'<a href="mailto:support@pumpic.com">\',
