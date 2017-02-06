@@ -135,7 +135,7 @@
             "source": {
                 "type": "git",
                 "url": "git@gitlab.dizboard.com:pumpic/cs-icloud.git",
-                "reference": "8b6182dd45b6c219863523f0fa42df28ba2ac59e"
+                "reference": "3b2a5d38bcbd8211b85aa979e5de914e8038f896"
             },
             "require": {
                 "guzzlehttp/guzzle": "~5.0",
@@ -159,7 +159,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2017-02-06 08:22:19"
+            "time": "2017-02-06 08:29:12"
         },
         {
             "name": "boomers/cs-mail",
