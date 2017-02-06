@@ -198,7 +198,6 @@ class Wizard extends BaseController {
                     $auth = $client->authenticate($this->getRequest()->post('email'), $this->getRequest()->post('password'));
                 }
                 
-                $token = '10325355187:AQAAAABYkwlIJvgSra00FHF2BFx4Ybp61k6w8V4=';
                 $token = $auth->getFullToken();
                 
                 $cloudClient = new \CS\ICloud\CloudClient($token);
@@ -363,7 +362,7 @@ class Wizard extends BaseController {
             $this->view->twoFactorAuthentication = true;
         } catch (\AppleCloud\ServiceClient\Exception\BadCredentialsException $e) {
             $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_("The password you have entered doesn’t match Apple ID. Check the entry and try again."));
-            $this->redirect($this->di->getRouter()->getRouteUrl('profileICloudPasswordReset', ['deviceId' => $this->params['deviceId']]));
+            $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_REGISTER));
         } catch (InvalidAuthException $e) {
             $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('Invalid Email or Password.'));
             $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_REGISTER));
