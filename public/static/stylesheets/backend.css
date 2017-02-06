@@ -12245,10 +12245,9 @@ a.list-group-item-danger.active:focus {
   border-top: 1px solid #e7e7e7;
 }
 .alert a {
-  color: #fff;
   font-weight: bold;
 }
-.alert.alert-danger a {
+.alert-danger a {
   color: #d66f79;
 }
 .popover {
