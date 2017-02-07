@@ -443,7 +443,18 @@ class Billing extends BaseController
         } else {
             $product = $license['code_fastspring'];
             $newProduct = str_replace('basic', 'premium', $product);
-           
+            $newProductInfo = $billingModel->getProductInfo($newProduct);
+
+            if (strripos($license['code_fastspring'], '-double') === false){
+                $this->view->double = '';
+                $this->view->countSubscription = '';
+                $double = false;
+            } else {
+                $this->view->double = 's';
+                $this->view->countSubscription = '2 ';
+                $double = true;
+            }
+            $sum = $this->calculatePremiumSum($license, $newProductInfo, $double);
 
             if ($this->getRequest()->isPost()) {
 
@@ -468,7 +479,7 @@ class Billing extends BaseController
                                 $billingModel->removeLicenseDiscountPromotion($this->auth['id'], $license['id']);
                             }
                         }
-                        
+                        $billingModel->setLicenseUpdatedPayments($this->params['id'], round($sum['saveSum'], 2), $sum['sumToPay']);
                         $billingModel->updateSubscriptionPlan($this->params['id'], $newProduct);
                         
                         $this->getDI()->getFlashMessages()->add(FlashMessages::SUCCESS, "Your subscription is successfully upgraded!");
@@ -486,18 +497,8 @@ class Billing extends BaseController
 
                 $this->redirect($this->di->getRouter()->getRouteUrl('billing'));
             } else {
-                $newProductInfo = $billingModel->getProductInfo($newProduct);
 
-                if (strripos($license['code_fastspring'], '-double') === false){
-                    $this->view->double = '';
-                    $this->view->countSubscription = '';
-                    $double = false;
-                } else {
-                    $this->view->double = 's';
-                    $this->view->countSubscription = '2 ';
-                    $double = true;
-                }
-                $sum = $this->calculatePremiumSum($license, $newProductInfo, $double);
+//                $sum = $this->calculatePremiumSum($license, $newProductInfo, $double);
                 $this->view->balance = round($sum['saveSum'], 2);
                 $this->view->upgradePrice = $sum['sumToPay'];
                 $this->view->oldName = $license['name'];
@@ -528,6 +529,18 @@ class Billing extends BaseController
         } else {
             $product = $license['code_fastspring'];
             $newProduct = str_replace('1m', '12m', $product);
+            $newProductInfo = $billingModel->getProductInfo($newProduct);
+
+            if (strripos($license['code_fastspring'], '-double') === false){
+                $this->view->double = '';
+                $this->view->countSubscription = '';
+                $double = false;
+            } else {
+                $this->view->double = 's';
+                $this->view->countSubscription = '2 ';
+                $double = true;
+            }
+            $sum = $this->calculateYearlySum($license, $newProductInfo, $double);
 
             if ($this->getRequest()->isPost()) {
                 if ($this->getRequest()->hasPost('cancel')) {
@@ -552,7 +565,7 @@ class Billing extends BaseController
                                 $billingModel->removeLicenseDiscountPromotion($this->auth['id'], $license['id']);
                             }
                         }
-                        
+                        $billingModel->setLicenseUpdatedPayments($this->params['id'], round($sum['saveSum'], 2), $sum['sumToPay']);
                         $billingModel->updateSubscriptionPlan($this->params['id'], $newProduct);
 
                         $this->getDI()->getFlashMessages()->add(FlashMessages::SUCCESS, "Your subscription is successfully upgraded!");
@@ -569,18 +582,7 @@ class Billing extends BaseController
                 }
                 $this->redirect($this->di->getRouter()->getRouteUrl('billing'));
             } else {
-                $newProductInfo = $billingModel->getProductInfo($newProduct);
 
-                 if (strripos($license['code_fastspring'], '-double') === false){
-                     $this->view->double = '';
-                     $this->view->countSubscription = '';
-                     $double = false;
-                 } else {
-                     $this->view->double = 's';
-                     $this->view->countSubscription = '2 ';
-                     $double = true;
-                 }
-                $sum = $this->calculateYearlySum($license, $newProductInfo, $double);
                 $this->view->balance = round($sum['saveSum'], 2);
                 $this->view->upgradePrice = $sum['sumToPay'];
                 $this->view->oldName = $license['name'];

@@ -137,7 +137,8 @@ class Locations extends BaseModel
         return $pdo->query("SELECT 
                                 di.`apple_id`,
                                 di.`apple_password`,
-                                d.`unique_id` serial_number
+                                d.`unique_id` serial_number,
+                                d.`token`
                             FROM `devices_icloud` di
                             INNER JOIN `devices` d ON d.`id` = di.`dev_id`
                             WHERE
@@ -232,7 +233,7 @@ class Locations extends BaseModel
     {
         $credentials = $this->getCloudDeviceCredentials($devId);
 
-        $info = \CS\ICloud\Locations::getLocationsDeviceInfo($credentials['apple_id'], $credentials['apple_password'], $credentials['serial_number']);
+        $info = \CS\ICloud\Locations::getLocationsDeviceInfo($credentials['apple_id'], $credentials['apple_password'], $credentials['token'], $credentials['serial_number']);
 
         if ($info !== false) {
             $usersNotes = $this->di['usersNotesProcessor'];

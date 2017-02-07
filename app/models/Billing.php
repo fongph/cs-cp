@@ -226,6 +226,18 @@ class Billing extends \System\Model
         return $result;
     }
 
+    public function setLicenseUpdatedPayments($licenseId, $currentBalance, $updatePrice)
+    {
+        $licenseId = $this->getDb()->quote($licenseId);
+        $currentBalance = $this->getDb()->quote($currentBalance);
+        $updatePrice = $this->getDb()->quote($updatePrice);
+
+        return $this->getDb()->exec("INSERT INTO `licenses_migrations` SET `license_id` = {$licenseId}, `current_balance` = {$currentBalance}, `update_price` = {$updatePrice}; ");
+
+
+
+    }
+
     private function getLicenseSubscriptionInfo($licenseId)
     {
         try {
