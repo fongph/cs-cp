@@ -21,7 +21,7 @@
         <li{if $di->getRouter()->getFindRoute()->isCurrentStep('wizardSetup')} class="active"{/if}>
             <a href="{$di->getRouter()->getRouteUrl('wizardSetup')}">3. {$stepName}</a>
         </li>
-    {else}<li>2. {$stepName}</li>{/if}
+    {else}<li>3. {$stepName}</li>{/if}
     
     
     {var $stepName = $di.t->_('Device Activation')}
@@ -29,13 +29,13 @@
         <li{if $di->getRouter()->getFindRoute()->isCurrentStep('wizardRegister')} class="active"{/if}>
             <a href="{$di->getRouter()->getRouteUrl('wizardRegister')}">4. {$stepName}</a>
         </li>
-    {else}<li>3. {$stepName}</li>{/if}
+    {else}<li>4. {$stepName}</li>{/if}
     
     {var $stepName = $di.t->_('Complete Installation')}
     {if $di->getRouter()->getFindRoute()->isAvailableStep('wizardFinish')}
         <li{if $di->getRouter()->getFindRoute()->isCurrentStep('wizardFinish')} class="active"{/if}>
             <a href="{$di->getRouter()->getRouteUrl('wizardFinish')}">5. {$stepName}</a>
         </li>
-    {else}<li>4. {$stepName}</li>{/if}
+    {else}<li>5. {$stepName}</li>{/if}
     
 </ol>
