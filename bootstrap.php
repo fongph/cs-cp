@@ -112,6 +112,7 @@ $di->setShared('router', function() use($config, $di) {
         $router->add('billingLicenseDiscountOffer', new \System\Router\Regex('/subscriptions/license/:id/discount', array('controller' => 'Billing', 'action' => 'discountOfferLicense'), array('id' => '[0-9]+')));
         $router->add('billingLicenseUpgradePremium', new \System\Router\Regex('/subscriptions/upgrade/:id/premium', array('controller' => 'Billing', 'action' => 'licenseUpgradePremium'), array('id' => '[0-9]+')));
         $router->add('billingLicenseUpgradeYearly', new \System\Router\Regex('/subscriptions/upgrade/:id/yearly', array('controller' => 'Billing', 'action' => 'licenseUpgradeYearly'), array('id' => '[0-9]+')));
+        $router->add('billingLicenseUpgradeMonthly', new \System\Router\Regex('/subscriptions/upgrade/:id/monthly', array('controller' => 'Billing', 'action' => 'licenseUpgradeMonthly'), array('id' => '[0-9]+')));
     } else {
         $router->add('billing', new \System\Router\Route('/billing', array('controller' => 'Billing', 'action' => 'index')));
         $router->add('billingAddDevice', new \System\Router\Route('/billing/addDevice', array('controller' => 'Billing', 'action' => 'addDevice')));

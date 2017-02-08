@@ -81,6 +81,7 @@ class Billing extends \System\Model
                 p.code_fastspring,
                 CASE WHEN p.`code_fastspring` LIKE 'pumpic-basic-%m-%' THEN 'basic'
                    WHEN p.`code_fastspring` LIKE '%pumpic-%-1m-%' THEN 'premium-1m'
+                   WHEN p.`code_fastspring` LIKE '%pumpic-%-7d-%' THEN 'period-7d'
                    ELSE '-' 
                  END AS 'product_version',
              (SELECT id 
