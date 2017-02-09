@@ -86,7 +86,8 @@ $default = array(
             'instructions/wizard-android.html' => 'Android Installation Guide for Support',
             'instructions/wizard-ios.html' => 'iOS Installation Guide for Support',
             'instructions/wizard-icloud.html' => 'iOS iCloud  Installation Guide for Support',
-            'instructions/how-to-backup-device.html' => 'How to back up your target device'
+            'instructions/how-to-backup-device.html' => 'How to back up your target device',
+            'instructions/additional-settings.html' => 'Additional Settings'
 
         ),
         'auth' => array(
@@ -108,7 +109,8 @@ $default = array(
             'instructions/wizard-android.html',
             'instructions/wizard-ios.html',
             'instructions/wizard-icloud.html',
-            'instructions/how-to-backup-device.html'
+            'instructions/how-to-backup-device.html',
+            'instructions/additional-settings.html'
         )
     ),
     'bundlesNamespace' => 'first'
