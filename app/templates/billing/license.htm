@@ -82,7 +82,7 @@
     <tr class="odd">
         <td>{$license.name}</td>
         <td>{$license.amount} {$license.currency} </td>
-        <td>{if $license.has_cancelation_discount}
+        <td>{if ($license.has_cancelation_discount || $license.has_cancelation_discount_double) }
             <s style="color: grey;"> {$license.price_regular} {$license.currency}</s>  <br> {$license.price_with_cancelation_discount} {$license.currency} <span>(20% OFF)</span>
             {else}
             {$license.price_regular} {$license.currency}

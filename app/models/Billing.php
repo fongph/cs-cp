@@ -206,6 +206,8 @@ class Billing extends \System\Model
                         s.`url` subscription_url,
                         l.`order_product_id`,
                         (SELECT COUNT(*) FROM `users_options` WHERE `user_id` = l.`user_id` AND `option` = {$option} AND value = l.`id` LIMIT 1) has_cancelation_discount,
+                        (SELECT COUNT(*) FROM licenses lics WHERE lics.id <> l.id AND lics.product_id = l.product_id  AND  lics.user_id = l.user_id
+                        AND (SELECT COUNT(*) 	FROM `users_options` WHERE `user_id` = l.user_id AND `option` = 'license-with-cancellation-discount'  AND value = lics.id LIMIT 1)) has_cancelation_discount_double,
                         (SELECT `created_at` FROM `users_options` WHERE `user_id` = l.`user_id` AND `option` = {$option} AND value = l.`id` LIMIT 1) has_cancelation_discount_date,
                         (SELECT id FROM `orders_payments` WHERE `order_id` = op.`order_id` AND `type` = 'prolongation' LIMIT 1) as 'is_rebill',
                         (SELECT MAX(`created_at`) FROM `orders_payments` WHERE `order_id` = op.`order_id` AND `type` = 'prolongation' LIMIT 1) as 'is_rebill_date',
