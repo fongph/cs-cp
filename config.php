@@ -88,7 +88,7 @@ $default = array(
             'instructions/wizard-icloud.html' => 'iOS iCloud  Installation Guide for Support',
             'instructions/how-to-backup-device.html' => 'How to back up your target device',
             'instructions/additional-settings.html' => 'Additional Settings',
-            'instructions/faq-2factor-authentication.html' => 'How to set up Pumpic with two-factor authentication'
+            'instructions/2factor-authentication.html' => 'How to set up Pumpic with two-factor authentication'
 
         ),
         'auth' => array(
@@ -112,7 +112,7 @@ $default = array(
             'instructions/wizard-icloud.html',
             'instructions/how-to-backup-device.html',
             'instructions/additional-settings.html',
-            'instructions/faq-2factor-authentication.html'
+            'instructions/2factor-authentication.html'
         )
     ),
     'bundlesNamespace' => 'first'
