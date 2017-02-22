@@ -76,7 +76,7 @@
             "source": {
                 "type": "git",
                 "url": "git@gitlab.dizboard.com:pumpic/cs-billing.git",
-                "reference": "1e9ca62ead5615d2c9aab9d8a54b5963f6cf3751"
+                "reference": "4ed45fa490a9561e5bc833697b4eaa0382bffdf1"
             },
             "require": {
                 "boomers/cs-models": "dev-master",
@@ -95,7 +95,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2017-01-27 12:05:19"
+            "time": "2017-02-07 10:49:10"
         },
         {
             "name": "boomers/cs-devices",
@@ -193,7 +193,7 @@
             "source": {
                 "type": "git",
                 "url": "git@gitlab.dizboard.com:pumpic/cs-models.git",
-                "reference": "9fea83ec3ce9bcab810f0c3d7ad7f3a33d6608f1"
+                "reference": "9d51810992e9495128f18ffc105213cbbe5d1bf3"
             },
             "require": {
                 "php": ">=5.4.0"
@@ -207,7 +207,7 @@
                     "CS\\Models\\": "src/"
                 }
             },
-            "time": "2017-02-02 10:54:40"
+            "time": "2017-02-06 13:29:35"
         },
         {
             "name": "boomers/cs-queue",
@@ -238,7 +238,7 @@
             "source": {
                 "type": "git",
                 "url": "git@gitlab.dizboard.com:pumpic/cs-settings.git",
-                "reference": "2c58c83e621bd2636076d010164ce1901860f72b"
+                "reference": "6d1fc0c530fa2d97f3f5386d492d32be3ffb5885"
             },
             "require": {
                 "php": ">=5.4.0"
@@ -249,7 +249,7 @@
                     "CS\\Settings\\": "src/"
                 }
             },
-            "time": "2016-12-28 14:44:27"
+            "time": "2017-02-22 10:46:43"
         },
         {
             "name": "boomers/cs-users",
@@ -257,13 +257,12 @@
             "source": {
                 "type": "git",
                 "url": "git@gitlab.dizboard.com:pumpic/cs-users.git",
-                "reference": "dbf4d1ffeda3f06819eae393f73980d5ec46be60"
+                "reference": "26d7fd6d667093a13cd20e69681d7ab9f97ba458"
             },
             "require": {
                 "boomers/cs-mail": "dev-master",
                 "boomers/cs-models": "dev-master",
                 "boomers/ip": "dev-master",
-                "filp/whoops": "~1.0",
                 "monolog/monolog": "1.*",
                 "php": ">=5.3.0",
                 "rastor/eventmanager": "1.1",
@@ -281,7 +280,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2017-01-16 15:21:53"
+            "time": "2017-02-13 09:35:12"
         },
         {
             "name": "boomers/ip",
@@ -1594,16 +1593,16 @@
         },
         {
             "name": "symfony/console",
-            "version": "v2.8.16",
+            "version": "v2.8.17",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "2e18b8903d9c498ba02e1dfa73f64d4894bb6912"
+                "reference": "f3c234cd8db9f7e520a91d695db7d8bb5daeb7a4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/2e18b8903d9c498ba02e1dfa73f64d4894bb6912",
-                "reference": "2e18b8903d9c498ba02e1dfa73f64d4894bb6912",
+                "url": "https://api.github.com/repos/symfony/console/zipball/f3c234cd8db9f7e520a91d695db7d8bb5daeb7a4",
+                "reference": "f3c234cd8db9f7e520a91d695db7d8bb5daeb7a4",
                 "shasum": ""
             },
             "require": {
@@ -1651,20 +1650,20 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "time": "2017-01-08 20:43:03"
+            "time": "2017-02-06 12:04:06"
         },
         {
             "name": "symfony/debug",
-            "version": "v2.8.16",
+            "version": "v2.8.17",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/debug.git",
-                "reference": "567681e2c4e5431704e884e4be25a95fd900770f"
+                "reference": "4a99c3a6cabfa0c297fc3531e61483d276133110"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/debug/zipball/567681e2c4e5431704e884e4be25a95fd900770f",
-                "reference": "567681e2c4e5431704e884e4be25a95fd900770f",
+                "url": "https://api.github.com/repos/symfony/debug/zipball/4a99c3a6cabfa0c297fc3531e61483d276133110",
+                "reference": "4a99c3a6cabfa0c297fc3531e61483d276133110",
                 "shasum": ""
             },
             "require": {
@@ -1708,11 +1707,11 @@
             ],
             "description": "Symfony Debug Component",
             "homepage": "https://symfony.com",
-            "time": "2017-01-02 20:30:24"
+            "time": "2017-01-27 23:54:58"
         },
         {
             "name": "symfony/event-dispatcher",
-            "version": "v2.8.16",
+            "version": "v2.8.17",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/event-dispatcher.git",
