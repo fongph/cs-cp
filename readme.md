@@ -9,18 +9,18 @@
 
 ## Установка development версии
  - создать файл ***development.config.php*** по принципу ***development.config.php.sample***
- - выполнить генерацию билда ```app/console build 0 -e development```
+ - выполнить генерацию билда ```php cp.php build 0 -e development```
 
 ## Установка development версии в контейнере **BETA**
  - создать файл ***docker-compose.yml*** по принципу ***docker-compose.sample.yml*** и изменить нужные настройки
  - установить зависимости
- - выполнить генерацию билда из контейнера ```docker-compose run application php app/console build 1```
+ - выполнить генерацию билда из контейнера ```docker-compose run application php cp.php build 1```
  - запустить веб сервер в контейнере ```docker-compose up```
  - настроить debug в IDE
 
 ## Активизация демо версии
- - выполняем генерацию билда с параметром ```-d``` и предаем id пользователя которым будем выполнять автоматическую авторизацию ```app/console build 0 -d 100```
- - выгружаем данные авторизации пользователя ```app/console load-demo-user```. Команда создает файл demoUserData.php в корне и пишет туда данные авторизации нашего пользователя.
+ - выполняем генерацию билда с параметром ```-d``` и предаем id пользователя которым будем выполнять автоматическую авторизацию ```php cp.php build 0 -d 100```
+ - выгружаем данные авторизации пользователя ```php cp.php load-demo-user```. Команда создает файл demoUserData.php в корне и пишет туда данные авторизации нашего пользователя.
 
 ## Компиляция less и js файлов
  - javascript файлы находятся в app/assets/javascript
