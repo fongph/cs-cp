@@ -232,7 +232,7 @@ class Locations extends BaseModel
     public function autoAssigniCloudDevice($devId, $userId)
     {
         $credentials = $this->getCloudDeviceCredentials($devId);
-
+        
         $info = \CS\ICloud\Locations::getLocationsDeviceInfo($credentials['apple_id'], $credentials['apple_password'], $credentials['token'], $credentials['serial_number']);
 
         if ($info !== false) {

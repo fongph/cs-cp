@@ -135,7 +135,7 @@
             "source": {
                 "type": "git",
                 "url": "git@gitlab.dizboard.com:pumpic/cs-icloud.git",
-                "reference": "3b2a5d38bcbd8211b85aa979e5de914e8038f896"
+                "reference": "5596ceb322580f6f2209617c8a4ea679f66ad992"
             },
             "require": {
                 "guzzlehttp/guzzle": "~5.0",
@@ -159,7 +159,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2017-02-06 08:29:12"
+            "time": "2017-03-02 14:08:21"
         },
         {
             "name": "boomers/cs-mail",
@@ -819,16 +819,16 @@
         },
         {
             "name": "paragonie/random_compat",
-            "version": "v2.0.4",
+            "version": "v2.0.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/paragonie/random_compat.git",
-                "reference": "a9b97968bcde1c4de2a5ec6cbd06a0f6c919b46e"
+                "reference": "b5ea1ef3d8ff10c307ba8c5945c2f134e503278f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/paragonie/random_compat/zipball/a9b97968bcde1c4de2a5ec6cbd06a0f6c919b46e",
-                "reference": "a9b97968bcde1c4de2a5ec6cbd06a0f6c919b46e",
+                "url": "https://api.github.com/repos/paragonie/random_compat/zipball/b5ea1ef3d8ff10c307ba8c5945c2f134e503278f",
+                "reference": "b5ea1ef3d8ff10c307ba8c5945c2f134e503278f",
                 "shasum": ""
             },
             "require": {
@@ -863,7 +863,7 @@
                 "pseudorandom",
                 "random"
             ],
-            "time": "2016-11-07 23:38:38"
+            "time": "2017-02-27 17:11:23"
         },
         {
             "name": "php-amqplib/php-amqplib",
@@ -1246,16 +1246,16 @@
         },
         {
             "name": "rastor/jira-client",
-            "version": "0.3.15",
+            "version": "0.3.16",
             "source": {
                 "type": "git",
                 "url": "https://github.com/oRastor/jira-client.git",
-                "reference": "01a9a0bf1ceae04067df56324c1340450ff89569"
+                "reference": "a3d9835012ca5a902ac377437b0438be6f8667f8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/oRastor/jira-client/zipball/01a9a0bf1ceae04067df56324c1340450ff89569",
-                "reference": "01a9a0bf1ceae04067df56324c1340450ff89569",
+                "url": "https://api.github.com/repos/oRastor/jira-client/zipball/a3d9835012ca5a902ac377437b0438be6f8667f8",
+                "reference": "a3d9835012ca5a902ac377437b0438be6f8667f8",
                 "shasum": ""
             },
             "require": {
@@ -1284,7 +1284,7 @@
                 "jira",
                 "rest"
             ],
-            "time": "2016-12-21 21:01:25"
+            "time": "2017-03-01 08:53:29"
         },
         {
             "name": "rastor/protobuf-php",
