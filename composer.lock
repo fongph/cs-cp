@@ -135,7 +135,7 @@
             "source": {
                 "type": "git",
                 "url": "git@gitlab.dizboard.com:pumpic/cs-icloud.git",
-                "reference": "03b51c02c9ab29f2f7ce1aeafd19cb20640af06c"
+                "reference": "71fa1eeadcc8ea553f83fe69d4f69b8a77cd68d7"
             },
             "require": {
                 "guzzlehttp/guzzle": "~5.0",
@@ -160,7 +160,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2017-03-15 08:12:58"
+            "time": "2017-03-15 12:41:54"
         },
         {
             "name": "boomers/cs-mail",
@@ -168,7 +168,7 @@
             "source": {
                 "type": "git",
                 "url": "git@gitlab.dizboard.com:pumpic/cs-mail.git",
-                "reference": "2450cdf2d156b8e30a757262f5be53dedd057682"
+                "reference": "0958865193d4c7d6f7892df7de678f450990a48e"
             },
             "require": {
                 "guzzlehttp/guzzle": "~5.0",
@@ -186,7 +186,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2017-01-16 10:20:19"
+            "time": "2017-03-15 08:18:14"
         },
         {
             "name": "boomers/cs-models",
@@ -194,7 +194,7 @@
             "source": {
                 "type": "git",
                 "url": "git@gitlab.dizboard.com:pumpic/cs-models.git",
-                "reference": "9d51810992e9495128f18ffc105213cbbe5d1bf3"
+                "reference": "4af9f13a1a5dc9a8ac5ae78314cfb16c0010970a"
             },
             "require": {
                 "php": ">=5.4.0"
@@ -208,7 +208,7 @@
                     "CS\\Models\\": "src/"
                 }
             },
-            "time": "2017-02-06 13:29:35"
+            "time": "2017-03-15 08:20:13"
         },
         {
             "name": "boomers/cs-queue",
