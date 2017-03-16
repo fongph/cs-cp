@@ -350,8 +350,6 @@ class DeviceSettings extends BaseModuleController {
             }
             $this->di['usersNotesProcessor']->iCloudForceBackup($deviceiCloudRecord->getDevId());
         } catch (\AppleCloud\ServiceClient\Exception\BadCredentialsException $e) {
-            var_dump($e->getMessage()); die;
-            
             $deviceiCloudRecord->setLastError(\CS\Models\Device\DeviceICloudRecord::ERROR_AUTHENTICATION)->save();
 
             $icloudAuthErrorMessage = $this->di['t']->_('Authentication error / failed. Please, %svalidate iCloud account in our system%s.', array(
