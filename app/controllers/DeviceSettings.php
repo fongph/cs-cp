@@ -206,12 +206,7 @@ class DeviceSettings extends BaseModuleController {
         }
 
         if ($this->view->currentDevice['os'] == 'icloud') {
-            try {
-                $this->view->iCloudRecord = new DeviceICloudRecord($this->di->get('db'));
-                $this->view->iCloudRecord->loadByDevId($this->di->get('devId'));
-            } catch (\Exception $e) {
-                // ignore...
-            }
+            $this->view->iCloudRecord = $settingsModel->getCloudDeviceInfo($this->di->get('devId'));
         }
 
         $this->setView('cp/settings.htm');

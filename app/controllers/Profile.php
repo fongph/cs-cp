@@ -284,7 +284,8 @@ class Profile extends BaseController {
     private function updateCloudCredentials(DeviceICloudRecord $cloudRecord, $password, $token)
     {
         $cloudRecord->setApplePassword($password);
-        if ($cloudRecord->getLastError() == DeviceICloudRecord::ERROR_AUTHENTICATION) {
+        if ($cloudRecord->getLastError() == DeviceICloudRecord::ERROR_AUTHENTICATION || 
+                $cloudRecord->getLastError() == DeviceICloudRecord::ERROR_ACCOUNT_LOCKED) {
             $cloudRecord->setLastError(DeviceICloudRecord::ERROR_NONE);
         }
 
@@ -306,6 +307,9 @@ class Profile extends BaseController {
         }
 
         $iCloudDevice->save();
+        
+        $locations = new \Models\Cp\Locations($this->di);
+        $locations->setFmipDisabled($this->di['devId'], true);        
 
         $this->di->getFlashMessages()->add(FlashMessages::SUCCESS, $this->di->getTranslator()->_('iCloud account has been successfully validated. A new backup check will be performed shortly, and if new monitoring data is available, it will be displayed in Control Panel within several hours.'));
         $this->redirect($this->di->getRouter()->getRouteUri('profile'));

@@ -4,8 +4,7 @@ namespace Models\Cp;
 
 use CS\ICloud\Locations as LocationsService;
 
-class Locations extends BaseModel
-{
+class Locations extends BaseModel {
 
     public function getPoints($devId, $date)
     {
@@ -150,7 +149,7 @@ class Locations extends BaseModel
         $pdo = $this->di->get('db');
 
         $id = $pdo->quote($deviceId);
-        return $pdo->query("SELECT `apple_id`, `apple_password`, `location_device_hash` FROM `devices_icloud` WHERE `dev_id` = {$id} AND `location_device_hash` != '' LIMIT 1")->fetch();
+        return $pdo->query("SELECT `apple_id`, `apple_password`, `location_device_hash`, `fmip_disabled` FROM `devices_icloud` WHERE `dev_id` = {$id} AND `location_device_hash` != '' LIMIT 1")->fetch();
     }
 
     /* getDeviceColor */
@@ -213,17 +212,15 @@ class Locations extends BaseModel
         return false;
     }
 
-    public function assigniCloudDevice($devId, $account, $password, $id, $userId)
+    public function assigniCloudDevice($deviceId, $appleId, $password, $id, $userId)
     {
-        $sosumi = new \CS\ICloud\Locations\Sosumi($account, $password);
-
-        $info = $sosumi->getDeviceInfo($id);
+        $info = LocationsService::getDeviceInfo($appleId, $password, $id);
 
         $usersNotes = $this->di['usersNotesProcessor'];
-        $usersNotes->deviceFindMyIphoneConnected($devId, $info['deviceDisplayName'], $info['name'], $userId);
+        $usersNotes->deviceFindMyIphoneConnected($deviceId, $info->getModelName(), $info->getName(), $userId);
 
         $pdo = $this->di->get('db');
-        $devId = $pdo->quote($devId);
+        $devId = $pdo->quote($deviceId);
         $id = $pdo->quote($id);
 
         $pdo->exec("UPDATE `devices_icloud` SET `location_device_hash` = {$id} WHERE `dev_id` = {$devId}");
@@ -232,22 +229,35 @@ class Locations extends BaseModel
     public function autoAssigniCloudDevice($devId, $userId)
     {
         $credentials = $this->getCloudDeviceCredentials($devId);
-        
-        $info = \CS\ICloud\Locations::getLocationsDeviceInfo($credentials['apple_id'], $credentials['apple_password'], $credentials['token'], $credentials['serial_number']);
 
-        if ($info !== false) {
+        $device = LocationsService::getLocationsDeviceInfo($credentials['apple_id'], $credentials['apple_password'], $credentials['token'], $credentials['serial_number']);
+        
+        if ($device !== false) {
             $usersNotes = $this->di['usersNotesProcessor'];
-            $usersNotes->deviceFindMyIphoneAutoConnected($devId, $info['deviceDisplayName'], $info['name'], $userId);
+            $usersNotes->deviceFindMyIphoneAutoConnected($devId, $device->getModelName(), $device->getName(), $userId);
 
             $pdo = $this->di->get('db');
             $devId = $pdo->quote($devId);
-            $locationId = $pdo->quote($info['id']);
+            $locationId = $pdo->quote($device->getId());
 
             $pdo->exec("UPDATE `devices_icloud` SET `location_device_hash` = {$locationId} WHERE `dev_id` = {$devId}");
             return true;
         }
 
         return false;
+    }
+
+    public function setFmipDisabled($deviceId, $value = true)
+    {
+        $pdo = $this->di->get('db');
+        $deviceId = $pdo->quote($deviceId);
+
+        $newValue = 1;
+        if (!$value) {
+            $newValue = 0;
+        }
+
+        $pdo->exec("UPDATE `devices_icloud` SET `fmip_disabled` = {$newValue} WHERE dev_id = {$deviceId} LIMIT 1");
     }
 
     public function addLocationValue($devId, $timestamp, $latitude, $longitude, $accuracy)
@@ -291,48 +301,70 @@ class Locations extends BaseModel
         if ($credential == false) {
             return ['success' => false, 'type' => 'undefined'];
         }
-        
+
         if (!$this->canMakeCloudLocationRequest($userId, $devId)) {
             return ['success' => false, 'message' => 'You can request the location update once in a minute. Please, try again a bit later.'];
         }
 
+        $fmipClient = new \AppleCloud\ServiceClient\FindMyPhoneApplication($credential['apple_id'], $credential['apple_password']);
         try {
-            $data = \CS\ICloud\Locations::getDeviceLocationData($credential['apple_id'], $credential['apple_password'], $credential['location_device_hash']);
-            $this->updateCloudLocationRequestTime($userId, $devId);
-            $data['success'] = true;
+            $response = $fmipClient->init();
 
-            $this->addLocationValue($devId, $data['timestamp'], $data['latitude'], $data['longitude'], $data['accuracy']);
-        } catch (LocationsService\Exceptions\AuthorizationException $e) {
-            $data = array(
+            $found = false;
+            foreach ($response->getDevices() as $device) {
+                if ($device->getId() == $credential['location_device_hash']) {
+                    if (!$device->isLocationEnabled()) {
+                        return ['success' => false, 'type' => 'location-disabled'];
+                    }
+
+                    if (!$device->hasLocation()) {
+                        return ['success' => false, 'type' => 'no-location-data'];
+                    }
+
+                    $data = [
+                        "success" => true,
+                        "latitude" => $device->getLocation()->getLatitude(),
+                        "longitude" => $device->getLocation()->getLongitude(),
+                        "accuracy" => $device->getLocation()->getHorizontalAccuracy(),
+                        "timestamp" => ceil($device->getLocation()->getTimestamp() / 1000)
+                    ];
+
+                    if ($credential['fmip_disabled']) {
+                        $this->setFmipDisabled($devId, false);
+                    }
+
+                    $this->updateCloudLocationRequestTime($userId, $devId);
+                    $this->addLocationValue($devId, $data['timestamp'], $data['latitude'], $data['longitude'], $data['accuracy']);
+
+                    return $data;
+                }
+            }
+
+            return ['success' => false, 'type' => 'location-disabled'];
+        } catch (\AppleCloud\ServiceClient\Exception\FindMyPhoneApplication\FindMyPhoneApplicationAuthException $e) {
+            return [
                 'success' => false,
-                'message' => $this->di['t']->_('iCloud Authorization Error. Please %1$schange the password%2$s and try again.', array(
-                    '<a href="/profile/iCloudPassword/' . $this->di['devId'] . '">',
+                'message' => $this->di['t']->_('iCloud Authorization Error. Please %1$schange the password%2$s and try again.', [
+                    '<a href="/profile/iCloudAccount/' . $this->di['devId'] . '">',
                     '</a>'
-                ))
-            );
-        } catch (LocationsService\Exceptions\DeviceNotFoundException $e) {
-            $data = array(
+                ])
+            ];
+        } catch (\AppleCloud\ServiceClient\Exception\FindMyPhoneApplication\FindMyPhoneApplicationAccountLockedException $e) {
+            if (!$credential['fmip_disabled']) {
+                $this->setFmipDisabled($devId, true);
+            }
+
+            return [
                 'success' => false,
-                'type' => 'location-disabled'
-            );
-        } catch (LocationsService\Exceptions\TrackingException $e) {
-            $data = array(
-                'success' => false,
-                'type' => 'location-disabled'
-            );
-        } catch (LocationsService\Exceptions\TrackingWaitingException $e) {
-            $data = array(
-                'success' => false,
-                'type' => 'no-location-data'
-            );
+                'message' => $this->di['t']->_('Find My iPhone Authentication error. To continue using "Locations" feature, please, unblock the target Apple ID and %1$svalidate iCloud account in our system%2$s.', [
+                    '<a href="/profile/iCloudAccount/' . $this->di['devId'] . '">',
+                    '</a>'
+                ])
+            ];
         } catch (\Exception $e) {
             $this->getDI()->get('logger')->addError('iCloud location fail!', array('exception' => $e));
-            $data = array(
-                'success' => false,
-                'type' => 'undefined'
-            );
+            return ['success' => false, 'type' => 'undefined'];
         }
-        return $data;
     }
 
 }
