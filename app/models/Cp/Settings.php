@@ -4,8 +4,7 @@ namespace Models\Cp;
 
 use CS\Devices\DeviceOptions;
 
-class Settings extends BaseModel
-{
+class Settings extends BaseModel {
 
     public static $networksList = array(
         'wifi' => 'Wi-Fi only',
@@ -48,11 +47,11 @@ class Settings extends BaseModel
     public function addBlackListPhone($devId, $phone)
     {
         $preparedPhone = str_replace(',', '', trim($phone));
-        
+
         if (!validatePhoneNumber($preparedPhone)) {
             throw new Settings\InvalidPhoneNumberException();
         }
-        
+
         if (($blackString = $this->getPhoneBlackListString($devId)) === false) {
             throw new Settings\SettingsNotFoundException("Device black phones list not found");
         }
@@ -71,23 +70,23 @@ class Settings extends BaseModel
     }
 
     public function addBadWord($devId, $word)
-    {   
+    {
         $preparedWord = str_replace(',', '', trim($word));
-        
+
         if (!strlen($preparedWord)) {
             throw new Settings\InvalidBadWordException();
         }
-        
+
         if (($blackString = $this->getWordBlackListString($devId)) === false) {
             throw new Settings\SettingsNotFoundException("Device bad word list not found");
         }
-        
+
         $list = $this->buildBlackList($blackString);
 
         if (in_array($preparedWord, $list)) {
             throw new Settings\BadWordExistException();
         }
-        
+
         array_push($list, $preparedWord);
 
         $newString = $this->blackListToString($list);
@@ -298,19 +297,28 @@ class Settings extends BaseModel
         return $this->getDb()->query("SELECT * FROM `dev_info` WHERE `dev_id` = {$escapedDevId} LIMIT 1")->fetch(\PDO::FETCH_ASSOC);
     }
 
-    public function getCarrierNameByCode($code){
+    public function getCarrierNameByCode($code)
+    {
         $mainDb = $this->di->get('db');
         $escapedCode = $mainDb->quote($code);
-        
+
         return $mainDb->query("SELECT `network` FROM `mcc_mnc_codes` WHERE `code` = {$escapedCode} LIMIT 1")->fetchColumn();
     }
-    
+
     public static function formatBytes($bytes, $precision = 2)
     {
         $base = log($bytes, 1024);
         $suffixes = array('', 'kB', 'MB', 'GB', 'TB');
 
         return round(pow(1024, $base - floor($base)), $precision) . ' ' . $suffixes[floor($base)];
+    }
+
+    public function getCloudDeviceInfo($deviceId)
+    {
+        $mainDb = $this->di->get('db');
+        $deviceId = $mainDb->quote($deviceId);
+
+        return $mainDb->query("SELECT * FROM `devices_icloud` WHERE `dev_id` = {$deviceId} LIMIT 1")->fetch(\PDO::FETCH_ASSOC);
     }
 
     public function getSettings($devId)
@@ -341,7 +349,7 @@ class Settings extends BaseModel
             $info['carrier'] = $carrierParts[0];
         } else {
             $code = isset($carrierParts[1]) ? $carrierParts[1] : 0;
-            
+
             $name = $this->getCarrierNameByCode($code);
             if ($name !== false) {
                 $info['carrier'] = $name;

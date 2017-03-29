@@ -212,7 +212,11 @@
                             {
                                 mData: "name",
                                 fnRender: function(obj, value) {
-                                    return escapeAndTruncate(value);
+                                    if (escapeAndTruncate(value).length > 0) {
+                                        return escapeAndTruncate(value);
+                                    } else {
+                                        return '<b>Group</b>';
+                                    }
                                 },
                                 'sClass': 'username'
                             },

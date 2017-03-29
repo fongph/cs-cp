@@ -21,6 +21,8 @@ use CS\Settings\GlobalSettings;
 use Models\Devices;
 use Monolog\Logger;
 
+use CS\Users\UsersManager;
+
 class Wizard extends BaseController {
 
     /** @var Logger */
@@ -306,8 +308,11 @@ class Wizard extends BaseController {
                                         ->setLicense($licenseRecord)
                                         ->setAfterSave(function() use ($deviceObserver) {
                                             /** @var $mailSender \CS\Mail\MailSender */
+
+                                            $user = (new UsersManager($this->di->get('db')))->getUser($this->auth['id']);
+
                                             $mailSender = $this->di->get('mailSender');
-                                            $mailSender->sendNewDeviceAdded($this->auth['login'], $deviceObserver->getDevice()->getName());
+                                            $mailSender->sendNewDeviceAdded($this->auth['login'], $deviceObserver->getDevice()->getName(),$user->getName());
 
                                             $this->di['usersNotesProcessor']->deviceAdded($deviceObserver->getDevice()->getId());
                                             $this->di['usersNotesProcessor']->licenseAssigned($deviceObserver->getLicense()->getId(), $deviceObserver->getDevice()->getId());

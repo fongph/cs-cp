@@ -63,7 +63,7 @@
         "boomers/cs-devices": "dev-master",
         "boomers/cs-billing": "dev-master",
         "boomers/seller": "dev-master",
-        "boomers/cs-icloud": "dev-token",
+        "boomers/cs-icloud": "dev-master",
         "boomers/cs-queue": "dev-master",
         "aws/aws-sdk-php": "2.*",
         "sabre/vobject": "^3.4",
