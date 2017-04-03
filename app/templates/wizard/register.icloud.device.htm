@@ -65,6 +65,7 @@
                                         <input type="hidden" name="email" value="{$appleID}">
                                         <input type="hidden" name="password" value="{$applePassword}">
                                         <input type="hidden" name="token" value="{$token}">
+                                        <input type="hidden" name="twoFactorAuthEnabled" value="{$twoFactorAuthEnabled}">
                                         <button class="btn btn-success btn-xs" type="submit" name="devHash" value="{$device.unique_id}">
                                             <i class="fa fa-plug"></i>
                                             {if $device.added}
