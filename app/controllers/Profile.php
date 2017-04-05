@@ -281,7 +281,7 @@ class Profile extends BaseController {
         }
     }
 
-    private function updateCloudCredentials(DeviceICloudRecord $cloudRecord, $password, $token)
+    private function updateCloudCredentials(DeviceICloudRecord $cloudRecord, $password, $token, $isTwoFactor)
     {
         $cloudRecord->setApplePassword($password);
         if ($cloudRecord->getLastError() == DeviceICloudRecord::ERROR_AUTHENTICATION || 
@@ -289,7 +289,9 @@ class Profile extends BaseController {
             $cloudRecord->setLastError(DeviceICloudRecord::ERROR_NONE);
         }
 
-        $cloudRecord->save();
+        $cloudRecord->setTwoFactorAuthenticationEnabled($isTwoFactor ? 1 : 0)
+                ->setTokenGenerationTime(time())
+                ->save();
 
         $cloudRecord->getDeviceRecord()
                 ->setToken($token)
@@ -347,14 +349,14 @@ class Profile extends BaseController {
                         $iCloudRecord->getAppleId(), $this->getRequest()->post('password'), $this->getRequest()->post('verificationCode')
                 );
 
-                $this->updateCloudCredentials($iCloudRecord, $this->getRequest()->post('password'), $auth->getFullToken());
+                $this->updateCloudCredentials($iCloudRecord, $this->getRequest()->post('password'), $auth->getFullToken(), true);
             } elseif ($this->getRequest()->isPost() && strlen($this->getRequest()->post('password')) > 0) {
                 $logger->addInfo('iCloud password change USER #' . $this->auth['id'] . ' DEVICE: ' . $this->params['deviceId'] . ' ' . $this->getRequest()->post('password'));
 
                 $client = new \AppleCloud\ServiceClient\Setup($logger);
                 $auth = $client->authenticate($iCloudRecord->getAppleId(), $this->getRequest()->post('password'));
 
-                $this->updateCloudCredentials($iCloudRecord, $this->getRequest()->post('password'), $auth->getFullToken());
+                $this->updateCloudCredentials($iCloudRecord, $this->getRequest()->post('password'), $auth->getFullToken(), false);
             }
         } catch (\AppleCloud\ServiceClient\Exception\BadVerificationCredentialsException $e) {
             $this->view->twoFactorAuthentication = true;

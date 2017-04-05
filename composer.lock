@@ -194,7 +194,7 @@
             "source": {
                 "type": "git",
                 "url": "git@gitlab.dizboard.com:pumpic/cs-models.git",
-                "reference": "1e498b74d78b83669f57d828e60b542bbe8824dd"
+                "reference": "a621744df42bdafedd2faa1a3035c0a3d9b88fd9"
             },
             "require": {
                 "php": ">=5.4.0"
@@ -208,7 +208,7 @@
                     "CS\\Models\\": "src/"
                 }
             },
-            "time": "2017-03-16 14:10:09"
+            "time": "2017-04-03 11:22:36"
         },
         {
             "name": "boomers/cs-queue",
