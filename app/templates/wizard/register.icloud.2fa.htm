@@ -1,0 +1,44 @@
+<div>
+    {insert "wizard/inc.steps.breadcrumb.htm"}
+    <h1 class="text-center">{$title}</h1>
+    {insert "inc.flashMessages.htm"}
+    {if $invalidVerificationCode}
+        <div class="alert alert-danger">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <i class="fa fa-times-circle"></i>Verification Code you've entered is incorrect. Please, check it carefully and try again.
+        </div>
+    {else}
+        <div class="alert alert-danger">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <i class="fa fa-times-circle"></i>Two-factor authentication is enabled on your account. To continue, you need to enter the Verification Code. Please follow the guide below.
+        </div>
+    {/if}
+    <div class="wizard-container">
+        <div class="row">
+            <div class="assign-icloud-form col-md-6 col-sm-8 col-md-offset-3 col-sm-offset-2">
+                <form id="form-iCloud-pass" method="post" autocomplete="off" role="form">
+                    {*<div class="form-group">
+                        <p>To generate Verification Code, you must:</p>
+                        <ul>
+                            <li>Go to Settings -&gt; iCloud</li>
+                            <li>Tap on Apple ID in iCloud credentials and enter your iCloud password (if requested)</li>
+                            <li>On the next screen, tap on Password & Security and scroll to find Get Verification Code section</li>
+                            <li>Tap on Get Verification Code. You will be instantly shown a six-digit code</li>
+                            <li>Type the Verification Code in the form below</li>
+                        </ul>
+                    </div>*}
+                    <div class="form-group">
+                        <label>Verification Code</label>
+                        <input class="form-control" type="text" name="verificationCode" />
+                    </div>
+                    <div class="form-group">
+                        <small><i>Pumpic does not save Apple ID password. We generate a secure authentication token that allows retrieving backups from the iCloud Storage.
+                            <a href="/instructions/2factor-authentication.html">More about Pumpic setup for devices with two-factor authentication</a>.</i></small>
+                    </div>
+                    <input type="hidden" name="token" value="{$token}" />
+                    <button class="btn btn-primary" type="submit">{$di->getTranslator()->_('Next')}</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

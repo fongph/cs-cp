@@ -314,6 +314,12 @@ $di->setShared('billingManager', function () use ($di) {
     return $billingManager;
 });
 
+$di->setShared('reincubateClient', function () use ($di) {
+    $reincubateClient = new \Reincubate\ReincubateClient('JqwsiWAUbLXasXgPADaUbzOeQTgfCDHBkChFtXtYWvoohgvprkxqdzwGXmnfQzTg', $di['logger']);
+    
+    return $reincubateClient;
+});
+
 $di->set('isTestUser', function($id) use($config) {
 
     if ($config['environment'] == 'production') {
