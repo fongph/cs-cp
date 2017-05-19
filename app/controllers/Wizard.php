@@ -199,28 +199,30 @@ class Wizard extends BaseController {
                     $client = new \AppleCloud\ServiceClient\Setup($this->logger);
                     $auth = $client->authenticate($this->getRequest()->post('email'), $this->getRequest()->post('password'));
                 }
-                
+                // if success login into account
                 $token = $auth->getFullToken();
                 
                 $cloudClient = new \CS\ICloud\CloudClient($token);
                 $iCloud = new iCloudBackup($cloudClient);
-
+                //get list of devices
                 $devices = $iCloud->getAllDevices();
 
                 $devModel = new Devices($this->di);
-
+                // if is no devices on icloud account
                 if (empty($devices)) {
                     $this->view->title = $this->di->getTranslator()->_('Connect to iCloud Account');
                     $this->setView('wizard/register.icloud.backup.not.found.htm');
                     return;
                 } else {
+                    // merge local devices with icloud devices
                     $devices = $devModel->iCloudMergeWithLocalInfo($this->auth['id'], $devices);
                 }
-
+                    // if user choose device and post devHash(serialNumber)
                 if (isset($_POST['devHash']) && !empty($_POST['devHash'])) {
 
                     foreach ($devices as &$device) {
                         if ($device['SerialNumber'] === $_POST['devHash']) {
+
                             if ($this->getICloudLicense()->getProduct()->getGroup() == 'trial' &&
                                     $devModel->existsOnOtherUsers($this->auth['id'], $device['SerialNumber'])) {
 

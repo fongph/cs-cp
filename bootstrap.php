@@ -307,9 +307,24 @@ $di->setShared('gatewaysContainer', function () {
     ));
 });
 
+$di->setShared('gatewaysContextualContainer', function () {
+    $fastSpringContextualConfig = GlobalSettings::getFastSpringContextualConfig();
+
+    return new \Seller\GatewaysContainer(array(
+        'fastspring-contextual' => $fastSpringContextualConfig
+    ));
+});
+
 $di->setShared('billingManager', function () use ($di) {
     $billingManager = new \CS\Billing\Manager($di['db']);
     $billingManager->setGatewaysContainer($di['gatewaysContainer']);
+
+    return $billingManager;
+});
+
+$di->setShared('billingContextualManager', function () use ($di) {
+    $billingManager = new \CS\Billing\Manager($di['db']);
+    $billingManager->setGatewaysContainer($di['gatewaysContextualContainer']);
 
     return $billingManager;
 });

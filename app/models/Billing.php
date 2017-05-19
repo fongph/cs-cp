@@ -275,7 +275,7 @@ class Billing extends \System\Model
     public function isCancelationDiscountOfferableForLicense($license)
     {
         // only for fastspring
-        if ($license['subscription_payment_method'] !== \CS\Models\Order\OrderRecord::PAYMENT_METHOD_FASTSPRING) {
+        if ($license['subscription_payment_method'] !== \CS\Models\Order\OrderRecord::PAYMENT_METHOD_FASTSPRING || $license['subscription_payment_method'] !== \CS\Models\Order\OrderRecord::PAYMENT_METHOD_FASTSPRING_CONTEXTUAL) {
             return false;
         }
 
@@ -339,14 +339,20 @@ class Billing extends \System\Model
         $billingManager = $this->di['billingManager'];
         
         $subscriptionRecord = $billingManager->getLicenseSubscription($licenseId);
-                
+
+        if ($subscriptionRecord->getPaymentMethod() == 'fastspring-contextual'){
+
+            $billingManager = $this->di['billingContextualManager'];
+        }
+
         $subscriptionIterator = $billingManager->getSubscriptionsIterator($subscriptionRecord->getReferenceNumber(), $subscriptionRecord->getPaymentMethod());
-        
+
+
         foreach ($subscriptionIterator as $subscriptionRecord) {
             $licenseRecord = $subscriptionRecord->getLicense();
             
             $this->di['usersNotesProcessor']->licenseSubscriptionAutoRebillTaskAdded($licenseRecord->getId());
-            $this->di['billingManager']->unCancelLicenseSubscription($licenseRecord->getId());
+            $billingManager->unCancelLicenseSubscription($licenseRecord->getId());
         }
     }
     
@@ -354,27 +360,35 @@ class Billing extends \System\Model
         $billingManager = $this->di['billingManager'];
         
         $subscriptionRecord = $billingManager->getLicenseSubscription($licenseId);
-                
+
+        if ($subscriptionRecord->getPaymentMethod() == 'fastspring-contextual'){
+
+            $billingManager = $this->di['billingContextualManager'];
+        }
+
         $subscriptionIterator = $billingManager->getSubscriptionsIterator($subscriptionRecord->getReferenceNumber(), $subscriptionRecord->getPaymentMethod());
         
         foreach ($subscriptionIterator as $subscriptionRecord) {
             $licenseRecord = $subscriptionRecord->getLicense();
             
             $this->di['usersNotesProcessor']->licenseSubscriptionAutoRebillTaskAdded($licenseRecord->getId());
-            $this->di['billingManager']->cancelLicenseSubscription($licenseRecord->getId());
+            $billingManager->cancelLicenseSubscription($licenseRecord->getId());
         }
     }
     public function updateSubscriptionPlan($licenseId, $productPath) {
         $billingManager = $this->di['billingManager'];
         
         $subscriptionRecord = $billingManager->getLicenseSubscription($licenseId);
-                
+        if ($subscriptionRecord->getPaymentMethod() == 'fastspring-contextual'){
+
+            $billingManager = $this->di['billingContextualManager'];
+        }
         $subscriptionIterator = $billingManager->getSubscriptionsIterator($subscriptionRecord->getReferenceNumber(), $subscriptionRecord->getPaymentMethod());
-        
+
         foreach ($subscriptionIterator as $subscriptionRecord) {
             $licenseRecord = $subscriptionRecord->getLicense();
 
-            $this->di['billingManager']->updateSubscriptionPlan($licenseRecord->getId(), $productPath);
+            $billingManager->updateSubscriptionPlan($licenseRecord->getId(), $productPath);
         }
     }
 

@@ -409,7 +409,16 @@ class Billing extends BaseController
         $billingModel = new \Models\Billing($this->di);
 
         try {
-            $this->di['billingManager']->applyCouponToLicenseSubscription($this->params['id'], self::CANCELATION_DISCOUNT_CODE);
+            $billingManager = $this->di['billingManager'];
+
+            $subscriptionRecord = $billingManager->getLicenseSubscription($licenseId);
+
+            if ($subscriptionRecord->getPaymentMethod() == 'fastspring-contextual'){
+
+                $billingManager = $this->di['billingContextualManager'];
+            }
+
+            $billingManager->applyCouponToLicenseSubscription($this->params['id'], self::CANCELATION_DISCOUNT_CODE);
             $billingModel->setCancelationDiscountOffered($this->auth['id']);
             $billingModel->setLicenseWithCancelationDiscount($this->auth['id'], $licenseId);
             $this->di['usersNotesProcessor']->licenseCancelationDiscountAccepted($licenseId);
@@ -543,6 +552,7 @@ class Billing extends BaseController
             $sum = $this->calculateYearlySum($license, $newProductInfo, $double);
 
             if ($this->getRequest()->isPost()) {
+
                 if ($this->getRequest()->hasPost('cancel')) {
                     $confirmed = false;
                 } else {
@@ -565,6 +575,8 @@ class Billing extends BaseController
                                 $billingModel->removeLicenseDiscountPromotion($this->auth['id'], $license['id']);
                             }
                         }
+
+
                         $billingModel->setLicenseUpdatedPayments($this->params['id'], round($sum['saveSum'], 2), $sum['sumToPay']);
                         $billingModel->updateSubscriptionPlan($this->params['id'], $newProduct);
 

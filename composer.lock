@@ -75,7 +75,7 @@
             "source": {
                 "type": "git",
                 "url": "git@gitlab.dizboard.com:pumpic/cs-billing.git",
-                "reference": "4ed45fa490a9561e5bc833697b4eaa0382bffdf1"
+                "reference": "17a794a7d10bc8985e2ba4aaf51d8496a5bc0880"
             },
             "require": {
                 "boomers/cs-models": "dev-master",
@@ -94,7 +94,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2017-02-07 10:49:10"
+            "time": "2017-05-18 17:01:08"
         },
         {
             "name": "boomers/cs-devices",
@@ -134,7 +134,7 @@
             "source": {
                 "type": "git",
                 "url": "git@gitlab.dizboard.com:pumpic/cs-icloud.git",
-                "reference": "b62c4dfbd31460d9b02ee311b2b17a3ace18c257"
+                "reference": "9b5e7cf0a2039cbe2212a02d309f780f0179ea75"
             },
             "require": {
                 "guzzlehttp/guzzle": "~5.0",
@@ -159,7 +159,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2017-03-15 12:57:53"
+            "time": "2017-03-27 09:03:19"
         },
         {
             "name": "boomers/cs-mail",
@@ -167,7 +167,7 @@
             "source": {
                 "type": "git",
                 "url": "git@gitlab.dizboard.com:pumpic/cs-mail.git",
-                "reference": "5edb13f9e6561b0dfa25c66ff35cd20dd4219636"
+                "reference": "e8bd4f24a8d571eb0a33a7c9fe317fdc8179946b"
             },
             "require": {
                 "guzzlehttp/guzzle": "~5.0",
@@ -185,7 +185,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2017-03-16 15:19:21"
+            "time": "2017-04-07 11:46:52"
         },
         {
             "name": "boomers/cs-models",
@@ -193,7 +193,7 @@
             "source": {
                 "type": "git",
                 "url": "git@gitlab.dizboard.com:pumpic/cs-models.git",
-                "reference": "1e498b74d78b83669f57d828e60b542bbe8824dd"
+                "reference": "5b7072ff237f1e2276d5979b8a8b44624b380b92"
             },
             "require": {
                 "php": ">=5.4.0"
@@ -207,7 +207,7 @@
                     "CS\\Models\\": "src/"
                 }
             },
-            "time": "2017-03-16 14:10:09"
+            "time": "2017-05-18 09:37:40"
         },
         {
             "name": "boomers/cs-queue",
@@ -238,7 +238,7 @@
             "source": {
                 "type": "git",
                 "url": "git@gitlab.dizboard.com:pumpic/cs-settings.git",
-                "reference": "6263af370df96d4bdb732f788d543e06a339cd8d"
+                "reference": "be3d39f790e61d5296086bfdb799e2987677d226"
             },
             "require": {
                 "php": ">=5.4.0"
@@ -249,7 +249,7 @@
                     "CS\\Settings\\": "src/"
                 }
             },
-            "time": "2017-02-22 12:36:15"
+            "time": "2017-05-16 08:01:49"
         },
         {
             "name": "boomers/cs-users",
@@ -307,7 +307,7 @@
             "source": {
                 "type": "git",
                 "url": "git@gitlab.dizboard.com:pumpic/seller.git",
-                "reference": "e697ea314bc9d3314ae5e2013fbfa42214030b2a"
+                "reference": "027a15d1f8b2d4d8b712d1ae19caadc2311df1ce"
             },
             "require": {
                 "guzzlehttp/guzzle": "~5.0",
@@ -325,20 +325,20 @@
             "license": [
                 "MIT"
             ],
-            "time": "2017-03-09 13:57:45"
+            "time": "2017-05-17 08:00:16"
         },
         {
             "name": "fenom/fenom",
-            "version": "2.11.5",
+            "version": "2.11.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fenom-template/fenom.git",
-                "reference": "e97ef95ef52263e41a54a66366285ba10c8bdad5"
+                "reference": "7d0db43050122d56ec3fb76700f07bad8fc10a91"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fenom-template/fenom/zipball/e97ef95ef52263e41a54a66366285ba10c8bdad5",
-                "reference": "e97ef95ef52263e41a54a66366285ba10c8bdad5",
+                "url": "https://api.github.com/repos/fenom-template/fenom/zipball/7d0db43050122d56ec3fb76700f07bad8fc10a91",
+                "reference": "7d0db43050122d56ec3fb76700f07bad8fc10a91",
                 "shasum": ""
             },
             "require": {
@@ -346,7 +346,7 @@
                 "php": ">=5.3.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "*",
+                "phpunit/phpunit": "<6.0",
                 "satooshi/php-coveralls": "*"
             },
             "type": "library",
@@ -375,7 +375,7 @@
                 "templater",
                 "templating"
             ],
-            "time": "2016-11-18T19:30:44+00:00"
+            "time": "2017-04-22T19:48:52+00:00"
         },
         {
             "name": "filp/whoops",
@@ -1080,16 +1080,16 @@
         },
         {
             "name": "ramsey/uuid",
-            "version": "3.6.0",
+            "version": "3.6.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ramsey/uuid.git",
-                "reference": "0b7bdfb180e72c8d76e75a649ced67e392201458"
+                "reference": "4ae32dd9ab8860a4bbd750ad269cba7f06f7934e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ramsey/uuid/zipball/0b7bdfb180e72c8d76e75a649ced67e392201458",
-                "reference": "0b7bdfb180e72c8d76e75a649ced67e392201458",
+                "url": "https://api.github.com/repos/ramsey/uuid/zipball/4ae32dd9ab8860a4bbd750ad269cba7f06f7934e",
+                "reference": "4ae32dd9ab8860a4bbd750ad269cba7f06f7934e",
                 "shasum": ""
             },
             "require": {
@@ -1101,9 +1101,9 @@
             },
             "require-dev": {
                 "apigen/apigen": "^4.1",
-                "codeception/aspect-mock": "1.0.0",
+                "codeception/aspect-mock": "^1.0 | ^2.0",
                 "doctrine/annotations": "~1.2.0",
-                "goaop/framework": "1.0.0-alpha.2",
+                "goaop/framework": "1.0.0-alpha.2 | ^1.0 | ^2.1",
                 "ircmaxell/random-lib": "^1.1",
                 "jakub-onderka/php-parallel-lint": "^0.9.0",
                 "mockery/mockery": "^0.9.4",
@@ -1158,7 +1158,7 @@
                 "identifier",
                 "uuid"
             ],
-            "time": "2017-03-18T15:38:09+00:00"
+            "time": "2017-03-26T20:37:53+00:00"
         },
         {
             "name": "rastor/amazon-s3-php-class",
@@ -1378,20 +1378,23 @@
         },
         {
             "name": "react/promise",
-            "version": "v2.5.0",
+            "version": "v2.5.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/reactphp/promise.git",
-                "reference": "2760f3898b7e931aa71153852dcd48a75c9b95db"
+                "reference": "62785ae604c8d69725d693eb370e1d67e94c4053"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/reactphp/promise/zipball/2760f3898b7e931aa71153852dcd48a75c9b95db",
-                "reference": "2760f3898b7e931aa71153852dcd48a75c9b95db",
+                "url": "https://api.github.com/repos/reactphp/promise/zipball/62785ae604c8d69725d693eb370e1d67e94c4053",
+                "reference": "62785ae604c8d69725d693eb370e1d67e94c4053",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.8"
             },
             "type": "library",
             "autoload": {
@@ -1417,7 +1420,7 @@
                 "promise",
                 "promises"
             ],
-            "time": "2016-12-22T14:09:01+00:00"
+            "time": "2017-03-25T12:08:31+00:00"
         },
         {
             "name": "rodneyrehm/plist",
@@ -1593,16 +1596,16 @@
         },
         {
             "name": "symfony/console",
-            "version": "v2.8.18",
+            "version": "v2.8.20",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "81508e6fac4476771275a3f4f53c3fee9b956bfa"
+                "reference": "2cfcbced8e39e2313ed4da8896fc8c59a56c0d7e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/81508e6fac4476771275a3f4f53c3fee9b956bfa",
-                "reference": "81508e6fac4476771275a3f4f53c3fee9b956bfa",
+                "url": "https://api.github.com/repos/symfony/console/zipball/2cfcbced8e39e2313ed4da8896fc8c59a56c0d7e",
+                "reference": "2cfcbced8e39e2313ed4da8896fc8c59a56c0d7e",
                 "shasum": ""
             },
             "require": {
@@ -1650,20 +1653,20 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "time": "2017-03-04T11:00:12+00:00"
+            "time": "2017-04-26T01:38:53+00:00"
         },
         {
             "name": "symfony/debug",
-            "version": "v2.8.18",
+            "version": "v2.8.20",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/debug.git",
-                "reference": "e90099a2958d4833a02d05b504cc06e1c234abcc"
+                "reference": "344f50ce827413b3640bfcb1e37386a67d06ea1f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/debug/zipball/e90099a2958d4833a02d05b504cc06e1c234abcc",
-                "reference": "e90099a2958d4833a02d05b504cc06e1c234abcc",
+                "url": "https://api.github.com/repos/symfony/debug/zipball/344f50ce827413b3640bfcb1e37386a67d06ea1f",
+                "reference": "344f50ce827413b3640bfcb1e37386a67d06ea1f",
                 "shasum": ""
             },
             "require": {
@@ -1707,20 +1710,20 @@
             ],
             "description": "Symfony Debug Component",
             "homepage": "https://symfony.com",
-            "time": "2017-02-18T19:13:35+00:00"
+            "time": "2017-04-19T19:56:30+00:00"
         },
         {
             "name": "symfony/event-dispatcher",
-            "version": "v2.8.18",
+            "version": "v2.8.20",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/event-dispatcher.git",
-                "reference": "bb4ec47e8e109c1c1172145732d0aa468d967cd0"
+                "reference": "7fc8e2b4118ff316550596357325dfd92a51f531"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/event-dispatcher/zipball/bb4ec47e8e109c1c1172145732d0aa468d967cd0",
-                "reference": "bb4ec47e8e109c1c1172145732d0aa468d967cd0",
+                "url": "https://api.github.com/repos/symfony/event-dispatcher/zipball/7fc8e2b4118ff316550596357325dfd92a51f531",
+                "reference": "7fc8e2b4118ff316550596357325dfd92a51f531",
                 "shasum": ""
             },
             "require": {
@@ -1767,7 +1770,7 @@
             ],
             "description": "Symfony EventDispatcher Component",
             "homepage": "https://symfony.com",
-            "time": "2017-02-21T08:33:48+00:00"
+            "time": "2017-04-26T16:56:54+00:00"
         },
         {
             "name": "symfony/options-resolver",
