@@ -1,6 +1,10 @@
 <div>
     {insert "wizard/inc.steps.breadcrumb.htm"}
     <h1 class="text-center">{$title}</h1>
+    <div class="alert alert-danger">
+        <i class="fa fa-times-circle"></i>Temporary technical error: this occurred due to Apple’s recent changes to the iCloud system. Trust us, we are working hard on the fix and will notify you once the issue is resolved. Thank you for your patience.
+    </div>
+    {*
     {insert "inc.flashMessages.htm"}
     {if $twoFactorAuthentication}
         {if $invalidVerificationCode}
@@ -15,6 +19,8 @@
             </div>
         {/if}
     {/if}
+    *}
+    {*
     <div class="wizard-container">
         <p>Please enter Apple ID of the target device and the password in the fields below.</p>
         <p><b>NOTE:</b> Pumpic does not store your password due to security reasons. To access backups, we use token based authentication.</p>
@@ -54,4 +60,5 @@
             </div>
         </div>
     </div>
+    *}
 </div>
