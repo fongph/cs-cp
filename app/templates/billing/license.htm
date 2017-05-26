@@ -96,7 +96,7 @@
         <td>
             {$license.status}
         </td>
-        {if $license.subscription_payment_method == 'fastspring'}
+        {if $license.subscription_payment_method == 'fastspring' || $license.subscription_payment_method == 'fastspring-contextual'}
         <td>
             {if $license.subscription_cancelable}
             {$di.t->_('on')} <a href="{$di.router->getRouteUrl('billingLicenseDisable', ['id' => $license.id])}" class="btn btn-xs btn-danger">{$di.t->_('disable')}</a>
@@ -113,7 +113,7 @@
 
 
 
-{if $license.subscription_payment_method == 'fastspring'}
+{if $license.subscription_payment_method == 'fastspring'  || $license.subscription_payment_method == 'fastspring-contextual'}
 <div>
     <a href="{$license.subscription_url}" style="display: block; text-align: center;"  target="_blank">{$di.t->_('Subscription details at FastSpring')}</a>
 </div>

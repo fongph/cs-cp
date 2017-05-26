@@ -75,7 +75,7 @@
             "source": {
                 "type": "git",
                 "url": "git@gitlab.dizboard.com:pumpic/cs-billing.git",
-                "reference": "17a794a7d10bc8985e2ba4aaf51d8496a5bc0880"
+                "reference": "959f1e5ba232aac660bdbf114412f271beed6140"
             },
             "require": {
                 "boomers/cs-models": "dev-master",
@@ -94,7 +94,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2017-05-18 17:01:08"
+            "time": "2017-05-24 08:54:42"
         },
         {
             "name": "boomers/cs-devices",
@@ -307,7 +307,7 @@
             "source": {
                 "type": "git",
                 "url": "git@gitlab.dizboard.com:pumpic/seller.git",
-                "reference": "027a15d1f8b2d4d8b712d1ae19caadc2311df1ce"
+                "reference": "e82f33b6411fdf016ac59ec869f10d5c3e6f3d88"
             },
             "require": {
                 "guzzlehttp/guzzle": "~5.0",
@@ -325,20 +325,20 @@
             "license": [
                 "MIT"
             ],
-            "time": "2017-05-17 08:00:16"
+            "time": "2017-05-24 15:15:42"
         },
         {
             "name": "fenom/fenom",
-            "version": "2.11.6",
+            "version": "2.11.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fenom-template/fenom.git",
-                "reference": "7d0db43050122d56ec3fb76700f07bad8fc10a91"
+                "reference": "87303434425f0b9df923b7cd303e7e827d1ba3c3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fenom-template/fenom/zipball/7d0db43050122d56ec3fb76700f07bad8fc10a91",
-                "reference": "7d0db43050122d56ec3fb76700f07bad8fc10a91",
+                "url": "https://api.github.com/repos/fenom-template/fenom/zipball/87303434425f0b9df923b7cd303e7e827d1ba3c3",
+                "reference": "87303434425f0b9df923b7cd303e7e827d1ba3c3",
                 "shasum": ""
             },
             "require": {
@@ -375,7 +375,7 @@
                 "templater",
                 "templating"
             ],
-            "time": "2017-04-22T19:48:52+00:00"
+            "time": "2017-05-23T08:21:35+00:00"
         },
         {
             "name": "filp/whoops",
@@ -1246,16 +1246,16 @@
         },
         {
             "name": "rastor/jira-client",
-            "version": "0.3.16",
+            "version": "0.3.17",
             "source": {
                 "type": "git",
                 "url": "https://github.com/oRastor/jira-client.git",
-                "reference": "a3d9835012ca5a902ac377437b0438be6f8667f8"
+                "reference": "6c2b14143f976e4b5c907506b1378ae6903769a9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/oRastor/jira-client/zipball/a3d9835012ca5a902ac377437b0438be6f8667f8",
-                "reference": "a3d9835012ca5a902ac377437b0438be6f8667f8",
+                "url": "https://api.github.com/repos/oRastor/jira-client/zipball/6c2b14143f976e4b5c907506b1378ae6903769a9",
+                "reference": "6c2b14143f976e4b5c907506b1378ae6903769a9",
                 "shasum": ""
             },
             "require": {
@@ -1284,7 +1284,7 @@
                 "jira",
                 "rest"
             ],
-            "time": "2017-03-01T08:53:29+00:00"
+            "time": "2017-05-19T16:07:12+00:00"
         },
         {
             "name": "rastor/protobuf-php",

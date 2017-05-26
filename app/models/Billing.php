@@ -80,7 +80,8 @@ class Billing extends \System\Model
                 END AS 'platform',
                 p.code_fastspring,
                 CASE WHEN p.`code_fastspring` LIKE 'pumpic-basic-%m-%' THEN 'basic'
-                   WHEN p.`code_fastspring` LIKE '%pumpic-%-1m-%' THEN 'premium-1m'
+                WHEN p.`code_fastspring` LIKE 'pumpic-android-%m-basic' THEN 'basic'
+                   WHEN p.`code_fastspring` LIKE '%pumpic-%-1m%' THEN 'premium-1m'
                    WHEN p.`code_fastspring` LIKE '%pumpic-%-7d-%' THEN 'period-7d'
                    ELSE '-' 
                  END AS 'product_version',
@@ -193,6 +194,7 @@ class Billing extends \System\Model
                         l.`id`,
                         p.`name`,
                         p.`code_fastspring`,
+                        p. `namespace` as product_namespace,
                         l.`amount`,
                         l.`currency`,
                         l.`price`,
