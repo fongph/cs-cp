@@ -30,9 +30,18 @@
             <i class="menu-{$menu.class}" data-module="{$menu.class}"></i>
             <div class="name-wrapper">
                 {if isset($moduelesAvailability[$menu['class']])}
-                    <span class="name">{$menu.name}</span><span class="asterisk asterisk-{$moduelesAvailability[$menu['class']]}">*</span>
+                {*{if $menu.name == "Locations"}
+                <span class="name">{$menu.name}</span><span class="asterisk asterisk-{$moduelesAvailability[$menu['class']]}">*</span><i class="fa fa-warning danger-color"></i>
                 {else}
-                    <span class="name">{$menu.name}</span>
+                    <span class="name">{$menu.name}</span><span class="asterisk asterisk-{$moduelesAvailability[$menu['class']]}">*</span>
+                {/if}*}
+                <span class="name">{$menu.name}</span><span class="asterisk asterisk-{$moduelesAvailability[$menu['class']]}">*</span>
+                {else}
+                    {*{if $menu.name == "Locations"}
+                        <span class="name">{$menu.name}</span> <i class="fa fa-warning danger-color"></i>
+                    {else}*}
+                        <span class="name">{$menu.name}</span>
+                    {*{/if}*}
                 {/if}
             </div>
         </a>    
@@ -43,7 +52,14 @@
             <div class="bottom-info">
                 <div><span class="asterisk asterisk-primary">*</span> - Basic plan</div>
                 <div><span class="asterisk asterisk-default">*</span> - Premium plan</div>
+                <!--<div><span class="fa fa-warning danger-color"></span> - Warning</div>-->
             </div>
         </li>
+    {else}
+    <!--<li>-->
+        <!--<div class="bottom-info">-->
+            <!--<div><span class="fa fa-warning danger-color"></span> - Warning</div>-->
+        <!--</div>-->
+    <!--</li>-->
     {/if}
 </ul>

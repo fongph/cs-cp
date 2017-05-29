@@ -13,7 +13,9 @@
 body > .cp-menu {
     display: none;
 }
- 
+ .danger-color {
+     color: #d04757;
+ }
 .cp-menu {   
     a {
         display: table-row;
@@ -26,7 +28,14 @@ body > .cp-menu {
             background-color: transparent !important;
             text-decoration: none !important;
         }
-        
+
+        i.fa-warning {
+            background: none;
+            float: right;
+            position: relative;
+            left: 5px;
+            top: 4px;
+        }
         span.name {
             &:hover, &:focus {
                 text-decoration: underline;

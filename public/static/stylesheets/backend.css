@@ -8275,12 +8275,28 @@ body {
 .back-to__link:focus {
   color: #555555;
 }
+.alert-white {
+  background: #fff;
+  margin-top: 20px;
+  position: relative;
+  padding: 8px 8px 8px 30px;
+  color: #d04757;
+  font-style: italic;
+}
+.alert-white i.fa-warning {
+  position: absolute;
+  top: 10px;
+  left: 8px;
+}
 /* Components */
 /*
 * Left menu inside cp
 */
 body > .cp-menu {
   display: none;
+}
+.danger-color {
+  color: #d04757;
 }
 .cp-menu a {
   display: table-row;
@@ -8293,6 +8309,13 @@ body > .cp-menu {
 .cp-menu a:focus {
   background-color: transparent !important;
   text-decoration: none !important;
+}
+.cp-menu a i.fa-warning {
+  background: none;
+  float: right;
+  position: relative;
+  left: 5px;
+  top: 4px;
 }
 .cp-menu a span.name:hover,
 .cp-menu a span.name:focus {

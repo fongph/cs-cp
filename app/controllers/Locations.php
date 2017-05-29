@@ -8,8 +8,7 @@ use Models\Modules,
     Models\Cp\Zones,
     System\FlashMessages;
 
-class Locations extends BaseModuleController
-{
+class Locations extends BaseModuleController {
 
     protected $module = Modules::LOCATIONS;
     private $buildMenu = true;
@@ -18,7 +17,7 @@ class Locations extends BaseModuleController
     {
         parent::init();
         $this->initCP();
-        
+
         $this->exportEnabled = ($this->auth['id'] == 317);
     }
 
@@ -80,7 +79,7 @@ class Locations extends BaseModuleController
         if (!$this->exportEnabled) {
             $this->redirect($this->di['router']->getRouteUrl('locations'));
         }
-        
+
         $locations = new \Models\Cp\Locations($this->di);
 
         $zones = $locations->getZonesNames($this->di['devId']);
@@ -319,15 +318,25 @@ class Locations extends BaseModuleController
 
             try {
                 $result = $locations->autoAssigniCloudDevice($this->di['devId'], $this->auth['id']);
-            } catch (\CS\ICloud\Locations\Exceptions\AuthorizationException $e) {
-                $this->makeJSONResponse(array(
+            } catch (\AppleCloud\ServiceClient\Exception\FindMyPhoneApplication\FindMyPhoneApplicationAuthException $e) {
+                return [
                     'success' => false,
-                    'message' => $this->di['t']->_('iCloud Authorization Error. Please %1$supdate the password in our system%2$s and try again.', array(
+                    'message' => $this->di['t']->_('iCloud Authorization Error. Please %1$schange the password%2$s and try again.', [
                         '<a href="/profile/iCloudPassword/' . $this->di['devId'] . '">',
                         '</a>'
-                    ))
-                ));
-            } catch (\CS\ICloud\Locations\Exceptions\LocationsException $e) {
+                    ])
+                ];
+            } catch (\AppleCloud\ServiceClient\Exception\FindMyPhoneApplication\FindMyPhoneApplicationAccountLockedException $e) {
+                $locations->setFmipDisabled($this->di['devId'], true);
+
+                return [
+                    'success' => false,
+                    'message' => $this->di['t']->_('Find My iPhone Authentication error. To continue using "Locations" feature, please, unblock the target Apple ID and %1$svalidate iCloud account in our system%2$s.', [
+                        '<a href="/profile/iCloudPassword/' . $this->di['devId'] . '">',
+                        '</a>'
+                    ])
+                ];
+            } catch (\Exception $e) {
                 $this->getDI()->get('logger')->addError('iCloud location autoasign fail', array('exception' => $e));
                 $this->makeJSONResponse(array(
                     'success' => false,
@@ -369,49 +378,49 @@ class Locations extends BaseModuleController
 
                     $this->getDI()->getFlashMessages()->add(FlashMessages::SUCCESS, $this->di['t']->_('Congratulations! The device was successfully connected.'));
 
-                    $data = array(
+                    $data = [
                         'success' => true,
                         'redirectUrl' => $this->di['router']->getRouteUrl(Modules::LOCATIONS)
-                    );
+                    ];
                 } else {
                     $devices = LocationsService::getDevicesList($credentials['apple_id'], $credentials['apple_password']);
 
                     if (count($devices)) {
-                        $data = array(
+                        $data = [
                             'success' => true,
                             'devices' => $devices
-                        );
+                        ];
                     } else {
-                        $data = array(
+                        $data = [
                             'success' => false,
-                            'message' => $this->di['t']->_('The device with activated Find My iPhone service was not found. Please make sure whether the target iOS device is connected to the Internet and follow the %1$sguide steps%2$s once again. If it didn\'t work, feel free to contact %3$sPumpic Customer Support%4$s.', array(
+                            'message' => $this->di['t']->_('The device with activated Find My iPhone service was not found. Please make sure whether the target iOS device is connected to the Internet and follow the %1$sguide steps%2$s once again. If it didn\'t work, feel free to contact %3$sPumpic Customer Support%4$s.', [
                                 '<a href="' . $this->di->getRouter()->getRouteUrl('locationsSetup', array('step' => 'instructions')) . '">',
                                 '</a>',
                                 '<a href="' . $this->di->getRouter()->getRouteUrl('support') . '">',
                                 '</a>'
-                            ))
-                        );
+                            ])
+                        ];
                     }
                 }
-            } catch (LocationsService\Exceptions\AuthorizationException $e) {
+            } catch (\AppleCloud\ServiceClient\Exception\FindMyPhoneApplication\FindMyPhoneApplicationAuthException $e) {
                 $data = array(
                     'success' => false,
                     'message' => $this->di['t']->_('iCloud Authorization Error. Please %1$supdate the password in our system%2$s and try again.', array(
+                        '<a href="/profile/iCloudAccount/' . $this->di['devId'] . '">',
+                        '</a>'
+                    ))
+                );
+            } catch (\AppleCloud\ServiceClient\Exception\FindMyPhoneApplication\FindMyPhoneApplicationAccountLockedException $e) {
+                $locations->setFmipDisabled($this->di['devId'], true);
+
+                return [
+                    'success' => false,
+                    'message' => $this->di['t']->_('Find My iPhone Authentication error. To continue using "Locations" feature, please, unblock the target Apple ID and %1$svalidate iCloud account in our system%2$s.', [
                         '<a href="/profile/iCloudPassword/' . $this->di['devId'] . '">',
                         '</a>'
-                    ))
-                );
-            } catch (LocationsService\Exceptions\DeviceNotAddedException $e) {
-                $data = array(
-                    'success' => false,
-                    'message' => $this->di['t']->_('Error connecting device. Please make sure whether the target iOS device is connected to the Internet and follow the %1$sguide steps%2$s once again. If it didn’t work, feel free to contact %3$sPumpic Customer Support%4$s.', array(
-                        '<a href="' . $this->di->getRouter()->getRouteUrl('locationsSetup', array('step' => 'instructions')) . '">',
-                        '</a>',
-                        '<a href="' . $this->di->getRouter()->getRouteUrl('support') . '">',
-                        '</a>'
-                    ))
-                );
-            } catch (LocationsService\Exceptions\LocationsException $e) {
+                    ])
+                ];
+            } catch (\Exception $e) {
                 $this->getDI()->get('logger')->addError('iCloud location fail', array('exception' => $e));
                 $data = array(
                     'success' => false,
@@ -443,7 +452,7 @@ class Locations extends BaseModuleController
         }
 
         $this->view->title = $this->di['t']->_('Locations');
-        
+
         if ($this->di['currentDevice']['os'] != 'icloud') {
             $this->view->customTimezoneOffset = 0;
         }
