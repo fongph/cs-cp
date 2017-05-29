@@ -276,8 +276,8 @@ class Billing extends \System\Model
 
     public function isCancelationDiscountOfferableForLicense($license)
     {
-        // only for fastspring
-        if ($license['subscription_payment_method'] !== \CS\Models\Order\OrderRecord::PAYMENT_METHOD_FASTSPRING || $license['subscription_payment_method'] !== \CS\Models\Order\OrderRecord::PAYMENT_METHOD_FASTSPRING_CONTEXTUAL) {
+    // only for fastspring
+        if (!in_array($license['subscription_payment_method'], [\CS\Models\Order\OrderRecord::PAYMENT_METHOD_FASTSPRING,\CS\Models\Order\OrderRecord::PAYMENT_METHOD_FASTSPRING_CONTEXTUAL])) {
             return false;
         }
 
