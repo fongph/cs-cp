@@ -329,7 +329,7 @@ class Profile extends BaseController {
         }
 
         $devicesModel = new Devices($this->di);
-        $cloudDeviceManager = new \Components\CloudDeviceManager($this->auth['id'], $devicesModel, $this->di['reincubateClient']);
+        $cloudDeviceManager = new \Components\CloudDeviceManager($this->auth['id'], $devicesModel, $this->di['reincubateClient'], $this->di['chachePool']);
 
         if ($this->getRequest()->hasPost('token')) {
             $token = $cloudDeviceManager->decryptState($this->getRequest()->post('token'));

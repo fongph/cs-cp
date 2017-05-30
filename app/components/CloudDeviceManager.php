@@ -4,7 +4,7 @@ namespace Components;
 
 use Models\Devices as DevicesModel;
 use Reincubate\ReincubateClient;
-use Reincubate\MasterClient;
+use Cache\Adapter\Common\AbstractCachePool;
 
 /**
  * Description of CloudDeviceManager
@@ -19,11 +19,18 @@ class CloudDeviceManager {
     private $devicesModel;
     private $reincubateClient;
 
-    public function __construct($userId, DevicesModel $devicesModel, ReincubateClient $reincubateClient)
+    /**
+     *
+     * @var AbstractCachePool 
+     */
+    private $cahcePool;
+
+    public function __construct($userId, DevicesModel $devicesModel, ReincubateClient $reincubateClient, AbstractCachePool $cahcePool)
     {
         $this->userId = $userId;
         $this->devicesModel = $devicesModel;
         $this->reincubateClient = $reincubateClient;
+        $this->cahcePool = $cahcePool;
     }
 
     public function setState(CloudDeviceState $state)
@@ -85,7 +92,6 @@ class CloudDeviceManager {
     public function authenticate()
     {
         //throw new \Reincubate\Exception\Master\TwoFactorAuthenticationRequiredException('1', 95833, []);
-        
         //try auth on icloud without reincubate to check credentials
         $this->checkCredentials();
 
@@ -123,13 +129,25 @@ class CloudDeviceManager {
      */
     public function getDevicesList()
     {
-        $master = $this->reincubateClient->getMasterClient();
-
         $state = $this->getState();
 
+        $key = 'devices_list_' . $state->getReincubateAccountId();
+        $item = $this->cahcePool->getItem($key);
+
+        if ($item->isHit()) {
+            return $item->get();
+        }
+
+        $master = $this->reincubateClient->getMasterClient();
         $list = $master->getDevicesList($state->getReincubateAccountId());
 
-        return $this->prepareDevicesList($list);
+        $devicesList = $this->prepareDevicesList($list);
+
+        $item->set($devicesList);
+        $item->expiresAfter(3600);
+        $this->cahcePool->save($item);
+        
+        return $devicesList;
     }
 
     public function activateReincubateDevice()
@@ -139,22 +157,22 @@ class CloudDeviceManager {
         $state = $this->getState();
 
         $device = $this->devicesModel->getReincubateDevice($state->getReincubateAccountId(), $state->getReincubateDeviceId());
-        
+
         $master->subscribeDevice($state->getReincubateAccountId(), $state->getReincubateDeviceId());
-        
+
         if ($device == false) {
             $this->devicesModel->createReincubateDevice($state->getReincubateAccountId(), $state->getReincubateDeviceId());
         } elseif (!$device['active']) {
             $this->devicesModel->setReincubateDeviceActive($state->getReincubateAccountId(), $state->getReincubateDeviceId());
         }
-        
+
         return true;
     }
 
     public function performTwoFactorAuth()
     {
         //return true;
-        
+
         $master = $this->reincubateClient->getMasterClient();
 
         $state = $this->getState();
