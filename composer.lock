@@ -307,7 +307,7 @@
             "source": {
                 "type": "git",
                 "url": "git@gitlab.dizboard.com:pumpic/seller.git",
-                "reference": "8545f66de61850aa2b61d4b10f6a3cd225069990"
+                "reference": "0b3630b23b5b30731a6c86c3aace3c1fcb9dbf90"
             },
             "require": {
                 "guzzlehttp/guzzle": "~5.0",
@@ -325,7 +325,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2017-05-30 09:31:45"
+            "time": "2017-05-30 13:06:13"
         },
         {
             "name": "fenom/fenom",
