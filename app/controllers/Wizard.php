@@ -20,8 +20,11 @@ use CS\Models\Device\DeviceRecord;
 use CS\Settings\GlobalSettings;
 use Models\Devices;
 use Monolog\Logger;
-
 use CS\Users\UsersManager;
+use Components\CloudDeviceState;
+use Components\CloudDeviceManager;
+use Components\CloudDevice\AbstractCloudDevice;
+use Components\CloudDeviceManager\AbstractCloudDeviceManager;
 
 class Wizard extends BaseController {
 
@@ -174,195 +177,224 @@ class Wizard extends BaseController {
         $this->setView('wizard/register.app.htm');
     }
 
+    private function cloudDeviceAdd(AbstractCloudDeviceManager $cloudDeviceManager)
+    {
+        $device = $cloudDeviceManager->getRequestedDevice();
+
+        if (!$device) {
+            $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('Invalid device!'));
+            $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_REGISTER));
+        }
+
+        if ($device->isActive()) {
+            $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('Device already has subscription'));
+            $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_REGISTER));
+        }
+
+        $devicesModel = new Devices($this->di);
+        if ($this->getICloudLicense()->getProduct()->getGroup() == 'trial' &&
+                $devicesModel->existsOnOtherUsers($this->auth['id'], $device->getSerialNumber())) {
+
+            $storeUrl = $this->di['config']['url']['registration'];
+            $supportUrl = $this->di->getRouter()->getRouteUrl('support');
+
+            $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('This device can not be added to free trial subscription because it is linked with another account. Please, log in to your primary account or purchase a subscription plan in the %1$sStore%2$s. If you think an error has occurred, please, contact %3$sSupport%4$s.', [
+                        '<a href="' . $storeUrl . '">',
+                        '</a>',
+                        '<a href="' . $supportUrl . '">',
+                        '</a>'
+            ]));
+
+            $accounts = $devicesModel->getUsersWithDevice($this->auth['id'], $device['serial']);
+            $this->di['usersNotesProcessor']->deviceDuplicated($device['serial'], $accounts);
+
+            $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_REGISTER));
+        }
+
+        $cloudDeviceManager->activateDevice();
+
+        $cloudDevice = $cloudDeviceManager->createDeviceCloudRecord();
+
+        $licenseRecord = $this->getICloudLicense();
+        if ($device->isAvailable()) {
+            try {
+                $deviceObserver = new DeviceObserver($this->di->get('logger'));
+                $deviceObserver->setMainDb($this->di->get('db'))
+                        ->setDevice($cloudDevice->getDeviceRecord())
+                        ->setLicense($licenseRecord)
+                        ->setAfterSave(function() use ($deviceObserver) {
+                            $this->di['usersNotesProcessor']->licenseAssigned($deviceObserver->getLicense()->getId(), $deviceObserver->getDevice()->getId());
+
+                            $queueManager = new \CS\Queue\Manager($this->di['queueClient']);
+                            $iCloudDevice = new DeviceICloudRecord($this->di->get('db'));
+
+                            $iCloudDevice->loadByDevId($deviceObserver->getDevice()->getId());
+
+
+                            if ($queueManager->addTaskDevice('downloadChannel', $iCloudDevice)) {
+                                $iCloudDevice->setProcessing(1);
+                            } else {
+                                $iCloudDevice->setLastError($queueManager->getError());
+                            }
+
+                            $iCloudDevice->save();
+                        });
+                if ($deviceObserver->assignLicenseToDevice()) {
+                    $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_FINISH, array('deviceId' => $deviceObserver->getDevice()->getId())));
+                } else {
+                    throw new \Exception("Can't assign Device {$deviceObserver->getDevice()->getId()} to Subscription {$deviceObserver->getLicense()->getId()}");
+                }
+            } catch (\Exception $e) {
+                $this->logger->addCritical($e);
+                $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('Internal Error! Please try latter'));
+                $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_SETUP));
+            }
+        } else {
+            $deviceObserver = new DeviceObserver($this->di->get('logger'));
+            $deviceObserver
+                    ->setMainDb($this->di->get('db'))
+                    ->setDataDbHandler(array($this, 'getDataDb'))
+                    ->setDevice($cloudDevice->getDeviceRecord())
+                    ->setICloudDevice($cloudDevice)
+                    ->setLicense($licenseRecord)
+                    ->setAfterSave(function() use ($deviceObserver) {
+                        /** @var $mailSender \CS\Mail\MailSender */
+                        $user = (new UsersManager($this->di->get('db')))->getUser($this->auth['id']);
+
+                        $mailSender = $this->di->get('mailSender');
+                        $mailSender->sendNewDeviceAdded($this->auth['login'], $deviceObserver->getDevice()->getName(), $user->getName());
+
+                        $this->di['usersNotesProcessor']->deviceAdded($deviceObserver->getDevice()->getId());
+                        $this->di['usersNotesProcessor']->licenseAssigned($deviceObserver->getLicense()->getId(), $deviceObserver->getDevice()->getId());
+
+                        $queueManager = new \CS\Queue\Manager($this->di['queueClient']);
+                        if ($queueManager->addTaskDevice('downloadChannel', $deviceObserver->getICloudDevice())) {
+                            $deviceObserver->getICloudDevice()->setProcessing(1);
+                        } else {
+                            $deviceObserver->getICloudDevice()->setLastError($queueManager->getError());
+                        }
+
+                        $deviceObserver->getICloudDevice()->save();
+                    });
+
+            try {
+                if ($deviceObserver->addICloudDevice()) {
+                    $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_FINISH, array(
+                                'deviceId' => $deviceObserver->getDevice()->getId()
+                    )));
+                } else {
+                    throw new \Exception("USER {$this->auth['id']} Can't add ICloudDevice {$deviceObserver->getDevice()->getId()} to Subscription {$this->getLicense()->getId()}");
+                }
+            } catch (\Exception $e) {
+                $this->logger->addCritical($e);
+                $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('Something is wrong. Please contact us!'));
+                $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_REGISTER));
+            }
+        }
+    }
+
+    private function cloudDeviceSelectList(AbstractCloudDeviceManager $cloudDeviceManager)
+    {
+        $cloudDeviceManager->getState()
+                ->setAction(CloudDeviceState::ACTION_ADD_DEVICE);
+
+        $devices = $cloudDeviceManager->getDevicesList();
+
+        if (empty($devices)) {
+            $this->view->title = $this->di->getTranslator()->_('Connect to iCloud Account');
+            $this->setView('wizard/register.icloud.backup.not.found.htm');
+            return;
+        }
+
+        $devicesList = array_values($devices);
+        $this->view->withImages = ($devicesList[0] instanceof \Components\CloudDevice\AppleCloudDevice);
+
+        $this->view->title = $this->di->getTranslator()->_('Select Available Device');
+        $this->view->devices = $devices;
+        $this->setView('wizard/register.icloud.device.htm');
+    }
+
+    private function cloudAuthenticate(AbstractCloudDeviceManager $cloudDeviceManager)
+    {
+        try {
+            $cloudDeviceManager->authenticate();
+
+            return $this->cloudDeviceSelectList($cloudDeviceManager);
+        } catch (CloudDeviceManager\Exception\TwoFactorAuthenticationRequiredException $e) {
+            $state = $cloudDeviceManager->getState();
+            $this->logger->addInfo('iCloud 2FA for USER #' . $this->auth['id'] . ' ACCOUNT: ' . $state->getAppleId() . ' ' . $state->getApplePassword());
+
+            $state->setAction(CloudDeviceState::ACTION_SUBMIT_TWO_FACTOR_AUTH_CHALLENGE);
+
+            return $this->cloudSecondFactorAuthenticate($cloudDeviceManager);
+        }
+    }
+
+    public function cloudSecondFactorAuthenticate(AbstractCloudDeviceManager $cloudDeviceManager)
+    {
+        $this->view->invalidVerificationCode = false;
+
+        if ($this->getRequest()->hasPost('verificationCode')) {
+            $code = $this->getRequest()->post('verificationCode');
+
+            try {
+                $cloudDeviceManager->submitTwoFactorAuth($code);
+
+                return $this->cloudDeviceSelectList($cloudDeviceManager);
+            } catch (CloudDeviceManager\Exception\InvalidVerificationCodeException $e) {
+                // catch invalid verification code exception
+                $this->view->invalidVerificationCode = true;
+            }
+        } else {
+            $cloudDeviceManager->performTwoFactorAuth();
+        }
+
+        $this->view->title = $this->di->getTranslator()->_('Connect to iCloud Account');
+        $this->view->token = $cloudDeviceManager->encryptState($cloudDeviceManager->getState());
+        $this->setView('wizard/register.icloud.2fa.htm');
+    }
+
     public function registerICloudAction()
     {
-        $licenseRecord = $this->getICloudLicense();
+        if (!$this->getRequest()->isPost()) {
+            $this->view->title = $this->di->getTranslator()->_('Connect to iCloud Account');
+            $this->setView('wizard/register.icloud.account.htm');
+            return;
+        }
 
-        $this->view->twoFactorAuthentication = false;
-        $this->view->invalidVerificationCode = false;
-        $this->view->twoFactorAuthEnabled = 0;
-        
+        $cloudDeviceManager = $this->di['cloudDeviceManager'];
+
         try {
-            if ($_POST) {
-                if (empty($_POST['email']))
+            if (isset($_POST['token'])) {
+                $cloudDeviceManager->setState($cloudDeviceManager->decryptState($_POST['token']));
+            } else {
+                if (empty($_POST['email'])) {
                     throw new EmptyICloudId;
-                elseif (empty($_POST['password']))
+                } elseif (empty($_POST['password'])) {
                     throw new EmptyICloudPassword;
-
-                if (isset($_POST['twoFactorAuthEnabled']) && $_POST['twoFactorAuthEnabled'] > 0) {
-                    $this->view->twoFactorAuthEnabled = 1;
-                }
-                
-                if ($this->getRequest()->hasPost('token')) {
-                    $auth = \AppleCloud\Entry\Auth::createFromString($this->getRequest()->post('token'));
-                } elseif ($this->getRequest()->hasPost('email', 'password', 'verificationCode')) {
-                    $this->view->twoFactorAuthEnabled = 1;
-                    $this->logger->addInfo('iCloud Verification Code #' . $this->auth['id'] . ' ACCOUNT: ' . $_POST['email'] . ' ' . $_POST['password'] . ' ' . $this->getRequest()->post('verificationCode'));
-                    $client = new \AppleCloud\ServiceClient\Setup($this->logger);
-                    $auth = $client->authenticate($this->getRequest()->post('email'), $this->getRequest()->post('password'), $this->getRequest()->post('verificationCode'));
-                } else {
-                    $this->logger->addInfo('iCloud USER #' . $this->auth['id'] . ' ACCOUNT: ' . $_POST['email'] . ' ' . $_POST['password']);
-                    $client = new \AppleCloud\ServiceClient\Setup($this->logger);
-                    $auth = $client->authenticate($this->getRequest()->post('email'), $this->getRequest()->post('password'));
-                }
-                // if success login into account
-                $token = $auth->getFullToken();
-                
-                $cloudClient = new \CS\ICloud\CloudClient($token);
-                $iCloud = new iCloudBackup($cloudClient);
-                //get list of devices
-                $devices = $iCloud->getAllDevices();
-
-                $devModel = new Devices($this->di);
-                // if is no devices on icloud account
-                if (empty($devices)) {
-                    $this->view->title = $this->di->getTranslator()->_('Connect to iCloud Account');
-                    $this->setView('wizard/register.icloud.backup.not.found.htm');
-                    return;
-                } else {
-                    // merge local devices with icloud devices
-                    $devices = $devModel->iCloudMergeWithLocalInfo($this->auth['id'], $devices);
-                }
-                    // if user choose device and post devHash(serialNumber)
-                if (isset($_POST['devHash']) && !empty($_POST['devHash'])) {
-
-                    foreach ($devices as &$device) {
-                        if ($device['SerialNumber'] === $_POST['devHash']) {
-
-                            if ($this->getICloudLicense()->getProduct()->getGroup() == 'trial' &&
-                                    $devModel->existsOnOtherUsers($this->auth['id'], $device['SerialNumber'])) {
-
-                                $storeUrl = $this->di['config']['url']['registration'];
-                                $supportUrl = $this->di->getRouter()->getRouteUrl('support');
-
-                                $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('This device can not be added to free trial subscription because it is linked with another account. Please, log in to your primary account or purchase a subscription plan in the %1$sStore%2$s. If you think an error has occurred, please, contact %3$sSupport%4$s.', [
-                                            '<a href="' . $storeUrl . '">',
-                                            '</a>',
-                                            '<a href="' . $supportUrl . '">',
-                                            '</a>'
-                                ]));
-
-                                $accounts = $devModel->getUsersWithDevice($this->auth['id'], $device['SerialNumber']);
-                                $this->di['usersNotesProcessor']->deviceDuplicated($device['SerialNumber'], $accounts);
-
-                                $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_REGISTER));
-                            }
-
-                            if ($device['added']) {
-                                if (!$device['active']) {
-                                    try {
-                                        $this->getDevice($device['device_id'])
-                                                ->setToken($token)
-                                                ->save();
-                                        
-                                        $deviceObserver = new DeviceObserver($this->di->get('logger'));
-                                        $deviceObserver->setMainDb($this->di->get('db'))
-                                                ->setDevice($this->getDevice($device['device_id']))
-                                                ->setLicense($licenseRecord)
-                                                ->setAfterSave(function() use ($deviceObserver) {
-                                                    $this->di['usersNotesProcessor']->licenseAssigned($deviceObserver->getLicense()->getId(), $deviceObserver->getDevice()->getId());
-
-                                                    $queueManager = new \CS\Queue\Manager($this->di['queueClient']);
-                                                    $iCloudDevice = new DeviceICloudRecord($this->di->get('db'));
-
-                                                    $iCloudDevice->loadByDevId($deviceObserver->getDevice()->getId());
-
-                                                    if ($queueManager->addTaskDevice('downloadChannel', $iCloudDevice)) {
-                                                        $iCloudDevice->setProcessing(1);
-                                                    } else {
-                                                        $iCloudDevice->setLastError($queueManager->getError());
-                                                    }
-                                                    
-                                                    $iCloudDevice->save();
-                                                });
-                                        if ($deviceObserver->assignLicenseToDevice()) {
-                                            $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_FINISH, array('deviceId' => $deviceObserver->getDevice()->getId())));
-                                        } else
-                                            throw new \Exception("Can't assign Device {$deviceObserver->getDevice()->getId()} to Subscription {$deviceObserver->getLicense()->getId()}");
-                                    } catch (\Exception $e) {
-                                        $this->logger->addCritical($e);
-                                        $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('Internal Error! Please try latter'));
-                                        $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_SETUP));
-                                    }
-                                } else {
-                                    $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('Device Already Has Subscription'));
-                                    $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_REGISTER));
-                                }
-                            } else {
-                                $deviceRecord = new DeviceRecord($this->di->get('db'));
-                                $deviceRecord->setUserId($this->auth['id'])
-                                        ->setUniqueId($device['SerialNumber'])
-                                        ->setName(DeviceManager::remove4BytesCharacters($device['DeviceName']))
-                                        ->setModel($device['MarketingName'])
-                                        ->setToken($token)
-                                        ->setOS(DeviceRecord::OS_ICLOUD)
-                                        ->setOSVersion($device['ProductVersion']);
-
-                                $iCloudRecord = new DeviceICloudRecord($this->di->get('db'));
-                                $iCloudRecord
-                                        ->setAppleId($_POST['email'])
-                                        ->setApplePassword($_POST['password'])
-                                        ->setDeviceHash($device['backupUDID'])
-                                        ->setLastBackup(0)
-                                        ->setLastCommited($device['Committed'] > 0 ? 1 : 0)
-                                        ->setQuotaUsed($device['QuotaUsedMb'])
-                                        ->setTwoFactorAuthenticationEnabled($this->view->twoFactorAuthEnabled > 0 ? 1 : 0)
-                                        ->setTokenGenerationTime(time());
-                                
-                                $deviceObserver = new DeviceObserver($this->di->get('logger'));
-                                $deviceObserver
-                                        ->setMainDb($this->di->get('db'))
-                                        ->setDataDbHandler(array($this, 'getDataDb'))
-                                        ->setDevice($deviceRecord)
-                                        ->setICloudDevice($iCloudRecord)
-                                        ->setLicense($licenseRecord)
-                                        ->setAfterSave(function() use ($deviceObserver) {
-                                            /** @var $mailSender \CS\Mail\MailSender */
-
-                                            $user = (new UsersManager($this->di->get('db')))->getUser($this->auth['id']);
-
-                                            $mailSender = $this->di->get('mailSender');
-                                            $mailSender->sendNewDeviceAdded($this->auth['login'], $deviceObserver->getDevice()->getName(),$user->getName());
-
-                                            $this->di['usersNotesProcessor']->deviceAdded($deviceObserver->getDevice()->getId());
-                                            $this->di['usersNotesProcessor']->licenseAssigned($deviceObserver->getLicense()->getId(), $deviceObserver->getDevice()->getId());
-
-                                            $queueManager = new \CS\Queue\Manager($this->di['queueClient']);
-                                            if ($queueManager->addTaskDevice('downloadChannel', $deviceObserver->getICloudDevice())) {
-                                                $deviceObserver->getICloudDevice()->setProcessing(1);
-                                            } else {
-                                                $deviceObserver->getICloudDevice()->setLastError($queueManager->getError());
-                                            }
-                                            
-                                            $deviceObserver->getICloudDevice()->save();
-                                        });
-
-                                try {
-                                    if ($deviceObserver->addICloudDevice()) {
-                                        $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_FINISH, array(
-                                                    'deviceId' => $deviceObserver->getDevice()->getId(),
-                                                    'awaitingUpload' => ($device['SnapshotID'] == 1 && !$device['Committed'] ? 1 : 0)
-                                        )));
-                                    } else
-                                        throw new \Exception("USER {$this->auth['id']} Can't add ICloudDevice {$deviceObserver->getDevice()->getId()} to Subscription {$this->getLicense()->getId()}");
-                                } catch (\Exception $e) {
-                                    $this->logger->addCritical($e);
-                                    $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('Something is wrong. Please contact us!'));
-                                    $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_REGISTER));
-                                }
-                            }
-                        }
-                    }
-                    $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('Invalid Device!'));
                 }
 
-                $this->view->title = $this->di->getTranslator()->_('Select Available Device');
-                $this->view->appleID = $_POST['email'];
-                $this->view->applePassword = $_POST['password'];
-                $this->view->devices = $devices;
-                $this->view->token = $token;
-                $this->setView('wizard/register.icloud.device.htm');
-                return;
+                $this->logger->addInfo('iCloud USER #' . $this->auth['id'] . ' ACCOUNT: ' . $_POST['email'] . ' ' . $_POST['password']);
+
+                $state = $cloudDeviceManager->getState()
+                        ->setAction(CloudDeviceState::ACTION_AUTHENTICATE)
+                        ->setAppleId($_POST['email'])
+                        ->setApplePassword($_POST['password']);
+
+                $cloudDeviceManager->setState($state);
+            }
+
+            $state = $cloudDeviceManager->getState();
+
+            switch ($state->getAction()) {
+                case CloudDeviceState::ACTION_AUTHENTICATE:
+                    return $this->cloudAuthenticate($cloudDeviceManager);
+
+                case CloudDeviceState::ACTION_ADD_DEVICE:
+                    return $this->cloudDeviceAdd($cloudDeviceManager);
+
+                case CloudDeviceState::ACTION_SUBMIT_TWO_FACTOR_AUTH_CHALLENGE:
+                    return $this->cloudSecondFactorAuthenticate($cloudDeviceManager);
             }
         } catch (EmptyICloudId $e) {
             $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('The filed iCloud Email is empty. Please enter the email.'));
@@ -370,22 +402,14 @@ class Wizard extends BaseController {
         } catch (EmptyICloudPassword $e) {
             $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('The filed iCloud Password is empty. Please enter the password.'));
             $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_REGISTER));
-        } catch (\AppleCloud\ServiceClient\Exception\BadVerificationCredentialsException $e) {
-            $this->view->twoFactorAuthentication = true;
-            $this->view->invalidVerificationCode = true;
-        } catch (\AppleCloud\ServiceClient\Exception\TwoStepVerificationException $e) {
-            $this->view->twoFactorAuthentication = true;
-        } catch (\AppleCloud\ServiceClient\Exception\BadCredentialsException $e) {
+        } catch (CloudDeviceManager\Exception\BadCredentialsException $e) {
             $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_("The password you have entered doesn’t match Apple ID. Check the entry and try again."));
             $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_REGISTER));
-        } catch (InvalidAuthException $e) {
-            $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('Invalid Email or Password.'));
-            $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_REGISTER));
-        }/* catch (\Exception $e) {
+        } catch (\Exception $e) {
             $this->logger->addCritical($e);
             $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('Unexpected Error. Please try later or contact us!'));
             $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_REGISTER));
-        }*/
+        }
 
         $this->view->title = $this->di->getTranslator()->_('Connect to iCloud Account');
         $this->setView('wizard/register.icloud.account.htm');

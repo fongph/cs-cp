@@ -40,6 +40,10 @@
         },
         {
             "type": "git",
+            "url": "git@gitlab.dizboard.com:pumpic/reincubate.git"
+        },
+        {
+            "type": "git",
             "url": "git@gitlab.dizboard.com:pumpic/ip.git"
         }
     ],
@@ -65,10 +69,12 @@
         "boomers/seller": "dev-master",
         "boomers/cs-icloud": "dev-master",
         "boomers/cs-queue": "dev-master",
+        "pumpic/reincubate": "dev-master",
         "aws/aws-sdk-php": "2.*",
         "sabre/vobject": "^3.4",
         "phpoffice/phpexcel": "^1.8",
-        "symfony/debug": "~2.0"
+        "symfony/debug": "~2.0",
+        "cache/cache": "^0.4.0"
     },
     "autoload": {
         "psr-4": {

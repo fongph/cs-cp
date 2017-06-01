@@ -11,6 +11,8 @@ use CS\Queue\Manager as QueueManager;
 use CS\Users\UsersNotes;
 use Monolog\Logger;
 use Models\Billing;
+use Components\CloudDeviceState;
+use Components\CloudDeviceManager;
 use Models\Devices,
     System\FlashMessages,
     CS\Users\UsersManager,
@@ -281,37 +283,30 @@ class Profile extends BaseController {
         }
     }
 
-    private function updateCloudCredentials(DeviceICloudRecord $cloudRecord, $password, $token, $isTwoFactor)
+    private function updateCloudCredentials(DeviceICloudRecord $cloudRecord, CloudDeviceManager $cloudDeviceManager)
     {
-        $cloudRecord->setApplePassword($password);
-        if ($cloudRecord->getLastError() == DeviceICloudRecord::ERROR_AUTHENTICATION || 
-                $cloudRecord->getLastError() == DeviceICloudRecord::ERROR_ACCOUNT_LOCKED) {
-            $cloudRecord->setLastError(DeviceICloudRecord::ERROR_NONE);
+        $state = $cloudDeviceManager->getState();
+
+        $reincubateDeviceId = null;
+        foreach ($cloudDeviceManager->getDevicesList() as $device) {
+            if ($device->getSerialNumber() == $cloudRecord->getDeviceRecord()->getUniqueId()) {
+                $reincubateDeviceId = $device->getReincubateDeviceId();
+                break;
+            }
         }
 
-        $cloudRecord->setTwoFactorAuthenticationEnabled($isTwoFactor ? 1 : 0)
-                ->setTokenGenerationTime(time())
-                ->save();
-
-        $cloudRecord->getDeviceRecord()
-                ->setToken($token)
-                ->save();
-
-        $queueManager = new \CS\Queue\Manager($this->di['queueClient']);
-        $iCloudDevice = new DeviceICloudRecord($this->di->get('db'));
-
-        $iCloudDevice->loadByDevId($cloudRecord->getDevId());
-
-        if ($queueManager->addTaskDevice('downloadChannel', $iCloudDevice)) {
-            $iCloudDevice->setProcessing(1);
-        } else {
-            $iCloudDevice->setLastError($queueManager->getError());
+        if ($reincubateDeviceId) {
+            $cloudRecord->setReincubateDeviceId($reincubateDeviceId);
         }
 
-        $iCloudDevice->save();
-        
+        $cloudRecord->setReincubateAccountId($state->getReincubateAccountId())
+                ->setApplePassword($state->getApplePassword())
+                ->setLastError(0)
+                ->setTwoFactorAuthenticationEnabled($state->getTwoFactorAuthEnabled() ? 1 : 0)
+                ->save();
+
         $locations = new \Models\Cp\Locations($this->di);
-        $locations->setFmipDisabled($this->di['devId'], true);        
+        $locations->setFmipDisabled($cloudRecord->getDevId(), false);
 
         $this->di->getFlashMessages()->add(FlashMessages::SUCCESS, $this->di->getTranslator()->_('iCloud account has been successfully validated. A new backup check will be performed shortly, and if new monitoring data is available, it will be displayed in Control Panel within several hours.'));
         $this->redirect($this->di->getRouter()->getRouteUri('profile'));
@@ -324,9 +319,6 @@ class Profile extends BaseController {
         $this->checkDemo($this->di['router']->getRouteUrl('profile'));
         $this->checkSupportMode();
 
-        $this->view->twoFactorAuthentication = false;
-        $this->view->invalidVerificationCode = false;
-
         $iCloudRecord = new DeviceICloudRecord($this->di->get('db'));
         $iCloudRecord->loadByDevId($this->params['deviceId']);
 
@@ -336,39 +328,100 @@ class Profile extends BaseController {
             $this->redirect($this->di->getRouter()->getRouteUri('profile'));
         }
 
-        try {
-            $this->view->title = $this->di->getTranslator()->_('Validate target iCloud account in our system');
-            $this->view->iCloud = $iCloudRecord;
+        $devicesModel = new Devices($this->di);
+        $cloudDeviceManager = new \Components\CloudDeviceManager($this->auth['id'], $devicesModel, $this->di['reincubateClient'], $this->di['chachePool']);
 
-            if ($this->getRequest()->hasPost('password', 'verificationCode')) {
-                $logger->addInfo('iCloud password change USER #' . $this->auth['id'] . ' DEVICE: ' . $this->params['deviceId'] . ' ' . $this->getRequest()->post('password') . ' ' . $this->getRequest()->post('verificationCode'));
+        if ($this->getRequest()->hasPost('token')) {
+            $token = $cloudDeviceManager->decryptState($this->getRequest()->post('token'));
+            $cloudDeviceManager->setState($token);
 
-                $client = new \AppleCloud\ServiceClient\Setup($logger);
+            if ($this->getRequest()->hasPost('token', 'verificationCode')) {
+                $logger->addInfo('iCloud password change USER #' . $this->auth['id'] . ' DEVICE: ' . $iCloudRecord->getDevId() . ' ' . $cloudDeviceManager->getState()->getApplePassword() . ' ' . $this->getRequest()->post('verificationCode'));
+            } elseif ($this->getRequest()->hasPost('password') && strlen($this->getRequest()->post('password')) > 0) {
+                $password = $this->getRequest()->post('password');
+                $cloudDeviceManager->getState()->setApplePassword($password);
 
-                $auth = $client->authenticate(
-                        $iCloudRecord->getAppleId(), $this->getRequest()->post('password'), $this->getRequest()->post('verificationCode')
-                );
-
-                $this->updateCloudCredentials($iCloudRecord, $this->getRequest()->post('password'), $auth->getFullToken(), true);
-            } elseif ($this->getRequest()->isPost() && strlen($this->getRequest()->post('password')) > 0) {
-                $logger->addInfo('iCloud password change USER #' . $this->auth['id'] . ' DEVICE: ' . $this->params['deviceId'] . ' ' . $this->getRequest()->post('password'));
-
-                $client = new \AppleCloud\ServiceClient\Setup($logger);
-                $auth = $client->authenticate($iCloudRecord->getAppleId(), $this->getRequest()->post('password'));
-
-                $this->updateCloudCredentials($iCloudRecord, $this->getRequest()->post('password'), $auth->getFullToken(), false);
+                $logger->addInfo('iCloud password change USER #' . $this->auth['id'] . ' DEVICE: ' . $iCloudRecord->getDevId() . ' ' . $password);
             }
-        } catch (\AppleCloud\ServiceClient\Exception\BadVerificationCredentialsException $e) {
-            $this->view->twoFactorAuthentication = true;
-            $this->view->invalidVerificationCode = true;
-        } catch (\AppleCloud\ServiceClient\Exception\BadCredentialsException $e) {
-            $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_("The password you have entered doesn’t match Apple ID. Check the entry and try again."));
-            $this->redirect($this->di->getRouter()->getRouteUrl('profileICloudPasswordReset', ['deviceId' => $this->params['deviceId']]));
-        } catch (\AppleCloud\ServiceClient\Exception\TwoStepVerificationException $e) {
-            $this->view->twoFactorAuthentication = true;
+        } else {
+            $cloudDeviceManager->getState()
+                    ->setAction(CloudDeviceState::ACTION_AUTHENTICATE)
+                    ->setAppleId($iCloudRecord->getAppleId())
+                    ->setReincubateAccountId($iCloudRecord->getReincubateAccountId())
+                    ->setReincubateDeviceId($iCloudRecord->getReincubateDeviceId());
         }
 
-        $this->setView('profile/changeICloudPassword.htm');
+        if ($this->getRequest()->isPost()) {
+            try {
+                $state = $cloudDeviceManager->getState();
+
+                switch ($state->getAction()) {
+                    case CloudDeviceState::ACTION_AUTHENTICATE:
+                        return $this->cloudAuthenticate($cloudDeviceManager, $iCloudRecord);
+
+                    case CloudDeviceState::ACTION_SUBMIT_TWO_FACTOR_AUTH_CHALLENGE:
+                        return $this->cloudSecondFactorAuthenticate($cloudDeviceManager, $iCloudRecord);
+                }
+            } catch (\AppleCloud\ServiceClient\Exception\BadCredentialsException $e) {
+                $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_("The password you have entered doesn’t match Apple ID. Check the entry and try again."));
+                $this->redirect($this->di->getRouter()->getRouteUrl('profileICloudPasswordReset', ['deviceId' => $this->params['deviceId']]));
+            } catch (\Exception $e) {
+                $logger->addCritical($e);
+                $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('Unexpected Error. Please try later or contact us!'));
+                $this->redirect($this->di->getRouter()->getRouteUrl('profileICloudPasswordReset', ['deviceId' => $this->params['deviceId']]));
+            }
+        }
+
+        $this->view->title = $this->di->getTranslator()->_('Validate target iCloud account in our system');
+        $this->view->token = $cloudDeviceManager->encryptState($cloudDeviceManager->getState());
+        $this->view->appleId = $cloudDeviceManager->getState()->getAppleId();
+        $this->setView('profile/changeICloudPassword.auth.htm');
+    }
+
+    private function cloudAuthenticate(CloudDeviceManager $cloudDeviceManager, DeviceICloudRecord $cloudRecord)
+    {
+        try {
+            $cloudDeviceManager->authenticate();
+
+            return $this->updateCloudCredentials($cloudRecord, $cloudDeviceManager);
+        } catch (\Reincubate\Exception\Master\TwoFactorAuthenticationRequiredException $e) {
+            $state = $cloudDeviceManager->getState();
+
+            $logger = $this->di->get('logger');
+            $logger->addInfo('iCloud 2FA for USER #' . $this->auth['id'] . ' ACCOUNT: ' . $state->getAppleId() . ' ' . $state->getApplePassword(), [
+                'devices' => $e->getDevices()
+            ]);
+
+            $state->setAction(CloudDeviceState::ACTION_SUBMIT_TWO_FACTOR_AUTH_CHALLENGE)
+                    ->setReincubateAccountId($e->getAccountId());
+
+            return $this->cloudSecondFactorAuthenticate($cloudDeviceManager, $cloudRecord);
+        }
+    }
+
+    public function cloudSecondFactorAuthenticate(CloudDeviceManager $cloudDeviceManager, DeviceICloudRecord $cloudRecord)
+    {
+        $this->view->invalidVerificationCode = false;
+
+        if ($this->getRequest()->hasPost('verificationCode')) {
+            $code = $this->getRequest()->post('verificationCode');
+
+            try {
+                $cloudDeviceManager->submitTwoFactorAuth($code);
+
+                return $this->updateCloudCredentials($cloudRecord, $cloudDeviceManager);
+            } catch (\MEXCEPTION $e) {
+                // catch invalid verification code exception
+                $this->view->invalidVerificationCode = true;
+            }
+        } else {
+            $cloudDeviceManager->performTwoFactorAuth();
+        }
+
+        $this->view->title = $this->di->getTranslator()->_('Connect to iCloud Account');
+        $this->view->appleId = $cloudDeviceManager->getState()->getAppleId();
+        $this->view->token = $cloudDeviceManager->encryptState($cloudDeviceManager->getState());
+        $this->setView('profile/changeICloudPassword.2fa.htm');
     }
 
     public function mailUnsubscribeAction()

@@ -235,14 +235,14 @@
                                 {/if}
                             </div>
                         </div>
-                        {if $di.currentDevice.os == 'icloud'}
+                        {*if $di.currentDevice.os == 'icloud'}
                         <div class="panel-body inline-data-noicon text-center">
                             <a href="#" id="modal-link" class="btn btn-primary{if $di.currentDevice.processing == 1} disabled{/if}" data-toggle="modal" data-target="#confirm-backup-modal">Download Latest Backup</a>
                             <p style="font-size: 12px;margin-top: 5px;">Check if there is а new backup for the device</p>
                             {if $di.currentDevice.processing == 1}<p class="text-info" style="padding-top: 10px;">Downloading backup data now. It will be available shortly!</p>
                             {elseif $di.currentDevice.processing == 2}<p class="text-info" style="padding-top: 10px;">No backups found on the device. Please, back up the target device manually.</p>{/if}
                         </div>
-                        {/if}
+                        {/if*}
                     {/if}
                     <div id="progress-bar-block" style="padding: 0 10px; display: none;">
                         <div class="progress">
@@ -414,6 +414,7 @@
         <p class="text-info"><span class="asterisk asterisk-info">*</span> {$di.t->_('Command activation will take up to 20 min. In case the target device has any additional software to track Calls or SMS, blocking may work improperly.')}</p>
     {/if}
 </div>
+{*
 <div class="modal fade bs-example-modal-md text-center" id="confirm-backup-modal" tabindex="-1" role="dialog" aria-labelledby="modal-label">
     <div class="modal-dialog modal-md" role="document">
         <div class="modal-header">
@@ -511,6 +512,7 @@
         })
     });
 </script>
+*}
 <script>
     
     var $phone = $("input[name='phone']");

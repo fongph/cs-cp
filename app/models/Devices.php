@@ -13,7 +13,8 @@ class Devices extends \System\Model {
 
     private $limitation;
 
-    public function setDeviceName($devId, $name) {
+    public function setDeviceName($devId, $name)
+    {
         if (strlen($name) < 1 || strlen($name) > 32) {
             throw new Devices\InvalidDeviceNameException();
         }
@@ -25,7 +26,8 @@ class Devices extends \System\Model {
                 ->save();
     }
 
-    public function getCurrentDevId() {
+    public function getCurrentDevId()
+    {
         $devId = $this->di['session']['devId'];
 
         if ($devId === null || !isset($this->di['devicesList'][$devId])) {
@@ -42,7 +44,8 @@ class Devices extends \System\Model {
         return $devId;
     }
 
-    public function setCurrentDevId($devId) {
+    public function setCurrentDevId($devId)
+    {
         $this->di['session']['devId'] = $devId;
         //setcookie('devId', $devId, time() + 3600 * 24, '/', $this->di['config']['cookieDomain']);
     }
@@ -51,7 +54,8 @@ class Devices extends \System\Model {
      * 
      * @return \CS\Models\Limitation
      */
-    private function getLimitation() {
+    private function getLimitation()
+    {
         if ($this->limitation === null) {
             $deviceLimitations = new Limitations($this->getDb());
             $this->limitation = $deviceLimitations->getDeviceLimitation($this->di['devId']);
@@ -60,7 +64,8 @@ class Devices extends \System\Model {
         return $this->limitation;
     }
 
-    public function isPaid($limitation) {
+    public function isPaid($limitation)
+    {
         if ($limitation === Limitations::CALL) {
             return $this->getLimitation()->getCall() > 0;
         } else if ($limitation === Limitations::SMS) {
@@ -70,7 +75,8 @@ class Devices extends \System\Model {
         return $this->getLimitation()->hasOption($limitation);
     }
 
-    public function iCloudMergeWithLocalInfo($userId, array $iCloudDevices) {
+    public function iCloudMergeWithLocalInfo($userId, array $iCloudDevices)
+    {
         $localDevices = array();
 
         foreach ($this->getUserDevices($userId, 'icloud') as $dbDevice)
@@ -98,7 +104,34 @@ class Devices extends \System\Model {
         return $iCloudDevices;
     }
 
-    public function getUserDevices($userId, $platform = null, $isSubscribed = null) {
+    /**
+     * 
+     * @param type $userId
+     * @param \Components\CloudDevice[] $devices
+     * @return boolean
+     */
+    public function updateCloudDevicesList($userId, $devices)
+    {
+        $actualDevices = [];
+
+        foreach ($this->getUserDevices($userId, 'icloud') as $device) {
+            $actualDevices[$device['unique_id']] = $device;
+        }
+
+        foreach ($devices as $device) {
+            $serialNumber = $device->getSerialNumber();
+            if (array_key_exists($serialNumber, $actualDevices)) {
+                $device->setDeviceId($actualDevices[$serialNumber]['device_id']);
+                $device->setLicenseId($actualDevices[$serialNumber]['license_id']);
+                $device->setLicenseName($actualDevices[$serialNumber]['package_name']);
+            }
+        }
+
+        return $devices;
+    }
+
+    public function getUserDevices($userId, $platform = null, $isSubscribed = null)
+    {
         if ($platform)
             $platformCondition = "AND d.os = {$this->getDb()->quote($platform)}";
         else
@@ -154,10 +187,11 @@ class Devices extends \System\Model {
         return $data;
     }
 
-    public function existsOnOtherUsers($userId, $uniqueId) {
+    public function existsOnOtherUsers($userId, $uniqueId)
+    {
         $user = $this->getDb()->quote($userId);
         $device = $this->getDb()->quote($uniqueId);
-        
+
         $count = $this->getDb()->query("SELECT
                         COUNT(*) 
                     FROM `devices` 
@@ -165,16 +199,106 @@ class Devices extends \System\Model {
                         unique_id = {$device} AND 
                         user_id != {$user}
                     LIMIT 1")->fetchColumn();
-                        
+
         return $count > 0;
     }
 
-    public function getUsersWithDevice($userId, $uniqueId) {
+    public function getUsersWithDevice($userId, $uniqueId)
+    {
         $user = $this->getDb()->quote($userId);
         $deviceUniqueId = $this->getDb()->quote($uniqueId);
         return $this->getDb()->query("SELECT DISTINCT `user_id` FROM `devices` WHERE `user_id` != {$user} AND `unique_id` = {$deviceUniqueId}")->fetchAll(\PDO::FETCH_COLUMN);
     }
+
+    public function getReincubateAccountByEmail($email)
+    {
+        $account = $this->getDb()->quote($email);
+
+        return $this->getDb()->query("SELECT
+                                            * 
+                                        FROM `reincubate_account` 
+                                        WHERE 
+                                            `email` = {$account} 
+                                        LIMIT 1")->fetch(\PDO::FETCH_ASSOC);
+    }
+
+    public function getReincubateAccount($accountId)
+    {
+        $account = $this->getDb()->quote($accountId);
+
+        return $this->getDb()->query("SELECT
+                                            * 
+                                        FROM `reincubate_account` 
+                                        WHERE 
+                                            `account_id` = {$account} 
+                                        LIMIT 1")->fetch(\PDO::FETCH_ASSOC);
+    }
+
+    public function getReincubateDevice($accountId, $deviceId)
+    {
+        $account = $this->getDb()->quote($accountId);
+        $device = $this->getDb()->quote($deviceId);
+
+        return $this->getDb()->query("SELECT
+                                            * 
+                                        FROM `reincubate_device`
+                                        WHERE 
+                                            `account_id` = {$account} AND
+                                            `device_id` = {$device}
+                                        LIMIT 1")->fetch(\PDO::FETCH_ASSOC);
+    }
+
+    public function createReincubateAccount($accountId, $email, $active = true)
+    {
+        $account = $this->getDb()->quote($accountId);
+        $email = $this->getDb()->quote($email);
+        $active = $this->getDb()->quote((int) $active);
+
+
+        return $this->getDb()->exec("INSERT INTO `reincubate_account` SET
+                                        `account_id` = {$account},
+                                        `email` = {$email},
+                                        `active` = {$active}");
+    }
+
+    public function setReincubateAccountActive($accountId, $active = true)
+    {
+        $account = $this->getDb()->quote($accountId);
+        $active = $this->getDb()->quote((int) $active);
+
+        return $this->getDb()->exec("UPDATE `reincubate_account` SET
+                                            `active` = {$active}
+                                        WHERE
+                                            `account_id` = {$account}");
+    }
     
+    public function createReincubateDevice($accountId, $deviceId, $active = true)
+    {
+        $account = $this->getDb()->quote($accountId);
+        $device = $this->getDb()->quote($deviceId);
+        $active = $this->getDb()->quote((int) $active);
+
+
+        return $this->getDb()->exec("INSERT INTO `reincubate_device` SET
+                                        `account_id` = {$account},
+                                        `device_id` = {$device},
+                                        `active` = {$active}");
+    }
+
+    public function setReincubateDeviceActive($accountId, $deviceId, $active = true)
+    {
+        $account = $this->getDb()->quote($accountId);
+        $device = $this->getDb()->quote($deviceId);
+        $active = $this->getDb()->quote((int) $active);
+
+        return $this->getDb()->exec("UPDATE `reincubate_device` SET
+                                            `active` = {$active}
+                                        WHERE
+                                            `account_id` = {$account} AND
+                                            `device_id` = {$device}
+                                            ");
+    }
+
 }
 
 class DevicesInvalidNetworkException extends \Exception {

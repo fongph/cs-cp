@@ -33,7 +33,7 @@ $di->setShared('mailSender', function() use ($di) {
         $mailSender = new CS\Mail\MailSender(new \CS\Mail\Processor\FileProcessor(ROOT_PATH . 'logs/mailSender.log'));
     } else {
         $queue = GlobalSettings::getQueueConfig();
-        
+
         $processor = new CS\Mail\Processor\QueueProcessor($queue['host'], $queue['port'], $queue['user'], $queue['password'], 'mail');
         $mailSender = new CS\Mail\MailSender($processor);
     }
@@ -63,7 +63,7 @@ $di->setShared('router', function() use($config, $di) {
     $router->add('unlockAccount', new \System\Router\Route('/unlockAccount', array('controller' => 'Index', 'action' => 'unlockAccount', 'public' => true)));
     $router->add('support', new \System\Router\Route('/support', array('controller' => 'Index', 'action' => 'support')));
     $router->add('profile', new \System\Router\Route('/profile', array('controller' => 'Profile', 'action' => 'index')));
-    $router->add('profileICloudPasswordReset', new \System\Router\Regex('/profile/iCloudAccount/:deviceId', array('controller' => 'Profile', 'action' => 'changeICloudPassword'),  array('deviceId' => '.+')));
+    $router->add('profileICloudPasswordReset', new \System\Router\Regex('/profile/iCloudAccount/:deviceId', array('controller' => 'Profile', 'action' => 'changeICloudPassword'), array('deviceId' => '.+')));
     $router->add('profileAssignChoice', new \System\Router\Route('/profile/assign/subscriptions', array('controller' => 'Profile', 'action' => 'assignChoice')));
     $router->add('profileUpgradeConfirm', new \System\Router\Route('/profile/assign/confirm', array('controller' => 'Profile', 'action' => 'upgradeConfirm')));
     $router->add('profileAssignProcess', new \System\Router\Route('/profile/assign/process', array('controller' => 'Profile', 'action' => 'assignProcess')));
@@ -98,8 +98,8 @@ $di->setShared('router', function() use($config, $di) {
     $router->add('videosNoCamera', new \System\Router\Route('/cp/videos/other', array('controller' => 'Videos', 'action' => 'noCamera')));
     $router->add('locationsZones', new \System\Router\Route('/cp/locations/zones', array('controller' => 'Locations', 'action' => 'zones')));
     $router->add('locationsZonesAdd', new \System\Router\Route('/cp/locations/zones/add', array('controller' => 'Locations', 'action' => 'zoneAdd')));
-    $router->add('locationsExport', new \System\Router\Route('/cp/locations/export',array('controller' => 'Locations', 'action' => 'export')));
-    $router->add('locationsCloudLocation', new \System\Router\Route('/cp/locations/cloud',array('controller' => 'Locations', 'action' => 'cloud')));
+    $router->add('locationsExport', new \System\Router\Route('/cp/locations/export', array('controller' => 'Locations', 'action' => 'export')));
+    $router->add('locationsCloudLocation', new \System\Router\Route('/cp/locations/cloud', array('controller' => 'Locations', 'action' => 'cloud')));
 
     if ($di->get('isWizardEnabled')) {
         $router->add('billing', new \System\Router\Route('/subscriptions', array('controller' => 'Billing', 'action' => 'index')));
@@ -161,7 +161,7 @@ $di->setShared('router', function() use($config, $di) {
     $router->add('locationsSetup', new \System\Router\Regex('/cp/locations/setup/:step', array('controller' => 'Locations', 'action' => 'setup'), array('step' => 'init|locationActivation|deviceConnection')));
     $router->add('instagramTab', new \System\Router\Regex('/cp/instagram/:account/:tab', array('controller' => 'Instagram', 'action' => 'tab'), array('account' => '[0-9]+', 'tab' => 'own|friends|commented')));
     $router->add('instagramPost', new \System\Router\Regex('/cp/instagram/:account/post/:post', array('controller' => 'Instagram', 'action' => 'view'), array('account' => '[0-9]+', 'post' => '[0-9]+')));
-    
+
     $router->add('profileMailUnsibscribe', new \System\Router\Regex('/profile/unsubscribe/:type', array('controller' => 'Profile', 'action' => 'mailUnsubscribe', 'public' => true), array('type' => '[^/]+')));
 
     $router->add('directLogin', new \System\Router\Route('/admin/login', array('controller' => 'Index', 'action' => 'directLogin', 'public' => true)));
@@ -177,7 +177,7 @@ $di->setShared('session', function () use ($di) {
     if (strpos($di['config']['domain'], 'https://') === false) {
         $sessionSettings['cookieParams']['secure'] = false;
     }
-    
+
     System\Session::setConfig($sessionSettings);
     if ($di['config']['demo']) {
         System\Session::setSessionHandler(new System\Session\Handler\CookieSessionHandler($di['request']));
@@ -283,7 +283,7 @@ $di->setShared('usersNotesProcessor', function() use ($di) {
 
 $di->setShared('eventManager', function() use ($di) {
     CS\Users\UsersManager::registerListeners($di['db']);
-    
+
     return \EventManager\EventManager::getInstance();
 });
 
@@ -327,6 +327,22 @@ $di->setShared('billingContextualManager', function () use ($di) {
     $billingManager->setGatewaysContainer($di['gatewaysContextualContainer']);
 
     return $billingManager;
+});
+    
+$di->setShared('reincubateClient', function () use ($di) {
+    $reincubateClient = new \Reincubate\ReincubateClient('JqwsiWAUbLXasXgPADaUbzOeQTgfCDHBkChFtXtYWvoohgvprkxqdzwGXmnfQzTg', $di['logger']);
+
+    return $reincubateClient;
+});
+
+$di->setShared('cloudDeviceManager', function () use ($di) {
+    $auth = $di['auth']->getIdentity();
+
+    $devicesModel = new Models\Devices($di);
+    $cloudDeviceManager = new Components\CloudDeviceManager\AppleCloudDeviceManager('http://165.227.142.74:8085', '839df7bc84f206160705dec7730eda74b402b53c', $auth['id'], $devicesModel, 'aasdasdads');
+    //$cloudDeviceManager = new \Components\CloudDeviceManager\ReincubateDeviceManager($auth['id'], $devicesModel, $di['reincubateClient'], $di['chachePool'], $di['chachePool']);
+
+    return $cloudDeviceManager;
 });
 
 $di->set('isTestUser', function($id) use($config) {
