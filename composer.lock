@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "62f548dedb5876431cc66f4fe0f29079",
-    "content-hash": "548aa554c8dc06e49b02aab38841e6d2",
+    "hash": "e7471f03f0bf15a006b1635e854aac7c",
+    "content-hash": "491b1fe1d8d49fc1774cde999bc3e6cf",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
@@ -1080,30 +1080,6 @@
             "time": "2016-10-10 12:19:37"
         },
         {
-            "name": "pumpic/reincubate",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "git@gitlab.dizboard.com:pumpic/reincubate.git",
-                "reference": "3629ef647cb8efcd0a2aa46158e86b25b6118e50"
-            },
-            "require": {
-                "guzzlehttp/guzzle": "~5.0",
-                "monolog/monolog": "^1.22",
-                "php": ">=5.4.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Reincubate\\": "src/"
-                }
-            },
-            "license": [
-                "MIT"
-            ],
-            "time": "2017-05-24 09:46:31"
-        },
-        {
             "name": "ramsey/uuid",
             "version": "3.6.1",
             "source": {
@@ -2017,8 +1993,7 @@
         "boomers/cs-billing": 20,
         "boomers/seller": 20,
         "boomers/cs-icloud": 20,
-        "boomers/cs-queue": 20,
-        "pumpic/reincubate": 20
+        "boomers/cs-queue": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
