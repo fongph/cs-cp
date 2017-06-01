@@ -16,6 +16,8 @@ class CloudDeviceState {
     private $action;
     private $appleId;
     private $applePassword;
+    private $accountId;
+    private $deviceId;
     private $reincubateAccountId;
     private $reincubateDeviceId;
     private $twoFactorAuthEnabled;
@@ -56,6 +58,30 @@ class CloudDeviceState {
         return $this;
     }
 
+    public function getAccountId()
+    {
+        return $this->accountId;
+    }
+
+    public function setAccountId($value)
+    {
+        $this->accountId = $value;
+
+        return $this;
+    }
+
+    public function setDeviceId($value)
+    {
+        $this->deviceId = $value;
+
+        return $this;
+    }
+    
+    public function getDeviceId()
+    {
+        return $this->deviceId;
+    }
+
     public function getReincubateAccountId()
     {
         return $this->reincubateAccountId;
@@ -79,7 +105,7 @@ class CloudDeviceState {
 
         return $this;
     }
-    
+
     public function getTwoFactorAuthEnabled()
     {
         return $this->twoFactorAuthEnabled;

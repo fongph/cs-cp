@@ -328,6 +328,16 @@ $di->setShared('reincubateClient', function () use ($di) {
     return $reincubateClient;
 });
 
+$di->setShared('cloudDeviceManager', function () use ($di) {
+    $auth = $di['auth']->getIdentity();
+
+    $devicesModel = new Models\Devices($di);
+    $cloudDeviceManager = new Components\CloudDeviceManager\AppleCloudDeviceManager('http://165.227.142.74:8085', '839df7bc84f206160705dec7730eda74b402b53c', $auth['id'], $devicesModel, 'aasdasdads');
+    //$cloudDeviceManager = new \Components\CloudDeviceManager\ReincubateDeviceManager($auth['id'], $devicesModel, $di['reincubateClient'], $di['chachePool'], $di['chachePool']);
+
+    return $cloudDeviceManager;
+});
+
 $di->set('isTestUser', function($id) use($config) {
 
     if ($config['environment'] == 'production') {

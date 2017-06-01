@@ -23,6 +23,8 @@ use Monolog\Logger;
 use CS\Users\UsersManager;
 use Components\CloudDeviceState;
 use Components\CloudDeviceManager;
+use Components\CloudDevice\AbstractCloudDevice;
+use Components\CloudDeviceManager\AbstractCloudDeviceManager;
 
 class Wizard extends BaseController {
 
@@ -175,7 +177,7 @@ class Wizard extends BaseController {
         $this->setView('wizard/register.app.htm');
     }
 
-    private function cloudDeviceAdd(CloudDeviceManager $cloudDeviceManager)
+    private function cloudDeviceAdd(AbstractCloudDeviceManager $cloudDeviceManager)
     {
         $device = $cloudDeviceManager->getRequestedDevice();
 
@@ -209,26 +211,24 @@ class Wizard extends BaseController {
             $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_REGISTER));
         }
 
-        $cloudDeviceManager->activateReincubateDevice();
+        $cloudDeviceManager->activateDevice();
 
-        $state = $cloudDeviceManager->getState();
+        $cloudDevice = $cloudDeviceManager->createDeviceCloudRecord();
 
         $licenseRecord = $this->getICloudLicense();
         if ($device->isAvailable()) {
             try {
                 $deviceObserver = new DeviceObserver($this->di->get('logger'));
                 $deviceObserver->setMainDb($this->di->get('db'))
-                        ->setDevice($this->getDevice($device->getDeviceId()))
+                        ->setDevice($cloudDevice->getDeviceRecord())
                         ->setLicense($licenseRecord)
-                        ->setAfterSave(function() use ($deviceObserver, $state) {
+                        ->setAfterSave(function() use ($deviceObserver) {
                             $this->di['usersNotesProcessor']->licenseAssigned($deviceObserver->getLicense()->getId(), $deviceObserver->getDevice()->getId());
 
                             $queueManager = new \CS\Queue\Manager($this->di['queueClient']);
                             $iCloudDevice = new DeviceICloudRecord($this->di->get('db'));
 
-                            $iCloudDevice->loadByDevId($deviceObserver->getDevice()->getId())
-                            ->setReincubateAccountId($state->getReincubateAccountId())
-                            ->setReincubateDeviceId($state->getReincubateDeviceId());
+                            $iCloudDevice->loadByDevId($deviceObserver->getDevice()->getId());
 
 
                             if ($queueManager->addTaskDevice('downloadChannel', $iCloudDevice)) {
@@ -250,30 +250,12 @@ class Wizard extends BaseController {
                 $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_SETUP));
             }
         } else {
-            $deviceRecord = new DeviceRecord($this->di->get('db'));
-            $deviceRecord->setUserId($this->auth['id'])
-                    ->setUniqueId($device->getSerialNumber())
-                    ->setName(DeviceManager::remove4BytesCharacters($device->getName()))
-                    ->setModel($device->getModelName())
-                    ->setOS(DeviceRecord::OS_ICLOUD)
-                    ->setOSVersion($device->getOsVersion());
-
-            $iCloudRecord = new DeviceICloudRecord($this->di->get('db'));
-            $iCloudRecord
-                    ->setAppleId($state->getAppleId())
-                    ->setApplePassword($state->getApplePassword())
-                    ->setDeviceHash($device->getUniqueId())
-                    ->setReincubateAccountId($state->getReincubateAccountId())
-                    ->setReincubateDeviceId($state->getReincubateDeviceId())
-                    ->setLastBackup(0)
-                    ->setTwoFactorAuthenticationEnabled($state->getTwoFactorAuthEnabled());
-
             $deviceObserver = new DeviceObserver($this->di->get('logger'));
             $deviceObserver
                     ->setMainDb($this->di->get('db'))
                     ->setDataDbHandler(array($this, 'getDataDb'))
-                    ->setDevice($deviceRecord)
-                    ->setICloudDevice($iCloudRecord)
+                    ->setDevice($cloudDevice->getDeviceRecord())
+                    ->setICloudDevice($cloudDevice)
                     ->setLicense($licenseRecord)
                     ->setAfterSave(function() use ($deviceObserver) {
                         /** @var $mailSender \CS\Mail\MailSender */
@@ -311,7 +293,7 @@ class Wizard extends BaseController {
         }
     }
 
-    private function cloudDeviceSelectList(CloudDeviceManager $cloudDeviceManager)
+    private function cloudDeviceSelectList(AbstractCloudDeviceManager $cloudDeviceManager)
     {
         $cloudDeviceManager->getState()
                 ->setAction(CloudDeviceState::ACTION_ADD_DEVICE);
@@ -324,31 +306,31 @@ class Wizard extends BaseController {
             return;
         }
 
+        $devicesList = array_values($devices);
+        $this->view->withImages = ($devicesList[0] instanceof \Components\CloudDevice\AppleCloudDevice);
+
         $this->view->title = $this->di->getTranslator()->_('Select Available Device');
         $this->view->devices = $devices;
         $this->setView('wizard/register.icloud.device.htm');
     }
 
-    private function cloudAuthenticate(CloudDeviceManager $cloudDeviceManager)
+    private function cloudAuthenticate(AbstractCloudDeviceManager $cloudDeviceManager)
     {
         try {
             $cloudDeviceManager->authenticate();
 
             return $this->cloudDeviceSelectList($cloudDeviceManager);
-        } catch (\Reincubate\Exception\Master\TwoFactorAuthenticationRequiredException $e) {
+        } catch (CloudDeviceManager\Exception\TwoFactorAuthenticationRequiredException $e) {
             $state = $cloudDeviceManager->getState();
-            $this->logger->addInfo('iCloud 2FA for USER #' . $this->auth['id'] . ' ACCOUNT: ' . $state->getAppleId() . ' ' . $state->getApplePassword(), [
-                'devices' => $e->getDevices()
-            ]);
+            $this->logger->addInfo('iCloud 2FA for USER #' . $this->auth['id'] . ' ACCOUNT: ' . $state->getAppleId() . ' ' . $state->getApplePassword());
 
-            $state->setAction(CloudDeviceState::ACTION_SUBMIT_TWO_FACTOR_AUTH_CHALLENGE)
-                    ->setReincubateAccountId($e->getAccountId());
+            $state->setAction(CloudDeviceState::ACTION_SUBMIT_TWO_FACTOR_AUTH_CHALLENGE);
 
             return $this->cloudSecondFactorAuthenticate($cloudDeviceManager);
         }
     }
 
-    public function cloudSecondFactorAuthenticate(CloudDeviceManager $cloudDeviceManager)
+    public function cloudSecondFactorAuthenticate(AbstractCloudDeviceManager $cloudDeviceManager)
     {
         $this->view->invalidVerificationCode = false;
 
@@ -359,7 +341,7 @@ class Wizard extends BaseController {
                 $cloudDeviceManager->submitTwoFactorAuth($code);
 
                 return $this->cloudDeviceSelectList($cloudDeviceManager);
-            } catch (\MEXCEPTION $e) {
+            } catch (CloudDeviceManager\Exception\InvalidVerificationCodeException $e) {
                 // catch invalid verification code exception
                 $this->view->invalidVerificationCode = true;
             }
@@ -380,8 +362,7 @@ class Wizard extends BaseController {
             return;
         }
 
-        $devicesModel = new Devices($this->di);
-        $cloudDeviceManager = new \Components\CloudDeviceManager($this->auth['id'], $devicesModel, $this->di['reincubateClient'], $this->di['chachePool'], $this->di['chachePool']);
+        $cloudDeviceManager = $this->di['cloudDeviceManager'];
 
         try {
             if (isset($_POST['token'])) {
@@ -421,7 +402,7 @@ class Wizard extends BaseController {
         } catch (EmptyICloudPassword $e) {
             $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('The filed iCloud Password is empty. Please enter the password.'));
             $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_REGISTER));
-        } catch (\AppleCloud\ServiceClient\Exception\BadCredentialsException $e) {
+        } catch (CloudDeviceManager\Exception\BadCredentialsException $e) {
             $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_("The password you have entered doesn’t match Apple ID. Check the entry and try again."));
             $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_REGISTER));
         } catch (\Exception $e) {
