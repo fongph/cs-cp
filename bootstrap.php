@@ -329,11 +329,11 @@ $di->setShared('billingContextualManager', function () use ($di) {
     return $billingManager;
 });
     
-$di->setShared('reincubateClient', function () use ($di) {
-    $reincubateClient = new \Reincubate\ReincubateClient('JqwsiWAUbLXasXgPADaUbzOeQTgfCDHBkChFtXtYWvoohgvprkxqdzwGXmnfQzTg', $di['logger']);
-
-    return $reincubateClient;
-});
+//$di->setShared('reincubateClient', function () use ($di) {
+//    $reincubateClient = new \Reincubate\ReincubateClient('JqwsiWAUbLXasXgPADaUbzOeQTgfCDHBkChFtXtYWvoohgvprkxqdzwGXmnfQzTg', $di['logger']);
+//
+//    return $reincubateClient;
+//});
 
 $di->setShared('cloudDeviceManager', function () use ($di) {
     $auth = $di['auth']->getIdentity();
