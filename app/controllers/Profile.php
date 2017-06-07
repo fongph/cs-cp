@@ -350,10 +350,13 @@ class Profile extends BaseController {
             } catch (CloudDeviceManager\Exception\BadCredentialsException $e) {
                 $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_("The password you have entered doesn’t match Apple ID. Check the entry and try again."));
                 $this->redirect($this->di->getRouter()->getRouteUrl('profileICloudPasswordReset', ['deviceId' => $this->params['deviceId']]));
-//            } catch (\Exception $e) {
-//                $logger->addCritical($e);
-//                $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('Unexpected Error. Please try later or contact us!'));
-//                $this->redirect($this->di->getRouter()->getRouteUrl('profileICloudPasswordReset', ['deviceId' => $this->params['deviceId']]));
+            } catch (CloudDeviceManager\Exception\AccountLockedException $e) {
+                $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_("Your iCloud account has been locked."));
+                $this->redirect($this->di->getRouter()->getRouteUrl('profileICloudPasswordReset', ['deviceId' => $this->params['deviceId']]));
+            } catch (\Exception $e) {
+                $logger->addCritical($e);
+                $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('Unexpected Error. Please try later or contact us!'));
+                $this->redirect($this->di->getRouter()->getRouteUrl('profileICloudPasswordReset', ['deviceId' => $this->params['deviceId']]));
             }
         }
 
