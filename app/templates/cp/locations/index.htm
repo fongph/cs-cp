@@ -484,6 +484,13 @@
                         this.path = [],
 
                         $.each(this.data, function() {
+
+                            if(this.accuracy > 150) {
+                                $('.alert-white').show();
+                                $('.alert-description').show();
+                                $('.fa, .fa-warning, .danger-color').show();
+                            }
+
                             if (self.filter(this)) {
                                 filtered.push(this);
                             }
@@ -492,12 +499,6 @@
                         this.fillTable(filtered);
 
                         $.each(filtered, function(index, value) {
-
-                            if(value.accuracy > 150) {
-                                $('.alert-white').show();
-                                $('.alert-description').show();
-                                $('.fa, .fa-warning, .danger-color').show();
-                            }
 
                             var latLng = new google.maps.LatLng(parseFloat(value.latitude), parseFloat(value.longitude));
 
