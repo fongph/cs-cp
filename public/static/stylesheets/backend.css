@@ -8321,6 +8321,7 @@ body > .cp-menu {
   position: relative;
   left: 5px;
   top: 4px;
+  display: none;
 }
 .cp-menu a span.name:hover,
 .cp-menu a span.name:focus {
