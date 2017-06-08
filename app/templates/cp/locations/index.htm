@@ -476,16 +476,21 @@
 
                         var self = this,
                             markers = [],
-                            filtered = [];
+                            filtered = [],
+                            isAndroidDevice = false;
                         
                         this.clearData();
                         this.getTable().fnClearTable();
-                        
+
+                        if($(".dropdown-toggle").find(".fa-android").length > 0){
+                            isAndroidDevice = true;
+                        }
+
                         this.path = [],
 
                         $.each(this.data, function() {
 
-                            if(this.accuracy > 150) {
+                            if(this.accuracy > 150 && isAndroidDevice) {
                                 $('.alert-white').show();
                                 $('.alert-description').show();
                                 $('.fa, .fa-warning, .danger-color').show();
