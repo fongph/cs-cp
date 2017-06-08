@@ -290,8 +290,17 @@ class Profile extends BaseController {
 
         $cloudRecord->setApplePassword($state->getApplePassword())
                 ->setLastError(0)
-                ->setTwoFactorAuthenticationEnabled($state->getTwoFactorAuthEnabled() ? 1 : 0)
-                ->save();
+                ->setTwoFactorAuthenticationEnabled($state->getTwoFactorAuthEnabled() ? 1 : 0);
+
+        $queueManager = new \CS\Queue\Manager($this->di['queueClient']);
+
+        if ($queueManager->addTaskDevice('downloadChannel', $cloudRecord)) {
+            $cloudRecord->setProcessing(1);
+        } else {
+            $cloudRecord->setLastError($queueManager->getError());
+        }
+
+        $cloudRecord->save();
 
         $locations = new \Models\Cp\Locations($this->di);
         $locations->setFmipDisabled($cloudRecord->getDevId(), false);
