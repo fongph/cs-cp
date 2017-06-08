@@ -402,6 +402,9 @@ class Wizard extends BaseController {
         } catch (EmptyICloudPassword $e) {
             $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('The filed iCloud Password is empty. Please enter the password.'));
             $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_REGISTER));
+        } catch (CloudDeviceManager\Exception\AccountLockedException $e) {
+            $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_("Your iCloud account has been locked."));
+            $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_REGISTER));
         } catch (CloudDeviceManager\Exception\BadCredentialsException $e) {
             $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_("The password you have entered doesn’t match Apple ID. Check the entry and try again."));
             $this->redirect($this->di->getRouter()->getRouteUrl(WizardRouter::STEP_REGISTER));

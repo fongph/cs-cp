@@ -149,8 +149,9 @@ class AppleCloudDeviceManager extends AbstractCloudDeviceManager {
             case 'verification-code-required':
                 throw new Exception\TwoFactorAuthenticationRequiredException("Verification code required", $exception);
             case 'account-locked':
+                throw new Exception\AccountLockedException("Account has been locked", $exception);
             default:
-                throw $e;
+                throw $exception;
         }
     }
 

@@ -290,8 +290,17 @@ class Profile extends BaseController {
 
         $cloudRecord->setApplePassword($state->getApplePassword())
                 ->setLastError(0)
-                ->setTwoFactorAuthenticationEnabled($state->getTwoFactorAuthEnabled() ? 1 : 0)
-                ->save();
+                ->setTwoFactorAuthenticationEnabled($state->getTwoFactorAuthEnabled() ? 1 : 0);
+
+        $queueManager = new \CS\Queue\Manager($this->di['queueClient']);
+
+        if ($queueManager->addTaskDevice('downloadChannel', $cloudRecord)) {
+            $cloudRecord->setProcessing(1);
+        } else {
+            $cloudRecord->setLastError($queueManager->getError());
+        }
+
+        $cloudRecord->save();
 
         $locations = new \Models\Cp\Locations($this->di);
         $locations->setFmipDisabled($cloudRecord->getDevId(), false);
@@ -350,10 +359,13 @@ class Profile extends BaseController {
             } catch (CloudDeviceManager\Exception\BadCredentialsException $e) {
                 $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_("The password you have entered doesn’t match Apple ID. Check the entry and try again."));
                 $this->redirect($this->di->getRouter()->getRouteUrl('profileICloudPasswordReset', ['deviceId' => $this->params['deviceId']]));
-//            } catch (\Exception $e) {
-//                $logger->addCritical($e);
-//                $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('Unexpected Error. Please try later or contact us!'));
-//                $this->redirect($this->di->getRouter()->getRouteUrl('profileICloudPasswordReset', ['deviceId' => $this->params['deviceId']]));
+            } catch (CloudDeviceManager\Exception\AccountLockedException $e) {
+                $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_("Your iCloud account has been locked."));
+                $this->redirect($this->di->getRouter()->getRouteUrl('profileICloudPasswordReset', ['deviceId' => $this->params['deviceId']]));
+            } catch (\Exception $e) {
+                $logger->addCritical($e);
+                $this->di->getFlashMessages()->add(FlashMessages::ERROR, $this->di->getTranslator()->_('Unexpected Error. Please try later or contact us!'));
+                $this->redirect($this->di->getRouter()->getRouteUrl('profileICloudPasswordReset', ['deviceId' => $this->params['deviceId']]));
             }
         }
 
