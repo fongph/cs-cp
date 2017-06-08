@@ -8293,9 +8293,6 @@ body {
 .alert-description {
   display: none;
 }
-
-
-
 /* Components */
 /*
 * Left menu inside cp
@@ -8324,9 +8321,7 @@ body > .cp-menu {
   position: relative;
   left: 5px;
   top: 4px;
-  display: none;
 }
-
 .cp-menu a span.name:hover,
 .cp-menu a span.name:focus {
   text-decoration: underline;
