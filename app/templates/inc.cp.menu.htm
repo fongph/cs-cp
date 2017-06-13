@@ -30,12 +30,12 @@
             <i class="menu-{$menu.class}" data-module="{$menu.class}"></i>
             <div class="name-wrapper">
                 {if isset($moduelesAvailability[$menu['class']])}
-                {if $menu.name == "Locations"}
-                <span class="name">{$menu.name}</span><span class="asterisk asterisk-{$moduelesAvailability[$menu['class']]}">*</span><i class="fa fa-warning danger-color"></i>
-                {else}
+                    {if $menu.name == "Locations"}
+                        <span class="name">{$menu.name}</span><span class="asterisk asterisk-{$moduelesAvailability[$menu['class']]}">*</span><i class="fa fa-warning danger-color"></i>
+                    {else}
                     <span class="name">{$menu.name}</span><span class="asterisk asterisk-{$moduelesAvailability[$menu['class']]}">*</span>
-                {/if}
-                <span class="name">{$menu.name}</span><span class="asterisk asterisk-{$moduelesAvailability[$menu['class']]}">*</span>
+                    {/if}
+                <!--span class="name">{$menu.name}</span><span class="asterisk asterisk-{$moduelesAvailability[$menu['class']]}">*</span-->
                 {else}
                     {if $menu.name == "Locations"}
                         <span class="name">{$menu.name}</span> <i class="fa fa-warning danger-color"></i>
