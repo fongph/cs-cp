@@ -338,7 +338,7 @@ class Locations extends BaseModel {
         foreach ($cloudDeviceManager->getDevicesLocations() as $item) {
             $batteryLevel = 'Unknown';
             
-            if (is_numeric($item['batteryLevel'])) {
+            if ($item['batteryStatus'] != 'Unknown') {
                 $batteryLevel = ceil($item['batteryLevel'] * 100);
             }
             
