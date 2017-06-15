@@ -339,7 +339,7 @@ class Locations extends BaseModel {
             $batteryLevel = 'Unknown';
             
             if ($item['batteryStatus'] != 'Unknown') {
-                $batteryLevel = ceil($item['batteryLevel'] * 100);
+                $batteryLevel = ceil($item['batteryLevel'] * 100) . '%';
             }
             
             array_push($result, array(
