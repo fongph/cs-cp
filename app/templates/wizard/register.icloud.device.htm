@@ -18,6 +18,10 @@
                             <span class="visible-xs">{$di.t->_('Name')}</span>
                         </th>
                         <th>
+                            <span class="hidden-xs">{$di.t->_('Device Model')}</span>
+                            <span class="visible-xs">{$di.t->_('Model')}</span>
+                        </th>
+                        <th>
                             <span class="hidden-xs">{$di.t->_('Serial number')}</span>
                             <span class="visible-xs">{$di.t->_('Serial')}</span>
                         </th>
@@ -37,6 +41,7 @@
                         <th>
                             <span class="hidden-xs">{$di.t->_('Device Model')}</span>
                             <span class="visible-xs">{$di.t->_('Model')}</span>
+                        </th>
                         <th>
                             <span class="hidden-xs">{$di.t->_('Platform (Operating System)')}</span>
                             <span class="visible-xs">{$di.t->_('OS')}</span>
@@ -68,6 +73,7 @@
                         {if $withImages}
                         <td style="text-align: center;"><img src="{$device->getImage()}" alt="" /></td>
                         <td>{$device->getName()|e}</td>
+                        <td>{$device->getModelName()|e}</td>
                         <td>{$device->getSerialNumber()}</td>
                         <td>{if $device->getBackupSize()}{round($device->getBackupSize() / 1024 / 1024, 2)} Mb{else}-{/if}</td>
                         <td>{if $device->getLastBackupTimestamp() > 0}

@@ -7,6 +7,7 @@ use Models\Modules,
     CS\ICloud\Locations as LocationsService,
     Models\Cp\Zones,
     System\FlashMessages;
+use Components\CloudDeviceManager\AppleCloudDeviceManager;
 
 class Locations extends BaseModuleController {
 
@@ -146,14 +147,14 @@ class Locations extends BaseModuleController {
 
     private function iCloud(\Models\Cp\Locations $locations)
     {
-        $credential = $locations->getDeviceLocationServiceCredentials($this->di['devId']);
+        $credentials = $locations->getDeviceLocationServiceCredentials($this->di['devId']);
 
         if ($this->getRequest()->isAjax() && $this->getRequest()->hasGet('currentLocation')) {
-            $data = $locations->getCloudLocation($this->auth['id'], $this->di['devId'], $credential);
+            $data = $locations->getCloudLocation($this->auth['id'], $this->di['devId'], $credentials);
             $this->makeJSONResponse($data);
         }
 
-        if ($credential === false) {
+        if ($credentials === false) {
             $this->redirect($this->di->getRouter()->getRouteUrl('locationsSetup', array('step' => 'init')));
         }
     }
@@ -317,8 +318,8 @@ class Locations extends BaseModuleController {
             $locations = new \Models\Cp\Locations($this->di);
 
             try {
-                $result = $locations->autoAssigniCloudDevice($this->di['devId'], $this->auth['id']);
-            } catch (\AppleCloud\ServiceClient\Exception\FindMyPhoneApplication\FindMyPhoneApplicationAuthException $e) {
+                $locations->autoAssigniCloudDevice($this->di['devId'], $this->auth['id']);
+            } catch (\Components\CloudDeviceManager\Exception\BadCredentialsException $e) {
                 return [
                     'success' => false,
                     'message' => $this->di['t']->_('iCloud Authorization Error. Please %1$schange the password%2$s and try again.', [
@@ -326,9 +327,7 @@ class Locations extends BaseModuleController {
                         '</a>'
                     ])
                 ];
-            } catch (\AppleCloud\ServiceClient\Exception\FindMyPhoneApplication\FindMyPhoneApplicationAccountLockedException $e) {
-                $locations->setFmipDisabled($this->di['devId'], true);
-
+            } catch (\Components\CloudDeviceManager\Exception\AccountLockedException $e) {
                 return [
                     'success' => false,
                     'message' => $this->di['t']->_('Find My iPhone Authentication error. To continue using "Locations" feature, please, unblock the target Apple ID and %1$svalidate iCloud account in our system%2$s.', [
@@ -336,29 +335,28 @@ class Locations extends BaseModuleController {
                         '</a>'
                     ])
                 ];
-            } catch (\Exception $e) {
-                $this->getDI()->get('logger')->addError('iCloud location autoasign fail', array('exception' => $e));
-                $this->makeJSONResponse(array(
-                    'success' => false,
-                    'message' => $this->di['t']->_('Undefined error! Please %1$scontact support%2$s!', array(
-                        '<a href="' . $this->di->getRouter()->getRouteUrl('support') . '">',
-                        '</a>'
-                    ))
-                ));
-            }
-
-            if ($result) {
-                $this->getDI()->getFlashMessages()->add(FlashMessages::SUCCESS, $this->di['t']->_('Congratulations! The device was successfully connected.'));
-
-                $this->makeJSONResponse(array(
-                    'success' => true,
-                    'redirectUrl' => $this->di['router']->getRouteUrl(Modules::LOCATIONS)
-                ));
-            } else {
+            } catch (\Components\CloudDeviceManager\Exception\DeviceLocationNotDetectedException $e) {
                 $this->makeJSONResponse(array(
                     'success' => false
                 ));
+            } catch (\Exception $e) {
+                $this->getDI()->get('logger')->addError('iCloud location autoasign fail', array('exception' => $e));
+
+                $this->makeJSONResponse([
+                    'success' => false,
+                    'message' => $this->di['t']->_('Undefined error! Please %1$scontact support%2$s!', [
+                        '<a href="' . $this->di->getRouter()->getRouteUrl('support') . '">',
+                        '</a>'
+                    ])
+                ]);
             }
+
+            $this->getDI()->getFlashMessages()->add(FlashMessages::SUCCESS, $this->di['t']->_('Congratulations! The device was successfully connected.'));
+
+            $this->makeJSONResponse([
+                'success' => true,
+                'redirectUrl' => $this->di['router']->getRouteUrl(Modules::LOCATIONS)
+            ]);
         }
 
         $this->view->step = 'init';
@@ -383,7 +381,7 @@ class Locations extends BaseModuleController {
                         'redirectUrl' => $this->di['router']->getRouteUrl(Modules::LOCATIONS)
                     ];
                 } else {
-                    $devices = LocationsService::getDevicesList($credentials['apple_id'], $credentials['apple_password']);
+                    $devices = $locations->getDevicesList($credentials['apple_id'], $credentials['apple_password']);
 
                     if (count($devices)) {
                         $data = [
@@ -402,7 +400,7 @@ class Locations extends BaseModuleController {
                         ];
                     }
                 }
-            } catch (\AppleCloud\ServiceClient\Exception\FindMyPhoneApplication\FindMyPhoneApplicationAuthException $e) {
+            } catch (\Components\CloudDeviceManager\Exception\BadCredentialsException $e) {
                 $data = array(
                     'success' => false,
                     'message' => $this->di['t']->_('iCloud Authorization Error. Please %1$supdate the password in our system%2$s and try again.', array(
@@ -410,7 +408,7 @@ class Locations extends BaseModuleController {
                         '</a>'
                     ))
                 );
-            } catch (\AppleCloud\ServiceClient\Exception\FindMyPhoneApplication\FindMyPhoneApplicationAccountLockedException $e) {
+            } catch (\Components\CloudDeviceManager\Exception\AccountLockedException $e) {
                 $locations->setFmipDisabled($this->di['devId'], true);
 
                 return [

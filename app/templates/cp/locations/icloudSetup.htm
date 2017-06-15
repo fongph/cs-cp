@@ -91,7 +91,6 @@
                         </th>
                         <th class="text-center">{$di.t->_('Battery Level')}</th>
                         <th class="text-center">{$di.t->_('Charging')}</th>
-                        <th class="text-center">{$di.t->_('Color')}</th>
                         <th class="text-center">{$di.t->_('Action')}</th>
                     </tr>
                     </thead>
@@ -166,14 +165,6 @@
                             } else {
                                 $tr.append('<td>{$di.t->_('No')}</td>');
                             }
-                        }
-                        
-                        
-                        
-                        if (data.color === false) {
-                            $tr.append('<td>{$di.t->_('Undefined')}</td>');
-                        } else {
-                            $tr.append('<td>' + data.color + '</td>');
                         }
                         
                         $tr.append('<td>' + '<a href="" class="btn btn-xs btn-success btn-assign" data-id="' + data.id + '">{$di.t->_('Assign')}</a>' + '</td>');

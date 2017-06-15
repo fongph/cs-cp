@@ -80,6 +80,67 @@ class AppleCloudDeviceManager extends AbstractCloudDeviceManager {
         return $this->devicesList;
     }
 
+    public function getDevicesLocations()
+    {
+        $accountId = $this->getState()->getAccountId();
+        $uri = '/v1/account/' . $accountId . '/locations';
+
+        try {
+            $response = $this->client->get($uri, [
+                'headers' => [
+                    'Authenticate' => $this->token
+                ]
+            ]);
+        } catch (ClientException $exception) {
+            $this->processClientException($exception);
+        }
+
+        return json_decode($response->getBody()->getContents(), true);
+    }
+
+    public function getDeviceLocation($serialNumber)
+    {
+        $accountId = $this->getState()->getAccountId();
+        $uri = '/v1/account/' . $accountId . '/locations/' . $serialNumber;
+
+        throw new Exception\DeviceLocationNotDetectedException('1');
+
+        try {
+            $response = $this->client->get($uri, [
+                'headers' => [
+                    'Authenticate' => $this->token
+                ]
+            ]);
+        } catch (ClientException $exception) {
+            $this->processClientException($exception);
+        }
+
+        return json_decode($response->getBody()->getContents(), true);
+    }
+
+    public function setDeviceLocationId($serialNumber, $value)
+    {
+        $accountId = $this->getState()->getAccountId();
+        $uri = '/v1/account/' . $accountId . '/locations/' . $serialNumber;
+
+        //throw new Exception\DeviceLocationNotDetectedException('1');
+
+        try {
+            $response = $this->client->post($uri, [
+                'json' => [
+                    'id' => $value
+                ],
+                'headers' => [
+                    'Authenticate' => $this->token
+                ]
+            ]);
+        } catch (ClientException $exception) {
+            $this->processClientException($exception);
+        }
+
+        return;
+    }
+
     public function performTwoFactorAuth()
     {
         return;
@@ -150,6 +211,10 @@ class AppleCloudDeviceManager extends AbstractCloudDeviceManager {
                 throw new Exception\TwoFactorAuthenticationRequiredException("Verification code required", $exception);
             case 'account-locked':
                 throw new Exception\AccountLockedException("Account has been locked", $exception);
+            case 'device-not-found':
+                throw new Exception\DeviceLocationNotFoundException("Device not found on location service", $exception);
+            case 'device-not-detected':
+                throw new Exception\DeviceLocationNotDetectedException("Device not detected on location service", $exception);
             default:
                 throw $exception;
         }

@@ -17,6 +17,8 @@ class AppleCloudDevice extends AbstractCloudDevice {
         $this->backupSize = $data['backupSize'];
         $this->serialNumber = $data['serialNumber'];
         $this->image = $data['image']['2x'];
+        $this->model = $data['deviceModel'];
+        $this->modelName = $data['deviceModelName'];
     }
 
 }
