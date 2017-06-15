@@ -103,8 +103,6 @@ class AppleCloudDeviceManager extends AbstractCloudDeviceManager {
         $accountId = $this->getState()->getAccountId();
         $uri = '/v1/account/' . $accountId . '/locations/' . $serialNumber;
 
-        throw new Exception\DeviceLocationNotDetectedException('1');
-
         try {
             $response = $this->client->get($uri, [
                 'headers' => [
