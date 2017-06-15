@@ -413,7 +413,15 @@ class Locations extends BaseModel {
         } catch (\Components\CloudDeviceManager\Exception\BadCredentialsException $e) {
             return [
                 'success' => false,
-                'message' => $this->di['t']->_('iCloud Authorization Error. Please %1$schange the password%2$s and try again.', [
+                'message' => $this->di['t']->_('iCloud Authorization Error. Please %1$supdate the password in our system%2$s and try again.', [
+                    '<a href="/profile/iCloudAccount/' . $this->di['devId'] . '">',
+                    '</a>'
+                ])
+            ];
+        } catch (\Components\CloudDeviceManager\Exception\TwoFactorAuthenticationRequiredException $e) {
+            return [
+                'success' => false,
+                'message' => $this->di['t']->_('iCloud Authorization Error. Please %1$supdate the password in our system%2$s and try again.', [
                     '<a href="/profile/iCloudAccount/' . $this->di['devId'] . '">',
                     '</a>'
                 ])
