@@ -65,7 +65,7 @@
         "boomers/seller": "dev-master",
         "boomers/cs-icloud": "dev-master",
         "boomers/cs-queue": "dev-master",
-        "aws/aws-sdk-php": "2.*",
+        "aws/aws-sdk-php": "3.*",
         "sabre/vobject": "^3.4",
         "phpoffice/phpexcel": "^1.8",
         "symfony/debug": "~2.0"
