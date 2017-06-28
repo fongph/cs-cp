@@ -1480,16 +1480,16 @@
         },
         {
             "name": "rastor/system",
-            "version": "0.5.4.14",
+            "version": "0.5.4.15",
             "source": {
                 "type": "git",
                 "url": "https://github.com/oRastor/system.git",
-                "reference": "9a3a8c27cbebad51912b7bd36e5a533c9f4cb86c"
+                "reference": "735dc766b4d23399f242a7b5c6cbc53e13a0fa3a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/oRastor/system/zipball/9a3a8c27cbebad51912b7bd36e5a533c9f4cb86c",
-                "reference": "9a3a8c27cbebad51912b7bd36e5a533c9f4cb86c",
+                "url": "https://api.github.com/repos/oRastor/system/zipball/735dc766b4d23399f242a7b5c6cbc53e13a0fa3a",
+                "reference": "735dc766b4d23399f242a7b5c6cbc53e13a0fa3a",
                 "shasum": ""
             },
             "require": {
@@ -1519,7 +1519,7 @@
                     "homepage": "http://rastor.name"
                 }
             ],
-            "time": "2017-06-28T09:46:56+00:00"
+            "time": "2017-06-28T12:06:09+00:00"
         },
         {
             "name": "react/promise",
