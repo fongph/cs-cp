@@ -201,7 +201,7 @@
                                         {elseif $iCloudRecord.last_error == 1 || $iCloudRecord.last_error == 6}
                                             {$di.t->_('Authentication error / failed. Please, %svalidate iCloud account in our system%s.', ['<a href="' ~ $di->getRouter()->getRouteUri("profileICloudPasswordReset", ['deviceId' => $di['devId']]) ~ '">', '</a>'])}
                                         {elseif $iCloudRecord.last_error == 3}
-                                            {$di.t->_('Please, %svalidate your target Apple ID credentials%s to receive updates, ['<a href="' ~ $di->getRouter()->getRouteUri("profileICloudPasswordReset", ['deviceId' => $di['devId']]) ~ '">', '</a>'])}
+                                            {$di.t->_('Please, %svalidate your target Apple ID credentials%s to receive updates', ['<a href="' ~ $di->getRouter()->getRouteUri("profileICloudPasswordReset", ['deviceId' => $di['devId']]) ~ '">', '</a>'])}
                                         {elseif $iCloudRecord.last_error == 10}
                                             {$di.t->_('Authentication error. Please, unblock the target Apple ID and %svalidate iCloud account in our system%s.', ['<a href="' ~ $di->getRouter()->getRouteUri("profileICloudPasswordReset", ['deviceId' => $di['devId']]) ~ '">', '</a>'])}    
                                         {elseif $iCloudRecord.last_error > 0 && $iCloudRecord.last_error < 100}
