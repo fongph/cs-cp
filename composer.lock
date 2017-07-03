@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "e7471f03f0bf15a006b1635e854aac7c",
-    "content-hash": "491b1fe1d8d49fc1774cde999bc3e6cf",
+    "hash": "f897b0dcfab3cc47ac643c58fbb57d3c",
+    "content-hash": "17ff241f94e9493d722830175ab7a184",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
@@ -380,37 +380,41 @@
         },
         {
             "name": "filp/whoops",
-            "version": "1.1.10",
+            "version": "2.1.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/filp/whoops.git",
-                "reference": "72538eeb70bbfb11964412a3d098d109efd012f7"
+                "reference": "b238974e1c7cc1859b0c16ddc1c02ecb70ecc07f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/filp/whoops/zipball/72538eeb70bbfb11964412a3d098d109efd012f7",
-                "reference": "72538eeb70bbfb11964412a3d098d109efd012f7",
+                "url": "https://api.github.com/repos/filp/whoops/zipball/b238974e1c7cc1859b0c16ddc1c02ecb70ecc07f",
+                "reference": "b238974e1c7cc1859b0c16ddc1c02ecb70ecc07f",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.0"
+                "php": "^5.5.9 || ^7.0",
+                "psr/log": "^1.0.1"
             },
             "require-dev": {
-                "mockery/mockery": "0.9.*"
+                "mockery/mockery": "0.9.*",
+                "phpunit/phpunit": "^4.8 || ^5.0",
+                "symfony/var-dumper": "^2.6 || ^3.0"
+            },
+            "suggest": {
+                "symfony/var-dumper": "Pretty print complex values better with var-dumper available",
+                "whoops/soap": "Formats errors as SOAP responses"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.2-dev"
+                    "dev-master": "2.0-dev"
                 }
             },
             "autoload": {
-                "psr-0": {
-                    "Whoops": "src/"
-                },
-                "classmap": [
-                    "src/deprecated"
-                ]
+                "psr-4": {
+                    "Whoops\\": "src/Whoops/"
+                }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -424,17 +428,16 @@
                 }
             ],
             "description": "php error handling for cool kids",
-            "homepage": "https://github.com/filp/whoops",
+            "homepage": "https://filp.github.io/whoops/",
             "keywords": [
                 "error",
                 "exception",
                 "handling",
                 "library",
-                "silex-provider",
                 "whoops",
                 "zf2"
             ],
-            "time": "2015-06-29 05:42:04"
+            "time": "2017-06-03 18:33:07"
         },
         {
             "name": "guzzle/guzzle",
@@ -742,16 +745,16 @@
         },
         {
             "name": "monolog/monolog",
-            "version": "1.22.1",
+            "version": "1.23.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Seldaek/monolog.git",
-                "reference": "1e044bc4b34e91743943479f1be7a1d5eb93add0"
+                "reference": "fd8c787753b3a2ad11bc60c063cff1358a32a3b4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/1e044bc4b34e91743943479f1be7a1d5eb93add0",
-                "reference": "1e044bc4b34e91743943479f1be7a1d5eb93add0",
+                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/fd8c787753b3a2ad11bc60c063cff1358a32a3b4",
+                "reference": "fd8c787753b3a2ad11bc60c063cff1358a32a3b4",
                 "shasum": ""
             },
             "require": {
@@ -772,7 +775,7 @@
                 "phpunit/phpunit-mock-objects": "2.3.0",
                 "ruflin/elastica": ">=0.90 <3.0",
                 "sentry/sentry": "^0.13",
-                "swiftmailer/swiftmailer": "~5.3"
+                "swiftmailer/swiftmailer": "^5.3|^6.0"
             },
             "suggest": {
                 "aws/aws-sdk-php": "Allow sending log messages to AWS services like DynamoDB",
@@ -816,7 +819,7 @@
                 "logging",
                 "psr-3"
             ],
-            "time": "2017-03-13 07:08:03"
+            "time": "2017-06-19 01:22:40"
         },
         {
             "name": "paragonie/random_compat",
@@ -1336,16 +1339,16 @@
         },
         {
             "name": "rastor/system",
-            "version": "0.5.4.11",
+            "version": "0.5.4.15",
             "source": {
                 "type": "git",
                 "url": "https://github.com/oRastor/system.git",
-                "reference": "eded608b4afcc39bcfa87476754abe35cb5c6046"
+                "reference": "735dc766b4d23399f242a7b5c6cbc53e13a0fa3a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/oRastor/system/zipball/eded608b4afcc39bcfa87476754abe35cb5c6046",
-                "reference": "eded608b4afcc39bcfa87476754abe35cb5c6046",
+                "url": "https://api.github.com/repos/oRastor/system/zipball/735dc766b4d23399f242a7b5c6cbc53e13a0fa3a",
+                "reference": "735dc766b4d23399f242a7b5c6cbc53e13a0fa3a",
                 "shasum": ""
             },
             "require": {
@@ -1375,7 +1378,7 @@
                     "homepage": "http://rastor.name"
                 }
             ],
-            "time": "2015-03-10 07:33:18"
+            "time": "2017-06-28 12:06:09"
         },
         {
             "name": "react/promise",
@@ -1535,16 +1538,16 @@
         },
         {
             "name": "swarrot/swarrot",
-            "version": "v2.3.0",
+            "version": "v2.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/swarrot/swarrot.git",
-                "reference": "52d0ef764fdd0dc934cab1077822b6c3f08d8051"
+                "reference": "97451c6fda90f89dbf3e8e505ea4657ea743c727"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/swarrot/swarrot/zipball/52d0ef764fdd0dc934cab1077822b6c3f08d8051",
-                "reference": "52d0ef764fdd0dc934cab1077822b6c3f08d8051",
+                "url": "https://api.github.com/repos/swarrot/swarrot/zipball/97451c6fda90f89dbf3e8e505ea4657ea743c727",
+                "reference": "97451c6fda90f89dbf3e8e505ea4657ea743c727",
                 "shasum": ""
             },
             "require": {
@@ -1568,7 +1571,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.4.x-dev"
+                    "dev-master": "2.5.x-dev"
                 }
             },
             "autoload": {
@@ -1593,7 +1596,7 @@
                 "swarrot",
                 "worker"
             ],
-            "time": "2016-12-28 14:53:53"
+            "time": "2017-06-26 12:50:51"
         },
         {
             "name": "symfony/console",

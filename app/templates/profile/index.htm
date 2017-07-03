@@ -194,6 +194,8 @@
                                         {$di.t->_('Awaiting New Data Upload')}
                                     {elseif $device.last_error == 1 || $device.last_error == 6}
                                         {$di.t->_('Authentication error / failed. Please, %svalidate iCloud account in our system%s.', ['<a href="' ~ $di->getRouter()->getRouteUri("profileICloudPasswordReset", ['deviceId' => $device.device_id]) ~ '">', '</a>'])}
+                                    {elseif $device.last_error == 3}
+                                        {$di.t->_('Please, %svalidate your target Apple ID credentials%s to receive updates, ['<a href="' ~ $di->getRouter()->getRouteUri("profileICloudPasswordReset", ['deviceId' => $device.device_id]) ~ '">', '</a>'])}
                                     {elseif $device.last_error == 10}
                                         {$di.t->_('Authentication error. Please, unblock the target Apple ID and %svalidate iCloud account in our system%s.', ['<a href="' ~ $di->getRouter()->getRouteUri("profileICloudPasswordReset", ['deviceId' => $device.device_id]) ~ '">', '</a>'])}    
                                     {elseif $device.last_error && $device.last_error < 100}
