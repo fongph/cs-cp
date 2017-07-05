@@ -472,7 +472,7 @@
 
                         $('.alert-white').hide();
                         $('.alert-description').hide();
-                        $('.fa, .fa-warning, .danger-color').hide();
+                        $('.fa-warning, .danger-color').hide();
 
                         var self = this,
                             markers = [],
@@ -493,7 +493,7 @@
                             if(this.accuracy > 150 && isAndroidDevice) {
                                 $('.alert-white').show();
                                 $('.alert-description').show();
-                                $('.fa, .fa-warning, .danger-color').show();
+                                $('.fa-warning, .danger-color').show();
                             }
 
                             if (self.filter(this)) {
