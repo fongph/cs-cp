@@ -320,29 +320,29 @@ class Locations extends BaseModuleController {
             try {
                 $locations->autoAssigniCloudDevice($this->di['devId'], $this->auth['id']);
             } catch (\Components\CloudDeviceManager\Exception\BadCredentialsException $e) {
-                return [
+                $this->makeJSONResponse([
                     'success' => false,
                     'message' => $this->di['t']->_('iCloud Authorization Error. Please %1$supdate the password in our system%2$s and try again.', [
                         '<a href="/profile/iCloudPassword/' . $this->di['devId'] . '">',
                         '</a>'
                     ])
-                ];
+                ]);
             } catch (\Components\CloudDeviceManager\Exception\TwoFactorAuthenticationRequiredException $e) {
-                return [
+                $this->makeJSONResponse([
                     'success' => false,
                     'message' => $this->di['t']->_('iCloud Authorization Error. Please %1$supdate the password in our system%2$s and try again.', [
                         '<a href="/profile/iCloudPassword/' . $this->di['devId'] . '">',
                         '</a>'
                     ])
-                ];
+                ]);
             } catch (\Components\CloudDeviceManager\Exception\AccountLockedException $e) {
-                return [
+                $this->makeJSONResponse([
                     'success' => false,
                     'message' => $this->di['t']->_('Find My iPhone Authentication error. To continue using "Locations" feature, please, unblock the target Apple ID and %1$svalidate iCloud account in our system%2$s.', [
                         '<a href="/profile/iCloudPassword/' . $this->di['devId'] . '">',
                         '</a>'
                     ])
-                ];
+                ]);
             } catch (\Components\CloudDeviceManager\Exception\DeviceLocationNotDetectedException $e) {
                 $this->makeJSONResponse(array(
                     'success' => false
