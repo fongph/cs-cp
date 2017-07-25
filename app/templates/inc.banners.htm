@@ -138,7 +138,7 @@
             <span>Smartphone Monitoring App</span>
             <ul>
                 {if $di.devicesList[$di.devId].os == 'icloud'}
-                <li><i class="fa fa-apple"></i> <b>iOS</b> 6.0 - 10.3.2 (iCloud)</li>
+                <li><i class="fa fa-apple"></i> <b>iOS</b> 6.0 - 10.3.3 (iCloud)</li>
                 {elseif $di.devicesList[$di.devId].os == 'android'}
                 <li><i class="fa fa-android"></i> <b>Android</b> 2.2 - 6.0.1</li>
                 {elseif $di.devicesList[$di.devId].os == 'ios'}
@@ -152,8 +152,8 @@
             <a href="https://pumpic.com/store.html" class="btn banner-btn" id="demo-banner-button">Buy Now</a>
             {elseif $di.devicesList[$di.devId].os == 'android'}
             <a href="https://pumpic.com/store.html#android" class="btn banner-btn" id="demo-banner-button">Buy Now</a>
-            {elseif $di.devicesList[$di.devId].os == 'ios'}
-            <a href="https://pumpic.com/store.html#jailbreak" class="btn banner-btn" id="demo-banner-button">Buy Now</a>
+            {else}
+            <a href="https://pumpic.com/store.html" class="btn banner-btn" id="demo-banner-button">Buy Now</a>
             {/if}
         </div>
     </div>
