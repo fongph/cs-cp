@@ -48,7 +48,7 @@ class Billing extends \System\Model
         $select = "SELECT 
             lic.`id`, p.`name`, p.`id` as p_id, lic.`price`, lic.`currency`, lic.`amount`, lic.`price_regular`,
             lic.`activation_date`, lic.`expiration_date`, lic.`status`,
-            d.`id` `deviceId`,
+            d.`id` `deviceId`, p.`code_fastspring`,
             d.`name` `device`,
             IF(dlim.`id` IS NULL, lim.`sms`, dlim.`sms`) `sms`,
             IF(dlim.`id` IS NULL, lim.`call`, dlim.`call`) `call`,
@@ -73,16 +73,13 @@ class Billing extends \System\Model
                     callsl.`product_type` = 'option' AND
                     callslim.call = {$unlimitedValue}
             ) as `calls_expire_date`,
-                CASE WHEN p.`group` LIKE '%icloud%' THEN 'icloud'
-                    WHEN p.`group` LIKE '%jailbreak%' THEN 'ios'
-                    WHEN p.`group` LIKE '%android%' THEN 'android'
+                CASE WHEN p.`group` LIKE 'ios-icloud%' THEN 'icloud' 
+                  WHEN p.`group` LIKE 'ios-jailbreak%' THEN 'ios'
+                  WHEN p.`group` LIKE 'android-%' THEN 'android'
                     ELSE 'no' 
                 END AS 'platform',
-                p.code_fastspring,
-                CASE WHEN p.`code_fastspring` LIKE 'pumpic-basic-%m-%' THEN 'basic'
-                WHEN p.`code_fastspring` LIKE 'pumpic-android-%m-basic' THEN 'basic'
+                CASE WHEN p.`code_fastspring`LIKE '%pumpic%basic%' AND p.`group` LIKE 'android-basic%' AND p.`limitation_id` NOT IN (4,5) THEN 'basic'
                    WHEN p.`code_fastspring` LIKE '%pumpic-%-1m%' THEN 'premium-1m'
-                   WHEN p.`code_fastspring` LIKE '%pumpic-%-7d-%' THEN 'period-7d'
                    ELSE '-' 
                  END AS 'product_version',
              (SELECT id 
@@ -108,7 +105,7 @@ class Billing extends \System\Model
         }
 
         $query = "{$select} {$fromWhere}" . " LIMIT {$params['start']}, {$params['length']}";
-//        echo $query;
+//        echo $query;die;
         $result = array(
             'aaData' => $this->getDb()->query($query)->fetchAll(\PDO::FETCH_ASSOC)
         );

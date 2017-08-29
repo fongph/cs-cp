@@ -9,19 +9,23 @@
     "packages": [
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.31.0",
+            "version": "3.35.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "21480f1ba2b7a329241f47d3042e9c9ad06e8e5e"
+                "reference": "e9691180888d2679b24cbad1f805e48aadd1a346"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/21480f1ba2b7a329241f47d3042e9c9ad06e8e5e",
-                "reference": "21480f1ba2b7a329241f47d3042e9c9ad06e8e5e",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/e9691180888d2679b24cbad1f805e48aadd1a346",
+                "reference": "e9691180888d2679b24cbad1f805e48aadd1a346",
                 "shasum": ""
             },
             "require": {
+                "ext-json": "*",
+                "ext-pcre": "*",
+                "ext-simplexml": "*",
+                "ext-spl": "*",
                 "guzzlehttp/guzzle": "^5.3.1|^6.2.1",
                 "guzzlehttp/promises": "~1.0",
                 "guzzlehttp/psr7": "^1.4.1",
@@ -34,11 +38,7 @@
                 "behat/behat": "~3.0",
                 "doctrine/cache": "~1.4",
                 "ext-dom": "*",
-                "ext-json": "*",
                 "ext-openssl": "*",
-                "ext-pcre": "*",
-                "ext-simplexml": "*",
-                "ext-spl": "*",
                 "nette/neon": "^2.3",
                 "phpunit/phpunit": "^4.8.35|^5.4.0",
                 "psr/cache": "^1.0"
@@ -85,7 +85,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2017-06-30 19:39:55"
+            "time": "2017-08-25 23:24:46"
         },
         {
             "name": "boomers/cs-billing",
@@ -93,7 +93,7 @@
             "source": {
                 "type": "git",
                 "url": "git@gitlab.dizboard.com:pumpic/cs-billing.git",
-                "reference": "959f1e5ba232aac660bdbf114412f271beed6140"
+                "reference": "1844fb50c6e70a9d2e776dcd057e6cb3aa4f3859"
             },
             "require": {
                 "boomers/cs-models": "dev-master",
@@ -112,7 +112,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2017-05-24 08:54:42"
+            "time": "2017-08-11 13:51:10"
         },
         {
             "name": "boomers/cs-devices",
@@ -185,7 +185,7 @@
             "source": {
                 "type": "git",
                 "url": "git@gitlab.dizboard.com:pumpic/cs-mail.git",
-                "reference": "e8bd4f24a8d571eb0a33a7c9fe317fdc8179946b"
+                "reference": "779dc01e4eea8a6209038d4ff3bb6c1280f5e49c"
             },
             "require": {
                 "guzzlehttp/guzzle": "~5.0",
@@ -203,7 +203,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2017-04-07 11:46:52"
+            "time": "2017-08-01 09:56:12"
         },
         {
             "name": "boomers/cs-models",
@@ -275,7 +275,7 @@
             "source": {
                 "type": "git",
                 "url": "git@gitlab.dizboard.com:pumpic/cs-users.git",
-                "reference": "c5e75f79805febc71df3d455f340d9d90ffea771"
+                "reference": "f65d75e2aeb6d335a761ff82b08c837e3f49f3d6"
             },
             "require": {
                 "boomers/cs-mail": "dev-master",
@@ -298,7 +298,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2017-03-16 17:32:03"
+            "time": "2017-07-10 12:34:09"
         },
         {
             "name": "boomers/ip",
@@ -325,7 +325,7 @@
             "source": {
                 "type": "git",
                 "url": "git@gitlab.dizboard.com:pumpic/seller.git",
-                "reference": "0b3630b23b5b30731a6c86c3aace3c1fcb9dbf90"
+                "reference": "1314d13f808ed9230d7f283cb6d763b5795e672c"
             },
             "require": {
                 "guzzlehttp/guzzle": "~5.0",
@@ -343,7 +343,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2017-05-30 13:06:13"
+            "time": "2017-08-11 13:48:54"
         },
         {
             "name": "fenom/fenom",
@@ -397,16 +397,16 @@
         },
         {
             "name": "filp/whoops",
-            "version": "2.1.9",
+            "version": "2.1.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/filp/whoops.git",
-                "reference": "b238974e1c7cc1859b0c16ddc1c02ecb70ecc07f"
+                "reference": "ffbbd2c06c64b08fb47974eed5dbce4ca2bb0eec"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/filp/whoops/zipball/b238974e1c7cc1859b0c16ddc1c02ecb70ecc07f",
-                "reference": "b238974e1c7cc1859b0c16ddc1c02ecb70ecc07f",
+                "url": "https://api.github.com/repos/filp/whoops/zipball/ffbbd2c06c64b08fb47974eed5dbce4ca2bb0eec",
+                "reference": "ffbbd2c06c64b08fb47974eed5dbce4ca2bb0eec",
                 "shasum": ""
             },
             "require": {
@@ -454,7 +454,7 @@
                 "whoops",
                 "zf2"
             ],
-            "time": "2017-06-03 18:33:07"
+            "time": "2017-08-03 18:23:40"
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -1226,16 +1226,16 @@
         },
         {
             "name": "ramsey/uuid",
-            "version": "3.6.1",
+            "version": "3.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ramsey/uuid.git",
-                "reference": "4ae32dd9ab8860a4bbd750ad269cba7f06f7934e"
+                "reference": "0ef23d1b10cf1bc576e9d865a7e9c47982c5715e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ramsey/uuid/zipball/4ae32dd9ab8860a4bbd750ad269cba7f06f7934e",
-                "reference": "4ae32dd9ab8860a4bbd750ad269cba7f06f7934e",
+                "url": "https://api.github.com/repos/ramsey/uuid/zipball/0ef23d1b10cf1bc576e9d865a7e9c47982c5715e",
+                "reference": "0ef23d1b10cf1bc576e9d865a7e9c47982c5715e",
                 "shasum": ""
             },
             "require": {
@@ -1304,7 +1304,7 @@
                 "identifier",
                 "uuid"
             ],
-            "time": "2017-03-26 20:37:53"
+            "time": "2017-08-04 13:39:04"
         },
         {
             "name": "rastor/amazon-s3-php-class",
@@ -1392,16 +1392,16 @@
         },
         {
             "name": "rastor/jira-client",
-            "version": "0.3.17",
+            "version": "0.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/oRastor/jira-client.git",
-                "reference": "6c2b14143f976e4b5c907506b1378ae6903769a9"
+                "reference": "6a486a0772f2afa2996c02a50dedc8aa20d5830f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/oRastor/jira-client/zipball/6c2b14143f976e4b5c907506b1378ae6903769a9",
-                "reference": "6c2b14143f976e4b5c907506b1378ae6903769a9",
+                "url": "https://api.github.com/repos/oRastor/jira-client/zipball/6a486a0772f2afa2996c02a50dedc8aa20d5830f",
+                "reference": "6a486a0772f2afa2996c02a50dedc8aa20d5830f",
                 "shasum": ""
             },
             "require": {
@@ -1430,7 +1430,7 @@
                 "jira",
                 "rest"
             ],
-            "time": "2017-05-19 16:07:12"
+            "time": "2017-07-28 06:43:52"
         },
         {
             "name": "rastor/protobuf-php",
@@ -1742,16 +1742,16 @@
         },
         {
             "name": "symfony/console",
-            "version": "v2.8.22",
+            "version": "v2.8.27",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "3ef6ef64abecd566d551d9e7f6393ac6e93b2462"
+                "reference": "c0807a2ca978e64d8945d373a9221a5c35d1a253"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/3ef6ef64abecd566d551d9e7f6393ac6e93b2462",
-                "reference": "3ef6ef64abecd566d551d9e7f6393ac6e93b2462",
+                "url": "https://api.github.com/repos/symfony/console/zipball/c0807a2ca978e64d8945d373a9221a5c35d1a253",
+                "reference": "c0807a2ca978e64d8945d373a9221a5c35d1a253",
                 "shasum": ""
             },
             "require": {
@@ -1799,20 +1799,20 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "time": "2017-06-02 14:36:56"
+            "time": "2017-08-27 14:29:03"
         },
         {
             "name": "symfony/debug",
-            "version": "v2.8.22",
+            "version": "v2.8.27",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/debug.git",
-                "reference": "8470d7701177a88edeb0cec59b44d50ef4477e9b"
+                "reference": "efc9656dcb227e1459905d5aa51e43dfec76e752"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/debug/zipball/8470d7701177a88edeb0cec59b44d50ef4477e9b",
-                "reference": "8470d7701177a88edeb0cec59b44d50ef4477e9b",
+                "url": "https://api.github.com/repos/symfony/debug/zipball/efc9656dcb227e1459905d5aa51e43dfec76e752",
+                "reference": "efc9656dcb227e1459905d5aa51e43dfec76e752",
                 "shasum": ""
             },
             "require": {
@@ -1856,7 +1856,7 @@
             ],
             "description": "Symfony Debug Component",
             "homepage": "https://symfony.com",
-            "time": "2017-06-01 20:52:29"
+            "time": "2017-08-27 14:29:03"
         },
         {
             "name": "symfony/options-resolver",
@@ -1915,16 +1915,16 @@
         },
         {
             "name": "symfony/polyfill-mbstring",
-            "version": "v1.4.0",
+            "version": "v1.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-mbstring.git",
-                "reference": "f29dca382a6485c3cbe6379f0c61230167681937"
+                "reference": "7c8fae0ac1d216eb54349e6a8baa57d515fe8803"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/f29dca382a6485c3cbe6379f0c61230167681937",
-                "reference": "f29dca382a6485c3cbe6379f0c61230167681937",
+                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/7c8fae0ac1d216eb54349e6a8baa57d515fe8803",
+                "reference": "7c8fae0ac1d216eb54349e6a8baa57d515fe8803",
                 "shasum": ""
             },
             "require": {
@@ -1936,7 +1936,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.4-dev"
+                    "dev-master": "1.5-dev"
                 }
             },
             "autoload": {
@@ -1970,7 +1970,7 @@
                 "portable",
                 "shim"
             ],
-            "time": "2017-06-09 14:24:12"
+            "time": "2017-06-14 15:44:48"
         },
         {
             "name": "true/punycode",
