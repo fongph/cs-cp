@@ -78,7 +78,7 @@ class Billing extends \System\Model
                   WHEN p.`group` LIKE 'android-%' THEN 'android'
                     ELSE 'no' 
                 END AS 'platform',
-                CASE WHEN p.`code_fastspring`LIKE '%pumpic%basic%' AND p.`group` LIKE 'android-basic%' AND p.`limitation_id` NOT IN (4,5) THEN 'basic'
+                CASE WHEN p.`code_fastspring`LIKE '%pumpic%basic%' AND p.`group` LIKE 'android-basic%' AND p.`limitation_id` NOT IN (4,5,22) THEN 'basic'
                    WHEN p.`code_fastspring` LIKE '%pumpic-%-1m%' THEN 'premium-1m'
                    ELSE '-' 
                  END AS 'product_version',
