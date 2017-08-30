@@ -540,7 +540,34 @@ class Billing extends BaseController
 
         } else {
             $product = $license['code_fastspring'];
-            $newProduct = str_replace('1m', '3m', $product);
+
+            if ($license['subscription_payment_method'] == 'fastspring') {
+                // for icloud
+                if (preg_match('/pumpic-icloud/is', $product)) {
+                    if (preg_match('/-double/is', $product)) {
+                        $newProduct = 'pumpic-icloud-3m-double';
+                    } else {
+                        $newProduct = 'pumpic-icloud-3m-n';
+                    }
+                } else {
+                    //for android premium
+                    if (preg_match('/-double/is', $product)) {
+                        $newProduct = 'pumpic-premium-3m-double';
+                    } else {
+                        $newProduct = 'pumpic-android-3m';
+                    }
+                }
+            } else {
+                if (preg_match('/pumpic-icloud/is', $product)) {
+                    // for icloud
+                    $newProduct = 'pumpic-icloud-3m-n';
+
+                } else {
+                    //for android premium
+                    $newProduct = 'pumpic-android-3m';
+
+                }
+            }
             $newProductInfo = $billingModel->getProductInfo($newProduct);
 
             if (strripos($license['code_fastspring'], '-double') === false){
@@ -578,7 +605,6 @@ class Billing extends BaseController
                                 $billingModel->removeLicenseDiscountPromotion($this->auth['id'], $license['id']);
                             }
                         }
-
 
                         $billingModel->setLicenseUpdatedPayments($this->params['id'], round($sum['saveSum'], 2), $sum['sumToPay']);
                         $billingModel->updateSubscriptionPlan($this->params['id'], $newProduct);
