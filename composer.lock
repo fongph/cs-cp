@@ -256,7 +256,7 @@
             "source": {
                 "type": "git",
                 "url": "git@gitlab.dizboard.com:pumpic/cs-settings.git",
-                "reference": "219882006bbe4c6e819172b575b7d73fb8a0b090"
+                "reference": "8b0f5f5be3bc0adfae82b15972b5daa9cd263a0d"
             },
             "require": {
                 "php": ">=5.4.0"
@@ -267,7 +267,7 @@
                     "CS\\Settings\\": "src/"
                 }
             },
-            "time": "2017-09-08 09:04:45"
+            "time": "2017-09-08 09:14:33"
         },
         {
             "name": "boomers/cs-users",
