@@ -482,10 +482,10 @@ class Billing extends BaseController
                             $licensesToRemoveDiscount = $billingModel->getDoubleSubscriptions($license['order_product_id']);
                             foreach ($licensesToRemoveDiscount as $item) {
                                 $licenseToRemove = $billingModel->getUserLicenseInfo($this->auth['id'], $item['id']);
+                                $billingModel->setLicenseUpdatedPayments($item['id'], round($sum['saveSum'], 2), $sum['sumToPay']);
+
                                 if (!$billingModel->isCancelationDiscountOfferableForLicense($licenseToRemove)) {
                                     $billingModel->removeLicenseDiscountPromotion($this->auth['id'], $licenseToRemove['id']);
-                                    $billingModel->setLicenseUpdatedPayments($licenseToRemove['id'], round($sum['saveSum'], 2), $sum['sumToPay']);
-
                                 }
                             }
                         } else {
@@ -596,10 +596,10 @@ class Billing extends BaseController
                             $licensesToRemoveDiscount = $billingModel->getDoubleSubscriptions($license['order_product_id']);
                             foreach ($licensesToRemoveDiscount as $item) {
                                 $licenseToRemove = $billingModel->getUserLicenseInfo($this->auth['id'], $item['id']);
+                                $billingModel->setLicenseUpdatedPayments($item['id'], round($sum['saveSum'], 2), $sum['sumToPay']);
+
                                 if (!$billingModel->isCancelationDiscountOfferableForLicense($licenseToRemove)) {
                                     $billingModel->removeLicenseDiscountPromotion($this->auth['id'], $licenseToRemove['id']);
-                                    $billingModel->setLicenseUpdatedPayments($licenseToRemove['id'], round($sum['saveSum'], 2), $sum['sumToPay']);
-
                                 }
                             }
                         } else {
