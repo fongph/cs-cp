@@ -489,6 +489,8 @@ class Billing extends BaseController
                                 }
                             }
                         } else {
+                            $billingModel->setLicenseUpdatedPayments( $license['id'], round($sum['saveSum'], 2), $sum['sumToPay']);
+
                             if (!$billingModel->isCancelationDiscountOfferableForLicense($license)) {
                                 $billingModel->removeLicenseDiscountPromotion($this->auth['id'], $license['id']);
                             }
@@ -603,6 +605,7 @@ class Billing extends BaseController
                                 }
                             }
                         } else {
+                            $billingModel->setLicenseUpdatedPayments( $license['id'], round($sum['saveSum'], 2), $sum['sumToPay']);
 
                             if (!$billingModel->isCancelationDiscountOfferableForLicense($license)) {
                                 $billingModel->removeLicenseDiscountPromotion($this->auth['id'], $license['id']);
