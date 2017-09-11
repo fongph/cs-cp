@@ -484,6 +484,8 @@ class Billing extends BaseController
                                 $licenseToRemove = $billingModel->getUserLicenseInfo($this->auth['id'], $item['id']);
                                 if (!$billingModel->isCancelationDiscountOfferableForLicense($licenseToRemove)) {
                                     $billingModel->removeLicenseDiscountPromotion($this->auth['id'], $licenseToRemove['id']);
+                                    $billingModel->setLicenseUpdatedPayments($licenseToRemove['id'], round($sum['saveSum'], 2), $sum['sumToPay']);
+
                                 }
                             }
                         } else {
@@ -491,7 +493,6 @@ class Billing extends BaseController
                                 $billingModel->removeLicenseDiscountPromotion($this->auth['id'], $license['id']);
                             }
                         }
-                        $billingModel->setLicenseUpdatedPayments($this->params['id'], round($sum['saveSum'], 2), $sum['sumToPay']);
                         $billingModel->updateSubscriptionPlan($this->params['id'], $newProduct);
                         
                         $this->getDI()->getFlashMessages()->add(FlashMessages::SUCCESS, "Your subscription is successfully upgraded!");
@@ -597,6 +598,8 @@ class Billing extends BaseController
                                 $licenseToRemove = $billingModel->getUserLicenseInfo($this->auth['id'], $item['id']);
                                 if (!$billingModel->isCancelationDiscountOfferableForLicense($licenseToRemove)) {
                                     $billingModel->removeLicenseDiscountPromotion($this->auth['id'], $licenseToRemove['id']);
+                                    $billingModel->setLicenseUpdatedPayments($licenseToRemove['id'], round($sum['saveSum'], 2), $sum['sumToPay']);
+
                                 }
                             }
                         } else {
@@ -606,7 +609,7 @@ class Billing extends BaseController
                             }
                         }
 
-                        $billingModel->setLicenseUpdatedPayments($this->params['id'], round($sum['saveSum'], 2), $sum['sumToPay']);
+//                        $billingModel->setLicenseUpdatedPayments($this->params['id'], round($sum['saveSum'], 2), $sum['sumToPay']);
                         $billingModel->updateSubscriptionPlan($this->params['id'], $newProduct);
 
                         $this->getDI()->getFlashMessages()->add(FlashMessages::SUCCESS, "Your subscription is successfully upgraded!");
