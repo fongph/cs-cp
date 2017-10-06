@@ -32,9 +32,18 @@ class BaseModel extends \System\Model
 
         $client = new \Aws\S3\S3Client($config);
 
-        return $client->getObjectUrl($config['bucket'], $uri, time() + self::$_authLifeTime, [
+        $cmd = $client->getCommand('GetObject', [
+            'Bucket' => $config['bucket'],
+            'Key'    => $uri,
             'ResponseContentDisposition' => 'attachment; filename="' . $filename . '"'
         ]);
+
+        $request = $client->createPresignedRequest($cmd, '+10 minutes');
+
+        $presignedUrl = (string) $request->getUri();
+
+
+        return $presignedUrl;
     }
 
 }
