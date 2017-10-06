@@ -2,6 +2,8 @@
 
 namespace Models\Cp;
 
+use Aws\AwsClient;
+
 class BaseModel extends \System\Model
 {
 
@@ -27,9 +29,10 @@ class BaseModel extends \System\Model
     public function getDownloadUrl($uri, $filename)
     {
         $config = \CS\Settings\GlobalSettings::getS3Config();
-        
-        $s3 = \Aws\S3\S3Client::factory($config);
-        return $s3->getObjectUrl($config['bucket'], $uri, time() + self::$_authLifeTime, [
+
+        $client = new \Aws\S3\S3Client($config);
+
+        return $client->getObjectUrl($config['bucket'], $uri, time() + self::$_authLifeTime, [
             'ResponseContentDisposition' => 'attachment; filename="' . $filename . '"'
         ]);
     }
