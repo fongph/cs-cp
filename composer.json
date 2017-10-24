@@ -41,6 +41,10 @@
         {
             "type": "git",
             "url": "git@gitlab.dizboard.com:pumpic/ip.git"
+        },
+        {
+            "type": "git",
+            "url": "git@gitlab.dizboard.com:pumpic/jira-client.git"
         }
     ],
     "require": {
@@ -65,6 +69,7 @@
         "boomers/seller": "dev-master",
         "boomers/cs-icloud": "dev-master",
         "boomers/cs-queue": "dev-master",
+        "boomers/jira-client": "dev-master",
         "aws/aws-sdk-php": "3.*",
         "sabre/vobject": "^3.4",
         "phpoffice/phpexcel": "^1.8",

@@ -51,7 +51,7 @@ class Wizard extends BaseController {
         $this->logger = $this->di->get('logger');
         $this->view->title = null;
 
-        \CS\Users\UsersManager::registerListeners($this->di['db']);
+        \CS\Users\UsersManager::registerListeners($this->di['db'], \CS\Settings\GlobalSettings::getQueueConfig());
     }
 
     public function packageAction()
