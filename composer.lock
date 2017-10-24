@@ -9,16 +9,16 @@
     "packages": [
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.36.31",
+            "version": "3.36.32",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "e3135c1f6bc797ca0e0fbba7b2a27faae4e09d5e"
+                "reference": "7ba49dbd24366647a41cd4a13eab972b2264b8db"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/e3135c1f6bc797ca0e0fbba7b2a27faae4e09d5e",
-                "reference": "e3135c1f6bc797ca0e0fbba7b2a27faae4e09d5e",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/7ba49dbd24366647a41cd4a13eab972b2264b8db",
+                "reference": "7ba49dbd24366647a41cd4a13eab972b2264b8db",
                 "shasum": ""
             },
             "require": {
@@ -85,7 +85,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2017-10-20 16:43:56"
+            "time": "2017-10-23 20:40:28"
         },
         {
             "name": "boomers/cs-billing",
@@ -275,7 +275,7 @@
             "source": {
                 "type": "git",
                 "url": "git@gitlab.dizboard.com:pumpic/cs-users.git",
-                "reference": "60b6f4e51abd0c224ee11219465a0bc511ce6579"
+                "reference": "bee130380050dea61e63bea90bb04e4d3ade8d89"
             },
             "require": {
                 "boomers/cs-mail": "dev-master",
@@ -300,7 +300,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2017-10-23 15:09:11"
+            "time": "2017-10-24 11:58:43"
         },
         {
             "name": "boomers/ip",

@@ -45,7 +45,7 @@ $di->setShared('mailSender', function() use ($di) {
         $mailSender->setUserId($authData['id']);
     }
 
-    CS\Users\UsersManager::registerListeners($di['db'], CS\Settings\GlobalSettings::getQueueConfig());
+    CS\Users\UsersManager::registerListeners($di['db']);
 
     return $mailSender->setLocale($di['t']->getLocale())
                     ->setSiteId($di['config']['site']);
@@ -266,7 +266,7 @@ $di->setShared('queueClient', function () use ($config) {
 $di->setShared('usersNotesProcessor', function() use ($di) {
     $auth = $di['auth'];
 
-    CS\Users\UsersManager::registerListeners($di['db'], CS\Settings\GlobalSettings::getQueueConfig());
+    CS\Users\UsersManager::registerListeners($di['db']);
 
     if (!$auth->hasIdentity()) {
         return new CS\Users\UsersNotes($di['db']);
@@ -282,7 +282,7 @@ $di->setShared('usersNotesProcessor', function() use ($di) {
 });
 
 $di->setShared('eventManager', function() use ($di) {
-    CS\Users\UsersManager::registerListeners($di['db'], CS\Settings\GlobalSettings::getQueueConfig());
+    CS\Users\UsersManager::registerListeners($di['db']);
 
     return \EventManager\EventManager::getInstance();
 });
