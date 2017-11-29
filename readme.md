@@ -32,8 +32,6 @@
  - grunt ожидает библиотеки bower'a, это означает, что перед компиляцией нужно установить компоненты bower'a командой ```bower install```
  - пока вот так...
  
-## Installing composer command:
-  composer install
-
-## deploy command:
-./vendor/boomers/deployer-recipes/dep deploy
+## Deploy
+ - за деплой на cp.pumpic.com отвечает cs-cp-deploy
+ - за деплой на demo.pumpic.com отвечает cs-demo-deploy
