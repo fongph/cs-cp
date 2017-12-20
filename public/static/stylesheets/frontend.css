@@ -9113,13 +9113,7 @@ a.list-group-item-danger.active:focus {
 @media (min-width: 768px) {
   .alert-app {
     width: 758px;
-    margin-left: calc(-329%);
     font-size: 16px;
-  }
-}
-@media (min-width: 991px) {
-  .alert-app {
-    margin-left: calc(-329px);
   }
 }
 #header {

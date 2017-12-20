@@ -1,5 +1,17 @@
+<style>
+    @media(min-width:768px){
+        .alert-app{
+            margin-left: calc((100% - 758px) / 2);
+        }
+    }
+    @media(min-width:991px){
+        .alert-app{                    
+            margin-left: calc((758px - 100%) / -2);
+        }
+    }
+</style>
 <div class="alert alert-app">
-    <img src="warning.svg" alt="!">
+    <img src="{$di.config.staticDomain}/img/warning.svg" alt="!">
     Please, note that starting 
     <strong>from 1 January Pumpic stops supporting the Control Panel Apps</strong>
     (iOs and  Android). To check data, kindly use the web version of the Control Panel.
