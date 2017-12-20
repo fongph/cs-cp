@@ -918,3 +918,31 @@ a.list-group-item {
     line-height: 1.42857;
     color: #303030;
 }
+
+// for app message
+
+.alert-app{
+    background-color: rgba(255, 255, 255, .5);;
+    border-color: rgb(232, 232, 232);
+    color: #37474f;
+    font-weight: 100;
+    img{
+        vertical-align: top;
+    }
+    strong{
+        font-weight: 600;
+    }
+}
+
+    @media(min-width:768px){
+        .alert-app{
+            width:758px;
+            margin-left: calc((100% - 758px) / 2);
+            font-size: 16px;
+        }
+    }
+    @media(min-width:991px){
+        .alert-app{                    
+            margin-left: calc((758px - 100%) / -2);
+        }
+    }

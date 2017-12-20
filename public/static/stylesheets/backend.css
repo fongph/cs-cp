@@ -12648,6 +12648,30 @@ a.list-group-item-danger.active:focus {
   line-height: 1.42857;
   color: #303030;
 }
+.alert-app {
+  background-color: rgba(255, 255, 255, 0.5);
+  border-color: #e8e8e8;
+  color: #37474f;
+  font-weight: 100;
+}
+.alert-app img {
+  vertical-align: top;
+}
+.alert-app strong {
+  font-weight: 600;
+}
+@media (min-width: 768px) {
+  .alert-app {
+    width: 758px;
+    margin-left: calc(-329%);
+    font-size: 16px;
+  }
+}
+@media (min-width: 991px) {
+  .alert-app {
+    margin-left: calc(-329px);
+  }
+}
 #header {
   background: #4d4f5b;
 }
