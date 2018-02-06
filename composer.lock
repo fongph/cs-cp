@@ -4,21 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "37769e208c16d4916e35135cbf48004c",
     "content-hash": "6cd5ffd38210e5ebcbb86a37634dbdb5",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.36.32",
+            "version": "3.52.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "7ba49dbd24366647a41cd4a13eab972b2264b8db"
+                "reference": "c6fa9217f1ff1cbfd8c498bb6deff5f342615717"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/7ba49dbd24366647a41cd4a13eab972b2264b8db",
-                "reference": "7ba49dbd24366647a41cd4a13eab972b2264b8db",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/c6fa9217f1ff1cbfd8c498bb6deff5f342615717",
+                "reference": "c6fa9217f1ff1cbfd8c498bb6deff5f342615717",
                 "shasum": ""
             },
             "require": {
@@ -40,7 +39,7 @@
                 "ext-dom": "*",
                 "ext-openssl": "*",
                 "nette/neon": "^2.3",
-                "phpunit/phpunit": "^4.8.35|^5.4.0",
+                "phpunit/phpunit": "^4.8.35|^5.4.3",
                 "psr/cache": "^1.0"
             },
             "suggest": {
@@ -85,7 +84,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2017-10-23 20:40:28"
+            "time": "2018-02-05T21:14:16+00:00"
         },
         {
             "name": "boomers/cs-billing",
@@ -112,7 +111,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2017-09-25 13:35:52"
+            "time": "2017-09-25T13:35:52+00:00"
         },
         {
             "name": "boomers/cs-devices",
@@ -144,7 +143,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2017-09-18 14:24:59"
+            "time": "2017-09-18T14:24:59+00:00"
         },
         {
             "name": "boomers/cs-icloud",
@@ -177,7 +176,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2017-03-27 09:03:19"
+            "time": "2017-03-27T09:03:19+00:00"
         },
         {
             "name": "boomers/cs-mail",
@@ -203,7 +202,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2017-08-01 09:56:12"
+            "time": "2017-08-01T09:56:12+00:00"
         },
         {
             "name": "boomers/cs-models",
@@ -225,7 +224,7 @@
                     "CS\\Models\\": "src/"
                 }
             },
-            "time": "2017-05-18 09:37:40"
+            "time": "2017-05-18T09:37:40+00:00"
         },
         {
             "name": "boomers/cs-queue",
@@ -248,7 +247,7 @@
                     "CS\\Queue\\": "src/"
                 }
             },
-            "time": "2016-03-23 17:30:36"
+            "time": "2016-03-23T17:30:36+00:00"
         },
         {
             "name": "boomers/cs-settings",
@@ -267,7 +266,7 @@
                     "CS\\Settings\\": "src/"
                 }
             },
-            "time": "2017-09-08 09:14:33"
+            "time": "2017-09-08T09:14:33+00:00"
         },
         {
             "name": "boomers/cs-users",
@@ -300,7 +299,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2017-10-24 11:58:43"
+            "time": "2017-10-24T11:58:43+00:00"
         },
         {
             "name": "boomers/ip",
@@ -319,7 +318,7 @@
                     "src/IP.php"
                 ]
             },
-            "time": "2014-11-11 13:33:06"
+            "time": "2014-11-11T13:33:06+00:00"
         },
         {
             "name": "boomers/jira-client",
@@ -354,7 +353,7 @@
                 "jira",
                 "rest"
             ],
-            "time": "2017-09-18 13:45:03"
+            "time": "2017-09-18T13:45:03+00:00"
         },
         {
             "name": "boomers/seller",
@@ -380,7 +379,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2017-08-11 13:48:54"
+            "time": "2017-08-11T13:48:54+00:00"
         },
         {
             "name": "fenom/fenom",
@@ -430,20 +429,20 @@
                 "templater",
                 "templating"
             ],
-            "time": "2017-06-29 10:49:38"
+            "time": "2017-06-29T10:49:38+00:00"
         },
         {
             "name": "filp/whoops",
-            "version": "2.1.12",
+            "version": "2.1.14",
             "source": {
                 "type": "git",
                 "url": "https://github.com/filp/whoops.git",
-                "reference": "a99f0b151846021ba7a73b4e3cba3ebc9f14f03e"
+                "reference": "c6081b8838686aa04f1e83ba7e91f78b7b2a23e6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/filp/whoops/zipball/a99f0b151846021ba7a73b4e3cba3ebc9f14f03e",
-                "reference": "a99f0b151846021ba7a73b4e3cba3ebc9f14f03e",
+                "url": "https://api.github.com/repos/filp/whoops/zipball/c6081b8838686aa04f1e83ba7e91f78b7b2a23e6",
+                "reference": "c6081b8838686aa04f1e83ba7e91f78b7b2a23e6",
                 "shasum": ""
             },
             "require": {
@@ -452,7 +451,7 @@
             },
             "require-dev": {
                 "mockery/mockery": "0.9.*",
-                "phpunit/phpunit": "^4.8 || ^5.0",
+                "phpunit/phpunit": "^4.8.35 || ^5.7",
                 "symfony/var-dumper": "^2.6 || ^3.0"
             },
             "suggest": {
@@ -491,25 +490,26 @@
                 "throwable",
                 "whoops"
             ],
-            "time": "2017-10-15 13:05:10"
+            "time": "2017-11-23T18:22:44+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",
-            "version": "5.3.1",
+            "version": "5.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/guzzle.git",
-                "reference": "70f1fa53b71c4647bf2762c09068a95f77e12fb8"
+                "reference": "f9acb4761844317e626a32259205bec1f1bc60d2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/70f1fa53b71c4647bf2762c09068a95f77e12fb8",
-                "reference": "70f1fa53b71c4647bf2762c09068a95f77e12fb8",
+                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/f9acb4761844317e626a32259205bec1f1bc60d2",
+                "reference": "f9acb4761844317e626a32259205bec1f1bc60d2",
                 "shasum": ""
             },
             "require": {
                 "guzzlehttp/ringphp": "^1.1",
-                "php": ">=5.4.0"
+                "php": ">=5.4.0",
+                "react/promise": "^2.2"
             },
             "require-dev": {
                 "ext-curl": "*",
@@ -543,7 +543,7 @@
                 "rest",
                 "web service"
             ],
-            "time": "2016-07-15 19:28:39"
+            "time": "2018-01-15T07:18:01+00:00"
         },
         {
             "name": "guzzlehttp/promises",
@@ -594,7 +594,7 @@
             "keywords": [
                 "promise"
             ],
-            "time": "2016-12-20 10:07:11"
+            "time": "2016-12-20T10:07:11+00:00"
         },
         {
             "name": "guzzlehttp/psr7",
@@ -659,7 +659,7 @@
                 "uri",
                 "url"
             ],
-            "time": "2017-03-20 17:10:46"
+            "time": "2017-03-20T17:10:46+00:00"
         },
         {
             "name": "guzzlehttp/ringphp",
@@ -710,7 +710,7 @@
                 }
             ],
             "description": "Provides a simple API and specification that abstracts away the details of HTTP into a single PHP function.",
-            "time": "2015-05-20 03:37:09"
+            "time": "2015-05-20T03:37:09+00:00"
         },
         {
             "name": "guzzlehttp/streams",
@@ -760,7 +760,7 @@
                 "Guzzle",
                 "stream"
             ],
-            "time": "2014-10-12 19:18:40"
+            "time": "2014-10-12T19:18:40+00:00"
         },
         {
             "name": "league/url",
@@ -815,7 +815,7 @@
                 "url"
             ],
             "abandoned": "league/uri",
-            "time": "2015-07-15 08:24:12"
+            "time": "2015-07-15T08:24:12+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -893,7 +893,7 @@
                 "logging",
                 "psr-3"
             ],
-            "time": "2017-06-19 01:22:40"
+            "time": "2017-06-19T01:22:40+00:00"
         },
         {
             "name": "mtdowling/jmespath.php",
@@ -948,7 +948,7 @@
                 "json",
                 "jsonpath"
             ],
-            "time": "2016-12-03 22:08:25"
+            "time": "2016-12-03T22:08:25+00:00"
         },
         {
             "name": "paragonie/random_compat",
@@ -996,7 +996,7 @@
                 "pseudorandom",
                 "random"
             ],
-            "time": "2017-09-27 21:40:39"
+            "time": "2017-09-27T21:40:39+00:00"
         },
         {
             "name": "php-amqplib/php-amqplib",
@@ -1050,7 +1050,7 @@
                 "queue",
                 "rabbitmq"
             ],
-            "time": "2015-09-23 02:25:31"
+            "time": "2015-09-23T02:25:31+00:00"
         },
         {
             "name": "phpoffice/phpexcel",
@@ -1107,7 +1107,8 @@
                 "xls",
                 "xlsx"
             ],
-            "time": "2015-05-01 07:00:55"
+            "abandoned": "phpoffice/phpspreadsheet",
+            "time": "2015-05-01T07:00:55+00:00"
         },
         {
             "name": "predis/predis",
@@ -1162,7 +1163,7 @@
                 "predis",
                 "redis"
             ],
-            "time": "2014-08-01 09:59:50"
+            "time": "2014-08-01T09:59:50+00:00"
         },
         {
             "name": "psr/http-message",
@@ -1212,7 +1213,7 @@
                 "request",
                 "response"
             ],
-            "time": "2016-08-06 14:39:51"
+            "time": "2016-08-06T14:39:51+00:00"
         },
         {
             "name": "psr/log",
@@ -1259,20 +1260,20 @@
                 "psr",
                 "psr-3"
             ],
-            "time": "2016-10-10 12:19:37"
+            "time": "2016-10-10T12:19:37+00:00"
         },
         {
             "name": "ramsey/uuid",
-            "version": "3.7.1",
+            "version": "3.7.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ramsey/uuid.git",
-                "reference": "45cffe822057a09e05f7bd09ec5fb88eeecd2334"
+                "reference": "44abcdad877d9a46685a3a4d221e3b2c4b87cb76"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ramsey/uuid/zipball/45cffe822057a09e05f7bd09ec5fb88eeecd2334",
-                "reference": "45cffe822057a09e05f7bd09ec5fb88eeecd2334",
+                "url": "https://api.github.com/repos/ramsey/uuid/zipball/44abcdad877d9a46685a3a4d221e3b2c4b87cb76",
+                "reference": "44abcdad877d9a46685a3a4d221e3b2c4b87cb76",
                 "shasum": ""
             },
             "require": {
@@ -1283,17 +1284,15 @@
                 "rhumsaa/uuid": "self.version"
             },
             "require-dev": {
-                "apigen/apigen": "^4.1",
-                "codeception/aspect-mock": "^1.0 | ^2.0",
+                "codeception/aspect-mock": "^1.0 | ~2.0.0",
                 "doctrine/annotations": "~1.2.0",
                 "goaop/framework": "1.0.0-alpha.2 | ^1.0 | ^2.1",
                 "ircmaxell/random-lib": "^1.1",
                 "jakub-onderka/php-parallel-lint": "^0.9.0",
-                "mockery/mockery": "^0.9.4",
+                "mockery/mockery": "^0.9.9",
                 "moontoast/math": "^1.1",
                 "php-mock/php-mock-phpunit": "^0.3|^1.1",
-                "phpunit/phpunit": "^4.7|>=5.0 <5.4",
-                "satooshi/php-coveralls": "^0.6.1",
+                "phpunit/phpunit": "^4.7|^5.0",
                 "squizlabs/php_codesniffer": "^2.3"
             },
             "suggest": {
@@ -1341,7 +1340,7 @@
                 "identifier",
                 "uuid"
             ],
-            "time": "2017-09-22 20:46:04"
+            "time": "2018-01-20T00:28:24+00:00"
         },
         {
             "name": "rastor/amazon-s3-php-class",
@@ -1382,7 +1381,7 @@
             ],
             "description": "A standalone Amazon S3 (REST) client for PHP 5.2.x using CURL that does not require PEAR.",
             "homepage": "https://github.com/tpyo/amazon-s3-php-class",
-            "time": "2014-10-01 14:18:42"
+            "time": "2014-10-01T14:18:42+00:00"
         },
         {
             "name": "rastor/eventmanager",
@@ -1425,7 +1424,7 @@
                 "event manager",
                 "events"
             ],
-            "time": "2015-07-06 08:29:29"
+            "time": "2015-07-06T08:29:29+00:00"
         },
         {
             "name": "rastor/protobuf-php",
@@ -1472,7 +1471,7 @@
                 "protocol buffer",
                 "serializing"
             ],
-            "time": "2016-01-15 15:25:11"
+            "time": "2016-01-15T15:25:11+00:00"
         },
         {
             "name": "rastor/system",
@@ -1515,7 +1514,7 @@
                     "homepage": "http://rastor.name"
                 }
             ],
-            "time": "2017-06-28 12:06:09"
+            "time": "2017-06-28T12:06:09+00:00"
         },
         {
             "name": "react/promise",
@@ -1561,7 +1560,7 @@
                 "promise",
                 "promises"
             ],
-            "time": "2017-03-25 12:08:31"
+            "time": "2017-03-25T12:08:31+00:00"
         },
         {
             "name": "rodneyrehm/plist",
@@ -1605,7 +1604,7 @@
             "keywords": [
                 "plist"
             ],
-            "time": "2015-01-28 23:18:19"
+            "time": "2015-01-28T23:18:19+00:00"
         },
         {
             "name": "sabre/vobject",
@@ -1671,7 +1670,7 @@
                 "jCard",
                 "vCard"
             ],
-            "time": "2016-10-07 03:20:40"
+            "time": "2016-10-07T03:20:40+00:00"
         },
         {
             "name": "swarrot/swarrot",
@@ -1733,20 +1732,20 @@
                 "swarrot",
                 "worker"
             ],
-            "time": "2017-06-26 12:50:51"
+            "time": "2017-06-26T12:50:51+00:00"
         },
         {
             "name": "symfony/console",
-            "version": "v2.8.28",
+            "version": "v2.8.34",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "f81549d2c5fdee8d711c9ab3c7e7362353ea5853"
+                "reference": "162ca7d0ea597599967aa63b23418e747da0896b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/f81549d2c5fdee8d711c9ab3c7e7362353ea5853",
-                "reference": "f81549d2c5fdee8d711c9ab3c7e7362353ea5853",
+                "url": "https://api.github.com/repos/symfony/console/zipball/162ca7d0ea597599967aa63b23418e747da0896b",
+                "reference": "162ca7d0ea597599967aa63b23418e747da0896b",
                 "shasum": ""
             },
             "require": {
@@ -1794,20 +1793,20 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "time": "2017-10-01 21:00:16"
+            "time": "2018-01-29T08:54:45+00:00"
         },
         {
             "name": "symfony/debug",
-            "version": "v2.8.28",
+            "version": "v2.8.34",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/debug.git",
-                "reference": "eaaec993ca5e8067e204b2ee653cdd142961f33e"
+                "reference": "35e36287fc0fdc8a08f70efcd4865ae6d8a6ee55"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/debug/zipball/eaaec993ca5e8067e204b2ee653cdd142961f33e",
-                "reference": "eaaec993ca5e8067e204b2ee653cdd142961f33e",
+                "url": "https://api.github.com/repos/symfony/debug/zipball/35e36287fc0fdc8a08f70efcd4865ae6d8a6ee55",
+                "reference": "35e36287fc0fdc8a08f70efcd4865ae6d8a6ee55",
                 "shasum": ""
             },
             "require": {
@@ -1851,7 +1850,7 @@
             ],
             "description": "Symfony Debug Component",
             "homepage": "https://symfony.com",
-            "time": "2017-10-01 21:00:16"
+            "time": "2018-01-18T22:12:33+00:00"
         },
         {
             "name": "symfony/options-resolver",
@@ -1906,20 +1905,20 @@
                 "configuration",
                 "options"
             ],
-            "time": "2016-05-06 20:13:08"
+            "time": "2016-05-06T20:13:08+00:00"
         },
         {
             "name": "symfony/polyfill-mbstring",
-            "version": "v1.6.0",
+            "version": "v1.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-mbstring.git",
-                "reference": "2ec8b39c38cb16674bbf3fea2b6ce5bf117e1296"
+                "reference": "78be803ce01e55d3491c1397cf1c64beb9c1b63b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/2ec8b39c38cb16674bbf3fea2b6ce5bf117e1296",
-                "reference": "2ec8b39c38cb16674bbf3fea2b6ce5bf117e1296",
+                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/78be803ce01e55d3491c1397cf1c64beb9c1b63b",
+                "reference": "78be803ce01e55d3491c1397cf1c64beb9c1b63b",
                 "shasum": ""
             },
             "require": {
@@ -1931,7 +1930,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.6-dev"
+                    "dev-master": "1.7-dev"
                 }
             },
             "autoload": {
@@ -1965,7 +1964,7 @@
                 "portable",
                 "shim"
             ],
-            "time": "2017-10-11 12:05:26"
+            "time": "2018-01-30T19:27:44+00:00"
         },
         {
             "name": "true/punycode",
@@ -2011,7 +2010,7 @@
                 "idna",
                 "punycode"
             ],
-            "time": "2016-11-16 10:37:54"
+            "time": "2016-11-16T10:37:54+00:00"
         },
         {
             "name": "videlalvaro/php-amqplib",
@@ -2057,7 +2056,7 @@
                 "rabbitmq"
             ],
             "abandoned": "php-amqplib/php-amqplib",
-            "time": "2013-12-22 12:49:53"
+            "time": "2013-12-22T12:49:53+00:00"
         }
     ],
     "packages-dev": [],
