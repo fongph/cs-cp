@@ -61,38 +61,7 @@
         margin: 0 auto;
     }
 </style>
-<style>
-    .notice{
-        border: 1px solid #16a89e;
-        border-radius: 5px;
-        padding: 20px 15px;
-        font-size: 12px;
-        background-color: rgba(255,255,255,0.5);
-    }
-    .notice-title{
-        margin: 0 0 5px;
-        text-transform: uppercase;
-        font-weight: normal;
-        text-align: left;
-        font-size: 14px;
-    }
-    @media(min-width:800px){
-        .notice{
-            margin-left: calc((100% - 800px) / 2);
-            width:800px;
-            font-size: 14px;
-            margin-top:20px;
-        }
-        .notice-title{
-            font-size:16px;
-        }
-    }
-    @media(min-width:991px){
-        .notice{                    
-            margin-left: calc((800px - 100%) / -2);
-        }
-    }
-</style>
+
 <div class="login-form col-lg-6 col-md-8 col-lg-offset-3 col-md-offset-2">
     <h1 class="text-center">{$di.t->_('Login')}</h1>
     {insert "inc.appMessage.htm"}
@@ -114,30 +83,6 @@
         </div>
         <div style="margin-top: 10px;"><a href="{$di.router->getRouteUrl('lostPassword')}" class="btn btn-lnk">{$di['t']->_('Forgot Password?')}</a></div>
     </form>
-
-    <div class="notice">
-        <h2 class="notice-title">
-            <svg 
-                xmlns="http://www.w3.org/2000/svg"
-                xmlns:xlink="http://www.w3.org/1999/xlink"
-                width="22px" height="22px">
-                <path fill-rule="evenodd"  fill="rgb(255, 255, 255)"
-                d="M11.000,1.000 C16.523,1.000 21.000,5.477 21.000,11.000 C21.000,16.523 16.523,21.000 11.000,21.000 C5.477,21.000 1.000,16.523 1.000,11.000 C1.000,5.477 5.477,1.000 11.000,1.000 Z"/>
-                <path fill-rule="evenodd"  fill="rgb(239, 171, 55)"
-                d="M11.000,0.200 C5.036,0.200 0.200,5.036 0.200,11.000 C0.200,16.964 5.036,21.800 11.000,21.800 C16.964,21.800 21.800,16.964 21.800,11.000 C21.800,5.036 16.964,0.200 11.000,0.200 ZM11.000,17.894 C10.156,17.894 9.578,17.244 9.578,16.400 C9.578,15.532 10.180,14.906 11.000,14.906 C11.867,14.906 12.422,15.532 12.422,16.400 C12.422,17.244 11.867,17.894 11.000,17.894 ZM11.560,12.188 C11.344,12.921 10.667,12.935 10.441,12.188 C10.181,11.329 9.257,8.062 9.257,5.941 C9.257,3.142 12.759,3.128 12.759,5.941 C12.758,8.075 11.784,11.426 11.560,12.188 Z"/>
-            </svg>
-            Important notice
-        </h2>
-        
-        <div class="notice-text">
-            We are excited to announce that Pumpic.com website has been acquired by WebWatcher (Awareness Technologies).
-        </div>
-        <div class="notice-text">
-            Please, visit 
-            <a href="https://www.webwatcher.com/" class="notice-link">https://www.webwatcher.com/</a>                    
-            to check available monitoring options for Android and iOS devices.
-        </div>
-    </div>
 
 
     <!-- <div class="login-member">
